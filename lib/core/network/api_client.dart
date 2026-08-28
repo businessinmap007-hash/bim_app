@@ -18,7 +18,17 @@ class ApiClient {
           baseUrl: Env.apiBaseUrl,
           connectTimeout: const Duration(seconds: 15),
           receiveTimeout: const Duration(seconds: 20),
-          headers: {'Accept': 'application/json'},
+          headers: {
+            'Accept': 'application/json',
+            // The backend's SetApiLocale middleware honours Accept-Language,
+            // and on Flutter Web the browser attaches its own (observed:
+            // Chrome sent "en", overriding the backend's Arabic default and
+            // returning English error messages while the app's UI was
+            // Arabic). Pin it explicitly to whatever locale the UI is
+            // actually showing — hardcoded to 'ar' until the app supports
+            // switching locales, then this must read the active Locale.
+            'Accept-Language': 'ar',
+          },
         )) {
     _dio.interceptors.add(
       InterceptorsWrapper(

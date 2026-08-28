@@ -36,14 +36,14 @@ class AuthApi {
   }) async {
     final body = await _client.postForBody('/auth/register', data: {
       'name': name,
-      if (nameEn != null) 'name_en': nameEn,
+      'name_en': ?nameEn,
       'email': email,
       'phone': phone,
       'password': password,
       'password_confirmation': passwordConfirmation,
       'type': type,
-      if (categoryId != null) 'category_id': categoryId,
-      if (categoryChildId != null) 'category_child_id': categoryChildId,
+      'category_id': ?categoryId,
+      'category_child_id': ?categoryChildId,
       'terms_accepted': true,
     });
     return (

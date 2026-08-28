@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'app_colors.dart';
+
+/// Registered in pubspec.yaml's `fonts:` section from a bundled asset — see
+/// the note there for why this isn't google_fonts.
+const _fontFamily = 'Cairo';
 
 class AppTheme {
   const AppTheme._();
@@ -23,16 +26,12 @@ class AppTheme {
       onSurface: isDark ? Colors.white : AppColors.primaryNavy,
     );
 
-    final textTheme = GoogleFonts.cairoTextTheme(
-      isDark ? ThemeData.dark().textTheme : ThemeData.light().textTheme,
-    );
-
     return ThemeData(
       useMaterial3: true,
       brightness: brightness,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
-      textTheme: textTheme,
+      fontFamily: _fontFamily,
       appBarTheme: AppBarTheme(
         backgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
         foregroundColor: isDark ? Colors.white : AppColors.primaryNavy,
