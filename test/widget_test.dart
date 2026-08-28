@@ -29,7 +29,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('BOM'), findsOneWidget);
+    expect(find.text('BIM'), findsOneWidget);
     expect(find.text('عميل'), findsOneWidget);
     expect(find.text('صاحب نشاط تجاري'), findsOneWidget);
   });

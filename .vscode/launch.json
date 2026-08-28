@@ -2,14 +2,14 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "BOM (localhost, Chrome)",
+      "name": "BIM (localhost, Chrome)",
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
       "args": ["--dart-define=API_BASE_URL=http://localhost/testing/public/api/v2"]
     },
     {
-      "name": "BOM (localhost, Windows desktop)",
+      "name": "BIM (localhost, Windows desktop)",
       "request": "launch",
       "type": "dart",
       "deviceId": "windows",
@@ -17,14 +17,14 @@
       "args": ["--dart-define=API_BASE_URL=http://localhost/testing/public/api/v2"]
     },
     {
-      "name": "BOM (Android emulator, host alias)",
+      "name": "BIM (Android emulator, host alias)",
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
       "args": ["--dart-define=API_BASE_URL=http://10.0.2.2/testing/public/api/v2"]
     },
     {
-      "name": "BOM (profile mode)",
+      "name": "BIM (profile mode)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "profile",

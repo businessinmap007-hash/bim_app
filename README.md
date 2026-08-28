@@ -1,4 +1,4 @@
-# BOM (Business in Map) — Flutter app
+# BIM (Business in Map) — Flutter app
 
 Frontend for the BIM backend at `C:\xampp\htdocs\testing` (Laravel v2 API).
 The API contract lives there — never guess a request/response shape:

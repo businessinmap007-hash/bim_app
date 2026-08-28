@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// No description provided for @appName.
   ///
   /// In ar, this message translates to:
-  /// **'BOM'**
+  /// **'BIM'**
   String get appName;
 
   /// No description provided for @appTagline.
