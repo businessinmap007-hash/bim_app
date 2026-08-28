@@ -1,0 +1,61 @@
+import '../../../core/network/api_client.dart';
+import 'models/auth_user.dart';
+
+/// Talks to `/auth/*` exactly as documented in the backend's
+/// docs/api/openapi-v2.yaml — the Postman collection (BIM-v2.postman_collection.json)
+/// is the fastest way to double check a shape before changing this file.
+class AuthApi {
+  final ApiClient _client;
+
+  const AuthApi(this._client);
+
+  Future<({AuthUser user, String token})> login({
+    required String email,
+    required String password,
+  }) async {
+    final body = await _client.postForBody('/auth/login', data: {
+      'email': email,
+      'password': password,
+    });
+    return (
+      user: AuthUser.fromJson(body['data'] as Map<String, dynamic>),
+      token: body['token'] as String,
+    );
+  }
+
+  Future<({AuthUser user, String token})> register({
+    required String name,
+    String? nameEn,
+    required String email,
+    required String phone,
+    required String password,
+    required String passwordConfirmation,
+    required String type, // 'client' | 'business'
+    int? categoryId,
+    int? categoryChildId,
+  }) async {
+    final body = await _client.postForBody('/auth/register', data: {
+      'name': name,
+      if (nameEn != null) 'name_en': nameEn,
+      'email': email,
+      'phone': phone,
+      'password': password,
+      'password_confirmation': passwordConfirmation,
+      'type': type,
+      if (categoryId != null) 'category_id': categoryId,
+      if (categoryChildId != null) 'category_child_id': categoryChildId,
+      'terms_accepted': true,
+    });
+    return (
+      user: AuthUser.fromJson(body['data'] as Map<String, dynamic>),
+      token: body['token'] as String,
+    );
+  }
+
+  Future<AuthUser> me() async {
+    final data = await _client.get('/auth/me');
+    return AuthUser.fromJson(data as Map<String, dynamic>);
+  }
+
+  Future<void> logout() => _client.post('/auth/logout');
+}
