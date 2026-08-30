@@ -70,7 +70,7 @@ class CustomerHomeScreen extends ConsumerWidget {
                           _gridSpacing * (rows - 1)) /
                       rows;
                   final aspectRatio = tileWidth / tileHeight;
-                  final iconSize = tileWidth * 0.78;
+                  final iconSize = tileWidth * 0.9;
 
                   return GridView.builder(
                     padding: const EdgeInsets.all(_gridPadding),
