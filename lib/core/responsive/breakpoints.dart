@@ -25,15 +25,17 @@ class Breakpoints {
   }
 
   /// Column count for a category/grid-style list — grows with screen size
-  /// instead of a fixed count everywhere.
+  /// instead of a fixed count everywhere. 4 on mobile (not 3): with ~21 root
+  /// categories, 4 columns is what lets the whole grid fit one screen
+  /// without scrolling on a typical phone.
   static int gridColumnsFor(double width) {
     switch (sizeFor(width)) {
       case ScreenSize.desktop:
-        return 6;
+        return 8;
       case ScreenSize.tablet:
-        return 4;
+        return 6;
       case ScreenSize.mobile:
-        return 3;
+        return 4;
     }
   }
 }

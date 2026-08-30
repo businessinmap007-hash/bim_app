@@ -55,13 +55,14 @@ class CustomerHomeScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(16),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: columns,
-                  mainAxisSpacing: 12,
-                  crossAxisSpacing: 12,
-                  // 0.9 clipped a two-line Arabic category name by a couple
-                  // of pixels (Cairo's line height runs taller than the
-                  // Latin-metrics estimate) — 0.78 gives that second line
-                  // real room instead of trimming padding to chase pixels.
-                  childAspectRatio: 0.78,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 10,
+                  // Compact enough that ~21 root categories (today's count)
+                  // fit one screen on a typical phone without scrolling —
+                  // still gives a two-line Arabic name real room (Cairo's
+                  // line height runs taller than the Latin-metrics estimate
+                  // a tighter ratio was first picked against).
+                  childAspectRatio: 0.88,
                 ),
                 itemCount: items.length,
                 itemBuilder: (context, index) {
