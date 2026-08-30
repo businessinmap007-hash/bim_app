@@ -51,12 +51,12 @@ class _LogoPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // onSurface (not a hardcoded navy) — navy-on-navy was invisible in dark
+    // mode, where onSurface resolves to white instead.
+    final onSurface = Theme.of(context).colorScheme.onSurface;
     return Container(
-      color: AppColors.primaryNavy.withValues(alpha: 0.08),
-      child: const Icon(
-        Icons.storefront_outlined,
-        color: AppColors.primaryNavy,
-      ),
+      color: onSurface.withValues(alpha: 0.08),
+      child: Icon(Icons.storefront_outlined, color: onSurface),
     );
   }
 }

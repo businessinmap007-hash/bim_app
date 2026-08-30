@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../app/theme/app_colors.dart';
 import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
@@ -31,11 +32,6 @@ class CustomerHomeScreen extends ConsumerWidget {
         title: Text(l10n.homeCustomerTitle),
         actions: [
           IconButton(
-            icon: const Icon(Icons.settings_outlined),
-            tooltip: l10n.settingsTitle,
-            onPressed: () => context.push('/settings'),
-          ),
-          IconButton(
             icon: const Icon(Icons.logout),
             tooltip: l10n.authLogout,
             onPressed: () => ref.read(authControllerProvider.notifier).logout(),
@@ -63,10 +59,18 @@ class CustomerHomeScreen extends ConsumerWidget {
               // icon) without re-guessing a ratio each time.
               child: LayoutBuilder(
                 builder: (context, constraints) {
-                  final tileWidth = (constraints.maxWidth - _gridPadding * 2 - _gridSpacing * (_columns - 1)) / _columns;
-                  final tileHeight = (constraints.maxHeight - _gridPadding * 2 - _gridSpacing * (rows - 1)) / rows;
+                  final tileWidth =
+                      (constraints.maxWidth -
+                          _gridPadding * 2 -
+                          _gridSpacing * (_columns - 1)) /
+                      _columns;
+                  final tileHeight =
+                      (constraints.maxHeight -
+                          _gridPadding * 2 -
+                          _gridSpacing * (rows - 1)) /
+                      rows;
                   final aspectRatio = tileWidth / tileHeight;
-                  final iconSize = tileWidth * 0.62;
+                  final iconSize = tileWidth * 0.78;
 
                   return GridView.builder(
                     padding: const EdgeInsets.all(_gridPadding),
@@ -82,9 +86,14 @@ class CustomerHomeScreen extends ConsumerWidget {
                       return CategoryRootTile(
                         category: category,
                         iconSize: iconSize,
+                        iconColor: index.isEven
+                            ? AppColors.accentGold
+                            : AppColors.primaryNavy,
                         onTap: () => context.push(
                           '/categories/${category.id}/specialties',
-                          extra: category.localizedName(Localizations.localeOf(context).languageCode),
+                          extra: category.localizedName(
+                            Localizations.localeOf(context).languageCode,
+                          ),
                         ),
                       );
                     },

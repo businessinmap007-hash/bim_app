@@ -12,6 +12,7 @@ import '../features/home/presentation/screens/business_home_screen.dart';
 import '../features/home/presentation/screens/customer_home_screen.dart';
 import '../features/settings/presentation/screens/settings_screen.dart';
 import '../features/splash/presentation/screens/splash_screen.dart';
+import 'main_shell.dart';
 
 /// A [Listenable] bridge so GoRouter's `refreshListenable` reacts to Riverpod
 /// state changes (GoRouter itself only knows about ChangeNotifier).
@@ -67,16 +68,34 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) =>
             RegisterScreen(accountType: (state.extra as String?) ?? 'client'),
       ),
-      GoRoute(
-        path: '/home',
-        builder: (context, state) {
-          final authState = ref.read(authControllerProvider);
-          final isBusiness =
-              authState is AuthSignedIn && authState.user.isBusiness;
-          return isBusiness
-              ? const BusinessHomeScreen()
-              : const CustomerHomeScreen();
-        },
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) =>
+            MainShell(navigationShell: navigationShell),
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/home',
+                builder: (context, state) {
+                  final authState = ref.read(authControllerProvider);
+                  final isBusiness =
+                      authState is AuthSignedIn && authState.user.isBusiness;
+                  return isBusiness
+                      ? const BusinessHomeScreen()
+                      : const CustomerHomeScreen();
+                },
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/settings',
+                builder: (context, state) => const SettingsScreen(),
+              ),
+            ],
+          ),
+        ],
       ),
       GoRoute(
         path: '/categories/:categoryId/specialties',
@@ -84,10 +103,6 @@ final routerProvider = Provider<GoRouter>((ref) {
           categoryId: int.parse(state.pathParameters['categoryId']!),
           categoryName: (state.extra as String?) ?? '',
         ),
-      ),
-      GoRoute(
-        path: '/settings',
-        builder: (context, state) => const SettingsScreen(),
       ),
       GoRoute(
         path: '/discovery',

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/profile_cover_header.dart';
@@ -26,11 +25,6 @@ class BusinessHomeScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(l10n.homeBusinessTitle),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.settings_outlined),
-            tooltip: l10n.settingsTitle,
-            onPressed: () => context.push('/settings'),
-          ),
           IconButton(
             icon: const Icon(Icons.logout),
             tooltip: l10n.authLogout,

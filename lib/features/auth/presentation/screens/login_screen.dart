@@ -57,77 +57,87 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
-          child: FormBuilder(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  l10n.authWelcomeBack,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 24),
-                if (_error != null) ...[
-                  _ErrorBanner(message: _error!),
-                  const SizedBox(height: 16),
-                ],
-                FormBuilderTextField(
-                  name: 'email',
-                  decoration: InputDecoration(labelText: l10n.authEmailOrPhone),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(
-                      errorText: l10n.validationRequired,
-                    ),
-                    FormBuilderValidators.email(
-                      errorText: l10n.validationInvalidEmail,
-                    ),
-                  ]),
-                ),
-                const SizedBox(height: 16),
-                FormBuilderTextField(
-                  name: 'password',
-                  decoration: InputDecoration(labelText: l10n.authPassword),
-                  obscureText: true,
-                  validator: FormBuilderValidators.required(
-                    errorText: l10n.validationRequired,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Align(
-                  alignment: AlignmentDirectional.centerEnd,
-                  child: TextButton(
-                    onPressed: () {}, // TODO: wire /auth/password/forgot flow
-                    child: Text(l10n.authForgotPassword),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: _submitting ? null : _submit,
-                  child: _submitting
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
-                          ),
-                        )
-                      : Text(l10n.authLogin),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 440),
+              child: FormBuilder(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(l10n.authDontHaveAccount),
-                    TextButton(
-                      onPressed: () =>
-                          context.push('/register', extra: widget.accountType),
-                      child: Text(l10n.authRegister),
+                    Text(
+                      l10n.authWelcomeBack,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const SizedBox(height: 24),
+                    if (_error != null) ...[
+                      _ErrorBanner(message: _error!),
+                      const SizedBox(height: 16),
+                    ],
+                    FormBuilderTextField(
+                      name: 'email',
+                      decoration: InputDecoration(
+                        labelText: l10n.authEmailOrPhone,
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                          errorText: l10n.validationRequired,
+                        ),
+                        FormBuilderValidators.email(
+                          errorText: l10n.validationInvalidEmail,
+                        ),
+                      ]),
+                    ),
+                    const SizedBox(height: 16),
+                    FormBuilderTextField(
+                      name: 'password',
+                      decoration: InputDecoration(labelText: l10n.authPassword),
+                      obscureText: true,
+                      validator: FormBuilderValidators.required(
+                        errorText: l10n.validationRequired,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Align(
+                      alignment: AlignmentDirectional.centerEnd,
+                      child: TextButton(
+                        onPressed:
+                            () {}, // TODO: wire /auth/password/forgot flow
+                        child: Text(l10n.authForgotPassword),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: _submitting ? null : _submit,
+                      child: _submitting
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : Text(l10n.authLogin),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(l10n.authDontHaveAccount),
+                        TextButton(
+                          onPressed: () => context.push(
+                            '/register',
+                            extra: widget.accountType,
+                          ),
+                          child: Text(l10n.authRegister),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
           ),
         ),

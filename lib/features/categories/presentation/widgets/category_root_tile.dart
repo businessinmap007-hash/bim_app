@@ -8,12 +8,14 @@ class CategoryRootTile extends StatelessWidget {
   final CategoryRoot category;
   final VoidCallback onTap;
   final double iconSize;
+  final Color iconColor;
 
   const CategoryRootTile({
     super.key,
     required this.category,
     required this.onTap,
     required this.iconSize,
+    this.iconColor = AppColors.accentGold,
   });
 
   @override
@@ -28,7 +30,9 @@ class CategoryRootTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Theme.of(context).dividerColor.withValues(alpha: 0.2)),
+          border: Border.all(
+            color: Theme.of(context).dividerColor.withValues(alpha: 0.2),
+          ),
         ),
         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 3),
         // FittedBox is a safety net, not the sizing mechanism — iconSize is
@@ -39,16 +43,20 @@ class CategoryRootTile extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(iconForCategory(category.nameAr), color: AppColors.accentGold, size: iconSize),
-              const SizedBox(height: 3),
+              Icon(
+                iconForCategory(category.nameAr),
+                color: iconColor,
+                size: iconSize,
+              ),
+              const SizedBox(height: 4),
               SizedBox(
-                width: iconSize * 2.6,
+                width: iconSize * 2.4,
                 child: Text(
                   displayName,
                   textAlign: TextAlign.center,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600),
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
               ),
             ],

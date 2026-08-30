@@ -64,118 +64,123 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
-          child: FormBuilder(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                if (_error != null) ...[
-                  _ErrorBanner(message: _error!),
-                  const SizedBox(height: 16),
-                ],
-                FormBuilderTextField(
-                  name: 'name',
-                  decoration: InputDecoration(labelText: l10n.authName),
-                  validator: FormBuilderValidators.required(
-                    errorText: l10n.validationRequired,
-                  ),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 440),
+              child: FormBuilder(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (_error != null) ...[
+                      _ErrorBanner(message: _error!),
+                      const SizedBox(height: 16),
+                    ],
+                    FormBuilderTextField(
+                      name: 'name',
+                      decoration: InputDecoration(labelText: l10n.authName),
+                      validator: FormBuilderValidators.required(
+                        errorText: l10n.validationRequired,
+                      ),
+                    ),
+                    if (_isBusiness) ...[
+                      const SizedBox(height: 16),
+                      FormBuilderTextField(
+                        name: 'name_en',
+                        decoration: const InputDecoration(
+                          labelText: 'Business name (English)',
+                        ),
+                        validator: FormBuilderValidators.required(
+                          errorText: l10n.validationRequired,
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 16),
+                    FormBuilderTextField(
+                      name: 'email',
+                      decoration: const InputDecoration(labelText: 'Email'),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                          errorText: l10n.validationRequired,
+                        ),
+                        FormBuilderValidators.email(
+                          errorText: l10n.validationInvalidEmail,
+                        ),
+                      ]),
+                    ),
+                    const SizedBox(height: 16),
+                    FormBuilderTextField(
+                      name: 'phone',
+                      decoration: const InputDecoration(labelText: 'Phone'),
+                      keyboardType: TextInputType.phone,
+                      validator: FormBuilderValidators.required(
+                        errorText: l10n.validationRequired,
+                      ),
+                    ),
+                    if (_isBusiness) ...[
+                      const SizedBox(height: 16),
+                      FormBuilderTextField(
+                        name: 'category_child_id',
+                        decoration: const InputDecoration(
+                          labelText: 'Category (child id)',
+                          helperText:
+                              'TEMP: numeric id until the category picker (Categories module) ships',
+                        ),
+                        keyboardType: TextInputType.number,
+                        validator: FormBuilderValidators.required(
+                          errorText: l10n.validationRequired,
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 16),
+                    FormBuilderTextField(
+                      name: 'password',
+                      decoration: InputDecoration(
+                        labelText: l10n.authPassword,
+                        helperText: l10n.validationPasswordPolicy,
+                      ),
+                      obscureText: true,
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                          errorText: l10n.validationRequired,
+                        ),
+                        FormBuilderValidators.minLength(8),
+                      ]),
+                    ),
+                    const SizedBox(height: 16),
+                    FormBuilderTextField(
+                      name: 'password_confirmation',
+                      decoration: InputDecoration(
+                        labelText: l10n.authConfirmPassword,
+                      ),
+                      obscureText: true,
+                      validator: (value) {
+                        final password =
+                            _formKey.currentState?.fields['password']?.value;
+                        if (value != password) {
+                          return l10n.validationPasswordMismatch;
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: _submitting ? null : _submit,
+                      child: _submitting
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : Text(l10n.authRegister),
+                    ),
+                  ],
                 ),
-                if (_isBusiness) ...[
-                  const SizedBox(height: 16),
-                  FormBuilderTextField(
-                    name: 'name_en',
-                    decoration: const InputDecoration(
-                      labelText: 'Business name (English)',
-                    ),
-                    validator: FormBuilderValidators.required(
-                      errorText: l10n.validationRequired,
-                    ),
-                  ),
-                ],
-                const SizedBox(height: 16),
-                FormBuilderTextField(
-                  name: 'email',
-                  decoration: const InputDecoration(labelText: 'Email'),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(
-                      errorText: l10n.validationRequired,
-                    ),
-                    FormBuilderValidators.email(
-                      errorText: l10n.validationInvalidEmail,
-                    ),
-                  ]),
-                ),
-                const SizedBox(height: 16),
-                FormBuilderTextField(
-                  name: 'phone',
-                  decoration: const InputDecoration(labelText: 'Phone'),
-                  keyboardType: TextInputType.phone,
-                  validator: FormBuilderValidators.required(
-                    errorText: l10n.validationRequired,
-                  ),
-                ),
-                if (_isBusiness) ...[
-                  const SizedBox(height: 16),
-                  FormBuilderTextField(
-                    name: 'category_child_id',
-                    decoration: const InputDecoration(
-                      labelText: 'Category (child id)',
-                      helperText:
-                          'TEMP: numeric id until the category picker (Categories module) ships',
-                    ),
-                    keyboardType: TextInputType.number,
-                    validator: FormBuilderValidators.required(
-                      errorText: l10n.validationRequired,
-                    ),
-                  ),
-                ],
-                const SizedBox(height: 16),
-                FormBuilderTextField(
-                  name: 'password',
-                  decoration: InputDecoration(
-                    labelText: l10n.authPassword,
-                    helperText: l10n.validationPasswordPolicy,
-                  ),
-                  obscureText: true,
-                  validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(
-                      errorText: l10n.validationRequired,
-                    ),
-                    FormBuilderValidators.minLength(8),
-                  ]),
-                ),
-                const SizedBox(height: 16),
-                FormBuilderTextField(
-                  name: 'password_confirmation',
-                  decoration: InputDecoration(
-                    labelText: l10n.authConfirmPassword,
-                  ),
-                  obscureText: true,
-                  validator: (value) {
-                    final password =
-                        _formKey.currentState?.fields['password']?.value;
-                    if (value != password) {
-                      return l10n.validationPasswordMismatch;
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 24),
-                ElevatedButton(
-                  onPressed: _submitting ? null : _submit,
-                  child: _submitting
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
-                          ),
-                        )
-                      : Text(l10n.authRegister),
-                ),
-              ],
+              ),
             ),
           ),
         ),

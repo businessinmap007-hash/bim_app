@@ -116,6 +116,15 @@ class _Avatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // A fixed pale-gold fill (blended against white, not the page
+    // background) so the navy icon's contrast stays the same in both
+    // themes — an alpha-blended gold over a dark scaffold turns muted
+    // dark-brown, and navy-on-that was nearly invisible in dark mode.
+    final placeholderFill = Color.alphaBlend(
+      AppColors.accentGold.withValues(alpha: 0.15),
+      Colors.white,
+    );
+
     return Container(
       width: radius * 2,
       height: radius * 2,
@@ -125,7 +134,7 @@ class _Avatar extends StatelessWidget {
           color: Theme.of(context).scaffoldBackgroundColor,
           width: 3,
         ),
-        color: AppColors.accentGold.withValues(alpha: 0.15),
+        color: placeholderFill,
       ),
       child: ClipOval(
         child: imageUrl != null
