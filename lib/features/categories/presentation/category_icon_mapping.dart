@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-/// Maps a root category's Arabic name to a Material icon for [PinBadgeIcon].
+/// Maps a root category's Arabic name to a Material icon, rendered solid
+/// gold as the category's own shape (no badge/container) — the glyph itself
+/// is the brand mark, not a decoration around it.
 /// Matched by keyword (not exact string) so small backend wording changes
 /// don't silently fall back to the generic icon. Order matters — first
 /// match wins, so put more specific keywords before broader ones.

@@ -45,30 +45,35 @@ class CustomerHomeScreen extends ConsumerWidget {
           if (items.isEmpty) {
             return Center(child: Text(l10n.categoriesEmpty));
           }
-          final columns = Breakpoints.gridColumnsFor(
-            MediaQuery.sizeOf(context).width,
-          );
+
+          // Fixed 3 columns by design (not screen-size-driven) — with the
+          // current ~21 root categories that's exactly 7 rows. Icon size is
+          // still computed from the real column width, so it reads as sized
+          // "for the screen" rather than an arbitrary constant.
+          const columns = 3;
+          const gridPadding = 16.0;
+          const gridSpacing = 10.0;
+          final contentWidth = MediaQuery.sizeOf(context).width.clamp(0, Breakpoints.maxContentWidth).toDouble();
+          final tileWidth = (contentWidth - gridPadding * 2 - gridSpacing * (columns - 1)) / columns;
+          final iconSize = tileWidth * 0.42;
+
           return RefreshIndicator(
             onRefresh: () async => ref.invalidate(categoryRootsProvider),
             child: ResponsiveCenter(
               child: GridView.builder(
-                padding: const EdgeInsets.all(16),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                padding: const EdgeInsets.all(gridPadding),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: columns,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                  // Compact enough that ~21 root categories (today's count)
-                  // fit one screen on a typical phone without scrolling —
-                  // still gives a two-line Arabic name real room (Cairo's
-                  // line height runs taller than the Latin-metrics estimate
-                  // a tighter ratio was first picked against).
-                  childAspectRatio: 0.88,
+                  mainAxisSpacing: gridSpacing,
+                  crossAxisSpacing: gridSpacing,
+                  childAspectRatio: 0.95,
                 ),
                 itemCount: items.length,
                 itemBuilder: (context, index) {
                   final category = items[index];
                   return CategoryRootTile(
                     category: category,
+                    iconSize: iconSize,
                     onTap: () => context.push(
                       '/categories/${category.id}/specialties',
                       extra: category.nameAr,
