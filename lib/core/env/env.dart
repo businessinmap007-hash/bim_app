@@ -18,4 +18,24 @@ class Env {
     'LOG_NETWORK',
     defaultValue: true,
   );
+
+  /// The server's document root (no `/api/v2`) — image paths like `logo`
+  /// come back as paths relative to this (e.g. `files/uploads/x.jpg`), not
+  /// full URLs. Derived from [apiBaseUrl] so there's one source of truth.
+  static String get assetBaseUrl {
+    const suffix = '/api/v2';
+    return apiBaseUrl.endsWith(suffix)
+        ? apiBaseUrl.substring(0, apiBaseUrl.length - suffix.length)
+        : apiBaseUrl;
+  }
+
+  /// Builds a full URL for a relative asset path the backend returned, or
+  /// null if there isn't one — callers decide the placeholder.
+  static String? assetUrl(String? relativePath) {
+    if (relativePath == null || relativePath.isEmpty) return null;
+    if (relativePath.startsWith('http://') || relativePath.startsWith('https://')) {
+      return relativePath;
+    }
+    return '$assetBaseUrl/$relativePath';
+  }
 }

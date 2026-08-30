@@ -31,5 +31,16 @@
   "validationPasswordPolicy": "8-20 characters, with an upper-case letter, a lower-case letter, and a digit.",
   "validationPasswordMismatch": "Passwords do not match.",
   "homeCustomerTitle": "Home",
-  "homeBusinessTitle": "Business Dashboard"
+  "homeBusinessTitle": "Business Dashboard",
+  "categoriesEmpty": "No categories available right now.",
+  "specialtiesEmpty": "No specialties available in this category.",
+  "businessSearchHint": "Search by business name...",
+  "businessListEmpty": "No matching businesses.",
+  "businessOpenNow": "Open now",
+  "businessClosedNow": "Closed now",
+  "businessCallForPrice": "Call for price",
+  "businessCount": "{count, plural, =0{No businesses} one{1 business} other{{count} businesses}}",
+  "@businessCount": {
+    "placeholders": { "count": { "type": "int" } }
+  }
 }

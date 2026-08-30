@@ -289,6 +289,54 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لوحة النشاط'**
   String get homeBusinessTitle;
+
+  /// No description provided for @categoriesEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد تصنيفات متاحة حاليًا.'**
+  String get categoriesEmpty;
+
+  /// No description provided for @specialtiesEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد تخصصات متاحة في هذا التصنيف.'**
+  String get specialtiesEmpty;
+
+  /// No description provided for @businessSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث باسم النشاط...'**
+  String get businessSearchHint;
+
+  /// No description provided for @businessListEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أنشطة مطابقة.'**
+  String get businessListEmpty;
+
+  /// No description provided for @businessOpenNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفتوح الآن'**
+  String get businessOpenNow;
+
+  /// No description provided for @businessClosedNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'مغلق الآن'**
+  String get businessClosedNow;
+
+  /// No description provided for @businessCallForPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتصل للسعر'**
+  String get businessCallForPrice;
+
+  /// No description provided for @businessCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{لا يوجد نشاط} one{نشاط واحد} two{نشاطان} few{{count} أنشطة} many{{count} نشاطًا} other{{count} نشاط}}'**
+  String businessCount(int count);
 }
 
 class _AppLocalizationsDelegate

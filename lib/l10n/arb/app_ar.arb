@@ -31,5 +31,16 @@
   "validationPasswordPolicy": "من 8 إلى 20 حرفًا، بحرف كبير وحرف صغير ورقم على الأقل.",
   "validationPasswordMismatch": "كلمتا المرور غير متطابقتين.",
   "homeCustomerTitle": "الرئيسية",
-  "homeBusinessTitle": "لوحة النشاط"
+  "homeBusinessTitle": "لوحة النشاط",
+  "categoriesEmpty": "لا توجد تصنيفات متاحة حاليًا.",
+  "specialtiesEmpty": "لا توجد تخصصات متاحة في هذا التصنيف.",
+  "businessSearchHint": "ابحث باسم النشاط...",
+  "businessListEmpty": "لا توجد أنشطة مطابقة.",
+  "businessOpenNow": "مفتوح الآن",
+  "businessClosedNow": "مغلق الآن",
+  "businessCallForPrice": "اتصل للسعر",
+  "businessCount": "{count, plural, =0{لا يوجد نشاط} one{نشاط واحد} two{نشاطان} few{{count} أنشطة} many{{count} نشاطًا} other{{count} نشاط}}",
+  "@businessCount": {
+    "placeholders": { "count": { "type": "int" } }
+  }
 }

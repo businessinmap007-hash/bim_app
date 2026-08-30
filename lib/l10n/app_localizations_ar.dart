@@ -104,4 +104,40 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get homeBusinessTitle => 'لوحة النشاط';
+
+  @override
+  String get categoriesEmpty => 'لا توجد تصنيفات متاحة حاليًا.';
+
+  @override
+  String get specialtiesEmpty => 'لا توجد تخصصات متاحة في هذا التصنيف.';
+
+  @override
+  String get businessSearchHint => 'ابحث باسم النشاط...';
+
+  @override
+  String get businessListEmpty => 'لا توجد أنشطة مطابقة.';
+
+  @override
+  String get businessOpenNow => 'مفتوح الآن';
+
+  @override
+  String get businessClosedNow => 'مغلق الآن';
+
+  @override
+  String get businessCallForPrice => 'اتصل للسعر';
+
+  @override
+  String businessCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count نشاط',
+      many: '$count نشاطًا',
+      few: '$count أنشطة',
+      two: 'نشاطان',
+      one: 'نشاط واحد',
+      zero: 'لا يوجد نشاط',
+    );
+    return '$_temp0';
+  }
 }

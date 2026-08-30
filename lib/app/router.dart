@@ -6,6 +6,8 @@ import '../features/auth/application/auth_controller.dart';
 import '../features/auth/presentation/screens/account_type_screen.dart';
 import '../features/auth/presentation/screens/login_screen.dart';
 import '../features/auth/presentation/screens/register_screen.dart';
+import '../features/categories/presentation/screens/specialties_screen.dart';
+import '../features/discovery/presentation/screens/business_list_screen.dart';
 import '../features/home/presentation/screens/business_home_screen.dart';
 import '../features/home/presentation/screens/customer_home_screen.dart';
 import '../features/splash/presentation/screens/splash_screen.dart';
@@ -61,6 +63,23 @@ final routerProvider = Provider<GoRouter>((ref) {
           final authState = ref.read(authControllerProvider);
           final isBusiness = authState is AuthSignedIn && authState.user.isBusiness;
           return isBusiness ? const BusinessHomeScreen() : const CustomerHomeScreen();
+        },
+      ),
+      GoRoute(
+        path: '/categories/:categoryId/specialties',
+        builder: (context, state) => SpecialtiesScreen(
+          categoryId: int.parse(state.pathParameters['categoryId']!),
+          categoryName: (state.extra as String?) ?? '',
+        ),
+      ),
+      GoRoute(
+        path: '/discovery',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, Object?>;
+          return BusinessListScreen(
+            childId: extra['childId'] as int,
+            title: extra['title'] as String,
+          );
         },
       ),
     ],

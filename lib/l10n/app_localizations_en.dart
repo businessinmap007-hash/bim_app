@@ -105,4 +105,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeBusinessTitle => 'Business Dashboard';
+
+  @override
+  String get categoriesEmpty => 'No categories available right now.';
+
+  @override
+  String get specialtiesEmpty => 'No specialties available in this category.';
+
+  @override
+  String get businessSearchHint => 'Search by business name...';
+
+  @override
+  String get businessListEmpty => 'No matching businesses.';
+
+  @override
+  String get businessOpenNow => 'Open now';
+
+  @override
+  String get businessClosedNow => 'Closed now';
+
+  @override
+  String get businessCallForPrice => 'Call for price';
+
+  @override
+  String businessCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count businesses',
+      one: '1 business',
+      zero: 'No businesses',
+    );
+    return '$_temp0';
+  }
 }
