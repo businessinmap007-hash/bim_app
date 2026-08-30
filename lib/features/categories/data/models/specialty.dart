@@ -19,4 +19,11 @@ class Specialty {
     nameEn: json['name_en'] as String?,
     businessCount: (json['businesses'] as num?)?.toInt() ?? 0,
   );
+
+  /// The name to show for [languageCode] — falls back to Arabic when the
+  /// English name is missing, same rule as [CategoryRoot.localizedName].
+  String localizedName(String languageCode) {
+    if (languageCode == 'en' && (nameEn?.isNotEmpty ?? false)) return nameEn!;
+    return nameAr;
+  }
 }

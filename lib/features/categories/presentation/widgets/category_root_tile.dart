@@ -18,6 +18,9 @@ class CategoryRootTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final languageCode = Localizations.localeOf(context).languageCode;
+    final displayName = category.localizedName(languageCode);
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
@@ -27,7 +30,7 @@ class CategoryRootTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: Theme.of(context).dividerColor.withValues(alpha: 0.2)),
         ),
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
+        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 3),
         // FittedBox is a safety net, not the sizing mechanism — iconSize is
         // computed from the actual column width so the icon itself reads as
         // sized "for the screen", not squeezed to fit as a last resort.
@@ -37,11 +40,11 @@ class CategoryRootTile extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(iconForCategory(category.nameAr), color: AppColors.accentGold, size: iconSize),
-              const SizedBox(height: 8),
+              const SizedBox(height: 3),
               SizedBox(
                 width: iconSize * 2.6,
                 child: Text(
-                  category.nameAr,
+                  displayName,
                   textAlign: TextAlign.center,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,

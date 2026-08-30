@@ -17,6 +17,10 @@ import '../../../categories/presentation/widgets/category_root_tile.dart';
 class CustomerHomeScreen extends ConsumerWidget {
   const CustomerHomeScreen({super.key});
 
+  static const _columns = 3;
+  static const _gridPadding = 10.0;
+  static const _gridSpacing = 6.0;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
@@ -46,38 +50,44 @@ class CustomerHomeScreen extends ConsumerWidget {
             return Center(child: Text(l10n.categoriesEmpty));
           }
 
-          // Fixed 3 columns by design (not screen-size-driven) — with the
-          // current ~21 root categories that's exactly 7 rows. Icon size is
-          // still computed from the real column width, so it reads as sized
-          // "for the screen" rather than an arbitrary constant.
-          const columns = 3;
-          const gridPadding = 16.0;
-          const gridSpacing = 10.0;
-          final contentWidth = MediaQuery.sizeOf(context).width.clamp(0, Breakpoints.maxContentWidth).toDouble();
-          final tileWidth = (contentWidth - gridPadding * 2 - gridSpacing * (columns - 1)) / columns;
-          final iconSize = tileWidth * 0.42;
+          final rows = (items.length / _columns).ceil();
 
           return RefreshIndicator(
             onRefresh: () async => ref.invalidate(categoryRootsProvider),
             child: ResponsiveCenter(
-              child: GridView.builder(
-                padding: const EdgeInsets.all(gridPadding),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: columns,
-                  mainAxisSpacing: gridSpacing,
-                  crossAxisSpacing: gridSpacing,
-                  childAspectRatio: 0.95,
-                ),
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  final category = items[index];
-                  return CategoryRootTile(
-                    category: category,
-                    iconSize: iconSize,
-                    onTap: () => context.push(
-                      '/categories/${category.id}/specialties',
-                      extra: category.nameAr,
+              // The whole grid — every row, all at once — sized to exactly
+              // fill this screen's available height, not a fixed
+              // childAspectRatio picked by eye. That's the only way "no
+              // scroll needed" holds regardless of device height, and it's
+              // what lets the icon grow (bigger available cell = bigger
+              // icon) without re-guessing a ratio each time.
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final tileWidth = (constraints.maxWidth - _gridPadding * 2 - _gridSpacing * (_columns - 1)) / _columns;
+                  final tileHeight = (constraints.maxHeight - _gridPadding * 2 - _gridSpacing * (rows - 1)) / rows;
+                  final aspectRatio = tileWidth / tileHeight;
+                  final iconSize = tileWidth * 0.62;
+
+                  return GridView.builder(
+                    padding: const EdgeInsets.all(_gridPadding),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: _columns,
+                      mainAxisSpacing: _gridSpacing,
+                      crossAxisSpacing: _gridSpacing,
+                      childAspectRatio: aspectRatio,
                     ),
+                    itemCount: items.length,
+                    itemBuilder: (context, index) {
+                      final category = items[index];
+                      return CategoryRootTile(
+                        category: category,
+                        iconSize: iconSize,
+                        onTap: () => context.push(
+                          '/categories/${category.id}/specialties',
+                          extra: category.localizedName(Localizations.localeOf(context).languageCode),
+                        ),
+                      );
+                    },
                   );
                 },
               ),

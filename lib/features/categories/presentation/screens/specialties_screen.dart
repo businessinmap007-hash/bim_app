@@ -43,11 +43,12 @@ class SpecialtiesScreen extends ConsumerWidget {
                 separatorBuilder: (context, index) => const SizedBox(height: 8),
                 itemBuilder: (context, index) {
                   final specialty = items[index];
+                  final displayName = specialty.localizedName(Localizations.localeOf(context).languageCode);
                   return Card(
                     margin: EdgeInsets.zero,
                     child: ListTile(
                       title: Text(
-                        specialty.nameAr,
+                        displayName,
                         style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                       trailing: Text(
@@ -57,7 +58,7 @@ class SpecialtiesScreen extends ConsumerWidget {
                         '/discovery',
                         extra: {
                           'childId': specialty.id,
-                          'title': specialty.nameAr,
+                          'title': displayName,
                         },
                       ),
                     ),
