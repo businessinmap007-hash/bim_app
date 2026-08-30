@@ -34,7 +34,7 @@ class CategoryRootTile extends StatelessWidget {
             color: Theme.of(context).dividerColor.withValues(alpha: 0.2),
           ),
         ),
-        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 3),
+        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
         // FittedBox is a safety net, not the sizing mechanism — iconSize is
         // computed from the actual column width so the icon itself reads as
         // sized "for the screen", not squeezed to fit as a last resort.

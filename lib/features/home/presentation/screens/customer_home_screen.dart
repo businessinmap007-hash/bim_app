@@ -19,8 +19,8 @@ class CustomerHomeScreen extends ConsumerWidget {
   const CustomerHomeScreen({super.key});
 
   static const _columns = 3;
-  static const _gridPadding = 10.0;
-  static const _gridSpacing = 6.0;
+  static const _gridPadding = 6.0;
+  static const _gridSpacing = 4.0;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
