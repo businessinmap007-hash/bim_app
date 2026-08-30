@@ -15,10 +15,20 @@ class AppTheme {
 
   static ThemeData _base(Brightness brightness) {
     final isDark = brightness == Brightness.dark;
+    // Navy is the brand's "ink" color — great contrast on the light cream
+    // background, nearly invisible on the dark one. Every default-M3-themed
+    // widget that derives its color from colorScheme.primary (TextButton,
+    // etc.) inherited that navy in dark mode too, which is how "نسيت كلمة
+    // المرور؟" ended up unreadable against the dark background. Gold reads
+    // well on both, so it takes over as the interactive/primary color in
+    // dark mode; explicit widget themes below (ElevatedButton) are
+    // unaffected since they hardcode their own colors already.
+    final interactive = isDark ? AppColors.accentGold : AppColors.primaryNavy;
+    final onInteractive = isDark ? AppColors.primaryNavy : Colors.white;
     final colorScheme = ColorScheme(
       brightness: brightness,
-      primary: AppColors.primaryNavy,
-      onPrimary: Colors.white,
+      primary: interactive,
+      onPrimary: onInteractive,
       secondary: AppColors.accentGold,
       onSecondary: AppColors.primaryNavy,
       error: AppColors.error,
