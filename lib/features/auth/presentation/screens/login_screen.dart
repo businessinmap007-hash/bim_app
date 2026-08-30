@@ -33,7 +33,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     });
 
     try {
-      await ref.read(authControllerProvider.notifier).login(
+      await ref
+          .read(authControllerProvider.notifier)
+          .login(
             email: values['email'] as String,
             password: values['password'] as String,
           );
@@ -60,7 +62,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(l10n.authWelcomeBack, style: Theme.of(context).textTheme.titleLarge),
+                Text(
+                  l10n.authWelcomeBack,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
                 const SizedBox(height: 24),
                 if (_error != null) ...[
                   _ErrorBanner(message: _error!),
@@ -71,8 +76,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   decoration: InputDecoration(labelText: l10n.authEmailOrPhone),
                   keyboardType: TextInputType.emailAddress,
                   validator: FormBuilderValidators.compose([
-                    FormBuilderValidators.required(errorText: l10n.validationRequired),
-                    FormBuilderValidators.email(errorText: l10n.validationInvalidEmail),
+                    FormBuilderValidators.required(
+                      errorText: l10n.validationRequired,
+                    ),
+                    FormBuilderValidators.email(
+                      errorText: l10n.validationInvalidEmail,
+                    ),
                   ]),
                 ),
                 const SizedBox(height: 16),
@@ -80,7 +89,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   name: 'password',
                   decoration: InputDecoration(labelText: l10n.authPassword),
                   obscureText: true,
-                  validator: FormBuilderValidators.required(errorText: l10n.validationRequired),
+                  validator: FormBuilderValidators.required(
+                    errorText: l10n.validationRequired,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Align(
@@ -97,7 +108,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ? const SizedBox(
                           height: 20,
                           width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
                         )
                       : Text(l10n.authLogin),
                 ),
@@ -107,7 +121,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   children: [
                     Text(l10n.authDontHaveAccount),
                     TextButton(
-                      onPressed: () => context.push('/register', extra: widget.accountType),
+                      onPressed: () =>
+                          context.push('/register', extra: widget.accountType),
                       child: Text(l10n.authRegister),
                     ),
                   ],
@@ -133,7 +148,10 @@ class _ErrorBanner extends StatelessWidget {
         color: Theme.of(context).colorScheme.error.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Text(message, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+      child: Text(
+        message,
+        style: TextStyle(color: Theme.of(context).colorScheme.error),
+      ),
     );
   }
 }

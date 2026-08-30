@@ -13,26 +13,26 @@ class ApiClient {
   final Dio _dio;
   final TokenStorage _tokenStorage;
 
+  /// The backend's SetApiLocale middleware honours Accept-Language, and on
+  /// Flutter Web the browser attaches its own (observed: Chrome sent "en",
+  /// overriding the backend's Arabic default and returning English error
+  /// messages while the app's UI was Arabic). Set by [LocaleController]
+  /// whenever the user switches language, so this always matches the UI.
+  String languageCode = 'ar';
+
   ApiClient(this._tokenStorage)
-      : _dio = Dio(BaseOptions(
+    : _dio = Dio(
+        BaseOptions(
           baseUrl: Env.apiBaseUrl,
           connectTimeout: const Duration(seconds: 15),
           receiveTimeout: const Duration(seconds: 20),
-          headers: {
-            'Accept': 'application/json',
-            // The backend's SetApiLocale middleware honours Accept-Language,
-            // and on Flutter Web the browser attaches its own (observed:
-            // Chrome sent "en", overriding the backend's Arabic default and
-            // returning English error messages while the app's UI was
-            // Arabic). Pin it explicitly to whatever locale the UI is
-            // actually showing — hardcoded to 'ar' until the app supports
-            // switching locales, then this must read the active Locale.
-            'Accept-Language': 'ar',
-          },
-        )) {
+          headers: {'Accept': 'application/json'},
+        ),
+      ) {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
+          options.headers['Accept-Language'] = languageCode;
           final token = await _tokenStorage.read();
           if (token != null && token.isNotEmpty) {
             options.headers['Authorization'] = 'Bearer $token';
@@ -43,11 +43,9 @@ class ApiClient {
     );
 
     if (Env.logNetwork) {
-      _dio.interceptors.add(LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-        error: true,
-      ));
+      _dio.interceptors.add(
+        LogInterceptor(requestBody: true, responseBody: true, error: true),
+      );
     }
   }
 
@@ -56,8 +54,17 @@ class ApiClient {
   Future<dynamic> get(String path, {Map<String, dynamic>? query}) =>
       _unwrap(() => _dio.get(path, queryParameters: query));
 
-  Future<dynamic> post(String path, {Object? data, Map<String, String>? headers}) =>
-      _unwrap(() => _dio.post(path, data: data, options: Options(headers: headers)));
+  Future<dynamic> post(
+    String path, {
+    Object? data,
+    Map<String, String>? headers,
+  }) => _unwrap(
+    () => _dio.post(
+      path,
+      data: data,
+      options: Options(headers: headers),
+    ),
+  );
 
   /// For the rare endpoint whose success body carries more than `data`
   /// (e.g. `/auth/login`'s sibling `token` field) — same error handling as
@@ -101,11 +108,17 @@ class ApiClient {
       if (rawErrors is Map) {
         rawErrors.forEach((key, value) {
           if (value is List) {
-            fieldErrors[key.toString()] = value.map((v) => v.toString()).toList();
+            fieldErrors[key.toString()] = value
+                .map((v) => v.toString())
+                .toList();
           }
         });
       }
-      return ApiException(statusCode: status, message: message, fieldErrors: fieldErrors);
+      return ApiException(
+        statusCode: status,
+        message: message,
+        fieldErrors: fieldErrors,
+      );
     }
 
     if (e.type == DioExceptionType.connectionTimeout ||
@@ -114,6 +127,9 @@ class ApiClient {
       return const ApiException(message: 'No internet connection.');
     }
 
-    return ApiException(statusCode: status, message: e.message ?? 'Request failed.');
+    return ApiException(
+      statusCode: status,
+      message: e.message ?? 'Request failed.',
+    );
   }
 }

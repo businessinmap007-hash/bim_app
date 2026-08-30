@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../network/api_client.dart';
+import '../storage/locale_storage.dart';
 import '../storage/token_storage.dart';
 
 final secureStorageProvider = Provider<FlutterSecureStorage>((ref) {
@@ -14,4 +15,8 @@ final tokenStorageProvider = Provider<TokenStorage>((ref) {
 
 final apiClientProvider = Provider<ApiClient>((ref) {
   return ApiClient(ref.watch(tokenStorageProvider));
+});
+
+final localeStorageProvider = Provider<LocaleStorage>((ref) {
+  return LocaleStorage();
 });

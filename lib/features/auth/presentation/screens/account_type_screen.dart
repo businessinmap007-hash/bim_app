@@ -23,15 +23,19 @@ class AccountTypeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Icon(Icons.push_pin_rounded, size: 64, color: AppColors.accentGold),
+              const Icon(
+                Icons.push_pin_rounded,
+                size: 64,
+                color: AppColors.accentGold,
+              ),
               const SizedBox(height: 16),
               Text(
                 l10n.appName,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primaryNavy,
-                    ),
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.primaryNavy,
+                ),
               ),
               const SizedBox(height: 4),
               Text(

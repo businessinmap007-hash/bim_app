@@ -17,10 +17,10 @@ class CategoryRoot {
   });
 
   factory CategoryRoot.fromJson(Map<String, dynamic> json) => CategoryRoot(
-        id: json['id'] as int,
-        nameAr: json['name_ar'] as String? ?? '',
-        nameEn: json['name_en'] as String?,
-        slug: json['slug'] as String?,
-        imageUrl: Env.assetUrl(json['image'] as String?),
-      );
+    id: json['id'] as int,
+    nameAr: json['name_ar'] as String? ?? '',
+    nameEn: json['name_en'] as String?,
+    slug: json['slug'] as String?,
+    imageUrl: Env.assetUrl(json['image'] as String?),
+  );
 }

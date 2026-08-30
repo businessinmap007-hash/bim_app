@@ -11,16 +11,25 @@ class CategoriesApi {
 
   Future<List<CategoryRoot>> roots() async {
     final data = await _client.get('/categories');
-    final list = (data as Map<String, dynamic>)['categories'] as List<dynamic>? ?? [];
-    return list.map((e) => CategoryRoot.fromJson(e as Map<String, dynamic>)).toList();
+    final list =
+        (data as Map<String, dynamic>)['categories'] as List<dynamic>? ?? [];
+    return list
+        .map((e) => CategoryRoot.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
-  Future<List<Specialty>> specialties(int categoryId, {bool sellableOnly = false}) async {
+  Future<List<Specialty>> specialties(
+    int categoryId, {
+    bool sellableOnly = false,
+  }) async {
     final data = await _client.get(
       '/categories/$categoryId/specialties',
       query: sellableOnly ? {'sellable': true} : null,
     );
-    final list = (data as Map<String, dynamic>)['specialties'] as List<dynamic>? ?? [];
-    return list.map((e) => Specialty.fromJson(e as Map<String, dynamic>)).toList();
+    final list =
+        (data as Map<String, dynamic>)['specialties'] as List<dynamic>? ?? [];
+    return list
+        .map((e) => Specialty.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 }

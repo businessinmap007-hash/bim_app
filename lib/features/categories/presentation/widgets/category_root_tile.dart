@@ -8,7 +8,11 @@ class CategoryRootTile extends StatelessWidget {
   final CategoryRoot category;
   final VoidCallback onTap;
 
-  const CategoryRootTile({super.key, required this.category, required this.onTap});
+  const CategoryRootTile({
+    super.key,
+    required this.category,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +23,9 @@ class CategoryRootTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Theme.of(context).dividerColor.withValues(alpha: 0.2)),
+          border: Border.all(
+            color: Theme.of(context).dividerColor.withValues(alpha: 0.2),
+          ),
         ),
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
         child: Column(
@@ -34,10 +40,17 @@ class CategoryRootTile extends StatelessWidget {
                       child: CachedNetworkImage(
                         imageUrl: category.imageUrl!,
                         fit: BoxFit.cover,
-                        errorWidget: (context, url, error) => const Icon(Icons.category_outlined, color: AppColors.accentGold),
+                        errorWidget: (context, url, error) => const Icon(
+                          Icons.category_outlined,
+                          color: AppColors.accentGold,
+                        ),
                       ),
                     )
-                  : const Icon(Icons.category_outlined, size: 36, color: AppColors.accentGold),
+                  : const Icon(
+                      Icons.category_outlined,
+                      size: 36,
+                      color: AppColors.accentGold,
+                    ),
             ),
             const SizedBox(height: 10),
             Text(
@@ -45,7 +58,9 @@ class CategoryRootTile extends StatelessWidget {
               textAlign: TextAlign.center,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
             ),
           ],
         ),

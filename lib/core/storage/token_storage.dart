@@ -12,7 +12,8 @@ class TokenStorage {
 
   Future<String?> read() => _storage.read(key: _tokenKey);
 
-  Future<void> write(String token) => _storage.write(key: _tokenKey, value: token);
+  Future<void> write(String token) =>
+      _storage.write(key: _tokenKey, value: token);
 
   Future<void> clear() => _storage.delete(key: _tokenKey);
 }

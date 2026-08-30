@@ -11,7 +11,12 @@ class AsyncValueView<T> extends StatelessWidget {
   final Widget Function(BuildContext context, T data) builder;
   final VoidCallback? onRetry;
 
-  const AsyncValueView({super.key, required this.value, required this.builder, this.onRetry});
+  const AsyncValueView({
+    super.key,
+    required this.value,
+    required this.builder,
+    this.onRetry,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +31,22 @@ class AsyncValueView<T> extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.error_outline, size: 40, color: Theme.of(context).colorScheme.error),
+                Icon(
+                  Icons.error_outline,
+                  size: 40,
+                  color: Theme.of(context).colorScheme.error,
+                ),
                 const SizedBox(height: 12),
-                Text(l10n.commonSomethingWentWrong, textAlign: TextAlign.center),
+                Text(
+                  l10n.commonSomethingWentWrong,
+                  textAlign: TextAlign.center,
+                ),
                 if (onRetry != null) ...[
                   const SizedBox(height: 12),
-                  OutlinedButton(onPressed: onRetry, child: Text(l10n.commonRetry)),
+                  OutlinedButton(
+                    onPressed: onRetry,
+                    child: Text(l10n.commonRetry),
+                  ),
                 ],
               ],
             ),

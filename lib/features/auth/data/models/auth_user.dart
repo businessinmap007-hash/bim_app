@@ -1,3 +1,5 @@
+import '../../../../core/env/env.dart';
+
 /// Mirrors `App\Http\Resources\V2\AccountResource` on the backend.
 /// Kept intentionally small — extend as screens need more fields, but never
 /// guess a field name; check the resource/openapi-v2.yaml first.
@@ -8,6 +10,8 @@ class AuthUser {
   final String email;
   final String phone;
   final String type; // 'client' | 'business'
+  final String? logoUrl;
+  final String? coverUrl;
 
   const AuthUser({
     required this.id,
@@ -16,16 +20,20 @@ class AuthUser {
     required this.email,
     required this.phone,
     required this.type,
+    this.logoUrl,
+    this.coverUrl,
   });
 
   bool get isBusiness => type == 'business';
 
   factory AuthUser.fromJson(Map<String, dynamic> json) => AuthUser(
-        id: json['id'] as int,
-        name: json['name'] as String? ?? '',
-        nameEn: json['name_en'] as String?,
-        email: json['email'] as String? ?? '',
-        phone: json['phone'] as String? ?? '',
-        type: json['type'] as String? ?? 'client',
-      );
+    id: json['id'] as int,
+    name: json['name'] as String? ?? '',
+    nameEn: json['name_en'] as String?,
+    email: json['email'] as String? ?? '',
+    phone: json['phone'] as String? ?? '',
+    type: json['type'] as String? ?? 'client',
+    logoUrl: Env.assetUrl(json['logo'] as String?),
+    coverUrl: Env.assetUrl(json['cover'] as String?),
+  );
 }

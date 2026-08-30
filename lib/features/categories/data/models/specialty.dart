@@ -14,9 +14,9 @@ class Specialty {
   });
 
   factory Specialty.fromJson(Map<String, dynamic> json) => Specialty(
-        id: json['id'] as int,
-        nameAr: json['name_ar'] as String? ?? '',
-        nameEn: json['name_en'] as String?,
-        businessCount: (json['businesses'] as num?)?.toInt() ?? 0,
-      );
+    id: json['id'] as int,
+    nameAr: json['name_ar'] as String? ?? '',
+    nameEn: json['name_en'] as String?,
+    businessCount: (json['businesses'] as num?)?.toInt() ?? 0,
+  );
 }

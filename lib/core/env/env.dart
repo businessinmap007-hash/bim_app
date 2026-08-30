@@ -33,7 +33,8 @@ class Env {
   /// null if there isn't one — callers decide the placeholder.
   static String? assetUrl(String? relativePath) {
     if (relativePath == null || relativePath.isEmpty) return null;
-    if (relativePath.startsWith('http://') || relativePath.startsWith('https://')) {
+    if (relativePath.startsWith('http://') ||
+        relativePath.startsWith('https://')) {
       return relativePath;
     }
     return '$assetBaseUrl/$relativePath';

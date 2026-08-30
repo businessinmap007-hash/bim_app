@@ -10,6 +10,7 @@ import '../features/categories/presentation/screens/specialties_screen.dart';
 import '../features/discovery/presentation/screens/business_list_screen.dart';
 import '../features/home/presentation/screens/business_home_screen.dart';
 import '../features/home/presentation/screens/customer_home_screen.dart';
+import '../features/settings/presentation/screens/settings_screen.dart';
 import '../features/splash/presentation/screens/splash_screen.dart';
 
 /// A [Listenable] bridge so GoRouter's `refreshListenable` reacts to Riverpod
@@ -28,7 +29,8 @@ final routerProvider = Provider<GoRouter>((ref) {
     refreshListenable: authListenable,
     redirect: (context, state) {
       final authState = ref.read(authControllerProvider);
-      final atAuthGate = state.matchedLocation == '/' ||
+      final atAuthGate =
+          state.matchedLocation == '/' ||
           state.matchedLocation == '/login' ||
           state.matchedLocation == '/register';
 
@@ -47,22 +49,33 @@ final routerProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
-      GoRoute(path: '/splash', builder: (context, state) => const SplashScreen()),
-      GoRoute(path: '/', builder: (context, state) => const AccountTypeScreen()),
+      GoRoute(
+        path: '/splash',
+        builder: (context, state) => const SplashScreen(),
+      ),
+      GoRoute(
+        path: '/',
+        builder: (context, state) => const AccountTypeScreen(),
+      ),
       GoRoute(
         path: '/login',
-        builder: (context, state) => LoginScreen(accountType: (state.extra as String?) ?? 'client'),
+        builder: (context, state) =>
+            LoginScreen(accountType: (state.extra as String?) ?? 'client'),
       ),
       GoRoute(
         path: '/register',
-        builder: (context, state) => RegisterScreen(accountType: (state.extra as String?) ?? 'client'),
+        builder: (context, state) =>
+            RegisterScreen(accountType: (state.extra as String?) ?? 'client'),
       ),
       GoRoute(
         path: '/home',
         builder: (context, state) {
           final authState = ref.read(authControllerProvider);
-          final isBusiness = authState is AuthSignedIn && authState.user.isBusiness;
-          return isBusiness ? const BusinessHomeScreen() : const CustomerHomeScreen();
+          final isBusiness =
+              authState is AuthSignedIn && authState.user.isBusiness;
+          return isBusiness
+              ? const BusinessHomeScreen()
+              : const CustomerHomeScreen();
         },
       ),
       GoRoute(
@@ -71,6 +84,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           categoryId: int.parse(state.pathParameters['categoryId']!),
           categoryName: (state.extra as String?) ?? '',
         ),
+      ),
+      GoRoute(
+        path: '/settings',
+        builder: (context, state) => const SettingsScreen(),
       ),
       GoRoute(
         path: '/discovery',

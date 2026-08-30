@@ -13,6 +13,9 @@ final categoryRootsProvider = FutureProvider<List<CategoryRoot>>((ref) {
   return ref.watch(categoriesApiProvider).roots();
 });
 
-final specialtiesProvider = FutureProvider.family<List<Specialty>, int>((ref, categoryId) {
+final specialtiesProvider = FutureProvider.family<List<Specialty>, int>((
+  ref,
+  categoryId,
+) {
   return ref.watch(categoriesApiProvider).specialties(categoryId);
 });

@@ -20,7 +20,8 @@ class BusinessSummary {
     required this.isOpenNow,
   });
 
-  factory BusinessSummary.fromJson(Map<String, dynamic> json) => BusinessSummary(
+  factory BusinessSummary.fromJson(Map<String, dynamic> json) =>
+      BusinessSummary(
         id: json['id'] as int,
         name: json['name'] as String? ?? '',
         logoUrl: Env.assetUrl(json['logo'] as String?),

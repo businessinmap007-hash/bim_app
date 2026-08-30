@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../features/settings/application/locale_controller.dart';
 import '../l10n/app_localizations.dart';
 import 'router.dart';
 import 'theme/app_theme.dart';
@@ -12,6 +13,7 @@ class BimApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
+    final locale = ref.watch(localeControllerProvider);
 
     return MaterialApp.router(
       title: 'BIM',
@@ -19,9 +21,10 @@ class BimApp extends ConsumerWidget {
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
       themeMode: ThemeMode.system,
-      // Arabic first: the backend's own i18n (resources/lang/ar.json) treats
-      // Arabic as the default locale, not a translation of an English original.
-      locale: const Locale('ar'),
+      // Arabic is the default (LocaleController starts on 'ar', matching the
+      // backend's own i18n convention — Arabic isn't a translation of an
+      // English original) but the user can switch it from Settings.
+      locale: locale,
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: const [
         AppLocalizations.delegate,

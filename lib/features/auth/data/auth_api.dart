@@ -13,10 +13,10 @@ class AuthApi {
     required String email,
     required String password,
   }) async {
-    final body = await _client.postForBody('/auth/login', data: {
-      'email': email,
-      'password': password,
-    });
+    final body = await _client.postForBody(
+      '/auth/login',
+      data: {'email': email, 'password': password},
+    );
     return (
       user: AuthUser.fromJson(body['data'] as Map<String, dynamic>),
       token: body['token'] as String,
@@ -34,18 +34,21 @@ class AuthApi {
     int? categoryId,
     int? categoryChildId,
   }) async {
-    final body = await _client.postForBody('/auth/register', data: {
-      'name': name,
-      'name_en': ?nameEn,
-      'email': email,
-      'phone': phone,
-      'password': password,
-      'password_confirmation': passwordConfirmation,
-      'type': type,
-      'category_id': ?categoryId,
-      'category_child_id': ?categoryChildId,
-      'terms_accepted': true,
-    });
+    final body = await _client.postForBody(
+      '/auth/register',
+      data: {
+        'name': name,
+        'name_en': ?nameEn,
+        'email': email,
+        'phone': phone,
+        'password': password,
+        'password_confirmation': passwordConfirmation,
+        'type': type,
+        'category_id': ?categoryId,
+        'category_child_id': ?categoryChildId,
+        'terms_accepted': true,
+      },
+    );
     return (
       user: AuthUser.fromJson(body['data'] as Map<String, dynamic>),
       token: body['token'] as String,

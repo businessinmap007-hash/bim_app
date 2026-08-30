@@ -42,5 +42,9 @@
   "businessCount": "{count, plural, =0{No businesses} one{1 business} other{{count} businesses}}",
   "@businessCount": {
     "placeholders": { "count": { "type": "int" } }
-  }
+  },
+  "settingsTitle": "Settings",
+  "settingsLanguage": "Language",
+  "settingsLanguageArabic": "العربية",
+  "settingsLanguageEnglish": "English"
 }

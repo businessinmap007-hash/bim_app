@@ -29,12 +29,16 @@ class BusinessCard extends StatelessWidget {
                 ? CachedNetworkImage(
                     imageUrl: business.logoUrl!,
                     fit: BoxFit.cover,
-                    errorWidget: (context, url, error) => const _LogoPlaceholder(),
+                    errorWidget: (context, url, error) =>
+                        const _LogoPlaceholder(),
                   )
                 : const _LogoPlaceholder(),
           ),
         ),
-        title: Text(business.name, style: const TextStyle(fontWeight: FontWeight.w600)),
+        title: Text(
+          business.name,
+          style: const TextStyle(fontWeight: FontWeight.w600),
+        ),
         subtitle: !business.hasPrices ? Text(l10n.businessCallForPrice) : null,
         trailing: _OpenBadge(isOpenNow: business.isOpenNow),
       ),
@@ -49,7 +53,10 @@ class _LogoPlaceholder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: AppColors.primaryNavy.withValues(alpha: 0.08),
-      child: const Icon(Icons.storefront_outlined, color: AppColors.primaryNavy),
+      child: const Icon(
+        Icons.storefront_outlined,
+        color: AppColors.primaryNavy,
+      ),
     );
   }
 }
@@ -71,7 +78,11 @@ class _OpenBadge extends StatelessWidget {
       ),
       child: Text(
         isOpenNow ? l10n.businessOpenNow : l10n.businessClosedNow,
-        style: TextStyle(color: color, fontSize: 11, fontWeight: FontWeight.w600),
+        style: TextStyle(
+          color: color,
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }

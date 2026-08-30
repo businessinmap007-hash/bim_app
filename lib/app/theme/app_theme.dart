@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
+import 'app_text_styles.dart';
 
 /// Registered in pubspec.yaml's `fonts:` section from a bundled asset — see
 /// the note there for why this isn't google_fonts.
@@ -30,10 +31,17 @@ class AppTheme {
       useMaterial3: true,
       brightness: brightness,
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
+      scaffoldBackgroundColor: isDark
+          ? AppColors.darkBackground
+          : AppColors.lightBackground,
       fontFamily: _fontFamily,
+      textTheme: AppTextStyles.themed(
+        isDark ? Colors.white : AppColors.primaryNavy,
+      ),
       appBarTheme: AppBarTheme(
-        backgroundColor: isDark ? AppColors.darkBackground : AppColors.lightBackground,
+        backgroundColor: isDark
+            ? AppColors.darkBackground
+            : AppColors.lightBackground,
         foregroundColor: isDark ? Colors.white : AppColors.primaryNavy,
         elevation: 0,
         centerTitle: true,
@@ -43,8 +51,10 @@ class AppTheme {
           backgroundColor: AppColors.primaryNavy,
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          textStyle: AppTextStyles.titleMedium,
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
@@ -54,7 +64,10 @@ class AppTheme {
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: Colors.grey.shade300),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
       ),
     );
   }

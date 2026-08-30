@@ -42,5 +42,9 @@
   "businessCount": "{count, plural, =0{لا يوجد نشاط} one{نشاط واحد} two{نشاطان} few{{count} أنشطة} many{{count} نشاطًا} other{{count} نشاط}}",
   "@businessCount": {
     "placeholders": { "count": { "type": "int" } }
-  }
+  },
+  "settingsTitle": "الإعدادات",
+  "settingsLanguage": "اللغة",
+  "settingsLanguageArabic": "العربية",
+  "settingsLanguageEnglish": "English"
 }

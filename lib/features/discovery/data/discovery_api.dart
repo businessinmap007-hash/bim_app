@@ -17,14 +17,18 @@ class DiscoveryApi {
     int page = 1,
     int perPage = 20,
   }) async {
-    final data = await _client.get('/discovery/businesses', query: {
-      'child_id': childId,
-      if (q != null && q.isNotEmpty) 'q': q,
-      if (openNow) 'open_now': true,
-      'page': page,
-      'per_page': perPage,
-    });
-    final businesses = (data as Map<String, dynamic>)['businesses'] as Map<String, dynamic>;
+    final data = await _client.get(
+      '/discovery/businesses',
+      query: {
+        'child_id': childId,
+        if (q != null && q.isNotEmpty) 'q': q,
+        if (openNow) 'open_now': true,
+        'page': page,
+        'per_page': perPage,
+      },
+    );
+    final businesses =
+        (data as Map<String, dynamic>)['businesses'] as Map<String, dynamic>;
     return Paginated.fromJson(businesses, BusinessSummary.fromJson);
   }
 }

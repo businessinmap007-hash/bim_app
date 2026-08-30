@@ -50,7 +50,8 @@ class BusinessListController extends StateNotifier<BusinessListState> {
   final int childId;
   int _page = 1;
 
-  BusinessListController(this._api, this.childId) : super(const BusinessListState()) {
+  BusinessListController(this._api, this.childId)
+    : super(const BusinessListState()) {
     load();
   }
 
@@ -58,7 +59,11 @@ class BusinessListController extends StateNotifier<BusinessListState> {
     state = state.copyWith(isLoading: true, clearError: true);
     _page = 1;
     try {
-      final result = await _api.businesses(childId: childId, q: state.query, page: _page);
+      final result = await _api.businesses(
+        childId: childId,
+        q: state.query,
+        page: _page,
+      );
       state = state.copyWith(
         items: result.items,
         isLoading: false,
@@ -73,7 +78,11 @@ class BusinessListController extends StateNotifier<BusinessListState> {
     if (state.isLoadingMore || !state.hasMore) return;
     state = state.copyWith(isLoadingMore: true);
     try {
-      final result = await _api.businesses(childId: childId, q: state.query, page: _page + 1);
+      final result = await _api.businesses(
+        childId: childId,
+        q: state.query,
+        page: _page + 1,
+      );
       _page += 1;
       state = state.copyWith(
         items: [...state.items, ...result.items],
@@ -91,6 +100,12 @@ class BusinessListController extends StateNotifier<BusinessListState> {
   }
 }
 
-final businessListControllerProvider = StateNotifierProvider.family<BusinessListController, BusinessListState, int>(
-  (ref, childId) => BusinessListController(ref.watch(discoveryApiProvider), childId),
-);
+final businessListControllerProvider =
+    StateNotifierProvider.family<
+      BusinessListController,
+      BusinessListState,
+      int
+    >(
+      (ref, childId) =>
+          BusinessListController(ref.watch(discoveryApiProvider), childId),
+    );

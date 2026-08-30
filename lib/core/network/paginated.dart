@@ -15,7 +15,10 @@ class Paginated<T> {
 
   bool get hasMore => currentPage < lastPage;
 
-  factory Paginated.fromJson(Map<String, dynamic> json, T Function(Map<String, dynamic>) fromJson) {
+  factory Paginated.fromJson(
+    Map<String, dynamic> json,
+    T Function(Map<String, dynamic>) fromJson,
+  ) {
     return Paginated(
       items: (json['data'] as List<dynamic>? ?? [])
           .map((e) => fromJson(e as Map<String, dynamic>))
@@ -26,5 +29,6 @@ class Paginated<T> {
     );
   }
 
-  static Paginated<T> empty<T>() => Paginated(items: const [], currentPage: 1, lastPage: 1, total: 0);
+  static Paginated<T> empty<T>() =>
+      Paginated(items: const [], currentPage: 1, lastPage: 1, total: 0);
 }

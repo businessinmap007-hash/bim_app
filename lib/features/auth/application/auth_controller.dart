@@ -50,7 +50,9 @@ class AuthController extends StateNotifier<AuthState> {
       // looping the app on something that will keep failing.
       try {
         await _ref.read(tokenStorageProvider).clear();
-      } catch (_) {/* storage itself is the thing that failed */}
+      } catch (_) {
+        /* storage itself is the thing that failed */
+      }
       state = const AuthSignedOut();
     }
   }
@@ -99,6 +101,8 @@ class AuthController extends StateNotifier<AuthState> {
   }
 }
 
-final authControllerProvider = StateNotifierProvider<AuthController, AuthState>((ref) {
-  return AuthController(ref.watch(authApiProvider), ref);
-});
+final authControllerProvider = StateNotifierProvider<AuthController, AuthState>(
+  (ref) {
+    return AuthController(ref.watch(authApiProvider), ref);
+  },
+);
