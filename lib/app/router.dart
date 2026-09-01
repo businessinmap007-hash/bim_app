@@ -9,7 +9,6 @@ import '../features/auth/presentation/screens/register_screen.dart';
 import '../features/business/presentation/screens/business_detail_screen.dart';
 import '../features/categories/presentation/screens/specialties_screen.dart';
 import '../features/discovery/presentation/screens/business_list_screen.dart';
-import '../features/home/presentation/screens/business_home_screen.dart';
 import '../features/home/presentation/screens/home_shell.dart';
 import '../features/media/presentation/screens/media_composer_screen.dart';
 import '../features/profile/presentation/screens/my_profile_screen.dart';
@@ -72,12 +71,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/home',
-        builder: (context, state) {
-          final authState = ref.read(authControllerProvider);
-          final isBusiness =
-              authState is AuthSignedIn && authState.user.isBusiness;
-          return isBusiness ? const BusinessHomeScreen() : const HomeShell();
-        },
+        builder: (context, state) => const HomeShell(),
       ),
       GoRoute(
         path: '/settings',
