@@ -9,9 +9,11 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../auth/application/auth_controller.dart';
 import '../../../auth/data/models/auth_user.dart';
 import '../../../categories/application/categories_providers.dart';
+import '../../../categories/data/models/category_root.dart';
 import '../../../categories/data/models/specialty.dart';
 import '../../../categories/presentation/widgets/category_picker_field.dart';
 import '../../application/profile_controller.dart';
+import '../../application/profile_options_controller.dart';
 import '../widgets/profile_avatar_picker.dart';
 
 /// The signed-in user's OWN account — private by design. There is no route
@@ -262,6 +264,10 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
             const SizedBox(height: 6),
             TextField(controller: _aboutController, maxLines: 3),
             const SizedBox(height: 16),
+            _FieldLabel(l10n.profileCategory),
+            const SizedBox(height: 6),
+            _RootCategoryLabel(categoryId: user?.categoryId),
+            const SizedBox(height: 16),
             _FieldLabel(l10n.profileSpecialty),
             const SizedBox(height: 6),
             _SpecialtyLabel(categoryId: user?.categoryId, categoryChildId: user?.categoryChildId),
@@ -299,6 +305,12 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
                   )
                 : Text(l10n.profileSave),
           ),
+          if (isBusiness && user?.categoryChildId != null) ...[
+            const SizedBox(height: 32),
+            const Divider(),
+            const SizedBox(height: 16),
+            const _OptionsSection(),
+          ],
           if (!isBusiness) ...[
             const SizedBox(height: 32),
             const Divider(),
@@ -393,6 +405,106 @@ class _SpecialtyLabel extends ConsumerWidget {
         child: CircularProgressIndicator(strokeWidth: 2),
       ),
       error: (error, stack) => Text('#$categoryChildId', style: style),
+    );
+  }
+}
+
+/// The root category name («عقارات و أراضي») above the specialty — there's
+/// no "one root by id" endpoint either, so this matches against the same
+/// cached root list the home grid and category picker already use.
+class _RootCategoryLabel extends ConsumerWidget {
+  final int? categoryId;
+  const _RootCategoryLabel({required this.categoryId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final style = Theme.of(context).textTheme.bodyMedium;
+
+    if (categoryId == null) {
+      return Text(l10n.profileCategoryNotSet, style: style);
+    }
+
+    final rootsAsync = ref.watch(categoryRootsProvider);
+    return rootsAsync.when(
+      data: (roots) {
+        final languageCode = Localizations.localeOf(context).languageCode;
+        CategoryRoot? match;
+        for (final root in roots) {
+          if (root.id == categoryId) {
+            match = root;
+            break;
+          }
+        }
+        return Text(match?.localizedName(languageCode) ?? '#$categoryId', style: style);
+      },
+      loading: () => const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2)),
+      error: (error, stack) => Text('#$categoryId', style: style),
+    );
+  }
+}
+
+/// A business's self-service attribute picks — every option for its
+/// specialty, grouped, as checkboxes. Saved on its own ("حفظ الخصائص"),
+/// separate from the main profile Save, since it's a different backend
+/// endpoint (PATCH /profile/options replaces the whole set, not a diff).
+class _OptionsSection extends ConsumerWidget {
+  const _OptionsSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final state = ref.watch(profileOptionsControllerProvider);
+    final notifier = ref.read(profileOptionsControllerProvider.notifier);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _FieldLabel(l10n.profileOptionsTitle),
+        const SizedBox(height: 8),
+        if (state.error != null) ...[
+          Text(state.error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+          const SizedBox(height: 8),
+        ],
+        if (state.isLoading)
+          const Center(child: CircularProgressIndicator())
+        else if (state.groups.isEmpty)
+          Text(
+            l10n.profileOptionsEmpty,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),
+          )
+        else ...[
+          for (final group in state.groups) ...[
+            Text(group.name, style: Theme.of(context).textTheme.titleSmall),
+            Wrap(
+              spacing: 4,
+              children: [
+                for (final option in group.options)
+                  FilterChip(
+                    label: Text(option.name),
+                    selected: state.selectedIds.contains(option.id),
+                    onSelected: (value) => notifier.toggle(option.id, value),
+                    selectedColor: AppColors.accentGold.withValues(alpha: 0.3),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 12),
+          ],
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: ElevatedButton(
+              onPressed: state.isSaving ? null : notifier.save,
+              child: state.isSaving
+                  ? const SizedBox(
+                      height: 18,
+                      width: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                    )
+                  : Text(l10n.profileOptionsSave),
+            ),
+          ),
+        ],
+      ],
     );
   }
 }

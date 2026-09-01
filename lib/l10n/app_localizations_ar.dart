@@ -361,6 +361,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profileSpecialtyNotSet => 'لم يتم اختيار تخصص';
 
   @override
+  String get profileCategory => 'التصنيف الرئيسي';
+
+  @override
+  String get profileCategoryNotSet => 'لم يتم تحديد تصنيف رئيسي';
+
+  @override
   String get profileConvertToBusiness => 'تحويل الحساب إلى نشاط تجاري';
 
   @override
@@ -372,4 +378,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get profileConvertSuccess => 'تم تحويل حسابك إلى نشاط تجاري بنجاح.';
+
+  @override
+  String get profileOptionsTitle => 'خصائص النشاط';
+
+  @override
+  String get profileOptionsEmpty => 'لا توجد خصائص متاحة لتخصصك الحالي.';
+
+  @override
+  String get profileOptionsSave => 'حفظ الخصائص';
 }

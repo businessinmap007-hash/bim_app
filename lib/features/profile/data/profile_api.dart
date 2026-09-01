@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 import '../../../core/network/api_client.dart';
 import '../../auth/data/models/auth_user.dart';
+import 'models/profile_options.dart';
 
 /// GET/PATCH /profile and POST /profile/image — always the caller's OWN
 /// account (Api\V2\ProfileController::show/update take no id param), never
@@ -53,5 +54,17 @@ class ProfileApi {
   Future<AuthUser> removeImage() async {
     final data = await _client.post('/profile/image', data: FormData.fromMap({'remove': true}));
     return AuthUser.fromJson(data as Map<String, dynamic>);
+  }
+
+  /// Business only — the backend 403s a client account. Only called once
+  /// the profile screen already knows `isBusiness`, so that never surfaces.
+  Future<ProfileOptionsPayload> showOptions() async {
+    final data = await _client.get('/profile/options');
+    return ProfileOptionsPayload.fromJson(data as Map<String, dynamic>);
+  }
+
+  Future<ProfileOptionsPayload> updateOptions(List<int> optionIds) async {
+    final data = await _client.put('/profile/options', data: {'option_ids': optionIds});
+    return ProfileOptionsPayload.fromJson(data as Map<String, dynamic>);
   }
 }

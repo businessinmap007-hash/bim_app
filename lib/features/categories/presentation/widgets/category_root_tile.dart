@@ -43,10 +43,21 @@ class CategoryRootTile extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                iconForCategory(category.nameAr),
-                color: iconColor,
-                size: iconSize,
+              // A light chip behind the glyph regardless of theme — the icon
+              // used to sit directly on the card's own (dark, in dark mode)
+              // surface with nothing separating it, so it read as floating
+              // rather than as an icon "on" something.
+              Container(
+                padding: EdgeInsets.all(iconSize * 0.16),
+                decoration: const BoxDecoration(
+                  color: AppColors.lightBackground,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  iconForCategory(category.nameAr),
+                  color: iconColor,
+                  size: iconSize,
+                ),
               ),
               const SizedBox(height: 4),
               SizedBox(

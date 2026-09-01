@@ -360,6 +360,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileSpecialtyNotSet => 'No specialty chosen yet';
 
   @override
+  String get profileCategory => 'Category';
+
+  @override
+  String get profileCategoryNotSet => 'No category chosen yet';
+
+  @override
   String get profileConvertToBusiness => 'Convert account to business';
 
   @override
@@ -371,4 +377,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileConvertSuccess => 'Your account is now a business account.';
+
+  @override
+  String get profileOptionsTitle => 'Business attributes';
+
+  @override
+  String get profileOptionsEmpty =>
+      'No attributes available for your current specialty.';
+
+  @override
+  String get profileOptionsSave => 'Save attributes';
 }

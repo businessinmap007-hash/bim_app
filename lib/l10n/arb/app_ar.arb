@@ -115,8 +115,13 @@
   "profileAccountTypeBusiness": "نشاط تجاري",
   "profileSpecialty": "التخصص",
   "profileSpecialtyNotSet": "لم يتم اختيار تخصص",
+  "profileCategory": "التصنيف الرئيسي",
+  "profileCategoryNotSet": "لم يتم تحديد تصنيف رئيسي",
   "profileConvertToBusiness": "تحويل الحساب إلى نشاط تجاري",
   "profileConvertToBusinessHint": "اختر تخصص نشاطك التجاري لإتمام التحويل — لا يمكن التراجع عن هذا التحويل من هنا.",
   "profileConvertConfirm": "تأكيد التحويل",
-  "profileConvertSuccess": "تم تحويل حسابك إلى نشاط تجاري بنجاح."
+  "profileConvertSuccess": "تم تحويل حسابك إلى نشاط تجاري بنجاح.",
+  "profileOptionsTitle": "خصائص النشاط",
+  "profileOptionsEmpty": "لا توجد خصائص متاحة لتخصصك الحالي.",
+  "profileOptionsSave": "حفظ الخصائص"
 }

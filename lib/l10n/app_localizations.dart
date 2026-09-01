@@ -770,6 +770,18 @@ abstract class AppLocalizations {
   /// **'لم يتم اختيار تخصص'**
   String get profileSpecialtyNotSet;
 
+  /// No description provided for @profileCategory.
+  ///
+  /// In ar, this message translates to:
+  /// **'التصنيف الرئيسي'**
+  String get profileCategory;
+
+  /// No description provided for @profileCategoryNotSet.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يتم تحديد تصنيف رئيسي'**
+  String get profileCategoryNotSet;
+
   /// No description provided for @profileConvertToBusiness.
   ///
   /// In ar, this message translates to:
@@ -793,6 +805,24 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تم تحويل حسابك إلى نشاط تجاري بنجاح.'**
   String get profileConvertSuccess;
+
+  /// No description provided for @profileOptionsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'خصائص النشاط'**
+  String get profileOptionsTitle;
+
+  /// No description provided for @profileOptionsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد خصائص متاحة لتخصصك الحالي.'**
+  String get profileOptionsEmpty;
+
+  /// No description provided for @profileOptionsSave.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ الخصائص'**
+  String get profileOptionsSave;
 }
 
 class _AppLocalizationsDelegate

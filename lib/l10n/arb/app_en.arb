@@ -115,8 +115,13 @@
   "profileAccountTypeBusiness": "Business",
   "profileSpecialty": "Specialty",
   "profileSpecialtyNotSet": "No specialty chosen yet",
+  "profileCategory": "Category",
+  "profileCategoryNotSet": "No category chosen yet",
   "profileConvertToBusiness": "Convert account to business",
   "profileConvertToBusinessHint": "Choose your business specialty to complete the conversion — this can't be undone from here.",
   "profileConvertConfirm": "Confirm conversion",
-  "profileConvertSuccess": "Your account is now a business account."
+  "profileConvertSuccess": "Your account is now a business account.",
+  "profileOptionsTitle": "Business attributes",
+  "profileOptionsEmpty": "No attributes available for your current specialty.",
+  "profileOptionsSave": "Save attributes"
 }
