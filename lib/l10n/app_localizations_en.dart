@@ -197,22 +197,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mediaRemove => 'Remove';
 
   @override
+  String get mediaCrop => 'Crop photo';
+
+  @override
   String get mediaWatermarkTitle => 'Watermark';
 
   @override
-  String get mediaWatermarkText => 'Watermark text';
+  String get mediaWatermarkUseMobile => 'Phone number';
 
   @override
-  String get mediaWatermarkTextHint => 'Phone number or business name';
+  String get mediaWatermarkUseBusinessName => 'Business name';
+
+  @override
+  String get mediaWatermarkSettingsHint =>
+      'Choose what watermark text comes from your profile — it\'s added to every photo you add automatically, no retyping.';
+
+  @override
+  String get mediaWatermarkDisabledHint => 'Watermark is currently off.';
+
+  @override
+  String get mediaWatermarkOpenSettings => 'Turn it on in Settings';
 
   @override
   String get mediaWatermarkRepeatCount => 'Repeat count';
-
-  @override
-  String get mediaWatermarkApply => 'Apply watermark';
-
-  @override
-  String get mediaWatermarkApplied => 'Watermark applied.';
 
   @override
   String get mediaComposerTitle => 'Photo display & watermark';
@@ -220,4 +227,22 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get mediaEmpty =>
       'No photos yet — add one from the camera or gallery.';
+
+  @override
+  String get cropTitle => 'Crop photo';
+
+  @override
+  String get cropAspectOriginal => 'Original';
+
+  @override
+  String get cropAspectSquare => 'Square';
+
+  @override
+  String get cropAspectPortrait => 'Portrait';
+
+  @override
+  String get cropAspectLandscape => 'Landscape';
+
+  @override
+  String get cropConfirm => 'Done';
 }

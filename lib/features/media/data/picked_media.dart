@@ -9,21 +9,25 @@ import 'package:image_picker/image_picker.dart';
 /// shot) but still useful, cheap-to-show context.
 enum MediaSource { camera, gallery }
 
-/// One photo in a post/album composer, before upload. `watermarkedBytes` is
-/// null until [WatermarkService] has run — callers upload that when set,
-/// the original file otherwise.
+/// One photo in a post/album composer, before upload. [processedBytes] is
+/// the result of crop and/or the saved watermark settings running against
+/// the original file — null only in the instant before either has run.
+/// Callers display/upload that when set, the original file otherwise.
+/// Re-cropping always starts again from the original file, not from a
+/// previously processed result, so repeated edits never compound quality
+/// loss or stack the watermark on itself.
 class PickedMedia {
   final XFile file;
   final MediaSource source;
-  final Uint8List? watermarkedBytes;
+  final Uint8List? processedBytes;
 
-  const PickedMedia({required this.file, required this.source, this.watermarkedBytes});
+  const PickedMedia({required this.file, required this.source, this.processedBytes});
 
-  PickedMedia copyWith({Uint8List? watermarkedBytes}) {
+  PickedMedia copyWith({Uint8List? processedBytes}) {
     return PickedMedia(
       file: file,
       source: source,
-      watermarkedBytes: watermarkedBytes ?? this.watermarkedBytes,
+      processedBytes: processedBytes ?? this.processedBytes,
     );
   }
 }

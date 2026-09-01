@@ -452,41 +452,53 @@ abstract class AppLocalizations {
   /// **'إزالة'**
   String get mediaRemove;
 
+  /// No description provided for @mediaCrop.
+  ///
+  /// In ar, this message translates to:
+  /// **'قص الصورة'**
+  String get mediaCrop;
+
   /// No description provided for @mediaWatermarkTitle.
   ///
   /// In ar, this message translates to:
   /// **'العلامة المائية'**
   String get mediaWatermarkTitle;
 
-  /// No description provided for @mediaWatermarkText.
+  /// No description provided for @mediaWatermarkUseMobile.
   ///
   /// In ar, this message translates to:
-  /// **'نص العلامة المائية'**
-  String get mediaWatermarkText;
+  /// **'رقم الموبايل'**
+  String get mediaWatermarkUseMobile;
 
-  /// No description provided for @mediaWatermarkTextHint.
+  /// No description provided for @mediaWatermarkUseBusinessName.
   ///
   /// In ar, this message translates to:
-  /// **'رقم الموبايل أو اسم النشاط'**
-  String get mediaWatermarkTextHint;
+  /// **'اسم النشاط'**
+  String get mediaWatermarkUseBusinessName;
+
+  /// No description provided for @mediaWatermarkSettingsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر مصدر نص العلامة المائية من ملفك الشخصي — سيُضاف تلقائيًا لكل صورة تضيفها، دون كتابته في كل مرة.'**
+  String get mediaWatermarkSettingsHint;
+
+  /// No description provided for @mediaWatermarkDisabledHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'العلامة المائية غير مفعّلة حاليًا.'**
+  String get mediaWatermarkDisabledHint;
+
+  /// No description provided for @mediaWatermarkOpenSettings.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفعيلها من الإعدادات'**
+  String get mediaWatermarkOpenSettings;
 
   /// No description provided for @mediaWatermarkRepeatCount.
   ///
   /// In ar, this message translates to:
   /// **'عدد التكرار'**
   String get mediaWatermarkRepeatCount;
-
-  /// No description provided for @mediaWatermarkApply.
-  ///
-  /// In ar, this message translates to:
-  /// **'تطبيق العلامة المائية'**
-  String get mediaWatermarkApply;
-
-  /// No description provided for @mediaWatermarkApplied.
-  ///
-  /// In ar, this message translates to:
-  /// **'تم تطبيق العلامة المائية.'**
-  String get mediaWatermarkApplied;
 
   /// No description provided for @mediaComposerTitle.
   ///
@@ -499,6 +511,42 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لا توجد صور بعد — أضف صورة بالكاميرا أو من المعرض.'**
   String get mediaEmpty;
+
+  /// No description provided for @cropTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'قص الصورة'**
+  String get cropTitle;
+
+  /// No description provided for @cropAspectOriginal.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأصلي'**
+  String get cropAspectOriginal;
+
+  /// No description provided for @cropAspectSquare.
+  ///
+  /// In ar, this message translates to:
+  /// **'مربع'**
+  String get cropAspectSquare;
+
+  /// No description provided for @cropAspectPortrait.
+  ///
+  /// In ar, this message translates to:
+  /// **'عمودي'**
+  String get cropAspectPortrait;
+
+  /// No description provided for @cropAspectLandscape.
+  ///
+  /// In ar, this message translates to:
+  /// **'أفقي'**
+  String get cropAspectLandscape;
+
+  /// No description provided for @cropConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم'**
+  String get cropConfirm;
 }
 
 class _AppLocalizationsDelegate

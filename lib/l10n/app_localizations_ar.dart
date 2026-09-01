@@ -199,26 +199,51 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mediaRemove => 'إزالة';
 
   @override
+  String get mediaCrop => 'قص الصورة';
+
+  @override
   String get mediaWatermarkTitle => 'العلامة المائية';
 
   @override
-  String get mediaWatermarkText => 'نص العلامة المائية';
+  String get mediaWatermarkUseMobile => 'رقم الموبايل';
 
   @override
-  String get mediaWatermarkTextHint => 'رقم الموبايل أو اسم النشاط';
+  String get mediaWatermarkUseBusinessName => 'اسم النشاط';
+
+  @override
+  String get mediaWatermarkSettingsHint =>
+      'اختر مصدر نص العلامة المائية من ملفك الشخصي — سيُضاف تلقائيًا لكل صورة تضيفها، دون كتابته في كل مرة.';
+
+  @override
+  String get mediaWatermarkDisabledHint => 'العلامة المائية غير مفعّلة حاليًا.';
+
+  @override
+  String get mediaWatermarkOpenSettings => 'تفعيلها من الإعدادات';
 
   @override
   String get mediaWatermarkRepeatCount => 'عدد التكرار';
-
-  @override
-  String get mediaWatermarkApply => 'تطبيق العلامة المائية';
-
-  @override
-  String get mediaWatermarkApplied => 'تم تطبيق العلامة المائية.';
 
   @override
   String get mediaComposerTitle => 'عرض الصور والعلامة المائية';
 
   @override
   String get mediaEmpty => 'لا توجد صور بعد — أضف صورة بالكاميرا أو من المعرض.';
+
+  @override
+  String get cropTitle => 'قص الصورة';
+
+  @override
+  String get cropAspectOriginal => 'الأصلي';
+
+  @override
+  String get cropAspectSquare => 'مربع';
+
+  @override
+  String get cropAspectPortrait => 'عمودي';
+
+  @override
+  String get cropAspectLandscape => 'أفقي';
+
+  @override
+  String get cropConfirm => 'تم';
 }

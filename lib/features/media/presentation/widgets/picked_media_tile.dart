@@ -8,17 +8,20 @@ import '../../data/picked_media.dart';
 import 'media_source_badge.dart';
 
 /// One photo in the composer review grid — adaptive Instagram-style sizing,
-/// a source badge (camera vs gallery), and a remove button. Shows
-/// [PickedMedia.watermarkedBytes] once set, the original file otherwise.
+/// a source badge (camera vs gallery), and crop/remove actions. Shows
+/// [PickedMedia.processedBytes] once set (crop and/or watermark applied),
+/// the original file otherwise.
 class PickedMediaTile extends StatelessWidget {
   final PickedMedia media;
   final VoidCallback? onRemove;
+  final VoidCallback? onCrop;
   final BorderRadius borderRadius;
 
   const PickedMediaTile({
     super.key,
     required this.media,
     this.onRemove,
+    this.onCrop,
     this.borderRadius = const BorderRadius.all(Radius.circular(12)),
   });
 
@@ -26,8 +29,8 @@ class PickedMediaTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    if (media.watermarkedBytes != null) {
-      return _buildBox(context, MemoryImage(media.watermarkedBytes!));
+    if (media.processedBytes != null) {
+      return _buildBox(context, MemoryImage(media.processedBytes!), l10n: l10n);
     }
 
     return FutureBuilder<Uint8List>(
@@ -47,9 +50,7 @@ class PickedMediaTile extends StatelessWidget {
     );
   }
 
-  Widget _buildBox(BuildContext context, ImageProvider provider, {AppLocalizations? l10n}) {
-    final loc = l10n ?? AppLocalizations.of(context)!;
-
+  Widget _buildBox(BuildContext context, ImageProvider provider, {required AppLocalizations l10n}) {
     return AdaptiveImageBox(
       imageProvider: provider,
       borderRadius: borderRadius,
@@ -59,22 +60,41 @@ class PickedMediaTile extends StatelessWidget {
           PositionedDirectional(
             top: 8,
             start: 8,
-            child: Tooltip(
-              message: loc.mediaRemove,
-              child: GestureDetector(
-                onTap: onRemove,
-                child: Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.55),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(Icons.close_rounded, color: Colors.white, size: 16),
-                ),
-              ),
-            ),
+            child: _RoundIconButton(icon: Icons.close_rounded, tooltip: l10n.mediaRemove, onTap: onRemove!),
+          ),
+        if (onCrop != null)
+          PositionedDirectional(
+            bottom: 8,
+            end: 8,
+            child: _RoundIconButton(icon: Icons.crop_rounded, tooltip: l10n.mediaCrop, onTap: onCrop!),
           ),
       ],
+    );
+  }
+}
+
+class _RoundIconButton extends StatelessWidget {
+  final IconData icon;
+  final String tooltip;
+  final VoidCallback onTap;
+
+  const _RoundIconButton({required this.icon, required this.tooltip, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: tooltip,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            color: Colors.black.withValues(alpha: 0.55),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: Colors.white, size: 16),
+        ),
+      ),
     );
   }
 }

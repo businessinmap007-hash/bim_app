@@ -5,8 +5,10 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/application/auth_controller.dart';
+import '../../../media/presentation/widgets/watermark_repeat_selector.dart';
 import '../../application/locale_controller.dart';
 import '../../application/theme_mode_controller.dart';
+import '../../application/watermark_settings_controller.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -18,6 +20,9 @@ class SettingsScreen extends ConsumerWidget {
     final themeMode = ref.watch(themeModeControllerProvider);
     final authState = ref.watch(authControllerProvider);
     final isBusiness = authState is AuthSignedIn && authState.user.isBusiness;
+    final authUser = authState is AuthSignedIn ? authState.user : null;
+    final watermarkSettings = ref.watch(watermarkSettingsControllerProvider);
+    final watermarkNotifier = ref.read(watermarkSettingsControllerProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsTitle)),
@@ -74,6 +79,44 @@ class SettingsScreen extends ConsumerWidget {
             _SectionHeader(l10n.settingsServicesSection),
             const SizedBox(height: 8),
             _OptionCard(children: [_PlaceholderRow(label: l10n.settingsServicesSection)]),
+          ],
+          const SizedBox(height: 24),
+          _SectionHeader(l10n.mediaWatermarkTitle),
+          const SizedBox(height: 4),
+          Text(
+            l10n.mediaWatermarkSettingsHint,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),
+          ),
+          const SizedBox(height: 8),
+          _OptionCard(
+            children: [
+              CheckboxListTile(
+                value: watermarkSettings.useMobile,
+                onChanged: (value) => watermarkNotifier.setUseMobile(value ?? false),
+                controlAffinity: ListTileControlAffinity.leading,
+                activeColor: AppColors.accentGold,
+                title: Text(l10n.mediaWatermarkUseMobile),
+                subtitle: authUser != null ? Text(authUser.phone) : null,
+              ),
+              const Divider(height: 1),
+              CheckboxListTile(
+                value: watermarkSettings.useBusinessName,
+                onChanged: (value) => watermarkNotifier.setUseBusinessName(value ?? false),
+                controlAffinity: ListTileControlAffinity.leading,
+                activeColor: AppColors.accentGold,
+                title: Text(l10n.mediaWatermarkUseBusinessName),
+                subtitle: authUser != null ? Text(authUser.name) : null,
+              ),
+            ],
+          ),
+          if (watermarkSettings.isEnabled) ...[
+            const SizedBox(height: 12),
+            Text(l10n.mediaWatermarkRepeatCount, style: Theme.of(context).textTheme.bodyMedium),
+            const SizedBox(height: 8),
+            WatermarkRepeatSelector(
+              value: watermarkSettings.repeatCount,
+              onChanged: watermarkNotifier.setRepeatCount,
+            ),
           ],
           const SizedBox(height: 24),
           _SectionHeader(l10n.mediaComposerTitle),
