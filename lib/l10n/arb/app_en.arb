@@ -205,5 +205,37 @@
   "businessFollowersCount": "{count, plural, =0{No followers} one{1 follower} other{{count} followers}}",
   "@businessFollowersCount": {
     "placeholders": { "count": { "type": "int" } }
-  }
+  },
+  "cartTitle": "Cart",
+  "cartEmpty": "Your cart is empty.",
+  "cartAdd": "Add to cart",
+  "cartAddedToCart": "Added to cart.",
+  "cartQty": "Quantity",
+  "cartRemove": "Remove",
+  "cartVariantChoose": "Choose a type",
+  "cartExtrasChoose": "Extras",
+  "cartItemsCount": "{count, plural, =0{No items} one{1 item} other{{count} items}}",
+  "@cartItemsCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "cartSubtotal": "Subtotal",
+  "cartServiceFee": "Service fee",
+  "cartTax": "Tax",
+  "cartDeliveryFee": "Delivery fee",
+  "cartDiscount": "Discount",
+  "cartFinalTotal": "Total",
+  "cartCheckout": "Checkout",
+  "cartCheckoutTitle": "Checkout",
+  "cartFulfillmentType": "Fulfillment",
+  "cartFulfillmentDelivery": "Delivery",
+  "cartFulfillmentPickup": "Pickup",
+  "cartFulfillmentDineIn": "Dine in",
+  "cartAddressLabel": "Address",
+  "cartAddressHint": "Enter the delivery address",
+  "cartNotesLabel": "Notes (optional)",
+  "cartPaymentMethod": "Payment method",
+  "cartPaymentCash": "Cash on delivery",
+  "cartPlaceOrder": "Place order",
+  "cartOrderPlaced": "Order placed successfully.",
+  "cartGoToCart": "Go to cart"
 }

@@ -5,8 +5,12 @@ import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
 import '../../../../shared/widgets/profile_cover_header.dart';
+import '../../../cart/application/cart_controller.dart';
+import '../../../cart/presentation/screens/cart_screen.dart';
+import '../../../cart/presentation/widgets/add_to_cart_sheet.dart';
 import '../../application/business_page_providers.dart';
 import '../../data/models/business_profile.dart';
+import '../../data/models/offering_item.dart';
 import '../widgets/business_rating_row.dart';
 import '../widgets/menu_item_tile.dart';
 import '../widgets/offering_card.dart';
@@ -27,9 +31,22 @@ class BusinessDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profileAsync = ref.watch(businessProfileProvider(businessId));
+    final itemsCount = ref.watch(cartControllerProvider.select((s) => s.itemsCount));
 
     return Scaffold(
-      appBar: AppBar(title: Text(profileAsync.valueOrNull?.name ?? '')),
+      appBar: AppBar(
+        title: Text(profileAsync.valueOrNull?.name ?? ''),
+        actions: [
+          IconButton(
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CartScreen())),
+            icon: Badge(
+              label: Text('$itemsCount'),
+              isLabelVisible: itemsCount > 0,
+              child: const Icon(Icons.shopping_cart_outlined),
+            ),
+          ),
+        ],
+      ),
       body: AsyncValueView(
         value: profileAsync,
         onRetry: () => ref.invalidate(businessProfileProvider(businessId)),
@@ -249,7 +266,10 @@ class _MenuTab extends ConsumerWidget {
                   ...section.items.map(
                     (item) => Padding(
                       padding: const EdgeInsets.only(bottom: 8),
-                      child: MenuItemTile(item: item),
+                      child: MenuItemTile(
+                        item: item,
+                        onTap: () => showAddToCartSheet(context, item),
+                      ),
                     ),
                   ),
                 ],
@@ -271,6 +291,19 @@ class _ServicesTab extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final offeringsAsync = ref.watch(businessOfferingsProvider(businessId));
 
+    Future<void> orderRetail(OfferingItem offering) async {
+      try {
+        await ref.read(cartControllerProvider.notifier).addItem(kind: 'retail', offeringId: offering.id);
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.cartAddedToCart)));
+        }
+      } catch (_) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+        }
+      }
+    }
+
     return AsyncValueView(
       value: offeringsAsync,
       onRetry: () => ref.invalidate(businessOfferingsProvider(businessId)),
@@ -281,7 +314,15 @@ class _ServicesTab extends ConsumerWidget {
           padding: const EdgeInsets.all(16),
           itemCount: offerings.length,
           separatorBuilder: (context, index) => const SizedBox(height: 8),
-          itemBuilder: (context, index) => OfferingCard(offering: offerings[index]),
+          itemBuilder: (context, index) {
+            final offering = offerings[index];
+            return OfferingCard(
+              offering: offering,
+              // Booking a specific unit is still a later module — only the
+              // "order" (retail) action is wired here.
+              onTap: offering.isBookable ? null : () => orderRetail(offering),
+            );
+          },
         );
       },
     );

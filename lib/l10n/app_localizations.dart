@@ -1243,6 +1243,180 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الراتب (اختياري)'**
   String get jobsSalaryLabel;
+
+  /// No description provided for @cartTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'السلة'**
+  String get cartTitle;
+
+  /// No description provided for @cartEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'السلة فارغة.'**
+  String get cartEmpty;
+
+  /// No description provided for @cartAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف للسلة'**
+  String get cartAdd;
+
+  /// No description provided for @cartAddedToCart.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت الإضافة للسلة.'**
+  String get cartAddedToCart;
+
+  /// No description provided for @cartQty.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكمية'**
+  String get cartQty;
+
+  /// No description provided for @cartRemove.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزالة'**
+  String get cartRemove;
+
+  /// No description provided for @cartVariantChoose.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر النوع'**
+  String get cartVariantChoose;
+
+  /// No description provided for @cartExtrasChoose.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافات'**
+  String get cartExtrasChoose;
+
+  /// No description provided for @cartItemsCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{لا توجد أصناف} one{صنف واحد} two{صنفان} few{{count} أصناف} many{{count} صنفًا} other{{count} صنف}}'**
+  String cartItemsCount(int count);
+
+  /// No description provided for @cartSubtotal.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجمالي الفرعي'**
+  String get cartSubtotal;
+
+  /// No description provided for @cartServiceFee.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسوم الخدمة'**
+  String get cartServiceFee;
+
+  /// No description provided for @cartTax.
+  ///
+  /// In ar, this message translates to:
+  /// **'الضريبة'**
+  String get cartTax;
+
+  /// No description provided for @cartDeliveryFee.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسوم التوصيل'**
+  String get cartDeliveryFee;
+
+  /// No description provided for @cartDiscount.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخصم'**
+  String get cartDiscount;
+
+  /// No description provided for @cartFinalTotal.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجمالي'**
+  String get cartFinalTotal;
+
+  /// No description provided for @cartCheckout.
+  ///
+  /// In ar, this message translates to:
+  /// **'إتمام الطلب'**
+  String get cartCheckout;
+
+  /// No description provided for @cartCheckoutTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إتمام الطلب'**
+  String get cartCheckoutTitle;
+
+  /// No description provided for @cartFulfillmentType.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة الاستلام'**
+  String get cartFulfillmentType;
+
+  /// No description provided for @cartFulfillmentDelivery.
+  ///
+  /// In ar, this message translates to:
+  /// **'توصيل'**
+  String get cartFulfillmentDelivery;
+
+  /// No description provided for @cartFulfillmentPickup.
+  ///
+  /// In ar, this message translates to:
+  /// **'استلام من المكان'**
+  String get cartFulfillmentPickup;
+
+  /// No description provided for @cartFulfillmentDineIn.
+  ///
+  /// In ar, this message translates to:
+  /// **'تناول في المكان'**
+  String get cartFulfillmentDineIn;
+
+  /// No description provided for @cartAddressLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'العنوان'**
+  String get cartAddressLabel;
+
+  /// No description provided for @cartAddressHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب عنوان التوصيل'**
+  String get cartAddressHint;
+
+  /// No description provided for @cartNotesLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات (اختياري)'**
+  String get cartNotesLabel;
+
+  /// No description provided for @cartPaymentMethod.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة الدفع'**
+  String get cartPaymentMethod;
+
+  /// No description provided for @cartPaymentCash.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقدًا عند الاستلام'**
+  String get cartPaymentCash;
+
+  /// No description provided for @cartPlaceOrder.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد الطلب'**
+  String get cartPlaceOrder;
+
+  /// No description provided for @cartOrderPlaced.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال الطلب بنجاح.'**
+  String get cartOrderPlaced;
+
+  /// No description provided for @cartGoToCart.
+  ///
+  /// In ar, this message translates to:
+  /// **'الذهاب للسلة'**
+  String get cartGoToCart;
 }
 
 class _AppLocalizationsDelegate

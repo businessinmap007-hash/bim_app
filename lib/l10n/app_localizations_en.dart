@@ -618,4 +618,100 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get jobsSalaryLabel => 'Salary (optional)';
+
+  @override
+  String get cartTitle => 'Cart';
+
+  @override
+  String get cartEmpty => 'Your cart is empty.';
+
+  @override
+  String get cartAdd => 'Add to cart';
+
+  @override
+  String get cartAddedToCart => 'Added to cart.';
+
+  @override
+  String get cartQty => 'Quantity';
+
+  @override
+  String get cartRemove => 'Remove';
+
+  @override
+  String get cartVariantChoose => 'Choose a type';
+
+  @override
+  String get cartExtrasChoose => 'Extras';
+
+  @override
+  String cartItemsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count items',
+      one: '1 item',
+      zero: 'No items',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cartSubtotal => 'Subtotal';
+
+  @override
+  String get cartServiceFee => 'Service fee';
+
+  @override
+  String get cartTax => 'Tax';
+
+  @override
+  String get cartDeliveryFee => 'Delivery fee';
+
+  @override
+  String get cartDiscount => 'Discount';
+
+  @override
+  String get cartFinalTotal => 'Total';
+
+  @override
+  String get cartCheckout => 'Checkout';
+
+  @override
+  String get cartCheckoutTitle => 'Checkout';
+
+  @override
+  String get cartFulfillmentType => 'Fulfillment';
+
+  @override
+  String get cartFulfillmentDelivery => 'Delivery';
+
+  @override
+  String get cartFulfillmentPickup => 'Pickup';
+
+  @override
+  String get cartFulfillmentDineIn => 'Dine in';
+
+  @override
+  String get cartAddressLabel => 'Address';
+
+  @override
+  String get cartAddressHint => 'Enter the delivery address';
+
+  @override
+  String get cartNotesLabel => 'Notes (optional)';
+
+  @override
+  String get cartPaymentMethod => 'Payment method';
+
+  @override
+  String get cartPaymentCash => 'Cash on delivery';
+
+  @override
+  String get cartPlaceOrder => 'Place order';
+
+  @override
+  String get cartOrderPlaced => 'Order placed successfully.';
+
+  @override
+  String get cartGoToCart => 'Go to cart';
 }

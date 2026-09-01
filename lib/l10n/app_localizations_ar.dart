@@ -623,4 +623,103 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get jobsSalaryLabel => 'الراتب (اختياري)';
+
+  @override
+  String get cartTitle => 'السلة';
+
+  @override
+  String get cartEmpty => 'السلة فارغة.';
+
+  @override
+  String get cartAdd => 'أضف للسلة';
+
+  @override
+  String get cartAddedToCart => 'تمت الإضافة للسلة.';
+
+  @override
+  String get cartQty => 'الكمية';
+
+  @override
+  String get cartRemove => 'إزالة';
+
+  @override
+  String get cartVariantChoose => 'اختر النوع';
+
+  @override
+  String get cartExtrasChoose => 'إضافات';
+
+  @override
+  String cartItemsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count صنف',
+      many: '$count صنفًا',
+      few: '$count أصناف',
+      two: 'صنفان',
+      one: 'صنف واحد',
+      zero: 'لا توجد أصناف',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get cartSubtotal => 'الإجمالي الفرعي';
+
+  @override
+  String get cartServiceFee => 'رسوم الخدمة';
+
+  @override
+  String get cartTax => 'الضريبة';
+
+  @override
+  String get cartDeliveryFee => 'رسوم التوصيل';
+
+  @override
+  String get cartDiscount => 'الخصم';
+
+  @override
+  String get cartFinalTotal => 'الإجمالي';
+
+  @override
+  String get cartCheckout => 'إتمام الطلب';
+
+  @override
+  String get cartCheckoutTitle => 'إتمام الطلب';
+
+  @override
+  String get cartFulfillmentType => 'طريقة الاستلام';
+
+  @override
+  String get cartFulfillmentDelivery => 'توصيل';
+
+  @override
+  String get cartFulfillmentPickup => 'استلام من المكان';
+
+  @override
+  String get cartFulfillmentDineIn => 'تناول في المكان';
+
+  @override
+  String get cartAddressLabel => 'العنوان';
+
+  @override
+  String get cartAddressHint => 'اكتب عنوان التوصيل';
+
+  @override
+  String get cartNotesLabel => 'ملاحظات (اختياري)';
+
+  @override
+  String get cartPaymentMethod => 'طريقة الدفع';
+
+  @override
+  String get cartPaymentCash => 'نقدًا عند الاستلام';
+
+  @override
+  String get cartPlaceOrder => 'تأكيد الطلب';
+
+  @override
+  String get cartOrderPlaced => 'تم إرسال الطلب بنجاح.';
+
+  @override
+  String get cartGoToCart => 'الذهاب للسلة';
 }
