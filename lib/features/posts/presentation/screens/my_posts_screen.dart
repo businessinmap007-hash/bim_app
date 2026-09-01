@@ -76,9 +76,9 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen> {
       if (isBusiness) Tab(text: l10n.postsTabJobs),
     ];
     final views = <Widget>[
-      const _FollowedFeedTab(),
-      const _MyPostsTab(),
-      if (isBusiness) const _MyJobsTab(),
+      const FollowedFeedTab(),
+      const MyPostsTab(),
+      if (isBusiness) const MyJobsTab(),
     ];
 
     return DefaultTabController(
@@ -92,14 +92,17 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen> {
   }
 }
 
-class _FollowedFeedTab extends ConsumerStatefulWidget {
-  const _FollowedFeedTab();
+/// The followed-accounts feed tab — public because [BusinessHomeScreen]
+/// embeds the same three tabs directly on the business dashboard, not just
+/// under the drawer's "My Posts" entry.
+class FollowedFeedTab extends ConsumerStatefulWidget {
+  const FollowedFeedTab({super.key});
 
   @override
-  ConsumerState<_FollowedFeedTab> createState() => _FollowedFeedTabState();
+  ConsumerState<FollowedFeedTab> createState() => _FollowedFeedTabState();
 }
 
-class _FollowedFeedTabState extends ConsumerState<_FollowedFeedTab> {
+class _FollowedFeedTabState extends ConsumerState<FollowedFeedTab> {
   final _scrollController = ScrollController();
 
   @override
@@ -164,14 +167,14 @@ class _FollowedFeedTabState extends ConsumerState<_FollowedFeedTab> {
   }
 }
 
-class _MyPostsTab extends ConsumerStatefulWidget {
-  const _MyPostsTab();
+class MyPostsTab extends ConsumerStatefulWidget {
+  const MyPostsTab({super.key});
 
   @override
-  ConsumerState<_MyPostsTab> createState() => _MyPostsTabState();
+  ConsumerState<MyPostsTab> createState() => _MyPostsTabState();
 }
 
-class _MyPostsTabState extends ConsumerState<_MyPostsTab> {
+class _MyPostsTabState extends ConsumerState<MyPostsTab> {
   final _scrollController = ScrollController();
 
   @override
@@ -246,14 +249,14 @@ class _MyPostsTabState extends ConsumerState<_MyPostsTab> {
   }
 }
 
-class _MyJobsTab extends ConsumerStatefulWidget {
-  const _MyJobsTab();
+class MyJobsTab extends ConsumerStatefulWidget {
+  const MyJobsTab({super.key});
 
   @override
-  ConsumerState<_MyJobsTab> createState() => _MyJobsTabState();
+  ConsumerState<MyJobsTab> createState() => _MyJobsTabState();
 }
 
-class _MyJobsTabState extends ConsumerState<_MyJobsTab> {
+class _MyJobsTabState extends ConsumerState<MyJobsTab> {
   final _scrollController = ScrollController();
 
   @override

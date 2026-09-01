@@ -5,10 +5,13 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/app_drawer.dart';
 import '../../../../shared/widgets/profile_cover_header.dart';
 import '../../../auth/application/auth_controller.dart';
+import '../../../posts/presentation/screens/my_posts_screen.dart';
 
-/// Placeholder for the business owner's panel. Real content (orders,
-/// bookings, catalog, financial statement) lands module by module per the
-/// roadmap's priority order — this is the auth-flow landing spot for now.
+/// The business owner's landing screen: its own cover/logo, then its posts
+/// activity right under it — the same three tabs "My Posts" shows from the
+/// drawer (followed accounts / my posts / my jobs), so the dashboard isn't
+/// just a name and an empty page. Orders, bookings and the financial
+/// statement still land module by module per the roadmap's priority order.
 class BusinessHomeScreen extends ConsumerWidget {
   const BusinessHomeScreen({super.key});
 
@@ -22,25 +25,32 @@ class BusinessHomeScreen extends ConsumerWidget {
 
     final business = state is AuthSignedIn ? state.user : null;
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.homeBusinessTitle)),
-      drawer: const AppDrawer(),
-      body: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          ProfileCoverHeader(
-            coverImageUrl: business?.coverUrl,
-            avatarImageUrl: business?.logoUrl,
-            title: name,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              '${l10n.authWelcomeBack}, $name',
-              style: Theme.of(context).textTheme.titleMedium,
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(title: Text(l10n.homeBusinessTitle)),
+        drawer: const AppDrawer(),
+        body: Column(
+          children: [
+            ProfileCoverHeader(
+              coverImageUrl: business?.coverUrl,
+              avatarImageUrl: business?.logoUrl,
+              title: name,
             ),
-          ),
-        ],
+            TabBar(
+              tabs: [
+                Tab(text: l10n.postsTabFollowing),
+                Tab(text: l10n.postsTabMine),
+                Tab(text: l10n.postsTabJobs),
+              ],
+            ),
+            const Expanded(
+              child: TabBarView(
+                children: [FollowedFeedTab(), MyPostsTab(), MyJobsTab()],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
