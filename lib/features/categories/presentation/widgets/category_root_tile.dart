@@ -61,8 +61,14 @@ class CategoryRootTile extends StatelessWidget {
                   // A fixed dark color, not a theme-derived one — the card
                   // is always light now, so a theme's own (light, in dark
                   // mode) text color would be unreadable on it.
+                  //
+                  // fontSize scales with iconSize (not a fixed px value) —
+                  // on a phone iconSize stays small so this matches the old
+                  // fixed 22, but on tablet/web the grid gives each tile far
+                  // more width, iconSize grows a lot, and a fixed size left
+                  // the label looking tiny next to a now-huge icon.
                   style: TextStyle(
-                    fontSize: 22,
+                    fontSize: (iconSize * 0.22).clamp(16.0, 34.0),
                     fontWeight: FontWeight.w700,
                     color: AppColors.primaryNavy,
                   ),

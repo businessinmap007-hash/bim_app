@@ -1,18 +1,30 @@
+import 'package:flutter/foundation.dart'
+    show TargetPlatform, defaultTargetPlatform, kIsWeb;
+
 /// Build-time environment configuration.
 ///
 /// Override at build/run time with:
-///   flutter run --dart-define=API_BASE_URL=http://10.0.2.2/testing/public/api/v2
+///   flutter run --dart-define=API_BASE_URL=http://192.168.x.x/testing/public/api/v2
 ///
-/// Defaults to the XAMPP dev server reachable from an Android emulator
-/// (10.0.2.2 is the emulator's alias for the host machine's localhost).
-/// A physical device or desktop/web build needs the machine's LAN IP instead.
+/// Without an override, the default is platform-aware: an Android emulator
+/// needs 10.0.2.2 (its alias for the host machine's localhost) — every other
+/// target (web, desktop, iOS simulator) reaches the host directly as
+/// localhost. Getting this wrong on web isn't a slow request, it's a dead
+/// one: 10.0.2.2 resolves to nothing in a real browser, so every screen that
+/// needs the API just times out (15s) with no visible error.
+/// A physical device still needs the machine's LAN IP via the dart-define.
 class Env {
   const Env._();
 
-  static const String apiBaseUrl = String.fromEnvironment(
-    'API_BASE_URL',
-    defaultValue: 'http://10.0.2.2/testing/public/api/v2',
-  );
+  static const String _override = String.fromEnvironment('API_BASE_URL');
+
+  static String get apiBaseUrl {
+    if (_override.isNotEmpty) return _override;
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+      return 'http://10.0.2.2/testing/public/api/v2';
+    }
+    return 'http://localhost/testing/public/api/v2';
+  }
 
   static const bool logNetwork = bool.fromEnvironment(
     'LOG_NETWORK',

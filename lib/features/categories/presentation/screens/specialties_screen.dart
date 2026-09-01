@@ -49,12 +49,17 @@ class SpecialtiesScreen extends ConsumerWidget {
                   return Card(
                     margin: EdgeInsets.zero,
                     child: ListTile(
+                      // Same size/weight as the bottom nav bar's labels
+                      // (NavigationBar has no style override, so it reads
+                      // straight off textTheme.labelMedium too) — matched
+                      // on request rather than the list-row default.
                       title: Text(
                         displayName,
-                        style: const TextStyle(fontWeight: FontWeight.w600),
+                        style: Theme.of(context).textTheme.labelMedium,
                       ),
                       trailing: Text(
                         l10n.businessCount(specialty.businessCount),
+                        style: Theme.of(context).textTheme.labelMedium,
                       ),
                       onTap: () => context.push(
                         '/discovery',
