@@ -246,4 +246,37 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get cropConfirm => 'تم';
+
+  @override
+  String get businessRatingNoReviews => 'لا توجد تقييمات بعد';
+
+  @override
+  String get businessTabPosts => 'المنشورات';
+
+  @override
+  String get businessTabMenu => 'القائمة';
+
+  @override
+  String get businessTabServices => 'الخدمات';
+
+  @override
+  String get businessPostsEmpty => 'لا توجد منشورات بعد';
+
+  @override
+  String get businessMenuEmpty => 'لا توجد أصناف بعد';
+
+  @override
+  String get businessServicesEmpty => 'لا توجد خدمات بعد';
+
+  @override
+  String get businessActionBook => 'احجز';
+
+  @override
+  String get businessActionOrder => 'اطلب';
+
+  @override
+  String get businessOutOfStock => 'غير متوفر حاليًا';
+
+  @override
+  String get businessNoContentYet => 'لا يوجد محتوى لعرضه بعد';
 }

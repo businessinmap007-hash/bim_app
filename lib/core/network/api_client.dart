@@ -54,6 +54,20 @@ class ApiClient {
   Future<dynamic> get(String path, {Map<String, dynamic>? query}) =>
       _unwrap(() => _dio.get(path, queryParameters: query));
 
+  /// For an endpoint whose body isn't the `{success, data}` envelope — e.g. a
+  /// Laravel resource collection response (`{data: [...], links, meta}`),
+  /// where the pagination info a caller needs lives in `meta`, not beside a
+  /// top-level `data` the way [Paginated] expects. Same error handling as
+  /// [get], but returns the full raw body un-unwrapped.
+  Future<Map<String, dynamic>> getForBody(String path, {Map<String, dynamic>? query}) async {
+    try {
+      final response = await _dio.get(path, queryParameters: query);
+      return response.data as Map<String, dynamic>;
+    } on DioException catch (e) {
+      throw _toApiException(e);
+    }
+  }
+
   Future<dynamic> post(
     String path, {
     Object? data,

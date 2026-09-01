@@ -6,6 +6,7 @@ import '../features/auth/application/auth_controller.dart';
 import '../features/auth/presentation/screens/account_type_screen.dart';
 import '../features/auth/presentation/screens/login_screen.dart';
 import '../features/auth/presentation/screens/register_screen.dart';
+import '../features/business/presentation/screens/business_detail_screen.dart';
 import '../features/categories/presentation/screens/specialties_screen.dart';
 import '../features/discovery/presentation/screens/business_list_screen.dart';
 import '../features/home/presentation/screens/business_home_screen.dart';
@@ -103,6 +104,12 @@ final routerProvider = Provider<GoRouter>((ref) {
             title: extra['title'] as String,
           );
         },
+      ),
+      GoRoute(
+        path: '/business/:businessId',
+        builder: (context, state) => BusinessDetailScreen(
+          businessId: int.parse(state.pathParameters['businessId']!),
+        ),
       ),
     ],
   );

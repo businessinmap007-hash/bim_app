@@ -547,6 +547,72 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تم'**
   String get cropConfirm;
+
+  /// No description provided for @businessRatingNoReviews.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد تقييمات بعد'**
+  String get businessRatingNoReviews;
+
+  /// No description provided for @businessTabPosts.
+  ///
+  /// In ar, this message translates to:
+  /// **'المنشورات'**
+  String get businessTabPosts;
+
+  /// No description provided for @businessTabMenu.
+  ///
+  /// In ar, this message translates to:
+  /// **'القائمة'**
+  String get businessTabMenu;
+
+  /// No description provided for @businessTabServices.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخدمات'**
+  String get businessTabServices;
+
+  /// No description provided for @businessPostsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد منشورات بعد'**
+  String get businessPostsEmpty;
+
+  /// No description provided for @businessMenuEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أصناف بعد'**
+  String get businessMenuEmpty;
+
+  /// No description provided for @businessServicesEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد خدمات بعد'**
+  String get businessServicesEmpty;
+
+  /// No description provided for @businessActionBook.
+  ///
+  /// In ar, this message translates to:
+  /// **'احجز'**
+  String get businessActionBook;
+
+  /// No description provided for @businessActionOrder.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلب'**
+  String get businessActionOrder;
+
+  /// No description provided for @businessOutOfStock.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير متوفر حاليًا'**
+  String get businessOutOfStock;
+
+  /// No description provided for @businessNoContentYet.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد محتوى لعرضه بعد'**
+  String get businessNoContentYet;
 }
 
 class _AppLocalizationsDelegate

@@ -77,5 +77,16 @@
   "cropAspectSquare": "مربع",
   "cropAspectPortrait": "عمودي",
   "cropAspectLandscape": "أفقي",
-  "cropConfirm": "تم"
+  "cropConfirm": "تم",
+  "businessRatingNoReviews": "لا توجد تقييمات بعد",
+  "businessTabPosts": "المنشورات",
+  "businessTabMenu": "القائمة",
+  "businessTabServices": "الخدمات",
+  "businessPostsEmpty": "لا توجد منشورات بعد",
+  "businessMenuEmpty": "لا توجد أصناف بعد",
+  "businessServicesEmpty": "لا توجد خدمات بعد",
+  "businessActionBook": "احجز",
+  "businessActionOrder": "اطلب",
+  "businessOutOfStock": "غير متوفر حاليًا",
+  "businessNoContentYet": "لا يوجد محتوى لعرضه بعد"
 }

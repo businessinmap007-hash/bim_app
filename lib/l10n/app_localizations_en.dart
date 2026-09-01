@@ -245,4 +245,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cropConfirm => 'Done';
+
+  @override
+  String get businessRatingNoReviews => 'No reviews yet';
+
+  @override
+  String get businessTabPosts => 'Posts';
+
+  @override
+  String get businessTabMenu => 'Menu';
+
+  @override
+  String get businessTabServices => 'Services';
+
+  @override
+  String get businessPostsEmpty => 'No posts yet';
+
+  @override
+  String get businessMenuEmpty => 'No menu items yet';
+
+  @override
+  String get businessServicesEmpty => 'No services yet';
+
+  @override
+  String get businessActionBook => 'Book';
+
+  @override
+  String get businessActionOrder => 'Order';
+
+  @override
+  String get businessOutOfStock => 'Currently unavailable';
+
+  @override
+  String get businessNoContentYet => 'Nothing to show yet';
 }

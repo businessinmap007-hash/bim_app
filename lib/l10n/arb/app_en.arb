@@ -77,5 +77,16 @@
   "cropAspectSquare": "Square",
   "cropAspectPortrait": "Portrait",
   "cropAspectLandscape": "Landscape",
-  "cropConfirm": "Done"
+  "cropConfirm": "Done",
+  "businessRatingNoReviews": "No reviews yet",
+  "businessTabPosts": "Posts",
+  "businessTabMenu": "Menu",
+  "businessTabServices": "Services",
+  "businessPostsEmpty": "No posts yet",
+  "businessMenuEmpty": "No menu items yet",
+  "businessServicesEmpty": "No services yet",
+  "businessActionBook": "Book",
+  "businessActionOrder": "Order",
+  "businessOutOfStock": "Currently unavailable",
+  "businessNoContentYet": "Nothing to show yet"
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -136,9 +137,7 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
                         final business = state.items[index];
                         return BusinessCard(
                           business: business,
-                          // Business detail (menu/booking) is a later module —
-                          // for now this list is the end of the discovery flow.
-                          onTap: () {},
+                          onTap: () => context.push('/business/${business.id}'),
                         );
                       },
                     ),
