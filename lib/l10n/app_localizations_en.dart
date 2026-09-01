@@ -714,4 +714,55 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cartGoToCart => 'Go to cart';
+
+  @override
+  String get bookingScreenTitle => 'Booking';
+
+  @override
+  String get bookingSubmit => 'Book now';
+
+  @override
+  String get bookingChooseUnit => 'Choose a unit';
+
+  @override
+  String get bookingUnitEmpty => 'No units available right now.';
+
+  @override
+  String get bookingModifiersTitle => 'Extras';
+
+  @override
+  String get bookingFrom => 'From';
+
+  @override
+  String get bookingTo => 'To';
+
+  @override
+  String get bookingChoosePlaceholder => 'Choose...';
+
+  @override
+  String get bookingChannelInPerson => 'In person';
+
+  @override
+  String get bookingChannelOnline => 'Online';
+
+  @override
+  String get bookingVisitAtBusiness => 'At the business';
+
+  @override
+  String get bookingVisitAtCustomer => 'At your place';
+
+  @override
+  String get bookingSuccess => 'Booking request sent successfully.';
+
+  @override
+  String get bookingDatetimeLabel => 'Booking time';
+
+  @override
+  String get bookingCapacityLabel => 'Capacity';
+
+  @override
+  String get bookingUnitRequired => 'Choose a unit first.';
+
+  @override
+  String get bookingDateRequired => 'Choose a date first.';
 }

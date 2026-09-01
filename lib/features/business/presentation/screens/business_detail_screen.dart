@@ -5,6 +5,7 @@ import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
 import '../../../../shared/widgets/profile_cover_header.dart';
+import '../../../booking/presentation/screens/booking_screen.dart';
 import '../../../cart/application/cart_controller.dart';
 import '../../../cart/presentation/screens/cart_screen.dart';
 import '../../../cart/presentation/widgets/add_to_cart_sheet.dart';
@@ -318,9 +319,11 @@ class _ServicesTab extends ConsumerWidget {
             final offering = offerings[index];
             return OfferingCard(
               offering: offering,
-              // Booking a specific unit is still a later module — only the
-              // "order" (retail) action is wired here.
-              onTap: offering.isBookable ? null : () => orderRetail(offering),
+              onTap: offering.isBookable
+                  ? () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => BookingScreen(businessId: businessId, offering: offering)),
+                    )
+                  : () => orderRetail(offering),
             );
           },
         );

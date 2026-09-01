@@ -237,5 +237,22 @@
   "cartPaymentCash": "نقدًا عند الاستلام",
   "cartPlaceOrder": "تأكيد الطلب",
   "cartOrderPlaced": "تم إرسال الطلب بنجاح.",
-  "cartGoToCart": "الذهاب للسلة"
+  "cartGoToCart": "الذهاب للسلة",
+  "bookingScreenTitle": "الحجز",
+  "bookingSubmit": "احجز الآن",
+  "bookingChooseUnit": "اختر الوحدة",
+  "bookingUnitEmpty": "لا توجد وحدات متاحة حاليًا.",
+  "bookingModifiersTitle": "إضافات",
+  "bookingFrom": "من",
+  "bookingTo": "إلى",
+  "bookingChoosePlaceholder": "اختر...",
+  "bookingChannelInPerson": "حضوريًا",
+  "bookingChannelOnline": "أونلاين",
+  "bookingVisitAtBusiness": "في المكان",
+  "bookingVisitAtCustomer": "عندك",
+  "bookingSuccess": "تم إرسال طلب الحجز بنجاح.",
+  "bookingDatetimeLabel": "موعد الحجز",
+  "bookingCapacityLabel": "السعة",
+  "bookingUnitRequired": "اختر الوحدة أولًا.",
+  "bookingDateRequired": "حدد الموعد أولًا."
 }

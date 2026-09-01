@@ -722,4 +722,55 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get cartGoToCart => 'الذهاب للسلة';
+
+  @override
+  String get bookingScreenTitle => 'الحجز';
+
+  @override
+  String get bookingSubmit => 'احجز الآن';
+
+  @override
+  String get bookingChooseUnit => 'اختر الوحدة';
+
+  @override
+  String get bookingUnitEmpty => 'لا توجد وحدات متاحة حاليًا.';
+
+  @override
+  String get bookingModifiersTitle => 'إضافات';
+
+  @override
+  String get bookingFrom => 'من';
+
+  @override
+  String get bookingTo => 'إلى';
+
+  @override
+  String get bookingChoosePlaceholder => 'اختر...';
+
+  @override
+  String get bookingChannelInPerson => 'حضوريًا';
+
+  @override
+  String get bookingChannelOnline => 'أونلاين';
+
+  @override
+  String get bookingVisitAtBusiness => 'في المكان';
+
+  @override
+  String get bookingVisitAtCustomer => 'عندك';
+
+  @override
+  String get bookingSuccess => 'تم إرسال طلب الحجز بنجاح.';
+
+  @override
+  String get bookingDatetimeLabel => 'موعد الحجز';
+
+  @override
+  String get bookingCapacityLabel => 'السعة';
+
+  @override
+  String get bookingUnitRequired => 'اختر الوحدة أولًا.';
+
+  @override
+  String get bookingDateRequired => 'حدد الموعد أولًا.';
 }

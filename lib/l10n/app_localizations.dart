@@ -1417,6 +1417,108 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الذهاب للسلة'**
   String get cartGoToCart;
+
+  /// No description provided for @bookingScreenTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحجز'**
+  String get bookingScreenTitle;
+
+  /// No description provided for @bookingSubmit.
+  ///
+  /// In ar, this message translates to:
+  /// **'احجز الآن'**
+  String get bookingSubmit;
+
+  /// No description provided for @bookingChooseUnit.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الوحدة'**
+  String get bookingChooseUnit;
+
+  /// No description provided for @bookingUnitEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد وحدات متاحة حاليًا.'**
+  String get bookingUnitEmpty;
+
+  /// No description provided for @bookingModifiersTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافات'**
+  String get bookingModifiersTitle;
+
+  /// No description provided for @bookingFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'من'**
+  String get bookingFrom;
+
+  /// No description provided for @bookingTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلى'**
+  String get bookingTo;
+
+  /// No description provided for @bookingChoosePlaceholder.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر...'**
+  String get bookingChoosePlaceholder;
+
+  /// No description provided for @bookingChannelInPerson.
+  ///
+  /// In ar, this message translates to:
+  /// **'حضوريًا'**
+  String get bookingChannelInPerson;
+
+  /// No description provided for @bookingChannelOnline.
+  ///
+  /// In ar, this message translates to:
+  /// **'أونلاين'**
+  String get bookingChannelOnline;
+
+  /// No description provided for @bookingVisitAtBusiness.
+  ///
+  /// In ar, this message translates to:
+  /// **'في المكان'**
+  String get bookingVisitAtBusiness;
+
+  /// No description provided for @bookingVisitAtCustomer.
+  ///
+  /// In ar, this message translates to:
+  /// **'عندك'**
+  String get bookingVisitAtCustomer;
+
+  /// No description provided for @bookingSuccess.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال طلب الحجز بنجاح.'**
+  String get bookingSuccess;
+
+  /// No description provided for @bookingDatetimeLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'موعد الحجز'**
+  String get bookingDatetimeLabel;
+
+  /// No description provided for @bookingCapacityLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعة'**
+  String get bookingCapacityLabel;
+
+  /// No description provided for @bookingUnitRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الوحدة أولًا.'**
+  String get bookingUnitRequired;
+
+  /// No description provided for @bookingDateRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدد الموعد أولًا.'**
+  String get bookingDateRequired;
 }
 
 class _AppLocalizationsDelegate
