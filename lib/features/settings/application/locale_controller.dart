@@ -1,3 +1,5 @@
+import 'dart:ui' show PlatformDispatcher;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -22,6 +24,15 @@ class LocaleController extends StateNotifier<Locale> {
             (l) => l.languageCode == saved,
           )) {
         state = Locale(saved);
+      } else {
+        // No explicit choice saved yet — follow the device's own language
+        // on first launch instead of always defaulting to Arabic, same as
+        // any well-behaved app. Once the user picks a language explicitly
+        // (setLocale persists it), that choice always wins from then on.
+        final deviceCode = PlatformDispatcher.instance.locale.languageCode;
+        if (AppLocalizations.supportedLocales.any((l) => l.languageCode == deviceCode)) {
+          state = Locale(deviceCode);
+        }
       }
     } catch (_) {
       // Keep the 'ar' default — storage being unavailable shouldn't crash launch.

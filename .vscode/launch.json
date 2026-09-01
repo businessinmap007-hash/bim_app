@@ -6,7 +6,7 @@
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
-      "args": ["--dart-define=API_BASE_URL=http://localhost/testing/public/api/v2"]
+      "args": ["--dart-define=API_BASE_URL=http://localhost:8000/api/v2"]
     },
     {
       "name": "BIM (localhost, Windows desktop)",
@@ -14,14 +14,21 @@
       "type": "dart",
       "deviceId": "windows",
       "program": "lib/main.dart",
-      "args": ["--dart-define=API_BASE_URL=http://localhost/testing/public/api/v2"]
+      "args": ["--dart-define=API_BASE_URL=http://localhost:8000/api/v2"]
     },
     {
       "name": "BIM (Android emulator, host alias)",
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
-      "args": ["--dart-define=API_BASE_URL=http://10.0.2.2/testing/public/api/v2"]
+      "args": ["--dart-define=API_BASE_URL=http://10.0.2.2:8000/api/v2"]
+    },
+    {
+      "name": "BIM (real device, LAN IP)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": ["--dart-define=API_BASE_URL=http://192.168.17.21:8000/api/v2"]
     },
     {
       "name": "BIM (profile mode)",
@@ -29,7 +36,7 @@
       "type": "dart",
       "flutterMode": "profile",
       "program": "lib/main.dart",
-      "args": ["--dart-define=API_BASE_URL=http://localhost/testing/public/api/v2"]
+      "args": ["--dart-define=API_BASE_URL=http://localhost:8000/api/v2"]
     }
   ]
 }

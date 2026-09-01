@@ -46,5 +46,15 @@
   "settingsTitle": "Settings",
   "settingsLanguage": "Language",
   "settingsLanguageArabic": "العربية",
-  "settingsLanguageEnglish": "English"
+  "settingsLanguageEnglish": "English",
+  "settingsAppearance": "Appearance",
+  "settingsAppearanceLight": "Light",
+  "settingsAppearanceDark": "Dark",
+  "settingsAppearanceSystem": "System default",
+  "settingsAccountSection": "Account settings",
+  "settingsServicesSection": "Service settings",
+  "settingsComingSoon": "Coming soon",
+  "categoryPickerFieldLabel": "Category",
+  "categoryPickerChooseHint": "Choose a category",
+  "categoryPickerChooseRoot": "Choose a section"
 }

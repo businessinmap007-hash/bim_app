@@ -5,8 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/app_drawer.dart';
 import '../../../../shared/widgets/async_value_view.dart';
-import '../../../auth/application/auth_controller.dart';
 import '../../../categories/application/categories_providers.dart';
 import '../../../categories/data/models/category_root.dart';
 import '../../../categories/presentation/widgets/category_root_tile.dart';
@@ -28,16 +28,8 @@ class CustomerHomeScreen extends ConsumerWidget {
     final roots = ref.watch(categoryRootsProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.homeCustomerTitle),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            tooltip: l10n.authLogout,
-            onPressed: () => ref.read(authControllerProvider.notifier).logout(),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: Text(l10n.homeCustomerTitle)),
+      drawer: const AppDrawer(),
       body: AsyncValueView<List<CategoryRoot>>(
         value: roots,
         onRetry: () => ref.invalidate(categoryRootsProvider),

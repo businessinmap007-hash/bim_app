@@ -152,4 +152,34 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get settingsLanguageEnglish => 'English';
+
+  @override
+  String get settingsAppearance => 'المظهر';
+
+  @override
+  String get settingsAppearanceLight => 'فاتح';
+
+  @override
+  String get settingsAppearanceDark => 'داكن';
+
+  @override
+  String get settingsAppearanceSystem => 'حسب النظام';
+
+  @override
+  String get settingsAccountSection => 'إعدادات الحساب';
+
+  @override
+  String get settingsServicesSection => 'إعدادات الخدمات';
+
+  @override
+  String get settingsComingSoon => 'قريبًا';
+
+  @override
+  String get categoryPickerFieldLabel => 'التصنيف';
+
+  @override
+  String get categoryPickerChooseHint => 'اختر التصنيف';
+
+  @override
+  String get categoryPickerChooseRoot => 'اختر القسم الرئيسي';
 }

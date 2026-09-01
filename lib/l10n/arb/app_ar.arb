@@ -46,5 +46,15 @@
   "settingsTitle": "الإعدادات",
   "settingsLanguage": "اللغة",
   "settingsLanguageArabic": "العربية",
-  "settingsLanguageEnglish": "English"
+  "settingsLanguageEnglish": "English",
+  "settingsAppearance": "المظهر",
+  "settingsAppearanceLight": "فاتح",
+  "settingsAppearanceDark": "داكن",
+  "settingsAppearanceSystem": "حسب النظام",
+  "settingsAccountSection": "إعدادات الحساب",
+  "settingsServicesSection": "إعدادات الخدمات",
+  "settingsComingSoon": "قريبًا",
+  "categoryPickerFieldLabel": "التصنيف",
+  "categoryPickerChooseHint": "اختر التصنيف",
+  "categoryPickerChooseRoot": "اختر القسم الرئيسي"
 }

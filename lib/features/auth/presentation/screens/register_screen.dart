@@ -5,6 +5,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../categories/presentation/widgets/category_picker_field.dart';
 import '../../application/auth_controller.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
@@ -21,11 +22,16 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   bool _submitting = false;
   String? _error;
+  CategorySelection? _category;
+  bool _categoryTouched = false;
 
   bool get _isBusiness => widget.accountType == 'business';
 
   Future<void> _submit() async {
-    if (_formKey.currentState?.saveAndValidate() != true) return;
+    final formOk = _formKey.currentState?.saveAndValidate() ?? false;
+    setState(() => _categoryTouched = true);
+    if (_isBusiness && _category == null) return;
+    if (!formOk) return;
     final v = _formKey.currentState!.value;
 
     setState(() {
@@ -44,9 +50,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             password: v['password'] as String,
             passwordConfirmation: v['password_confirmation'] as String,
             type: widget.accountType,
-            categoryChildId: _isBusiness
-                ? int.tryParse(v['category_child_id'] as String? ?? '')
-                : null,
+            categoryChildId: _isBusiness ? _category?.childId : null,
           );
     } on ApiException catch (e) {
       setState(() => _error = e.message);
@@ -79,6 +83,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     FormBuilderTextField(
                       name: 'name',
                       decoration: InputDecoration(labelText: l10n.authName),
+                      textInputAction: TextInputAction.next,
                       validator: FormBuilderValidators.required(
                         errorText: l10n.validationRequired,
                       ),
@@ -90,6 +95,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         decoration: const InputDecoration(
                           labelText: 'Business name (English)',
                         ),
+                        textInputAction: TextInputAction.next,
                         validator: FormBuilderValidators.required(
                           errorText: l10n.validationRequired,
                         ),
@@ -100,6 +106,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       name: 'email',
                       decoration: const InputDecoration(labelText: 'Email'),
                       keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(
                           errorText: l10n.validationRequired,
@@ -114,23 +121,22 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       name: 'phone',
                       decoration: const InputDecoration(labelText: 'Phone'),
                       keyboardType: TextInputType.phone,
+                      textInputAction: TextInputAction.next,
                       validator: FormBuilderValidators.required(
                         errorText: l10n.validationRequired,
                       ),
                     ),
                     if (_isBusiness) ...[
                       const SizedBox(height: 16),
-                      FormBuilderTextField(
-                        name: 'category_child_id',
-                        decoration: const InputDecoration(
-                          labelText: 'Category (child id)',
-                          helperText:
-                              'TEMP: numeric id until the category picker (Categories module) ships',
-                        ),
-                        keyboardType: TextInputType.number,
-                        validator: FormBuilderValidators.required(
-                          errorText: l10n.validationRequired,
-                        ),
+                      CategoryPickerField(
+                        value: _category,
+                        errorText: _categoryTouched && _category == null
+                            ? l10n.validationRequired
+                            : null,
+                        onChanged: (selection) => setState(() {
+                          _category = selection;
+                          _categoryTouched = true;
+                        }),
                       ),
                     ],
                     const SizedBox(height: 16),
@@ -141,6 +147,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         helperText: l10n.validationPasswordPolicy,
                       ),
                       obscureText: true,
+                      textInputAction: TextInputAction.next,
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(
                           errorText: l10n.validationRequired,
@@ -155,6 +162,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         labelText: l10n.authConfirmPassword,
                       ),
                       obscureText: true,
+                      textInputAction: TextInputAction.done,
+                      onSubmitted: (_) => _submit(),
                       validator: (value) {
                         final password =
                             _formKey.currentState?.fields['password']?.value;

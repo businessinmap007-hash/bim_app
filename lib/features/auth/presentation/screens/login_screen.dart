@@ -80,6 +80,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         labelText: l10n.authEmailOrPhone,
                       ),
                       keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(
                           errorText: l10n.validationRequired,
@@ -94,6 +95,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       name: 'password',
                       decoration: InputDecoration(labelText: l10n.authPassword),
                       obscureText: true,
+                      textInputAction: TextInputAction.done,
+                      // Enter/Done on the last field submits the form —
+                      // matches what every login form does; requiring a
+                      // pointer click on the button afterward is friction
+                      // nobody asked for.
+                      onSubmitted: (_) => _submit(),
                       validator: FormBuilderValidators.required(
                         errorText: l10n.validationRequired,
                       ),

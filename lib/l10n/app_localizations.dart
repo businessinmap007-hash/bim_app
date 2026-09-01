@@ -361,6 +361,66 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'English'**
   String get settingsLanguageEnglish;
+
+  /// No description provided for @settingsAppearance.
+  ///
+  /// In ar, this message translates to:
+  /// **'المظهر'**
+  String get settingsAppearance;
+
+  /// No description provided for @settingsAppearanceLight.
+  ///
+  /// In ar, this message translates to:
+  /// **'فاتح'**
+  String get settingsAppearanceLight;
+
+  /// No description provided for @settingsAppearanceDark.
+  ///
+  /// In ar, this message translates to:
+  /// **'داكن'**
+  String get settingsAppearanceDark;
+
+  /// No description provided for @settingsAppearanceSystem.
+  ///
+  /// In ar, this message translates to:
+  /// **'حسب النظام'**
+  String get settingsAppearanceSystem;
+
+  /// No description provided for @settingsAccountSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعدادات الحساب'**
+  String get settingsAccountSection;
+
+  /// No description provided for @settingsServicesSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعدادات الخدمات'**
+  String get settingsServicesSection;
+
+  /// No description provided for @settingsComingSoon.
+  ///
+  /// In ar, this message translates to:
+  /// **'قريبًا'**
+  String get settingsComingSoon;
+
+  /// No description provided for @categoryPickerFieldLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'التصنيف'**
+  String get categoryPickerFieldLabel;
+
+  /// No description provided for @categoryPickerChooseHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر التصنيف'**
+  String get categoryPickerChooseHint;
+
+  /// No description provided for @categoryPickerChooseRoot.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر القسم الرئيسي'**
+  String get categoryPickerChooseRoot;
 }
 
 class _AppLocalizationsDelegate

@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../network/api_client.dart';
 import '../storage/locale_storage.dart';
+import '../storage/theme_mode_storage.dart';
 import '../storage/token_storage.dart';
 
 final secureStorageProvider = Provider<FlutterSecureStorage>((ref) {
@@ -19,4 +20,8 @@ final apiClientProvider = Provider<ApiClient>((ref) {
 
 final localeStorageProvider = Provider<LocaleStorage>((ref) {
   return LocaleStorage();
+});
+
+final themeModeStorageProvider = Provider<ThemeModeStorage>((ref) {
+  return ThemeModeStorage();
 });

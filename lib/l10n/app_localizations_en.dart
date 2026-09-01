@@ -150,4 +150,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsLanguageEnglish => 'English';
+
+  @override
+  String get settingsAppearance => 'Appearance';
+
+  @override
+  String get settingsAppearanceLight => 'Light';
+
+  @override
+  String get settingsAppearanceDark => 'Dark';
+
+  @override
+  String get settingsAppearanceSystem => 'System default';
+
+  @override
+  String get settingsAccountSection => 'Account settings';
+
+  @override
+  String get settingsServicesSection => 'Service settings';
+
+  @override
+  String get settingsComingSoon => 'Coming soon';
+
+  @override
+  String get categoryPickerFieldLabel => 'Category';
+
+  @override
+  String get categoryPickerChooseHint => 'Choose a category';
+
+  @override
+  String get categoryPickerChooseRoot => 'Choose a section';
 }
