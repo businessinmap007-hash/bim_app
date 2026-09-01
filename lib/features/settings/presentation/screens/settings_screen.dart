@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/application/auth_controller.dart';
+import '../../../booking_settings/presentation/screens/booking_settings_screen.dart';
 import '../../../media/presentation/widgets/watermark_repeat_selector.dart';
 import '../../application/locale_controller.dart';
 import '../../application/theme_mode_controller.dart';
@@ -87,7 +88,18 @@ class SettingsScreen extends ConsumerWidget {
             const SizedBox(height: 24),
             _SectionHeader(l10n.settingsServicesSection),
             const SizedBox(height: 8),
-            _OptionCard(children: [_PlaceholderRow(label: l10n.settingsServicesSection)]),
+            _OptionCard(
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.event_available_outlined),
+                  title: Text(l10n.bookingSettingsTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const BookingSettingsScreen()),
+                  ),
+                ),
+              ],
+            ),
           ],
           const SizedBox(height: 24),
           _SectionHeader(l10n.mediaWatermarkTitle),
@@ -197,32 +209,6 @@ class _OptionRow extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-/// A section that exists structurally (so the settings hub already has a
-/// home for it) but has no real content yet — account-level and
-/// per-service settings land here module by module.
-class _PlaceholderRow extends StatelessWidget {
-  final String label;
-  const _PlaceholderRow({required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              l10n.settingsComingSoon,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).hintColor),
-            ),
-          ),
-        ],
       ),
     );
   }
