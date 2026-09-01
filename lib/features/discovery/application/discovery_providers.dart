@@ -3,9 +3,60 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers/core_providers.dart';
 import '../data/discovery_api.dart';
 import '../data/models/business_summary.dart';
+import '../data/search_api.dart';
 
 final discoveryApiProvider = Provider<DiscoveryApi>((ref) {
   return DiscoveryApi(ref.watch(apiClientProvider));
+});
+
+final searchApiProvider = Provider<SearchApi>((ref) {
+  return SearchApi(ref.watch(apiClientProvider));
+});
+
+class SearchState {
+  final List<BusinessSummary> items;
+  final bool isLoading;
+  final String? error;
+  final String query;
+
+  const SearchState({this.items = const [], this.isLoading = false, this.error, this.query = ''});
+
+  SearchState copyWith({List<BusinessSummary>? items, bool? isLoading, String? error, bool clearError = false, String? query}) {
+    return SearchState(
+      items: items ?? this.items,
+      isLoading: isLoading ?? this.isLoading,
+      error: clearError ? null : (error ?? this.error),
+      query: query ?? this.query,
+    );
+  }
+}
+
+/// Cross-category business search (SearchApi) — deliberately separate from
+/// [BusinessListController], which is always scoped to one specialty's
+/// child_id. This one has no child_id at all.
+class SearchController extends StateNotifier<SearchState> {
+  final SearchApi _api;
+
+  SearchController(this._api) : super(const SearchState());
+
+  Future<void> search(String q) async {
+    state = state.copyWith(query: q);
+    if (q.trim().isEmpty) {
+      state = state.copyWith(items: [], isLoading: false, clearError: true);
+      return;
+    }
+    state = state.copyWith(isLoading: true, clearError: true);
+    try {
+      final results = await _api.businesses(q);
+      state = state.copyWith(items: results, isLoading: false);
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+    }
+  }
+}
+
+final searchControllerProvider = StateNotifierProvider<SearchController, SearchState>((ref) {
+  return SearchController(ref.watch(searchApiProvider));
 });
 
 class BusinessListState {

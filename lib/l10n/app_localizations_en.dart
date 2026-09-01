@@ -278,4 +278,60 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get businessNoContentYet => 'Nothing to show yet';
+
+  @override
+  String get profileTitle => 'My Profile';
+
+  @override
+  String get profileName => 'Name';
+
+  @override
+  String get profilePhone => 'Mobile number';
+
+  @override
+  String get profileLocation => 'Location';
+
+  @override
+  String get profileLocationNotSet => 'Location not set yet';
+
+  @override
+  String get profileLocationSet => 'Location set';
+
+  @override
+  String get profileUseCurrentLocation => 'Use my current location';
+
+  @override
+  String get profileLocationPermissionDenied =>
+      'Location access is needed — allow it from your device settings.';
+
+  @override
+  String get profilePhotoCamera => 'Take a photo';
+
+  @override
+  String get profilePhotoGallery => 'Choose from gallery';
+
+  @override
+  String get profilePhotoRemove => 'Remove photo';
+
+  @override
+  String get profileSaved => 'Changes saved.';
+
+  @override
+  String get profilePrivacyNote =>
+      'Your phone and location are never shown publicly — a business only sees them once you actually use one of its services, like a booking or an order.';
+
+  @override
+  String get profileSave => 'Save';
+
+  @override
+  String get navCategories => 'Categories';
+
+  @override
+  String get navSearch => 'Search';
+
+  @override
+  String get navProfile => 'My account';
+
+  @override
+  String get searchEmptyHint => 'Type a business name to search for';
 }

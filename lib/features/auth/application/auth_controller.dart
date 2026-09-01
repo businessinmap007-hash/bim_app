@@ -89,6 +89,15 @@ class AuthController extends StateNotifier<AuthState> {
     state = AuthSignedIn(result.user);
   }
 
+  /// Replaces the signed-in user's data in place — called after a profile
+  /// edit (name/phone/location/photo) so the rest of the app (app bars,
+  /// business home header, ...) reflects the change without a full re-fetch.
+  void setUser(AuthUser user) {
+    if (state is AuthSignedIn) {
+      state = AuthSignedIn(user);
+    }
+  }
+
   Future<void> logout() async {
     try {
       await _authApi.logout();

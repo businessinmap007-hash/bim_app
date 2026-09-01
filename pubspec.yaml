@@ -70,6 +70,12 @@ dependencies:
   # Connectivity
   connectivity_plus: ^6.1.0
 
+  # Device location — for the customer's own profile location. No API key
+  # needed (that's only google_maps_flutter, for rendering a map view, still
+  # deferred below); geolocator is just permission + native location
+  # services.
+  geolocator: ^13.0.2
+
   # NOTE: google_fonts was removed on purpose. On Flutter Web it never
   # actually fetches the font bytes for the CanvasKit/Skwasm renderer (only a
   # <link> in web/index.html helps, and even that only benefits the HTML
@@ -80,10 +86,10 @@ dependencies:
   # NOTE: deliberately NOT added yet — each needs native project config
   # (API keys / google-services.json / Info.plist entries) we don't have
   # values for, and would break a fresh `flutter run` if added blind:
-  #   google_maps_flutter, geolocator, geocoding  -> add when the Location/
-  #     Discovery module starts (needs a Google Maps API key per platform)
-  #   firebase_messaging                          -> add when push notif-
-  #     ications are wired (needs a Firebase project + google-services.json)
+  #   google_maps_flutter, geocoding  -> add when a screen needs to actually
+  #     render a map or reverse-geocode an address (needs a Maps API key)
+  #   firebase_messaging              -> add when push notifications are
+  #     wired (needs a Firebase project + google-services.json)
 
 dev_dependencies:
   flutter_test:

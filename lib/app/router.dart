@@ -10,8 +10,9 @@ import '../features/business/presentation/screens/business_detail_screen.dart';
 import '../features/categories/presentation/screens/specialties_screen.dart';
 import '../features/discovery/presentation/screens/business_list_screen.dart';
 import '../features/home/presentation/screens/business_home_screen.dart';
-import '../features/home/presentation/screens/customer_home_screen.dart';
+import '../features/home/presentation/screens/home_shell.dart';
 import '../features/media/presentation/screens/media_composer_screen.dart';
+import '../features/profile/presentation/screens/my_profile_screen.dart';
 import '../features/settings/presentation/screens/settings_screen.dart';
 import '../features/splash/presentation/screens/splash_screen.dart';
 
@@ -75,14 +76,19 @@ final routerProvider = Provider<GoRouter>((ref) {
           final authState = ref.read(authControllerProvider);
           final isBusiness =
               authState is AuthSignedIn && authState.user.isBusiness;
-          return isBusiness
-              ? const BusinessHomeScreen()
-              : const CustomerHomeScreen();
+          return isBusiness ? const BusinessHomeScreen() : const HomeShell();
         },
       ),
       GoRoute(
         path: '/settings',
         builder: (context, state) => const SettingsScreen(),
+      ),
+      // Deliberately no id param — always the caller's OWN account. See
+      // MyProfileScreen's doc comment for why no "view another profile"
+      // route exists in this app at all.
+      GoRoute(
+        path: '/profile',
+        builder: (context, state) => const MyProfileScreen(),
       ),
       GoRoute(
         path: '/media-composer',

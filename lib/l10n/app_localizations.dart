@@ -613,6 +613,114 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لا يوجد محتوى لعرضه بعد'**
   String get businessNoContentYet;
+
+  /// No description provided for @profileTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الملف الشخصي'**
+  String get profileTitle;
+
+  /// No description provided for @profileName.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم'**
+  String get profileName;
+
+  /// No description provided for @profilePhone.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الموبايل'**
+  String get profilePhone;
+
+  /// No description provided for @profileLocation.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموقع'**
+  String get profileLocation;
+
+  /// No description provided for @profileLocationNotSet.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يتم تحديد الموقع بعد'**
+  String get profileLocationNotSet;
+
+  /// No description provided for @profileLocationSet.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تحديد الموقع'**
+  String get profileLocationSet;
+
+  /// No description provided for @profileUseCurrentLocation.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديد موقعي الحالي'**
+  String get profileUseCurrentLocation;
+
+  /// No description provided for @profileLocationPermissionDenied.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحتاج للسماح بالوصول للموقع من إعدادات الجهاز.'**
+  String get profileLocationPermissionDenied;
+
+  /// No description provided for @profilePhotoCamera.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقاط بالكاميرا'**
+  String get profilePhotoCamera;
+
+  /// No description provided for @profilePhotoGallery.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيار من المعرض'**
+  String get profilePhotoGallery;
+
+  /// No description provided for @profilePhotoRemove.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزالة الصورة'**
+  String get profilePhotoRemove;
+
+  /// No description provided for @profileSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ التغييرات.'**
+  String get profileSaved;
+
+  /// No description provided for @profilePrivacyNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'بياناتك دي (رقمك وموقعك) متتشافش لحد — بتظهر بس للنشاط التجاري وقت ما تستخدم خدمة فعلية معاه، زي الحجز أو الطلب.'**
+  String get profilePrivacyNote;
+
+  /// No description provided for @profileSave.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ'**
+  String get profileSave;
+
+  /// No description provided for @navCategories.
+  ///
+  /// In ar, this message translates to:
+  /// **'التصنيفات'**
+  String get navCategories;
+
+  /// No description provided for @navSearch.
+  ///
+  /// In ar, this message translates to:
+  /// **'البحث'**
+  String get navSearch;
+
+  /// No description provided for @navProfile.
+  ///
+  /// In ar, this message translates to:
+  /// **'حسابي'**
+  String get navProfile;
+
+  /// No description provided for @searchEmptyHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب اسم النشاط اللي بتدور عليه'**
+  String get searchEmptyHint;
 }
 
 class _AppLocalizationsDelegate

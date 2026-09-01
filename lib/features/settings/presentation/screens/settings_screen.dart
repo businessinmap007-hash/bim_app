@@ -73,7 +73,16 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 24),
           _SectionHeader(l10n.settingsAccountSection),
           const SizedBox(height: 8),
-          _OptionCard(children: [_PlaceholderRow(label: l10n.settingsAccountSection)]),
+          _OptionCard(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.person_outline),
+                title: Text(l10n.profileTitle),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => context.push('/profile'),
+              ),
+            ],
+          ),
           if (isBusiness) ...[
             const SizedBox(height: 24),
             _SectionHeader(l10n.settingsServicesSection),

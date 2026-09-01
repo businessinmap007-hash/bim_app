@@ -45,5 +45,7 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>نستخدم موقعك لعرضه على النشاط عند استخدام خدماته (زي الحجز والتوصيل).</string>
 </dict>
 </plist>

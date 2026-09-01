@@ -279,4 +279,60 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get businessNoContentYet => 'لا يوجد محتوى لعرضه بعد';
+
+  @override
+  String get profileTitle => 'الملف الشخصي';
+
+  @override
+  String get profileName => 'الاسم';
+
+  @override
+  String get profilePhone => 'رقم الموبايل';
+
+  @override
+  String get profileLocation => 'الموقع';
+
+  @override
+  String get profileLocationNotSet => 'لم يتم تحديد الموقع بعد';
+
+  @override
+  String get profileLocationSet => 'تم تحديد الموقع';
+
+  @override
+  String get profileUseCurrentLocation => 'تحديد موقعي الحالي';
+
+  @override
+  String get profileLocationPermissionDenied =>
+      'تحتاج للسماح بالوصول للموقع من إعدادات الجهاز.';
+
+  @override
+  String get profilePhotoCamera => 'التقاط بالكاميرا';
+
+  @override
+  String get profilePhotoGallery => 'اختيار من المعرض';
+
+  @override
+  String get profilePhotoRemove => 'إزالة الصورة';
+
+  @override
+  String get profileSaved => 'تم حفظ التغييرات.';
+
+  @override
+  String get profilePrivacyNote =>
+      'بياناتك دي (رقمك وموقعك) متتشافش لحد — بتظهر بس للنشاط التجاري وقت ما تستخدم خدمة فعلية معاه، زي الحجز أو الطلب.';
+
+  @override
+  String get profileSave => 'حفظ';
+
+  @override
+  String get navCategories => 'التصنيفات';
+
+  @override
+  String get navSearch => 'البحث';
+
+  @override
+  String get navProfile => 'حسابي';
+
+  @override
+  String get searchEmptyHint => 'اكتب اسم النشاط اللي بتدور عليه';
 }

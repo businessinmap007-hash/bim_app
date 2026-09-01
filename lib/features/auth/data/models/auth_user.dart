@@ -12,6 +12,10 @@ class AuthUser {
   final String type; // 'client' | 'business'
   final String? logoUrl;
   final String? coverUrl;
+  final String? imageUrl;
+  final String? about;
+  final double? latitude;
+  final double? longitude;
 
   const AuthUser({
     required this.id,
@@ -22,9 +26,14 @@ class AuthUser {
     required this.type,
     this.logoUrl,
     this.coverUrl,
+    this.imageUrl,
+    this.about,
+    this.latitude,
+    this.longitude,
   });
 
   bool get isBusiness => type == 'business';
+  bool get hasLocation => latitude != null && longitude != null;
 
   factory AuthUser.fromJson(Map<String, dynamic> json) => AuthUser(
     id: json['id'] as int,
@@ -35,5 +44,9 @@ class AuthUser {
     type: json['type'] as String? ?? 'client',
     logoUrl: Env.assetUrl(json['logo'] as String?),
     coverUrl: Env.assetUrl(json['cover'] as String?),
+    imageUrl: Env.assetUrl(json['image'] as String?),
+    about: json['about'] as String?,
+    latitude: (json['latitude'] as num?)?.toDouble(),
+    longitude: (json['longitude'] as num?)?.toDouble(),
   );
 }
