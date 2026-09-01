@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../app/theme/app_colors.dart';
 import '../../features/auth/application/auth_controller.dart';
+import '../../features/posts/presentation/screens/my_posts_screen.dart';
 import '../../l10n/app_localizations.dart';
 
 /// The app's account menu — reached via the AppBar's automatic hamburger
@@ -47,6 +48,14 @@ class AppDrawer extends ConsumerWidget {
                     ),
                 ],
               ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.dynamic_feed_outlined),
+              title: Text(l10n.postsMyPostsTitle),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MyPostsScreen()));
+              },
             ),
             ListTile(
               leading: const Icon(Icons.settings_outlined),

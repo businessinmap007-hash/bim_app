@@ -127,6 +127,27 @@ class AppLocalizationsAr extends AppLocalizations {
   String get businessCallForPrice => 'اتصل للسعر';
 
   @override
+  String get businessFollow => 'متابعة';
+
+  @override
+  String get businessUnfollow => 'إلغاء المتابعة';
+
+  @override
+  String businessFollowersCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count متابع',
+      many: '$count متابعًا',
+      few: '$count متابعين',
+      two: 'متابعان',
+      one: 'متابع واحد',
+      zero: 'لا يوجد متابعون',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String businessCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -429,4 +450,177 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get profileAlbumsDeleteConfirm => 'هل تريد حذف هذا الألبوم وكل صوره؟';
+
+  @override
+  String get bookingSettingsTitle => 'إدارة الحجز';
+
+  @override
+  String get bookingSettingsPricesTab => 'الأسعار';
+
+  @override
+  String get bookingSettingsUnitsTab => 'الوحدات';
+
+  @override
+  String get bookingSettingsHoursTab => 'ساعات العمل';
+
+  @override
+  String get bookingSettingsAddPrice => 'إضافة سعر';
+
+  @override
+  String get bookingSettingsAddUnit => 'إضافة وحدة';
+
+  @override
+  String get bookingSettingsService => 'الخدمة';
+
+  @override
+  String get bookingSettingsItemType => 'نوع الخدمة';
+
+  @override
+  String get bookingSettingsLineOption => 'النوع';
+
+  @override
+  String get bookingSettingsLineOptionHint => 'مثال: غرفة مزدوجة';
+
+  @override
+  String get bookingSettingsPrice => 'السعر';
+
+  @override
+  String get bookingSettingsCode => 'الرقم / الكود';
+
+  @override
+  String get bookingSettingsCapacity => 'السعة';
+
+  @override
+  String get bookingSettingsPricesEmpty =>
+      'لا توجد أسعار بعد — أضف سعرًا لكل نوع تقدّمه.';
+
+  @override
+  String get bookingSettingsUnitsEmpty => 'لا توجد وحدات بعد.';
+
+  @override
+  String get bookingSettingsDelete => 'حذف';
+
+  @override
+  String get bookingSettingsDeleteConfirm => 'هل تريد الحذف؟';
+
+  @override
+  String get bookingSettingsClosed => 'مغلق';
+
+  @override
+  String get bookingSettingsOpenTime => 'وقت الفتح';
+
+  @override
+  String get bookingSettingsCloseTime => 'وقت الإغلاق';
+
+  @override
+  String get bookingSettingsSaveHours => 'حفظ المواعيد';
+
+  @override
+  String get bookingSettingsHoursSaved => 'تم حفظ المواعيد.';
+
+  @override
+  String get bookingSettingsOpenNow => 'مفتوح الآن';
+
+  @override
+  String get bookingSettingsClosedNow => 'مغلق الآن';
+
+  @override
+  String get weekdaySunday => 'الأحد';
+
+  @override
+  String get weekdayMonday => 'الإثنين';
+
+  @override
+  String get weekdayTuesday => 'الثلاثاء';
+
+  @override
+  String get weekdayWednesday => 'الأربعاء';
+
+  @override
+  String get weekdayThursday => 'الخميس';
+
+  @override
+  String get weekdayFriday => 'الجمعة';
+
+  @override
+  String get weekdaySaturday => 'السبت';
+
+  @override
+  String get postsMyPostsTitle => 'منشوراتي';
+
+  @override
+  String get postsTabFollowing => 'المتابَعون';
+
+  @override
+  String get postsTabMine => 'منشوراتي';
+
+  @override
+  String get postsTabJobs => 'وظائفي';
+
+  @override
+  String get postsFeedEmpty =>
+      'لا توجد منشورات بعد — تابع نشاطًا تجاريًا لترى منشوراته هنا.';
+
+  @override
+  String get postsMineEmpty => 'لم تنشر أي شيء بعد.';
+
+  @override
+  String get postsJobsEmpty => 'لم تنشر أي وظيفة بعد.';
+
+  @override
+  String get postsCreateChoicePost => 'منشور جديد';
+
+  @override
+  String get postsCreateChoiceJob => 'وظيفة جديدة';
+
+  @override
+  String get postsCreateTitle => 'منشور جديد';
+
+  @override
+  String get postsPublish => 'نشر';
+
+  @override
+  String get postsTitleLabel => 'العنوان (اختياري)';
+
+  @override
+  String get postsBodyLabel => 'النص';
+
+  @override
+  String get postsDeleteConfirmTitle => 'هل تريد حذف هذا المنشور؟';
+
+  @override
+  String get postsDelete => 'حذف';
+
+  @override
+  String get postsJobsClosed => 'مغلقة';
+
+  @override
+  String postsJobsApplicantsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count متقدم',
+      many: '$count متقدمًا',
+      few: '$count متقدمين',
+      two: 'متقدمان',
+      one: 'متقدم واحد',
+      zero: 'لا يوجد متقدمون',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get jobsCreateTitle => 'وظيفة جديدة';
+
+  @override
+  String get jobsTitleLabel => 'المسمى الوظيفي';
+
+  @override
+  String get jobsBodyLabel => 'وصف الوظيفة';
+
+  @override
+  String get jobsRequirementsLabel => 'المتطلبات (اختياري)';
+
+  @override
+  String get jobsSalaryLabel => 'الراتب (اختياري)';
 }

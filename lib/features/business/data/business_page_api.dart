@@ -54,4 +54,15 @@ class BusinessPageApi {
     final rows = offerings['data'] as List<dynamic>? ?? [];
     return rows.map((e) => OfferingItem.fromJson(e as Map<String, dynamic>)).toList();
   }
+
+  /// POST /follows — same `follow_user` row PostAudienceService reads to
+  /// build the personal feed, so following here is what makes this
+  /// business's posts start showing up in that feed.
+  Future<void> follow(int businessId) async {
+    await _client.post('/follows', data: {'follow_id': businessId});
+  }
+
+  Future<void> unfollow(int businessId) async {
+    await _client.delete('/follows/$businessId');
+  }
 }

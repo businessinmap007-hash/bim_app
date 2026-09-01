@@ -128,6 +128,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get businessCallForPrice => 'Call for price';
 
   @override
+  String get businessFollow => 'Follow';
+
+  @override
+  String get businessUnfollow => 'Unfollow';
+
+  @override
+  String businessFollowersCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count followers',
+      one: '1 follower',
+      zero: 'No followers',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String businessCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -430,4 +448,174 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get profileAlbumsDeleteConfirm =>
       'Delete this album and all its photos?';
+
+  @override
+  String get bookingSettingsTitle => 'Booking management';
+
+  @override
+  String get bookingSettingsPricesTab => 'Prices';
+
+  @override
+  String get bookingSettingsUnitsTab => 'Units';
+
+  @override
+  String get bookingSettingsHoursTab => 'Working hours';
+
+  @override
+  String get bookingSettingsAddPrice => 'Add price';
+
+  @override
+  String get bookingSettingsAddUnit => 'Add unit';
+
+  @override
+  String get bookingSettingsService => 'Service';
+
+  @override
+  String get bookingSettingsItemType => 'Item type';
+
+  @override
+  String get bookingSettingsLineOption => 'Type';
+
+  @override
+  String get bookingSettingsLineOptionHint => 'e.g. Double room';
+
+  @override
+  String get bookingSettingsPrice => 'Price';
+
+  @override
+  String get bookingSettingsCode => 'Code / Number';
+
+  @override
+  String get bookingSettingsCapacity => 'Capacity';
+
+  @override
+  String get bookingSettingsPricesEmpty =>
+      'No prices yet — add one for each type you offer.';
+
+  @override
+  String get bookingSettingsUnitsEmpty => 'No units yet.';
+
+  @override
+  String get bookingSettingsDelete => 'Delete';
+
+  @override
+  String get bookingSettingsDeleteConfirm => 'Delete this?';
+
+  @override
+  String get bookingSettingsClosed => 'Closed';
+
+  @override
+  String get bookingSettingsOpenTime => 'Opening time';
+
+  @override
+  String get bookingSettingsCloseTime => 'Closing time';
+
+  @override
+  String get bookingSettingsSaveHours => 'Save hours';
+
+  @override
+  String get bookingSettingsHoursSaved => 'Hours saved.';
+
+  @override
+  String get bookingSettingsOpenNow => 'Open now';
+
+  @override
+  String get bookingSettingsClosedNow => 'Closed now';
+
+  @override
+  String get weekdaySunday => 'Sunday';
+
+  @override
+  String get weekdayMonday => 'Monday';
+
+  @override
+  String get weekdayTuesday => 'Tuesday';
+
+  @override
+  String get weekdayWednesday => 'Wednesday';
+
+  @override
+  String get weekdayThursday => 'Thursday';
+
+  @override
+  String get weekdayFriday => 'Friday';
+
+  @override
+  String get weekdaySaturday => 'Saturday';
+
+  @override
+  String get postsMyPostsTitle => 'My Posts';
+
+  @override
+  String get postsTabFollowing => 'Following';
+
+  @override
+  String get postsTabMine => 'My Posts';
+
+  @override
+  String get postsTabJobs => 'My Jobs';
+
+  @override
+  String get postsFeedEmpty =>
+      'No posts yet — follow a business to see its posts here.';
+
+  @override
+  String get postsMineEmpty => 'You haven\'t posted anything yet.';
+
+  @override
+  String get postsJobsEmpty => 'You haven\'t posted any jobs yet.';
+
+  @override
+  String get postsCreateChoicePost => 'New post';
+
+  @override
+  String get postsCreateChoiceJob => 'New job';
+
+  @override
+  String get postsCreateTitle => 'New post';
+
+  @override
+  String get postsPublish => 'Publish';
+
+  @override
+  String get postsTitleLabel => 'Title (optional)';
+
+  @override
+  String get postsBodyLabel => 'Text';
+
+  @override
+  String get postsDeleteConfirmTitle => 'Delete this post?';
+
+  @override
+  String get postsDelete => 'Delete';
+
+  @override
+  String get postsJobsClosed => 'Closed';
+
+  @override
+  String postsJobsApplicantsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count applicants',
+      one: '1 applicant',
+      zero: 'No applicants',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get jobsCreateTitle => 'New job';
+
+  @override
+  String get jobsTitleLabel => 'Job title';
+
+  @override
+  String get jobsBodyLabel => 'Job description';
+
+  @override
+  String get jobsRequirementsLabel => 'Requirements (optional)';
+
+  @override
+  String get jobsSalaryLabel => 'Salary (optional)';
 }

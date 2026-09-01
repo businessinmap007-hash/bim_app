@@ -79,7 +79,17 @@ class _BusinessDetailBody extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  BusinessRatingRow(rating: profile.rating, openNow: profile.openNow),
+                  Row(
+                    children: [
+                      Expanded(child: BusinessRatingRow(rating: profile.rating, openNow: profile.openNow)),
+                      _FollowButton(businessId: profile.id, isFollowing: profile.isFollowing),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    l10n.businessFollowersCount(profile.followersCount),
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),
+                  ),
                   if (profile.about != null) ...[
                     const SizedBox(height: 10),
                     Text(profile.about!, style: Theme.of(context).textTheme.bodyMedium),
@@ -105,6 +115,34 @@ class _BusinessDetailBody extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+/// Toggling this is the write side of the personal feed: follow a business
+/// here and its posts start showing up on the "متابَعون" tab of My Posts.
+class _FollowButton extends ConsumerWidget {
+  final int businessId;
+  final bool isFollowing;
+
+  const _FollowButton({required this.businessId, required this.isFollowing});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+
+    Future<void> toggle() async {
+      try {
+        await ref.read(businessProfileProvider(businessId).notifier).toggleFollow();
+      } catch (_) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+        }
+      }
+    }
+
+    return isFollowing
+        ? OutlinedButton(onPressed: toggle, child: Text(l10n.businessUnfollow))
+        : FilledButton(onPressed: toggle, child: Text(l10n.businessFollow));
   }
 }
 

@@ -332,6 +332,24 @@ abstract class AppLocalizations {
   /// **'اتصل للسعر'**
   String get businessCallForPrice;
 
+  /// No description provided for @businessFollow.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة'**
+  String get businessFollow;
+
+  /// No description provided for @businessUnfollow.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء المتابعة'**
+  String get businessUnfollow;
+
+  /// No description provided for @businessFollowersCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{لا يوجد متابعون} one{متابع واحد} two{متابعان} few{{count} متابعين} many{{count} متابعًا} other{{count} متابع}}'**
+  String businessFollowersCount(int count);
+
   /// No description provided for @businessCount.
   ///
   /// In ar, this message translates to:
@@ -907,6 +925,324 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'هل تريد حذف هذا الألبوم وكل صوره؟'**
   String get profileAlbumsDeleteConfirm;
+
+  /// No description provided for @bookingSettingsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إدارة الحجز'**
+  String get bookingSettingsTitle;
+
+  /// No description provided for @bookingSettingsPricesTab.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأسعار'**
+  String get bookingSettingsPricesTab;
+
+  /// No description provided for @bookingSettingsUnitsTab.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوحدات'**
+  String get bookingSettingsUnitsTab;
+
+  /// No description provided for @bookingSettingsHoursTab.
+  ///
+  /// In ar, this message translates to:
+  /// **'ساعات العمل'**
+  String get bookingSettingsHoursTab;
+
+  /// No description provided for @bookingSettingsAddPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة سعر'**
+  String get bookingSettingsAddPrice;
+
+  /// No description provided for @bookingSettingsAddUnit.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة وحدة'**
+  String get bookingSettingsAddUnit;
+
+  /// No description provided for @bookingSettingsService.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخدمة'**
+  String get bookingSettingsService;
+
+  /// No description provided for @bookingSettingsItemType.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع الخدمة'**
+  String get bookingSettingsItemType;
+
+  /// No description provided for @bookingSettingsLineOption.
+  ///
+  /// In ar, this message translates to:
+  /// **'النوع'**
+  String get bookingSettingsLineOption;
+
+  /// No description provided for @bookingSettingsLineOptionHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مثال: غرفة مزدوجة'**
+  String get bookingSettingsLineOptionHint;
+
+  /// No description provided for @bookingSettingsPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر'**
+  String get bookingSettingsPrice;
+
+  /// No description provided for @bookingSettingsCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرقم / الكود'**
+  String get bookingSettingsCode;
+
+  /// No description provided for @bookingSettingsCapacity.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعة'**
+  String get bookingSettingsCapacity;
+
+  /// No description provided for @bookingSettingsPricesEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أسعار بعد — أضف سعرًا لكل نوع تقدّمه.'**
+  String get bookingSettingsPricesEmpty;
+
+  /// No description provided for @bookingSettingsUnitsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد وحدات بعد.'**
+  String get bookingSettingsUnitsEmpty;
+
+  /// No description provided for @bookingSettingsDelete.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف'**
+  String get bookingSettingsDelete;
+
+  /// No description provided for @bookingSettingsDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد الحذف؟'**
+  String get bookingSettingsDeleteConfirm;
+
+  /// No description provided for @bookingSettingsClosed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مغلق'**
+  String get bookingSettingsClosed;
+
+  /// No description provided for @bookingSettingsOpenTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقت الفتح'**
+  String get bookingSettingsOpenTime;
+
+  /// No description provided for @bookingSettingsCloseTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقت الإغلاق'**
+  String get bookingSettingsCloseTime;
+
+  /// No description provided for @bookingSettingsSaveHours.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ المواعيد'**
+  String get bookingSettingsSaveHours;
+
+  /// No description provided for @bookingSettingsHoursSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ المواعيد.'**
+  String get bookingSettingsHoursSaved;
+
+  /// No description provided for @bookingSettingsOpenNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفتوح الآن'**
+  String get bookingSettingsOpenNow;
+
+  /// No description provided for @bookingSettingsClosedNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'مغلق الآن'**
+  String get bookingSettingsClosedNow;
+
+  /// No description provided for @weekdaySunday.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأحد'**
+  String get weekdaySunday;
+
+  /// No description provided for @weekdayMonday.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإثنين'**
+  String get weekdayMonday;
+
+  /// No description provided for @weekdayTuesday.
+  ///
+  /// In ar, this message translates to:
+  /// **'الثلاثاء'**
+  String get weekdayTuesday;
+
+  /// No description provided for @weekdayWednesday.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأربعاء'**
+  String get weekdayWednesday;
+
+  /// No description provided for @weekdayThursday.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخميس'**
+  String get weekdayThursday;
+
+  /// No description provided for @weekdayFriday.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجمعة'**
+  String get weekdayFriday;
+
+  /// No description provided for @weekdaySaturday.
+  ///
+  /// In ar, this message translates to:
+  /// **'السبت'**
+  String get weekdaySaturday;
+
+  /// No description provided for @postsMyPostsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'منشوراتي'**
+  String get postsMyPostsTitle;
+
+  /// No description provided for @postsTabFollowing.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتابَعون'**
+  String get postsTabFollowing;
+
+  /// No description provided for @postsTabMine.
+  ///
+  /// In ar, this message translates to:
+  /// **'منشوراتي'**
+  String get postsTabMine;
+
+  /// No description provided for @postsTabJobs.
+  ///
+  /// In ar, this message translates to:
+  /// **'وظائفي'**
+  String get postsTabJobs;
+
+  /// No description provided for @postsFeedEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد منشورات بعد — تابع نشاطًا تجاريًا لترى منشوراته هنا.'**
+  String get postsFeedEmpty;
+
+  /// No description provided for @postsMineEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تنشر أي شيء بعد.'**
+  String get postsMineEmpty;
+
+  /// No description provided for @postsJobsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تنشر أي وظيفة بعد.'**
+  String get postsJobsEmpty;
+
+  /// No description provided for @postsCreateChoicePost.
+  ///
+  /// In ar, this message translates to:
+  /// **'منشور جديد'**
+  String get postsCreateChoicePost;
+
+  /// No description provided for @postsCreateChoiceJob.
+  ///
+  /// In ar, this message translates to:
+  /// **'وظيفة جديدة'**
+  String get postsCreateChoiceJob;
+
+  /// No description provided for @postsCreateTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'منشور جديد'**
+  String get postsCreateTitle;
+
+  /// No description provided for @postsPublish.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشر'**
+  String get postsPublish;
+
+  /// No description provided for @postsTitleLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'العنوان (اختياري)'**
+  String get postsTitleLabel;
+
+  /// No description provided for @postsBodyLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'النص'**
+  String get postsBodyLabel;
+
+  /// No description provided for @postsDeleteConfirmTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد حذف هذا المنشور؟'**
+  String get postsDeleteConfirmTitle;
+
+  /// No description provided for @postsDelete.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف'**
+  String get postsDelete;
+
+  /// No description provided for @postsJobsClosed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مغلقة'**
+  String get postsJobsClosed;
+
+  /// No description provided for @postsJobsApplicantsCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{لا يوجد متقدمون} one{متقدم واحد} two{متقدمان} few{{count} متقدمين} many{{count} متقدمًا} other{{count} متقدم}}'**
+  String postsJobsApplicantsCount(int count);
+
+  /// No description provided for @jobsCreateTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'وظيفة جديدة'**
+  String get jobsCreateTitle;
+
+  /// No description provided for @jobsTitleLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المسمى الوظيفي'**
+  String get jobsTitleLabel;
+
+  /// No description provided for @jobsBodyLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصف الوظيفة'**
+  String get jobsBodyLabel;
+
+  /// No description provided for @jobsRequirementsLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتطلبات (اختياري)'**
+  String get jobsRequirementsLabel;
+
+  /// No description provided for @jobsSalaryLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الراتب (اختياري)'**
+  String get jobsSalaryLabel;
 }
 
 class _AppLocalizationsDelegate

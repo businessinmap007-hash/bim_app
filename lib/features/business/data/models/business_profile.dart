@@ -35,7 +35,9 @@ class BusinessProfile {
   final int? categoryChildId;
   final RatingSummary rating;
   final bool openNow;
+  final bool isFollowing;
   final int postsCount;
+  final int followersCount;
   final BusinessSections sections;
 
   const BusinessProfile({
@@ -49,9 +51,28 @@ class BusinessProfile {
     this.categoryChildId,
     required this.rating,
     required this.openNow,
+    this.isFollowing = false,
     required this.postsCount,
+    this.followersCount = 0,
     required this.sections,
   });
+
+  BusinessProfile copyWith({bool? isFollowing, int? followersCount}) => BusinessProfile(
+    id: id,
+    name: name,
+    logoUrl: logoUrl,
+    coverUrl: coverUrl,
+    about: about,
+    phone: phone,
+    categoryId: categoryId,
+    categoryChildId: categoryChildId,
+    rating: rating,
+    openNow: openNow,
+    isFollowing: isFollowing ?? this.isFollowing,
+    postsCount: postsCount,
+    followersCount: followersCount ?? this.followersCount,
+    sections: sections,
+  );
 
   factory BusinessProfile.fromJson(Map<String, dynamic> json) {
     final category = json['category'] as Map<String, dynamic>? ?? const {};
@@ -68,7 +89,9 @@ class BusinessProfile {
       categoryChildId: (category['child_id'] as num?)?.toInt(),
       rating: RatingSummary.fromJson(json['rating'] as Map<String, dynamic>? ?? const {}),
       openNow: json['open_now'] as bool? ?? true,
+      isFollowing: json['is_following'] as bool? ?? false,
       postsCount: (counts['posts'] as num?)?.toInt() ?? 0,
+      followersCount: (counts['followers'] as num?)?.toInt() ?? 0,
       sections: BusinessSections.fromJson(json['sections'] as Map<String, dynamic>? ?? const {}),
     );
   }

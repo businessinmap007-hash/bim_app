@@ -7,11 +7,14 @@ import '../../data/models/category_root.dart';
 import '../../data/models/specialty.dart';
 
 /// A picked leaf category — `childId` is exactly what the backend calls
-/// `category_child_id` (registration) / `child_id` (discovery).
+/// `category_child_id` (registration) / `child_id` (discovery). `rootId` is
+/// the specialty's parent root — null for call sites that never needed it
+/// (registration/profile only ever send the leaf); job posting needs both.
 class CategorySelection {
   final int childId;
   final String label;
-  const CategorySelection({required this.childId, required this.label});
+  final int? rootId;
+  const CategorySelection({required this.childId, required this.label, this.rootId});
 }
 
 /// A tap-to-pick field for a taxonomy specialty (root -> specialty), used
@@ -127,6 +130,7 @@ class _CategoryPickerSheetState extends State<_CategoryPickerSheet> {
                           CategorySelection(
                             childId: specialty.id,
                             label: specialty.localizedName(languageCode),
+                            rootId: selectedRoot.id,
                           ),
                         ),
                       ),

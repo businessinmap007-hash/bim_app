@@ -11,9 +11,59 @@ final businessPageApiProvider = Provider<BusinessPageApi>((ref) {
   return BusinessPageApi(ref.watch(apiClientProvider));
 });
 
-final businessProfileProvider = FutureProvider.family<BusinessProfile, int>((ref, businessId) {
-  return ref.watch(businessPageApiProvider).profile(businessId);
-});
+final businessProfileProvider =
+    StateNotifierProvider.family<BusinessProfileController, AsyncValue<BusinessProfile>, int>((ref, businessId) {
+      return BusinessProfileController(ref.watch(businessPageApiProvider), businessId);
+    });
+
+/// The profile aggregate plus a follow toggle that updates in place —
+/// re-fetching the whole page just to flip one boolean would flash the
+/// header, and the count the button shows should move the instant it's
+/// tapped, not after a round trip.
+class BusinessProfileController extends StateNotifier<AsyncValue<BusinessProfile>> {
+  final BusinessPageApi _api;
+  final int businessId;
+
+  BusinessProfileController(this._api, this.businessId) : super(const AsyncValue.loading()) {
+    _load();
+  }
+
+  Future<void> _load() async {
+    state = const AsyncValue.loading();
+    try {
+      state = AsyncValue.data(await _api.profile(businessId));
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
+  }
+
+  Future<void> refresh() => _load();
+
+  Future<void> toggleFollow() async {
+    final current = state.valueOrNull;
+    if (current == null) return;
+
+    final nextFollowing = !current.isFollowing;
+    state = AsyncValue.data(
+      current.copyWith(
+        isFollowing: nextFollowing,
+        followersCount: current.followersCount + (nextFollowing ? 1 : -1),
+      ),
+    );
+
+    try {
+      if (nextFollowing) {
+        await _api.follow(businessId);
+      } else {
+        await _api.unfollow(businessId);
+      }
+    } catch (e) {
+      // Roll back on failure — the optimistic flip didn't actually happen.
+      state = AsyncValue.data(current);
+      rethrow;
+    }
+  }
+}
 
 final businessMenuProvider = FutureProvider.family<List<MenuSectionGroup>, int>((ref, businessId) {
   return ref.watch(businessPageApiProvider).menu(businessId);
