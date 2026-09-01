@@ -14,19 +14,29 @@ class ProfileApi {
 
   Future<AuthUser> update({
     String? name,
+    String? nameEn,
     String? phone,
     String? about,
     double? latitude,
     double? longitude,
+    int? categoryId,
+    int? categoryChildId,
+    // Only 'business' is ever sent — see ProfileController::update on the
+    // backend for why a business can't self-downgrade through this call.
+    String? type,
   }) async {
     final data = await _client.put(
       '/profile',
       data: {
         if (name != null) 'name': name,
+        if (nameEn != null) 'name_en': nameEn,
         if (phone != null) 'phone': phone,
         if (about != null) 'about': about,
         if (latitude != null) 'latitude': latitude,
         if (longitude != null) 'longitude': longitude,
+        if (categoryId != null) 'category_id': categoryId,
+        if (categoryChildId != null) 'category_child_id': categoryChildId,
+        if (type != null) 'type': type,
       },
     );
     return AuthUser.fromJson(data as Map<String, dynamic>);

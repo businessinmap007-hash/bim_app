@@ -334,4 +334,41 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get searchEmptyHint => 'Type a business name to search for';
+
+  @override
+  String get profileEmail => 'Email';
+
+  @override
+  String get profileNameEnglish => 'English name';
+
+  @override
+  String get profileAbout => 'About your business';
+
+  @override
+  String get profileAccountType => 'Account type';
+
+  @override
+  String get profileAccountTypeClient => 'Customer';
+
+  @override
+  String get profileAccountTypeBusiness => 'Business';
+
+  @override
+  String get profileSpecialty => 'Specialty';
+
+  @override
+  String get profileSpecialtyNotSet => 'No specialty chosen yet';
+
+  @override
+  String get profileConvertToBusiness => 'Convert account to business';
+
+  @override
+  String get profileConvertToBusinessHint =>
+      'Choose your business specialty to complete the conversion — this can\'t be undone from here.';
+
+  @override
+  String get profileConvertConfirm => 'Confirm conversion';
+
+  @override
+  String get profileConvertSuccess => 'Your account is now a business account.';
 }

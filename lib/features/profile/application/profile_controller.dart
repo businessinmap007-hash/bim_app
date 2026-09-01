@@ -20,17 +20,25 @@ class ProfileController {
 
   Future<AuthUser> update({
     String? name,
+    String? nameEn,
     String? phone,
     String? about,
     double? latitude,
     double? longitude,
+    int? categoryId,
+    int? categoryChildId,
+    String? type,
   }) async {
     final user = await _api.update(
       name: name,
+      nameEn: nameEn,
       phone: phone,
       about: about,
       latitude: latitude,
       longitude: longitude,
+      categoryId: categoryId,
+      categoryChildId: categoryChildId,
+      type: type,
     );
     _ref.read(authControllerProvider.notifier).setUser(user);
     return user;

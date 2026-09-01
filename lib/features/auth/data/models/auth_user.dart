@@ -16,6 +16,8 @@ class AuthUser {
   final String? about;
   final double? latitude;
   final double? longitude;
+  final int? categoryId;
+  final int? categoryChildId;
 
   const AuthUser({
     required this.id,
@@ -30,6 +32,8 @@ class AuthUser {
     this.about,
     this.latitude,
     this.longitude,
+    this.categoryId,
+    this.categoryChildId,
   });
 
   bool get isBusiness => type == 'business';
@@ -48,5 +52,7 @@ class AuthUser {
     about: json['about'] as String?,
     latitude: (json['latitude'] as num?)?.toDouble(),
     longitude: (json['longitude'] as num?)?.toDouble(),
+    categoryId: (json['category_id'] as num?)?.toInt(),
+    categoryChildId: (json['category_child_id'] as num?)?.toInt(),
   );
 }

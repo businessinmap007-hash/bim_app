@@ -106,5 +106,17 @@
   "navCategories": "Categories",
   "navSearch": "Search",
   "navProfile": "My account",
-  "searchEmptyHint": "Type a business name to search for"
+  "searchEmptyHint": "Type a business name to search for",
+  "profileEmail": "Email",
+  "profileNameEnglish": "English name",
+  "profileAbout": "About your business",
+  "profileAccountType": "Account type",
+  "profileAccountTypeClient": "Customer",
+  "profileAccountTypeBusiness": "Business",
+  "profileSpecialty": "Specialty",
+  "profileSpecialtyNotSet": "No specialty chosen yet",
+  "profileConvertToBusiness": "Convert account to business",
+  "profileConvertToBusinessHint": "Choose your business specialty to complete the conversion — this can't be undone from here.",
+  "profileConvertConfirm": "Confirm conversion",
+  "profileConvertSuccess": "Your account is now a business account."
 }

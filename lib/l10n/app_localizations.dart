@@ -721,6 +721,78 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'اكتب اسم النشاط اللي بتدور عليه'**
   String get searchEmptyHint;
+
+  /// No description provided for @profileEmail.
+  ///
+  /// In ar, this message translates to:
+  /// **'البريد الإلكتروني'**
+  String get profileEmail;
+
+  /// No description provided for @profileNameEnglish.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم بالإنجليزية'**
+  String get profileNameEnglish;
+
+  /// No description provided for @profileAbout.
+  ///
+  /// In ar, this message translates to:
+  /// **'نبذة عن النشاط'**
+  String get profileAbout;
+
+  /// No description provided for @profileAccountType.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع الحساب'**
+  String get profileAccountType;
+
+  /// No description provided for @profileAccountTypeClient.
+  ///
+  /// In ar, this message translates to:
+  /// **'عميل'**
+  String get profileAccountTypeClient;
+
+  /// No description provided for @profileAccountTypeBusiness.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشاط تجاري'**
+  String get profileAccountTypeBusiness;
+
+  /// No description provided for @profileSpecialty.
+  ///
+  /// In ar, this message translates to:
+  /// **'التخصص'**
+  String get profileSpecialty;
+
+  /// No description provided for @profileSpecialtyNotSet.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يتم اختيار تخصص'**
+  String get profileSpecialtyNotSet;
+
+  /// No description provided for @profileConvertToBusiness.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحويل الحساب إلى نشاط تجاري'**
+  String get profileConvertToBusiness;
+
+  /// No description provided for @profileConvertToBusinessHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر تخصص نشاطك التجاري لإتمام التحويل — لا يمكن التراجع عن هذا التحويل من هنا.'**
+  String get profileConvertToBusinessHint;
+
+  /// No description provided for @profileConvertConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد التحويل'**
+  String get profileConvertConfirm;
+
+  /// No description provided for @profileConvertSuccess.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تحويل حسابك إلى نشاط تجاري بنجاح.'**
+  String get profileConvertSuccess;
 }
 
 class _AppLocalizationsDelegate

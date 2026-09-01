@@ -335,4 +335,41 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get searchEmptyHint => 'اكتب اسم النشاط اللي بتدور عليه';
+
+  @override
+  String get profileEmail => 'البريد الإلكتروني';
+
+  @override
+  String get profileNameEnglish => 'الاسم بالإنجليزية';
+
+  @override
+  String get profileAbout => 'نبذة عن النشاط';
+
+  @override
+  String get profileAccountType => 'نوع الحساب';
+
+  @override
+  String get profileAccountTypeClient => 'عميل';
+
+  @override
+  String get profileAccountTypeBusiness => 'نشاط تجاري';
+
+  @override
+  String get profileSpecialty => 'التخصص';
+
+  @override
+  String get profileSpecialtyNotSet => 'لم يتم اختيار تخصص';
+
+  @override
+  String get profileConvertToBusiness => 'تحويل الحساب إلى نشاط تجاري';
+
+  @override
+  String get profileConvertToBusinessHint =>
+      'اختر تخصص نشاطك التجاري لإتمام التحويل — لا يمكن التراجع عن هذا التحويل من هنا.';
+
+  @override
+  String get profileConvertConfirm => 'تأكيد التحويل';
+
+  @override
+  String get profileConvertSuccess => 'تم تحويل حسابك إلى نشاط تجاري بنجاح.';
 }

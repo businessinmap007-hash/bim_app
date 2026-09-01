@@ -106,5 +106,17 @@
   "navCategories": "التصنيفات",
   "navSearch": "البحث",
   "navProfile": "حسابي",
-  "searchEmptyHint": "اكتب اسم النشاط اللي بتدور عليه"
+  "searchEmptyHint": "اكتب اسم النشاط اللي بتدور عليه",
+  "profileEmail": "البريد الإلكتروني",
+  "profileNameEnglish": "الاسم بالإنجليزية",
+  "profileAbout": "نبذة عن النشاط",
+  "profileAccountType": "نوع الحساب",
+  "profileAccountTypeClient": "عميل",
+  "profileAccountTypeBusiness": "نشاط تجاري",
+  "profileSpecialty": "التخصص",
+  "profileSpecialtyNotSet": "لم يتم اختيار تخصص",
+  "profileConvertToBusiness": "تحويل الحساب إلى نشاط تجاري",
+  "profileConvertToBusinessHint": "اختر تخصص نشاطك التجاري لإتمام التحويل — لا يمكن التراجع عن هذا التحويل من هنا.",
+  "profileConvertConfirm": "تأكيد التحويل",
+  "profileConvertSuccess": "تم تحويل حسابك إلى نشاط تجاري بنجاح."
 }

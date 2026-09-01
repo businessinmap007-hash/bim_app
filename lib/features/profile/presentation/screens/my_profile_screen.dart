@@ -7,15 +7,26 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/application/auth_controller.dart';
+import '../../../auth/data/models/auth_user.dart';
+import '../../../categories/application/categories_providers.dart';
+import '../../../categories/data/models/specialty.dart';
+import '../../../categories/presentation/widgets/category_picker_field.dart';
 import '../../application/profile_controller.dart';
 import '../widgets/profile_avatar_picker.dart';
 
-/// The customer's OWN profile — private by design. There is no route
+/// The signed-in user's OWN account — private by design. There is no route
 /// anywhere in this app (or endpoint on the backend) that opens someone
 /// ELSE's profile; a business only ever sees a party's name/phone/location/
 /// photo inside a booking or order it is actually fulfilling for them (see
 /// Api\V2\BookingController::relations() and OrderController on the
 /// backend) — never by browsing an account directly.
+///
+/// What's editable depends on the account's real type (read from
+/// AuthUser.type, never guessed from which login button was tapped to get
+/// here): a business gets its English name and about text too, on top of
+/// what a customer edits. A customer additionally gets a one-way "convert to
+/// business" action — see ProfileController::update on the backend for why
+/// that direction only.
 class MyProfileScreen extends ConsumerStatefulWidget {
   const MyProfileScreen({super.key});
 
@@ -25,20 +36,30 @@ class MyProfileScreen extends ConsumerStatefulWidget {
 
 class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
   late final TextEditingController _nameController;
+  late final TextEditingController _nameEnController;
   late final TextEditingController _phoneController;
+  late final TextEditingController _aboutController;
   double? _latitude;
   double? _longitude;
   bool _saving = false;
   bool _locating = false;
   String? _error;
 
+  // Only used while converting a client account to business.
+  CategorySelection? _newSpecialty;
+  bool _showConvertPanel = false;
+  bool _converting = false;
+
+  AuthUser? _userAt(AuthState state) => state is AuthSignedIn ? state.user : null;
+
   @override
   void initState() {
     super.initState();
-    final state = ref.read(authControllerProvider);
-    final user = state is AuthSignedIn ? state.user : null;
+    final user = _userAt(ref.read(authControllerProvider));
     _nameController = TextEditingController(text: user?.name ?? '');
+    _nameEnController = TextEditingController(text: user?.nameEn ?? '');
     _phoneController = TextEditingController(text: user?.phone ?? '');
+    _aboutController = TextEditingController(text: user?.about ?? '');
     _latitude = user?.latitude;
     _longitude = user?.longitude;
   }
@@ -46,7 +67,9 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
   @override
   void dispose() {
     _nameController.dispose();
+    _nameEnController.dispose();
     _phoneController.dispose();
+    _aboutController.dispose();
     super.dispose();
   }
 
@@ -81,6 +104,7 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
   }
 
   Future<void> _save() async {
+    final isBusiness = _userAt(ref.read(authControllerProvider))?.isBusiness ?? false;
     setState(() {
       _saving = true;
       _error = null;
@@ -90,7 +114,9 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
           .read(profileControllerProvider)
           .update(
             name: _nameController.text.trim(),
+            nameEn: isBusiness ? _nameEnController.text.trim() : null,
             phone: _phoneController.text.trim(),
+            about: isBusiness ? _aboutController.text.trim() : null,
             latitude: _latitude,
             longitude: _longitude,
           );
@@ -103,6 +129,30 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
       setState(() => _error = e.message);
     } finally {
       if (mounted) setState(() => _saving = false);
+    }
+  }
+
+  Future<void> _confirmConvertToBusiness() async {
+    final specialty = _newSpecialty;
+    if (specialty == null) return;
+
+    setState(() {
+      _converting = true;
+      _error = null;
+    });
+    try {
+      await ref
+          .read(profileControllerProvider)
+          .update(type: 'business', categoryChildId: specialty.childId);
+      if (!mounted) return;
+      setState(() => _showConvertPanel = false);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.profileConvertSuccess)));
+    } on ApiException catch (e) {
+      setState(() => _error = e.message);
+    } finally {
+      if (mounted) setState(() => _converting = false);
     }
   }
 
@@ -132,10 +182,25 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final authState = ref.watch(authControllerProvider);
-    final user = authState is AuthSignedIn ? authState.user : null;
+    final user = _userAt(authState);
+    final isBusiness = user?.isBusiness ?? false;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.profileTitle)),
+      appBar: AppBar(
+        title: Text(l10n.profileTitle),
+        actions: [
+          TextButton(
+            onPressed: _saving ? null : _save,
+            child: _saving
+                ? const SizedBox(
+                    height: 18,
+                    width: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                  )
+                : Text(l10n.profileSave, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
+          ),
+        ],
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -170,15 +235,39 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
             Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
             const SizedBox(height: 12),
           ],
-          Text(l10n.profileName, style: Theme.of(context).textTheme.titleSmall),
+          _FieldLabel(l10n.profileAccountType),
+          const SizedBox(height: 6),
+          _AccountTypeBadge(isBusiness: isBusiness),
+          const SizedBox(height: 16),
+          _FieldLabel(l10n.profileName),
           const SizedBox(height: 6),
           TextField(controller: _nameController),
+          if (isBusiness) ...[
+            const SizedBox(height: 16),
+            _FieldLabel(l10n.profileNameEnglish),
+            const SizedBox(height: 6),
+            TextField(controller: _nameEnController),
+          ],
           const SizedBox(height: 16),
-          Text(l10n.profilePhone, style: Theme.of(context).textTheme.titleSmall),
+          _FieldLabel(l10n.profileEmail),
+          const SizedBox(height: 6),
+          Text(user?.email ?? '', style: Theme.of(context).textTheme.bodyMedium),
+          const SizedBox(height: 16),
+          _FieldLabel(l10n.profilePhone),
           const SizedBox(height: 6),
           TextField(controller: _phoneController, keyboardType: TextInputType.phone),
+          if (isBusiness) ...[
+            const SizedBox(height: 16),
+            _FieldLabel(l10n.profileAbout),
+            const SizedBox(height: 6),
+            TextField(controller: _aboutController, maxLines: 3),
+            const SizedBox(height: 16),
+            _FieldLabel(l10n.profileSpecialty),
+            const SizedBox(height: 6),
+            _SpecialtyLabel(categoryId: user?.categoryId, categoryChildId: user?.categoryChildId),
+          ],
           const SizedBox(height: 16),
-          Text(l10n.profileLocation, style: Theme.of(context).textTheme.titleSmall),
+          _FieldLabel(l10n.profileLocation),
           const SizedBox(height: 6),
           Row(
             children: [
@@ -210,7 +299,132 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
                   )
                 : Text(l10n.profileSave),
           ),
+          if (!isBusiness) ...[
+            const SizedBox(height: 32),
+            const Divider(),
+            const SizedBox(height: 16),
+            if (!_showConvertPanel)
+              OutlinedButton.icon(
+                onPressed: () => setState(() => _showConvertPanel = true),
+                icon: const Icon(Icons.storefront_outlined),
+                label: Text(l10n.profileConvertToBusiness),
+              )
+            else
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(l10n.profileConvertToBusinessHint, style: Theme.of(context).textTheme.bodySmall),
+                  const SizedBox(height: 12),
+                  CategoryPickerField(
+                    value: _newSpecialty,
+                    onChanged: (selection) => setState(() => _newSpecialty = selection),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: _converting ? null : () => setState(() => _showConvertPanel = false),
+                          child: Text(l10n.commonCancel),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: (_converting || _newSpecialty == null) ? null : _confirmConvertToBusiness,
+                          child: _converting
+                              ? const SizedBox(
+                                  height: 18,
+                                  width: 18,
+                                  child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                                )
+                              : Text(l10n.profileConvertConfirm),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+          ],
         ],
+      ),
+    );
+  }
+}
+
+/// Resolves a specialty id to its display name for the profile's read-only
+/// summary — there's no "look up one specialty by id" endpoint, so this
+/// re-reads the root's already-cached specialty list (the same data the
+/// category picker itself uses) and finds the match locally.
+class _SpecialtyLabel extends ConsumerWidget {
+  final int? categoryId;
+  final int? categoryChildId;
+
+  const _SpecialtyLabel({required this.categoryId, required this.categoryChildId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final style = Theme.of(context).textTheme.bodyMedium;
+
+    if (categoryChildId == null) {
+      return Text(l10n.profileSpecialtyNotSet, style: style);
+    }
+    if (categoryId == null) {
+      return Text('#$categoryChildId', style: style);
+    }
+
+    final specialtiesAsync = ref.watch(specialtiesProvider(categoryId!));
+    return specialtiesAsync.when(
+      data: (specialties) {
+        final languageCode = Localizations.localeOf(context).languageCode;
+        Specialty? match;
+        for (final specialty in specialties) {
+          if (specialty.id == categoryChildId) {
+            match = specialty;
+            break;
+          }
+        }
+        return Text(match?.localizedName(languageCode) ?? '#$categoryChildId', style: style);
+      },
+      loading: () => const SizedBox(
+        height: 16,
+        width: 16,
+        child: CircularProgressIndicator(strokeWidth: 2),
+      ),
+      error: (error, stack) => Text('#$categoryChildId', style: style),
+    );
+  }
+}
+
+class _FieldLabel extends StatelessWidget {
+  final String label;
+  const _FieldLabel(this.label);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(label, style: Theme.of(context).textTheme.titleSmall);
+  }
+}
+
+class _AccountTypeBadge extends StatelessWidget {
+  final bool isBusiness;
+  const _AccountTypeBadge({required this.isBusiness});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final color = isBusiness ? AppColors.primaryNavy : AppColors.accentGold;
+
+    return Align(
+      alignment: AlignmentDirectional.centerStart,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(color: color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(20)),
+        child: Text(
+          isBusiness ? l10n.profileAccountTypeBusiness : l10n.profileAccountTypeClient,
+          style: TextStyle(color: color, fontWeight: FontWeight.w700, fontSize: 12),
+        ),
       ),
     );
   }
