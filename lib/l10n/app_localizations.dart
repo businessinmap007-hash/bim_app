@@ -823,6 +823,90 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'حفظ الخصائص'**
   String get profileOptionsSave;
+
+  /// No description provided for @profileAdministrativeLocation.
+  ///
+  /// In ar, this message translates to:
+  /// **'المنطقة الإدارية'**
+  String get profileAdministrativeLocation;
+
+  /// No description provided for @locationFieldLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدولة / المحافظة / المدينة'**
+  String get locationFieldLabel;
+
+  /// No description provided for @locationChooseHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الدولة والمحافظة والمدينة'**
+  String get locationChooseHint;
+
+  /// No description provided for @locationChooseCountry.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الدولة'**
+  String get locationChooseCountry;
+
+  /// No description provided for @locationEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد نتائج'**
+  String get locationEmpty;
+
+  /// No description provided for @locationSearchCity.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث عن مدينة'**
+  String get locationSearchCity;
+
+  /// No description provided for @profileAlbumsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ألبومات الصور'**
+  String get profileAlbumsTitle;
+
+  /// No description provided for @profileAlbumsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد ألبومات بعد.'**
+  String get profileAlbumsEmpty;
+
+  /// No description provided for @profileAlbumsAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'ألبوم جديد'**
+  String get profileAlbumsAdd;
+
+  /// No description provided for @profileAlbumsNewTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الألبوم'**
+  String get profileAlbumsNewTitle;
+
+  /// No description provided for @profileAlbumsCreate.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء'**
+  String get profileAlbumsCreate;
+
+  /// No description provided for @profileAlbumsAddPhoto.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة صورة'**
+  String get profileAlbumsAddPhoto;
+
+  /// No description provided for @profileAlbumsDelete.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف الألبوم'**
+  String get profileAlbumsDelete;
+
+  /// No description provided for @profileAlbumsDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد حذف هذا الألبوم وكل صوره؟'**
+  String get profileAlbumsDeleteConfirm;
 }
 
 class _AppLocalizationsDelegate

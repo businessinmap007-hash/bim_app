@@ -387,4 +387,46 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get profileOptionsSave => 'حفظ الخصائص';
+
+  @override
+  String get profileAdministrativeLocation => 'المنطقة الإدارية';
+
+  @override
+  String get locationFieldLabel => 'الدولة / المحافظة / المدينة';
+
+  @override
+  String get locationChooseHint => 'اختر الدولة والمحافظة والمدينة';
+
+  @override
+  String get locationChooseCountry => 'اختر الدولة';
+
+  @override
+  String get locationEmpty => 'لا توجد نتائج';
+
+  @override
+  String get locationSearchCity => 'ابحث عن مدينة';
+
+  @override
+  String get profileAlbumsTitle => 'ألبومات الصور';
+
+  @override
+  String get profileAlbumsEmpty => 'لا توجد ألبومات بعد.';
+
+  @override
+  String get profileAlbumsAdd => 'ألبوم جديد';
+
+  @override
+  String get profileAlbumsNewTitle => 'اسم الألبوم';
+
+  @override
+  String get profileAlbumsCreate => 'إنشاء';
+
+  @override
+  String get profileAlbumsAddPhoto => 'إضافة صورة';
+
+  @override
+  String get profileAlbumsDelete => 'حذف الألبوم';
+
+  @override
+  String get profileAlbumsDeleteConfirm => 'هل تريد حذف هذا الألبوم وكل صوره؟';
 }

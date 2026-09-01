@@ -16,6 +16,9 @@ class AuthUser {
   final String? about;
   final double? latitude;
   final double? longitude;
+  final int? countryId;
+  final int? governorateId;
+  final int? cityId;
   final int? categoryId;
   final int? categoryChildId;
 
@@ -32,6 +35,9 @@ class AuthUser {
     this.about,
     this.latitude,
     this.longitude,
+    this.countryId,
+    this.governorateId,
+    this.cityId,
     this.categoryId,
     this.categoryChildId,
   });
@@ -52,6 +58,9 @@ class AuthUser {
     about: json['about'] as String?,
     latitude: (json['latitude'] as num?)?.toDouble(),
     longitude: (json['longitude'] as num?)?.toDouble(),
+    countryId: (json['country_id'] as num?)?.toInt(),
+    governorateId: (json['governorate_id'] as num?)?.toInt(),
+    cityId: (json['city_id'] as num?)?.toInt(),
     categoryId: (json['category_id'] as num?)?.toInt(),
     categoryChildId: (json['category_child_id'] as num?)?.toInt(),
   );

@@ -12,6 +12,10 @@ import '../../../categories/application/categories_providers.dart';
 import '../../../categories/data/models/category_root.dart';
 import '../../../categories/data/models/specialty.dart';
 import '../../../categories/presentation/widgets/category_picker_field.dart';
+import '../../../albums/presentation/screens/albums_screen.dart';
+import '../../../location/application/location_providers.dart';
+import '../../../location/data/models/location_models.dart';
+import '../../../location/presentation/widgets/location_picker_field.dart';
 import '../../application/profile_controller.dart';
 import '../../application/profile_options_controller.dart';
 import '../widgets/profile_avatar_picker.dart';
@@ -43,6 +47,7 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
   late final TextEditingController _aboutController;
   double? _latitude;
   double? _longitude;
+  LocationSelection? _locationSelection;
   bool _saving = false;
   bool _locating = false;
   String? _error;
@@ -64,6 +69,68 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
     _aboutController = TextEditingController(text: user?.about ?? '');
     _latitude = user?.latitude;
     _longitude = user?.longitude;
+    _resolveSavedLocation(user);
+  }
+
+  /// Only ids are stored (see AuthUser.countryId/governorateId/cityId) —
+  /// there's no "one location by id" endpoint, so the saved location's
+  /// display label is built the same way _SpecialtyLabel resolves a
+  /// specialty: read the already-cached lists and match locally.
+  Future<void> _resolveSavedLocation(AuthUser? user) async {
+    final countryId = user?.countryId;
+    final governorateId = user?.governorateId;
+    final cityId = user?.cityId;
+    if (countryId == null || governorateId == null || cityId == null) return;
+
+    try {
+      final languageCode = Localizations.localeOf(context).languageCode;
+      final countries = await ref.read(locationApiProvider).countries();
+      final governorates = await ref.read(locationApiProvider).governorates(countryId);
+      final cities = await ref.read(locationApiProvider).cities(governorateId);
+
+      LocationCountry? country;
+      for (final c in countries) {
+        if (c.id == countryId) {
+          country = c;
+          break;
+        }
+      }
+      LocationGovernorate? governorate;
+      for (final g in governorates) {
+        if (g.id == governorateId) {
+          governorate = g;
+          break;
+        }
+      }
+      LocationCity? city;
+      for (final c in cities) {
+        if (c.id == cityId) {
+          city = c;
+          break;
+        }
+      }
+      if (country == null || governorate == null || city == null || !mounted) return;
+      // Local non-nullable copies: a mutable local's null-check doesn't
+      // stay promoted once captured by the setState closure below.
+      final resolvedCountry = country;
+      final resolvedGovernorate = governorate;
+      final resolvedCity = city;
+
+      setState(() {
+        _locationSelection = LocationSelection(
+          countryId: countryId,
+          governorateId: governorateId,
+          cityId: cityId,
+          label:
+              '${resolvedCountry.localizedName(languageCode)} — '
+              '${resolvedGovernorate.localizedName(languageCode)} — '
+              '${resolvedCity.localizedName(languageCode)}',
+        );
+      });
+    } catch (_) {
+      // Best-effort label resolution — the picker still works to set a new
+      // value even if the initial one couldn't be resolved (offline, etc.).
+    }
   }
 
   @override
@@ -96,6 +163,24 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
         _latitude = position.latitude;
         _longitude = position.longitude;
       });
+
+      // Best-effort: also resolve the administrative division from the same
+      // GPS point, still overridable via the manual picker below. A miss
+      // (no confident match) just leaves the picker as it was.
+      final match = await ref.read(locationApiProvider).nearest(latitude: position.latitude, longitude: position.longitude);
+      if (match != null && mounted) {
+        final languageCode = Localizations.localeOf(context).languageCode;
+        setState(() {
+          _locationSelection = LocationSelection(
+            countryId: match.countryId,
+            governorateId: match.governorateId,
+            cityId: match.cityId,
+            label:
+                '${match.governorateNameEn != null && languageCode == 'en' ? match.governorateNameEn! : match.governorateNameAr} — '
+                '${match.cityNameEn != null && languageCode == 'en' ? match.cityNameEn! : match.cityNameAr}',
+          );
+        });
+      }
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
@@ -121,6 +206,9 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
             about: isBusiness ? _aboutController.text.trim() : null,
             latitude: _latitude,
             longitude: _longitude,
+            countryId: _locationSelection?.countryId,
+            governorateId: _locationSelection?.governorateId,
+            cityId: _locationSelection?.cityId,
           );
       if (mounted) {
         ScaffoldMessenger.of(
@@ -293,6 +381,26 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
                 label: Text(l10n.profileUseCurrentLocation),
               ),
             ],
+          ),
+          const SizedBox(height: 16),
+          _FieldLabel(l10n.profileAdministrativeLocation),
+          const SizedBox(height: 6),
+          LocationPickerField(
+            value: _locationSelection,
+            onChanged: (selection) => setState(() => _locationSelection = selection),
+          ),
+          const SizedBox(height: 16),
+          Card(
+            margin: EdgeInsets.zero,
+            clipBehavior: Clip.antiAlias,
+            child: ListTile(
+              leading: const Icon(Icons.photo_album_outlined),
+              title: Text(l10n.profileAlbumsTitle),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const AlbumsScreen()),
+              ),
+            ),
           ),
           const SizedBox(height: 32),
           ElevatedButton(

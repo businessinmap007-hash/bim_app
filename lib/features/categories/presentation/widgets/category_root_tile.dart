@@ -27,12 +27,14 @@ class CategoryRootTile extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
+        // Always the light-theme card look, in both app themes — a
+        // deliberate fixed choice (not colorScheme.surface) since the icons
+        // are drawn for a light backdrop and read as "floating" on a dark
+        // one with nothing behind them.
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
+          color: AppColors.lightSurface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: Theme.of(context).dividerColor.withValues(alpha: 0.2),
-          ),
+          border: Border.all(color: Colors.black.withValues(alpha: 0.08)),
         ),
         padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
         // FittedBox is a safety net, not the sizing mechanism — iconSize is
@@ -43,23 +45,12 @@ class CategoryRootTile extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // A light chip behind the glyph regardless of theme — the icon
-              // used to sit directly on the card's own (dark, in dark mode)
-              // surface with nothing separating it, so it read as floating
-              // rather than as an icon "on" something.
-              Container(
-                padding: EdgeInsets.all(iconSize * 0.16),
-                decoration: const BoxDecoration(
-                  color: AppColors.lightBackground,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  iconForCategory(category.nameAr),
-                  color: iconColor,
-                  size: iconSize,
-                ),
+              Icon(
+                iconForCategory(category.nameAr),
+                color: iconColor,
+                size: iconSize,
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 6),
               SizedBox(
                 width: iconSize * 2.4,
                 child: Text(
@@ -67,7 +58,14 @@ class CategoryRootTile extends StatelessWidget {
                   textAlign: TextAlign.center,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 17),
+                  // A fixed dark color, not a theme-derived one — the card
+                  // is always light now, so a theme's own (light, in dark
+                  // mode) text color would be unreadable on it.
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.primaryNavy,
+                  ),
                 ),
               ),
             ],

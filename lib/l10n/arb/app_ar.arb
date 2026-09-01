@@ -123,5 +123,19 @@
   "profileConvertSuccess": "تم تحويل حسابك إلى نشاط تجاري بنجاح.",
   "profileOptionsTitle": "خصائص النشاط",
   "profileOptionsEmpty": "لا توجد خصائص متاحة لتخصصك الحالي.",
-  "profileOptionsSave": "حفظ الخصائص"
+  "profileOptionsSave": "حفظ الخصائص",
+  "profileAdministrativeLocation": "المنطقة الإدارية",
+  "locationFieldLabel": "الدولة / المحافظة / المدينة",
+  "locationChooseHint": "اختر الدولة والمحافظة والمدينة",
+  "locationChooseCountry": "اختر الدولة",
+  "locationEmpty": "لا توجد نتائج",
+  "locationSearchCity": "ابحث عن مدينة",
+  "profileAlbumsTitle": "ألبومات الصور",
+  "profileAlbumsEmpty": "لا توجد ألبومات بعد.",
+  "profileAlbumsAdd": "ألبوم جديد",
+  "profileAlbumsNewTitle": "اسم الألبوم",
+  "profileAlbumsCreate": "إنشاء",
+  "profileAlbumsAddPhoto": "إضافة صورة",
+  "profileAlbumsDelete": "حذف الألبوم",
+  "profileAlbumsDeleteConfirm": "هل تريد حذف هذا الألبوم وكل صوره؟"
 }

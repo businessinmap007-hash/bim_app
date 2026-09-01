@@ -387,4 +387,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileOptionsSave => 'Save attributes';
+
+  @override
+  String get profileAdministrativeLocation => 'Administrative area';
+
+  @override
+  String get locationFieldLabel => 'Country / Governorate / City';
+
+  @override
+  String get locationChooseHint => 'Choose country, governorate and city';
+
+  @override
+  String get locationChooseCountry => 'Choose a country';
+
+  @override
+  String get locationEmpty => 'No results';
+
+  @override
+  String get locationSearchCity => 'Search for a city';
+
+  @override
+  String get profileAlbumsTitle => 'Photo albums';
+
+  @override
+  String get profileAlbumsEmpty => 'No albums yet.';
+
+  @override
+  String get profileAlbumsAdd => 'New album';
+
+  @override
+  String get profileAlbumsNewTitle => 'Album name';
+
+  @override
+  String get profileAlbumsCreate => 'Create';
+
+  @override
+  String get profileAlbumsAddPhoto => 'Add photo';
+
+  @override
+  String get profileAlbumsDelete => 'Delete album';
+
+  @override
+  String get profileAlbumsDeleteConfirm =>
+      'Delete this album and all its photos?';
 }

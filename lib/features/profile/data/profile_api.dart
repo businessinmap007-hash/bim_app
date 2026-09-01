@@ -20,6 +20,12 @@ class ProfileApi {
     String? about,
     double? latitude,
     double? longitude,
+    // The administrative location — independent of the GPS point above.
+    // Settable together (after a GET /locations/nearest GPS lookup) or on
+    // their own (a manual picker).
+    int? countryId,
+    int? governorateId,
+    int? cityId,
     int? categoryId,
     int? categoryChildId,
     // Only 'business' is ever sent — see ProfileController::update on the
@@ -35,6 +41,9 @@ class ProfileApi {
         if (about != null) 'about': about,
         if (latitude != null) 'latitude': latitude,
         if (longitude != null) 'longitude': longitude,
+        if (countryId != null) 'country_id': countryId,
+        if (governorateId != null) 'governorate_id': governorateId,
+        if (cityId != null) 'city_id': cityId,
         if (categoryId != null) 'category_id': categoryId,
         if (categoryChildId != null) 'category_child_id': categoryChildId,
         if (type != null) 'type': type,

@@ -123,5 +123,19 @@
   "profileConvertSuccess": "Your account is now a business account.",
   "profileOptionsTitle": "Business attributes",
   "profileOptionsEmpty": "No attributes available for your current specialty.",
-  "profileOptionsSave": "Save attributes"
+  "profileOptionsSave": "Save attributes",
+  "profileAdministrativeLocation": "Administrative area",
+  "locationFieldLabel": "Country / Governorate / City",
+  "locationChooseHint": "Choose country, governorate and city",
+  "locationChooseCountry": "Choose a country",
+  "locationEmpty": "No results",
+  "locationSearchCity": "Search for a city",
+  "profileAlbumsTitle": "Photo albums",
+  "profileAlbumsEmpty": "No albums yet.",
+  "profileAlbumsAdd": "New album",
+  "profileAlbumsNewTitle": "Album name",
+  "profileAlbumsCreate": "Create",
+  "profileAlbumsAddPhoto": "Add photo",
+  "profileAlbumsDelete": "Delete album",
+  "profileAlbumsDeleteConfirm": "Delete this album and all its photos?"
 }
