@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import '../../../../shared/widgets/adaptive_image_box.dart';
 import '../../data/models/business_post.dart';
 
-/// One post — reuses [AdaptiveImageBox] so a post photo gets the same
-/// Instagram-style adaptive framing as the media composer, without
-/// letterboxing tall or wide shots.
+/// One post, laid out like an actual Instagram post rather than a generic
+/// Material card: compact header, the photo edge-to-edge with square
+/// corners (no card chrome boxing it in), an icon-only action row, the
+/// like count bold on its own line, then a caption line that leads with
+/// the author's name the same way Instagram repeats it under the image.
 ///
 /// [showAuthor] is on for a multi-author list (the followed-accounts feed)
 /// and off for a single business's own wall, where every card would repeat
@@ -17,92 +19,156 @@ class PostCard extends StatelessWidget {
   final ValueChanged<int>? onReact;
   final VoidCallback? onDelete;
 
-  const PostCard({super.key, required this.post, this.showAuthor = false, this.onReact, this.onDelete});
+  const PostCard({
+    super.key,
+    required this.post,
+    this.showAuthor = false,
+    this.onReact,
+    this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final imageUrl = post.imageUrl ?? (post.images.isNotEmpty ? post.images.first.url : null);
+    final imageUrl =
+        post.imageUrl ??
+        (post.images.isNotEmpty ? post.images.first.url : null);
     final liked = post.myReaction == 1;
+    final hasCaption = post.title.isNotEmpty || post.body.isNotEmpty;
 
-    return Card(
-      margin: EdgeInsets.zero,
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (showAuthor && post.author != null)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12, 10, 4, 0),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: 16,
-                    backgroundImage: post.author!.logoUrl != null ? NetworkImage(post.author!.logoUrl!) : null,
-                    child: post.author!.logoUrl == null ? const Icon(Icons.storefront_outlined, size: 16) : null,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      post.author!.name,
-                      style: theme.textTheme.titleSmall,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  if (onDelete != null)
-                    IconButton(
-                      icon: const Icon(Icons.delete_outline, size: 20),
-                      onPressed: onDelete,
-                      visualDensity: VisualDensity.compact,
-                    ),
-                ],
-              ),
-            ),
-          if (imageUrl != null) AdaptiveImageBox(imageProvider: NetworkImage(imageUrl)),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (showAuthor && post.author != null)
           Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            padding: const EdgeInsets.fromLTRB(12, 10, 4, 8),
+            child: Row(
               children: [
-                if (post.title.isNotEmpty)
-                  Text(post.title, style: theme.textTheme.titleSmall, maxLines: 2, overflow: TextOverflow.ellipsis),
-                if (post.body.isNotEmpty) ...[
-                  const SizedBox(height: 4),
-                  Text(post.body, style: theme.textTheme.bodyMedium, maxLines: 4, overflow: TextOverflow.ellipsis),
-                ],
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    InkWell(
-                      onTap: onReact != null ? () => onReact!(liked ? 0 : 1) : null,
-                      borderRadius: BorderRadius.circular(16),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
-                        child: Row(
-                          children: [
-                            Icon(
-                              liked ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-                              size: 16,
-                              color: liked ? theme.colorScheme.error : theme.hintColor,
-                            ),
-                            const SizedBox(width: 4),
-                            Text('${post.likesCount}', style: theme.textTheme.bodySmall),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Icon(Icons.mode_comment_outlined, size: 16, color: theme.hintColor),
-                    const SizedBox(width: 4),
-                    Text('${post.commentsCount}', style: theme.textTheme.bodySmall),
-                  ],
+                CircleAvatar(
+                  radius: 16,
+                  backgroundImage: post.author!.logoUrl != null
+                      ? NetworkImage(post.author!.logoUrl!)
+                      : null,
+                  child: post.author!.logoUrl == null
+                      ? const Icon(Icons.storefront_outlined, size: 16)
+                      : null,
                 ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    post.author!.name,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                if (onDelete != null)
+                  IconButton(
+                    icon: const Icon(Icons.delete_outline, size: 20),
+                    onPressed: onDelete,
+                    visualDensity: VisualDensity.compact,
+                  ),
               ],
             ),
           ),
-        ],
-      ),
+        // Edge-to-edge, square corners — an Instagram photo isn't boxed
+        // inside a card, it IS the card.
+        if (imageUrl != null)
+          AdaptiveImageBox(imageProvider: NetworkImage(imageUrl)),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(8, 6, 8, 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  InkWell(
+                    onTap: onReact != null
+                        ? () => onReact!(liked ? 0 : 1)
+                        : null,
+                    borderRadius: BorderRadius.circular(20),
+                    child: Padding(
+                      padding: const EdgeInsets.all(6),
+                      child: Icon(
+                        liked
+                            ? Icons.favorite_rounded
+                            : Icons.favorite_border_rounded,
+                        size: 24,
+                        color: liked
+                            ? theme.colorScheme.error
+                            : theme.textTheme.bodyLarge?.color,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(6),
+                    child: Icon(
+                      Icons.mode_comment_outlined,
+                      size: 22,
+                      color: theme.textTheme.bodyLarge?.color,
+                    ),
+                  ),
+                ],
+              ),
+              if (post.likesCount > 0)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                  child: Text(
+                    '${post.likesCount} إعجاب',
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              if (hasCaption)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(6, 4, 6, 0),
+                  child: Text.rich(
+                    TextSpan(
+                      children: [
+                        if (showAuthor && post.author != null)
+                          TextSpan(
+                            text: '${post.author!.name} ',
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        if (post.title.isNotEmpty)
+                          TextSpan(
+                            text: post.body.isNotEmpty
+                                ? '${post.title}\n'
+                                : post.title,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        if (post.body.isNotEmpty)
+                          TextSpan(
+                            text: post.body,
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                      ],
+                    ),
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              if (post.commentsCount > 0)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(6, 4, 6, 0),
+                  child: Text(
+                    'عرض التعليقات (${post.commentsCount})',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.hintColor,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
