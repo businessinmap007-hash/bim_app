@@ -8,7 +8,11 @@ class AlbumPhoto {
   final String imageUrl;
   final String source;
 
-  const AlbumPhoto({required this.id, required this.imageUrl, required this.source});
+  const AlbumPhoto({
+    required this.id,
+    required this.imageUrl,
+    required this.source,
+  });
 
   bool get isFromCamera => source == 'camera';
 

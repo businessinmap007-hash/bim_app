@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
+import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/albums_controller.dart';
 import '../../data/models/album.dart';
@@ -27,7 +28,10 @@ class AlbumsScreen extends ConsumerWidget {
           decoration: InputDecoration(labelText: l10n.profileAlbumsNewTitle),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.commonCancel)),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l10n.commonCancel),
+          ),
           TextButton(
             onPressed: () => Navigator.pop(context, controller.text.trim()),
             child: Text(l10n.profileAlbumsCreate),
@@ -57,19 +61,29 @@ class AlbumsScreen extends ConsumerWidget {
           ? const Center(child: CircularProgressIndicator())
           : state.albums.isEmpty
           ? Center(child: Text(l10n.profileAlbumsEmpty))
-          : GridView.builder(
-              padding: const EdgeInsets.all(16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 12,
-                childAspectRatio: 0.85,
+          : ResponsiveCenter(
+              maxWidth: 900,
+              child: GridView.builder(
+                padding: const EdgeInsets.all(16),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  // Same fixed 2 columns at tablet/web width just meant 2
+                  // huge covers instead of a grid that actually fills the
+                  // space.
+                  crossAxisCount: switch (Breakpoints.of(context)) {
+                    ScreenSize.mobile => 2,
+                    ScreenSize.tablet => 3,
+                    ScreenSize.desktop => 4,
+                  },
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
+                  childAspectRatio: 0.85,
+                ),
+                itemCount: state.albums.length,
+                itemBuilder: (context, index) {
+                  final album = state.albums[index];
+                  return _AlbumCard(album: album);
+                },
               ),
-              itemCount: state.albums.length,
-              itemBuilder: (context, index) {
-                final album = state.albums[index];
-                return _AlbumCard(album: album);
-              },
             ),
     );
   }
@@ -93,16 +107,26 @@ class _AlbumCard extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: album.coverUrl != null
-                  ? CachedNetworkImage(imageUrl: album.coverUrl!, fit: BoxFit.cover)
+                  ? CachedNetworkImage(
+                      imageUrl: album.coverUrl!,
+                      fit: BoxFit.cover,
+                    )
                   : Container(
                       color: AppColors.accentGold.withValues(alpha: 0.12),
-                      child: const Icon(Icons.photo_album_outlined, size: 40, color: AppColors.accentGold),
+                      child: const Icon(
+                        Icons.photo_album_outlined,
+                        size: 40,
+                        color: AppColors.accentGold,
+                      ),
                     ),
             ),
           ),
           const SizedBox(height: 6),
           Text(album.title ?? '', maxLines: 1, overflow: TextOverflow.ellipsis),
-          Text('${album.photosCount}', style: Theme.of(context).textTheme.bodySmall),
+          Text(
+            '${album.photosCount}',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
         ],
       ),
     );

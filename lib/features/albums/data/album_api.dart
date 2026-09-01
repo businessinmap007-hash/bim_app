@@ -29,21 +29,34 @@ class AlbumApi {
     return Album.fromJson(data as Map<String, dynamic>);
   }
 
-  Future<void> delete(int albumId) => _client.delete('/profile/albums/$albumId');
+  Future<void> delete(int albumId) =>
+      _client.delete('/profile/albums/$albumId');
 
   /// [source] is 'camera' | 'upload' — Image::SOURCE_CAMERA/SOURCE_UPLOAD on
   /// the backend, the same provenance signal the media composer already
   /// tags a picked photo with.
-  Future<Album> addPhoto({required int albumId, required String filePath, required String source}) async {
+  Future<Album> addPhoto({
+    required int albumId,
+    required String filePath,
+    required String source,
+  }) async {
     final data = await _client.post(
       '/profile/albums/$albumId/photos',
-      data: FormData.fromMap({'image': await MultipartFile.fromFile(filePath), 'source': source}),
+      data: FormData.fromMap({
+        'image': await MultipartFile.fromFile(filePath),
+        'source': source,
+      }),
     );
     return Album.fromJson(data as Map<String, dynamic>);
   }
 
-  Future<Album> removePhoto({required int albumId, required int photoId}) async {
-    final data = await _client.delete('/profile/albums/$albumId/photos/$photoId');
+  Future<Album> removePhoto({
+    required int albumId,
+    required int photoId,
+  }) async {
+    final data = await _client.delete(
+      '/profile/albums/$albumId/photos/$photoId',
+    );
     return Album.fromJson(data as Map<String, dynamic>);
   }
 }

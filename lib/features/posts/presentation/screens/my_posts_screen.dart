@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/application/auth_controller.dart';
 import '../../../business/data/models/business_post.dart';
@@ -52,12 +53,16 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen> {
     if (!mounted || choice == null) return;
 
     if (choice == 'post') {
-      final created = await Navigator.of(context).push<bool>(MaterialPageRoute(builder: (_) => const CreatePostScreen()));
+      final created = await Navigator.of(
+        context,
+      ).push<bool>(MaterialPageRoute(builder: (_) => const CreatePostScreen()));
       if (created == true) {
         ref.read(myPostsControllerProvider.notifier).load();
       }
     } else {
-      final created = await Navigator.of(context).push<bool>(MaterialPageRoute(builder: (_) => const CreateJobScreen()));
+      final created = await Navigator.of(
+        context,
+      ).push<bool>(MaterialPageRoute(builder: (_) => const CreateJobScreen()));
       if (created == true) {
         ref.read(myJobsControllerProvider.notifier).load();
       }
@@ -84,8 +89,14 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen> {
     return DefaultTabController(
       length: tabs.length,
       child: Scaffold(
-        appBar: AppBar(title: Text(l10n.postsMyPostsTitle), bottom: TabBar(tabs: tabs)),
-        floatingActionButton: FloatingActionButton(onPressed: _openCreateChoice, child: const Icon(Icons.add)),
+        appBar: AppBar(
+          title: Text(l10n.postsMyPostsTitle),
+          bottom: TabBar(tabs: tabs),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _openCreateChoice,
+          child: const Icon(Icons.add),
+        ),
         body: TabBarView(children: views),
       ),
     );
@@ -112,7 +123,8 @@ class _FollowedFeedTabState extends ConsumerState<FollowedFeedTab> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
       ref.read(followedFeedControllerProvider.notifier).loadMore();
     }
   }
@@ -128,9 +140,12 @@ class _FollowedFeedTabState extends ConsumerState<FollowedFeedTab> {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(followedFeedControllerProvider);
 
-    if (state.isLoading) return const Center(child: CircularProgressIndicator());
+    if (state.isLoading)
+      return const Center(child: CircularProgressIndicator());
     if (state.error != null) {
-      return _ErrorRetry(onRetry: () => ref.read(followedFeedControllerProvider.notifier).load());
+      return _ErrorRetry(
+        onRetry: () => ref.read(followedFeedControllerProvider.notifier).load(),
+      );
     }
     if (state.items.isEmpty) {
       return Center(
@@ -143,25 +158,30 @@ class _FollowedFeedTabState extends ConsumerState<FollowedFeedTab> {
 
     return RefreshIndicator(
       onRefresh: () => ref.read(followedFeedControllerProvider.notifier).load(),
-      child: ListView.separated(
-        controller: _scrollController,
-        padding: const EdgeInsets.all(16),
-        itemCount: state.items.length + (state.isLoadingMore ? 1 : 0),
-        separatorBuilder: (context, index) => const SizedBox(height: 12),
-        itemBuilder: (context, index) {
-          if (index >= state.items.length) {
-            return const Padding(
-              padding: EdgeInsets.symmetric(vertical: 16),
-              child: Center(child: CircularProgressIndicator()),
+      child: ResponsiveCenter(
+        maxWidth: 800,
+        child: ListView.separated(
+          controller: _scrollController,
+          padding: const EdgeInsets.all(16),
+          itemCount: state.items.length + (state.isLoadingMore ? 1 : 0),
+          separatorBuilder: (context, index) => const SizedBox(height: 12),
+          itemBuilder: (context, index) {
+            if (index >= state.items.length) {
+              return const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+            final post = state.items[index];
+            return PostCard(
+              post: post,
+              showAuthor: true,
+              onReact: (reaction) => ref
+                  .read(followedFeedControllerProvider.notifier)
+                  .react(post.id, reaction),
             );
-          }
-          final post = state.items[index];
-          return PostCard(
-            post: post,
-            showAuthor: true,
-            onReact: (reaction) => ref.read(followedFeedControllerProvider.notifier).react(post.id, reaction),
-          );
-        },
+          },
+        ),
       ),
     );
   }
@@ -184,7 +204,8 @@ class _MyPostsTabState extends ConsumerState<MyPostsTab> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
       ref.read(myPostsControllerProvider.notifier).loadMore();
     }
   }
@@ -202,8 +223,14 @@ class _MyPostsTabState extends ConsumerState<MyPostsTab> {
       builder: (context) => AlertDialog(
         title: Text(l10n.postsDeleteConfirmTitle),
         actions: [
-          TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text(l10n.commonCancel)),
-          TextButton(onPressed: () => Navigator.of(context).pop(true), child: Text(l10n.postsDelete)),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l10n.commonCancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l10n.postsDelete),
+          ),
         ],
       ),
     );
@@ -217,33 +244,41 @@ class _MyPostsTabState extends ConsumerState<MyPostsTab> {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(myPostsControllerProvider);
 
-    if (state.isLoading) return const Center(child: CircularProgressIndicator());
+    if (state.isLoading)
+      return const Center(child: CircularProgressIndicator());
     if (state.error != null) {
-      return _ErrorRetry(onRetry: () => ref.read(myPostsControllerProvider.notifier).load());
+      return _ErrorRetry(
+        onRetry: () => ref.read(myPostsControllerProvider.notifier).load(),
+      );
     }
     if (state.items.isEmpty) return Center(child: Text(l10n.postsMineEmpty));
 
     return RefreshIndicator(
       onRefresh: () => ref.read(myPostsControllerProvider.notifier).load(),
-      child: ListView.separated(
-        controller: _scrollController,
-        padding: const EdgeInsets.all(16),
-        itemCount: state.items.length + (state.isLoadingMore ? 1 : 0),
-        separatorBuilder: (context, index) => const SizedBox(height: 12),
-        itemBuilder: (context, index) {
-          if (index >= state.items.length) {
-            return const Padding(
-              padding: EdgeInsets.symmetric(vertical: 16),
-              child: Center(child: CircularProgressIndicator()),
+      child: ResponsiveCenter(
+        maxWidth: 800,
+        child: ListView.separated(
+          controller: _scrollController,
+          padding: const EdgeInsets.all(16),
+          itemCount: state.items.length + (state.isLoadingMore ? 1 : 0),
+          separatorBuilder: (context, index) => const SizedBox(height: 12),
+          itemBuilder: (context, index) {
+            if (index >= state.items.length) {
+              return const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+            final post = state.items[index];
+            return PostCard(
+              post: post,
+              onReact: (reaction) => ref
+                  .read(myPostsControllerProvider.notifier)
+                  .react(post.id, reaction),
+              onDelete: () => _confirmDelete(post),
             );
-          }
-          final post = state.items[index];
-          return PostCard(
-            post: post,
-            onReact: (reaction) => ref.read(myPostsControllerProvider.notifier).react(post.id, reaction),
-            onDelete: () => _confirmDelete(post),
-          );
-        },
+          },
+        ),
       ),
     );
   }
@@ -266,7 +301,8 @@ class _MyJobsTabState extends ConsumerState<MyJobsTab> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
       ref.read(myJobsControllerProvider.notifier).loadMore();
     }
   }
@@ -282,28 +318,34 @@ class _MyJobsTabState extends ConsumerState<MyJobsTab> {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(myJobsControllerProvider);
 
-    if (state.isLoading) return const Center(child: CircularProgressIndicator());
+    if (state.isLoading)
+      return const Center(child: CircularProgressIndicator());
     if (state.error != null) {
-      return _ErrorRetry(onRetry: () => ref.read(myJobsControllerProvider.notifier).load());
+      return _ErrorRetry(
+        onRetry: () => ref.read(myJobsControllerProvider.notifier).load(),
+      );
     }
     if (state.items.isEmpty) return Center(child: Text(l10n.postsJobsEmpty));
 
     return RefreshIndicator(
       onRefresh: () => ref.read(myJobsControllerProvider.notifier).load(),
-      child: ListView.separated(
-        controller: _scrollController,
-        padding: const EdgeInsets.all(16),
-        itemCount: state.items.length + (state.isLoadingMore ? 1 : 0),
-        separatorBuilder: (context, index) => const SizedBox(height: 12),
-        itemBuilder: (context, index) {
-          if (index >= state.items.length) {
-            return const Padding(
-              padding: EdgeInsets.symmetric(vertical: 16),
-              child: Center(child: CircularProgressIndicator()),
-            );
-          }
-          return _JobTile(job: state.items[index]);
-        },
+      child: ResponsiveCenter(
+        maxWidth: 800,
+        child: ListView.separated(
+          controller: _scrollController,
+          padding: const EdgeInsets.all(16),
+          itemCount: state.items.length + (state.isLoadingMore ? 1 : 0),
+          separatorBuilder: (context, index) => const SizedBox(height: 12),
+          itemBuilder: (context, index) {
+            if (index >= state.items.length) {
+              return const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+            return _JobTile(job: state.items[index]);
+          },
+        ),
       ),
     );
   }
@@ -327,10 +369,15 @@ class _JobTile extends StatelessWidget {
           children: [
             Row(
               children: [
-                Expanded(child: Text(job.title, style: theme.textTheme.titleSmall)),
+                Expanded(
+                  child: Text(job.title, style: theme.textTheme.titleSmall),
+                ),
                 if (!job.isActive)
                   Chip(
-                    label: Text(l10n.postsJobsClosed, style: const TextStyle(fontSize: 11)),
+                    label: Text(
+                      l10n.postsJobsClosed,
+                      style: const TextStyle(fontSize: 11),
+                    ),
                     visualDensity: VisualDensity.compact,
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
@@ -338,14 +385,22 @@ class _JobTile extends StatelessWidget {
             ),
             if (job.body != null && job.body!.isNotEmpty) ...[
               const SizedBox(height: 4),
-              Text(job.body!, style: theme.textTheme.bodyMedium, maxLines: 3, overflow: TextOverflow.ellipsis),
+              Text(
+                job.body!,
+                style: theme.textTheme.bodyMedium,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+              ),
             ],
             const SizedBox(height: 8),
             Row(
               children: [
                 Icon(Icons.people_outline, size: 16, color: theme.hintColor),
                 const SizedBox(width: 4),
-                Text(l10n.postsJobsApplicantsCount(job.applicantsCount), style: theme.textTheme.bodySmall),
+                Text(
+                  l10n.postsJobsApplicantsCount(job.applicantsCount),
+                  style: theme.textTheme.bodySmall,
+                ),
               ],
             ),
           ],

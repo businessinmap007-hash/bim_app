@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/adaptive_image_box.dart';
 import '../../../media/application/media_picker_service.dart';
@@ -32,7 +33,9 @@ class _AlbumDetailScreenState extends ConsumerState<AlbumDetailScreen> {
   }
 
   Future<void> _load() async {
-    final album = await ref.read(albumsControllerProvider.notifier).loadDetail(widget.albumId);
+    final album = await ref
+        .read(albumsControllerProvider.notifier)
+        .loadDetail(widget.albumId);
     if (mounted) setState(() => _album = album);
   }
 
@@ -76,10 +79,16 @@ class _AlbumDetailScreenState extends ConsumerState<AlbumDetailScreen> {
         title: Text(l10n.profileAlbumsDelete),
         content: Text(l10n.profileAlbumsDeleteConfirm),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l10n.commonCancel)),
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.commonCancel),
+          ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: Text(l10n.profileAlbumsDelete, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+            child: Text(
+              l10n.profileAlbumsDelete,
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
           ),
         ],
       ),
@@ -117,57 +126,83 @@ class _AlbumDetailScreenState extends ConsumerState<AlbumDetailScreen> {
                     spacing: 12,
                     children: [
                       OutlinedButton.icon(
-                        onPressed: _uploading ? null : () => _addFrom(MediaSource.camera),
+                        onPressed: _uploading
+                            ? null
+                            : () => _addFrom(MediaSource.camera),
                         icon: const Icon(Icons.photo_camera_outlined),
                         label: Text(l10n.mediaAddFromCamera),
                       ),
                       OutlinedButton.icon(
-                        onPressed: _uploading ? null : () => _addFrom(MediaSource.gallery),
+                        onPressed: _uploading
+                            ? null
+                            : () => _addFrom(MediaSource.gallery),
                         icon: const Icon(Icons.photo_library_outlined),
                         label: Text(l10n.mediaAddFromGallery),
                       ),
-                      if (_uploading) const Center(child: CircularProgressIndicator()),
+                      if (_uploading)
+                        const Center(child: CircularProgressIndicator()),
                     ],
                   ),
                   const SizedBox(height: 16),
                   Expanded(
                     child: album.photos.isEmpty
                         ? Center(child: Text(l10n.mediaEmpty))
-                        : GridView.builder(
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 12,
-                              crossAxisSpacing: 12,
-                            ),
-                            itemCount: album.photos.length,
-                            itemBuilder: (context, index) {
-                              final photo = album.photos[index];
-                              return AdaptiveImageBox(
-                                imageProvider: NetworkImage(photo.imageUrl),
-                                borderRadius: BorderRadius.circular(12),
-                                overlays: [
-                                  MediaSourceBadge(
-                                    source: photo.isFromCamera ? MediaSource.camera : MediaSource.gallery,
-                                  ),                                  PositionedDirectional(
-                                    top: 8,
-                                    start: 8,
-                                    child: GestureDetector(
-                                      onTap: () => _removePhoto(photo.id),
-                                      child: Container(
-                                        padding: const EdgeInsets.all(6),
-                                        decoration: BoxDecoration(
-                                          color: Colors.black.withValues(alpha: 0.55),
-                                          shape: BoxShape.circle,
-                                        ),                                        child: const Icon(
-                                          Icons.close_rounded,
-                                          color: Colors.white,
-                                          size: 16,
-                                        ),                                      ),
-                                    ),
+                        : ResponsiveCenter(
+                            maxWidth: 900,
+                            child: GridView.builder(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                    // A wide screen gives every cell far more room,
+                                    // not just a bigger version of the same 2
+                                    // columns — a photo grid at tablet/web width
+                                    // stayed 2 huge columns otherwise.
+                                    crossAxisCount: switch (Breakpoints.of(
+                                      context,
+                                    )) {
+                                      ScreenSize.mobile => 2,
+                                      ScreenSize.tablet => 3,
+                                      ScreenSize.desktop => 4,
+                                    },
+                                    mainAxisSpacing: 12,
+                                    crossAxisSpacing: 12,
                                   ),
-                                ],
-                              );
-                            },
+                              itemCount: album.photos.length,
+                              itemBuilder: (context, index) {
+                                final photo = album.photos[index];
+                                return AdaptiveImageBox(
+                                  imageProvider: NetworkImage(photo.imageUrl),
+                                  borderRadius: BorderRadius.circular(12),
+                                  overlays: [
+                                    MediaSourceBadge(
+                                      source: photo.isFromCamera
+                                          ? MediaSource.camera
+                                          : MediaSource.gallery,
+                                    ),
+                                    PositionedDirectional(
+                                      top: 8,
+                                      start: 8,
+                                      child: GestureDetector(
+                                        onTap: () => _removePhoto(photo.id),
+                                        child: Container(
+                                          padding: const EdgeInsets.all(6),
+                                          decoration: BoxDecoration(
+                                            color: Colors.black.withValues(
+                                              alpha: 0.55,
+                                            ),
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: const Icon(
+                                            Icons.close_rounded,
+                                            color: Colors.white,
+                                            size: 16,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
                           ),
                   ),
                 ],

@@ -13,9 +13,18 @@ class AlbumsState {
   final bool isLoading;
   final String? error;
 
-  const AlbumsState({this.albums = const [], this.isLoading = false, this.error});
+  const AlbumsState({
+    this.albums = const [],
+    this.isLoading = false,
+    this.error,
+  });
 
-  AlbumsState copyWith({List<Album>? albums, bool? isLoading, String? error, bool clearError = false}) {
+  AlbumsState copyWith({
+    List<Album>? albums,
+    bool? isLoading,
+    String? error,
+    bool clearError = false,
+  }) {
     return AlbumsState(
       albums: albums ?? this.albums,
       isLoading: isLoading ?? this.isLoading,
@@ -54,9 +63,17 @@ class AlbumsController extends StateNotifier<AlbumsState> {
     }
   }
 
-  Future<Album> addPhoto({required int albumId, required String filePath, required String source}) async {
+  Future<Album> addPhoto({
+    required int albumId,
+    required String filePath,
+    required String source,
+  }) async {
     try {
-      final updated = await _api.addPhoto(albumId: albumId, filePath: filePath, source: source);
+      final updated = await _api.addPhoto(
+        albumId: albumId,
+        filePath: filePath,
+        source: source,
+      );
       _replace(updated);
       return updated;
     } catch (e) {
@@ -65,9 +82,15 @@ class AlbumsController extends StateNotifier<AlbumsState> {
     }
   }
 
-  Future<Album> removePhoto({required int albumId, required int photoId}) async {
+  Future<Album> removePhoto({
+    required int albumId,
+    required int photoId,
+  }) async {
     try {
-      final updated = await _api.removePhoto(albumId: albumId, photoId: photoId);
+      final updated = await _api.removePhoto(
+        albumId: albumId,
+        photoId: photoId,
+      );
       _replace(updated);
       return updated;
     } catch (e) {
@@ -79,7 +102,9 @@ class AlbumsController extends StateNotifier<AlbumsState> {
   Future<void> delete(int albumId) async {
     try {
       await _api.delete(albumId);
-      state = state.copyWith(albums: state.albums.where((a) => a.id != albumId).toList());
+      state = state.copyWith(
+        albums: state.albums.where((a) => a.id != albumId).toList(),
+      );
     } catch (e) {
       state = state.copyWith(error: e.toString());
     }
@@ -94,10 +119,16 @@ class AlbumsController extends StateNotifier<AlbumsState> {
   }
 
   void _replace(Album updated) {
-    state = state.copyWith(albums: [for (final a in state.albums) if (a.id == updated.id) updated else a]);
+    state = state.copyWith(
+      albums: [
+        for (final a in state.albums)
+          if (a.id == updated.id) updated else a,
+      ],
+    );
   }
 }
 
-final albumsControllerProvider = StateNotifierProvider<AlbumsController, AlbumsState>((ref) {
-  return AlbumsController(ref.watch(albumApiProvider));
-});
+final albumsControllerProvider =
+    StateNotifierProvider<AlbumsController, AlbumsState>((ref) {
+      return AlbumsController(ref.watch(albumApiProvider));
+    });
