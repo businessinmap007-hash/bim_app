@@ -56,5 +56,18 @@
   "settingsComingSoon": "Coming soon",
   "categoryPickerFieldLabel": "Category",
   "categoryPickerChooseHint": "Choose a category",
-  "categoryPickerChooseRoot": "Choose a section"
+  "categoryPickerChooseRoot": "Choose a section",
+  "mediaCapturedByCamera": "This photo was captured with the camera",
+  "mediaFromGallery": "This photo was uploaded from the gallery",
+  "mediaAddFromCamera": "Take photo",
+  "mediaAddFromGallery": "Choose from gallery",
+  "mediaRemove": "Remove",
+  "mediaWatermarkTitle": "Watermark",
+  "mediaWatermarkText": "Watermark text",
+  "mediaWatermarkTextHint": "Phone number or business name",
+  "mediaWatermarkRepeatCount": "Repeat count",
+  "mediaWatermarkApply": "Apply watermark",
+  "mediaWatermarkApplied": "Watermark applied.",
+  "mediaComposerTitle": "Photo display & watermark",
+  "mediaEmpty": "No photos yet — add one from the camera or gallery."
 }

@@ -182,4 +182,43 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get categoryPickerChooseRoot => 'اختر القسم الرئيسي';
+
+  @override
+  String get mediaCapturedByCamera => 'تم التقاط هذه الصورة بالكاميرا';
+
+  @override
+  String get mediaFromGallery => 'تم رفع هذه الصورة من المعرض';
+
+  @override
+  String get mediaAddFromCamera => 'التقاط بالكاميرا';
+
+  @override
+  String get mediaAddFromGallery => 'اختيار من المعرض';
+
+  @override
+  String get mediaRemove => 'إزالة';
+
+  @override
+  String get mediaWatermarkTitle => 'العلامة المائية';
+
+  @override
+  String get mediaWatermarkText => 'نص العلامة المائية';
+
+  @override
+  String get mediaWatermarkTextHint => 'رقم الموبايل أو اسم النشاط';
+
+  @override
+  String get mediaWatermarkRepeatCount => 'عدد التكرار';
+
+  @override
+  String get mediaWatermarkApply => 'تطبيق العلامة المائية';
+
+  @override
+  String get mediaWatermarkApplied => 'تم تطبيق العلامة المائية.';
+
+  @override
+  String get mediaComposerTitle => 'عرض الصور والعلامة المائية';
+
+  @override
+  String get mediaEmpty => 'لا توجد صور بعد — أضف صورة بالكاميرا أو من المعرض.';
 }

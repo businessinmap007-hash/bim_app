@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -74,6 +75,18 @@ class SettingsScreen extends ConsumerWidget {
             const SizedBox(height: 8),
             _OptionCard(children: [_PlaceholderRow(label: l10n.settingsServicesSection)]),
           ],
+          const SizedBox(height: 24),
+          _SectionHeader(l10n.mediaComposerTitle),
+          const SizedBox(height: 8),
+          _OptionCard(
+            children: [
+              ListTile(
+                title: Text(l10n.mediaComposerTitle),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => context.push('/media-composer'),
+              ),
+            ],
+          ),
         ],
       ),
     );

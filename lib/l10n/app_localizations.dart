@@ -421,6 +421,84 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'اختر القسم الرئيسي'**
   String get categoryPickerChooseRoot;
+
+  /// No description provided for @mediaCapturedByCamera.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التقاط هذه الصورة بالكاميرا'**
+  String get mediaCapturedByCamera;
+
+  /// No description provided for @mediaFromGallery.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم رفع هذه الصورة من المعرض'**
+  String get mediaFromGallery;
+
+  /// No description provided for @mediaAddFromCamera.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقاط بالكاميرا'**
+  String get mediaAddFromCamera;
+
+  /// No description provided for @mediaAddFromGallery.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيار من المعرض'**
+  String get mediaAddFromGallery;
+
+  /// No description provided for @mediaRemove.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزالة'**
+  String get mediaRemove;
+
+  /// No description provided for @mediaWatermarkTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'العلامة المائية'**
+  String get mediaWatermarkTitle;
+
+  /// No description provided for @mediaWatermarkText.
+  ///
+  /// In ar, this message translates to:
+  /// **'نص العلامة المائية'**
+  String get mediaWatermarkText;
+
+  /// No description provided for @mediaWatermarkTextHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الموبايل أو اسم النشاط'**
+  String get mediaWatermarkTextHint;
+
+  /// No description provided for @mediaWatermarkRepeatCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد التكرار'**
+  String get mediaWatermarkRepeatCount;
+
+  /// No description provided for @mediaWatermarkApply.
+  ///
+  /// In ar, this message translates to:
+  /// **'تطبيق العلامة المائية'**
+  String get mediaWatermarkApply;
+
+  /// No description provided for @mediaWatermarkApplied.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تطبيق العلامة المائية.'**
+  String get mediaWatermarkApplied;
+
+  /// No description provided for @mediaComposerTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض الصور والعلامة المائية'**
+  String get mediaComposerTitle;
+
+  /// No description provided for @mediaEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد صور بعد — أضف صورة بالكاميرا أو من المعرض.'**
+  String get mediaEmpty;
 }
 
 class _AppLocalizationsDelegate

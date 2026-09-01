@@ -97,6 +97,7 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   build_runner: ^2.4.13
   hive_generator: ^2.0.1
+  flutter_launcher_icons: ^0.14.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -139,3 +140,27 @@ flutter:
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+# Regenerate after changing the source art: dart run flutter_launcher_icons
+flutter_launcher_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  # Opaque (navy bg + gold pin) on purpose — iOS forbids alpha in app icons,
+  # and Android's legacy (non-adaptive) launcher icon looks wrong with a
+  # transparent background too.
+  image_path: "assets/branding/bim_mark_icon_1024.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#0B1F3A"
+  adaptive_icon_foreground: "assets/branding/bim_mark_1024.png"
+  web:
+    generate: true
+    image_path: "assets/branding/bim_mark_icon_1024.png"
+    background_color: "#0B1F3A"
+    theme_color: "#0B1F3A"
+  windows:
+    generate: true
+    image_path: "assets/branding/bim_mark_icon_1024.png"
+  macos:
+    generate: true
+    image_path: "assets/branding/bim_mark_icon_1024.png"

@@ -10,6 +10,7 @@ import '../features/categories/presentation/screens/specialties_screen.dart';
 import '../features/discovery/presentation/screens/business_list_screen.dart';
 import '../features/home/presentation/screens/business_home_screen.dart';
 import '../features/home/presentation/screens/customer_home_screen.dart';
+import '../features/media/presentation/screens/media_composer_screen.dart';
 import '../features/settings/presentation/screens/settings_screen.dart';
 import '../features/splash/presentation/screens/splash_screen.dart';
 
@@ -81,6 +82,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/settings',
         builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: '/media-composer',
+        builder: (context, state) => const MediaComposerScreen(),
       ),
       GoRoute(
         path: '/categories/:categoryId/specialties',

@@ -56,5 +56,18 @@
   "settingsComingSoon": "قريبًا",
   "categoryPickerFieldLabel": "التصنيف",
   "categoryPickerChooseHint": "اختر التصنيف",
-  "categoryPickerChooseRoot": "اختر القسم الرئيسي"
+  "categoryPickerChooseRoot": "اختر القسم الرئيسي",
+  "mediaCapturedByCamera": "تم التقاط هذه الصورة بالكاميرا",
+  "mediaFromGallery": "تم رفع هذه الصورة من المعرض",
+  "mediaAddFromCamera": "التقاط بالكاميرا",
+  "mediaAddFromGallery": "اختيار من المعرض",
+  "mediaRemove": "إزالة",
+  "mediaWatermarkTitle": "العلامة المائية",
+  "mediaWatermarkText": "نص العلامة المائية",
+  "mediaWatermarkTextHint": "رقم الموبايل أو اسم النشاط",
+  "mediaWatermarkRepeatCount": "عدد التكرار",
+  "mediaWatermarkApply": "تطبيق العلامة المائية",
+  "mediaWatermarkApplied": "تم تطبيق العلامة المائية.",
+  "mediaComposerTitle": "عرض الصور والعلامة المائية",
+  "mediaEmpty": "لا توجد صور بعد — أضف صورة بالكاميرا أو من المعرض."
 }

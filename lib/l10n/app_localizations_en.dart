@@ -180,4 +180,44 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get categoryPickerChooseRoot => 'Choose a section';
+
+  @override
+  String get mediaCapturedByCamera => 'This photo was captured with the camera';
+
+  @override
+  String get mediaFromGallery => 'This photo was uploaded from the gallery';
+
+  @override
+  String get mediaAddFromCamera => 'Take photo';
+
+  @override
+  String get mediaAddFromGallery => 'Choose from gallery';
+
+  @override
+  String get mediaRemove => 'Remove';
+
+  @override
+  String get mediaWatermarkTitle => 'Watermark';
+
+  @override
+  String get mediaWatermarkText => 'Watermark text';
+
+  @override
+  String get mediaWatermarkTextHint => 'Phone number or business name';
+
+  @override
+  String get mediaWatermarkRepeatCount => 'Repeat count';
+
+  @override
+  String get mediaWatermarkApply => 'Apply watermark';
+
+  @override
+  String get mediaWatermarkApplied => 'Watermark applied.';
+
+  @override
+  String get mediaComposerTitle => 'Photo display & watermark';
+
+  @override
+  String get mediaEmpty =>
+      'No photos yet — add one from the camera or gallery.';
 }

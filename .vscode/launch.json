@@ -6,7 +6,11 @@
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
-      "args": ["--dart-define=API_BASE_URL=http://localhost:8000/api/v2"]
+      // Web only, not the other targets: a browser enforces CORS on image
+      // fetches (CanvasKit reads pixel bytes, not a passive <img> load),
+      // and php artisan serve can't send CORS headers for static files —
+      // Apache (already running via XAMPP) can, via public/.htaccess.
+      "args": ["--dart-define=API_BASE_URL=http://localhost/testing/public/api/v2"]
     },
     {
       "name": "BIM (localhost, Windows desktop)",
