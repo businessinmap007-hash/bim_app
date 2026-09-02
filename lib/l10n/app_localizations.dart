@@ -4405,6 +4405,270 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تم إرسال طلبك وسيتم مراجعته.'**
   String get merchantAccountApplied;
+
+  /// No description provided for @menuManagementTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'قائمتي'**
+  String get menuManagementTitle;
+
+  /// No description provided for @menuSectionsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أقسام القائمة'**
+  String get menuSectionsTitle;
+
+  /// No description provided for @menuSectionsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أقسام بعد.'**
+  String get menuSectionsEmpty;
+
+  /// No description provided for @menuSectionAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة قسم'**
+  String get menuSectionAdd;
+
+  /// No description provided for @menuSectionEditTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل القسم'**
+  String get menuSectionEditTitle;
+
+  /// No description provided for @menuSectionAddTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة قسم'**
+  String get menuSectionAddTitle;
+
+  /// No description provided for @menuSectionDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف هذا القسم؟ الأصناف بداخله تحتفظ ببياناتها لكنها تفقد قسمها.'**
+  String get menuSectionDeleteConfirm;
+
+  /// No description provided for @menuItemsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأصناف'**
+  String get menuItemsTitle;
+
+  /// No description provided for @menuItemsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أصناف بعد.'**
+  String get menuItemsEmpty;
+
+  /// No description provided for @menuItemsSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث عن صنف...'**
+  String get menuItemsSearchHint;
+
+  /// No description provided for @menuItemsAllSections.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل الأقسام'**
+  String get menuItemsAllSections;
+
+  /// No description provided for @menuItemAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة صنف'**
+  String get menuItemAdd;
+
+  /// No description provided for @menuItemEditTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل الصنف'**
+  String get menuItemEditTitle;
+
+  /// No description provided for @menuItemAddTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة صنف'**
+  String get menuItemAddTitle;
+
+  /// No description provided for @menuItemDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف هذا الصنف؟'**
+  String get menuItemDeleteConfirm;
+
+  /// No description provided for @menuItemNameArHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم (عربي)'**
+  String get menuItemNameArHint;
+
+  /// No description provided for @menuItemNameEnHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم (إنجليزي، اختياري)'**
+  String get menuItemNameEnHint;
+
+  /// No description provided for @menuItemDescriptionArHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوصف (عربي، اختياري)'**
+  String get menuItemDescriptionArHint;
+
+  /// No description provided for @menuItemDescriptionEnHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوصف (إنجليزي، اختياري)'**
+  String get menuItemDescriptionEnHint;
+
+  /// No description provided for @menuItemSectionLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'القسم'**
+  String get menuItemSectionLabel;
+
+  /// No description provided for @menuItemNoSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون قسم'**
+  String get menuItemNoSection;
+
+  /// No description provided for @menuItemBasePriceHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر'**
+  String get menuItemBasePriceHint;
+
+  /// No description provided for @menuItemSupplyPriceHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر التكلفة (اختياري)'**
+  String get menuItemSupplyPriceHint;
+
+  /// No description provided for @menuItemBrandNameHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الماركة (اختياري)'**
+  String get menuItemBrandNameHint;
+
+  /// No description provided for @menuItemSortOrderHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ترتيب العرض'**
+  String get menuItemSortOrderHint;
+
+  /// No description provided for @menuItemActiveLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشط'**
+  String get menuItemActiveLabel;
+
+  /// No description provided for @menuItemImagesSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصور'**
+  String get menuItemImagesSection;
+
+  /// No description provided for @menuItemAddImage.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة صورة'**
+  String get menuItemAddImage;
+
+  /// No description provided for @menuItemVariantsSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخيارات'**
+  String get menuItemVariantsSection;
+
+  /// No description provided for @menuItemAddVariant.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة خيار'**
+  String get menuItemAddVariant;
+
+  /// No description provided for @menuItemEditVariant.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل الخيار'**
+  String get menuItemEditVariant;
+
+  /// No description provided for @menuItemVariantTypeHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'النوع (مثال: الحجم)'**
+  String get menuItemVariantTypeHint;
+
+  /// No description provided for @menuItemVariantPriceHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر الكامل (اختياري)'**
+  String get menuItemVariantPriceHint;
+
+  /// No description provided for @menuItemVariantPriceDeltaHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'فرق السعر (اختياري)'**
+  String get menuItemVariantPriceDeltaHint;
+
+  /// No description provided for @menuItemVariantDefaultLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاختيار الافتراضي'**
+  String get menuItemVariantDefaultLabel;
+
+  /// No description provided for @menuItemExtrasSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإضافات'**
+  String get menuItemExtrasSection;
+
+  /// No description provided for @menuItemAddExtra.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة إضافة'**
+  String get menuItemAddExtra;
+
+  /// No description provided for @menuItemEditExtra.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل الإضافة'**
+  String get menuItemEditExtra;
+
+  /// No description provided for @menuItemExtraGroupHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'المجموعة (اختياري)'**
+  String get menuItemExtraGroupHint;
+
+  /// No description provided for @menuItemExtraPriceHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر'**
+  String get menuItemExtraPriceHint;
+
+  /// No description provided for @menuItemExtraMaxQtyHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحد الأقصى للكمية'**
+  String get menuItemExtraMaxQtyHint;
+
+  /// No description provided for @menuItemDeleteRowConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف هذا؟'**
+  String get menuItemDeleteRowConfirm;
+
+  /// No description provided for @menuNameRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل اسمًا.'**
+  String get menuNameRequired;
+
+  /// No description provided for @menuPriceRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل سعرًا صحيحًا.'**
+  String get menuPriceRequired;
 }
 
 class _AppLocalizationsDelegate

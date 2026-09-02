@@ -2253,4 +2253,137 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get merchantAccountApplied => 'تم إرسال طلبك وسيتم مراجعته.';
+
+  @override
+  String get menuManagementTitle => 'قائمتي';
+
+  @override
+  String get menuSectionsTitle => 'أقسام القائمة';
+
+  @override
+  String get menuSectionsEmpty => 'لا توجد أقسام بعد.';
+
+  @override
+  String get menuSectionAdd => 'إضافة قسم';
+
+  @override
+  String get menuSectionEditTitle => 'تعديل القسم';
+
+  @override
+  String get menuSectionAddTitle => 'إضافة قسم';
+
+  @override
+  String get menuSectionDeleteConfirm =>
+      'حذف هذا القسم؟ الأصناف بداخله تحتفظ ببياناتها لكنها تفقد قسمها.';
+
+  @override
+  String get menuItemsTitle => 'الأصناف';
+
+  @override
+  String get menuItemsEmpty => 'لا توجد أصناف بعد.';
+
+  @override
+  String get menuItemsSearchHint => 'ابحث عن صنف...';
+
+  @override
+  String get menuItemsAllSections => 'كل الأقسام';
+
+  @override
+  String get menuItemAdd => 'إضافة صنف';
+
+  @override
+  String get menuItemEditTitle => 'تعديل الصنف';
+
+  @override
+  String get menuItemAddTitle => 'إضافة صنف';
+
+  @override
+  String get menuItemDeleteConfirm => 'حذف هذا الصنف؟';
+
+  @override
+  String get menuItemNameArHint => 'الاسم (عربي)';
+
+  @override
+  String get menuItemNameEnHint => 'الاسم (إنجليزي، اختياري)';
+
+  @override
+  String get menuItemDescriptionArHint => 'الوصف (عربي، اختياري)';
+
+  @override
+  String get menuItemDescriptionEnHint => 'الوصف (إنجليزي، اختياري)';
+
+  @override
+  String get menuItemSectionLabel => 'القسم';
+
+  @override
+  String get menuItemNoSection => 'بدون قسم';
+
+  @override
+  String get menuItemBasePriceHint => 'السعر';
+
+  @override
+  String get menuItemSupplyPriceHint => 'سعر التكلفة (اختياري)';
+
+  @override
+  String get menuItemBrandNameHint => 'الماركة (اختياري)';
+
+  @override
+  String get menuItemSortOrderHint => 'ترتيب العرض';
+
+  @override
+  String get menuItemActiveLabel => 'نشط';
+
+  @override
+  String get menuItemImagesSection => 'الصور';
+
+  @override
+  String get menuItemAddImage => 'إضافة صورة';
+
+  @override
+  String get menuItemVariantsSection => 'الخيارات';
+
+  @override
+  String get menuItemAddVariant => 'إضافة خيار';
+
+  @override
+  String get menuItemEditVariant => 'تعديل الخيار';
+
+  @override
+  String get menuItemVariantTypeHint => 'النوع (مثال: الحجم)';
+
+  @override
+  String get menuItemVariantPriceHint => 'السعر الكامل (اختياري)';
+
+  @override
+  String get menuItemVariantPriceDeltaHint => 'فرق السعر (اختياري)';
+
+  @override
+  String get menuItemVariantDefaultLabel => 'الاختيار الافتراضي';
+
+  @override
+  String get menuItemExtrasSection => 'الإضافات';
+
+  @override
+  String get menuItemAddExtra => 'إضافة إضافة';
+
+  @override
+  String get menuItemEditExtra => 'تعديل الإضافة';
+
+  @override
+  String get menuItemExtraGroupHint => 'المجموعة (اختياري)';
+
+  @override
+  String get menuItemExtraPriceHint => 'السعر';
+
+  @override
+  String get menuItemExtraMaxQtyHint => 'الحد الأقصى للكمية';
+
+  @override
+  String get menuItemDeleteRowConfirm => 'حذف هذا؟';
+
+  @override
+  String get menuNameRequired => 'أدخل اسمًا.';
+
+  @override
+  String get menuPriceRequired => 'أدخل سعرًا صحيحًا.';
 }

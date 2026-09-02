@@ -2251,4 +2251,137 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get merchantAccountApplied =>
       'Your application was submitted and will be reviewed.';
+
+  @override
+  String get menuManagementTitle => 'My Menu';
+
+  @override
+  String get menuSectionsTitle => 'Menu Sections';
+
+  @override
+  String get menuSectionsEmpty => 'No sections yet.';
+
+  @override
+  String get menuSectionAdd => 'Add section';
+
+  @override
+  String get menuSectionEditTitle => 'Edit section';
+
+  @override
+  String get menuSectionAddTitle => 'Add section';
+
+  @override
+  String get menuSectionDeleteConfirm =>
+      'Delete this section? Items in it keep their data but lose their section.';
+
+  @override
+  String get menuItemsTitle => 'Menu Items';
+
+  @override
+  String get menuItemsEmpty => 'No items yet.';
+
+  @override
+  String get menuItemsSearchHint => 'Search items...';
+
+  @override
+  String get menuItemsAllSections => 'All sections';
+
+  @override
+  String get menuItemAdd => 'Add item';
+
+  @override
+  String get menuItemEditTitle => 'Edit item';
+
+  @override
+  String get menuItemAddTitle => 'Add item';
+
+  @override
+  String get menuItemDeleteConfirm => 'Delete this item?';
+
+  @override
+  String get menuItemNameArHint => 'Name (Arabic)';
+
+  @override
+  String get menuItemNameEnHint => 'Name (English, optional)';
+
+  @override
+  String get menuItemDescriptionArHint => 'Description (Arabic, optional)';
+
+  @override
+  String get menuItemDescriptionEnHint => 'Description (English, optional)';
+
+  @override
+  String get menuItemSectionLabel => 'Section';
+
+  @override
+  String get menuItemNoSection => 'No section';
+
+  @override
+  String get menuItemBasePriceHint => 'Price';
+
+  @override
+  String get menuItemSupplyPriceHint => 'Cost price (optional)';
+
+  @override
+  String get menuItemBrandNameHint => 'Brand (optional)';
+
+  @override
+  String get menuItemSortOrderHint => 'Sort order';
+
+  @override
+  String get menuItemActiveLabel => 'Active';
+
+  @override
+  String get menuItemImagesSection => 'Photos';
+
+  @override
+  String get menuItemAddImage => 'Add photo';
+
+  @override
+  String get menuItemVariantsSection => 'Variants';
+
+  @override
+  String get menuItemAddVariant => 'Add variant';
+
+  @override
+  String get menuItemEditVariant => 'Edit variant';
+
+  @override
+  String get menuItemVariantTypeHint => 'Type (e.g. size)';
+
+  @override
+  String get menuItemVariantPriceHint => 'Price (absolute, optional)';
+
+  @override
+  String get menuItemVariantPriceDeltaHint => 'Price add-on (optional)';
+
+  @override
+  String get menuItemVariantDefaultLabel => 'Default choice';
+
+  @override
+  String get menuItemExtrasSection => 'Extras';
+
+  @override
+  String get menuItemAddExtra => 'Add extra';
+
+  @override
+  String get menuItemEditExtra => 'Edit extra';
+
+  @override
+  String get menuItemExtraGroupHint => 'Group (optional)';
+
+  @override
+  String get menuItemExtraPriceHint => 'Price';
+
+  @override
+  String get menuItemExtraMaxQtyHint => 'Max quantity';
+
+  @override
+  String get menuItemDeleteRowConfirm => 'Delete this?';
+
+  @override
+  String get menuNameRequired => 'Enter a name.';
+
+  @override
+  String get menuPriceRequired => 'Enter a valid price.';
 }

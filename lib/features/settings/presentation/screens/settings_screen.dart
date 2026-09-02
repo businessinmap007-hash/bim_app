@@ -6,6 +6,7 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/application/auth_controller.dart';
 import '../../../booking_settings/presentation/screens/booking_settings_screen.dart';
+import '../../../business_menu/presentation/screens/menu_items_screen.dart';
 import '../../../media/presentation/widgets/watermark_repeat_selector.dart';
 import '../../../merchant_account/presentation/screens/merchant_account_screen.dart';
 import '../../../projects/presentation/screens/projects_screen.dart';
@@ -103,6 +104,15 @@ class SettingsScreen extends ConsumerWidget {
             const SizedBox(height: 8),
             _OptionCard(
               children: [
+                ListTile(
+                  leading: const Icon(Icons.restaurant_menu_outlined),
+                  title: Text(l10n.menuManagementTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const MenuItemsScreen()),
+                  ),
+                ),
+                const Divider(height: 1),
                 ListTile(
                   leading: const Icon(Icons.event_available_outlined),
                   title: Text(l10n.bookingSettingsTitle),
