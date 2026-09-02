@@ -30,6 +30,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonSave => 'Save';
 
   @override
+  String get commonDelete => 'Delete';
+
+  @override
   String get commonNext => 'Next';
 
   @override
@@ -929,4 +932,34 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get chatLocked =>
       'This chat has ended; you can no longer send messages.';
+
+  @override
+  String get agendaTitle => 'My agenda';
+
+  @override
+  String get agendaEmpty => 'Nothing on this day.';
+
+  @override
+  String get agendaAddTask => 'Add task';
+
+  @override
+  String get agendaTaskTitle => 'Title';
+
+  @override
+  String get agendaTaskNotes => 'Notes (optional)';
+
+  @override
+  String get agendaStartTime => 'Start time';
+
+  @override
+  String get agendaEndTime => 'End time (optional)';
+
+  @override
+  String get agendaToday => 'Today';
+
+  @override
+  String get agendaDeleteConfirm => 'Delete this task?';
+
+  @override
+  String get agendaTitleRequired => 'Enter a title for the task.';
 }

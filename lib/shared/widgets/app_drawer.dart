@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../app/theme/app_colors.dart';
+import '../../features/agenda/presentation/screens/agenda_screen.dart';
 import '../../features/auth/application/auth_controller.dart';
 import '../../features/orders/presentation/screens/orders_and_bookings_screen.dart';
 import '../../features/posts/presentation/screens/my_posts_screen.dart';
@@ -75,6 +76,14 @@ class AppDrawer extends ConsumerWidget {
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.of(context).push(MaterialPageRoute(builder: (_) => const WalletScreen()));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.calendar_month_outlined),
+              title: Text(l10n.agendaTitle),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AgendaScreen()));
               },
             ),
             ListTile(

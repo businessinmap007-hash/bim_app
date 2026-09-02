@@ -7,6 +7,7 @@
   "commonCancel": "Cancel",
   "commonSubmit": "Submit",
   "commonSave": "Save",
+  "commonDelete": "Delete",
   "commonNext": "Next",
   "commonBack": "Back",
   "commonSomethingWentWrong": "Something went wrong, please try again.",
@@ -307,5 +308,15 @@
   "chatOpenChat": "Chat",
   "chatEmpty": "No messages yet.",
   "chatMessageHint": "Write a message...",
-  "chatLocked": "This chat has ended; you can no longer send messages."
+  "chatLocked": "This chat has ended; you can no longer send messages.",
+  "agendaTitle": "My agenda",
+  "agendaEmpty": "Nothing on this day.",
+  "agendaAddTask": "Add task",
+  "agendaTaskTitle": "Title",
+  "agendaTaskNotes": "Notes (optional)",
+  "agendaStartTime": "Start time",
+  "agendaEndTime": "End time (optional)",
+  "agendaToday": "Today",
+  "agendaDeleteConfirm": "Delete this task?",
+  "agendaTitleRequired": "Enter a title for the task."
 }

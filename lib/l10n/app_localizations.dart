@@ -140,6 +140,12 @@ abstract class AppLocalizations {
   /// **'حفظ'**
   String get commonSave;
 
+  /// No description provided for @commonDelete.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف'**
+  String get commonDelete;
+
   /// No description provided for @commonNext.
   ///
   /// In ar, this message translates to:
@@ -1837,6 +1843,66 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'انتهت المحادثة ولم يعد بالإمكان إرسال رسائل.'**
   String get chatLocked;
+
+  /// No description provided for @agendaTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أجندتي'**
+  String get agendaTitle;
+
+  /// No description provided for @agendaEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد عناصر في هذا اليوم.'**
+  String get agendaEmpty;
+
+  /// No description provided for @agendaAddTask.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة مهمة'**
+  String get agendaAddTask;
+
+  /// No description provided for @agendaTaskTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'العنوان'**
+  String get agendaTaskTitle;
+
+  /// No description provided for @agendaTaskNotes.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات (اختياري)'**
+  String get agendaTaskNotes;
+
+  /// No description provided for @agendaStartTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقت البدء'**
+  String get agendaStartTime;
+
+  /// No description provided for @agendaEndTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقت الانتهاء (اختياري)'**
+  String get agendaEndTime;
+
+  /// No description provided for @agendaToday.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم'**
+  String get agendaToday;
+
+  /// No description provided for @agendaDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد حذف هذه المهمة؟'**
+  String get agendaDeleteConfirm;
+
+  /// No description provided for @agendaTitleRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل عنوان المهمة.'**
+  String get agendaTitleRequired;
 }
 
 class _AppLocalizationsDelegate

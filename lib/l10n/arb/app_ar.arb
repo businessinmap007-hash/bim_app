@@ -7,6 +7,7 @@
   "commonCancel": "إلغاء",
   "commonSubmit": "إرسال",
   "commonSave": "حفظ",
+  "commonDelete": "حذف",
   "commonNext": "التالي",
   "commonBack": "رجوع",
   "commonSomethingWentWrong": "حدث خطأ ما، حاول مرة أخرى.",
@@ -307,5 +308,15 @@
   "chatOpenChat": "محادثة",
   "chatEmpty": "لا توجد رسائل بعد.",
   "chatMessageHint": "اكتب رسالة...",
-  "chatLocked": "انتهت المحادثة ولم يعد بالإمكان إرسال رسائل."
+  "chatLocked": "انتهت المحادثة ولم يعد بالإمكان إرسال رسائل.",
+  "agendaTitle": "أجندتي",
+  "agendaEmpty": "لا توجد عناصر في هذا اليوم.",
+  "agendaAddTask": "إضافة مهمة",
+  "agendaTaskTitle": "العنوان",
+  "agendaTaskNotes": "ملاحظات (اختياري)",
+  "agendaStartTime": "وقت البدء",
+  "agendaEndTime": "وقت الانتهاء (اختياري)",
+  "agendaToday": "اليوم",
+  "agendaDeleteConfirm": "هل تريد حذف هذه المهمة؟",
+  "agendaTitleRequired": "أدخل عنوان المهمة."
 }

@@ -30,6 +30,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get commonSave => 'حفظ';
 
   @override
+  String get commonDelete => 'حذف';
+
+  @override
   String get commonNext => 'التالي';
 
   @override
@@ -935,4 +938,34 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get chatLocked => 'انتهت المحادثة ولم يعد بالإمكان إرسال رسائل.';
+
+  @override
+  String get agendaTitle => 'أجندتي';
+
+  @override
+  String get agendaEmpty => 'لا توجد عناصر في هذا اليوم.';
+
+  @override
+  String get agendaAddTask => 'إضافة مهمة';
+
+  @override
+  String get agendaTaskTitle => 'العنوان';
+
+  @override
+  String get agendaTaskNotes => 'ملاحظات (اختياري)';
+
+  @override
+  String get agendaStartTime => 'وقت البدء';
+
+  @override
+  String get agendaEndTime => 'وقت الانتهاء (اختياري)';
+
+  @override
+  String get agendaToday => 'اليوم';
+
+  @override
+  String get agendaDeleteConfirm => 'هل تريد حذف هذه المهمة؟';
+
+  @override
+  String get agendaTitleRequired => 'أدخل عنوان المهمة.';
 }
