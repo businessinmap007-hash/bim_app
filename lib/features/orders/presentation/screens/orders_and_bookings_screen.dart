@@ -611,7 +611,7 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
             if (booking.startsAt != null)
               Text(_formatRange(booking.startsAt!, booking.endsAt))
             else if (booking.date != null)
-              Text('${booking.date!.toLocal()}'.split(' ').first + (booking.time != null ? ' ${booking.time}' : '')),
+              Text('${booking.date!}'.split(' ').first + (booking.time != null ? ' ${booking.time}' : '')),
             if (booking.notes != null && booking.notes!.isNotEmpty) ...[
               const SizedBox(height: 12),
               Text(booking.notes!, style: Theme.of(context).textTheme.bodySmall),
@@ -663,11 +663,9 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
 }
 
 String _formatRange(DateTime start, DateTime? end) {
-  final s = start.toLocal();
-  final startStr = '${s.year}-${s.month.toString().padLeft(2, '0')}-${s.day.toString().padLeft(2, '0')} ${s.hour.toString().padLeft(2, '0')}:${s.minute.toString().padLeft(2, '0')}';
+  final startStr = '${start.year}-${start.month.toString().padLeft(2, '0')}-${start.day.toString().padLeft(2, '0')} ${start.hour.toString().padLeft(2, '0')}:${start.minute.toString().padLeft(2, '0')}';
   if (end == null) return startStr;
-  final e = end.toLocal();
-  final endStr = '${e.hour.toString().padLeft(2, '0')}:${e.minute.toString().padLeft(2, '0')}';
+  final endStr = '${end.hour.toString().padLeft(2, '0')}:${end.minute.toString().padLeft(2, '0')}';
   return '$startStr → $endStr';
 }
 

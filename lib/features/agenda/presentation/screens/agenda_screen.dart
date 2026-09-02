@@ -269,10 +269,8 @@ class _AgendaTile extends ConsumerWidget {
 String _formatDate(DateTime d) => '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
 
 String _formatTimeRange(DateTime start, DateTime? end) {
-  final s = start.toLocal();
-  final startStr = '${s.hour.toString().padLeft(2, '0')}:${s.minute.toString().padLeft(2, '0')}';
+  final startStr = '${start.hour.toString().padLeft(2, '0')}:${start.minute.toString().padLeft(2, '0')}';
   if (end == null) return startStr;
-  final e = end.toLocal();
-  final endStr = '${e.hour.toString().padLeft(2, '0')}:${e.minute.toString().padLeft(2, '0')}';
+  final endStr = '${end.hour.toString().padLeft(2, '0')}:${end.minute.toString().padLeft(2, '0')}';
   return '$startStr – $endStr';
 }

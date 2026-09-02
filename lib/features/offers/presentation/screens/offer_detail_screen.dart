@@ -128,6 +128,5 @@ class _OfferDetailScreenState extends ConsumerState<OfferDetailScreen> {
 }
 
 String _formatDate(DateTime dt) {
-  final d = dt.toLocal();
-  return '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+  return '${dt.year}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')}';
 }
