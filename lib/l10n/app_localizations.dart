@@ -224,6 +224,66 @@ abstract class AppLocalizations {
   /// **'نسيت كلمة المرور؟'**
   String get authForgotPassword;
 
+  /// No description provided for @authForgotPasswordTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'استعادة كلمة المرور'**
+  String get authForgotPasswordTitle;
+
+  /// No description provided for @authForgotPasswordInstructions.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل بريدك الإلكتروني وسنرسل لك رمز تحقق لإعادة تعيين كلمة المرور.'**
+  String get authForgotPasswordInstructions;
+
+  /// No description provided for @authSendCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال الرمز'**
+  String get authSendCode;
+
+  /// No description provided for @authResendCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة إرسال الرمز'**
+  String get authResendCode;
+
+  /// No description provided for @authVerificationCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'رمز التحقق'**
+  String get authVerificationCode;
+
+  /// No description provided for @authCodeSentMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال رمز التحقق إلى بريدك الإلكتروني.'**
+  String get authCodeSentMessage;
+
+  /// No description provided for @authNewPassword.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمة المرور الجديدة'**
+  String get authNewPassword;
+
+  /// No description provided for @authResetPassword.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة تعيين كلمة المرور'**
+  String get authResetPassword;
+
+  /// No description provided for @authBackToLogin.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرجوع لتسجيل الدخول'**
+  String get authBackToLogin;
+
+  /// No description provided for @authResetPasswordSuccess.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تغيير كلمة المرور بنجاح، يمكنك تسجيل الدخول الآن.'**
+  String get authResetPasswordSuccess;
+
   /// No description provided for @authDontHaveAccount.
   ///
   /// In ar, this message translates to:

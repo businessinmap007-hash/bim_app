@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../features/auth/application/auth_controller.dart';
 import '../features/auth/presentation/screens/account_type_screen.dart';
+import '../features/auth/presentation/screens/forgot_password_screen.dart';
 import '../features/auth/presentation/screens/login_screen.dart';
 import '../features/auth/presentation/screens/register_screen.dart';
 import '../features/business/presentation/screens/business_detail_screen.dart';
@@ -34,7 +35,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       final atAuthGate =
           state.matchedLocation == '/' ||
           state.matchedLocation == '/login' ||
-          state.matchedLocation == '/register';
+          state.matchedLocation == '/register' ||
+          state.matchedLocation == '/forgot-password';
 
       if (authState is AuthUnknown) {
         return state.matchedLocation == '/splash' ? null : '/splash';
@@ -68,6 +70,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/register',
         builder: (context, state) =>
             RegisterScreen(accountType: (state.extra as String?) ?? 'client'),
+      ),
+      GoRoute(
+        path: '/forgot-password',
+        builder: (context, state) => const ForgotPasswordScreen(),
       ),
       GoRoute(
         path: '/home',

@@ -61,4 +61,33 @@ class AuthApi {
   }
 
   Future<void> logout() => _client.post('/auth/logout');
+
+  Future<void> forgotPassword(String email) =>
+      _client.post('/auth/password/forgot', data: {'email': email});
+
+  Future<void> resendResetCode(String email) =>
+      _client.post('/auth/password/resend', data: {'email': email});
+
+  Future<void> verifyResetCode({
+    required String email,
+    required String code,
+  }) => _client.post(
+    '/auth/password/verify',
+    data: {'email': email, 'code': code},
+  );
+
+  Future<void> resetPassword({
+    required String email,
+    required String code,
+    required String password,
+    required String passwordConfirmation,
+  }) => _client.post(
+    '/auth/password/reset',
+    data: {
+      'email': email,
+      'code': code,
+      'password': password,
+      'password_confirmation': passwordConfirmation,
+    },
+  );
 }

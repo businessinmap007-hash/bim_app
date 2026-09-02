@@ -109,8 +109,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     Align(
                       alignment: AlignmentDirectional.centerEnd,
                       child: TextButton(
-                        onPressed:
-                            () {}, // TODO: wire /auth/password/forgot flow
+                        onPressed: () => context.push('/forgot-password'),
                         child: Text(l10n.authForgotPassword),
                       ),
                     ),
