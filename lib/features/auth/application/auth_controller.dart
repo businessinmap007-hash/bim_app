@@ -98,6 +98,16 @@ class AuthController extends StateNotifier<AuthState> {
     }
   }
 
+  /// Restore an account soft-deleted within its grace window. `cancel()`
+  /// only returns a token (the account had none while deleted) — fetch the
+  /// user separately, same as session restore on launch.
+  Future<void> restoreDeletedAccount({required String email, required String password}) async {
+    final token = await _authApi.cancelDeletion(email: email, password: password);
+    await _ref.read(tokenStorageProvider).write(token);
+    final user = await _authApi.me();
+    state = AuthSignedIn(user);
+  }
+
   Future<void> logout() async {
     try {
       await _authApi.logout();

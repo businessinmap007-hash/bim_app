@@ -141,6 +141,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         ),
                       ],
                     ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: TextButton(
+                        onPressed: () => context.push('/restore-account'),
+                        child: Text(
+                          l10n.restoreAccountLinkFromLogin,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

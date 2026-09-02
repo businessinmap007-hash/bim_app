@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/application/auth_controller.dart';
+import '../../../auth/presentation/screens/account_deletion_screen.dart';
 import '../../../booking_settings/presentation/screens/booking_settings_screen.dart';
 import '../../../business_menu/presentation/screens/menu_items_screen.dart';
 import '../../../media/presentation/widgets/watermark_repeat_selector.dart';
@@ -95,6 +96,18 @@ class SettingsScreen extends ConsumerWidget {
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const MyRatingScreen()),
+                ),
+              ),
+              const Divider(height: 1),
+              ListTile(
+                leading: Icon(Icons.delete_forever_outlined, color: Theme.of(context).colorScheme.error),
+                title: Text(
+                  l10n.accountDeletionTitle,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const AccountDeletionScreen()),
                 ),
               ),
             ],

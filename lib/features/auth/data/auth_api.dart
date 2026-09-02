@@ -1,4 +1,5 @@
 import '../../../core/network/api_client.dart';
+import 'models/account_deletion_status.dart';
 import 'models/auth_user.dart';
 
 /// Talks to `/auth/*` exactly as documented in the backend's
@@ -90,4 +91,28 @@ class AuthApi {
       'password_confirmation': passwordConfirmation,
     },
   );
+
+  /// GET /account/deletion — see Api\V2\AccountDeletionController.
+  Future<AccountDeletionStatus> deletionEligibility() async {
+    final data = await _client.get('/account/deletion') as Map<String, dynamic>;
+    return AccountDeletionStatus.fromJson(data);
+  }
+
+  /// POST /account/deletion — soft-deletes the caller's own account (grace
+  /// window before it's ever finalized); revokes every device's token.
+  Future<void> requestDeletion({required String password, String? reason}) => _client.post(
+    '/account/deletion',
+    data: {'password': password, if (reason != null && reason.isNotEmpty) 'reason': reason},
+  );
+
+  /// POST /account/deletion/cancel — restore within the grace window.
+  /// Unauthenticated (the account's tokens are gone), so it re-verifies
+  /// credentials itself; returns a fresh token to log back in with.
+  Future<String> cancelDeletion({required String email, required String password}) async {
+    final body = await _client.postForBody(
+      '/account/deletion/cancel',
+      data: {'email': email, 'password': password},
+    );
+    return body['token'] as String;
+  }
 }

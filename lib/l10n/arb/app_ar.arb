@@ -805,5 +805,22 @@
   "retailListingSkuHint": "رمز المنتج SKU (اختياري)",
   "retailListingActiveLabel": "نشط",
   "retailListingDeleteConfirm": "إزالة هذا المنتج من منتجاتك؟",
-  "retailPriceRequired": "أدخل سعرًا صحيحًا."
+  "retailPriceRequired": "أدخل سعرًا صحيحًا.",
+  "accountDeletionTitle": "حذف حسابي",
+  "accountDeletionHint": "لديك {days} يومًا لتغيير رأيك — تسجيل الدخول مرة أخرى خلال هذه المدة يستعيد كل شيء كما كان.",
+  "@accountDeletionHint": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "accountDeletionBlockersTitle": "لا يمكنك حذف حسابك الآن",
+  "accountDeletionPasswordHint": "أكّد كلمة المرور",
+  "accountDeletionReasonHint": "السبب (اختياري)",
+  "accountDeletionRequestButton": "حذف حسابي",
+  "accountDeletionConfirmTitle": "حذف حسابك؟",
+  "accountDeletionConfirmBody": "سيتم تسجيل خروجك من كل الأجهزة فورًا. يمكنك استعادة حسابك بتسجيل الدخول مرة أخرى خلال مهلة الاسترجاع — بعدها يُحذف نهائيًا.",
+  "accountDeletionConfirmButton": "احذفه",
+  "accountDeletionRequested": "تم جدولة حذف حسابك. سجّل الدخول مرة أخرى خلال مهلة الاسترجاع لاستعادته.",
+  "restoreAccountTitle": "استعادة حسابك",
+  "restoreAccountHint": "أدخل بريد وكلمة مرور الحساب الذي حذفته — يعمل هذا فقط خلال مهلة الاسترجاع.",
+  "restoreAccountButton": "استعادة الحساب",
+  "restoreAccountLinkFromLogin": "حذفت حسابك بالخطأ؟"
 }

@@ -7,6 +7,7 @@ import '../features/auth/presentation/screens/account_type_screen.dart';
 import '../features/auth/presentation/screens/forgot_password_screen.dart';
 import '../features/auth/presentation/screens/login_screen.dart';
 import '../features/auth/presentation/screens/register_screen.dart';
+import '../features/auth/presentation/screens/restore_account_screen.dart';
 import '../features/business/presentation/screens/business_detail_screen.dart';
 import '../features/categories/presentation/screens/specialties_screen.dart';
 import '../features/discovery/presentation/screens/business_list_screen.dart';
@@ -37,7 +38,8 @@ final routerProvider = Provider<GoRouter>((ref) {
           state.matchedLocation == '/' ||
           state.matchedLocation == '/login' ||
           state.matchedLocation == '/register' ||
-          state.matchedLocation == '/forgot-password';
+          state.matchedLocation == '/forgot-password' ||
+          state.matchedLocation == '/restore-account';
 
       if (authState is AuthUnknown) {
         return state.matchedLocation == '/splash' ? null : '/splash';
@@ -75,6 +77,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/forgot-password',
         builder: (context, state) => const ForgotPasswordScreen(),
+      ),
+      GoRoute(
+        path: '/restore-account',
+        builder: (context, state) => const RestoreAccountScreen(),
       ),
       GoRoute(
         path: '/home',

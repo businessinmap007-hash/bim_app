@@ -2427,4 +2427,52 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get retailPriceRequired => 'Enter a valid price.';
+
+  @override
+  String get accountDeletionTitle => 'Delete my account';
+
+  @override
+  String accountDeletionHint(int days) {
+    return 'You\'ll have $days days to change your mind — logging in again during that window restores everything exactly as it was.';
+  }
+
+  @override
+  String get accountDeletionBlockersTitle =>
+      'You can\'t delete your account right now';
+
+  @override
+  String get accountDeletionPasswordHint => 'Confirm your password';
+
+  @override
+  String get accountDeletionReasonHint => 'Reason (optional)';
+
+  @override
+  String get accountDeletionRequestButton => 'Delete my account';
+
+  @override
+  String get accountDeletionConfirmTitle => 'Delete your account?';
+
+  @override
+  String get accountDeletionConfirmBody =>
+      'This signs you out everywhere right away. You can restore your account by logging in again within the grace period — after that it\'s gone for good.';
+
+  @override
+  String get accountDeletionConfirmButton => 'Delete it';
+
+  @override
+  String get accountDeletionRequested =>
+      'Your account is scheduled for deletion. Log back in within the grace period to restore it.';
+
+  @override
+  String get restoreAccountTitle => 'Restore your account';
+
+  @override
+  String get restoreAccountHint =>
+      'Enter the email and password of the account you deleted — this only works during its grace period.';
+
+  @override
+  String get restoreAccountButton => 'Restore account';
+
+  @override
+  String get restoreAccountLinkFromLogin => 'Deleted your account by mistake?';
 }

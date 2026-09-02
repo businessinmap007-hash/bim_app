@@ -2428,4 +2428,51 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get retailPriceRequired => 'أدخل سعرًا صحيحًا.';
+
+  @override
+  String get accountDeletionTitle => 'حذف حسابي';
+
+  @override
+  String accountDeletionHint(int days) {
+    return 'لديك $days يومًا لتغيير رأيك — تسجيل الدخول مرة أخرى خلال هذه المدة يستعيد كل شيء كما كان.';
+  }
+
+  @override
+  String get accountDeletionBlockersTitle => 'لا يمكنك حذف حسابك الآن';
+
+  @override
+  String get accountDeletionPasswordHint => 'أكّد كلمة المرور';
+
+  @override
+  String get accountDeletionReasonHint => 'السبب (اختياري)';
+
+  @override
+  String get accountDeletionRequestButton => 'حذف حسابي';
+
+  @override
+  String get accountDeletionConfirmTitle => 'حذف حسابك؟';
+
+  @override
+  String get accountDeletionConfirmBody =>
+      'سيتم تسجيل خروجك من كل الأجهزة فورًا. يمكنك استعادة حسابك بتسجيل الدخول مرة أخرى خلال مهلة الاسترجاع — بعدها يُحذف نهائيًا.';
+
+  @override
+  String get accountDeletionConfirmButton => 'احذفه';
+
+  @override
+  String get accountDeletionRequested =>
+      'تم جدولة حذف حسابك. سجّل الدخول مرة أخرى خلال مهلة الاسترجاع لاستعادته.';
+
+  @override
+  String get restoreAccountTitle => 'استعادة حسابك';
+
+  @override
+  String get restoreAccountHint =>
+      'أدخل بريد وكلمة مرور الحساب الذي حذفته — يعمل هذا فقط خلال مهلة الاسترجاع.';
+
+  @override
+  String get restoreAccountButton => 'استعادة الحساب';
+
+  @override
+  String get restoreAccountLinkFromLogin => 'حذفت حسابك بالخطأ؟';
 }

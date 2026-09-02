@@ -4753,6 +4753,90 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'أدخل سعرًا صحيحًا.'**
   String get retailPriceRequired;
+
+  /// No description provided for @accountDeletionTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف حسابي'**
+  String get accountDeletionTitle;
+
+  /// No description provided for @accountDeletionHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'لديك {days} يومًا لتغيير رأيك — تسجيل الدخول مرة أخرى خلال هذه المدة يستعيد كل شيء كما كان.'**
+  String accountDeletionHint(int days);
+
+  /// No description provided for @accountDeletionBlockersTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يمكنك حذف حسابك الآن'**
+  String get accountDeletionBlockersTitle;
+
+  /// No description provided for @accountDeletionPasswordHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكّد كلمة المرور'**
+  String get accountDeletionPasswordHint;
+
+  /// No description provided for @accountDeletionReasonHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'السبب (اختياري)'**
+  String get accountDeletionReasonHint;
+
+  /// No description provided for @accountDeletionRequestButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف حسابي'**
+  String get accountDeletionRequestButton;
+
+  /// No description provided for @accountDeletionConfirmTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف حسابك؟'**
+  String get accountDeletionConfirmTitle;
+
+  /// No description provided for @accountDeletionConfirmBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيتم تسجيل خروجك من كل الأجهزة فورًا. يمكنك استعادة حسابك بتسجيل الدخول مرة أخرى خلال مهلة الاسترجاع — بعدها يُحذف نهائيًا.'**
+  String get accountDeletionConfirmBody;
+
+  /// No description provided for @accountDeletionConfirmButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'احذفه'**
+  String get accountDeletionConfirmButton;
+
+  /// No description provided for @accountDeletionRequested.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم جدولة حذف حسابك. سجّل الدخول مرة أخرى خلال مهلة الاسترجاع لاستعادته.'**
+  String get accountDeletionRequested;
+
+  /// No description provided for @restoreAccountTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'استعادة حسابك'**
+  String get restoreAccountTitle;
+
+  /// No description provided for @restoreAccountHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل بريد وكلمة مرور الحساب الذي حذفته — يعمل هذا فقط خلال مهلة الاسترجاع.'**
+  String get restoreAccountHint;
+
+  /// No description provided for @restoreAccountButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'استعادة الحساب'**
+  String get restoreAccountButton;
+
+  /// No description provided for @restoreAccountLinkFromLogin.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذفت حسابك بالخطأ؟'**
+  String get restoreAccountLinkFromLogin;
 }
 
 class _AppLocalizationsDelegate

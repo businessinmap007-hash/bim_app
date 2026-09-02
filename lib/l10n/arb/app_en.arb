@@ -805,5 +805,22 @@
   "retailListingSkuHint": "SKU (optional)",
   "retailListingActiveLabel": "Active",
   "retailListingDeleteConfirm": "Remove this product from your listings?",
-  "retailPriceRequired": "Enter a valid price."
+  "retailPriceRequired": "Enter a valid price.",
+  "accountDeletionTitle": "Delete my account",
+  "accountDeletionHint": "You'll have {days} days to change your mind — logging in again during that window restores everything exactly as it was.",
+  "@accountDeletionHint": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "accountDeletionBlockersTitle": "You can't delete your account right now",
+  "accountDeletionPasswordHint": "Confirm your password",
+  "accountDeletionReasonHint": "Reason (optional)",
+  "accountDeletionRequestButton": "Delete my account",
+  "accountDeletionConfirmTitle": "Delete your account?",
+  "accountDeletionConfirmBody": "This signs you out everywhere right away. You can restore your account by logging in again within the grace period — after that it's gone for good.",
+  "accountDeletionConfirmButton": "Delete it",
+  "accountDeletionRequested": "Your account is scheduled for deletion. Log back in within the grace period to restore it.",
+  "restoreAccountTitle": "Restore your account",
+  "restoreAccountHint": "Enter the email and password of the account you deleted — this only works during its grace period.",
+  "restoreAccountButton": "Restore account",
+  "restoreAccountLinkFromLogin": "Deleted your account by mistake?"
 }
