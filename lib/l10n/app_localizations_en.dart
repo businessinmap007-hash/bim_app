@@ -2760,4 +2760,34 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get priceNoServicesWarning =>
       'No services available for your business yet.';
+
+  @override
+  String get offerCompareButton => 'Compare prices';
+
+  @override
+  String get offerCompareTitle => 'Compare prices';
+
+  @override
+  String get offerCompareSortLabel => 'Sort by';
+
+  @override
+  String get offerCompareSortLowest => 'Lowest price';
+
+  @override
+  String get offerCompareSortHighest => 'Highest price';
+
+  @override
+  String get offerCompareSortBestValue => 'Best value';
+
+  @override
+  String get offerCompareSortRanking => 'Top ranked';
+
+  @override
+  String get offerCompareEmpty => 'No offers found for this item yet.';
+
+  @override
+  String get offerCompareBestPrice => 'Best price';
+
+  @override
+  String get offerCompareRefundable => 'Refundable';
 }

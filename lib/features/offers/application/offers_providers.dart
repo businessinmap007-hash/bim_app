@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/core_providers.dart';
 import '../data/models/commercial_offer.dart';
+import '../data/models/offer_comparison_row.dart';
 import '../data/models/offer_follow.dart';
 import '../data/offers_api.dart';
 
@@ -188,3 +189,17 @@ final myOfferFollowsControllerProvider =
     StateNotifierProvider<MyOfferFollowsController, MyOfferFollowsState>((ref) {
       return MyOfferFollowsController(ref.watch(offersApiProvider));
     });
+
+typedef OfferCompareParams = ({String offerableType, int offerableId, int quantity, String sort});
+
+final offerComparisonProvider = FutureProvider.autoDispose.family<OfferComparisonResult, OfferCompareParams>((
+  ref,
+  params,
+) {
+  return ref.watch(offersApiProvider).compare(
+    offerableType: params.offerableType,
+    offerableId: params.offerableId,
+    quantity: params.quantity,
+    sort: params.sort,
+  );
+});

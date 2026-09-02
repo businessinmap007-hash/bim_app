@@ -919,5 +919,15 @@
   "priceLineNone": "— بدون تحديد —",
   "priceModifiersLabel": "ما يميّزه",
   "priceModifierAdjustHint": "يُضاف إلى سعر الوحدة — اتركه فارغًا إن كان لا يغيّر السعر",
-  "priceNoServicesWarning": "لا توجد خدمات متاحة لنشاطك بعد."
+  "priceNoServicesWarning": "لا توجد خدمات متاحة لنشاطك بعد.",
+  "offerCompareButton": "قارن الأسعار",
+  "offerCompareTitle": "مقارنة الأسعار",
+  "offerCompareSortLabel": "ترتيب حسب",
+  "offerCompareSortLowest": "الأقل سعرًا",
+  "offerCompareSortHighest": "الأعلى سعرًا",
+  "offerCompareSortBestValue": "الأفضل قيمة",
+  "offerCompareSortRanking": "الأعلى تقييمًا",
+  "offerCompareEmpty": "لا توجد عروض لهذا العنصر بعد.",
+  "offerCompareBestPrice": "أفضل سعر",
+  "offerCompareRefundable": "قابل للاسترجاع"
 }

@@ -2760,4 +2760,34 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get priceNoServicesWarning => 'لا توجد خدمات متاحة لنشاطك بعد.';
+
+  @override
+  String get offerCompareButton => 'قارن الأسعار';
+
+  @override
+  String get offerCompareTitle => 'مقارنة الأسعار';
+
+  @override
+  String get offerCompareSortLabel => 'ترتيب حسب';
+
+  @override
+  String get offerCompareSortLowest => 'الأقل سعرًا';
+
+  @override
+  String get offerCompareSortHighest => 'الأعلى سعرًا';
+
+  @override
+  String get offerCompareSortBestValue => 'الأفضل قيمة';
+
+  @override
+  String get offerCompareSortRanking => 'الأعلى تقييمًا';
+
+  @override
+  String get offerCompareEmpty => 'لا توجد عروض لهذا العنصر بعد.';
+
+  @override
+  String get offerCompareBestPrice => 'أفضل سعر';
+
+  @override
+  String get offerCompareRefundable => 'قابل للاسترجاع';
 }

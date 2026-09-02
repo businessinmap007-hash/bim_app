@@ -5383,6 +5383,66 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لا توجد خدمات متاحة لنشاطك بعد.'**
   String get priceNoServicesWarning;
+
+  /// No description provided for @offerCompareButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'قارن الأسعار'**
+  String get offerCompareButton;
+
+  /// No description provided for @offerCompareTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقارنة الأسعار'**
+  String get offerCompareTitle;
+
+  /// No description provided for @offerCompareSortLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'ترتيب حسب'**
+  String get offerCompareSortLabel;
+
+  /// No description provided for @offerCompareSortLowest.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأقل سعرًا'**
+  String get offerCompareSortLowest;
+
+  /// No description provided for @offerCompareSortHighest.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأعلى سعرًا'**
+  String get offerCompareSortHighest;
+
+  /// No description provided for @offerCompareSortBestValue.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأفضل قيمة'**
+  String get offerCompareSortBestValue;
+
+  /// No description provided for @offerCompareSortRanking.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأعلى تقييمًا'**
+  String get offerCompareSortRanking;
+
+  /// No description provided for @offerCompareEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد عروض لهذا العنصر بعد.'**
+  String get offerCompareEmpty;
+
+  /// No description provided for @offerCompareBestPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'أفضل سعر'**
+  String get offerCompareBestPrice;
+
+  /// No description provided for @offerCompareRefundable.
+  ///
+  /// In ar, this message translates to:
+  /// **'قابل للاسترجاع'**
+  String get offerCompareRefundable;
 }
 
 class _AppLocalizationsDelegate

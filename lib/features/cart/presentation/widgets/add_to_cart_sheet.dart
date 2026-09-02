@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../business/data/models/menu_item_summary.dart';
+import '../../../offers/presentation/screens/offer_comparison_screen.dart';
 import '../../application/cart_controller.dart';
 import '../../application/shared_cart_providers.dart';
 
@@ -120,6 +121,22 @@ class _AddToCartSheetState extends ConsumerState<_AddToCartSheet> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(item.name, style: Theme.of(context).textTheme.titleLarge, textAlign: TextAlign.center),
+              Align(
+                alignment: Alignment.center,
+                child: TextButton.icon(
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => OfferComparisonScreen(
+                        offerableType: 'menu_item',
+                        offerableId: item.id,
+                        itemTitle: item.name,
+                      ),
+                    ),
+                  ),
+                  icon: const Icon(Icons.compare_arrows, size: 18),
+                  label: Text(l10n.offerCompareButton),
+                ),
+              ),
               const SizedBox(height: 16),
               if (item.variants.isNotEmpty) ...[
                 Text(l10n.cartVariantChoose, style: Theme.of(context).textTheme.titleSmall),

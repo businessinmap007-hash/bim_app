@@ -919,5 +919,15 @@
   "priceLineNone": "— Not specified —",
   "priceModifiersLabel": "What sets it apart",
   "priceModifierAdjustHint": "Adds to the unit price — leave blank if descriptive only",
-  "priceNoServicesWarning": "No services available for your business yet."
+  "priceNoServicesWarning": "No services available for your business yet.",
+  "offerCompareButton": "Compare prices",
+  "offerCompareTitle": "Compare prices",
+  "offerCompareSortLabel": "Sort by",
+  "offerCompareSortLowest": "Lowest price",
+  "offerCompareSortHighest": "Highest price",
+  "offerCompareSortBestValue": "Best value",
+  "offerCompareSortRanking": "Top ranked",
+  "offerCompareEmpty": "No offers found for this item yet.",
+  "offerCompareBestPrice": "Best price",
+  "offerCompareRefundable": "Refundable"
 }

@@ -1,14 +1,14 @@
 import '../../../core/network/api_client.dart';
 import '../../../core/network/paginated.dart';
 import 'models/commercial_offer.dart';
+import 'models/offer_comparison_row.dart';
 import 'models/offer_follow.dart';
 
-/// /offers, /offer-follows — public deal discovery + "follow a business for
-/// future offers" (see OfferDiscoveryController, OfferTrackingController,
-/// OfferFollowController). OfferComparisonController's price-compare and
-/// OfferBoostController's paid promotion are out of scope: compare needs a
-/// specific offerable_type+id most naturally reached FROM a menu/booking
-/// item screen (not built here), and boosting is a business-side purchase.
+/// /offers, /offer-follows, /offers/compare — public deal discovery, "follow
+/// a business for future offers", and price comparison across sellers for
+/// one specific item (see OfferDiscoveryController, OfferTrackingController,
+/// OfferFollowController, OfferComparisonController). OfferBoostController's
+/// paid promotion is out of scope — it's a business-side purchase.
 class OffersApi {
   final ApiClient _client;
   const OffersApi(this._client);
@@ -49,5 +49,23 @@ class OffersApi {
 
   Future<void> unfollow(int followId) async {
     await _client.delete('/offer-follows/$followId');
+  }
+
+  Future<OfferComparisonResult> compare({
+    required String offerableType,
+    required int offerableId,
+    int quantity = 1,
+    String sort = 'lowest_price',
+  }) async {
+    final data = await _client.get(
+      '/offers/compare',
+      query: {
+        'offerable_type': offerableType,
+        'offerable_id': offerableId,
+        'quantity': quantity,
+        'sort': sort,
+      },
+    ) as Map<String, dynamic>;
+    return OfferComparisonResult.fromJson(data);
   }
 }
