@@ -2515,6 +2515,96 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'توزيع'**
   String get tripModeDistribution;
+
+  /// No description provided for @clinicBookAppointment.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجز موعد'**
+  String get clinicBookAppointment;
+
+  /// No description provided for @clinicNoOpenSlots.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد فترات متاحة حاليًا.'**
+  String get clinicNoOpenSlots;
+
+  /// No description provided for @clinicBookSlot.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجز الموعد'**
+  String get clinicBookSlot;
+
+  /// No description provided for @clinicReasonHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'سبب الزيارة (اختياري)'**
+  String get clinicReasonHint;
+
+  /// No description provided for @clinicAppointmentBooked.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حجز الموعد.'**
+  String get clinicAppointmentBooked;
+
+  /// No description provided for @myClinicAppointmentsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مواعيد العيادة'**
+  String get myClinicAppointmentsTitle;
+
+  /// No description provided for @myClinicAppointmentsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد مواعيد بعد.'**
+  String get myClinicAppointmentsEmpty;
+
+  /// No description provided for @clinicAppointmentCancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء الموعد'**
+  String get clinicAppointmentCancel;
+
+  /// No description provided for @clinicAppointmentCancelConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد إلغاء هذا الموعد؟'**
+  String get clinicAppointmentCancelConfirm;
+
+  /// No description provided for @clinicAppointmentCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إلغاء الموعد.'**
+  String get clinicAppointmentCancelled;
+
+  /// No description provided for @clinicStatusRequested.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار التأكيد'**
+  String get clinicStatusRequested;
+
+  /// No description provided for @clinicStatusConfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مؤكد'**
+  String get clinicStatusConfirmed;
+
+  /// No description provided for @clinicStatusCompleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتمل'**
+  String get clinicStatusCompleted;
+
+  /// No description provided for @clinicStatusCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغي'**
+  String get clinicStatusCancelled;
+
+  /// No description provided for @clinicStatusNoShow.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يحضر'**
+  String get clinicStatusNoShow;
 }
 
 class _AppLocalizationsDelegate

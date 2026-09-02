@@ -1277,4 +1277,49 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get tripModeDistribution => 'توزيع';
+
+  @override
+  String get clinicBookAppointment => 'حجز موعد';
+
+  @override
+  String get clinicNoOpenSlots => 'لا توجد فترات متاحة حاليًا.';
+
+  @override
+  String get clinicBookSlot => 'حجز الموعد';
+
+  @override
+  String get clinicReasonHint => 'سبب الزيارة (اختياري)';
+
+  @override
+  String get clinicAppointmentBooked => 'تم حجز الموعد.';
+
+  @override
+  String get myClinicAppointmentsTitle => 'مواعيد العيادة';
+
+  @override
+  String get myClinicAppointmentsEmpty => 'لا توجد مواعيد بعد.';
+
+  @override
+  String get clinicAppointmentCancel => 'إلغاء الموعد';
+
+  @override
+  String get clinicAppointmentCancelConfirm => 'هل تريد إلغاء هذا الموعد؟';
+
+  @override
+  String get clinicAppointmentCancelled => 'تم إلغاء الموعد.';
+
+  @override
+  String get clinicStatusRequested => 'بانتظار التأكيد';
+
+  @override
+  String get clinicStatusConfirmed => 'مؤكد';
+
+  @override
+  String get clinicStatusCompleted => 'مكتمل';
+
+  @override
+  String get clinicStatusCancelled => 'ملغي';
+
+  @override
+  String get clinicStatusNoShow => 'لم يحضر';
 }

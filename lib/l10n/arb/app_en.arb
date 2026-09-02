@@ -420,5 +420,20 @@
   "tripModeFreight": "Freight",
   "tripModePassenger": "Passengers",
   "tripModeLimousine": "Limousine",
-  "tripModeDistribution": "Distribution"
+  "tripModeDistribution": "Distribution",
+  "clinicBookAppointment": "Book an appointment",
+  "clinicNoOpenSlots": "No open slots right now.",
+  "clinicBookSlot": "Book this slot",
+  "clinicReasonHint": "Reason for the visit (optional)",
+  "clinicAppointmentBooked": "Appointment booked.",
+  "myClinicAppointmentsTitle": "Clinic appointments",
+  "myClinicAppointmentsEmpty": "No appointments yet.",
+  "clinicAppointmentCancel": "Cancel appointment",
+  "clinicAppointmentCancelConfirm": "Cancel this appointment?",
+  "clinicAppointmentCancelled": "Appointment cancelled.",
+  "clinicStatusRequested": "Awaiting confirmation",
+  "clinicStatusConfirmed": "Confirmed",
+  "clinicStatusCompleted": "Completed",
+  "clinicStatusCancelled": "Cancelled",
+  "clinicStatusNoShow": "No-show"
 }

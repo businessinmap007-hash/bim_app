@@ -1274,4 +1274,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tripModeDistribution => 'Distribution';
+
+  @override
+  String get clinicBookAppointment => 'Book an appointment';
+
+  @override
+  String get clinicNoOpenSlots => 'No open slots right now.';
+
+  @override
+  String get clinicBookSlot => 'Book this slot';
+
+  @override
+  String get clinicReasonHint => 'Reason for the visit (optional)';
+
+  @override
+  String get clinicAppointmentBooked => 'Appointment booked.';
+
+  @override
+  String get myClinicAppointmentsTitle => 'Clinic appointments';
+
+  @override
+  String get myClinicAppointmentsEmpty => 'No appointments yet.';
+
+  @override
+  String get clinicAppointmentCancel => 'Cancel appointment';
+
+  @override
+  String get clinicAppointmentCancelConfirm => 'Cancel this appointment?';
+
+  @override
+  String get clinicAppointmentCancelled => 'Appointment cancelled.';
+
+  @override
+  String get clinicStatusRequested => 'Awaiting confirmation';
+
+  @override
+  String get clinicStatusConfirmed => 'Confirmed';
+
+  @override
+  String get clinicStatusCompleted => 'Completed';
+
+  @override
+  String get clinicStatusCancelled => 'Cancelled';
+
+  @override
+  String get clinicStatusNoShow => 'No-show';
 }

@@ -9,6 +9,7 @@ import '../../../booking/presentation/screens/booking_screen.dart';
 import '../../../cart/application/cart_controller.dart';
 import '../../../cart/presentation/screens/cart_screen.dart';
 import '../../../cart/presentation/widgets/add_to_cart_sheet.dart';
+import '../../../clinic/presentation/screens/clinic_slots_screen.dart';
 import '../../../ratings/presentation/screens/reviews_screen.dart';
 import '../../application/business_page_providers.dart';
 import '../../data/models/business_profile.dart';
@@ -17,6 +18,12 @@ import '../widgets/business_rating_row.dart';
 import '../widgets/menu_item_tile.dart';
 import '../widgets/offering_card.dart';
 import '../widgets/post_card.dart';
+
+/// The "الصحة"/Health root's category id — mirrors
+/// BusinessCapability::HEALTH_ROOT_SLUG on the backend (resolved there by
+/// slug, kept here as the id directly since there's no endpoint that hands
+/// the app a category-by-slug lookup).
+const kHealthRootCategoryId = 20;
 
 /// The public business page a search result opens into: profile header +
 /// rating/open-now, then whichever of posts/menu/services this business
@@ -133,6 +140,25 @@ class _BusinessDetailBody extends StatelessWidget {
                   if (profile.about != null) ...[
                     const SizedBox(height: 10),
                     Text(profile.about!, style: Theme.of(context).textTheme.bodyMedium),
+                  ],
+                  // Health-root businesses only — the same "is this a
+                  // clinic" heuristic BusinessCapability::standsUnderHealth()
+                  // uses on the backend (category_id against the Health
+                  // root). No per-business "offers clinic appointments" flag
+                  // exists to check instead; an empty-slots screen for a
+                  // health business that doesn't publish any is a harmless
+                  // outcome, unlike showing this on an unrelated business.
+                  if (profile.categoryId == kHealthRootCategoryId) ...[
+                    const SizedBox(height: 10),
+                    OutlinedButton.icon(
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => ClinicSlotsScreen(clinicId: profile.id, clinicName: profile.name),
+                        ),
+                      ),
+                      icon: const Icon(Icons.local_hospital_outlined),
+                      label: Text(l10n.clinicBookAppointment),
+                    ),
                   ],
                 ],
               ),

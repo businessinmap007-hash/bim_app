@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../app/theme/app_colors.dart';
 import '../../features/agenda/presentation/screens/agenda_screen.dart';
 import '../../features/auth/application/auth_controller.dart';
+import '../../features/clinic/presentation/screens/my_clinic_appointments_screen.dart';
 import '../../features/fines/presentation/screens/fines_screen.dart';
 import '../../features/orders/presentation/screens/orders_and_bookings_screen.dart';
 import '../../features/posts/presentation/screens/my_posts_screen.dart';
@@ -106,6 +107,16 @@ class AppDrawer extends ConsumerWidget {
                     onTap: () {
                       Navigator.of(context).pop();
                       Navigator.of(context).push(MaterialPageRoute(builder: (_) => const TripSearchScreen()));
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.local_hospital_outlined),
+                    title: Text(l10n.myClinicAppointmentsTitle),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const MyClinicAppointmentsScreen()),
+                      );
                     },
                   ),
                   ListTile(

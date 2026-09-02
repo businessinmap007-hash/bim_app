@@ -420,5 +420,20 @@
   "tripModeFreight": "شحن بضائع",
   "tripModePassenger": "نقل ركاب",
   "tripModeLimousine": "ليموزين",
-  "tripModeDistribution": "توزيع"
+  "tripModeDistribution": "توزيع",
+  "clinicBookAppointment": "حجز موعد",
+  "clinicNoOpenSlots": "لا توجد فترات متاحة حاليًا.",
+  "clinicBookSlot": "حجز الموعد",
+  "clinicReasonHint": "سبب الزيارة (اختياري)",
+  "clinicAppointmentBooked": "تم حجز الموعد.",
+  "myClinicAppointmentsTitle": "مواعيد العيادة",
+  "myClinicAppointmentsEmpty": "لا توجد مواعيد بعد.",
+  "clinicAppointmentCancel": "إلغاء الموعد",
+  "clinicAppointmentCancelConfirm": "هل تريد إلغاء هذا الموعد؟",
+  "clinicAppointmentCancelled": "تم إلغاء الموعد.",
+  "clinicStatusRequested": "بانتظار التأكيد",
+  "clinicStatusConfirmed": "مؤكد",
+  "clinicStatusCompleted": "مكتمل",
+  "clinicStatusCancelled": "ملغي",
+  "clinicStatusNoShow": "لم يحضر"
 }
