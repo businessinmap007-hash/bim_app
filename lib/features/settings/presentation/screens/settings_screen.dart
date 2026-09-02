@@ -306,7 +306,7 @@ class _OptionRow extends StatelessWidget {
             Expanded(child: Text(label, style: Theme.of(context).textTheme.bodyLarge)),
             Icon(
               selected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
-              color: selected ? AppColors.primaryNavy : Theme.of(context).dividerColor,
+              color: selected ? Theme.of(context).colorScheme.primary : Theme.of(context).dividerColor,
             ),
           ],
         ),
