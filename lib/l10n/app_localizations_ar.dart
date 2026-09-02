@@ -1051,4 +1051,49 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get staffPhoneRequired => 'أدخل رقم هاتف الموظف.';
+
+  @override
+  String get finesTitle => 'الغرامات';
+
+  @override
+  String get finesEmpty => 'لا توجد غرامات.';
+
+  @override
+  String get finesFrozenAmount => 'المبلغ المجمّد';
+
+  @override
+  String get finesCollectedAmount => 'المبلغ المحصَّل';
+
+  @override
+  String get finesAppealStatementHint => 'اكتب سبب اعتراضك';
+
+  @override
+  String get finesSubmitAppeal => 'تقديم الاعتراض';
+
+  @override
+  String get finesAppealSubmitted => 'تم تقديم اعتراضك، سيُراجَع قريبًا.';
+
+  @override
+  String get finesAppealPending => 'اعتراضك قيد المراجعة.';
+
+  @override
+  String get finesAppealStatementRequired => 'اكتب سبب اعتراضك أولًا.';
+
+  @override
+  String get finesStatusFrozen => 'مجمّدة (نافذة اعتراض)';
+
+  @override
+  String get finesStatusAppealed => 'قيد الاعتراض';
+
+  @override
+  String get finesStatusUpheld => 'مؤيَّدة (مستحقة الخصم)';
+
+  @override
+  String get finesStatusOverturned => 'ملغاة باعتراض';
+
+  @override
+  String get finesStatusCollected => 'محصَّلة';
+
+  @override
+  String get finesStatusCancelled => 'ملغاة';
 }

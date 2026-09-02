@@ -345,5 +345,20 @@
   "staffInactiveBadge": "غير نشط",
   "staffRemove": "إزالة",
   "staffRemoveConfirm": "هل تريد إزالة هذا الموظف؟",
-  "staffPhoneRequired": "أدخل رقم هاتف الموظف."
+  "staffPhoneRequired": "أدخل رقم هاتف الموظف.",
+  "finesTitle": "الغرامات",
+  "finesEmpty": "لا توجد غرامات.",
+  "finesFrozenAmount": "المبلغ المجمّد",
+  "finesCollectedAmount": "المبلغ المحصَّل",
+  "finesAppealStatementHint": "اكتب سبب اعتراضك",
+  "finesSubmitAppeal": "تقديم الاعتراض",
+  "finesAppealSubmitted": "تم تقديم اعتراضك، سيُراجَع قريبًا.",
+  "finesAppealPending": "اعتراضك قيد المراجعة.",
+  "finesAppealStatementRequired": "اكتب سبب اعتراضك أولًا.",
+  "finesStatusFrozen": "مجمّدة (نافذة اعتراض)",
+  "finesStatusAppealed": "قيد الاعتراض",
+  "finesStatusUpheld": "مؤيَّدة (مستحقة الخصم)",
+  "finesStatusOverturned": "ملغاة باعتراض",
+  "finesStatusCollected": "محصَّلة",
+  "finesStatusCancelled": "ملغاة"
 }

@@ -345,5 +345,20 @@
   "staffInactiveBadge": "Inactive",
   "staffRemove": "Remove",
   "staffRemoveConfirm": "Remove this staff member?",
-  "staffPhoneRequired": "Enter the staff member's phone number."
+  "staffPhoneRequired": "Enter the staff member's phone number.",
+  "finesTitle": "Fines",
+  "finesEmpty": "No fines.",
+  "finesFrozenAmount": "Frozen amount",
+  "finesCollectedAmount": "Collected amount",
+  "finesAppealStatementHint": "Explain why you're contesting this",
+  "finesSubmitAppeal": "Submit appeal",
+  "finesAppealSubmitted": "Your appeal was submitted and will be reviewed.",
+  "finesAppealPending": "Your appeal is under review.",
+  "finesAppealStatementRequired": "Explain why you're contesting this first.",
+  "finesStatusFrozen": "Frozen (appeal window open)",
+  "finesStatusAppealed": "Under appeal",
+  "finesStatusUpheld": "Upheld (due for collection)",
+  "finesStatusOverturned": "Overturned",
+  "finesStatusCollected": "Collected",
+  "finesStatusCancelled": "Cancelled"
 }

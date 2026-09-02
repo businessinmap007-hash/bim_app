@@ -1044,4 +1044,51 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get staffPhoneRequired => 'Enter the staff member\'s phone number.';
+
+  @override
+  String get finesTitle => 'Fines';
+
+  @override
+  String get finesEmpty => 'No fines.';
+
+  @override
+  String get finesFrozenAmount => 'Frozen amount';
+
+  @override
+  String get finesCollectedAmount => 'Collected amount';
+
+  @override
+  String get finesAppealStatementHint => 'Explain why you\'re contesting this';
+
+  @override
+  String get finesSubmitAppeal => 'Submit appeal';
+
+  @override
+  String get finesAppealSubmitted =>
+      'Your appeal was submitted and will be reviewed.';
+
+  @override
+  String get finesAppealPending => 'Your appeal is under review.';
+
+  @override
+  String get finesAppealStatementRequired =>
+      'Explain why you\'re contesting this first.';
+
+  @override
+  String get finesStatusFrozen => 'Frozen (appeal window open)';
+
+  @override
+  String get finesStatusAppealed => 'Under appeal';
+
+  @override
+  String get finesStatusUpheld => 'Upheld (due for collection)';
+
+  @override
+  String get finesStatusOverturned => 'Overturned';
+
+  @override
+  String get finesStatusCollected => 'Collected';
+
+  @override
+  String get finesStatusCancelled => 'Cancelled';
 }

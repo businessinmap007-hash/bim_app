@@ -2065,6 +2065,96 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'أدخل رقم هاتف الموظف.'**
   String get staffPhoneRequired;
+
+  /// No description provided for @finesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الغرامات'**
+  String get finesTitle;
+
+  /// No description provided for @finesEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد غرامات.'**
+  String get finesEmpty;
+
+  /// No description provided for @finesFrozenAmount.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ المجمّد'**
+  String get finesFrozenAmount;
+
+  /// No description provided for @finesCollectedAmount.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ المحصَّل'**
+  String get finesCollectedAmount;
+
+  /// No description provided for @finesAppealStatementHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب سبب اعتراضك'**
+  String get finesAppealStatementHint;
+
+  /// No description provided for @finesSubmitAppeal.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقديم الاعتراض'**
+  String get finesSubmitAppeal;
+
+  /// No description provided for @finesAppealSubmitted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تقديم اعتراضك، سيُراجَع قريبًا.'**
+  String get finesAppealSubmitted;
+
+  /// No description provided for @finesAppealPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتراضك قيد المراجعة.'**
+  String get finesAppealPending;
+
+  /// No description provided for @finesAppealStatementRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب سبب اعتراضك أولًا.'**
+  String get finesAppealStatementRequired;
+
+  /// No description provided for @finesStatusFrozen.
+  ///
+  /// In ar, this message translates to:
+  /// **'مجمّدة (نافذة اعتراض)'**
+  String get finesStatusFrozen;
+
+  /// No description provided for @finesStatusAppealed.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيد الاعتراض'**
+  String get finesStatusAppealed;
+
+  /// No description provided for @finesStatusUpheld.
+  ///
+  /// In ar, this message translates to:
+  /// **'مؤيَّدة (مستحقة الخصم)'**
+  String get finesStatusUpheld;
+
+  /// No description provided for @finesStatusOverturned.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغاة باعتراض'**
+  String get finesStatusOverturned;
+
+  /// No description provided for @finesStatusCollected.
+  ///
+  /// In ar, this message translates to:
+  /// **'محصَّلة'**
+  String get finesStatusCollected;
+
+  /// No description provided for @finesStatusCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغاة'**
+  String get finesStatusCancelled;
 }
 
 class _AppLocalizationsDelegate
