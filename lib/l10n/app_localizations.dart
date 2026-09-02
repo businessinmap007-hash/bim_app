@@ -4669,6 +4669,90 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'أدخل سعرًا صحيحًا.'**
   String get menuPriceRequired;
+
+  /// No description provided for @retailListingsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'منتجاتي'**
+  String get retailListingsTitle;
+
+  /// No description provided for @retailListingsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد منتجات مضافة بعد.'**
+  String get retailListingsEmpty;
+
+  /// No description provided for @retailListingsSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث في منتجاتي...'**
+  String get retailListingsSearchHint;
+
+  /// No description provided for @retailListingAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة منتج'**
+  String get retailListingAdd;
+
+  /// No description provided for @retailListingPickTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر منتجًا'**
+  String get retailListingPickTitle;
+
+  /// No description provided for @retailListingLookupHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث في الكتالوج...'**
+  String get retailListingLookupHint;
+
+  /// No description provided for @retailListingLookupEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد منتجات مطابقة.'**
+  String get retailListingLookupEmpty;
+
+  /// No description provided for @retailListingEditTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل الإدراج'**
+  String get retailListingEditTitle;
+
+  /// No description provided for @retailListingPriceHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر'**
+  String get retailListingPriceHint;
+
+  /// No description provided for @retailListingStockHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'المخزون (اختياري)'**
+  String get retailListingStockHint;
+
+  /// No description provided for @retailListingSkuHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'رمز المنتج SKU (اختياري)'**
+  String get retailListingSkuHint;
+
+  /// No description provided for @retailListingActiveLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشط'**
+  String get retailListingActiveLabel;
+
+  /// No description provided for @retailListingDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزالة هذا المنتج من منتجاتك؟'**
+  String get retailListingDeleteConfirm;
+
+  /// No description provided for @retailPriceRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل سعرًا صحيحًا.'**
+  String get retailPriceRequired;
 }
 
 class _AppLocalizationsDelegate

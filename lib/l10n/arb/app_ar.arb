@@ -791,5 +791,19 @@
   "menuItemExtraMaxQtyHint": "الحد الأقصى للكمية",
   "menuItemDeleteRowConfirm": "حذف هذا؟",
   "menuNameRequired": "أدخل اسمًا.",
-  "menuPriceRequired": "أدخل سعرًا صحيحًا."
+  "menuPriceRequired": "أدخل سعرًا صحيحًا.",
+  "retailListingsTitle": "منتجاتي",
+  "retailListingsEmpty": "لا توجد منتجات مضافة بعد.",
+  "retailListingsSearchHint": "ابحث في منتجاتي...",
+  "retailListingAdd": "إضافة منتج",
+  "retailListingPickTitle": "اختر منتجًا",
+  "retailListingLookupHint": "ابحث في الكتالوج...",
+  "retailListingLookupEmpty": "لا توجد منتجات مطابقة.",
+  "retailListingEditTitle": "تعديل الإدراج",
+  "retailListingPriceHint": "السعر",
+  "retailListingStockHint": "المخزون (اختياري)",
+  "retailListingSkuHint": "رمز المنتج SKU (اختياري)",
+  "retailListingActiveLabel": "نشط",
+  "retailListingDeleteConfirm": "إزالة هذا المنتج من منتجاتك؟",
+  "retailPriceRequired": "أدخل سعرًا صحيحًا."
 }

@@ -791,5 +791,19 @@
   "menuItemExtraMaxQtyHint": "Max quantity",
   "menuItemDeleteRowConfirm": "Delete this?",
   "menuNameRequired": "Enter a name.",
-  "menuPriceRequired": "Enter a valid price."
+  "menuPriceRequired": "Enter a valid price.",
+  "retailListingsTitle": "My Products",
+  "retailListingsEmpty": "No products listed yet.",
+  "retailListingsSearchHint": "Search my products...",
+  "retailListingAdd": "Add product",
+  "retailListingPickTitle": "Choose a product",
+  "retailListingLookupHint": "Search the catalog...",
+  "retailListingLookupEmpty": "No matching products.",
+  "retailListingEditTitle": "Edit listing",
+  "retailListingPriceHint": "Price",
+  "retailListingStockHint": "Stock (optional)",
+  "retailListingSkuHint": "SKU (optional)",
+  "retailListingActiveLabel": "Active",
+  "retailListingDeleteConfirm": "Remove this product from your listings?",
+  "retailPriceRequired": "Enter a valid price."
 }

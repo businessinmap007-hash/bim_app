@@ -11,6 +11,7 @@ import '../../../media/presentation/widgets/watermark_repeat_selector.dart';
 import '../../../merchant_account/presentation/screens/merchant_account_screen.dart';
 import '../../../projects/presentation/screens/projects_screen.dart';
 import '../../../ratings/presentation/screens/my_rating_screen.dart';
+import '../../../retail_listings/presentation/screens/retail_listings_screen.dart';
 import '../../../staff/presentation/screens/staff_screen.dart';
 import '../../application/locale_controller.dart';
 import '../../application/theme_mode_controller.dart';
@@ -110,6 +111,15 @@ class SettingsScreen extends ConsumerWidget {
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => const MenuItemsScreen()),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.inventory_2_outlined),
+                  title: Text(l10n.retailListingsTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const RetailListingsScreen()),
                   ),
                 ),
                 const Divider(height: 1),

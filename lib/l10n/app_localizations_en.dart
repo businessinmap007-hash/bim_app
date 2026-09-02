@@ -2384,4 +2384,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get menuPriceRequired => 'Enter a valid price.';
+
+  @override
+  String get retailListingsTitle => 'My Products';
+
+  @override
+  String get retailListingsEmpty => 'No products listed yet.';
+
+  @override
+  String get retailListingsSearchHint => 'Search my products...';
+
+  @override
+  String get retailListingAdd => 'Add product';
+
+  @override
+  String get retailListingPickTitle => 'Choose a product';
+
+  @override
+  String get retailListingLookupHint => 'Search the catalog...';
+
+  @override
+  String get retailListingLookupEmpty => 'No matching products.';
+
+  @override
+  String get retailListingEditTitle => 'Edit listing';
+
+  @override
+  String get retailListingPriceHint => 'Price';
+
+  @override
+  String get retailListingStockHint => 'Stock (optional)';
+
+  @override
+  String get retailListingSkuHint => 'SKU (optional)';
+
+  @override
+  String get retailListingActiveLabel => 'Active';
+
+  @override
+  String get retailListingDeleteConfirm =>
+      'Remove this product from your listings?';
+
+  @override
+  String get retailPriceRequired => 'Enter a valid price.';
 }

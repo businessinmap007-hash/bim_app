@@ -2386,4 +2386,46 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get menuPriceRequired => 'أدخل سعرًا صحيحًا.';
+
+  @override
+  String get retailListingsTitle => 'منتجاتي';
+
+  @override
+  String get retailListingsEmpty => 'لا توجد منتجات مضافة بعد.';
+
+  @override
+  String get retailListingsSearchHint => 'ابحث في منتجاتي...';
+
+  @override
+  String get retailListingAdd => 'إضافة منتج';
+
+  @override
+  String get retailListingPickTitle => 'اختر منتجًا';
+
+  @override
+  String get retailListingLookupHint => 'ابحث في الكتالوج...';
+
+  @override
+  String get retailListingLookupEmpty => 'لا توجد منتجات مطابقة.';
+
+  @override
+  String get retailListingEditTitle => 'تعديل الإدراج';
+
+  @override
+  String get retailListingPriceHint => 'السعر';
+
+  @override
+  String get retailListingStockHint => 'المخزون (اختياري)';
+
+  @override
+  String get retailListingSkuHint => 'رمز المنتج SKU (اختياري)';
+
+  @override
+  String get retailListingActiveLabel => 'نشط';
+
+  @override
+  String get retailListingDeleteConfirm => 'إزالة هذا المنتج من منتجاتك؟';
+
+  @override
+  String get retailPriceRequired => 'أدخل سعرًا صحيحًا.';
 }
