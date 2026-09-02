@@ -2851,6 +2851,258 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الدهون الحشوية'**
   String get bodyReportVisceralFat;
+
+  /// No description provided for @prescriptionsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الروشتات'**
+  String get prescriptionsTitle;
+
+  /// No description provided for @prescriptionsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد روشتات بعد.'**
+  String get prescriptionsEmpty;
+
+  /// No description provided for @prescriptionStatusIssued.
+  ///
+  /// In ar, this message translates to:
+  /// **'صدرت'**
+  String get prescriptionStatusIssued;
+
+  /// No description provided for @prescriptionStatusSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُرسلت للصيدلية'**
+  String get prescriptionStatusSent;
+
+  /// No description provided for @prescriptionStatusPreparing.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيد التجهيز'**
+  String get prescriptionStatusPreparing;
+
+  /// No description provided for @prescriptionStatusReady.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاهزة'**
+  String get prescriptionStatusReady;
+
+  /// No description provided for @prescriptionStatusDispensed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الصرف'**
+  String get prescriptionStatusDispensed;
+
+  /// No description provided for @prescriptionStatusCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغاة'**
+  String get prescriptionStatusCancelled;
+
+  /// No description provided for @prescriptionDiagnosisLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'التشخيص'**
+  String get prescriptionDiagnosisLabel;
+
+  /// No description provided for @prescriptionConditionLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'حالة المريض'**
+  String get prescriptionConditionLabel;
+
+  /// No description provided for @prescriptionNotesLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات'**
+  String get prescriptionNotesLabel;
+
+  /// No description provided for @prescriptionPharmacyLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصيدلية'**
+  String get prescriptionPharmacyLabel;
+
+  /// No description provided for @prescriptionMedicineTotalLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجمالي'**
+  String get prescriptionMedicineTotalLabel;
+
+  /// No description provided for @prescriptionSharedWithTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت مشاركتها مع'**
+  String get prescriptionSharedWithTitle;
+
+  /// No description provided for @prescriptionItemsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأدوية'**
+  String get prescriptionItemsTitle;
+
+  /// No description provided for @prescriptionDosageLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجرعة'**
+  String get prescriptionDosageLabel;
+
+  /// No description provided for @prescriptionQuantityLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكمية'**
+  String get prescriptionQuantityLabel;
+
+  /// No description provided for @prescriptionFoodBefore.
+  ///
+  /// In ar, this message translates to:
+  /// **'قبل الأكل'**
+  String get prescriptionFoodBefore;
+
+  /// No description provided for @prescriptionFoodWith.
+  ///
+  /// In ar, this message translates to:
+  /// **'مع الأكل'**
+  String get prescriptionFoodWith;
+
+  /// No description provided for @prescriptionFoodAfter.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعد الأكل'**
+  String get prescriptionFoodAfter;
+
+  /// No description provided for @prescriptionSlotMorning.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصباح'**
+  String get prescriptionSlotMorning;
+
+  /// No description provided for @prescriptionSlotEvening.
+  ///
+  /// In ar, this message translates to:
+  /// **'المساء'**
+  String get prescriptionSlotEvening;
+
+  /// No description provided for @prescriptionDurationDays.
+  ///
+  /// In ar, this message translates to:
+  /// **'يوم/أيام'**
+  String get prescriptionDurationDays;
+
+  /// No description provided for @prescriptionDurationWeeks.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسبوع/أسابيع'**
+  String get prescriptionDurationWeeks;
+
+  /// No description provided for @prescriptionDurationMonths.
+  ///
+  /// In ar, this message translates to:
+  /// **'شهر/أشهر'**
+  String get prescriptionDurationMonths;
+
+  /// No description provided for @prescriptionImagesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصور'**
+  String get prescriptionImagesTitle;
+
+  /// No description provided for @prescriptionSendToPharmacy.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال إلى صيدلية'**
+  String get prescriptionSendToPharmacy;
+
+  /// No description provided for @prescriptionSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال الوصفة إلى الصيدلية.'**
+  String get prescriptionSent;
+
+  /// No description provided for @prescriptionFulfillmentDelivery.
+  ///
+  /// In ar, this message translates to:
+  /// **'توصيل'**
+  String get prescriptionFulfillmentDelivery;
+
+  /// No description provided for @prescriptionFulfillmentPickup.
+  ///
+  /// In ar, this message translates to:
+  /// **'استلام'**
+  String get prescriptionFulfillmentPickup;
+
+  /// No description provided for @prescriptionDeliveryAddressHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'عنوان التوصيل'**
+  String get prescriptionDeliveryAddressHint;
+
+  /// No description provided for @prescriptionCancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء الوصفة'**
+  String get prescriptionCancel;
+
+  /// No description provided for @prescriptionCancelConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء هذه الوصفة؟'**
+  String get prescriptionCancelConfirm;
+
+  /// No description provided for @prescriptionCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إلغاء الوصفة.'**
+  String get prescriptionCancelled;
+
+  /// No description provided for @prescriptionScheduleReminders.
+  ///
+  /// In ar, this message translates to:
+  /// **'جدولة التذكيرات'**
+  String get prescriptionScheduleReminders;
+
+  /// No description provided for @prescriptionRemindersLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'تذكيرًا تمت جدولتها'**
+  String get prescriptionRemindersLabel;
+
+  /// No description provided for @prescriptionShareWithDoctor.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشاركة مع طبيب آخر'**
+  String get prescriptionShareWithDoctor;
+
+  /// No description provided for @prescriptionShared.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت مشاركة الوصفة.'**
+  String get prescriptionShared;
+
+  /// No description provided for @prescriptionSendPickPharmacyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر صيدلية'**
+  String get prescriptionSendPickPharmacyTitle;
+
+  /// No description provided for @prescriptionSharePickDoctorTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر طبيبًا'**
+  String get prescriptionSharePickDoctorTitle;
+
+  /// No description provided for @prescriptionSupersededLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'استُبدلت بنسخة معدّلة'**
+  String get prescriptionSupersededLabel;
+
+  /// No description provided for @prescriptionRemovePhotoConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف هذه الصورة؟'**
+  String get prescriptionRemovePhotoConfirm;
 }
 
 class _AppLocalizationsDelegate

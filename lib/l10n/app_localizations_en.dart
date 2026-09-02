@@ -1442,4 +1442,130 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bodyReportVisceralFat => 'Visceral fat';
+
+  @override
+  String get prescriptionsTitle => 'Prescriptions';
+
+  @override
+  String get prescriptionsEmpty => 'No prescriptions yet.';
+
+  @override
+  String get prescriptionStatusIssued => 'Issued';
+
+  @override
+  String get prescriptionStatusSent => 'Sent to pharmacy';
+
+  @override
+  String get prescriptionStatusPreparing => 'Preparing';
+
+  @override
+  String get prescriptionStatusReady => 'Ready';
+
+  @override
+  String get prescriptionStatusDispensed => 'Dispensed';
+
+  @override
+  String get prescriptionStatusCancelled => 'Cancelled';
+
+  @override
+  String get prescriptionDiagnosisLabel => 'Diagnosis';
+
+  @override
+  String get prescriptionConditionLabel => 'Patient condition';
+
+  @override
+  String get prescriptionNotesLabel => 'Notes';
+
+  @override
+  String get prescriptionPharmacyLabel => 'Pharmacy';
+
+  @override
+  String get prescriptionMedicineTotalLabel => 'Total';
+
+  @override
+  String get prescriptionSharedWithTitle => 'Shared with';
+
+  @override
+  String get prescriptionItemsTitle => 'Medicines';
+
+  @override
+  String get prescriptionDosageLabel => 'Dosage';
+
+  @override
+  String get prescriptionQuantityLabel => 'Quantity';
+
+  @override
+  String get prescriptionFoodBefore => 'Before food';
+
+  @override
+  String get prescriptionFoodWith => 'With food';
+
+  @override
+  String get prescriptionFoodAfter => 'After food';
+
+  @override
+  String get prescriptionSlotMorning => 'Morning';
+
+  @override
+  String get prescriptionSlotEvening => 'Evening';
+
+  @override
+  String get prescriptionDurationDays => 'day(s)';
+
+  @override
+  String get prescriptionDurationWeeks => 'week(s)';
+
+  @override
+  String get prescriptionDurationMonths => 'month(s)';
+
+  @override
+  String get prescriptionImagesTitle => 'Photos';
+
+  @override
+  String get prescriptionSendToPharmacy => 'Send to pharmacy';
+
+  @override
+  String get prescriptionSent => 'Prescription sent to the pharmacy.';
+
+  @override
+  String get prescriptionFulfillmentDelivery => 'Delivery';
+
+  @override
+  String get prescriptionFulfillmentPickup => 'Pickup';
+
+  @override
+  String get prescriptionDeliveryAddressHint => 'Delivery address';
+
+  @override
+  String get prescriptionCancel => 'Cancel prescription';
+
+  @override
+  String get prescriptionCancelConfirm => 'Cancel this prescription?';
+
+  @override
+  String get prescriptionCancelled => 'Prescription cancelled.';
+
+  @override
+  String get prescriptionScheduleReminders => 'Schedule reminders';
+
+  @override
+  String get prescriptionRemindersLabel => 'reminders scheduled';
+
+  @override
+  String get prescriptionShareWithDoctor => 'Share with another doctor';
+
+  @override
+  String get prescriptionShared => 'Prescription shared.';
+
+  @override
+  String get prescriptionSendPickPharmacyTitle => 'Choose a pharmacy';
+
+  @override
+  String get prescriptionSharePickDoctorTitle => 'Choose a doctor';
+
+  @override
+  String get prescriptionSupersededLabel => 'Superseded by a revision';
+
+  @override
+  String get prescriptionRemovePhotoConfirm => 'Remove this photo?';
 }

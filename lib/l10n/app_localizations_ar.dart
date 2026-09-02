@@ -1445,4 +1445,130 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get bodyReportVisceralFat => 'الدهون الحشوية';
+
+  @override
+  String get prescriptionsTitle => 'الروشتات';
+
+  @override
+  String get prescriptionsEmpty => 'لا توجد روشتات بعد.';
+
+  @override
+  String get prescriptionStatusIssued => 'صدرت';
+
+  @override
+  String get prescriptionStatusSent => 'أُرسلت للصيدلية';
+
+  @override
+  String get prescriptionStatusPreparing => 'قيد التجهيز';
+
+  @override
+  String get prescriptionStatusReady => 'جاهزة';
+
+  @override
+  String get prescriptionStatusDispensed => 'تم الصرف';
+
+  @override
+  String get prescriptionStatusCancelled => 'ملغاة';
+
+  @override
+  String get prescriptionDiagnosisLabel => 'التشخيص';
+
+  @override
+  String get prescriptionConditionLabel => 'حالة المريض';
+
+  @override
+  String get prescriptionNotesLabel => 'ملاحظات';
+
+  @override
+  String get prescriptionPharmacyLabel => 'الصيدلية';
+
+  @override
+  String get prescriptionMedicineTotalLabel => 'الإجمالي';
+
+  @override
+  String get prescriptionSharedWithTitle => 'تمت مشاركتها مع';
+
+  @override
+  String get prescriptionItemsTitle => 'الأدوية';
+
+  @override
+  String get prescriptionDosageLabel => 'الجرعة';
+
+  @override
+  String get prescriptionQuantityLabel => 'الكمية';
+
+  @override
+  String get prescriptionFoodBefore => 'قبل الأكل';
+
+  @override
+  String get prescriptionFoodWith => 'مع الأكل';
+
+  @override
+  String get prescriptionFoodAfter => 'بعد الأكل';
+
+  @override
+  String get prescriptionSlotMorning => 'الصباح';
+
+  @override
+  String get prescriptionSlotEvening => 'المساء';
+
+  @override
+  String get prescriptionDurationDays => 'يوم/أيام';
+
+  @override
+  String get prescriptionDurationWeeks => 'أسبوع/أسابيع';
+
+  @override
+  String get prescriptionDurationMonths => 'شهر/أشهر';
+
+  @override
+  String get prescriptionImagesTitle => 'الصور';
+
+  @override
+  String get prescriptionSendToPharmacy => 'إرسال إلى صيدلية';
+
+  @override
+  String get prescriptionSent => 'تم إرسال الوصفة إلى الصيدلية.';
+
+  @override
+  String get prescriptionFulfillmentDelivery => 'توصيل';
+
+  @override
+  String get prescriptionFulfillmentPickup => 'استلام';
+
+  @override
+  String get prescriptionDeliveryAddressHint => 'عنوان التوصيل';
+
+  @override
+  String get prescriptionCancel => 'إلغاء الوصفة';
+
+  @override
+  String get prescriptionCancelConfirm => 'إلغاء هذه الوصفة؟';
+
+  @override
+  String get prescriptionCancelled => 'تم إلغاء الوصفة.';
+
+  @override
+  String get prescriptionScheduleReminders => 'جدولة التذكيرات';
+
+  @override
+  String get prescriptionRemindersLabel => 'تذكيرًا تمت جدولتها';
+
+  @override
+  String get prescriptionShareWithDoctor => 'مشاركة مع طبيب آخر';
+
+  @override
+  String get prescriptionShared => 'تمت مشاركة الوصفة.';
+
+  @override
+  String get prescriptionSendPickPharmacyTitle => 'اختر صيدلية';
+
+  @override
+  String get prescriptionSharePickDoctorTitle => 'اختر طبيبًا';
+
+  @override
+  String get prescriptionSupersededLabel => 'استُبدلت بنسخة معدّلة';
+
+  @override
+  String get prescriptionRemovePhotoConfirm => 'حذف هذه الصورة؟';
 }
