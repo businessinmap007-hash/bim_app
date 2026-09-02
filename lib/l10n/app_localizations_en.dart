@@ -601,6 +601,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get postsTabJobs => 'My Jobs';
 
   @override
+  String get myFollowsTitle => 'Following';
+
+  @override
+  String get myFollowsEmpty => 'You\'re not following any accounts yet.';
+
+  @override
   String get postsFeedEmpty =>
       'No posts yet — follow a business to see its posts here.';
 

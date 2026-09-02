@@ -602,6 +602,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get postsTabJobs => 'وظائفي';
 
   @override
+  String get myFollowsTitle => 'المتابَعون';
+
+  @override
+  String get myFollowsEmpty => 'أنت لا تتابع أي حساب بعد.';
+
+  @override
   String get postsFeedEmpty =>
       'لا توجد منشورات بعد — تابع نشاطًا تجاريًا لترى منشوراته هنا.';
 

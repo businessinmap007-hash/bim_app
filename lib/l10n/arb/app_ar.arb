@@ -193,6 +193,8 @@
   "postsTabFollowing": "المتابَعون",
   "postsTabMine": "منشوراتي",
   "postsTabJobs": "وظائفي",
+  "myFollowsTitle": "المتابَعون",
+  "myFollowsEmpty": "أنت لا تتابع أي حساب بعد.",
   "postsFeedEmpty": "لا توجد منشورات بعد — تابع نشاطًا تجاريًا لترى منشوراته هنا.",
   "postsMineEmpty": "لم تنشر أي شيء بعد.",
   "postsJobsEmpty": "لم تنشر أي وظيفة بعد.",

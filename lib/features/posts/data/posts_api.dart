@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 
 import '../../../core/network/api_client.dart';
 import '../../business/data/models/business_post.dart';
+import 'models/followed_account.dart';
 import 'models/job_post.dart';
 
 class PostsPage {
@@ -83,6 +84,18 @@ class PostsApi {
           'images[$i]': MultipartFile.fromBytes(images[i], filename: 'photo_$i.png'),
       }),
     );
+  }
+
+  /// GET /follows — accounts feeding [feed]'s audience. See
+  /// BusinessPageApi.follow/unfollow, which write the same relationship
+  /// from a business's own page; this is where it's reviewed afterward.
+  Future<List<FollowedAccount>> follows() async {
+    final data = await _client.get('/follows') as List<dynamic>;
+    return data.map((e) => FollowedAccount.fromJson(e as Map<String, dynamic>)).toList();
+  }
+
+  Future<void> unfollow(int businessId) async {
+    await _client.delete('/follows/$businessId');
   }
 
   Future<void> createJob({

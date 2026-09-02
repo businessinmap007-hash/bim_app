@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/core_providers.dart';
 import '../../business/data/models/business_post.dart';
+import '../data/models/followed_account.dart';
 import '../data/models/job_post.dart';
 import '../data/posts_api.dart';
 
@@ -227,4 +228,56 @@ class MyJobsController extends StateNotifier<MyJobsState> {
 
 final myJobsControllerProvider = StateNotifierProvider<MyJobsController, MyJobsState>((ref) {
   return MyJobsController(ref.watch(postsApiProvider));
+});
+
+class MyFollowsState {
+  final List<FollowedAccount> items;
+  final bool isLoading;
+  final String? error;
+
+  const MyFollowsState({this.items = const [], this.isLoading = false, this.error});
+
+  MyFollowsState copyWith({List<FollowedAccount>? items, bool? isLoading, String? error, bool clearError = false}) {
+    return MyFollowsState(
+      items: items ?? this.items,
+      isLoading: isLoading ?? this.isLoading,
+      error: clearError ? null : (error ?? this.error),
+    );
+  }
+}
+
+/// Accounts feeding the "Following" tab's feed (GET/DELETE /follows) —
+/// reviewed and pruned separately from following itself, which happens on
+/// each business's own page.
+class MyFollowsController extends StateNotifier<MyFollowsState> {
+  final PostsApi _api;
+
+  MyFollowsController(this._api) : super(const MyFollowsState()) {
+    load();
+  }
+
+  Future<void> load() async {
+    state = state.copyWith(isLoading: true, clearError: true);
+    try {
+      final items = await _api.follows();
+      state = state.copyWith(items: items, isLoading: false);
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+    }
+  }
+
+  Future<void> unfollow(int businessId) async {
+    final previous = state.items;
+    state = state.copyWith(items: previous.where((f) => f.id != businessId).toList());
+    try {
+      await _api.unfollow(businessId);
+    } catch (e) {
+      state = state.copyWith(items: previous, error: e.toString());
+      rethrow;
+    }
+  }
+}
+
+final myFollowsControllerProvider = StateNotifierProvider<MyFollowsController, MyFollowsState>((ref) {
+  return MyFollowsController(ref.watch(postsApiProvider));
 });

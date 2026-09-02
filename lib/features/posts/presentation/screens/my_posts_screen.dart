@@ -11,6 +11,7 @@ import '../../application/posts_controller.dart';
 import '../../data/models/job_post.dart';
 import 'create_job_screen.dart';
 import 'create_post_screen.dart';
+import 'my_follows_screen.dart';
 
 /// "منشوراتي" — reached from the account Drawer, not the bottom nav (it's a
 /// personal utility screen, not a primary destination the way Home is).
@@ -92,6 +93,15 @@ class _MyPostsScreenState extends ConsumerState<MyPostsScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(l10n.postsMyPostsTitle),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.people_outline),
+              tooltip: l10n.myFollowsTitle,
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const MyFollowsScreen()),
+              ),
+            ),
+          ],
           bottom: TabBar(tabs: tabs),
         ),
         floatingActionButton: FloatingActionButton(

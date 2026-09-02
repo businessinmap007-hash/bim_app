@@ -193,6 +193,8 @@
   "postsTabFollowing": "Following",
   "postsTabMine": "My Posts",
   "postsTabJobs": "My Jobs",
+  "myFollowsTitle": "Following",
+  "myFollowsEmpty": "You're not following any accounts yet.",
   "postsFeedEmpty": "No posts yet — follow a business to see its posts here.",
   "postsMineEmpty": "You haven't posted anything yet.",
   "postsJobsEmpty": "You haven't posted any jobs yet.",

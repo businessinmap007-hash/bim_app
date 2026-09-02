@@ -1220,6 +1220,18 @@ abstract class AppLocalizations {
   /// **'وظائفي'**
   String get postsTabJobs;
 
+  /// No description provided for @myFollowsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتابَعون'**
+  String get myFollowsTitle;
+
+  /// No description provided for @myFollowsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنت لا تتابع أي حساب بعد.'**
+  String get myFollowsEmpty;
+
   /// No description provided for @postsFeedEmpty.
   ///
   /// In ar, this message translates to:
