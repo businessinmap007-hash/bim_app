@@ -9,6 +9,7 @@ import '../../../booking/presentation/screens/booking_screen.dart';
 import '../../../cart/application/cart_controller.dart';
 import '../../../cart/presentation/screens/cart_screen.dart';
 import '../../../cart/presentation/widgets/add_to_cart_sheet.dart';
+import '../../../ratings/presentation/screens/reviews_screen.dart';
 import '../../application/business_page_providers.dart';
 import '../../data/models/business_profile.dart';
 import '../../data/models/offering_item.dart';
@@ -99,7 +100,20 @@ class _BusinessDetailBody extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Expanded(child: BusinessRatingRow(rating: profile.rating, openNow: profile.openNow)),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => ReviewsScreen(
+                                userId: profile.id,
+                                name: profile.name,
+                                summary: profile.rating,
+                              ),
+                            ),
+                          ),
+                          child: BusinessRatingRow(rating: profile.rating, openNow: profile.openNow),
+                        ),
+                      ),
                       _FollowButton(businessId: profile.id, isFollowing: profile.isFollowing),
                     ],
                   ),

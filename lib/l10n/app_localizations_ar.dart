@@ -884,4 +884,25 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get bookingStatusCompleted => 'مكتمل';
+
+  @override
+  String get ratingsReviewsTitle => 'التقييمات';
+
+  @override
+  String get ratingsEmpty => 'لا توجد تقييمات بعد.';
+
+  @override
+  String get ratingsLeaveReview => 'أضف تقييمك';
+
+  @override
+  String get ratingsSubmit => 'إرسال التقييم';
+
+  @override
+  String get ratingsCommentHint => 'اكتب تعليقك (اختياري)';
+
+  @override
+  String get ratingsSubmitted => 'تم إرسال تقييمك بنجاح.';
+
+  @override
+  String get ratingsSelectStarsError => 'اختر عدد النجوم أولًا.';
 }

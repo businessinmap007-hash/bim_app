@@ -877,4 +877,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bookingStatusCompleted => 'Completed';
+
+  @override
+  String get ratingsReviewsTitle => 'Reviews';
+
+  @override
+  String get ratingsEmpty => 'No reviews yet.';
+
+  @override
+  String get ratingsLeaveReview => 'Leave a review';
+
+  @override
+  String get ratingsSubmit => 'Submit review';
+
+  @override
+  String get ratingsCommentHint => 'Write a comment (optional)';
+
+  @override
+  String get ratingsSubmitted => 'Your review was submitted.';
+
+  @override
+  String get ratingsSelectStarsError => 'Choose a star rating first.';
 }

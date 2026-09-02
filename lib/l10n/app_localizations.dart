@@ -1735,6 +1735,48 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'مكتمل'**
   String get bookingStatusCompleted;
+
+  /// No description provided for @ratingsReviewsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقييمات'**
+  String get ratingsReviewsTitle;
+
+  /// No description provided for @ratingsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد تقييمات بعد.'**
+  String get ratingsEmpty;
+
+  /// No description provided for @ratingsLeaveReview.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف تقييمك'**
+  String get ratingsLeaveReview;
+
+  /// No description provided for @ratingsSubmit.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال التقييم'**
+  String get ratingsSubmit;
+
+  /// No description provided for @ratingsCommentHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب تعليقك (اختياري)'**
+  String get ratingsCommentHint;
+
+  /// No description provided for @ratingsSubmitted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال تقييمك بنجاح.'**
+  String get ratingsSubmitted;
+
+  /// No description provided for @ratingsSelectStarsError.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر عدد النجوم أولًا.'**
+  String get ratingsSelectStarsError;
 }
 
 class _AppLocalizationsDelegate

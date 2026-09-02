@@ -290,5 +290,12 @@
   "bookingStatusRejected": "مرفوض",
   "bookingStatusCancelled": "ملغي",
   "bookingStatusInProgress": "جارٍ التنفيذ",
-  "bookingStatusCompleted": "مكتمل"
+  "bookingStatusCompleted": "مكتمل",
+  "ratingsReviewsTitle": "التقييمات",
+  "ratingsEmpty": "لا توجد تقييمات بعد.",
+  "ratingsLeaveReview": "أضف تقييمك",
+  "ratingsSubmit": "إرسال التقييم",
+  "ratingsCommentHint": "اكتب تعليقك (اختياري)",
+  "ratingsSubmitted": "تم إرسال تقييمك بنجاح.",
+  "ratingsSelectStarsError": "اختر عدد النجوم أولًا."
 }

@@ -7,6 +7,7 @@ import '../../../booking/application/booking_providers.dart';
 import '../../../booking/data/models/booking.dart';
 import '../../../cart/application/cart_controller.dart';
 import '../../../cart/presentation/screens/cart_screen.dart';
+import '../../../ratings/presentation/widgets/leave_review_sheet.dart';
 import '../../application/orders_providers.dart';
 import '../../data/models/placed_order.dart';
 
@@ -195,6 +196,19 @@ class _OrderDetailSheetState extends ConsumerState<_OrderDetailSheet> {
     }
   }
 
+  Future<void> _leaveReview(PlacedOrder order) async {
+    final l10n = AppLocalizations.of(context)!;
+    final submitted = await showLeaveReviewSheet(
+      context,
+      operationType: 'order',
+      operationId: order.id,
+    );
+    if (submitted && mounted) {
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.ratingsSubmitted)));
+    }
+  }
+
   Future<void> _reorder(PlacedOrder order) async {
     final l10n = AppLocalizations.of(context)!;
     setState(() => _busy = true);
@@ -288,6 +302,13 @@ class _OrderDetailSheetState extends ConsumerState<_OrderDetailSheet> {
               onPressed: _busy ? null : () => _cancel(order),
               child: Text(l10n.ordersCancel),
             ),
+          if (order.status == 'completed') ...[
+            const SizedBox(height: 8),
+            OutlinedButton(
+              onPressed: _busy ? null : () => _leaveReview(order),
+              child: Text(l10n.ratingsLeaveReview),
+            ),
+          ],
           const SizedBox(height: 8),
           FilledButton(
             onPressed: _busy ? null : () => _reorder(order),
@@ -446,6 +467,19 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
     }
   }
 
+  Future<void> _leaveReview() async {
+    final l10n = AppLocalizations.of(context)!;
+    final submitted = await showLeaveReviewSheet(
+      context,
+      operationType: 'booking',
+      operationId: widget.booking.id,
+    );
+    if (submitted && mounted) {
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.ratingsSubmitted)));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -491,6 +525,14 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
                   child: _busy
                       ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
                       : Text(l10n.bookingsCancel),
+                ),
+              ),
+            if (booking.status == 'completed')
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
+                  onPressed: _busy ? null : _leaveReview,
+                  child: Text(l10n.ratingsLeaveReview),
                 ),
               ),
           ],

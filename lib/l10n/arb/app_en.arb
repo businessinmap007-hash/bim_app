@@ -290,5 +290,12 @@
   "bookingStatusRejected": "Rejected",
   "bookingStatusCancelled": "Cancelled",
   "bookingStatusInProgress": "In progress",
-  "bookingStatusCompleted": "Completed"
+  "bookingStatusCompleted": "Completed",
+  "ratingsReviewsTitle": "Reviews",
+  "ratingsEmpty": "No reviews yet.",
+  "ratingsLeaveReview": "Leave a review",
+  "ratingsSubmit": "Submit review",
+  "ratingsCommentHint": "Write a comment (optional)",
+  "ratingsSubmitted": "Your review was submitted.",
+  "ratingsSelectStarsError": "Choose a star rating first."
 }
