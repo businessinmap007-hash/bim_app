@@ -7,6 +7,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../auth/application/auth_controller.dart';
 import '../../../booking_settings/presentation/screens/booking_settings_screen.dart';
 import '../../../media/presentation/widgets/watermark_repeat_selector.dart';
+import '../../../merchant_account/presentation/screens/merchant_account_screen.dart';
 import '../../../projects/presentation/screens/projects_screen.dart';
 import '../../../ratings/presentation/screens/my_rating_screen.dart';
 import '../../../staff/presentation/screens/staff_screen.dart';
@@ -124,6 +125,15 @@ class SettingsScreen extends ConsumerWidget {
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => const ProjectsScreen()),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.account_balance_outlined),
+                  title: Text(l10n.merchantAccountTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const MerchantAccountScreen()),
                   ),
                 ),
               ],

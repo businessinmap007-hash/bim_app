@@ -2218,4 +2218,37 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get myRatingEnabledMessage =>
       'Your rating is now open. Service fees will apply to your operations from now on.';
+
+  @override
+  String get merchantAccountTitle => 'Merchant account';
+
+  @override
+  String get merchantAccountHint =>
+      'A dedicated Fawry sub-account settles your payments directly to you instead of the platform\'s shared account.';
+
+  @override
+  String get merchantAccountStatusActive => 'Active';
+
+  @override
+  String get merchantAccountStatusPending => 'Application under review';
+
+  @override
+  String get merchantAccountStatusRejected => 'Application rejected';
+
+  @override
+  String get merchantAccountStatusNone => 'Not set up yet';
+
+  @override
+  String get merchantAccountRoutingDisabledNote =>
+      'Direct routing isn\'t live platform-wide yet — applications are still reviewed and queued.';
+
+  @override
+  String get merchantAccountNoteHint => 'Note for the review team (optional)';
+
+  @override
+  String get merchantAccountApplyButton => 'Apply for a merchant account';
+
+  @override
+  String get merchantAccountApplied =>
+      'Your application was submitted and will be reviewed.';
 }

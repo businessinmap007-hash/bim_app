@@ -737,5 +737,15 @@
   "myRatingEnableConfirmTitle": "Open your rating?",
   "myRatingEnableConfirmBody": "This makes your operations visible with a rating and reviews, and service fees will start applying to your own operations from now on. This cannot be undone from the app.",
   "myRatingEnableConfirm": "Open it",
-  "myRatingEnabledMessage": "Your rating is now open. Service fees will apply to your operations from now on."
+  "myRatingEnabledMessage": "Your rating is now open. Service fees will apply to your operations from now on.",
+  "merchantAccountTitle": "Merchant account",
+  "merchantAccountHint": "A dedicated Fawry sub-account settles your payments directly to you instead of the platform's shared account.",
+  "merchantAccountStatusActive": "Active",
+  "merchantAccountStatusPending": "Application under review",
+  "merchantAccountStatusRejected": "Application rejected",
+  "merchantAccountStatusNone": "Not set up yet",
+  "merchantAccountRoutingDisabledNote": "Direct routing isn't live platform-wide yet — applications are still reviewed and queued.",
+  "merchantAccountNoteHint": "Note for the review team (optional)",
+  "merchantAccountApplyButton": "Apply for a merchant account",
+  "merchantAccountApplied": "Your application was submitted and will be reviewed."
 }

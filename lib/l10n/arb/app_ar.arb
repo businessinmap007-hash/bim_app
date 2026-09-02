@@ -737,5 +737,15 @@
   "myRatingEnableConfirmTitle": "فتح تقييمك؟",
   "myRatingEnableConfirmBody": "هذا يجعل عملياتك ظاهرة بتقييم ومراجعات، وستبدأ رسوم الخدمة في التطبيق على عملياتك الخاصة من الآن. لا يمكن التراجع عن هذا من داخل التطبيق.",
   "myRatingEnableConfirm": "فتحه",
-  "myRatingEnabledMessage": "تم فتح تقييمك. ستُطبَّق رسوم الخدمة على عملياتك من الآن."
+  "myRatingEnabledMessage": "تم فتح تقييمك. ستُطبَّق رسوم الخدمة على عملياتك من الآن.",
+  "merchantAccountTitle": "حساب Merchant",
+  "merchantAccountHint": "حساب Fawry فرعي مخصص يحوّل مدفوعاتك إليك مباشرة بدلًا من الحساب المشترك للمنصة.",
+  "merchantAccountStatusActive": "نشط",
+  "merchantAccountStatusPending": "الطلب قيد المراجعة",
+  "merchantAccountStatusRejected": "تم رفض الطلب",
+  "merchantAccountStatusNone": "لم يُنشأ بعد",
+  "merchantAccountRoutingDisabledNote": "التحويل المباشر غير مفعّل على مستوى المنصة بعد — الطلبات تُراجَع وتُدرَج في الانتظار.",
+  "merchantAccountNoteHint": "ملاحظة لفريق المراجعة (اختياري)",
+  "merchantAccountApplyButton": "التقدّم بطلب حساب Merchant",
+  "merchantAccountApplied": "تم إرسال طلبك وسيتم مراجعته."
 }

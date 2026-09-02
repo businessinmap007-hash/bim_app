@@ -4345,6 +4345,66 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تم فتح تقييمك. ستُطبَّق رسوم الخدمة على عملياتك من الآن.'**
   String get myRatingEnabledMessage;
+
+  /// No description provided for @merchantAccountTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حساب Merchant'**
+  String get merchantAccountTitle;
+
+  /// No description provided for @merchantAccountHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'حساب Fawry فرعي مخصص يحوّل مدفوعاتك إليك مباشرة بدلًا من الحساب المشترك للمنصة.'**
+  String get merchantAccountHint;
+
+  /// No description provided for @merchantAccountStatusActive.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشط'**
+  String get merchantAccountStatusActive;
+
+  /// No description provided for @merchantAccountStatusPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطلب قيد المراجعة'**
+  String get merchantAccountStatusPending;
+
+  /// No description provided for @merchantAccountStatusRejected.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم رفض الطلب'**
+  String get merchantAccountStatusRejected;
+
+  /// No description provided for @merchantAccountStatusNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يُنشأ بعد'**
+  String get merchantAccountStatusNone;
+
+  /// No description provided for @merchantAccountRoutingDisabledNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'التحويل المباشر غير مفعّل على مستوى المنصة بعد — الطلبات تُراجَع وتُدرَج في الانتظار.'**
+  String get merchantAccountRoutingDisabledNote;
+
+  /// No description provided for @merchantAccountNoteHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظة لفريق المراجعة (اختياري)'**
+  String get merchantAccountNoteHint;
+
+  /// No description provided for @merchantAccountApplyButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقدّم بطلب حساب Merchant'**
+  String get merchantAccountApplyButton;
+
+  /// No description provided for @merchantAccountApplied.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال طلبك وسيتم مراجعته.'**
+  String get merchantAccountApplied;
 }
 
 class _AppLocalizationsDelegate

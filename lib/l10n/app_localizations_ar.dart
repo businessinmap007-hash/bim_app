@@ -2221,4 +2221,36 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get myRatingEnabledMessage =>
       'تم فتح تقييمك. ستُطبَّق رسوم الخدمة على عملياتك من الآن.';
+
+  @override
+  String get merchantAccountTitle => 'حساب Merchant';
+
+  @override
+  String get merchantAccountHint =>
+      'حساب Fawry فرعي مخصص يحوّل مدفوعاتك إليك مباشرة بدلًا من الحساب المشترك للمنصة.';
+
+  @override
+  String get merchantAccountStatusActive => 'نشط';
+
+  @override
+  String get merchantAccountStatusPending => 'الطلب قيد المراجعة';
+
+  @override
+  String get merchantAccountStatusRejected => 'تم رفض الطلب';
+
+  @override
+  String get merchantAccountStatusNone => 'لم يُنشأ بعد';
+
+  @override
+  String get merchantAccountRoutingDisabledNote =>
+      'التحويل المباشر غير مفعّل على مستوى المنصة بعد — الطلبات تُراجَع وتُدرَج في الانتظار.';
+
+  @override
+  String get merchantAccountNoteHint => 'ملاحظة لفريق المراجعة (اختياري)';
+
+  @override
+  String get merchantAccountApplyButton => 'التقدّم بطلب حساب Merchant';
+
+  @override
+  String get merchantAccountApplied => 'تم إرسال طلبك وسيتم مراجعته.';
 }
