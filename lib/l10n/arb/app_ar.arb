@@ -696,5 +696,24 @@
   "durationDays": "{count} يوم",
   "@durationDays": {
     "placeholders": { "count": { "type": "int" } }
-  }
+  },
+  "depositsTitle": "الضمانات المجمّدة",
+  "depositsEmpty": "لا توجد ضمانات.",
+  "depositsAllStatuses": "الكل",
+  "depositStatusFrozen": "مجمّد",
+  "depositStatusInProgress": "قيد التنفيذ",
+  "depositStatusReleased": "تم الإفراج",
+  "depositStatusRefunded": "تم الاسترداد",
+  "depositStatusSplit": "مقسوم",
+  "depositRoleClient": "أنت دفعت",
+  "depositRoleBusiness": "المبلغ محجوز لك",
+  "depositMyAmount": "نصيبي",
+  "depositTotalAmount": "المبلغ الإجمالي",
+  "depositClientShare": "نصيب العميل",
+  "depositBusinessShare": "نصيب النشاط",
+  "depositCounterparty": "الطرف الآخر",
+  "depositCreatedAt": "تاريخ الإنشاء",
+  "depositReleasedAt": "تاريخ الإفراج",
+  "depositRefundedAt": "تاريخ الاسترداد",
+  "depositBookingLabel": "الحجز"
 }

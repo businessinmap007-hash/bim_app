@@ -2091,4 +2091,61 @@ class AppLocalizationsEn extends AppLocalizations {
   String durationDays(int count) {
     return '${count}d';
   }
+
+  @override
+  String get depositsTitle => 'Escrow deposits';
+
+  @override
+  String get depositsEmpty => 'No deposits.';
+
+  @override
+  String get depositsAllStatuses => 'All';
+
+  @override
+  String get depositStatusFrozen => 'Frozen';
+
+  @override
+  String get depositStatusInProgress => 'In progress';
+
+  @override
+  String get depositStatusReleased => 'Released';
+
+  @override
+  String get depositStatusRefunded => 'Refunded';
+
+  @override
+  String get depositStatusSplit => 'Split';
+
+  @override
+  String get depositRoleClient => 'You paid';
+
+  @override
+  String get depositRoleBusiness => 'You\'re holding';
+
+  @override
+  String get depositMyAmount => 'My share';
+
+  @override
+  String get depositTotalAmount => 'Total amount';
+
+  @override
+  String get depositClientShare => 'Client share';
+
+  @override
+  String get depositBusinessShare => 'Business share';
+
+  @override
+  String get depositCounterparty => 'Counterparty';
+
+  @override
+  String get depositCreatedAt => 'Created';
+
+  @override
+  String get depositReleasedAt => 'Released';
+
+  @override
+  String get depositRefundedAt => 'Refunded';
+
+  @override
+  String get depositBookingLabel => 'Booking';
 }

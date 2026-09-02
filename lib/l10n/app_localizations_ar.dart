@@ -2091,4 +2091,61 @@ class AppLocalizationsAr extends AppLocalizations {
   String durationDays(int count) {
     return '$count يوم';
   }
+
+  @override
+  String get depositsTitle => 'الضمانات المجمّدة';
+
+  @override
+  String get depositsEmpty => 'لا توجد ضمانات.';
+
+  @override
+  String get depositsAllStatuses => 'الكل';
+
+  @override
+  String get depositStatusFrozen => 'مجمّد';
+
+  @override
+  String get depositStatusInProgress => 'قيد التنفيذ';
+
+  @override
+  String get depositStatusReleased => 'تم الإفراج';
+
+  @override
+  String get depositStatusRefunded => 'تم الاسترداد';
+
+  @override
+  String get depositStatusSplit => 'مقسوم';
+
+  @override
+  String get depositRoleClient => 'أنت دفعت';
+
+  @override
+  String get depositRoleBusiness => 'المبلغ محجوز لك';
+
+  @override
+  String get depositMyAmount => 'نصيبي';
+
+  @override
+  String get depositTotalAmount => 'المبلغ الإجمالي';
+
+  @override
+  String get depositClientShare => 'نصيب العميل';
+
+  @override
+  String get depositBusinessShare => 'نصيب النشاط';
+
+  @override
+  String get depositCounterparty => 'الطرف الآخر';
+
+  @override
+  String get depositCreatedAt => 'تاريخ الإنشاء';
+
+  @override
+  String get depositReleasedAt => 'تاريخ الإفراج';
+
+  @override
+  String get depositRefundedAt => 'تاريخ الاسترداد';
+
+  @override
+  String get depositBookingLabel => 'الحجز';
 }

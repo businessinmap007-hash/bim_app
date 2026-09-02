@@ -696,5 +696,24 @@
   "durationDays": "{count}d",
   "@durationDays": {
     "placeholders": { "count": { "type": "int" } }
-  }
+  },
+  "depositsTitle": "Escrow deposits",
+  "depositsEmpty": "No deposits.",
+  "depositsAllStatuses": "All",
+  "depositStatusFrozen": "Frozen",
+  "depositStatusInProgress": "In progress",
+  "depositStatusReleased": "Released",
+  "depositStatusRefunded": "Refunded",
+  "depositStatusSplit": "Split",
+  "depositRoleClient": "You paid",
+  "depositRoleBusiness": "You're holding",
+  "depositMyAmount": "My share",
+  "depositTotalAmount": "Total amount",
+  "depositClientShare": "Client share",
+  "depositBusinessShare": "Business share",
+  "depositCounterparty": "Counterparty",
+  "depositCreatedAt": "Created",
+  "depositReleasedAt": "Released",
+  "depositRefundedAt": "Refunded",
+  "depositBookingLabel": "Booking"
 }

@@ -4117,6 +4117,120 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'{count} يوم'**
   String durationDays(int count);
+
+  /// No description provided for @depositsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الضمانات المجمّدة'**
+  String get depositsTitle;
+
+  /// No description provided for @depositsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد ضمانات.'**
+  String get depositsEmpty;
+
+  /// No description provided for @depositsAllStatuses.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get depositsAllStatuses;
+
+  /// No description provided for @depositStatusFrozen.
+  ///
+  /// In ar, this message translates to:
+  /// **'مجمّد'**
+  String get depositStatusFrozen;
+
+  /// No description provided for @depositStatusInProgress.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيد التنفيذ'**
+  String get depositStatusInProgress;
+
+  /// No description provided for @depositStatusReleased.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الإفراج'**
+  String get depositStatusReleased;
+
+  /// No description provided for @depositStatusRefunded.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الاسترداد'**
+  String get depositStatusRefunded;
+
+  /// No description provided for @depositStatusSplit.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقسوم'**
+  String get depositStatusSplit;
+
+  /// No description provided for @depositRoleClient.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنت دفعت'**
+  String get depositRoleClient;
+
+  /// No description provided for @depositRoleBusiness.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ محجوز لك'**
+  String get depositRoleBusiness;
+
+  /// No description provided for @depositMyAmount.
+  ///
+  /// In ar, this message translates to:
+  /// **'نصيبي'**
+  String get depositMyAmount;
+
+  /// No description provided for @depositTotalAmount.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ الإجمالي'**
+  String get depositTotalAmount;
+
+  /// No description provided for @depositClientShare.
+  ///
+  /// In ar, this message translates to:
+  /// **'نصيب العميل'**
+  String get depositClientShare;
+
+  /// No description provided for @depositBusinessShare.
+  ///
+  /// In ar, this message translates to:
+  /// **'نصيب النشاط'**
+  String get depositBusinessShare;
+
+  /// No description provided for @depositCounterparty.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطرف الآخر'**
+  String get depositCounterparty;
+
+  /// No description provided for @depositCreatedAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'تاريخ الإنشاء'**
+  String get depositCreatedAt;
+
+  /// No description provided for @depositReleasedAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'تاريخ الإفراج'**
+  String get depositReleasedAt;
+
+  /// No description provided for @depositRefundedAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'تاريخ الاسترداد'**
+  String get depositRefundedAt;
+
+  /// No description provided for @depositBookingLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحجز'**
+  String get depositBookingLabel;
 }
 
 class _AppLocalizationsDelegate
