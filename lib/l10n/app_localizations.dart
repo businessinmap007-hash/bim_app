@@ -1597,6 +1597,144 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'حدد الموعد أولًا.'**
   String get bookingDateRequired;
+
+  /// No description provided for @ordersBookingsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلباتي وحجوزاتي'**
+  String get ordersBookingsTitle;
+
+  /// No description provided for @ordersTab.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطلبات'**
+  String get ordersTab;
+
+  /// No description provided for @bookingsTab.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحجوزات'**
+  String get bookingsTab;
+
+  /// No description provided for @ordersEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد طلبات بعد.'**
+  String get ordersEmpty;
+
+  /// No description provided for @bookingsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد حجوزات بعد.'**
+  String get bookingsEmpty;
+
+  /// No description provided for @ordersCancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء الطلب'**
+  String get ordersCancel;
+
+  /// No description provided for @ordersReorder.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلب مرة أخرى'**
+  String get ordersReorder;
+
+  /// No description provided for @ordersReordered.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت إضافة العناصر إلى السلة.'**
+  String get ordersReordered;
+
+  /// No description provided for @ordersReorderedWithSkipped.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت إضافة العناصر المتاحة إلى السلة، وتعذّر توفير بعضها.'**
+  String get ordersReorderedWithSkipped;
+
+  /// No description provided for @ordersCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إلغاء الطلب.'**
+  String get ordersCancelled;
+
+  /// No description provided for @ordersCancelConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد إلغاء هذا الطلب؟'**
+  String get ordersCancelConfirm;
+
+  /// No description provided for @bookingsCancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء الحجز'**
+  String get bookingsCancel;
+
+  /// No description provided for @bookingsCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إلغاء الحجز.'**
+  String get bookingsCancelled;
+
+  /// No description provided for @bookingsCancelConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد إلغاء هذا الحجز؟'**
+  String get bookingsCancelConfirm;
+
+  /// No description provided for @orderStatusPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيد الانتظار'**
+  String get orderStatusPending;
+
+  /// No description provided for @orderStatusCompleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتمل'**
+  String get orderStatusCompleted;
+
+  /// No description provided for @orderStatusCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغي'**
+  String get orderStatusCancelled;
+
+  /// No description provided for @bookingStatusPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيد الانتظار'**
+  String get bookingStatusPending;
+
+  /// No description provided for @bookingStatusAccepted.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقبول'**
+  String get bookingStatusAccepted;
+
+  /// No description provided for @bookingStatusRejected.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرفوض'**
+  String get bookingStatusRejected;
+
+  /// No description provided for @bookingStatusCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغي'**
+  String get bookingStatusCancelled;
+
+  /// No description provided for @bookingStatusInProgress.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ التنفيذ'**
+  String get bookingStatusInProgress;
+
+  /// No description provided for @bookingStatusCompleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتمل'**
+  String get bookingStatusCompleted;
 }
 
 class _AppLocalizationsDelegate

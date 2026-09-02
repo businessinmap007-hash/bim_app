@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../app/theme/app_colors.dart';
 import '../../features/auth/application/auth_controller.dart';
+import '../../features/orders/presentation/screens/orders_and_bookings_screen.dart';
 import '../../features/posts/presentation/screens/my_posts_screen.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -55,6 +56,16 @@ class AppDrawer extends ConsumerWidget {
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MyPostsScreen()));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.receipt_long_outlined),
+              title: Text(l10n.ordersBookingsTitle),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const OrdersAndBookingsScreen()),
+                );
               },
             ),
             ListTile(

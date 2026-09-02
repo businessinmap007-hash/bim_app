@@ -1,4 +1,5 @@
 import '../../../core/network/api_client.dart';
+import '../../../core/network/paginated.dart';
 import 'models/booking.dart';
 import 'models/booking_form.dart';
 
@@ -6,6 +7,23 @@ import 'models/booking_form.dart';
 class BookingApi {
   final ApiClient _client;
   const BookingApi(this._client);
+
+  Future<Paginated<Booking>> list({String? status, int page = 1, int perPage = 20}) async {
+    final data = await _client.get(
+      '/bookings',
+      query: {
+        if (status != null) 'status': status,
+        'page': page,
+        'per_page': perPage,
+      },
+    ) as Map<String, dynamic>;
+    return Paginated.fromJson(data['bookings'] as Map<String, dynamic>, Booking.fromJson);
+  }
+
+  Future<Booking> cancel(int id) async {
+    final data = await _client.post('/bookings/$id/cancel') as Map<String, dynamic>;
+    return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+  }
 
   /// What this business's booking screen must ask (Api\V2\BookingController::form).
   Future<BookingFormPayload> form(int businessId) async {

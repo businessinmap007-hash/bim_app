@@ -1,26 +1,21 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/core_providers.dart';
-import '../data/booking_api.dart';
-import '../data/models/booking.dart';
-import '../data/models/booking_form.dart';
+import '../data/models/placed_order.dart';
+import '../data/orders_api.dart';
 
-final bookingApiProvider = Provider<BookingApi>((ref) {
-  return BookingApi(ref.watch(apiClientProvider));
+final ordersApiProvider = Provider<OrdersApi>((ref) {
+  return OrdersApi(ref.watch(apiClientProvider));
 });
 
-final bookingFormProvider = FutureProvider.family<BookingFormPayload, int>((ref, businessId) {
-  return ref.watch(bookingApiProvider).form(businessId);
-});
-
-class MyBookingsState {
-  final List<Booking> items;
+class MyOrdersState {
+  final List<PlacedOrder> items;
   final bool isLoading;
   final bool isLoadingMore;
   final bool hasMore;
   final String? error;
 
-  const MyBookingsState({
+  const MyOrdersState({
     this.items = const [],
     this.isLoading = false,
     this.isLoadingMore = false,
@@ -28,15 +23,15 @@ class MyBookingsState {
     this.error,
   });
 
-  MyBookingsState copyWith({
-    List<Booking>? items,
+  MyOrdersState copyWith({
+    List<PlacedOrder>? items,
     bool? isLoading,
     bool? isLoadingMore,
     bool? hasMore,
     String? error,
     bool clearError = false,
   }) {
-    return MyBookingsState(
+    return MyOrdersState(
       items: items ?? this.items,
       isLoading: isLoading ?? this.isLoading,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
@@ -46,11 +41,11 @@ class MyBookingsState {
   }
 }
 
-class MyBookingsController extends StateNotifier<MyBookingsState> {
-  final BookingApi _api;
+class MyOrdersController extends StateNotifier<MyOrdersState> {
+  final OrdersApi _api;
   int _page = 1;
 
-  MyBookingsController(this._api) : super(const MyBookingsState()) {
+  MyOrdersController(this._api) : super(const MyOrdersState()) {
     load();
   }
 
@@ -81,13 +76,22 @@ class MyBookingsController extends StateNotifier<MyBookingsState> {
     }
   }
 
-  Future<void> cancel(int id) async {
-    final updated = await _api.cancel(id);
-    state = state.copyWith(items: [for (final b in state.items) b.id == id ? updated : b]);
+  /// Replaces one row with the freshly loaded detail (has `items`, unlike the
+  /// list rows) so the detail sheet can show a cancelled/updated order
+  /// without a full reload.
+  Future<PlacedOrder> loadDetail(int id) async {
+    final detail = await _api.show(id);
+    state = state.copyWith(items: [for (final o in state.items) o.id == id ? detail : o]);
+    return detail;
+  }
+
+  Future<PlacedOrder> cancel(int id, {String? reason}) async {
+    final updated = await _api.cancel(id, reason: reason);
+    state = state.copyWith(items: [for (final o in state.items) o.id == id ? updated : o]);
+    return updated;
   }
 }
 
-final myBookingsControllerProvider =
-    StateNotifierProvider<MyBookingsController, MyBookingsState>((ref) {
-      return MyBookingsController(ref.watch(bookingApiProvider));
-    });
+final myOrdersControllerProvider = StateNotifierProvider<MyOrdersController, MyOrdersState>((ref) {
+  return MyOrdersController(ref.watch(ordersApiProvider));
+});

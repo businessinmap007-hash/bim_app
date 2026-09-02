@@ -807,4 +807,74 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bookingDateRequired => 'Choose a date first.';
+
+  @override
+  String get ordersBookingsTitle => 'My orders & bookings';
+
+  @override
+  String get ordersTab => 'Orders';
+
+  @override
+  String get bookingsTab => 'Bookings';
+
+  @override
+  String get ordersEmpty => 'No orders yet.';
+
+  @override
+  String get bookingsEmpty => 'No bookings yet.';
+
+  @override
+  String get ordersCancel => 'Cancel order';
+
+  @override
+  String get ordersReorder => 'Order again';
+
+  @override
+  String get ordersReordered => 'The items were added to your cart.';
+
+  @override
+  String get ordersReorderedWithSkipped =>
+      'The available items were added to your cart; some could not be found.';
+
+  @override
+  String get ordersCancelled => 'Order cancelled.';
+
+  @override
+  String get ordersCancelConfirm => 'Cancel this order?';
+
+  @override
+  String get bookingsCancel => 'Cancel booking';
+
+  @override
+  String get bookingsCancelled => 'Booking cancelled.';
+
+  @override
+  String get bookingsCancelConfirm => 'Cancel this booking?';
+
+  @override
+  String get orderStatusPending => 'Pending';
+
+  @override
+  String get orderStatusCompleted => 'Completed';
+
+  @override
+  String get orderStatusCancelled => 'Cancelled';
+
+  @override
+  String get bookingStatusPending => 'Pending';
+
+  @override
+  String get bookingStatusAccepted => 'Accepted';
+
+  @override
+  String get bookingStatusRejected => 'Rejected';
+
+  @override
+  String get bookingStatusCancelled => 'Cancelled';
+
+  @override
+  String get bookingStatusInProgress => 'In progress';
+
+  @override
+  String get bookingStatusCompleted => 'Completed';
 }

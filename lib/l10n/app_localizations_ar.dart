@@ -814,4 +814,74 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get bookingDateRequired => 'حدد الموعد أولًا.';
+
+  @override
+  String get ordersBookingsTitle => 'طلباتي وحجوزاتي';
+
+  @override
+  String get ordersTab => 'الطلبات';
+
+  @override
+  String get bookingsTab => 'الحجوزات';
+
+  @override
+  String get ordersEmpty => 'لا توجد طلبات بعد.';
+
+  @override
+  String get bookingsEmpty => 'لا توجد حجوزات بعد.';
+
+  @override
+  String get ordersCancel => 'إلغاء الطلب';
+
+  @override
+  String get ordersReorder => 'اطلب مرة أخرى';
+
+  @override
+  String get ordersReordered => 'تمت إضافة العناصر إلى السلة.';
+
+  @override
+  String get ordersReorderedWithSkipped =>
+      'تمت إضافة العناصر المتاحة إلى السلة، وتعذّر توفير بعضها.';
+
+  @override
+  String get ordersCancelled => 'تم إلغاء الطلب.';
+
+  @override
+  String get ordersCancelConfirm => 'هل تريد إلغاء هذا الطلب؟';
+
+  @override
+  String get bookingsCancel => 'إلغاء الحجز';
+
+  @override
+  String get bookingsCancelled => 'تم إلغاء الحجز.';
+
+  @override
+  String get bookingsCancelConfirm => 'هل تريد إلغاء هذا الحجز؟';
+
+  @override
+  String get orderStatusPending => 'قيد الانتظار';
+
+  @override
+  String get orderStatusCompleted => 'مكتمل';
+
+  @override
+  String get orderStatusCancelled => 'ملغي';
+
+  @override
+  String get bookingStatusPending => 'قيد الانتظار';
+
+  @override
+  String get bookingStatusAccepted => 'مقبول';
+
+  @override
+  String get bookingStatusRejected => 'مرفوض';
+
+  @override
+  String get bookingStatusCancelled => 'ملغي';
+
+  @override
+  String get bookingStatusInProgress => 'جارٍ التنفيذ';
+
+  @override
+  String get bookingStatusCompleted => 'مكتمل';
 }
