@@ -42,7 +42,7 @@ class OfferingCard extends StatelessWidget {
         title: Text(offering.label, maxLines: 2, overflow: TextOverflow.ellipsis),
         subtitle: Text(
           '${offering.price.toStringAsFixed(0)} ${offering.currency}',
-          style: const TextStyle(fontWeight: FontWeight.w700, color: AppColors.primaryNavy),
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
         ),
         trailing: _ActionBadge(isBookable: offering.isBookable, label: offering.isBookable ? l10n.businessActionBook : l10n.businessActionOrder),
       ),

@@ -74,7 +74,7 @@ class _PricesTab extends ConsumerWidget {
                       children: [
                         Text(
                           '${row.price.toStringAsFixed(0)} ${row.currency}',
-                          style: const TextStyle(fontWeight: FontWeight.w700, color: AppColors.primaryNavy),
+                          style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
                         ),
                         IconButton(
                           icon: const Icon(Icons.delete_outline),

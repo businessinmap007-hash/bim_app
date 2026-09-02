@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../data/models/menu_item_summary.dart';
 
@@ -55,7 +54,7 @@ class MenuItemTile extends StatelessWidget {
             children: [
               Text(
                 _priceLabel(item),
-                style: const TextStyle(fontWeight: FontWeight.w700, color: AppColors.primaryNavy),
+                style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
               ),
               if (item.isOutOfStock)
                 Text(l10n.businessOutOfStock, style: TextStyle(fontSize: 10, color: theme.colorScheme.error)),
