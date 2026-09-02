@@ -80,6 +80,10 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
                 hintText: l10n.menuItemsSearchHint,
                 prefixIcon: const Icon(Icons.search),
                 isDense: true,
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.arrow_forward),
+                  onPressed: () => ref.read(menuItemsControllerProvider.notifier).setQuery(_searchController.text),
+                ),
               ),
               textInputAction: TextInputAction.search,
               onSubmitted: (q) => ref.read(menuItemsControllerProvider.notifier).setQuery(q),

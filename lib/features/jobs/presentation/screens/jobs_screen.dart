@@ -69,6 +69,10 @@ class _JobsScreenState extends ConsumerState<JobsScreen> {
                 hintText: l10n.jobsSearchHint,
                 prefixIcon: const Icon(Icons.search),
                 isDense: true,
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.arrow_forward),
+                  onPressed: () => ref.read(jobsControllerProvider.notifier).setQuery(_searchController.text),
+                ),
               ),
               textInputAction: TextInputAction.search,
               onSubmitted: (q) => ref.read(jobsControllerProvider.notifier).setQuery(q),
