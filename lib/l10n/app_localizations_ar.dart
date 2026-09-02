@@ -2814,4 +2814,73 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get productOffersStockLabel => 'المخزون';
+
+  @override
+  String get clinicWritePrescription => 'كتابة روشتة';
+
+  @override
+  String get clinicViewPrescription => 'عرض الروشتة';
+
+  @override
+  String get prescriptionsIssuedTitle => 'الروشتات الصادرة';
+
+  @override
+  String get prescriptionsIssuedEmpty => 'لم تصدر أي روشتة بعد.';
+
+  @override
+  String get prescriptionIssueTitle => 'إصدار روشتة';
+
+  @override
+  String get prescriptionReviseTitle => 'تعديل الروشتة';
+
+  @override
+  String get prescriptionIssueSubmit => 'إصدار الروشتة';
+
+  @override
+  String get prescriptionReviseSubmit => 'حفظ التعديل';
+
+  @override
+  String get prescriptionReviseAction => 'تعديل';
+
+  @override
+  String get medicineSearchTitle => 'إضافة دواء';
+
+  @override
+  String get medicineSearchHint => 'ابحث باسم الدواء...';
+
+  @override
+  String get medicineNoResults => 'لا توجد نتائج. أضفه كدواء جديد بالأسفل.';
+
+  @override
+  String get medicineAddNew => 'إضافة دواء جديد';
+
+  @override
+  String get medicineAddTitle => 'دواء جديد';
+
+  @override
+  String get medicineNameHint => 'اسم الدواء';
+
+  @override
+  String get medicineStrengthHint => 'التركيز (اختياري)';
+
+  @override
+  String get medicineInstructionsHint => 'تعليمات (اختياري)';
+
+  @override
+  String get medicineFrequencyLabel => 'عدد المرات يوميًا';
+
+  @override
+  String get medicineFoodTimingLabel => 'توقيت الأكل';
+
+  @override
+  String get medicineTimeSlotsLabel => 'وقت اليوم';
+
+  @override
+  String get medicineDurationLabel => 'المدة';
+
+  @override
+  String get medicineAddItem => 'إضافة دواء';
+
+  @override
+  String get medicineAtLeastOneItem => 'أضف دواءً واحدًا على الأقل.';
 }

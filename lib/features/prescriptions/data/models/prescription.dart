@@ -26,6 +26,7 @@ class PrescriptionParty {
 /// One drug line. Written by the doctor at issue time — read-only here.
 class PrescriptionItem {
   final int id;
+  final int? medicineId;
   final String? name;
   final String? dosage;
   final String? quantity;
@@ -42,6 +43,7 @@ class PrescriptionItem {
 
   const PrescriptionItem({
     required this.id,
+    this.medicineId,
     this.name,
     this.dosage,
     this.quantity,
@@ -59,6 +61,7 @@ class PrescriptionItem {
 
   factory PrescriptionItem.fromJson(Map<String, dynamic> json) => PrescriptionItem(
     id: json['id'] as int,
+    medicineId: (json['medicine_id'] as num?)?.toInt(),
     name: json['name'] as String?,
     dosage: json['dosage'] as String?,
     quantity: json['quantity'] as String?,

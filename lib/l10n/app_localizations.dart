@@ -5491,6 +5491,144 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'المخزون'**
   String get productOffersStockLabel;
+
+  /// No description provided for @clinicWritePrescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'كتابة روشتة'**
+  String get clinicWritePrescription;
+
+  /// No description provided for @clinicViewPrescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض الروشتة'**
+  String get clinicViewPrescription;
+
+  /// No description provided for @prescriptionsIssuedTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الروشتات الصادرة'**
+  String get prescriptionsIssuedTitle;
+
+  /// No description provided for @prescriptionsIssuedEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تصدر أي روشتة بعد.'**
+  String get prescriptionsIssuedEmpty;
+
+  /// No description provided for @prescriptionIssueTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إصدار روشتة'**
+  String get prescriptionIssueTitle;
+
+  /// No description provided for @prescriptionReviseTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل الروشتة'**
+  String get prescriptionReviseTitle;
+
+  /// No description provided for @prescriptionIssueSubmit.
+  ///
+  /// In ar, this message translates to:
+  /// **'إصدار الروشتة'**
+  String get prescriptionIssueSubmit;
+
+  /// No description provided for @prescriptionReviseSubmit.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ التعديل'**
+  String get prescriptionReviseSubmit;
+
+  /// No description provided for @prescriptionReviseAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل'**
+  String get prescriptionReviseAction;
+
+  /// No description provided for @medicineSearchTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة دواء'**
+  String get medicineSearchTitle;
+
+  /// No description provided for @medicineSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث باسم الدواء...'**
+  String get medicineSearchHint;
+
+  /// No description provided for @medicineNoResults.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد نتائج. أضفه كدواء جديد بالأسفل.'**
+  String get medicineNoResults;
+
+  /// No description provided for @medicineAddNew.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة دواء جديد'**
+  String get medicineAddNew;
+
+  /// No description provided for @medicineAddTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'دواء جديد'**
+  String get medicineAddTitle;
+
+  /// No description provided for @medicineNameHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الدواء'**
+  String get medicineNameHint;
+
+  /// No description provided for @medicineStrengthHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'التركيز (اختياري)'**
+  String get medicineStrengthHint;
+
+  /// No description provided for @medicineInstructionsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعليمات (اختياري)'**
+  String get medicineInstructionsHint;
+
+  /// No description provided for @medicineFrequencyLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد المرات يوميًا'**
+  String get medicineFrequencyLabel;
+
+  /// No description provided for @medicineFoodTimingLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'توقيت الأكل'**
+  String get medicineFoodTimingLabel;
+
+  /// No description provided for @medicineTimeSlotsLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقت اليوم'**
+  String get medicineTimeSlotsLabel;
+
+  /// No description provided for @medicineDurationLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المدة'**
+  String get medicineDurationLabel;
+
+  /// No description provided for @medicineAddItem.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة دواء'**
+  String get medicineAddItem;
+
+  /// No description provided for @medicineAtLeastOneItem.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف دواءً واحدًا على الأقل.'**
+  String get medicineAtLeastOneItem;
 }
 
 class _AppLocalizationsDelegate

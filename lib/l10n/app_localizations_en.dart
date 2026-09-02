@@ -2814,4 +2814,73 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get productOffersStockLabel => 'Stock';
+
+  @override
+  String get clinicWritePrescription => 'Write prescription';
+
+  @override
+  String get clinicViewPrescription => 'View prescription';
+
+  @override
+  String get prescriptionsIssuedTitle => 'Issued Prescriptions';
+
+  @override
+  String get prescriptionsIssuedEmpty => 'No prescriptions issued yet.';
+
+  @override
+  String get prescriptionIssueTitle => 'Issue Prescription';
+
+  @override
+  String get prescriptionReviseTitle => 'Revise Prescription';
+
+  @override
+  String get prescriptionIssueSubmit => 'Issue prescription';
+
+  @override
+  String get prescriptionReviseSubmit => 'Save revision';
+
+  @override
+  String get prescriptionReviseAction => 'Revise';
+
+  @override
+  String get medicineSearchTitle => 'Add medicine';
+
+  @override
+  String get medicineSearchHint => 'Search drug name...';
+
+  @override
+  String get medicineNoResults => 'No matches. Add it as a new drug below.';
+
+  @override
+  String get medicineAddNew => 'Add new medicine';
+
+  @override
+  String get medicineAddTitle => 'New medicine';
+
+  @override
+  String get medicineNameHint => 'Drug name';
+
+  @override
+  String get medicineStrengthHint => 'Strength (optional)';
+
+  @override
+  String get medicineInstructionsHint => 'Instructions (optional)';
+
+  @override
+  String get medicineFrequencyLabel => 'Times per day';
+
+  @override
+  String get medicineFoodTimingLabel => 'Food timing';
+
+  @override
+  String get medicineTimeSlotsLabel => 'Time of day';
+
+  @override
+  String get medicineDurationLabel => 'Duration';
+
+  @override
+  String get medicineAddItem => 'Add medicine';
+
+  @override
+  String get medicineAtLeastOneItem => 'Add at least one medicine.';
 }

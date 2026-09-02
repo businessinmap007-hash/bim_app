@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../prescriptions/presentation/screens/issue_prescription_screen.dart';
+import '../../../prescriptions/presentation/screens/prescription_detail_screen.dart';
 import '../../application/business_clinic_providers.dart';
 import '../../data/models/business_clinic_appointment.dart';
 import 'clinic_slots_screen.dart';
@@ -226,6 +228,34 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
               const SizedBox(height: 4),
               Text(a.reason!, style: Theme.of(context).textTheme.bodySmall),
             ],
+            const SizedBox(height: 8),
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: OutlinedButton.icon(
+                icon: const Icon(Icons.receipt_long_outlined, size: 18),
+                label: Text(a.prescriptionId == null ? l10n.clinicWritePrescription : l10n.clinicViewPrescription),
+                onPressed: () async {
+                  if (a.prescriptionId == null) {
+                    await Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => IssuePrescriptionScreen(
+                          patientId: a.patientId,
+                          patientName: a.patientName,
+                          appointmentId: a.id,
+                        ),
+                      ),
+                    );
+                    ref.read(clinicAppointmentsControllerProvider.notifier).load();
+                  } else {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => PrescriptionDetailScreen(prescriptionId: a.prescriptionId!),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
             if (a.status == 'requested' || a.status == 'confirmed') ...[
               const SizedBox(height: 8),
               Wrap(

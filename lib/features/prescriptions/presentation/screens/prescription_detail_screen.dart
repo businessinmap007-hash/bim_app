@@ -5,10 +5,12 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../addresses/presentation/widgets/address_pick_sheet.dart';
+import '../../../auth/application/auth_controller.dart';
 import '../../../discovery/data/models/business_summary.dart';
 import '../../application/prescriptions_providers.dart';
 import '../../data/models/prescription.dart';
 import '../widgets/business_picker_sheet.dart';
+import 'issue_prescription_screen.dart';
 import 'prescriptions_screen.dart' show statusLabel;
 
 class PrescriptionDetailScreen extends ConsumerWidget {
@@ -224,6 +226,18 @@ class PrescriptionDetailScreen extends ConsumerWidget {
     }
   }
 
+  Future<void> _revise(BuildContext context, WidgetRef ref, Prescription p) async {
+    final created = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        builder: (_) => IssuePrescriptionScreen(patientId: p.patient.id, patientName: p.patient.name, existing: p),
+      ),
+    );
+    if (created == true && context.mounted) {
+      ref.invalidate(prescriptionDetailProvider(prescriptionId));
+      ref.read(issuedPrescriptionsControllerProvider.notifier).load();
+    }
+  }
+
   void _showError(BuildContext context, Object e) {
     final l10n = AppLocalizations.of(context)!;
     final message = e is ApiException ? e.message : l10n.commonSomethingWentWrong;
@@ -234,6 +248,8 @@ class PrescriptionDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final async = ref.watch(prescriptionDetailProvider(prescriptionId));
+    final authState = ref.watch(authControllerProvider);
+    final currentUserId = authState is AuthSignedIn ? authState.user.id : null;
 
     return async.when(
       loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
@@ -253,7 +269,14 @@ class PrescriptionDetailScreen extends ConsumerWidget {
           ),
         ),
       ),
-      data: (p) => Scaffold(
+      data: (p) {
+        // Send-to-pharmacy and dose reminders are patient-only server-side
+        // (both 404 for anyone else) — this screen used to show them
+        // unconditionally, which only ever worked because only the patient
+        // ever opened it before a doctor could too (see IssuePrescriptionScreen).
+        final isPatientViewer = currentUserId != null && currentUserId == p.patient.id;
+        final canRevise = currentUserId != null && currentUserId == p.doctor.id && p.canCancel;
+        return Scaffold(
         appBar: AppBar(title: Text(p.doctor.name ?? l10n.prescriptionsTitle)),
         body: ListView(
           padding: const EdgeInsets.all(16),
@@ -340,19 +363,25 @@ class PrescriptionDetailScreen extends ConsumerWidget {
               spacing: 8,
               runSpacing: 8,
               children: [
-                if (p.canSend)
+                if (p.canSend && isPatientViewer)
                   FilledButton(
                     onPressed: () => _sendToPharmacy(context, ref),
                     child: Text(l10n.prescriptionSendToPharmacy),
                   ),
-                OutlinedButton(
-                  onPressed: () => _scheduleReminders(context, ref),
-                  child: Text(l10n.prescriptionScheduleReminders),
-                ),
+                if (isPatientViewer)
+                  OutlinedButton(
+                    onPressed: () => _scheduleReminders(context, ref),
+                    child: Text(l10n.prescriptionScheduleReminders),
+                  ),
                 OutlinedButton(
                   onPressed: () => _share(context, ref),
                   child: Text(l10n.prescriptionShareWithDoctor),
                 ),
+                if (canRevise)
+                  OutlinedButton(
+                    onPressed: () => _revise(context, ref, p),
+                    child: Text(l10n.prescriptionReviseAction),
+                  ),
                 if (p.canCancel)
                   OutlinedButton(
                     onPressed: () => _cancel(context, ref),
@@ -362,7 +391,8 @@ class PrescriptionDetailScreen extends ConsumerWidget {
             ),
           ],
         ),
-      ),
+        );
+      },
     );
   }
 }
