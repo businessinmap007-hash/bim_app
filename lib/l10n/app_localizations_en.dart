@@ -1568,4 +1568,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get prescriptionRemovePhotoConfirm => 'Remove this photo?';
+
+  @override
+  String get offersTitle => 'Offers';
+
+  @override
+  String get offersEmpty => 'No offers right now.';
+
+  @override
+  String get offersSearchHint => 'Search offers...';
+
+  @override
+  String get offerSortBoosted => 'Featured';
+
+  @override
+  String get offerSortLatest => 'Latest';
+
+  @override
+  String get offerSortLowestPrice => 'Lowest price';
+
+  @override
+  String get offerFollowBusiness => 'Follow this seller';
+
+  @override
+  String get offerUnfollowBusiness => 'Unfollow';
+
+  @override
+  String get offerFollowed =>
+      'You\'ll be notified about this seller\'s offers.';
+
+  @override
+  String get offerUnfollowed => 'Unfollowed.';
+
+  @override
+  String get myOfferFollowsTitle => 'Followed sellers';
+
+  @override
+  String get myOfferFollowsEmpty => 'You\'re not following any sellers yet.';
+
+  @override
+  String get offerAvailableQuantityLabel => 'Available';
+
+  @override
+  String get offerEndsAtLabel => 'Ends';
 }

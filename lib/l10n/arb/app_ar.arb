@@ -518,5 +518,19 @@
   "prescriptionSendPickPharmacyTitle": "اختر صيدلية",
   "prescriptionSharePickDoctorTitle": "اختر طبيبًا",
   "prescriptionSupersededLabel": "استُبدلت بنسخة معدّلة",
-  "prescriptionRemovePhotoConfirm": "حذف هذه الصورة؟"
+  "prescriptionRemovePhotoConfirm": "حذف هذه الصورة؟",
+  "offersTitle": "العروض",
+  "offersEmpty": "لا توجد عروض الآن.",
+  "offersSearchHint": "ابحث عن عرض...",
+  "offerSortBoosted": "مميز",
+  "offerSortLatest": "الأحدث",
+  "offerSortLowestPrice": "الأقل سعرًا",
+  "offerFollowBusiness": "متابعة هذا البائع",
+  "offerUnfollowBusiness": "إلغاء المتابعة",
+  "offerFollowed": "سنخبرك بعروض هذا البائع القادمة.",
+  "offerUnfollowed": "تم إلغاء المتابعة.",
+  "myOfferFollowsTitle": "البائعون المتابَعون",
+  "myOfferFollowsEmpty": "لا تتابع أي بائع بعد.",
+  "offerAvailableQuantityLabel": "الكمية المتاحة",
+  "offerEndsAtLabel": "ينتهى"
 }

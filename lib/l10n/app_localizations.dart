@@ -3103,6 +3103,90 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'حذف هذه الصورة؟'**
   String get prescriptionRemovePhotoConfirm;
+
+  /// No description provided for @offersTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'العروض'**
+  String get offersTitle;
+
+  /// No description provided for @offersEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد عروض الآن.'**
+  String get offersEmpty;
+
+  /// No description provided for @offersSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث عن عرض...'**
+  String get offersSearchHint;
+
+  /// No description provided for @offerSortBoosted.
+  ///
+  /// In ar, this message translates to:
+  /// **'مميز'**
+  String get offerSortBoosted;
+
+  /// No description provided for @offerSortLatest.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأحدث'**
+  String get offerSortLatest;
+
+  /// No description provided for @offerSortLowestPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأقل سعرًا'**
+  String get offerSortLowestPrice;
+
+  /// No description provided for @offerFollowBusiness.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة هذا البائع'**
+  String get offerFollowBusiness;
+
+  /// No description provided for @offerUnfollowBusiness.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء المتابعة'**
+  String get offerUnfollowBusiness;
+
+  /// No description provided for @offerFollowed.
+  ///
+  /// In ar, this message translates to:
+  /// **'سنخبرك بعروض هذا البائع القادمة.'**
+  String get offerFollowed;
+
+  /// No description provided for @offerUnfollowed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إلغاء المتابعة.'**
+  String get offerUnfollowed;
+
+  /// No description provided for @myOfferFollowsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'البائعون المتابَعون'**
+  String get myOfferFollowsTitle;
+
+  /// No description provided for @myOfferFollowsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا تتابع أي بائع بعد.'**
+  String get myOfferFollowsEmpty;
+
+  /// No description provided for @offerAvailableQuantityLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكمية المتاحة'**
+  String get offerAvailableQuantityLabel;
+
+  /// No description provided for @offerEndsAtLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'ينتهى'**
+  String get offerEndsAtLabel;
 }
 
 class _AppLocalizationsDelegate

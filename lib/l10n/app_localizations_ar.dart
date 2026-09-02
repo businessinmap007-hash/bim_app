@@ -1571,4 +1571,46 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get prescriptionRemovePhotoConfirm => 'حذف هذه الصورة؟';
+
+  @override
+  String get offersTitle => 'العروض';
+
+  @override
+  String get offersEmpty => 'لا توجد عروض الآن.';
+
+  @override
+  String get offersSearchHint => 'ابحث عن عرض...';
+
+  @override
+  String get offerSortBoosted => 'مميز';
+
+  @override
+  String get offerSortLatest => 'الأحدث';
+
+  @override
+  String get offerSortLowestPrice => 'الأقل سعرًا';
+
+  @override
+  String get offerFollowBusiness => 'متابعة هذا البائع';
+
+  @override
+  String get offerUnfollowBusiness => 'إلغاء المتابعة';
+
+  @override
+  String get offerFollowed => 'سنخبرك بعروض هذا البائع القادمة.';
+
+  @override
+  String get offerUnfollowed => 'تم إلغاء المتابعة.';
+
+  @override
+  String get myOfferFollowsTitle => 'البائعون المتابَعون';
+
+  @override
+  String get myOfferFollowsEmpty => 'لا تتابع أي بائع بعد.';
+
+  @override
+  String get offerAvailableQuantityLabel => 'الكمية المتاحة';
+
+  @override
+  String get offerEndsAtLabel => 'ينتهى';
 }

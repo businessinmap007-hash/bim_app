@@ -7,6 +7,8 @@ import '../../features/agenda/presentation/screens/agenda_screen.dart';
 import '../../features/auth/application/auth_controller.dart';
 import '../../features/clinic/presentation/screens/my_clinic_appointments_screen.dart';
 import '../../features/fines/presentation/screens/fines_screen.dart';
+import '../../features/offers/presentation/screens/my_offer_follows_screen.dart';
+import '../../features/offers/presentation/screens/offers_screen.dart';
 import '../../features/orders/presentation/screens/orders_and_bookings_screen.dart';
 import '../../features/posts/presentation/screens/my_posts_screen.dart';
 import '../../features/prescriptions/presentation/screens/prescriptions_screen.dart';
@@ -138,6 +140,24 @@ class AppDrawer extends ConsumerWidget {
                       Navigator.of(context).pop();
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => const PrescriptionsScreen()),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.local_offer_outlined),
+                    title: Text(l10n.offersTitle),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const OffersScreen()));
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.notifications_none),
+                    title: Text(l10n.myOfferFollowsTitle),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const MyOfferFollowsScreen()),
                       );
                     },
                   ),

@@ -518,5 +518,19 @@
   "prescriptionSendPickPharmacyTitle": "Choose a pharmacy",
   "prescriptionSharePickDoctorTitle": "Choose a doctor",
   "prescriptionSupersededLabel": "Superseded by a revision",
-  "prescriptionRemovePhotoConfirm": "Remove this photo?"
+  "prescriptionRemovePhotoConfirm": "Remove this photo?",
+  "offersTitle": "Offers",
+  "offersEmpty": "No offers right now.",
+  "offersSearchHint": "Search offers...",
+  "offerSortBoosted": "Featured",
+  "offerSortLatest": "Latest",
+  "offerSortLowestPrice": "Lowest price",
+  "offerFollowBusiness": "Follow this seller",
+  "offerUnfollowBusiness": "Unfollow",
+  "offerFollowed": "You'll be notified about this seller's offers.",
+  "offerUnfollowed": "Unfollowed.",
+  "myOfferFollowsTitle": "Followed sellers",
+  "myOfferFollowsEmpty": "You're not following any sellers yet.",
+  "offerAvailableQuantityLabel": "Available",
+  "offerEndsAtLabel": "Ends"
 }
