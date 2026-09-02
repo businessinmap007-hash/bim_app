@@ -1012,4 +1012,43 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get sharedCartHostBadge => 'المضيف';
+
+  @override
+  String get staffTitle => 'الموظفون';
+
+  @override
+  String get staffEmpty => 'لا يوجد موظفون بعد.';
+
+  @override
+  String get staffAdd => 'إضافة موظف';
+
+  @override
+  String get staffEdit => 'تعديل الموظف';
+
+  @override
+  String get staffPhone => 'رقم هاتف الموظف';
+
+  @override
+  String get staffJobTitle => 'المسمى الوظيفي (اختياري)';
+
+  @override
+  String get staffCapabilities => 'الصلاحيات';
+
+  @override
+  String get staffCapabilitiesRequired => 'اختر صلاحية واحدة على الأقل.';
+
+  @override
+  String get staffActive => 'نشط';
+
+  @override
+  String get staffInactiveBadge => 'غير نشط';
+
+  @override
+  String get staffRemove => 'إزالة';
+
+  @override
+  String get staffRemoveConfirm => 'هل تريد إزالة هذا الموظف؟';
+
+  @override
+  String get staffPhoneRequired => 'أدخل رقم هاتف الموظف.';
 }

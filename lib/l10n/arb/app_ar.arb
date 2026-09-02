@@ -332,5 +332,18 @@
   "sharedCartLeaveConfirm": "هل تريد مغادرة هذه السلة المشتركة؟",
   "sharedCartCancelCart": "إلغاء السلة",
   "sharedCartCancelConfirm": "هل تريد إلغاء هذه السلة المشتركة بالكامل؟",
-  "sharedCartHostBadge": "المضيف"
+  "sharedCartHostBadge": "المضيف",
+  "staffTitle": "الموظفون",
+  "staffEmpty": "لا يوجد موظفون بعد.",
+  "staffAdd": "إضافة موظف",
+  "staffEdit": "تعديل الموظف",
+  "staffPhone": "رقم هاتف الموظف",
+  "staffJobTitle": "المسمى الوظيفي (اختياري)",
+  "staffCapabilities": "الصلاحيات",
+  "staffCapabilitiesRequired": "اختر صلاحية واحدة على الأقل.",
+  "staffActive": "نشط",
+  "staffInactiveBadge": "غير نشط",
+  "staffRemove": "إزالة",
+  "staffRemoveConfirm": "هل تريد إزالة هذا الموظف؟",
+  "staffPhoneRequired": "أدخل رقم هاتف الموظف."
 }

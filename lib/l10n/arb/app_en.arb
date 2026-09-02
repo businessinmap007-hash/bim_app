@@ -332,5 +332,18 @@
   "sharedCartLeaveConfirm": "Leave this shared cart?",
   "sharedCartCancelCart": "Cancel cart",
   "sharedCartCancelConfirm": "Cancel this shared cart entirely?",
-  "sharedCartHostBadge": "Host"
+  "sharedCartHostBadge": "Host",
+  "staffTitle": "Staff",
+  "staffEmpty": "No staff yet.",
+  "staffAdd": "Add staff",
+  "staffEdit": "Edit staff",
+  "staffPhone": "Staff member's phone",
+  "staffJobTitle": "Job title (optional)",
+  "staffCapabilities": "Capabilities",
+  "staffCapabilitiesRequired": "Choose at least one capability.",
+  "staffActive": "Active",
+  "staffInactiveBadge": "Inactive",
+  "staffRemove": "Remove",
+  "staffRemoveConfirm": "Remove this staff member?",
+  "staffPhoneRequired": "Enter the staff member's phone number."
 }

@@ -1005,4 +1005,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sharedCartHostBadge => 'Host';
+
+  @override
+  String get staffTitle => 'Staff';
+
+  @override
+  String get staffEmpty => 'No staff yet.';
+
+  @override
+  String get staffAdd => 'Add staff';
+
+  @override
+  String get staffEdit => 'Edit staff';
+
+  @override
+  String get staffPhone => 'Staff member\'s phone';
+
+  @override
+  String get staffJobTitle => 'Job title (optional)';
+
+  @override
+  String get staffCapabilities => 'Capabilities';
+
+  @override
+  String get staffCapabilitiesRequired => 'Choose at least one capability.';
+
+  @override
+  String get staffActive => 'Active';
+
+  @override
+  String get staffInactiveBadge => 'Inactive';
+
+  @override
+  String get staffRemove => 'Remove';
+
+  @override
+  String get staffRemoveConfirm => 'Remove this staff member?';
+
+  @override
+  String get staffPhoneRequired => 'Enter the staff member\'s phone number.';
 }

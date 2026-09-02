@@ -1987,6 +1987,84 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'المضيف'**
   String get sharedCartHostBadge;
+
+  /// No description provided for @staffTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموظفون'**
+  String get staffTitle;
+
+  /// No description provided for @staffEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد موظفون بعد.'**
+  String get staffEmpty;
+
+  /// No description provided for @staffAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة موظف'**
+  String get staffAdd;
+
+  /// No description provided for @staffEdit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل الموظف'**
+  String get staffEdit;
+
+  /// No description provided for @staffPhone.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم هاتف الموظف'**
+  String get staffPhone;
+
+  /// No description provided for @staffJobTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المسمى الوظيفي (اختياري)'**
+  String get staffJobTitle;
+
+  /// No description provided for @staffCapabilities.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصلاحيات'**
+  String get staffCapabilities;
+
+  /// No description provided for @staffCapabilitiesRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر صلاحية واحدة على الأقل.'**
+  String get staffCapabilitiesRequired;
+
+  /// No description provided for @staffActive.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشط'**
+  String get staffActive;
+
+  /// No description provided for @staffInactiveBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير نشط'**
+  String get staffInactiveBadge;
+
+  /// No description provided for @staffRemove.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزالة'**
+  String get staffRemove;
+
+  /// No description provided for @staffRemoveConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد إزالة هذا الموظف؟'**
+  String get staffRemoveConfirm;
+
+  /// No description provided for @staffPhoneRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل رقم هاتف الموظف.'**
+  String get staffPhoneRequired;
 }
 
 class _AppLocalizationsDelegate
