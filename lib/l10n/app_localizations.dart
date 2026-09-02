@@ -4837,6 +4837,216 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'حذفت حسابك بالخطأ؟'**
   String get restoreAccountLinkFromLogin;
+
+  /// No description provided for @clinicManagementTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عيادتي'**
+  String get clinicManagementTitle;
+
+  /// No description provided for @clinicQueueTab.
+  ///
+  /// In ar, this message translates to:
+  /// **'المواعيد'**
+  String get clinicQueueTab;
+
+  /// No description provided for @clinicSlotsTab.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفتحات'**
+  String get clinicSlotsTab;
+
+  /// No description provided for @clinicQueueEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد مواعيد.'**
+  String get clinicQueueEmpty;
+
+  /// No description provided for @clinicQueueAllStatuses.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get clinicQueueAllStatuses;
+
+  /// No description provided for @clinicActionConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد'**
+  String get clinicActionConfirm;
+
+  /// No description provided for @clinicActionReject.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفض'**
+  String get clinicActionReject;
+
+  /// No description provided for @clinicActionComplete.
+  ///
+  /// In ar, this message translates to:
+  /// **'إكمال'**
+  String get clinicActionComplete;
+
+  /// No description provided for @clinicActionNoShow.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يحضر'**
+  String get clinicActionNoShow;
+
+  /// No description provided for @clinicActionReschedule.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغيير الموعد'**
+  String get clinicActionReschedule;
+
+  /// No description provided for @clinicRescheduleTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغيير موعد الحجز'**
+  String get clinicRescheduleTitle;
+
+  /// No description provided for @clinicRescheduleConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ الموعد الجديد'**
+  String get clinicRescheduleConfirm;
+
+  /// No description provided for @clinicSlotsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد فتحات مفتوحة.'**
+  String get clinicSlotsEmpty;
+
+  /// No description provided for @clinicAddSlots.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة فتحات'**
+  String get clinicAddSlots;
+
+  /// No description provided for @clinicSlotsSpecificTab.
+  ///
+  /// In ar, this message translates to:
+  /// **'تواريخ محددة'**
+  String get clinicSlotsSpecificTab;
+
+  /// No description provided for @clinicSlotsRecurringTab.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسبوعي متكرر'**
+  String get clinicSlotsRecurringTab;
+
+  /// No description provided for @clinicSlotAddDate.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة تاريخ ووقت'**
+  String get clinicSlotAddDate;
+
+  /// No description provided for @clinicSlotPendingCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} في الانتظار'**
+  String clinicSlotPendingCount(int count);
+
+  /// No description provided for @clinicPublishButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشر'**
+  String get clinicPublishButton;
+
+  /// No description provided for @clinicWeekdaysLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'أيام الأسبوع'**
+  String get clinicWeekdaysLabel;
+
+  /// No description provided for @clinicStartTimeHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'من'**
+  String get clinicStartTimeHint;
+
+  /// No description provided for @clinicEndTimeHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلى'**
+  String get clinicEndTimeHint;
+
+  /// No description provided for @clinicIntervalHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفاصل الزمني (دقائق)'**
+  String get clinicIntervalHint;
+
+  /// No description provided for @clinicWeeksHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'التكرار لمدة (أسابيع)'**
+  String get clinicWeeksHint;
+
+  /// No description provided for @clinicGenerateButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء'**
+  String get clinicGenerateButton;
+
+  /// No description provided for @clinicSlotsPublished.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم نشر {created} فتحة{skipped, plural, =0{} other{، وتخطي {skipped}}}.'**
+  String clinicSlotsPublished(int created, int skipped);
+
+  /// No description provided for @clinicSlotDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزالة هذه الفتحة؟'**
+  String get clinicSlotDeleteConfirm;
+
+  /// No description provided for @clinicWeekday0.
+  ///
+  /// In ar, this message translates to:
+  /// **'أحد'**
+  String get clinicWeekday0;
+
+  /// No description provided for @clinicWeekday1.
+  ///
+  /// In ar, this message translates to:
+  /// **'اثنين'**
+  String get clinicWeekday1;
+
+  /// No description provided for @clinicWeekday2.
+  ///
+  /// In ar, this message translates to:
+  /// **'ثلاثاء'**
+  String get clinicWeekday2;
+
+  /// No description provided for @clinicWeekday3.
+  ///
+  /// In ar, this message translates to:
+  /// **'أربعاء'**
+  String get clinicWeekday3;
+
+  /// No description provided for @clinicWeekday4.
+  ///
+  /// In ar, this message translates to:
+  /// **'خميس'**
+  String get clinicWeekday4;
+
+  /// No description provided for @clinicWeekday5.
+  ///
+  /// In ar, this message translates to:
+  /// **'جمعة'**
+  String get clinicWeekday5;
+
+  /// No description provided for @clinicWeekday6.
+  ///
+  /// In ar, this message translates to:
+  /// **'سبت'**
+  String get clinicWeekday6;
+
+  /// No description provided for @clinicSelectWeekdaysError.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر يومًا واحدًا على الأقل.'**
+  String get clinicSelectWeekdaysError;
 }
 
 class _AppLocalizationsDelegate

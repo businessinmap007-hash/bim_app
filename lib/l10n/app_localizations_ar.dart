@@ -2475,4 +2475,119 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get restoreAccountLinkFromLogin => 'حذفت حسابك بالخطأ؟';
+
+  @override
+  String get clinicManagementTitle => 'عيادتي';
+
+  @override
+  String get clinicQueueTab => 'المواعيد';
+
+  @override
+  String get clinicSlotsTab => 'الفتحات';
+
+  @override
+  String get clinicQueueEmpty => 'لا توجد مواعيد.';
+
+  @override
+  String get clinicQueueAllStatuses => 'الكل';
+
+  @override
+  String get clinicActionConfirm => 'تأكيد';
+
+  @override
+  String get clinicActionReject => 'رفض';
+
+  @override
+  String get clinicActionComplete => 'إكمال';
+
+  @override
+  String get clinicActionNoShow => 'لم يحضر';
+
+  @override
+  String get clinicActionReschedule => 'تغيير الموعد';
+
+  @override
+  String get clinicRescheduleTitle => 'تغيير موعد الحجز';
+
+  @override
+  String get clinicRescheduleConfirm => 'حفظ الموعد الجديد';
+
+  @override
+  String get clinicSlotsEmpty => 'لا توجد فتحات مفتوحة.';
+
+  @override
+  String get clinicAddSlots => 'إضافة فتحات';
+
+  @override
+  String get clinicSlotsSpecificTab => 'تواريخ محددة';
+
+  @override
+  String get clinicSlotsRecurringTab => 'أسبوعي متكرر';
+
+  @override
+  String get clinicSlotAddDate => 'إضافة تاريخ ووقت';
+
+  @override
+  String clinicSlotPendingCount(int count) {
+    return '$count في الانتظار';
+  }
+
+  @override
+  String get clinicPublishButton => 'نشر';
+
+  @override
+  String get clinicWeekdaysLabel => 'أيام الأسبوع';
+
+  @override
+  String get clinicStartTimeHint => 'من';
+
+  @override
+  String get clinicEndTimeHint => 'إلى';
+
+  @override
+  String get clinicIntervalHint => 'الفاصل الزمني (دقائق)';
+
+  @override
+  String get clinicWeeksHint => 'التكرار لمدة (أسابيع)';
+
+  @override
+  String get clinicGenerateButton => 'إنشاء';
+
+  @override
+  String clinicSlotsPublished(int created, int skipped) {
+    String _temp0 = intl.Intl.pluralLogic(
+      skipped,
+      locale: localeName,
+      other: '، وتخطي $skipped',
+      zero: '',
+    );
+    return 'تم نشر $created فتحة$_temp0.';
+  }
+
+  @override
+  String get clinicSlotDeleteConfirm => 'إزالة هذه الفتحة؟';
+
+  @override
+  String get clinicWeekday0 => 'أحد';
+
+  @override
+  String get clinicWeekday1 => 'اثنين';
+
+  @override
+  String get clinicWeekday2 => 'ثلاثاء';
+
+  @override
+  String get clinicWeekday3 => 'أربعاء';
+
+  @override
+  String get clinicWeekday4 => 'خميس';
+
+  @override
+  String get clinicWeekday5 => 'جمعة';
+
+  @override
+  String get clinicWeekday6 => 'سبت';
+
+  @override
+  String get clinicSelectWeekdaysError => 'اختر يومًا واحدًا على الأقل.';
 }

@@ -8,6 +8,7 @@ import '../../../auth/application/auth_controller.dart';
 import '../../../auth/presentation/screens/account_deletion_screen.dart';
 import '../../../booking_settings/presentation/screens/booking_settings_screen.dart';
 import '../../../business_menu/presentation/screens/menu_items_screen.dart';
+import '../../../clinic_management/presentation/screens/clinic_management_screen.dart';
 import '../../../media/presentation/widgets/watermark_repeat_selector.dart';
 import '../../../merchant_account/presentation/screens/merchant_account_screen.dart';
 import '../../../projects/presentation/screens/projects_screen.dart';
@@ -133,6 +134,15 @@ class SettingsScreen extends ConsumerWidget {
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => const RetailListingsScreen()),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.local_hospital_outlined),
+                  title: Text(l10n.clinicManagementTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const ClinicManagementScreen()),
                   ),
                 ),
                 const Divider(height: 1),

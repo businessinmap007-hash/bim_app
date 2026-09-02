@@ -2475,4 +2475,119 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get restoreAccountLinkFromLogin => 'Deleted your account by mistake?';
+
+  @override
+  String get clinicManagementTitle => 'My Clinic';
+
+  @override
+  String get clinicQueueTab => 'Appointments';
+
+  @override
+  String get clinicSlotsTab => 'Slots';
+
+  @override
+  String get clinicQueueEmpty => 'No appointments.';
+
+  @override
+  String get clinicQueueAllStatuses => 'All';
+
+  @override
+  String get clinicActionConfirm => 'Confirm';
+
+  @override
+  String get clinicActionReject => 'Reject';
+
+  @override
+  String get clinicActionComplete => 'Complete';
+
+  @override
+  String get clinicActionNoShow => 'No-show';
+
+  @override
+  String get clinicActionReschedule => 'Reschedule';
+
+  @override
+  String get clinicRescheduleTitle => 'Reschedule appointment';
+
+  @override
+  String get clinicRescheduleConfirm => 'Save new time';
+
+  @override
+  String get clinicSlotsEmpty => 'No open slots.';
+
+  @override
+  String get clinicAddSlots => 'Add slots';
+
+  @override
+  String get clinicSlotsSpecificTab => 'Specific dates';
+
+  @override
+  String get clinicSlotsRecurringTab => 'Recurring weekly';
+
+  @override
+  String get clinicSlotAddDate => 'Add a date & time';
+
+  @override
+  String clinicSlotPendingCount(int count) {
+    return '$count queued';
+  }
+
+  @override
+  String get clinicPublishButton => 'Publish';
+
+  @override
+  String get clinicWeekdaysLabel => 'Days of the week';
+
+  @override
+  String get clinicStartTimeHint => 'From';
+
+  @override
+  String get clinicEndTimeHint => 'To';
+
+  @override
+  String get clinicIntervalHint => 'Interval (minutes)';
+
+  @override
+  String get clinicWeeksHint => 'Repeat for (weeks)';
+
+  @override
+  String get clinicGenerateButton => 'Generate';
+
+  @override
+  String clinicSlotsPublished(int created, int skipped) {
+    String _temp0 = intl.Intl.pluralLogic(
+      skipped,
+      locale: localeName,
+      other: ', $skipped skipped',
+      zero: '',
+    );
+    return '$created slots published$_temp0.';
+  }
+
+  @override
+  String get clinicSlotDeleteConfirm => 'Remove this slot?';
+
+  @override
+  String get clinicWeekday0 => 'Sun';
+
+  @override
+  String get clinicWeekday1 => 'Mon';
+
+  @override
+  String get clinicWeekday2 => 'Tue';
+
+  @override
+  String get clinicWeekday3 => 'Wed';
+
+  @override
+  String get clinicWeekday4 => 'Thu';
+
+  @override
+  String get clinicWeekday5 => 'Fri';
+
+  @override
+  String get clinicWeekday6 => 'Sat';
+
+  @override
+  String get clinicSelectWeekdaysError => 'Choose at least one day.';
 }
