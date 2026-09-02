@@ -1777,6 +1777,36 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'اختر عدد النجوم أولًا.'**
   String get ratingsSelectStarsError;
+
+  /// No description provided for @walletTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المحفظة'**
+  String get walletTitle;
+
+  /// No description provided for @walletAvailableBalance.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرصيد المتاح'**
+  String get walletAvailableBalance;
+
+  /// No description provided for @walletLockedBalance.
+  ///
+  /// In ar, this message translates to:
+  /// **'رصيد محجوز'**
+  String get walletLockedBalance;
+
+  /// No description provided for @walletTransactionsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحركات'**
+  String get walletTransactionsTitle;
+
+  /// No description provided for @walletTransactionsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد حركات بعد.'**
+  String get walletTransactionsEmpty;
 }
 
 class _AppLocalizationsDelegate

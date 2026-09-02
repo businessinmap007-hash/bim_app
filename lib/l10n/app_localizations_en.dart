@@ -898,4 +898,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ratingsSelectStarsError => 'Choose a star rating first.';
+
+  @override
+  String get walletTitle => 'Wallet';
+
+  @override
+  String get walletAvailableBalance => 'Available balance';
+
+  @override
+  String get walletLockedBalance => 'Locked balance';
+
+  @override
+  String get walletTransactionsTitle => 'Transactions';
+
+  @override
+  String get walletTransactionsEmpty => 'No transactions yet.';
 }

@@ -297,5 +297,10 @@
   "ratingsSubmit": "Submit review",
   "ratingsCommentHint": "Write a comment (optional)",
   "ratingsSubmitted": "Your review was submitted.",
-  "ratingsSelectStarsError": "Choose a star rating first."
+  "ratingsSelectStarsError": "Choose a star rating first.",
+  "walletTitle": "Wallet",
+  "walletAvailableBalance": "Available balance",
+  "walletLockedBalance": "Locked balance",
+  "walletTransactionsTitle": "Transactions",
+  "walletTransactionsEmpty": "No transactions yet."
 }

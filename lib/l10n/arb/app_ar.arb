@@ -297,5 +297,10 @@
   "ratingsSubmit": "إرسال التقييم",
   "ratingsCommentHint": "اكتب تعليقك (اختياري)",
   "ratingsSubmitted": "تم إرسال تقييمك بنجاح.",
-  "ratingsSelectStarsError": "اختر عدد النجوم أولًا."
+  "ratingsSelectStarsError": "اختر عدد النجوم أولًا.",
+  "walletTitle": "المحفظة",
+  "walletAvailableBalance": "الرصيد المتاح",
+  "walletLockedBalance": "رصيد محجوز",
+  "walletTransactionsTitle": "الحركات",
+  "walletTransactionsEmpty": "لا توجد حركات بعد."
 }

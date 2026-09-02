@@ -6,6 +6,7 @@ import '../../app/theme/app_colors.dart';
 import '../../features/auth/application/auth_controller.dart';
 import '../../features/orders/presentation/screens/orders_and_bookings_screen.dart';
 import '../../features/posts/presentation/screens/my_posts_screen.dart';
+import '../../features/wallet/presentation/screens/wallet_screen.dart';
 import '../../l10n/app_localizations.dart';
 
 /// The app's account menu — reached via the AppBar's automatic hamburger
@@ -66,6 +67,14 @@ class AppDrawer extends ConsumerWidget {
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const OrdersAndBookingsScreen()),
                 );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.account_balance_wallet_outlined),
+              title: Text(l10n.walletTitle),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => const WalletScreen()));
               },
             ),
             ListTile(

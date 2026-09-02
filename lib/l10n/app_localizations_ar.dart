@@ -905,4 +905,19 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get ratingsSelectStarsError => 'اختر عدد النجوم أولًا.';
+
+  @override
+  String get walletTitle => 'المحفظة';
+
+  @override
+  String get walletAvailableBalance => 'الرصيد المتاح';
+
+  @override
+  String get walletLockedBalance => 'رصيد محجوز';
+
+  @override
+  String get walletTransactionsTitle => 'الحركات';
+
+  @override
+  String get walletTransactionsEmpty => 'لا توجد حركات بعد.';
 }
