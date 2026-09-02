@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../disputes/application/disputes_providers.dart';
+import '../../../disputes/presentation/screens/dispute_detail_screen.dart';
+import '../../../disputes/presentation/widgets/dispute_reason_picker.dart';
 import '../../application/schedules_providers.dart';
 import '../../data/models/trip_reservation.dart';
 
@@ -60,6 +64,29 @@ class _MyReservationsScreenState extends ConsumerState<MyReservationsScreen> {
     }
   }
 
+  Future<void> _reportProblem(TripReservation reservation) async {
+    final l10n = AppLocalizations.of(context)!;
+    final result = await showDisputeReasonPicker(context, ref);
+    if (result == null || !mounted) return;
+
+    try {
+      final dispute = await ref
+          .read(disputesApiProvider)
+          .openForTrip(reservation.id, reasonCode: result.reasonCode, reasonText: result.reasonText);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.disputeOpened)));
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => DisputeDetailScreen(disputeId: dispute.id)),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        final message = e is ApiException ? e.message : l10n.commonSomethingWentWrong;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -100,7 +127,11 @@ class _MyReservationsScreenState extends ConsumerState<MyReservationsScreen> {
                     );
                   }
                   final reservation = state.items[index];
-                  return _ReservationTile(reservation: reservation, onCancel: () => _cancel(reservation));
+                  return _ReservationTile(
+                    reservation: reservation,
+                    onCancel: () => _cancel(reservation),
+                    onReportProblem: () => _reportProblem(reservation),
+                  );
                 },
               ),
             ),
@@ -111,7 +142,8 @@ class _MyReservationsScreenState extends ConsumerState<MyReservationsScreen> {
 class _ReservationTile extends StatelessWidget {
   final TripReservation reservation;
   final VoidCallback onCancel;
-  const _ReservationTile({required this.reservation, required this.onCancel});
+  final VoidCallback onReportProblem;
+  const _ReservationTile({required this.reservation, required this.onCancel, required this.onReportProblem});
 
   @override
   Widget build(BuildContext context) {
@@ -122,9 +154,19 @@ class _ReservationTile extends StatelessWidget {
         leading: const Icon(Icons.local_shipping_outlined),
         title: Text('${reservation.units} · ${(reservation.totalPrice ?? 0).toStringAsFixed(0)} ${reservation.currency}'),
         subtitle: Text(_statusLabel(reservation.status, l10n)),
-        trailing: reservation.isCancellable
-            ? TextButton(onPressed: onCancel, child: Text(l10n.tripReservationCancel))
-            : null,
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (reservation.status != 'blocked')
+              IconButton(
+                tooltip: l10n.disputeOpenTitle,
+                icon: const Icon(Icons.report_gmailerrorred_outlined),
+                onPressed: onReportProblem,
+              ),
+            if (reservation.isCancellable)
+              TextButton(onPressed: onCancel, child: Text(l10n.tripReservationCancel)),
+          ],
+        ),
       ),
     );
   }

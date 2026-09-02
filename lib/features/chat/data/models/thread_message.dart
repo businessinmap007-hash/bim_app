@@ -1,6 +1,30 @@
+/// A file attached to a message (see ThreadAttachmentResource). `url` is
+/// already an absolute API URL — never pass it through `Env.assetUrl`.
+class ThreadAttachment {
+  final int id;
+  final String url;
+  final String? name;
+  final String? mime;
+  final int? size;
+
+  const ThreadAttachment({required this.id, required this.url, this.name, this.mime, this.size});
+
+  bool get isImage => mime?.startsWith('image/') ?? false;
+
+  factory ThreadAttachment.fromJson(Map<String, dynamic> json) => ThreadAttachment(
+    id: json['id'] as int,
+    url: json['url'] as String? ?? '',
+    name: json['name'] as String?,
+    mime: json['mime'] as String?,
+    size: (json['size'] as num?)?.toInt(),
+  );
+}
+
 /// Mirrors `ThreadMessageResource` — one line in an operation chat. A
 /// `kind == 'system'` message (thread opened/closed, ...) has no sender and
-/// must never render as if someone sent it.
+/// must never render as if someone sent it. `attachments` is empty for the
+/// text-only threads (operation/training chat); the dispute room is the one
+/// caller that populates it.
 class ThreadMessage {
   final int id;
   final String kind;
@@ -8,6 +32,7 @@ class ThreadMessage {
   final bool isMine;
   final String? senderName;
   final DateTime? createdAt;
+  final List<ThreadAttachment> attachments;
 
   const ThreadMessage({
     required this.id,
@@ -16,6 +41,7 @@ class ThreadMessage {
     required this.isMine,
     this.senderName,
     this.createdAt,
+    this.attachments = const [],
   });
 
   bool get isSystem => kind == 'system';
@@ -29,6 +55,9 @@ class ThreadMessage {
       isMine: json['is_mine'] as bool? ?? false,
       senderName: sender?['name'] as String?,
       createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
+      attachments: (json['attachments'] as List<dynamic>? ?? [])
+          .map((e) => ThreadAttachment.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
   }
 }

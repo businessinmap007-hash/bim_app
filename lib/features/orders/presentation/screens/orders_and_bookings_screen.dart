@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
+import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../booking/application/booking_providers.dart';
 import '../../../booking/data/models/booking.dart';
 import '../../../cart/application/cart_controller.dart';
 import '../../../cart/presentation/screens/cart_screen.dart';
 import '../../../chat/presentation/screens/operation_chat_screen.dart';
+import '../../../disputes/application/disputes_providers.dart';
+import '../../../disputes/presentation/screens/dispute_detail_screen.dart';
+import '../../../disputes/presentation/widgets/dispute_reason_picker.dart';
 import '../../../projects/presentation/screens/project_progress_screen.dart';
 import '../../../ratings/presentation/widgets/leave_review_sheet.dart';
 import '../../application/orders_providers.dart';
@@ -240,6 +244,33 @@ class _OrderDetailSheetState extends ConsumerState<_OrderDetailSheet> {
     }
   }
 
+  Future<void> _reportProblem(PlacedOrder order) async {
+    final l10n = AppLocalizations.of(context)!;
+    final result = await showDisputeReasonPicker(context, ref);
+    if (result == null || !mounted) return;
+
+    setState(() => _busy = true);
+    try {
+      final dispute = await ref
+          .read(disputesApiProvider)
+          .openForOrder(order.id, reasonCode: result.reasonCode, reasonText: result.reasonText);
+      if (mounted) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.disputeOpened)));
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => DisputeDetailScreen(disputeId: dispute.id)),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        final message = e is ApiException ? e.message : l10n.commonSomethingWentWrong;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -339,6 +370,11 @@ class _OrderDetailSheetState extends ConsumerState<_OrderDetailSheet> {
             child: _busy
                 ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
                 : Text(l10n.ordersReorder),
+          ),
+          const SizedBox(height: 8),
+          OutlinedButton(
+            onPressed: _busy ? null : () => _reportProblem(order),
+            child: Text(l10n.disputeOpenTitle),
           ),
         ],
       ),
@@ -504,6 +540,33 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
     }
   }
 
+  Future<void> _reportProblem() async {
+    final l10n = AppLocalizations.of(context)!;
+    final result = await showDisputeReasonPicker(context, ref);
+    if (result == null || !mounted) return;
+
+    setState(() => _busy = true);
+    try {
+      final dispute = await ref
+          .read(disputesApiProvider)
+          .openForBooking(widget.booking.id, reasonCode: result.reasonCode, reasonText: result.reasonText);
+      if (mounted) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.disputeOpened)));
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => DisputeDetailScreen(disputeId: dispute.id)),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        final message = e is ApiException ? e.message : l10n.commonSomethingWentWrong;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -582,6 +645,14 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
                   ),
                 ),
                 child: Text(l10n.projectViewProgress),
+              ),
+            ),
+            const SizedBox(height: 8),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: _busy ? null : _reportProblem,
+                child: Text(l10n.disputeOpenTitle),
               ),
             ),
           ],

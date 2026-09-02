@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../app/theme/app_colors.dart';
 import '../../features/agenda/presentation/screens/agenda_screen.dart';
 import '../../features/auth/application/auth_controller.dart';
+import '../../features/disputes/presentation/screens/disputes_screen.dart';
 import '../../features/clinic/presentation/screens/my_clinic_appointments_screen.dart';
 import '../../features/fines/presentation/screens/fines_screen.dart';
 import '../../features/offers/presentation/screens/my_offer_follows_screen.dart';
@@ -159,6 +160,14 @@ class AppDrawer extends ConsumerWidget {
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => const MyOfferFollowsScreen()),
                       );
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.gavel_outlined),
+                    title: Text(l10n.disputesTitle),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const DisputesScreen()));
                     },
                   ),
                   ListTile(

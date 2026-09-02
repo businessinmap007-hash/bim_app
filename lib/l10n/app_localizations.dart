@@ -3187,6 +3187,444 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'ينتهى'**
   String get offerEndsAtLabel;
+
+  /// No description provided for @disputesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'نزاعاتي'**
+  String get disputesTitle;
+
+  /// No description provided for @disputesEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد نزاعات.'**
+  String get disputesEmpty;
+
+  /// No description provided for @disputeStatusOpen.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفتوح'**
+  String get disputeStatusOpen;
+
+  /// No description provided for @disputeStatusMutualResolution.
+  ///
+  /// In ar, this message translates to:
+  /// **'فترة التراضي'**
+  String get disputeStatusMutualResolution;
+
+  /// No description provided for @disputeStatusUnderReview.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيد التحكيم'**
+  String get disputeStatusUnderReview;
+
+  /// No description provided for @disputeStatusResolved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الفصل'**
+  String get disputeStatusResolved;
+
+  /// No description provided for @disputeStatusClosed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مغلق'**
+  String get disputeStatusClosed;
+
+  /// No description provided for @disputeStatusCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغى'**
+  String get disputeStatusCancelled;
+
+  /// No description provided for @disputeStatusExpired.
+  ///
+  /// In ar, this message translates to:
+  /// **'منتهي'**
+  String get disputeStatusExpired;
+
+  /// No description provided for @disputeRoleOpener.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنت من فتح هذا النزاع'**
+  String get disputeRoleOpener;
+
+  /// No description provided for @disputeRoleRespondent.
+  ///
+  /// In ar, this message translates to:
+  /// **'فُتح ضدك'**
+  String get disputeRoleRespondent;
+
+  /// No description provided for @disputeReasonNotDelivered.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يُسلَّم'**
+  String get disputeReasonNotDelivered;
+
+  /// No description provided for @disputeReasonNotAsDescribed.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير مطابق للوصف'**
+  String get disputeReasonNotAsDescribed;
+
+  /// No description provided for @disputeReasonQuality.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشكلة في الجودة'**
+  String get disputeReasonQuality;
+
+  /// No description provided for @disputeReasonLate.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأخير'**
+  String get disputeReasonLate;
+
+  /// No description provided for @disputeReasonCancelledByBusiness.
+  ///
+  /// In ar, this message translates to:
+  /// **'ألغاه النشاط التجاري'**
+  String get disputeReasonCancelledByBusiness;
+
+  /// No description provided for @disputeReasonNoShow.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يحضر'**
+  String get disputeReasonNoShow;
+
+  /// No description provided for @disputeReasonOvercharged.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحصيل زائد'**
+  String get disputeReasonOvercharged;
+
+  /// No description provided for @disputeReasonDamage.
+  ///
+  /// In ar, this message translates to:
+  /// **'تلف'**
+  String get disputeReasonDamage;
+
+  /// No description provided for @disputeReasonOther.
+  ///
+  /// In ar, this message translates to:
+  /// **'أخرى'**
+  String get disputeReasonOther;
+
+  /// No description provided for @disputeOpenTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإبلاغ عن مشكلة'**
+  String get disputeOpenTitle;
+
+  /// No description provided for @disputeReasonLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'السبب'**
+  String get disputeReasonLabel;
+
+  /// No description provided for @disputeDetailsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل إضافية (اختياري)'**
+  String get disputeDetailsHint;
+
+  /// No description provided for @disputeOpened.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم فتح النزاع.'**
+  String get disputeOpened;
+
+  /// No description provided for @disputeCooperate.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنا منخرط فى التسوية'**
+  String get disputeCooperate;
+
+  /// No description provided for @disputeCooperated.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التسجيل كمنخرط.'**
+  String get disputeCooperated;
+
+  /// No description provided for @disputeRequestArbitration.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب التحكيم'**
+  String get disputeRequestArbitration;
+
+  /// No description provided for @disputeArbitrationRequested.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم طلب التحكيم.'**
+  String get disputeArbitrationRequested;
+
+  /// No description provided for @disputeArbitrationFeeLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسم الجلسة'**
+  String get disputeArbitrationFeeLabel;
+
+  /// No description provided for @disputeArbitrationBalanceLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'رصيدك'**
+  String get disputeArbitrationBalanceLabel;
+
+  /// No description provided for @disputeAgreeSettlement.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتفقنا — إنهاء النزاع'**
+  String get disputeAgreeSettlement;
+
+  /// No description provided for @disputeWithdrawSettlement.
+  ///
+  /// In ar, this message translates to:
+  /// **'سحب الموافقة'**
+  String get disputeWithdrawSettlement;
+
+  /// No description provided for @disputeSettlementAgreed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تسجيل الموافقة.'**
+  String get disputeSettlementAgreed;
+
+  /// No description provided for @disputeSettlementWithdrawn.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم سحب الموافقة.'**
+  String get disputeSettlementWithdrawn;
+
+  /// No description provided for @disputeSettlementCompleteLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'وافق الطرفان — تمت تسوية النزاع.'**
+  String get disputeSettlementCompleteLabel;
+
+  /// No description provided for @disputeSettlementWaitingLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار موافقة الطرف الآخر.'**
+  String get disputeSettlementWaitingLabel;
+
+  /// No description provided for @disputeCounterpartyLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطرف الآخر'**
+  String get disputeCounterpartyLabel;
+
+  /// No description provided for @disputeCooperationTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الانخراط فى التسوية'**
+  String get disputeCooperationTitle;
+
+  /// No description provided for @disputeCooperationClientLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'العميل'**
+  String get disputeCooperationClientLabel;
+
+  /// No description provided for @disputeCooperationBusinessLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'النشاط التجاري'**
+  String get disputeCooperationBusinessLabel;
+
+  /// No description provided for @disputeCooperationPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يحدث بعد'**
+  String get disputeCooperationPending;
+
+  /// No description provided for @disputeMyObligationsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما عليّ في هذا النزاع'**
+  String get disputeMyObligationsTitle;
+
+  /// No description provided for @disputeObligationsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مستحقات النزاعات'**
+  String get disputeObligationsTitle;
+
+  /// No description provided for @disputeSettleObligations.
+  ///
+  /// In ar, this message translates to:
+  /// **'السداد من المحفظة'**
+  String get disputeSettleObligations;
+
+  /// No description provided for @disputeObligationSettled.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم السداد.'**
+  String get disputeObligationSettled;
+
+  /// No description provided for @disputeObligationsBlockedNotice.
+  ///
+  /// In ar, this message translates to:
+  /// **'عليك مستحقات نزاعات غير مسددة تمنعك من عمليات جديدة.'**
+  String get disputeObligationsBlockedNotice;
+
+  /// No description provided for @disputeOwedByMeTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عليّ'**
+  String get disputeOwedByMeTitle;
+
+  /// No description provided for @disputeOwedToMeTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لي'**
+  String get disputeOwedToMeTitle;
+
+  /// No description provided for @disputeObligationsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد مستحق.'**
+  String get disputeObligationsEmpty;
+
+  /// No description provided for @disputeClosePurgeAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف هذه المحادثة'**
+  String get disputeClosePurgeAction;
+
+  /// No description provided for @disputeClosurePurgeConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف هذه المحادثة نهائيًا؟ يبقى سجل الحكم فقط.'**
+  String get disputeClosurePurgeConfirm;
+
+  /// No description provided for @disputeClosurePurged.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الطلب.'**
+  String get disputeClosurePurged;
+
+  /// No description provided for @disputeRoomTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'غرفة النزاع'**
+  String get disputeRoomTitle;
+
+  /// No description provided for @disputeConductTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'قواعد الغرفة'**
+  String get disputeConductTitle;
+
+  /// No description provided for @disputeConductAccept.
+  ///
+  /// In ar, this message translates to:
+  /// **'أوافق'**
+  String get disputeConductAccept;
+
+  /// No description provided for @disputeConductDecline.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا أوافق'**
+  String get disputeConductDecline;
+
+  /// No description provided for @disputeRoomLocked.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذه الغرفة مغلقة.'**
+  String get disputeRoomLocked;
+
+  /// No description provided for @disputeRoomPurgedNotice.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حذف هذه المحادثة.'**
+  String get disputeRoomPurgedNotice;
+
+  /// No description provided for @disputeSettlementPaymentsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'دفع خارج المنصة'**
+  String get disputeSettlementPaymentsTitle;
+
+  /// No description provided for @disputeProposePayment.
+  ///
+  /// In ar, this message translates to:
+  /// **'اقتراح دفعة'**
+  String get disputeProposePayment;
+
+  /// No description provided for @disputePayerLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'من يدفع'**
+  String get disputePayerLabel;
+
+  /// No description provided for @disputePayerClient.
+  ///
+  /// In ar, this message translates to:
+  /// **'العميل'**
+  String get disputePayerClient;
+
+  /// No description provided for @disputePayerBusiness.
+  ///
+  /// In ar, this message translates to:
+  /// **'النشاط التجاري'**
+  String get disputePayerBusiness;
+
+  /// No description provided for @disputeAmountHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ'**
+  String get disputeAmountHint;
+
+  /// No description provided for @disputeMethodHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'وسيلة الدفع (اختياري)'**
+  String get disputeMethodHint;
+
+  /// No description provided for @disputeNoteHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظة (اختياري)'**
+  String get disputeNoteHint;
+
+  /// No description provided for @disputePropose.
+  ///
+  /// In ar, this message translates to:
+  /// **'اقتراح'**
+  String get disputePropose;
+
+  /// No description provided for @disputeAccept.
+  ///
+  /// In ar, this message translates to:
+  /// **'قبول'**
+  String get disputeAccept;
+
+  /// No description provided for @disputeReject.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفض'**
+  String get disputeReject;
+
+  /// No description provided for @disputeConfirmReceived.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد الاستلام'**
+  String get disputeConfirmReceived;
+
+  /// No description provided for @disputeWithdraw.
+  ///
+  /// In ar, this message translates to:
+  /// **'سحب'**
+  String get disputeWithdraw;
+
+  /// No description provided for @disputeNoSettlementPayments.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد مقترحات دفع بعد.'**
+  String get disputeNoSettlementPayments;
+
+  /// No description provided for @disputeHistoryTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'السجل'**
+  String get disputeHistoryTitle;
 }
 
 class _AppLocalizationsDelegate

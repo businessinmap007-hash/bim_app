@@ -1611,4 +1611,227 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get offerEndsAtLabel => 'Ends';
+
+  @override
+  String get disputesTitle => 'My disputes';
+
+  @override
+  String get disputesEmpty => 'No disputes.';
+
+  @override
+  String get disputeStatusOpen => 'Open';
+
+  @override
+  String get disputeStatusMutualResolution => 'Settlement window';
+
+  @override
+  String get disputeStatusUnderReview => 'Under arbitration';
+
+  @override
+  String get disputeStatusResolved => 'Resolved';
+
+  @override
+  String get disputeStatusClosed => 'Closed';
+
+  @override
+  String get disputeStatusCancelled => 'Cancelled';
+
+  @override
+  String get disputeStatusExpired => 'Expired';
+
+  @override
+  String get disputeRoleOpener => 'You opened this';
+
+  @override
+  String get disputeRoleRespondent => 'Opened against you';
+
+  @override
+  String get disputeReasonNotDelivered => 'Not delivered';
+
+  @override
+  String get disputeReasonNotAsDescribed => 'Not as described';
+
+  @override
+  String get disputeReasonQuality => 'Quality issue';
+
+  @override
+  String get disputeReasonLate => 'Late';
+
+  @override
+  String get disputeReasonCancelledByBusiness => 'Cancelled by the business';
+
+  @override
+  String get disputeReasonNoShow => 'No-show';
+
+  @override
+  String get disputeReasonOvercharged => 'Overcharged';
+
+  @override
+  String get disputeReasonDamage => 'Damage';
+
+  @override
+  String get disputeReasonOther => 'Other';
+
+  @override
+  String get disputeOpenTitle => 'Report a problem';
+
+  @override
+  String get disputeReasonLabel => 'Reason';
+
+  @override
+  String get disputeDetailsHint => 'Additional details (optional)';
+
+  @override
+  String get disputeOpened => 'Dispute opened.';
+
+  @override
+  String get disputeCooperate => 'I\'m engaging with the settlement';
+
+  @override
+  String get disputeCooperated => 'Marked as engaging.';
+
+  @override
+  String get disputeRequestArbitration => 'Request arbitration';
+
+  @override
+  String get disputeArbitrationRequested => 'Arbitration requested.';
+
+  @override
+  String get disputeArbitrationFeeLabel => 'Session fee';
+
+  @override
+  String get disputeArbitrationBalanceLabel => 'Your balance';
+
+  @override
+  String get disputeAgreeSettlement => 'We agreed — end the dispute';
+
+  @override
+  String get disputeWithdrawSettlement => 'Withdraw agreement';
+
+  @override
+  String get disputeSettlementAgreed => 'Agreement recorded.';
+
+  @override
+  String get disputeSettlementWithdrawn => 'Agreement withdrawn.';
+
+  @override
+  String get disputeSettlementCompleteLabel =>
+      'Both sides agreed — the dispute is settled.';
+
+  @override
+  String get disputeSettlementWaitingLabel =>
+      'Waiting for the other side to agree.';
+
+  @override
+  String get disputeCounterpartyLabel => 'Other party';
+
+  @override
+  String get disputeCooperationTitle => 'Cooperation';
+
+  @override
+  String get disputeCooperationClientLabel => 'Client';
+
+  @override
+  String get disputeCooperationBusinessLabel => 'Business';
+
+  @override
+  String get disputeCooperationPending => 'Not yet';
+
+  @override
+  String get disputeMyObligationsTitle => 'What I owe on this dispute';
+
+  @override
+  String get disputeObligationsTitle => 'Dispute obligations';
+
+  @override
+  String get disputeSettleObligations => 'Settle from wallet';
+
+  @override
+  String get disputeObligationSettled => 'Settled.';
+
+  @override
+  String get disputeObligationsBlockedNotice =>
+      'You have unpaid dispute obligations blocking new operations.';
+
+  @override
+  String get disputeOwedByMeTitle => 'I owe';
+
+  @override
+  String get disputeOwedToMeTitle => 'Owed to me';
+
+  @override
+  String get disputeObligationsEmpty => 'Nothing outstanding.';
+
+  @override
+  String get disputeClosePurgeAction => 'Delete this conversation';
+
+  @override
+  String get disputeClosurePurgeConfirm =>
+      'Delete this conversation for good? Only the ruling record stays.';
+
+  @override
+  String get disputeClosurePurged => 'Requested.';
+
+  @override
+  String get disputeRoomTitle => 'Dispute room';
+
+  @override
+  String get disputeConductTitle => 'Room rules';
+
+  @override
+  String get disputeConductAccept => 'I agree';
+
+  @override
+  String get disputeConductDecline => 'I don\'t agree';
+
+  @override
+  String get disputeRoomLocked => 'This room is closed.';
+
+  @override
+  String get disputeRoomPurgedNotice => 'This conversation has been deleted.';
+
+  @override
+  String get disputeSettlementPaymentsTitle => 'Off-app payment';
+
+  @override
+  String get disputeProposePayment => 'Propose a payment';
+
+  @override
+  String get disputePayerLabel => 'Who pays';
+
+  @override
+  String get disputePayerClient => 'Client';
+
+  @override
+  String get disputePayerBusiness => 'Business';
+
+  @override
+  String get disputeAmountHint => 'Amount';
+
+  @override
+  String get disputeMethodHint => 'Method (optional)';
+
+  @override
+  String get disputeNoteHint => 'Note (optional)';
+
+  @override
+  String get disputePropose => 'Propose';
+
+  @override
+  String get disputeAccept => 'Accept';
+
+  @override
+  String get disputeReject => 'Reject';
+
+  @override
+  String get disputeConfirmReceived => 'Confirm received';
+
+  @override
+  String get disputeWithdraw => 'Withdraw';
+
+  @override
+  String get disputeNoSettlementPayments => 'No payment proposals yet.';
+
+  @override
+  String get disputeHistoryTitle => 'History';
 }

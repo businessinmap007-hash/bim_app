@@ -1613,4 +1613,226 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get offerEndsAtLabel => 'ينتهى';
+
+  @override
+  String get disputesTitle => 'نزاعاتي';
+
+  @override
+  String get disputesEmpty => 'لا توجد نزاعات.';
+
+  @override
+  String get disputeStatusOpen => 'مفتوح';
+
+  @override
+  String get disputeStatusMutualResolution => 'فترة التراضي';
+
+  @override
+  String get disputeStatusUnderReview => 'قيد التحكيم';
+
+  @override
+  String get disputeStatusResolved => 'تم الفصل';
+
+  @override
+  String get disputeStatusClosed => 'مغلق';
+
+  @override
+  String get disputeStatusCancelled => 'ملغى';
+
+  @override
+  String get disputeStatusExpired => 'منتهي';
+
+  @override
+  String get disputeRoleOpener => 'أنت من فتح هذا النزاع';
+
+  @override
+  String get disputeRoleRespondent => 'فُتح ضدك';
+
+  @override
+  String get disputeReasonNotDelivered => 'لم يُسلَّم';
+
+  @override
+  String get disputeReasonNotAsDescribed => 'غير مطابق للوصف';
+
+  @override
+  String get disputeReasonQuality => 'مشكلة في الجودة';
+
+  @override
+  String get disputeReasonLate => 'تأخير';
+
+  @override
+  String get disputeReasonCancelledByBusiness => 'ألغاه النشاط التجاري';
+
+  @override
+  String get disputeReasonNoShow => 'لم يحضر';
+
+  @override
+  String get disputeReasonOvercharged => 'تحصيل زائد';
+
+  @override
+  String get disputeReasonDamage => 'تلف';
+
+  @override
+  String get disputeReasonOther => 'أخرى';
+
+  @override
+  String get disputeOpenTitle => 'الإبلاغ عن مشكلة';
+
+  @override
+  String get disputeReasonLabel => 'السبب';
+
+  @override
+  String get disputeDetailsHint => 'تفاصيل إضافية (اختياري)';
+
+  @override
+  String get disputeOpened => 'تم فتح النزاع.';
+
+  @override
+  String get disputeCooperate => 'أنا منخرط فى التسوية';
+
+  @override
+  String get disputeCooperated => 'تم التسجيل كمنخرط.';
+
+  @override
+  String get disputeRequestArbitration => 'طلب التحكيم';
+
+  @override
+  String get disputeArbitrationRequested => 'تم طلب التحكيم.';
+
+  @override
+  String get disputeArbitrationFeeLabel => 'رسم الجلسة';
+
+  @override
+  String get disputeArbitrationBalanceLabel => 'رصيدك';
+
+  @override
+  String get disputeAgreeSettlement => 'اتفقنا — إنهاء النزاع';
+
+  @override
+  String get disputeWithdrawSettlement => 'سحب الموافقة';
+
+  @override
+  String get disputeSettlementAgreed => 'تم تسجيل الموافقة.';
+
+  @override
+  String get disputeSettlementWithdrawn => 'تم سحب الموافقة.';
+
+  @override
+  String get disputeSettlementCompleteLabel =>
+      'وافق الطرفان — تمت تسوية النزاع.';
+
+  @override
+  String get disputeSettlementWaitingLabel => 'بانتظار موافقة الطرف الآخر.';
+
+  @override
+  String get disputeCounterpartyLabel => 'الطرف الآخر';
+
+  @override
+  String get disputeCooperationTitle => 'الانخراط فى التسوية';
+
+  @override
+  String get disputeCooperationClientLabel => 'العميل';
+
+  @override
+  String get disputeCooperationBusinessLabel => 'النشاط التجاري';
+
+  @override
+  String get disputeCooperationPending => 'لم يحدث بعد';
+
+  @override
+  String get disputeMyObligationsTitle => 'ما عليّ في هذا النزاع';
+
+  @override
+  String get disputeObligationsTitle => 'مستحقات النزاعات';
+
+  @override
+  String get disputeSettleObligations => 'السداد من المحفظة';
+
+  @override
+  String get disputeObligationSettled => 'تم السداد.';
+
+  @override
+  String get disputeObligationsBlockedNotice =>
+      'عليك مستحقات نزاعات غير مسددة تمنعك من عمليات جديدة.';
+
+  @override
+  String get disputeOwedByMeTitle => 'عليّ';
+
+  @override
+  String get disputeOwedToMeTitle => 'لي';
+
+  @override
+  String get disputeObligationsEmpty => 'لا يوجد مستحق.';
+
+  @override
+  String get disputeClosePurgeAction => 'حذف هذه المحادثة';
+
+  @override
+  String get disputeClosurePurgeConfirm =>
+      'حذف هذه المحادثة نهائيًا؟ يبقى سجل الحكم فقط.';
+
+  @override
+  String get disputeClosurePurged => 'تم الطلب.';
+
+  @override
+  String get disputeRoomTitle => 'غرفة النزاع';
+
+  @override
+  String get disputeConductTitle => 'قواعد الغرفة';
+
+  @override
+  String get disputeConductAccept => 'أوافق';
+
+  @override
+  String get disputeConductDecline => 'لا أوافق';
+
+  @override
+  String get disputeRoomLocked => 'هذه الغرفة مغلقة.';
+
+  @override
+  String get disputeRoomPurgedNotice => 'تم حذف هذه المحادثة.';
+
+  @override
+  String get disputeSettlementPaymentsTitle => 'دفع خارج المنصة';
+
+  @override
+  String get disputeProposePayment => 'اقتراح دفعة';
+
+  @override
+  String get disputePayerLabel => 'من يدفع';
+
+  @override
+  String get disputePayerClient => 'العميل';
+
+  @override
+  String get disputePayerBusiness => 'النشاط التجاري';
+
+  @override
+  String get disputeAmountHint => 'المبلغ';
+
+  @override
+  String get disputeMethodHint => 'وسيلة الدفع (اختياري)';
+
+  @override
+  String get disputeNoteHint => 'ملاحظة (اختياري)';
+
+  @override
+  String get disputePropose => 'اقتراح';
+
+  @override
+  String get disputeAccept => 'قبول';
+
+  @override
+  String get disputeReject => 'رفض';
+
+  @override
+  String get disputeConfirmReceived => 'تأكيد الاستلام';
+
+  @override
+  String get disputeWithdraw => 'سحب';
+
+  @override
+  String get disputeNoSettlementPayments => 'لا توجد مقترحات دفع بعد.';
+
+  @override
+  String get disputeHistoryTitle => 'السجل';
 }
