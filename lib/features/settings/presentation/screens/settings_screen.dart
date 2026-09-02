@@ -7,6 +7,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../auth/application/auth_controller.dart';
 import '../../../auth/presentation/screens/account_deletion_screen.dart';
 import '../../../booking_settings/presentation/screens/booking_settings_screen.dart';
+import '../../../business_prices/presentation/screens/business_prices_screen.dart';
 import '../../../business_menu/presentation/screens/menu_items_screen.dart';
 import '../../../clinic_management/presentation/screens/clinic_management_screen.dart';
 import '../../../media/presentation/widgets/watermark_repeat_selector.dart';
@@ -153,6 +154,15 @@ class SettingsScreen extends ConsumerWidget {
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => const TrainingTemplatesScreen()),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.sell_outlined),
+                  title: Text(l10n.businessPricesTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const BusinessPricesScreen()),
                   ),
                 ),
                 const Divider(height: 1),

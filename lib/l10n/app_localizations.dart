@@ -5185,6 +5185,204 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'حذف هذا؟'**
   String get trainingRemoveRowConfirm;
+
+  /// No description provided for @businessPricesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسعاري'**
+  String get businessPricesTitle;
+
+  /// No description provided for @businessPricesSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر كل نوع تقدّمه — يخصّك أنت فقط.'**
+  String get businessPricesSubtitle;
+
+  /// No description provided for @businessPricesEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أسعار بعد.'**
+  String get businessPricesEmpty;
+
+  /// No description provided for @businessPricesAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة سعر'**
+  String get businessPricesAdd;
+
+  /// No description provided for @businessPricesFilterAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل الخدمات'**
+  String get businessPricesFilterAll;
+
+  /// No description provided for @businessPriceDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف هذا السعر؟'**
+  String get businessPriceDeleteConfirm;
+
+  /// No description provided for @businessPriceEditTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل السعر'**
+  String get businessPriceEditTitle;
+
+  /// No description provided for @businessPriceAddTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة سعر'**
+  String get businessPriceAddTitle;
+
+  /// No description provided for @priceFieldService.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخدمة'**
+  String get priceFieldService;
+
+  /// No description provided for @priceFieldServiceHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الخدمة'**
+  String get priceFieldServiceHint;
+
+  /// No description provided for @priceFieldItemType.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع العنصر'**
+  String get priceFieldItemType;
+
+  /// No description provided for @priceFieldItemTypePickServiceFirst.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الخدمة أولًا'**
+  String get priceFieldItemTypePickServiceFirst;
+
+  /// No description provided for @priceFieldItemTypeEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أنواع مسموحة'**
+  String get priceFieldItemTypeEmpty;
+
+  /// No description provided for @priceFieldItemTypeHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر النوع'**
+  String get priceFieldItemTypeHint;
+
+  /// No description provided for @priceFieldPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر'**
+  String get priceFieldPrice;
+
+  /// No description provided for @priceFieldCurrency.
+  ///
+  /// In ar, this message translates to:
+  /// **'العملة'**
+  String get priceFieldCurrency;
+
+  /// No description provided for @priceFieldActive.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفعّل'**
+  String get priceFieldActive;
+
+  /// No description provided for @priceChargeModeLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة الاحتساب'**
+  String get priceChargeModeLabel;
+
+  /// No description provided for @priceChargeModeStandard.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر عادي'**
+  String get priceChargeModeStandard;
+
+  /// No description provided for @priceChargeModeFree.
+  ///
+  /// In ar, this message translates to:
+  /// **'مجانية — يُحتسب الأكل فقط'**
+  String get priceChargeModeFree;
+
+  /// No description provided for @priceChargeModeReservationFee.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسوم حجز ثابتة'**
+  String get priceChargeModeReservationFee;
+
+  /// No description provided for @priceChargeModeMinimum.
+  ///
+  /// In ar, this message translates to:
+  /// **'حد أدنى للطلب'**
+  String get priceChargeModeMinimum;
+
+  /// No description provided for @priceFieldChargeAmount.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيمة الرسوم / الحد الأدنى'**
+  String get priceFieldChargeAmount;
+
+  /// No description provided for @priceFieldDuration.
+  ///
+  /// In ar, this message translates to:
+  /// **'مدة الموعد (بالدقائق)'**
+  String get priceFieldDuration;
+
+  /// No description provided for @priceFieldDurationHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتركه فارغًا إن لم يكن للموعد مدة ثابتة'**
+  String get priceFieldDurationHint;
+
+  /// No description provided for @priceDiscountEnable.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفعيل الخصم'**
+  String get priceDiscountEnable;
+
+  /// No description provided for @priceFieldDiscountPercent.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة الخصم %'**
+  String get priceFieldDiscountPercent;
+
+  /// No description provided for @priceVocabTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما الذي تبيعه هنا؟'**
+  String get priceVocabTitle;
+
+  /// No description provided for @priceLineLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'النوع'**
+  String get priceLineLabel;
+
+  /// No description provided for @priceLineNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'— بدون تحديد —'**
+  String get priceLineNone;
+
+  /// No description provided for @priceModifiersLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما يميّزه'**
+  String get priceModifiersLabel;
+
+  /// No description provided for @priceModifierAdjustHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُضاف إلى سعر الوحدة — اتركه فارغًا إن كان لا يغيّر السعر'**
+  String get priceModifierAdjustHint;
+
+  /// No description provided for @priceNoServicesWarning.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد خدمات متاحة لنشاطك بعد.'**
+  String get priceNoServicesWarning;
 }
 
 class _AppLocalizationsDelegate

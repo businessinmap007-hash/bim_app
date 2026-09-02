@@ -2659,4 +2659,105 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trainingRemoveRowConfirm => 'Delete this?';
+
+  @override
+  String get businessPricesTitle => 'My Prices';
+
+  @override
+  String get businessPricesSubtitle => 'Price per type you offer — yours only.';
+
+  @override
+  String get businessPricesEmpty => 'No prices yet.';
+
+  @override
+  String get businessPricesAdd => 'Add price';
+
+  @override
+  String get businessPricesFilterAll => 'All services';
+
+  @override
+  String get businessPriceDeleteConfirm => 'Delete this price?';
+
+  @override
+  String get businessPriceEditTitle => 'Edit price';
+
+  @override
+  String get businessPriceAddTitle => 'Add price';
+
+  @override
+  String get priceFieldService => 'Service';
+
+  @override
+  String get priceFieldServiceHint => 'Choose a service';
+
+  @override
+  String get priceFieldItemType => 'Item type';
+
+  @override
+  String get priceFieldItemTypePickServiceFirst => 'Choose the service first';
+
+  @override
+  String get priceFieldItemTypeEmpty => 'No allowed types';
+
+  @override
+  String get priceFieldItemTypeHint => 'Choose the type';
+
+  @override
+  String get priceFieldPrice => 'Price';
+
+  @override
+  String get priceFieldCurrency => 'Currency';
+
+  @override
+  String get priceFieldActive => 'Active';
+
+  @override
+  String get priceChargeModeLabel => 'Charge mode';
+
+  @override
+  String get priceChargeModeStandard => 'Standard price';
+
+  @override
+  String get priceChargeModeFree => 'Free — food only is charged';
+
+  @override
+  String get priceChargeModeReservationFee => 'Fixed reservation fee';
+
+  @override
+  String get priceChargeModeMinimum => 'Minimum order amount';
+
+  @override
+  String get priceFieldChargeAmount => 'Fee / minimum amount';
+
+  @override
+  String get priceFieldDuration => 'Appointment duration (minutes)';
+
+  @override
+  String get priceFieldDurationHint => 'Leave blank if no fixed duration';
+
+  @override
+  String get priceDiscountEnable => 'Enable discount';
+
+  @override
+  String get priceFieldDiscountPercent => 'Discount %';
+
+  @override
+  String get priceVocabTitle => 'What are you selling here?';
+
+  @override
+  String get priceLineLabel => 'Type';
+
+  @override
+  String get priceLineNone => '— Not specified —';
+
+  @override
+  String get priceModifiersLabel => 'What sets it apart';
+
+  @override
+  String get priceModifierAdjustHint =>
+      'Adds to the unit price — leave blank if descriptive only';
+
+  @override
+  String get priceNoServicesWarning =>
+      'No services available for your business yet.';
 }

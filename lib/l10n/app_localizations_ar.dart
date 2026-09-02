@@ -2659,4 +2659,105 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get trainingRemoveRowConfirm => 'حذف هذا؟';
+
+  @override
+  String get businessPricesTitle => 'أسعاري';
+
+  @override
+  String get businessPricesSubtitle => 'سعر كل نوع تقدّمه — يخصّك أنت فقط.';
+
+  @override
+  String get businessPricesEmpty => 'لا توجد أسعار بعد.';
+
+  @override
+  String get businessPricesAdd => 'إضافة سعر';
+
+  @override
+  String get businessPricesFilterAll => 'كل الخدمات';
+
+  @override
+  String get businessPriceDeleteConfirm => 'حذف هذا السعر؟';
+
+  @override
+  String get businessPriceEditTitle => 'تعديل السعر';
+
+  @override
+  String get businessPriceAddTitle => 'إضافة سعر';
+
+  @override
+  String get priceFieldService => 'الخدمة';
+
+  @override
+  String get priceFieldServiceHint => 'اختر الخدمة';
+
+  @override
+  String get priceFieldItemType => 'نوع العنصر';
+
+  @override
+  String get priceFieldItemTypePickServiceFirst => 'اختر الخدمة أولًا';
+
+  @override
+  String get priceFieldItemTypeEmpty => 'لا توجد أنواع مسموحة';
+
+  @override
+  String get priceFieldItemTypeHint => 'اختر النوع';
+
+  @override
+  String get priceFieldPrice => 'السعر';
+
+  @override
+  String get priceFieldCurrency => 'العملة';
+
+  @override
+  String get priceFieldActive => 'مفعّل';
+
+  @override
+  String get priceChargeModeLabel => 'طريقة الاحتساب';
+
+  @override
+  String get priceChargeModeStandard => 'سعر عادي';
+
+  @override
+  String get priceChargeModeFree => 'مجانية — يُحتسب الأكل فقط';
+
+  @override
+  String get priceChargeModeReservationFee => 'رسوم حجز ثابتة';
+
+  @override
+  String get priceChargeModeMinimum => 'حد أدنى للطلب';
+
+  @override
+  String get priceFieldChargeAmount => 'قيمة الرسوم / الحد الأدنى';
+
+  @override
+  String get priceFieldDuration => 'مدة الموعد (بالدقائق)';
+
+  @override
+  String get priceFieldDurationHint =>
+      'اتركه فارغًا إن لم يكن للموعد مدة ثابتة';
+
+  @override
+  String get priceDiscountEnable => 'تفعيل الخصم';
+
+  @override
+  String get priceFieldDiscountPercent => 'نسبة الخصم %';
+
+  @override
+  String get priceVocabTitle => 'ما الذي تبيعه هنا؟';
+
+  @override
+  String get priceLineLabel => 'النوع';
+
+  @override
+  String get priceLineNone => '— بدون تحديد —';
+
+  @override
+  String get priceModifiersLabel => 'ما يميّزه';
+
+  @override
+  String get priceModifierAdjustHint =>
+      'يُضاف إلى سعر الوحدة — اتركه فارغًا إن كان لا يغيّر السعر';
+
+  @override
+  String get priceNoServicesWarning => 'لا توجد خدمات متاحة لنشاطك بعد.';
 }
