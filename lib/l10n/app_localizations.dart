@@ -3685,6 +3685,90 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'كتابة عنوان آخر'**
   String get addressUseNewLabel;
+
+  /// No description provided for @commentsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'التعليقات'**
+  String get commentsTitle;
+
+  /// No description provided for @commentsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد تعليقات بعد.'**
+  String get commentsEmpty;
+
+  /// No description provided for @commentComposeHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف تعليقًا...'**
+  String get commentComposeHint;
+
+  /// No description provided for @commentReplyHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب ردًا...'**
+  String get commentReplyHint;
+
+  /// No description provided for @commentPrivateToggle.
+  ///
+  /// In ar, this message translates to:
+  /// **'يظهر لصاحب المنشور فقط'**
+  String get commentPrivateToggle;
+
+  /// No description provided for @commentPrivateBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'خاص'**
+  String get commentPrivateBadge;
+
+  /// No description provided for @commentRepliesLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'ردود'**
+  String get commentRepliesLabel;
+
+  /// No description provided for @commentViewReplies.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض الردود'**
+  String get commentViewReplies;
+
+  /// No description provided for @commentHideReplies.
+  ///
+  /// In ar, this message translates to:
+  /// **'إخفاء الردود'**
+  String get commentHideReplies;
+
+  /// No description provided for @commentReplyAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'رد'**
+  String get commentReplyAction;
+
+  /// No description provided for @commentEditAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل'**
+  String get commentEditAction;
+
+  /// No description provided for @commentDeleteAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف'**
+  String get commentDeleteAction;
+
+  /// No description provided for @commentDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف هذا التعليق؟'**
+  String get commentDeleteConfirm;
+
+  /// No description provided for @commentSend.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشر'**
+  String get commentSend;
 }
 
 class _AppLocalizationsDelegate

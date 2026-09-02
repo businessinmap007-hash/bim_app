@@ -1864,4 +1864,46 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addressUseNewLabel => 'Type a different address';
+
+  @override
+  String get commentsTitle => 'Comments';
+
+  @override
+  String get commentsEmpty => 'No comments yet.';
+
+  @override
+  String get commentComposeHint => 'Add a comment...';
+
+  @override
+  String get commentReplyHint => 'Write a reply...';
+
+  @override
+  String get commentPrivateToggle => 'Only visible to the post\'s owner';
+
+  @override
+  String get commentPrivateBadge => 'Private';
+
+  @override
+  String get commentRepliesLabel => 'replies';
+
+  @override
+  String get commentViewReplies => 'View replies';
+
+  @override
+  String get commentHideReplies => 'Hide replies';
+
+  @override
+  String get commentReplyAction => 'Reply';
+
+  @override
+  String get commentEditAction => 'Edit';
+
+  @override
+  String get commentDeleteAction => 'Delete';
+
+  @override
+  String get commentDeleteConfirm => 'Delete this comment?';
+
+  @override
+  String get commentSend => 'Post';
 }

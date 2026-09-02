@@ -615,5 +615,19 @@
   "addressMakePrimary": "Make this the primary address",
   "addressDeleteConfirm": "Delete this address?",
   "addressPickTitle": "Choose a delivery address",
-  "addressUseNewLabel": "Type a different address"
+  "addressUseNewLabel": "Type a different address",
+  "commentsTitle": "Comments",
+  "commentsEmpty": "No comments yet.",
+  "commentComposeHint": "Add a comment...",
+  "commentReplyHint": "Write a reply...",
+  "commentPrivateToggle": "Only visible to the post's owner",
+  "commentPrivateBadge": "Private",
+  "commentRepliesLabel": "replies",
+  "commentViewReplies": "View replies",
+  "commentHideReplies": "Hide replies",
+  "commentReplyAction": "Reply",
+  "commentEditAction": "Edit",
+  "commentDeleteAction": "Delete",
+  "commentDeleteConfirm": "Delete this comment?",
+  "commentSend": "Post"
 }

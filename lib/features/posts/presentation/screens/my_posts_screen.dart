@@ -6,6 +6,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../auth/application/auth_controller.dart';
 import '../../../business/data/models/business_post.dart';
 import '../../../business/presentation/widgets/post_card.dart';
+import '../../../comments/presentation/screens/comments_screen.dart';
 import '../../application/posts_controller.dart';
 import '../../data/models/job_post.dart';
 import 'create_job_screen.dart';
@@ -179,6 +180,9 @@ class _FollowedFeedTabState extends ConsumerState<FollowedFeedTab> {
               onReact: (reaction) => ref
                   .read(followedFeedControllerProvider.notifier)
                   .react(post.id, reaction),
+              onOpenComments: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => CommentsScreen(postId: post.id)),
+              ),
             );
           },
         ),
@@ -276,6 +280,9 @@ class _MyPostsTabState extends ConsumerState<MyPostsTab> {
                   .read(myPostsControllerProvider.notifier)
                   .react(post.id, reaction),
               onDelete: () => _confirmDelete(post),
+              onOpenComments: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => CommentsScreen(postId: post.id)),
+              ),
             );
           },
         ),

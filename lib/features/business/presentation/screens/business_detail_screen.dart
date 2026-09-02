@@ -10,6 +10,7 @@ import '../../../cart/application/cart_controller.dart';
 import '../../../cart/presentation/screens/cart_screen.dart';
 import '../../../cart/presentation/widgets/add_to_cart_sheet.dart';
 import '../../../clinic/presentation/screens/clinic_slots_screen.dart';
+import '../../../comments/presentation/screens/comments_screen.dart';
 import '../../../ratings/presentation/screens/reviews_screen.dart';
 import '../../application/business_page_providers.dart';
 import '../../data/models/business_profile.dart';
@@ -278,7 +279,13 @@ class _PostsTabState extends ConsumerState<_PostsTab> {
               child: Center(child: CircularProgressIndicator()),
             );
           }
-          return PostCard(post: state.items[index]);
+          final post = state.items[index];
+          return PostCard(
+            post: post,
+            onOpenComments: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => CommentsScreen(postId: post.id)),
+            ),
+          );
         },
       ),
     );

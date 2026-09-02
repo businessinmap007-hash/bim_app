@@ -615,5 +615,19 @@
   "addressMakePrimary": "اجعله العنوان الأساسي",
   "addressDeleteConfirm": "حذف هذا العنوان؟",
   "addressPickTitle": "اختر عنوان التوصيل",
-  "addressUseNewLabel": "كتابة عنوان آخر"
+  "addressUseNewLabel": "كتابة عنوان آخر",
+  "commentsTitle": "التعليقات",
+  "commentsEmpty": "لا توجد تعليقات بعد.",
+  "commentComposeHint": "أضف تعليقًا...",
+  "commentReplyHint": "اكتب ردًا...",
+  "commentPrivateToggle": "يظهر لصاحب المنشور فقط",
+  "commentPrivateBadge": "خاص",
+  "commentRepliesLabel": "ردود",
+  "commentViewReplies": "عرض الردود",
+  "commentHideReplies": "إخفاء الردود",
+  "commentReplyAction": "رد",
+  "commentEditAction": "تعديل",
+  "commentDeleteAction": "حذف",
+  "commentDeleteConfirm": "حذف هذا التعليق؟",
+  "commentSend": "نشر"
 }

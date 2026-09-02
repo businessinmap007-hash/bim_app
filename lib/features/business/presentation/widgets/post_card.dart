@@ -18,6 +18,7 @@ class PostCard extends StatelessWidget {
   final bool showAuthor;
   final ValueChanged<int>? onReact;
   final VoidCallback? onDelete;
+  final VoidCallback? onOpenComments;
 
   const PostCard({
     super.key,
@@ -25,6 +26,7 @@ class PostCard extends StatelessWidget {
     this.showAuthor = false,
     this.onReact,
     this.onDelete,
+    this.onOpenComments,
   });
 
   @override
@@ -102,12 +104,16 @@ class PostCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(6),
-                    child: Icon(
-                      Icons.mode_comment_outlined,
-                      size: 22,
-                      color: theme.textTheme.bodyLarge?.color,
+                  InkWell(
+                    onTap: onOpenComments,
+                    borderRadius: BorderRadius.circular(20),
+                    child: Padding(
+                      padding: const EdgeInsets.all(6),
+                      child: Icon(
+                        Icons.mode_comment_outlined,
+                        size: 22,
+                        color: theme.textTheme.bodyLarge?.color,
+                      ),
                     ),
                   ),
                 ],
@@ -158,10 +164,13 @@ class PostCard extends StatelessWidget {
               if (post.commentsCount > 0)
                 Padding(
                   padding: const EdgeInsets.fromLTRB(6, 4, 6, 0),
-                  child: Text(
-                    'عرض التعليقات (${post.commentsCount})',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.hintColor,
+                  child: InkWell(
+                    onTap: onOpenComments,
+                    child: Text(
+                      'عرض التعليقات (${post.commentsCount})',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.hintColor,
+                      ),
                     ),
                   ),
                 ),

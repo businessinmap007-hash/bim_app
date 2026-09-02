@@ -1865,4 +1865,46 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get addressUseNewLabel => 'كتابة عنوان آخر';
+
+  @override
+  String get commentsTitle => 'التعليقات';
+
+  @override
+  String get commentsEmpty => 'لا توجد تعليقات بعد.';
+
+  @override
+  String get commentComposeHint => 'أضف تعليقًا...';
+
+  @override
+  String get commentReplyHint => 'اكتب ردًا...';
+
+  @override
+  String get commentPrivateToggle => 'يظهر لصاحب المنشور فقط';
+
+  @override
+  String get commentPrivateBadge => 'خاص';
+
+  @override
+  String get commentRepliesLabel => 'ردود';
+
+  @override
+  String get commentViewReplies => 'عرض الردود';
+
+  @override
+  String get commentHideReplies => 'إخفاء الردود';
+
+  @override
+  String get commentReplyAction => 'رد';
+
+  @override
+  String get commentEditAction => 'تعديل';
+
+  @override
+  String get commentDeleteAction => 'حذف';
+
+  @override
+  String get commentDeleteConfirm => 'حذف هذا التعليق؟';
+
+  @override
+  String get commentSend => 'نشر';
 }
