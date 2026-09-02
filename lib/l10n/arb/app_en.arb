@@ -930,5 +930,12 @@
   "offerCompareSortRanking": "Top ranked",
   "offerCompareEmpty": "No offers found for this item yet.",
   "offerCompareBestPrice": "Best price",
-  "offerCompareRefundable": "Refundable"
+  "offerCompareRefundable": "Refundable",
+  "shopProductsTitle": "Shop Products",
+  "shopProductsSearchHint": "Search products...",
+  "shopProductsEmpty": "No products found.",
+  "shopProductsFilterAllBrands": "All brands",
+  "shopProductsSellersLabel": "sellers",
+  "productOffersEmpty": "No sellers currently.",
+  "productOffersStockLabel": "Stock"
 }

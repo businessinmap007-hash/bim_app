@@ -2793,4 +2793,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get offerCompareRefundable => 'Refundable';
+
+  @override
+  String get shopProductsTitle => 'Shop Products';
+
+  @override
+  String get shopProductsSearchHint => 'Search products...';
+
+  @override
+  String get shopProductsEmpty => 'No products found.';
+
+  @override
+  String get shopProductsFilterAllBrands => 'All brands';
+
+  @override
+  String get shopProductsSellersLabel => 'sellers';
+
+  @override
+  String get productOffersEmpty => 'No sellers currently.';
+
+  @override
+  String get productOffersStockLabel => 'Stock';
 }

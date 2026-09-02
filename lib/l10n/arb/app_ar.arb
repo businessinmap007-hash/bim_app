@@ -930,5 +930,12 @@
   "offerCompareSortRanking": "الأعلى تقييمًا",
   "offerCompareEmpty": "لا توجد عروض لهذا العنصر بعد.",
   "offerCompareBestPrice": "أفضل سعر",
-  "offerCompareRefundable": "قابل للاسترجاع"
+  "offerCompareRefundable": "قابل للاسترجاع",
+  "shopProductsTitle": "تسوّق المنتجات",
+  "shopProductsSearchHint": "ابحث عن منتج...",
+  "shopProductsEmpty": "لا توجد منتجات.",
+  "shopProductsFilterAllBrands": "كل العلامات",
+  "shopProductsSellersLabel": "بائع",
+  "productOffersEmpty": "لا يوجد بائعون حاليًا.",
+  "productOffersStockLabel": "المخزون"
 }

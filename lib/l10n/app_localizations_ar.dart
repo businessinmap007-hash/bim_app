@@ -2793,4 +2793,25 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get offerCompareRefundable => 'قابل للاسترجاع';
+
+  @override
+  String get shopProductsTitle => 'تسوّق المنتجات';
+
+  @override
+  String get shopProductsSearchHint => 'ابحث عن منتج...';
+
+  @override
+  String get shopProductsEmpty => 'لا توجد منتجات.';
+
+  @override
+  String get shopProductsFilterAllBrands => 'كل العلامات';
+
+  @override
+  String get shopProductsSellersLabel => 'بائع';
+
+  @override
+  String get productOffersEmpty => 'لا يوجد بائعون حاليًا.';
+
+  @override
+  String get productOffersStockLabel => 'المخزون';
 }

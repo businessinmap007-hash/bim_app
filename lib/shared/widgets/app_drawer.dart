@@ -17,6 +17,7 @@ import '../../features/offers/presentation/screens/offers_screen.dart';
 import '../../features/orders/presentation/screens/orders_and_bookings_screen.dart';
 import '../../features/posts/presentation/screens/my_posts_screen.dart';
 import '../../features/prescriptions/presentation/screens/prescriptions_screen.dart';
+import '../../features/retail_discovery/presentation/screens/shop_products_screen.dart';
 import '../../features/schedules/presentation/screens/trip_search_screen.dart';
 import '../../features/training/presentation/screens/training_plans_screen.dart';
 import '../../features/wallet/presentation/screens/wallet_screen.dart';
@@ -163,6 +164,16 @@ class AppDrawer extends ConsumerWidget {
                       Navigator.of(context).pop();
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => const MyOfferFollowsScreen()),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.storefront_outlined),
+                    title: Text(l10n.shopProductsTitle),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const ShopProductsScreen()),
                       );
                     },
                   ),

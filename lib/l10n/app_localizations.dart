@@ -5449,6 +5449,48 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'قابل للاسترجاع'**
   String get offerCompareRefundable;
+
+  /// No description provided for @shopProductsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسوّق المنتجات'**
+  String get shopProductsTitle;
+
+  /// No description provided for @shopProductsSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث عن منتج...'**
+  String get shopProductsSearchHint;
+
+  /// No description provided for @shopProductsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد منتجات.'**
+  String get shopProductsEmpty;
+
+  /// No description provided for @shopProductsFilterAllBrands.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل العلامات'**
+  String get shopProductsFilterAllBrands;
+
+  /// No description provided for @shopProductsSellersLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'بائع'**
+  String get shopProductsSellersLabel;
+
+  /// No description provided for @productOffersEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد بائعون حاليًا.'**
+  String get productOffersEmpty;
+
+  /// No description provided for @productOffersStockLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المخزون'**
+  String get productOffersStockLabel;
 }
 
 class _AppLocalizationsDelegate
