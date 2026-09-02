@@ -1096,4 +1096,98 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get finesStatusCancelled => 'ملغاة';
+
+  @override
+  String get projectsTitle => 'المشاريع';
+
+  @override
+  String get projectsEmpty => 'لا توجد مشاريع بعد.';
+
+  @override
+  String get projectTasksEmpty => 'لا توجد مهام بعد.';
+
+  @override
+  String get projectsAdd => 'مشروع جديد';
+
+  @override
+  String get projectTitleLabel => 'عنوان المشروع';
+
+  @override
+  String get projectDescription => 'الوصف (اختياري)';
+
+  @override
+  String get projectReference => 'المرجع (اختياري)';
+
+  @override
+  String get projectStartsOn => 'تاريخ البدء (اختياري)';
+
+  @override
+  String get projectDueOn => 'الموعد النهائي (اختياري)';
+
+  @override
+  String get projectTitleRequired => 'أدخل عنوان المشروع.';
+
+  @override
+  String get projectOverdueBadge => 'متأخر';
+
+  @override
+  String get projectTasksTitle => 'المهام';
+
+  @override
+  String get projectAddTask => 'إضافة مهمة';
+
+  @override
+  String get projectDeleteConfirm =>
+      'هل تريد حذف هذا المشروع؟ سيتم حذف كل مهامه.';
+
+  @override
+  String get taskTitleLabel => 'عنوان المهمة';
+
+  @override
+  String get taskNotes => 'ملاحظات (اختياري)';
+
+  @override
+  String get taskRequiresPhoto => 'يتطلب صورة إثبات عند الإنهاء';
+
+  @override
+  String get taskTitleRequired => 'أدخل عنوان المهمة.';
+
+  @override
+  String get taskCriticalBadge => 'حرجة';
+
+  @override
+  String get taskDeleteConfirm => 'هل تريد حذف هذه المهمة؟';
+
+  @override
+  String get taskProgressLabel => 'نسبة الإنجاز';
+
+  @override
+  String get taskMarkDone => 'تحديد كمكتملة';
+
+  @override
+  String get projectStatusPlanning => 'تخطيط';
+
+  @override
+  String get projectStatusActive => 'نشط';
+
+  @override
+  String get projectStatusOnHold => 'متوقف مؤقتًا';
+
+  @override
+  String get projectStatusCompleted => 'مكتمل';
+
+  @override
+  String get projectStatusCancelled => 'ملغي';
+
+  @override
+  String get taskStatusPending => 'قيد الانتظار';
+
+  @override
+  String get taskStatusInProgress => 'جارٍ التنفيذ';
+
+  @override
+  String get taskStatusBlocked => 'معلّقة';
+
+  @override
+  String get taskStatusDone => 'مكتملة';
 }

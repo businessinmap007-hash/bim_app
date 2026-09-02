@@ -7,6 +7,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../auth/application/auth_controller.dart';
 import '../../../booking_settings/presentation/screens/booking_settings_screen.dart';
 import '../../../media/presentation/widgets/watermark_repeat_selector.dart';
+import '../../../projects/presentation/screens/projects_screen.dart';
 import '../../../staff/presentation/screens/staff_screen.dart';
 import '../../application/locale_controller.dart';
 import '../../application/theme_mode_controller.dart';
@@ -105,6 +106,14 @@ class SettingsScreen extends ConsumerWidget {
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => const StaffScreen()),
+                  ),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.timeline_outlined),
+                  title: Text(l10n.projectsTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const ProjectsScreen()),
                   ),
                 ),
               ],

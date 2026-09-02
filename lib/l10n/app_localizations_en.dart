@@ -1091,4 +1091,98 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get finesStatusCancelled => 'Cancelled';
+
+  @override
+  String get projectsTitle => 'Projects';
+
+  @override
+  String get projectsEmpty => 'No projects yet.';
+
+  @override
+  String get projectTasksEmpty => 'No tasks yet.';
+
+  @override
+  String get projectsAdd => 'New project';
+
+  @override
+  String get projectTitleLabel => 'Project title';
+
+  @override
+  String get projectDescription => 'Description (optional)';
+
+  @override
+  String get projectReference => 'Reference (optional)';
+
+  @override
+  String get projectStartsOn => 'Start date (optional)';
+
+  @override
+  String get projectDueOn => 'Due date (optional)';
+
+  @override
+  String get projectTitleRequired => 'Enter a project title.';
+
+  @override
+  String get projectOverdueBadge => 'Overdue';
+
+  @override
+  String get projectTasksTitle => 'Tasks';
+
+  @override
+  String get projectAddTask => 'Add task';
+
+  @override
+  String get projectDeleteConfirm =>
+      'Delete this project? All its tasks will be deleted too.';
+
+  @override
+  String get taskTitleLabel => 'Task title';
+
+  @override
+  String get taskNotes => 'Notes (optional)';
+
+  @override
+  String get taskRequiresPhoto => 'Requires a camera photo to complete';
+
+  @override
+  String get taskTitleRequired => 'Enter a task title.';
+
+  @override
+  String get taskCriticalBadge => 'Critical';
+
+  @override
+  String get taskDeleteConfirm => 'Delete this task?';
+
+  @override
+  String get taskProgressLabel => 'Progress';
+
+  @override
+  String get taskMarkDone => 'Mark done';
+
+  @override
+  String get projectStatusPlanning => 'Planning';
+
+  @override
+  String get projectStatusActive => 'Active';
+
+  @override
+  String get projectStatusOnHold => 'On hold';
+
+  @override
+  String get projectStatusCompleted => 'Completed';
+
+  @override
+  String get projectStatusCancelled => 'Cancelled';
+
+  @override
+  String get taskStatusPending => 'Pending';
+
+  @override
+  String get taskStatusInProgress => 'In progress';
+
+  @override
+  String get taskStatusBlocked => 'Blocked';
+
+  @override
+  String get taskStatusDone => 'Done';
 }

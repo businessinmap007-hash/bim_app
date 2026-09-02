@@ -2155,6 +2155,192 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'ملغاة'**
   String get finesStatusCancelled;
+
+  /// No description provided for @projectsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المشاريع'**
+  String get projectsTitle;
+
+  /// No description provided for @projectsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد مشاريع بعد.'**
+  String get projectsEmpty;
+
+  /// No description provided for @projectTasksEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد مهام بعد.'**
+  String get projectTasksEmpty;
+
+  /// No description provided for @projectsAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشروع جديد'**
+  String get projectsAdd;
+
+  /// No description provided for @projectTitleLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'عنوان المشروع'**
+  String get projectTitleLabel;
+
+  /// No description provided for @projectDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوصف (اختياري)'**
+  String get projectDescription;
+
+  /// No description provided for @projectReference.
+  ///
+  /// In ar, this message translates to:
+  /// **'المرجع (اختياري)'**
+  String get projectReference;
+
+  /// No description provided for @projectStartsOn.
+  ///
+  /// In ar, this message translates to:
+  /// **'تاريخ البدء (اختياري)'**
+  String get projectStartsOn;
+
+  /// No description provided for @projectDueOn.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموعد النهائي (اختياري)'**
+  String get projectDueOn;
+
+  /// No description provided for @projectTitleRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل عنوان المشروع.'**
+  String get projectTitleRequired;
+
+  /// No description provided for @projectOverdueBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'متأخر'**
+  String get projectOverdueBadge;
+
+  /// No description provided for @projectTasksTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المهام'**
+  String get projectTasksTitle;
+
+  /// No description provided for @projectAddTask.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة مهمة'**
+  String get projectAddTask;
+
+  /// No description provided for @projectDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد حذف هذا المشروع؟ سيتم حذف كل مهامه.'**
+  String get projectDeleteConfirm;
+
+  /// No description provided for @taskTitleLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'عنوان المهمة'**
+  String get taskTitleLabel;
+
+  /// No description provided for @taskNotes.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات (اختياري)'**
+  String get taskNotes;
+
+  /// No description provided for @taskRequiresPhoto.
+  ///
+  /// In ar, this message translates to:
+  /// **'يتطلب صورة إثبات عند الإنهاء'**
+  String get taskRequiresPhoto;
+
+  /// No description provided for @taskTitleRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل عنوان المهمة.'**
+  String get taskTitleRequired;
+
+  /// No description provided for @taskCriticalBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'حرجة'**
+  String get taskCriticalBadge;
+
+  /// No description provided for @taskDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد حذف هذه المهمة؟'**
+  String get taskDeleteConfirm;
+
+  /// No description provided for @taskProgressLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة الإنجاز'**
+  String get taskProgressLabel;
+
+  /// No description provided for @taskMarkDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديد كمكتملة'**
+  String get taskMarkDone;
+
+  /// No description provided for @projectStatusPlanning.
+  ///
+  /// In ar, this message translates to:
+  /// **'تخطيط'**
+  String get projectStatusPlanning;
+
+  /// No description provided for @projectStatusActive.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشط'**
+  String get projectStatusActive;
+
+  /// No description provided for @projectStatusOnHold.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوقف مؤقتًا'**
+  String get projectStatusOnHold;
+
+  /// No description provided for @projectStatusCompleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتمل'**
+  String get projectStatusCompleted;
+
+  /// No description provided for @projectStatusCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغي'**
+  String get projectStatusCancelled;
+
+  /// No description provided for @taskStatusPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيد الانتظار'**
+  String get taskStatusPending;
+
+  /// No description provided for @taskStatusInProgress.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ التنفيذ'**
+  String get taskStatusInProgress;
+
+  /// No description provided for @taskStatusBlocked.
+  ///
+  /// In ar, this message translates to:
+  /// **'معلّقة'**
+  String get taskStatusBlocked;
+
+  /// No description provided for @taskStatusDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتملة'**
+  String get taskStatusDone;
 }
 
 class _AppLocalizationsDelegate
