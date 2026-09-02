@@ -605,5 +605,15 @@
   "disputeConfirmReceived": "تأكيد الاستلام",
   "disputeWithdraw": "سحب",
   "disputeNoSettlementPayments": "لا توجد مقترحات دفع بعد.",
-  "disputeHistoryTitle": "السجل"
+  "disputeHistoryTitle": "السجل",
+  "addressesTitle": "عناويني",
+  "addressesEmpty": "لا توجد عناوين محفوظة بعد.",
+  "addressAddTitle": "إضافة عنوان",
+  "addressEditTitle": "تعديل العنوان",
+  "addressLineHint": "الشارع، المبنى، الدور...",
+  "addressZipHint": "الرمز البريدي (اختياري)",
+  "addressMakePrimary": "اجعله العنوان الأساسي",
+  "addressDeleteConfirm": "حذف هذا العنوان؟",
+  "addressPickTitle": "اختر عنوان التوصيل",
+  "addressUseNewLabel": "كتابة عنوان آخر"
 }

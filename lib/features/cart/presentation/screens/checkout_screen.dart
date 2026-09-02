@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../addresses/presentation/widgets/address_pick_sheet.dart';
 import '../../application/cart_controller.dart';
 import '../../data/models/cart_models.dart';
 
@@ -21,7 +22,17 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   String _fulfillmentType = 'delivery';
   final _addressController = TextEditingController();
   final _notesController = TextEditingController();
+  int? _selectedAddressId;
   bool _submitting = false;
+
+  Future<void> _pickAddress() async {
+    final result = await showAddressPickSheet(context);
+    if (result == null || !mounted) return;
+    setState(() {
+      _selectedAddressId = result.addressId;
+      _addressController.text = result.label;
+    });
+  }
 
   @override
   void dispose() {
@@ -37,7 +48,10 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       await ref.read(cartControllerProvider.notifier).checkout(
         widget.cart.business!.id,
         fulfillmentType: _fulfillmentType,
-        address: _fulfillmentType == 'delivery' ? _addressController.text.trim() : null,
+        addressId: _fulfillmentType == 'delivery' ? _selectedAddressId : null,
+        address: _fulfillmentType == 'delivery' && _selectedAddressId == null
+            ? _addressController.text.trim()
+            : null,
         notes: _notesController.text.trim(),
         paymentMethod: 'cash',
       );
@@ -78,8 +92,18 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             const SizedBox(height: 16),
             TextField(
               controller: _addressController,
-              decoration: InputDecoration(labelText: l10n.cartAddressLabel, hintText: l10n.cartAddressHint),
+              decoration: InputDecoration(
+                labelText: l10n.cartAddressLabel,
+                hintText: l10n.cartAddressHint,
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.location_on_outlined),
+                  onPressed: _pickAddress,
+                ),
+              ),
               maxLines: 2,
+              onChanged: (_) {
+                if (_selectedAddressId != null) setState(() => _selectedAddressId = null);
+              },
             ),
           ],
           const SizedBox(height: 16),

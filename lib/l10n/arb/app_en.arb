@@ -605,5 +605,15 @@
   "disputeConfirmReceived": "Confirm received",
   "disputeWithdraw": "Withdraw",
   "disputeNoSettlementPayments": "No payment proposals yet.",
-  "disputeHistoryTitle": "History"
+  "disputeHistoryTitle": "History",
+  "addressesTitle": "My addresses",
+  "addressesEmpty": "No saved addresses yet.",
+  "addressAddTitle": "Add address",
+  "addressEditTitle": "Edit address",
+  "addressLineHint": "Street, building, floor...",
+  "addressZipHint": "Zip code (optional)",
+  "addressMakePrimary": "Make this the primary address",
+  "addressDeleteConfirm": "Delete this address?",
+  "addressPickTitle": "Choose a delivery address",
+  "addressUseNewLabel": "Type a different address"
 }

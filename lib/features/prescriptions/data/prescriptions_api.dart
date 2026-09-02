@@ -26,6 +26,7 @@ class PrescriptionsApi {
     int id, {
     required int pharmacyId,
     required String fulfillmentType,
+    int? addressId,
     String? deliveryAddress,
   }) async {
     final data = await _client.post(
@@ -33,7 +34,9 @@ class PrescriptionsApi {
       data: {
         'pharmacy_id': pharmacyId,
         'fulfillment_type': fulfillmentType,
-        if (deliveryAddress != null && deliveryAddress.isNotEmpty) 'delivery_address': deliveryAddress,
+        if (addressId != null) 'address_id': addressId,
+        if (addressId == null && deliveryAddress != null && deliveryAddress.isNotEmpty)
+          'delivery_address': deliveryAddress,
       },
     ) as Map<String, dynamic>;
     return Prescription.fromJson(data['prescription'] as Map<String, dynamic>);

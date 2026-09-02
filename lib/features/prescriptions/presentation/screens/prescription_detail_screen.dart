@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/network/api_exception.dart';
+import '../../../addresses/presentation/widgets/address_pick_sheet.dart';
 import '../../../discovery/data/models/business_summary.dart';
 import '../../application/prescriptions_providers.dart';
 import '../../data/models/prescription.dart';
@@ -27,6 +28,7 @@ class PrescriptionDetailScreen extends ConsumerWidget {
         prescriptionId,
         pharmacyId: pharmacy.id,
         fulfillmentType: result.fulfillmentType,
+        addressId: result.addressId,
         deliveryAddress: result.deliveryAddress,
       );
       ref.invalidate(prescriptionDetailProvider(prescriptionId));
@@ -42,6 +44,7 @@ class PrescriptionDetailScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final addressController = TextEditingController();
     String fulfillment = 'delivery';
+    int? selectedAddressId;
 
     return showModalBottomSheet<_FulfillmentChoice>(
       context: context,
@@ -73,13 +76,31 @@ class PrescriptionDetailScreen extends ConsumerWidget {
                   const SizedBox(height: 12),
                   TextField(
                     controller: addressController,
-                    decoration: InputDecoration(hintText: l10n.prescriptionDeliveryAddressHint),
+                    decoration: InputDecoration(
+                      hintText: l10n.prescriptionDeliveryAddressHint,
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.location_on_outlined),
+                        onPressed: () async {
+                          final picked = await showAddressPickSheet(sheetContext);
+                          if (picked == null) return;
+                          setState(() {
+                            selectedAddressId = picked.addressId;
+                            addressController.text = picked.label;
+                          });
+                        },
+                      ),
+                    ),
+                    onChanged: (_) => setState(() => selectedAddressId = null),
                   ),
                 ],
                 const SizedBox(height: 16),
                 FilledButton(
                   onPressed: () => Navigator.of(sheetContext).pop(
-                    _FulfillmentChoice(fulfillment, addressController.text.trim()),
+                    _FulfillmentChoice(
+                      fulfillment,
+                      selectedAddressId,
+                      selectedAddressId == null ? addressController.text.trim() : null,
+                    ),
                   ),
                   child: Text(l10n.prescriptionSendToPharmacy),
                 ),
@@ -348,8 +369,9 @@ class PrescriptionDetailScreen extends ConsumerWidget {
 
 class _FulfillmentChoice {
   final String fulfillmentType;
+  final int? addressId;
   final String? deliveryAddress;
-  const _FulfillmentChoice(this.fulfillmentType, this.deliveryAddress);
+  const _FulfillmentChoice(this.fulfillmentType, this.addressId, this.deliveryAddress);
 }
 
 class _ItemCard extends StatelessWidget {

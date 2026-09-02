@@ -3625,6 +3625,66 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'السجل'**
   String get disputeHistoryTitle;
+
+  /// No description provided for @addressesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عناويني'**
+  String get addressesTitle;
+
+  /// No description provided for @addressesEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد عناوين محفوظة بعد.'**
+  String get addressesEmpty;
+
+  /// No description provided for @addressAddTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة عنوان'**
+  String get addressAddTitle;
+
+  /// No description provided for @addressEditTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل العنوان'**
+  String get addressEditTitle;
+
+  /// No description provided for @addressLineHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشارع، المبنى، الدور...'**
+  String get addressLineHint;
+
+  /// No description provided for @addressZipHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرمز البريدي (اختياري)'**
+  String get addressZipHint;
+
+  /// No description provided for @addressMakePrimary.
+  ///
+  /// In ar, this message translates to:
+  /// **'اجعله العنوان الأساسي'**
+  String get addressMakePrimary;
+
+  /// No description provided for @addressDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف هذا العنوان؟'**
+  String get addressDeleteConfirm;
+
+  /// No description provided for @addressPickTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر عنوان التوصيل'**
+  String get addressPickTitle;
+
+  /// No description provided for @addressUseNewLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'كتابة عنوان آخر'**
+  String get addressUseNewLabel;
 }
 
 class _AppLocalizationsDelegate

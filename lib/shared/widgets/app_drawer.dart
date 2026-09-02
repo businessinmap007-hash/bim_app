@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../app/theme/app_colors.dart';
+import '../../features/addresses/presentation/screens/addresses_screen.dart';
 import '../../features/agenda/presentation/screens/agenda_screen.dart';
 import '../../features/auth/application/auth_controller.dart';
 import '../../features/disputes/presentation/screens/disputes_screen.dart';
@@ -168,6 +169,14 @@ class AppDrawer extends ConsumerWidget {
                     onTap: () {
                       Navigator.of(context).pop();
                       Navigator.of(context).push(MaterialPageRoute(builder: (_) => const DisputesScreen()));
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.location_on_outlined),
+                    title: Text(l10n.addressesTitle),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AddressesScreen()));
                     },
                   ),
                   ListTile(

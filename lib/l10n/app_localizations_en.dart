@@ -1834,4 +1834,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get disputeHistoryTitle => 'History';
+
+  @override
+  String get addressesTitle => 'My addresses';
+
+  @override
+  String get addressesEmpty => 'No saved addresses yet.';
+
+  @override
+  String get addressAddTitle => 'Add address';
+
+  @override
+  String get addressEditTitle => 'Edit address';
+
+  @override
+  String get addressLineHint => 'Street, building, floor...';
+
+  @override
+  String get addressZipHint => 'Zip code (optional)';
+
+  @override
+  String get addressMakePrimary => 'Make this the primary address';
+
+  @override
+  String get addressDeleteConfirm => 'Delete this address?';
+
+  @override
+  String get addressPickTitle => 'Choose a delivery address';
+
+  @override
+  String get addressUseNewLabel => 'Type a different address';
 }

@@ -1835,4 +1835,34 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get disputeHistoryTitle => 'السجل';
+
+  @override
+  String get addressesTitle => 'عناويني';
+
+  @override
+  String get addressesEmpty => 'لا توجد عناوين محفوظة بعد.';
+
+  @override
+  String get addressAddTitle => 'إضافة عنوان';
+
+  @override
+  String get addressEditTitle => 'تعديل العنوان';
+
+  @override
+  String get addressLineHint => 'الشارع، المبنى، الدور...';
+
+  @override
+  String get addressZipHint => 'الرمز البريدي (اختياري)';
+
+  @override
+  String get addressMakePrimary => 'اجعله العنوان الأساسي';
+
+  @override
+  String get addressDeleteConfirm => 'حذف هذا العنوان؟';
+
+  @override
+  String get addressPickTitle => 'اختر عنوان التوصيل';
+
+  @override
+  String get addressUseNewLabel => 'كتابة عنوان آخر';
 }
