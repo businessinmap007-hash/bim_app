@@ -715,5 +715,27 @@
   "depositCreatedAt": "تاريخ الإنشاء",
   "depositReleasedAt": "تاريخ الإفراج",
   "depositRefundedAt": "تاريخ الاسترداد",
-  "depositBookingLabel": "الحجز"
+  "depositBookingLabel": "الحجز",
+  "myRatingTitle": "تقييمي",
+  "myRatingObjectiveSection": "سجل العمليات",
+  "myRatingTotalOperations": "إجمالي العمليات",
+  "myRatingSuccessRate": "نسبة النجاح",
+  "myRatingCancelRate": "نسبة الإلغاء",
+  "myRatingDisputeRate": "نسبة النزاعات",
+  "myRatingFaultRate": "قرارات ضدك",
+  "myRatingVindicationRate": "قرارات لصالحك",
+  "myRatingReviewsSection": "التقييمات",
+  "myRatingStarsAverage": "متوسط التقييم",
+  "myRatingReviewCount": "{count, plural, =0{لا توجد تقييمات بعد} =1{تقييم واحد} =2{تقييمان} few{{count} تقييمات} many{{count} تقييمًا} other{{count} تقييم}}",
+  "@myRatingReviewCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "myRatingConsentSection": "رسوم الخدمة",
+  "myRatingConsentEnabledLabel": "تقييمك مفتوح — تُطبَّق رسوم الخدمة على عملياتك الخاصة.",
+  "myRatingConsentDisabledLabel": "تقييمك مغلق — التعامل مجاني، لكن تقييمك وتقييمات الآخرين لك تبقى مخفية حتى تفتحه.",
+  "myRatingEnableButton": "افتح تقييمي",
+  "myRatingEnableConfirmTitle": "فتح تقييمك؟",
+  "myRatingEnableConfirmBody": "هذا يجعل عملياتك ظاهرة بتقييم ومراجعات، وستبدأ رسوم الخدمة في التطبيق على عملياتك الخاصة من الآن. لا يمكن التراجع عن هذا من داخل التطبيق.",
+  "myRatingEnableConfirm": "فتحه",
+  "myRatingEnabledMessage": "تم فتح تقييمك. ستُطبَّق رسوم الخدمة على عملياتك من الآن."
 }

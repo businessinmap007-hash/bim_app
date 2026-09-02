@@ -715,5 +715,27 @@
   "depositCreatedAt": "Created",
   "depositReleasedAt": "Released",
   "depositRefundedAt": "Refunded",
-  "depositBookingLabel": "Booking"
+  "depositBookingLabel": "Booking",
+  "myRatingTitle": "My Rating",
+  "myRatingObjectiveSection": "Operation record",
+  "myRatingTotalOperations": "Total operations",
+  "myRatingSuccessRate": "Success rate",
+  "myRatingCancelRate": "Cancellation rate",
+  "myRatingDisputeRate": "Dispute rate",
+  "myRatingFaultRate": "Ruled against you",
+  "myRatingVindicationRate": "Ruled in your favor",
+  "myRatingReviewsSection": "Reviews",
+  "myRatingStarsAverage": "Average rating",
+  "myRatingReviewCount": "{count, plural, =0{No reviews yet} =1{1 review} other{{count} reviews}}",
+  "@myRatingReviewCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "myRatingConsentSection": "Service fees",
+  "myRatingConsentEnabledLabel": "Your rating is open — service fees apply to your own operations.",
+  "myRatingConsentDisabledLabel": "Your rating is closed — transacting is free, but your rating and reviews stay hidden until you open it.",
+  "myRatingEnableButton": "Open my rating",
+  "myRatingEnableConfirmTitle": "Open your rating?",
+  "myRatingEnableConfirmBody": "This makes your operations visible with a rating and reviews, and service fees will start applying to your own operations from now on. This cannot be undone from the app.",
+  "myRatingEnableConfirm": "Open it",
+  "myRatingEnabledMessage": "Your rating is now open. Service fees will apply to your operations from now on."
 }

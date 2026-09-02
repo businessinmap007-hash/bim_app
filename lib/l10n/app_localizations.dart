@@ -4231,6 +4231,120 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الحجز'**
   String get depositBookingLabel;
+
+  /// No description provided for @myRatingTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقييمي'**
+  String get myRatingTitle;
+
+  /// No description provided for @myRatingObjectiveSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجل العمليات'**
+  String get myRatingObjectiveSection;
+
+  /// No description provided for @myRatingTotalOperations.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي العمليات'**
+  String get myRatingTotalOperations;
+
+  /// No description provided for @myRatingSuccessRate.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة النجاح'**
+  String get myRatingSuccessRate;
+
+  /// No description provided for @myRatingCancelRate.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة الإلغاء'**
+  String get myRatingCancelRate;
+
+  /// No description provided for @myRatingDisputeRate.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة النزاعات'**
+  String get myRatingDisputeRate;
+
+  /// No description provided for @myRatingFaultRate.
+  ///
+  /// In ar, this message translates to:
+  /// **'قرارات ضدك'**
+  String get myRatingFaultRate;
+
+  /// No description provided for @myRatingVindicationRate.
+  ///
+  /// In ar, this message translates to:
+  /// **'قرارات لصالحك'**
+  String get myRatingVindicationRate;
+
+  /// No description provided for @myRatingReviewsSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقييمات'**
+  String get myRatingReviewsSection;
+
+  /// No description provided for @myRatingStarsAverage.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوسط التقييم'**
+  String get myRatingStarsAverage;
+
+  /// No description provided for @myRatingReviewCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{لا توجد تقييمات بعد} =1{تقييم واحد} =2{تقييمان} few{{count} تقييمات} many{{count} تقييمًا} other{{count} تقييم}}'**
+  String myRatingReviewCount(int count);
+
+  /// No description provided for @myRatingConsentSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسوم الخدمة'**
+  String get myRatingConsentSection;
+
+  /// No description provided for @myRatingConsentEnabledLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقييمك مفتوح — تُطبَّق رسوم الخدمة على عملياتك الخاصة.'**
+  String get myRatingConsentEnabledLabel;
+
+  /// No description provided for @myRatingConsentDisabledLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقييمك مغلق — التعامل مجاني، لكن تقييمك وتقييمات الآخرين لك تبقى مخفية حتى تفتحه.'**
+  String get myRatingConsentDisabledLabel;
+
+  /// No description provided for @myRatingEnableButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'افتح تقييمي'**
+  String get myRatingEnableButton;
+
+  /// No description provided for @myRatingEnableConfirmTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح تقييمك؟'**
+  String get myRatingEnableConfirmTitle;
+
+  /// No description provided for @myRatingEnableConfirmBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا يجعل عملياتك ظاهرة بتقييم ومراجعات، وستبدأ رسوم الخدمة في التطبيق على عملياتك الخاصة من الآن. لا يمكن التراجع عن هذا من داخل التطبيق.'**
+  String get myRatingEnableConfirmBody;
+
+  /// No description provided for @myRatingEnableConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتحه'**
+  String get myRatingEnableConfirm;
+
+  /// No description provided for @myRatingEnabledMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم فتح تقييمك. ستُطبَّق رسوم الخدمة على عملياتك من الآن.'**
+  String get myRatingEnabledMessage;
 }
 
 class _AppLocalizationsDelegate

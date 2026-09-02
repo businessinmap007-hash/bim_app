@@ -8,6 +8,7 @@ import '../../../auth/application/auth_controller.dart';
 import '../../../booking_settings/presentation/screens/booking_settings_screen.dart';
 import '../../../media/presentation/widgets/watermark_repeat_selector.dart';
 import '../../../projects/presentation/screens/projects_screen.dart';
+import '../../../ratings/presentation/screens/my_rating_screen.dart';
 import '../../../staff/presentation/screens/staff_screen.dart';
 import '../../application/locale_controller.dart';
 import '../../application/theme_mode_controller.dart';
@@ -83,6 +84,15 @@ class SettingsScreen extends ConsumerWidget {
                 title: Text(l10n.profileTitle),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => context.push('/profile'),
+              ),
+              const Divider(height: 1),
+              ListTile(
+                leading: const Icon(Icons.star_outline),
+                title: Text(l10n.myRatingTitle),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const MyRatingScreen()),
+                ),
               ),
             ],
           ),

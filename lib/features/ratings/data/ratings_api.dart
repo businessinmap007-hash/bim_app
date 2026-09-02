@@ -1,15 +1,24 @@
 import '../../../core/network/api_client.dart';
 import '../../../core/network/paginated.dart';
+import 'models/my_rating.dart';
 import 'models/operation_review.dart';
 
-/// /ratings — see Api\V2\RatingController. Only [reviews] and [submitReview]
-/// are used by this app; `me`/`enable`/`show` (the operational trust-score
-/// surface) aren't wired up yet — this feature is just the subjective star
-/// review, the one thing the business page already showed a summary of with
-/// nowhere to read or add to it.
+/// /ratings — see Api\V2\RatingController.
 class RatingsApi {
   final ApiClient _client;
   const RatingsApi(this._client);
+
+  Future<MyRating> me() async {
+    final data = await _client.get('/ratings/me') as Map<String, dynamic>;
+    return MyRating.fromJson(data);
+  }
+
+  /// Forward-only: opens the caller's own rating, which also makes THEM
+  /// liable for service fees on their own operations from now on (never
+  /// the counterparty). No API path undoes this once called.
+  Future<void> enable() async {
+    await _client.post('/ratings/enable');
+  }
 
   Future<Paginated<OperationReview>> reviews(int userId, {int page = 1, int perPage = 20}) async {
     final data = await _client.get(

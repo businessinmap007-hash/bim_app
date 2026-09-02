@@ -2148,4 +2148,77 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get depositBookingLabel => 'الحجز';
+
+  @override
+  String get myRatingTitle => 'تقييمي';
+
+  @override
+  String get myRatingObjectiveSection => 'سجل العمليات';
+
+  @override
+  String get myRatingTotalOperations => 'إجمالي العمليات';
+
+  @override
+  String get myRatingSuccessRate => 'نسبة النجاح';
+
+  @override
+  String get myRatingCancelRate => 'نسبة الإلغاء';
+
+  @override
+  String get myRatingDisputeRate => 'نسبة النزاعات';
+
+  @override
+  String get myRatingFaultRate => 'قرارات ضدك';
+
+  @override
+  String get myRatingVindicationRate => 'قرارات لصالحك';
+
+  @override
+  String get myRatingReviewsSection => 'التقييمات';
+
+  @override
+  String get myRatingStarsAverage => 'متوسط التقييم';
+
+  @override
+  String myRatingReviewCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count تقييم',
+      many: '$count تقييمًا',
+      few: '$count تقييمات',
+      two: 'تقييمان',
+      one: 'تقييم واحد',
+      zero: 'لا توجد تقييمات بعد',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get myRatingConsentSection => 'رسوم الخدمة';
+
+  @override
+  String get myRatingConsentEnabledLabel =>
+      'تقييمك مفتوح — تُطبَّق رسوم الخدمة على عملياتك الخاصة.';
+
+  @override
+  String get myRatingConsentDisabledLabel =>
+      'تقييمك مغلق — التعامل مجاني، لكن تقييمك وتقييمات الآخرين لك تبقى مخفية حتى تفتحه.';
+
+  @override
+  String get myRatingEnableButton => 'افتح تقييمي';
+
+  @override
+  String get myRatingEnableConfirmTitle => 'فتح تقييمك؟';
+
+  @override
+  String get myRatingEnableConfirmBody =>
+      'هذا يجعل عملياتك ظاهرة بتقييم ومراجعات، وستبدأ رسوم الخدمة في التطبيق على عملياتك الخاصة من الآن. لا يمكن التراجع عن هذا من داخل التطبيق.';
+
+  @override
+  String get myRatingEnableConfirm => 'فتحه';
+
+  @override
+  String get myRatingEnabledMessage =>
+      'تم فتح تقييمك. ستُطبَّق رسوم الخدمة على عملياتك من الآن.';
 }

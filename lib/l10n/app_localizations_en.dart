@@ -2148,4 +2148,74 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get depositBookingLabel => 'Booking';
+
+  @override
+  String get myRatingTitle => 'My Rating';
+
+  @override
+  String get myRatingObjectiveSection => 'Operation record';
+
+  @override
+  String get myRatingTotalOperations => 'Total operations';
+
+  @override
+  String get myRatingSuccessRate => 'Success rate';
+
+  @override
+  String get myRatingCancelRate => 'Cancellation rate';
+
+  @override
+  String get myRatingDisputeRate => 'Dispute rate';
+
+  @override
+  String get myRatingFaultRate => 'Ruled against you';
+
+  @override
+  String get myRatingVindicationRate => 'Ruled in your favor';
+
+  @override
+  String get myRatingReviewsSection => 'Reviews';
+
+  @override
+  String get myRatingStarsAverage => 'Average rating';
+
+  @override
+  String myRatingReviewCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count reviews',
+      one: '1 review',
+      zero: 'No reviews yet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get myRatingConsentSection => 'Service fees';
+
+  @override
+  String get myRatingConsentEnabledLabel =>
+      'Your rating is open — service fees apply to your own operations.';
+
+  @override
+  String get myRatingConsentDisabledLabel =>
+      'Your rating is closed — transacting is free, but your rating and reviews stay hidden until you open it.';
+
+  @override
+  String get myRatingEnableButton => 'Open my rating';
+
+  @override
+  String get myRatingEnableConfirmTitle => 'Open your rating?';
+
+  @override
+  String get myRatingEnableConfirmBody =>
+      'This makes your operations visible with a rating and reviews, and service fees will start applying to your own operations from now on. This cannot be undone from the app.';
+
+  @override
+  String get myRatingEnableConfirm => 'Open it';
+
+  @override
+  String get myRatingEnabledMessage =>
+      'Your rating is now open. Service fees will apply to your operations from now on.';
 }

@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/core_providers.dart';
+import '../data/models/my_rating.dart';
 import '../data/models/operation_review.dart';
 import '../data/ratings_api.dart';
 
@@ -82,3 +83,29 @@ final reviewsControllerProvider =
     StateNotifierProvider.family<ReviewsController, ReviewsState, int>((ref, userId) {
       return ReviewsController(ref.watch(ratingsApiProvider), userId);
     });
+
+class MyRatingController extends StateNotifier<AsyncValue<MyRating>> {
+  final RatingsApi _api;
+
+  MyRatingController(this._api) : super(const AsyncValue.loading()) {
+    load();
+  }
+
+  Future<void> load() async {
+    state = const AsyncValue.loading();
+    try {
+      state = AsyncValue.data(await _api.me());
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
+  }
+
+  Future<void> enable() async {
+    await _api.enable();
+    await load();
+  }
+}
+
+final myRatingControllerProvider = StateNotifierProvider<MyRatingController, AsyncValue<MyRating>>((ref) {
+  return MyRatingController(ref.watch(ratingsApiProvider));
+});
