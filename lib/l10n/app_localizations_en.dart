@@ -1319,4 +1319,127 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get clinicStatusNoShow => 'No-show';
+
+  @override
+  String get trainingPlansTitle => 'Training plans';
+
+  @override
+  String get trainingPlansEmpty => 'No training plans yet.';
+
+  @override
+  String get trainingStatusActive => 'Active';
+
+  @override
+  String get trainingStatusPaused => 'Paused';
+
+  @override
+  String get trainingStatusCompleted => 'Completed';
+
+  @override
+  String get trainingStatusCancelled => 'Cancelled';
+
+  @override
+  String get trainingTabExercises => 'Exercises';
+
+  @override
+  String get trainingTabMeals => 'Meals';
+
+  @override
+  String get trainingTabProgress => 'Progress';
+
+  @override
+  String get trainingTabBodyReports => 'Body reports';
+
+  @override
+  String get trainingExercisesEmpty => 'No exercises yet.';
+
+  @override
+  String get trainingMealsEmpty => 'No meals yet.';
+
+  @override
+  String get trainingSetsLabel => 'Sets';
+
+  @override
+  String get trainingRepsLabel => 'Reps';
+
+  @override
+  String get trainingRestLabel => 'Rest';
+
+  @override
+  String get trainingCompleteRound => 'Complete a round';
+
+  @override
+  String get trainingRoundCompleted => 'Round logged.';
+
+  @override
+  String get trainingAllRoundsDone => 'All rounds done for today';
+
+  @override
+  String get trainingLogProgress => 'Log progress';
+
+  @override
+  String get trainingWeightHint => 'Weight (kg)';
+
+  @override
+  String get trainingNotesHint => 'Notes (optional)';
+
+  @override
+  String get trainingProgressLogged => 'Progress logged.';
+
+  @override
+  String get trainingProgressEmpty => 'No check-ins yet.';
+
+  @override
+  String get trainingWeeklySummaryTitle => 'This week';
+
+  @override
+  String get trainingAdherence => 'Adherence';
+
+  @override
+  String get trainingTargetRounds => 'Target rounds';
+
+  @override
+  String get trainingCompletedRoundsLabel => 'Completed rounds';
+
+  @override
+  String get trainingActiveDays => 'Active days';
+
+  @override
+  String get trainingCheckIns => 'Check-ins';
+
+  @override
+  String get trainingLatestWeight => 'Latest weight';
+
+  @override
+  String get trainingBodyReportsEmpty => 'No body reports yet.';
+
+  @override
+  String get mealBreakfast => 'Breakfast';
+
+  @override
+  String get mealLunch => 'Lunch';
+
+  @override
+  String get mealDinner => 'Dinner';
+
+  @override
+  String get mealSnack => 'Snack';
+
+  @override
+  String get bodyReportWeight => 'Weight';
+
+  @override
+  String get bodyReportMuscle => 'Muscle mass';
+
+  @override
+  String get bodyReportFat => 'Fat %';
+
+  @override
+  String get bodyReportWater => 'Water %';
+
+  @override
+  String get bodyReportBone => 'Bone mass';
+
+  @override
+  String get bodyReportVisceralFat => 'Visceral fat';
 }

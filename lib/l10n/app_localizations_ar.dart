@@ -1322,4 +1322,127 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get clinicStatusNoShow => 'لم يحضر';
+
+  @override
+  String get trainingPlansTitle => 'خطط التدريب';
+
+  @override
+  String get trainingPlansEmpty => 'لا توجد خطط تدريب بعد.';
+
+  @override
+  String get trainingStatusActive => 'نشطة';
+
+  @override
+  String get trainingStatusPaused => 'متوقفة مؤقتًا';
+
+  @override
+  String get trainingStatusCompleted => 'مكتملة';
+
+  @override
+  String get trainingStatusCancelled => 'ملغاة';
+
+  @override
+  String get trainingTabExercises => 'التمارين';
+
+  @override
+  String get trainingTabMeals => 'الوجبات';
+
+  @override
+  String get trainingTabProgress => 'التقدّم';
+
+  @override
+  String get trainingTabBodyReports => 'تقارير الجسم';
+
+  @override
+  String get trainingExercisesEmpty => 'لا توجد تمارين بعد.';
+
+  @override
+  String get trainingMealsEmpty => 'لا توجد وجبات بعد.';
+
+  @override
+  String get trainingSetsLabel => 'المجموعات';
+
+  @override
+  String get trainingRepsLabel => 'التكرارات';
+
+  @override
+  String get trainingRestLabel => 'الراحة';
+
+  @override
+  String get trainingCompleteRound => 'إتمام جولة';
+
+  @override
+  String get trainingRoundCompleted => 'تم تسجيل الجولة.';
+
+  @override
+  String get trainingAllRoundsDone => 'اكتملت كل الجولات اليوم';
+
+  @override
+  String get trainingLogProgress => 'تسجيل التقدّم';
+
+  @override
+  String get trainingWeightHint => 'الوزن (كجم)';
+
+  @override
+  String get trainingNotesHint => 'ملاحظات (اختياري)';
+
+  @override
+  String get trainingProgressLogged => 'تم تسجيل تقدّمك.';
+
+  @override
+  String get trainingProgressEmpty => 'لا توجد تسجيلات بعد.';
+
+  @override
+  String get trainingWeeklySummaryTitle => 'هذا الأسبوع';
+
+  @override
+  String get trainingAdherence => 'الالتزام';
+
+  @override
+  String get trainingTargetRounds => 'الجولات المستهدفة';
+
+  @override
+  String get trainingCompletedRoundsLabel => 'الجولات المكتملة';
+
+  @override
+  String get trainingActiveDays => 'أيام النشاط';
+
+  @override
+  String get trainingCheckIns => 'عدد التسجيلات';
+
+  @override
+  String get trainingLatestWeight => 'آخر وزن';
+
+  @override
+  String get trainingBodyReportsEmpty => 'لا توجد تقارير جسم بعد.';
+
+  @override
+  String get mealBreakfast => 'فطار';
+
+  @override
+  String get mealLunch => 'غداء';
+
+  @override
+  String get mealDinner => 'عشاء';
+
+  @override
+  String get mealSnack => 'سناك';
+
+  @override
+  String get bodyReportWeight => 'الوزن';
+
+  @override
+  String get bodyReportMuscle => 'الكتلة العضلية';
+
+  @override
+  String get bodyReportFat => 'نسبة الدهون';
+
+  @override
+  String get bodyReportWater => 'نسبة الماء';
+
+  @override
+  String get bodyReportBone => 'كتلة العظام';
+
+  @override
+  String get bodyReportVisceralFat => 'الدهون الحشوية';
 }

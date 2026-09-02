@@ -2605,6 +2605,252 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لم يحضر'**
   String get clinicStatusNoShow;
+
+  /// No description provided for @trainingPlansTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'خطط التدريب'**
+  String get trainingPlansTitle;
+
+  /// No description provided for @trainingPlansEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد خطط تدريب بعد.'**
+  String get trainingPlansEmpty;
+
+  /// No description provided for @trainingStatusActive.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشطة'**
+  String get trainingStatusActive;
+
+  /// No description provided for @trainingStatusPaused.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوقفة مؤقتًا'**
+  String get trainingStatusPaused;
+
+  /// No description provided for @trainingStatusCompleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتملة'**
+  String get trainingStatusCompleted;
+
+  /// No description provided for @trainingStatusCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغاة'**
+  String get trainingStatusCancelled;
+
+  /// No description provided for @trainingTabExercises.
+  ///
+  /// In ar, this message translates to:
+  /// **'التمارين'**
+  String get trainingTabExercises;
+
+  /// No description provided for @trainingTabMeals.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوجبات'**
+  String get trainingTabMeals;
+
+  /// No description provided for @trainingTabProgress.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقدّم'**
+  String get trainingTabProgress;
+
+  /// No description provided for @trainingTabBodyReports.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقارير الجسم'**
+  String get trainingTabBodyReports;
+
+  /// No description provided for @trainingExercisesEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد تمارين بعد.'**
+  String get trainingExercisesEmpty;
+
+  /// No description provided for @trainingMealsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد وجبات بعد.'**
+  String get trainingMealsEmpty;
+
+  /// No description provided for @trainingSetsLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المجموعات'**
+  String get trainingSetsLabel;
+
+  /// No description provided for @trainingRepsLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'التكرارات'**
+  String get trainingRepsLabel;
+
+  /// No description provided for @trainingRestLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الراحة'**
+  String get trainingRestLabel;
+
+  /// No description provided for @trainingCompleteRound.
+  ///
+  /// In ar, this message translates to:
+  /// **'إتمام جولة'**
+  String get trainingCompleteRound;
+
+  /// No description provided for @trainingRoundCompleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تسجيل الجولة.'**
+  String get trainingRoundCompleted;
+
+  /// No description provided for @trainingAllRoundsDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتملت كل الجولات اليوم'**
+  String get trainingAllRoundsDone;
+
+  /// No description provided for @trainingLogProgress.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل التقدّم'**
+  String get trainingLogProgress;
+
+  /// No description provided for @trainingWeightHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوزن (كجم)'**
+  String get trainingWeightHint;
+
+  /// No description provided for @trainingNotesHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات (اختياري)'**
+  String get trainingNotesHint;
+
+  /// No description provided for @trainingProgressLogged.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تسجيل تقدّمك.'**
+  String get trainingProgressLogged;
+
+  /// No description provided for @trainingProgressEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد تسجيلات بعد.'**
+  String get trainingProgressEmpty;
+
+  /// No description provided for @trainingWeeklySummaryTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا الأسبوع'**
+  String get trainingWeeklySummaryTitle;
+
+  /// No description provided for @trainingAdherence.
+  ///
+  /// In ar, this message translates to:
+  /// **'الالتزام'**
+  String get trainingAdherence;
+
+  /// No description provided for @trainingTargetRounds.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجولات المستهدفة'**
+  String get trainingTargetRounds;
+
+  /// No description provided for @trainingCompletedRoundsLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجولات المكتملة'**
+  String get trainingCompletedRoundsLabel;
+
+  /// No description provided for @trainingActiveDays.
+  ///
+  /// In ar, this message translates to:
+  /// **'أيام النشاط'**
+  String get trainingActiveDays;
+
+  /// No description provided for @trainingCheckIns.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد التسجيلات'**
+  String get trainingCheckIns;
+
+  /// No description provided for @trainingLatestWeight.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر وزن'**
+  String get trainingLatestWeight;
+
+  /// No description provided for @trainingBodyReportsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد تقارير جسم بعد.'**
+  String get trainingBodyReportsEmpty;
+
+  /// No description provided for @mealBreakfast.
+  ///
+  /// In ar, this message translates to:
+  /// **'فطار'**
+  String get mealBreakfast;
+
+  /// No description provided for @mealLunch.
+  ///
+  /// In ar, this message translates to:
+  /// **'غداء'**
+  String get mealLunch;
+
+  /// No description provided for @mealDinner.
+  ///
+  /// In ar, this message translates to:
+  /// **'عشاء'**
+  String get mealDinner;
+
+  /// No description provided for @mealSnack.
+  ///
+  /// In ar, this message translates to:
+  /// **'سناك'**
+  String get mealSnack;
+
+  /// No description provided for @bodyReportWeight.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوزن'**
+  String get bodyReportWeight;
+
+  /// No description provided for @bodyReportMuscle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكتلة العضلية'**
+  String get bodyReportMuscle;
+
+  /// No description provided for @bodyReportFat.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة الدهون'**
+  String get bodyReportFat;
+
+  /// No description provided for @bodyReportWater.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة الماء'**
+  String get bodyReportWater;
+
+  /// No description provided for @bodyReportBone.
+  ///
+  /// In ar, this message translates to:
+  /// **'كتلة العظام'**
+  String get bodyReportBone;
+
+  /// No description provided for @bodyReportVisceralFat.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدهون الحشوية'**
+  String get bodyReportVisceralFat;
 }
 
 class _AppLocalizationsDelegate

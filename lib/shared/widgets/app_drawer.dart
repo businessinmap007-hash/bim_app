@@ -10,6 +10,7 @@ import '../../features/fines/presentation/screens/fines_screen.dart';
 import '../../features/orders/presentation/screens/orders_and_bookings_screen.dart';
 import '../../features/posts/presentation/screens/my_posts_screen.dart';
 import '../../features/schedules/presentation/screens/trip_search_screen.dart';
+import '../../features/training/presentation/screens/training_plans_screen.dart';
 import '../../features/wallet/presentation/screens/wallet_screen.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -116,6 +117,16 @@ class AppDrawer extends ConsumerWidget {
                       Navigator.of(context).pop();
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => const MyClinicAppointmentsScreen()),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.fitness_center_outlined),
+                    title: Text(l10n.trainingPlansTitle),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const TrainingPlansScreen()),
                       );
                     },
                   ),
