@@ -650,5 +650,21 @@
   "guaranteeNoChange": "No change — your balance doesn't yet cover a higher level.",
   "guaranteeTransactionsTitle": "Transactions",
   "guaranteeTransactionsEmpty": "No transactions yet.",
-  "guaranteeRequiredLockedLabel": "Requires"
+  "guaranteeRequiredLockedLabel": "Requires",
+  "jobsTitle": "Jobs",
+  "jobsEmpty": "No open jobs right now.",
+  "jobsSearchHint": "Search jobs...",
+  "jobsAllCategories": "All fields",
+  "jobSalaryLabel": "Salary",
+  "jobRequirementsLabel": "Requirements",
+  "jobInterviewLabel": "Interview",
+  "jobApplicantsLabel": "applicants",
+  "jobApply": "Apply",
+  "jobApplied": "Application sent.",
+  "jobFollowsTitle": "Job alerts",
+  "jobFollowsEmpty": "You're not following any fields yet.",
+  "jobFollowAdd": "Follow a field",
+  "jobFollowPickTitle": "Choose a field to follow",
+  "jobUnfollow": "Unfollow",
+  "jobFollowed": "Following this field."
 }

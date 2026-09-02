@@ -1971,4 +1971,52 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get guaranteeRequiredLockedLabel => 'يتطلب';
+
+  @override
+  String get jobsTitle => 'الوظائف';
+
+  @override
+  String get jobsEmpty => 'لا توجد وظائف متاحة الآن.';
+
+  @override
+  String get jobsSearchHint => 'ابحث عن وظيفة...';
+
+  @override
+  String get jobsAllCategories => 'كل المجالات';
+
+  @override
+  String get jobSalaryLabel => 'الراتب';
+
+  @override
+  String get jobRequirementsLabel => 'المتطلبات';
+
+  @override
+  String get jobInterviewLabel => 'المقابلة';
+
+  @override
+  String get jobApplicantsLabel => 'متقدّم';
+
+  @override
+  String get jobApply => 'تقديم';
+
+  @override
+  String get jobApplied => 'تم إرسال طلبك.';
+
+  @override
+  String get jobFollowsTitle => 'تنبيهات الوظائف';
+
+  @override
+  String get jobFollowsEmpty => 'لا تتابع أي مجال بعد.';
+
+  @override
+  String get jobFollowAdd => 'متابعة مجال';
+
+  @override
+  String get jobFollowPickTitle => 'اختر مجالًا لمتابعته';
+
+  @override
+  String get jobUnfollow => 'إلغاء المتابعة';
+
+  @override
+  String get jobFollowed => 'تمت متابعة هذا المجال.';
 }

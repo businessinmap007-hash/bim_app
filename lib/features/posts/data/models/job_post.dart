@@ -29,6 +29,7 @@ class JobPost {
   final int applicantsCount;
   final bool isActive;
   final DateTime? expireAt;
+  final DateTime? interviewStartsAt;
   final DateTime? createdAt;
 
   const JobPost({
@@ -43,6 +44,7 @@ class JobPost {
     required this.applicantsCount,
     this.isActive = true,
     this.expireAt,
+    this.interviewStartsAt,
     this.createdAt,
   });
 
@@ -60,6 +62,9 @@ class JobPost {
     applicantsCount: (json['applicants_count'] as num?)?.toInt() ?? 0,
     isActive: json['is_active'] as bool? ?? true,
     expireAt: json['expire_at'] != null ? DateTime.tryParse(json['expire_at'] as String) : null,
+    interviewStartsAt: json['interview_starts_at'] != null
+        ? DateTime.tryParse(json['interview_starts_at'] as String)
+        : null,
     createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
   );
 }

@@ -1971,4 +1971,52 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get guaranteeRequiredLockedLabel => 'Requires';
+
+  @override
+  String get jobsTitle => 'Jobs';
+
+  @override
+  String get jobsEmpty => 'No open jobs right now.';
+
+  @override
+  String get jobsSearchHint => 'Search jobs...';
+
+  @override
+  String get jobsAllCategories => 'All fields';
+
+  @override
+  String get jobSalaryLabel => 'Salary';
+
+  @override
+  String get jobRequirementsLabel => 'Requirements';
+
+  @override
+  String get jobInterviewLabel => 'Interview';
+
+  @override
+  String get jobApplicantsLabel => 'applicants';
+
+  @override
+  String get jobApply => 'Apply';
+
+  @override
+  String get jobApplied => 'Application sent.';
+
+  @override
+  String get jobFollowsTitle => 'Job alerts';
+
+  @override
+  String get jobFollowsEmpty => 'You\'re not following any fields yet.';
+
+  @override
+  String get jobFollowAdd => 'Follow a field';
+
+  @override
+  String get jobFollowPickTitle => 'Choose a field to follow';
+
+  @override
+  String get jobUnfollow => 'Unfollow';
+
+  @override
+  String get jobFollowed => 'Following this field.';
 }

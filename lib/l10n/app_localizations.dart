@@ -3895,6 +3895,102 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'يتطلب'**
   String get guaranteeRequiredLockedLabel;
+
+  /// No description provided for @jobsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوظائف'**
+  String get jobsTitle;
+
+  /// No description provided for @jobsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد وظائف متاحة الآن.'**
+  String get jobsEmpty;
+
+  /// No description provided for @jobsSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث عن وظيفة...'**
+  String get jobsSearchHint;
+
+  /// No description provided for @jobsAllCategories.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل المجالات'**
+  String get jobsAllCategories;
+
+  /// No description provided for @jobSalaryLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الراتب'**
+  String get jobSalaryLabel;
+
+  /// No description provided for @jobRequirementsLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتطلبات'**
+  String get jobRequirementsLabel;
+
+  /// No description provided for @jobInterviewLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المقابلة'**
+  String get jobInterviewLabel;
+
+  /// No description provided for @jobApplicantsLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'متقدّم'**
+  String get jobApplicantsLabel;
+
+  /// No description provided for @jobApply.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقديم'**
+  String get jobApply;
+
+  /// No description provided for @jobApplied.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال طلبك.'**
+  String get jobApplied;
+
+  /// No description provided for @jobFollowsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنبيهات الوظائف'**
+  String get jobFollowsTitle;
+
+  /// No description provided for @jobFollowsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا تتابع أي مجال بعد.'**
+  String get jobFollowsEmpty;
+
+  /// No description provided for @jobFollowAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة مجال'**
+  String get jobFollowAdd;
+
+  /// No description provided for @jobFollowPickTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر مجالًا لمتابعته'**
+  String get jobFollowPickTitle;
+
+  /// No description provided for @jobUnfollow.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء المتابعة'**
+  String get jobUnfollow;
+
+  /// No description provided for @jobFollowed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت متابعة هذا المجال.'**
+  String get jobFollowed;
 }
 
 class _AppLocalizationsDelegate

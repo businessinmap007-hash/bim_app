@@ -650,5 +650,21 @@
   "guaranteeNoChange": "لا تغيير — رصيدك لا يكفي مستوى أعلى بعد.",
   "guaranteeTransactionsTitle": "الحركات",
   "guaranteeTransactionsEmpty": "لا توجد حركات بعد.",
-  "guaranteeRequiredLockedLabel": "يتطلب"
+  "guaranteeRequiredLockedLabel": "يتطلب",
+  "jobsTitle": "الوظائف",
+  "jobsEmpty": "لا توجد وظائف متاحة الآن.",
+  "jobsSearchHint": "ابحث عن وظيفة...",
+  "jobsAllCategories": "كل المجالات",
+  "jobSalaryLabel": "الراتب",
+  "jobRequirementsLabel": "المتطلبات",
+  "jobInterviewLabel": "المقابلة",
+  "jobApplicantsLabel": "متقدّم",
+  "jobApply": "تقديم",
+  "jobApplied": "تم إرسال طلبك.",
+  "jobFollowsTitle": "تنبيهات الوظائف",
+  "jobFollowsEmpty": "لا تتابع أي مجال بعد.",
+  "jobFollowAdd": "متابعة مجال",
+  "jobFollowPickTitle": "اختر مجالًا لمتابعته",
+  "jobUnfollow": "إلغاء المتابعة",
+  "jobFollowed": "تمت متابعة هذا المجال."
 }
