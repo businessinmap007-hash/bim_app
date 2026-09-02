@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../application/cart_controller.dart';
+import '../../application/shared_cart_providers.dart';
 import '../../data/models/cart_models.dart';
 import 'checkout_screen.dart';
+import 'shared_cart_screen.dart';
 
 /// Every business the customer has a draft order with, one card per
 /// business — checkout happens per business (a cart is one business's
@@ -13,13 +17,59 @@ import 'checkout_screen.dart';
 class CartScreen extends ConsumerWidget {
   const CartScreen({super.key});
 
+  Future<void> _joinSharedCart(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    final controller = TextEditingController();
+    final token = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.cartJoinSharedCart),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          decoration: InputDecoration(hintText: l10n.cartJoinTokenHint),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.commonCancel)),
+          TextButton(
+            onPressed: () => Navigator.pop(context, controller.text.trim()),
+            child: Text(l10n.cartJoinAction),
+          ),
+        ],
+      ),
+    );
+    if (token == null || token.isEmpty) return;
+
+    try {
+      final cart = await ref.read(sharedCartApiProvider).join(token);
+      if (context.mounted) {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => SharedCartScreen(orderId: cart.id)),
+        );
+      }
+    } catch (_) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(cartControllerProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.cartTitle)),
+      appBar: AppBar(
+        title: Text(l10n.cartTitle),
+        actions: [
+          IconButton(
+            tooltip: l10n.cartJoinSharedCart,
+            icon: const Icon(Icons.group_add_outlined),
+            onPressed: () => _joinSharedCart(context, ref),
+          ),
+        ],
+      ),
       body: state.isLoading
           ? const Center(child: CircularProgressIndicator())
           : state.carts.isEmpty
@@ -77,6 +127,33 @@ class _BusinessCartCard extends ConsumerWidget {
               ),
               child: Text(l10n.cartCheckout),
             ),
+            if (cart.business != null) ...[
+              const SizedBox(height: 8),
+              OutlinedButton.icon(
+                onPressed: () async {
+                  final businessId = cart.business!.id;
+                  // Captured before any await: reloading the cart list below
+                  // rebuilds this very card with a fresh BuildContext, so a
+                  // Navigator looked up afterward would belong to a disposed
+                  // widget and silently no-op.
+                  final navigator = Navigator.of(context);
+                  final messenger = ScaffoldMessenger.of(context);
+                  try {
+                    final shared = await ref.read(sharedCartApiProvider).share(businessId);
+                    unawaited(ref.read(cartControllerProvider.notifier).load());
+                    navigator.push(
+                      MaterialPageRoute(builder: (_) => SharedCartScreen(orderId: shared.orderId)),
+                    );
+                  } catch (_) {
+                    messenger.showSnackBar(
+                      SnackBar(content: Text(l10n.commonSomethingWentWrong)),
+                    );
+                  }
+                },
+                icon: const Icon(Icons.share_outlined),
+                label: Text(l10n.cartShareCart),
+              ),
+            ],
           ],
         ),
       ),

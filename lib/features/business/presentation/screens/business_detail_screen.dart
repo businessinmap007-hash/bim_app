@@ -28,7 +28,13 @@ import '../widgets/post_card.dart';
 class BusinessDetailScreen extends ConsumerWidget {
   final int businessId;
 
-  const BusinessDetailScreen({super.key, required this.businessId});
+  /// Set only when reached from SharedCartScreen's "add items" — routes
+  /// every add-to-cart on this visit into that group cart instead of the
+  /// caller's own solo cart, and swaps the solo-cart badge for nothing (the
+  /// solo cart isn't what's being built right now).
+  final int? sharedOrderId;
+
+  const BusinessDetailScreen({super.key, required this.businessId, this.sharedOrderId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -39,20 +45,21 @@ class BusinessDetailScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(profileAsync.valueOrNull?.name ?? ''),
         actions: [
-          IconButton(
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CartScreen())),
-            icon: Badge(
-              label: Text('$itemsCount'),
-              isLabelVisible: itemsCount > 0,
-              child: const Icon(Icons.shopping_cart_outlined),
+          if (sharedOrderId == null)
+            IconButton(
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CartScreen())),
+              icon: Badge(
+                label: Text('$itemsCount'),
+                isLabelVisible: itemsCount > 0,
+                child: const Icon(Icons.shopping_cart_outlined),
+              ),
             ),
-          ),
         ],
       ),
       body: AsyncValueView(
         value: profileAsync,
         onRetry: () => ref.invalidate(businessProfileProvider(businessId)),
-        builder: (context, profile) => _BusinessDetailBody(profile: profile),
+        builder: (context, profile) => _BusinessDetailBody(profile: profile, sharedOrderId: sharedOrderId),
       ),
     );
   }
@@ -60,8 +67,9 @@ class BusinessDetailScreen extends ConsumerWidget {
 
 class _BusinessDetailBody extends StatelessWidget {
   final BusinessProfile profile;
+  final int? sharedOrderId;
 
-  const _BusinessDetailBody({required this.profile});
+  const _BusinessDetailBody({required this.profile, this.sharedOrderId});
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +83,7 @@ class _BusinessDetailBody extends StatelessWidget {
     }
     if (profile.sections.menu) {
       tabs.add(Tab(text: l10n.businessTabMenu));
-      tabViews.add(_MenuTab(businessId: profile.id));
+      tabViews.add(_MenuTab(businessId: profile.id, sharedOrderId: sharedOrderId));
     }
     if (profile.sections.services) {
       tabs.add(Tab(text: l10n.businessTabServices));
@@ -253,7 +261,8 @@ class _PostsTabState extends ConsumerState<_PostsTab> {
 
 class _MenuTab extends ConsumerWidget {
   final int businessId;
-  const _MenuTab({required this.businessId});
+  final int? sharedOrderId;
+  const _MenuTab({required this.businessId, this.sharedOrderId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -283,7 +292,7 @@ class _MenuTab extends ConsumerWidget {
                       padding: const EdgeInsets.only(bottom: 8),
                       child: MenuItemTile(
                         item: item,
-                        onTap: () => showAddToCartSheet(context, item),
+                        onTap: () => showAddToCartSheet(context, item, sharedOrderId: sharedOrderId),
                       ),
                     ),
                   ),

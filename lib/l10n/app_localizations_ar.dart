@@ -968,4 +968,48 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get agendaTitleRequired => 'أدخل عنوان المهمة.';
+
+  @override
+  String get cartShareCart => 'مشاركة السلة';
+
+  @override
+  String get cartShareInstructions =>
+      'شارك هذا الرمز مع أصدقائك ليضيفوا طلباتهم:';
+
+  @override
+  String get cartShareCopied => 'تم نسخ الرمز.';
+
+  @override
+  String get cartJoinSharedCart => 'الانضمام لسلة مشتركة';
+
+  @override
+  String get cartJoinTokenHint => 'أدخل رمز المشاركة';
+
+  @override
+  String get cartJoinAction => 'انضمام';
+
+  @override
+  String get sharedCartTitle => 'سلة مشتركة';
+
+  @override
+  String get sharedCartParticipants => 'المشاركون';
+
+  @override
+  String get sharedCartAddItems => 'إضافة عناصر';
+
+  @override
+  String get sharedCartLeave => 'مغادرة السلة';
+
+  @override
+  String get sharedCartLeaveConfirm => 'هل تريد مغادرة هذه السلة المشتركة؟';
+
+  @override
+  String get sharedCartCancelCart => 'إلغاء السلة';
+
+  @override
+  String get sharedCartCancelConfirm =>
+      'هل تريد إلغاء هذه السلة المشتركة بالكامل؟';
+
+  @override
+  String get sharedCartHostBadge => 'المضيف';
 }

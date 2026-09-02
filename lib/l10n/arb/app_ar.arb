@@ -318,5 +318,19 @@
   "agendaEndTime": "وقت الانتهاء (اختياري)",
   "agendaToday": "اليوم",
   "agendaDeleteConfirm": "هل تريد حذف هذه المهمة؟",
-  "agendaTitleRequired": "أدخل عنوان المهمة."
+  "agendaTitleRequired": "أدخل عنوان المهمة.",
+  "cartShareCart": "مشاركة السلة",
+  "cartShareInstructions": "شارك هذا الرمز مع أصدقائك ليضيفوا طلباتهم:",
+  "cartShareCopied": "تم نسخ الرمز.",
+  "cartJoinSharedCart": "الانضمام لسلة مشتركة",
+  "cartJoinTokenHint": "أدخل رمز المشاركة",
+  "cartJoinAction": "انضمام",
+  "sharedCartTitle": "سلة مشتركة",
+  "sharedCartParticipants": "المشاركون",
+  "sharedCartAddItems": "إضافة عناصر",
+  "sharedCartLeave": "مغادرة السلة",
+  "sharedCartLeaveConfirm": "هل تريد مغادرة هذه السلة المشتركة؟",
+  "sharedCartCancelCart": "إلغاء السلة",
+  "sharedCartCancelConfirm": "هل تريد إلغاء هذه السلة المشتركة بالكامل؟",
+  "sharedCartHostBadge": "المضيف"
 }

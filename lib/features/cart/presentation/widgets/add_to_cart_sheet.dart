@@ -4,22 +4,28 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../business/data/models/menu_item_summary.dart';
 import '../../application/cart_controller.dart';
+import '../../application/shared_cart_providers.dart';
 
 /// Opens the picker for a menu item (variant + extras + qty) and adds it to
 /// the cart on confirm. A plain item with no variants/extras skips straight
 /// to a qty-only sheet — same widget, the variant/extras sections just don't
 /// render when there's nothing to choose.
-Future<void> showAddToCartSheet(BuildContext context, MenuItemSummary item) {
+///
+/// [sharedOrderId] routes the add through the group cart instead of the
+/// caller's own solo cart — set when reached via SharedCartScreen's "add
+/// items", which pushes BusinessDetailScreen carrying that id.
+Future<void> showAddToCartSheet(BuildContext context, MenuItemSummary item, {int? sharedOrderId}) {
   return showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
-    builder: (context) => _AddToCartSheet(item: item),
+    builder: (context) => _AddToCartSheet(item: item, sharedOrderId: sharedOrderId),
   );
 }
 
 class _AddToCartSheet extends ConsumerStatefulWidget {
   final MenuItemSummary item;
-  const _AddToCartSheet({required this.item});
+  final int? sharedOrderId;
+  const _AddToCartSheet({required this.item, this.sharedOrderId});
 
   @override
   ConsumerState<_AddToCartSheet> createState() => _AddToCartSheetState();
@@ -62,13 +68,24 @@ class _AddToCartSheetState extends ConsumerState<_AddToCartSheet> {
   Future<void> _confirm() async {
     setState(() => _submitting = true);
     try {
-      await ref.read(cartControllerProvider.notifier).addItem(
-        kind: 'menu',
-        offeringId: widget.item.id,
-        qty: _qty,
-        sizeId: _variantId,
-        extras: _extraIds.toList(),
-      );
+      final sharedOrderId = widget.sharedOrderId;
+      if (sharedOrderId != null) {
+        await ref.read(sharedCartControllerProvider(sharedOrderId).notifier).addItem(
+          kind: 'menu',
+          offeringId: widget.item.id,
+          qty: _qty,
+          sizeId: _variantId,
+          extras: _extraIds.toList(),
+        );
+      } else {
+        await ref.read(cartControllerProvider.notifier).addItem(
+          kind: 'menu',
+          offeringId: widget.item.id,
+          qty: _qty,
+          sizeId: _variantId,
+          extras: _extraIds.toList(),
+        );
+      }
       if (mounted) {
         final l10n = AppLocalizations.of(context)!;
         Navigator.of(context).pop();

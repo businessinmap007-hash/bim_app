@@ -962,4 +962,47 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get agendaTitleRequired => 'Enter a title for the task.';
+
+  @override
+  String get cartShareCart => 'Share cart';
+
+  @override
+  String get cartShareInstructions =>
+      'Share this code with your friends so they can add their orders:';
+
+  @override
+  String get cartShareCopied => 'Code copied.';
+
+  @override
+  String get cartJoinSharedCart => 'Join a shared cart';
+
+  @override
+  String get cartJoinTokenHint => 'Enter the share code';
+
+  @override
+  String get cartJoinAction => 'Join';
+
+  @override
+  String get sharedCartTitle => 'Shared cart';
+
+  @override
+  String get sharedCartParticipants => 'Participants';
+
+  @override
+  String get sharedCartAddItems => 'Add items';
+
+  @override
+  String get sharedCartLeave => 'Leave cart';
+
+  @override
+  String get sharedCartLeaveConfirm => 'Leave this shared cart?';
+
+  @override
+  String get sharedCartCancelCart => 'Cancel cart';
+
+  @override
+  String get sharedCartCancelConfirm => 'Cancel this shared cart entirely?';
+
+  @override
+  String get sharedCartHostBadge => 'Host';
 }

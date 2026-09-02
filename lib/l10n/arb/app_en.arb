@@ -318,5 +318,19 @@
   "agendaEndTime": "End time (optional)",
   "agendaToday": "Today",
   "agendaDeleteConfirm": "Delete this task?",
-  "agendaTitleRequired": "Enter a title for the task."
+  "agendaTitleRequired": "Enter a title for the task.",
+  "cartShareCart": "Share cart",
+  "cartShareInstructions": "Share this code with your friends so they can add their orders:",
+  "cartShareCopied": "Code copied.",
+  "cartJoinSharedCart": "Join a shared cart",
+  "cartJoinTokenHint": "Enter the share code",
+  "cartJoinAction": "Join",
+  "sharedCartTitle": "Shared cart",
+  "sharedCartParticipants": "Participants",
+  "sharedCartAddItems": "Add items",
+  "sharedCartLeave": "Leave cart",
+  "sharedCartLeaveConfirm": "Leave this shared cart?",
+  "sharedCartCancelCart": "Cancel cart",
+  "sharedCartCancelConfirm": "Cancel this shared cart entirely?",
+  "sharedCartHostBadge": "Host"
 }

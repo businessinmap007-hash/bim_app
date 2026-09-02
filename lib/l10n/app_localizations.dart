@@ -1903,6 +1903,90 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'أدخل عنوان المهمة.'**
   String get agendaTitleRequired;
+
+  /// No description provided for @cartShareCart.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشاركة السلة'**
+  String get cartShareCart;
+
+  /// No description provided for @cartShareInstructions.
+  ///
+  /// In ar, this message translates to:
+  /// **'شارك هذا الرمز مع أصدقائك ليضيفوا طلباتهم:'**
+  String get cartShareInstructions;
+
+  /// No description provided for @cartShareCopied.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم نسخ الرمز.'**
+  String get cartShareCopied;
+
+  /// No description provided for @cartJoinSharedCart.
+  ///
+  /// In ar, this message translates to:
+  /// **'الانضمام لسلة مشتركة'**
+  String get cartJoinSharedCart;
+
+  /// No description provided for @cartJoinTokenHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل رمز المشاركة'**
+  String get cartJoinTokenHint;
+
+  /// No description provided for @cartJoinAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'انضمام'**
+  String get cartJoinAction;
+
+  /// No description provided for @sharedCartTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'سلة مشتركة'**
+  String get sharedCartTitle;
+
+  /// No description provided for @sharedCartParticipants.
+  ///
+  /// In ar, this message translates to:
+  /// **'المشاركون'**
+  String get sharedCartParticipants;
+
+  /// No description provided for @sharedCartAddItems.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة عناصر'**
+  String get sharedCartAddItems;
+
+  /// No description provided for @sharedCartLeave.
+  ///
+  /// In ar, this message translates to:
+  /// **'مغادرة السلة'**
+  String get sharedCartLeave;
+
+  /// No description provided for @sharedCartLeaveConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد مغادرة هذه السلة المشتركة؟'**
+  String get sharedCartLeaveConfirm;
+
+  /// No description provided for @sharedCartCancelCart.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء السلة'**
+  String get sharedCartCancelCart;
+
+  /// No description provided for @sharedCartCancelConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد إلغاء هذه السلة المشتركة بالكامل؟'**
+  String get sharedCartCancelConfirm;
+
+  /// No description provided for @sharedCartHostBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'المضيف'**
+  String get sharedCartHostBadge;
 }
 
 class _AppLocalizationsDelegate
