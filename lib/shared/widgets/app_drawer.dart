@@ -9,6 +9,7 @@ import '../../features/auth/application/auth_controller.dart';
 import '../../features/disputes/presentation/screens/disputes_screen.dart';
 import '../../features/clinic/presentation/screens/my_clinic_appointments_screen.dart';
 import '../../features/fines/presentation/screens/fines_screen.dart';
+import '../../features/guarantee/presentation/screens/guarantee_screen.dart';
 import '../../features/offers/presentation/screens/my_offer_follows_screen.dart';
 import '../../features/offers/presentation/screens/offers_screen.dart';
 import '../../features/orders/presentation/screens/orders_and_bookings_screen.dart';
@@ -177,6 +178,14 @@ class AppDrawer extends ConsumerWidget {
                     onTap: () {
                       Navigator.of(context).pop();
                       Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AddressesScreen()));
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.verified_user_outlined),
+                    title: Text(l10n.guaranteeTitle),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GuaranteeScreen()));
                     },
                   ),
                   ListTile(

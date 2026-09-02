@@ -1906,4 +1906,69 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get commentSend => 'Post';
+
+  @override
+  String get guaranteeTitle => 'My guarantee';
+
+  @override
+  String get guaranteeNoneYet => 'You haven\'t activated a guarantee yet.';
+
+  @override
+  String get guaranteeLockedAmountLabel => 'Locked';
+
+  @override
+  String get guaranteeCoverageLabel => 'Coverage';
+
+  @override
+  String get guaranteeAvailableCoverageLabel => 'Available coverage';
+
+  @override
+  String get guaranteeUsedCoverageLabel => 'Used';
+
+  @override
+  String get guaranteeTrustScoreLabel => 'Trust score';
+
+  @override
+  String get guaranteeCompletedOpsLabel => 'Completed operations';
+
+  @override
+  String get guaranteeLevelsTitle => 'Coverage levels';
+
+  @override
+  String get guaranteeActivate => 'Activate';
+
+  @override
+  String get guaranteeUpgrade => 'Upgrade';
+
+  @override
+  String get guaranteeCurrentLevelBadge => 'Current';
+
+  @override
+  String get guaranteeAutoActivate => 'Activate best available level';
+
+  @override
+  String get guaranteeUnlock => 'Unlock guarantee';
+
+  @override
+  String get guaranteeUnlockConfirm =>
+      'Unlock your guarantee and return the locked amount to your wallet?';
+
+  @override
+  String get guaranteeUnlocked => 'Guarantee unlocked.';
+
+  @override
+  String get guaranteeActivated => 'Guarantee activated.';
+
+  @override
+  String get guaranteeNoChange =>
+      'No change — your balance doesn\'t yet cover a higher level.';
+
+  @override
+  String get guaranteeTransactionsTitle => 'Transactions';
+
+  @override
+  String get guaranteeTransactionsEmpty => 'No transactions yet.';
+
+  @override
+  String get guaranteeRequiredLockedLabel => 'Requires';
 }

@@ -1907,4 +1907,68 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get commentSend => 'نشر';
+
+  @override
+  String get guaranteeTitle => 'ضماني';
+
+  @override
+  String get guaranteeNoneYet => 'لم تُفعّل ضمانًا بعد.';
+
+  @override
+  String get guaranteeLockedAmountLabel => 'المحجوز';
+
+  @override
+  String get guaranteeCoverageLabel => 'التغطية';
+
+  @override
+  String get guaranteeAvailableCoverageLabel => 'التغطية المتاحة';
+
+  @override
+  String get guaranteeUsedCoverageLabel => 'المستخدَم';
+
+  @override
+  String get guaranteeTrustScoreLabel => 'درجة الثقة';
+
+  @override
+  String get guaranteeCompletedOpsLabel => 'العمليات المكتملة';
+
+  @override
+  String get guaranteeLevelsTitle => 'مستويات التغطية';
+
+  @override
+  String get guaranteeActivate => 'تفعيل';
+
+  @override
+  String get guaranteeUpgrade => 'ترقية';
+
+  @override
+  String get guaranteeCurrentLevelBadge => 'الحالي';
+
+  @override
+  String get guaranteeAutoActivate => 'تفعيل أفضل مستوى متاح';
+
+  @override
+  String get guaranteeUnlock => 'فكّ الضمان';
+
+  @override
+  String get guaranteeUnlockConfirm =>
+      'فكّ ضمانك وإعادة المبلغ المحجوز إلى محفظتك؟';
+
+  @override
+  String get guaranteeUnlocked => 'تم فكّ الضمان.';
+
+  @override
+  String get guaranteeActivated => 'تم تفعيل الضمان.';
+
+  @override
+  String get guaranteeNoChange => 'لا تغيير — رصيدك لا يكفي مستوى أعلى بعد.';
+
+  @override
+  String get guaranteeTransactionsTitle => 'الحركات';
+
+  @override
+  String get guaranteeTransactionsEmpty => 'لا توجد حركات بعد.';
+
+  @override
+  String get guaranteeRequiredLockedLabel => 'يتطلب';
 }

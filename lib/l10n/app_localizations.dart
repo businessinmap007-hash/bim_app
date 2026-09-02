@@ -3769,6 +3769,132 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'نشر'**
   String get commentSend;
+
+  /// No description provided for @guaranteeTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضماني'**
+  String get guaranteeTitle;
+
+  /// No description provided for @guaranteeNoneYet.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تُفعّل ضمانًا بعد.'**
+  String get guaranteeNoneYet;
+
+  /// No description provided for @guaranteeLockedAmountLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المحجوز'**
+  String get guaranteeLockedAmountLabel;
+
+  /// No description provided for @guaranteeCoverageLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'التغطية'**
+  String get guaranteeCoverageLabel;
+
+  /// No description provided for @guaranteeAvailableCoverageLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'التغطية المتاحة'**
+  String get guaranteeAvailableCoverageLabel;
+
+  /// No description provided for @guaranteeUsedCoverageLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المستخدَم'**
+  String get guaranteeUsedCoverageLabel;
+
+  /// No description provided for @guaranteeTrustScoreLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'درجة الثقة'**
+  String get guaranteeTrustScoreLabel;
+
+  /// No description provided for @guaranteeCompletedOpsLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'العمليات المكتملة'**
+  String get guaranteeCompletedOpsLabel;
+
+  /// No description provided for @guaranteeLevelsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مستويات التغطية'**
+  String get guaranteeLevelsTitle;
+
+  /// No description provided for @guaranteeActivate.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفعيل'**
+  String get guaranteeActivate;
+
+  /// No description provided for @guaranteeUpgrade.
+  ///
+  /// In ar, this message translates to:
+  /// **'ترقية'**
+  String get guaranteeUpgrade;
+
+  /// No description provided for @guaranteeCurrentLevelBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحالي'**
+  String get guaranteeCurrentLevelBadge;
+
+  /// No description provided for @guaranteeAutoActivate.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفعيل أفضل مستوى متاح'**
+  String get guaranteeAutoActivate;
+
+  /// No description provided for @guaranteeUnlock.
+  ///
+  /// In ar, this message translates to:
+  /// **'فكّ الضمان'**
+  String get guaranteeUnlock;
+
+  /// No description provided for @guaranteeUnlockConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'فكّ ضمانك وإعادة المبلغ المحجوز إلى محفظتك؟'**
+  String get guaranteeUnlockConfirm;
+
+  /// No description provided for @guaranteeUnlocked.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم فكّ الضمان.'**
+  String get guaranteeUnlocked;
+
+  /// No description provided for @guaranteeActivated.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تفعيل الضمان.'**
+  String get guaranteeActivated;
+
+  /// No description provided for @guaranteeNoChange.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا تغيير — رصيدك لا يكفي مستوى أعلى بعد.'**
+  String get guaranteeNoChange;
+
+  /// No description provided for @guaranteeTransactionsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحركات'**
+  String get guaranteeTransactionsTitle;
+
+  /// No description provided for @guaranteeTransactionsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد حركات بعد.'**
+  String get guaranteeTransactionsEmpty;
+
+  /// No description provided for @guaranteeRequiredLockedLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'يتطلب'**
+  String get guaranteeRequiredLockedLabel;
 }
 
 class _AppLocalizationsDelegate
