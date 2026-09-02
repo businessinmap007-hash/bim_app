@@ -202,7 +202,7 @@
   "postsCreateChoiceJob": "وظيفة جديدة",
   "postsCreateTitle": "منشور جديد",
   "postsPublish": "نشر",
-  "postsTitleLabel": "العنوان (اختياري)",
+  "postsTitleLabel": "العنوان",
   "postsBodyLabel": "النص",
   "postsDeleteConfirmTitle": "هل تريد حذف هذا المنشور؟",
   "postsDelete": "حذف",

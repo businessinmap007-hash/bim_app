@@ -1277,7 +1277,7 @@ abstract class AppLocalizations {
   /// No description provided for @postsTitleLabel.
   ///
   /// In ar, this message translates to:
-  /// **'العنوان (اختياري)'**
+  /// **'العنوان'**
   String get postsTitleLabel;
 
   /// No description provided for @postsBodyLabel.

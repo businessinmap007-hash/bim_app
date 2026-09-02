@@ -630,7 +630,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get postsPublish => 'نشر';
 
   @override
-  String get postsTitleLabel => 'العنوان (اختياري)';
+  String get postsTitleLabel => 'العنوان';
 
   @override
   String get postsBodyLabel => 'النص';

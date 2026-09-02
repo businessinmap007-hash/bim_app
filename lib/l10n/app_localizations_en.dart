@@ -629,7 +629,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get postsPublish => 'Publish';
 
   @override
-  String get postsTitleLabel => 'Title (optional)';
+  String get postsTitleLabel => 'Title';
 
   @override
   String get postsBodyLabel => 'Text';

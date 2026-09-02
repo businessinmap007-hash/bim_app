@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../media/application/auto_watermark_service.dart';
 import '../../../media/application/media_picker_service.dart';
@@ -66,8 +67,16 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
   void _remove(int index) => setState(() => _items.removeAt(index));
 
   Future<void> _publish() async {
+    final l10n = AppLocalizations.of(context)!;
+    final title = _titleController.text.trim();
     final body = _bodyController.text.trim();
-    if (body.isEmpty) return;
+    // The server requires a title whenever the post links no subject — which
+    // this screen never sends — so title is effectively always required here
+    // too, even though nothing in the UI used to say so.
+    if (title.isEmpty || body.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.validationRequired)));
+      return;
+    }
 
     setState(() => _busy = true);
     try {
@@ -75,13 +84,12 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
       for (final item in _items) {
         images.add(item.processedBytes ?? await item.file.readAsBytes());
       }
-      await ref
-          .read(postsApiProvider)
-          .createPost(title: _titleController.text.trim(), body: body, images: images);
+      await ref.read(postsApiProvider).createPost(title: title, body: body, images: images);
       if (mounted) Navigator.of(context).pop(true);
-    } catch (_) {
+    } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.commonSomethingWentWrong)));
+        final message = e is ApiException ? e.message : l10n.commonSomethingWentWrong;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
       }
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -108,12 +116,12 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          TextField(controller: _titleController, decoration: InputDecoration(labelText: l10n.postsTitleLabel)),
+          TextField(controller: _titleController, decoration: InputDecoration(labelText: '${l10n.postsTitleLabel} *')),
           const SizedBox(height: 12),
           TextField(
             controller: _bodyController,
             maxLines: 5,
-            decoration: InputDecoration(labelText: l10n.postsBodyLabel),
+            decoration: InputDecoration(labelText: '${l10n.postsBodyLabel} *'),
           ),
           const SizedBox(height: 16),
           Wrap(

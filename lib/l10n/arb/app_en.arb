@@ -202,7 +202,7 @@
   "postsCreateChoiceJob": "New job",
   "postsCreateTitle": "New post",
   "postsPublish": "Publish",
-  "postsTitleLabel": "Title (optional)",
+  "postsTitleLabel": "Title",
   "postsBodyLabel": "Text",
   "postsDeleteConfirmTitle": "Delete this post?",
   "postsDelete": "Delete",
