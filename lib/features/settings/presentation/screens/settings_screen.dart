@@ -15,6 +15,7 @@ import '../../../projects/presentation/screens/projects_screen.dart';
 import '../../../ratings/presentation/screens/my_rating_screen.dart';
 import '../../../retail_listings/presentation/screens/retail_listings_screen.dart';
 import '../../../staff/presentation/screens/staff_screen.dart';
+import '../../../training_templates/presentation/screens/training_templates_screen.dart';
 import '../../application/locale_controller.dart';
 import '../../application/theme_mode_controller.dart';
 import '../../application/watermark_settings_controller.dart';
@@ -143,6 +144,15 @@ class SettingsScreen extends ConsumerWidget {
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => const ClinicManagementScreen()),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.fitness_center_outlined),
+                  title: Text(l10n.trainingTemplatesTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const TrainingTemplatesScreen()),
                   ),
                 ),
                 const Divider(height: 1),

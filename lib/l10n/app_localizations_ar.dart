@@ -2590,4 +2590,73 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get clinicSelectWeekdaysError => 'اختر يومًا واحدًا على الأقل.';
+
+  @override
+  String get trainingTemplatesTitle => 'قوالبي';
+
+  @override
+  String get trainingTemplatesEmpty => 'لا توجد قوالب بعد.';
+
+  @override
+  String get trainingTemplateAdd => 'إضافة قالب';
+
+  @override
+  String get trainingTemplateAddTitle => 'إضافة قالب';
+
+  @override
+  String get trainingTemplateEditTitle => 'تعديل القالب';
+
+  @override
+  String get trainingTemplateTitleHint => 'العنوان';
+
+  @override
+  String get trainingTemplateGoalHint => 'الهدف (اختياري)';
+
+  @override
+  String get trainingTemplateNotesHint => 'ملاحظات (اختياري)';
+
+  @override
+  String get trainingTemplateDeleteConfirm => 'حذف هذا القالب؟';
+
+  @override
+  String get trainingTemplateExercisesSection => 'التمارين';
+
+  @override
+  String get trainingTemplateAddExercise => 'إضافة تمرين';
+
+  @override
+  String get trainingTemplateMealsSection => 'الوجبات';
+
+  @override
+  String get trainingTemplateAddMeal => 'إضافة وجبة';
+
+  @override
+  String get trainingExerciseNameHint => 'اسم التمرين';
+
+  @override
+  String get trainingExerciseDayHint => 'اليوم (اختياري)';
+
+  @override
+  String get trainingExerciseDayAny => 'أي يوم';
+
+  @override
+  String get trainingExerciseSetsHint => 'المجموعات (اختياري)';
+
+  @override
+  String get trainingExerciseRepsHint => 'التكرارات (اختياري)';
+
+  @override
+  String get trainingExerciseRestHint => 'الراحة، ثوانٍ (اختياري)';
+
+  @override
+  String get trainingMealTypeLabel => 'نوع الوجبة';
+
+  @override
+  String get trainingMealNameHint => 'اسم الوجبة';
+
+  @override
+  String get trainingMealCaloriesHint => 'السعرات (اختياري)';
+
+  @override
+  String get trainingRemoveRowConfirm => 'حذف هذا؟';
 }

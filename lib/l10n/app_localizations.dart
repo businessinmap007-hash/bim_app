@@ -5047,6 +5047,144 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'اختر يومًا واحدًا على الأقل.'**
   String get clinicSelectWeekdaysError;
+
+  /// No description provided for @trainingTemplatesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'قوالبي'**
+  String get trainingTemplatesTitle;
+
+  /// No description provided for @trainingTemplatesEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد قوالب بعد.'**
+  String get trainingTemplatesEmpty;
+
+  /// No description provided for @trainingTemplateAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة قالب'**
+  String get trainingTemplateAdd;
+
+  /// No description provided for @trainingTemplateAddTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة قالب'**
+  String get trainingTemplateAddTitle;
+
+  /// No description provided for @trainingTemplateEditTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل القالب'**
+  String get trainingTemplateEditTitle;
+
+  /// No description provided for @trainingTemplateTitleHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'العنوان'**
+  String get trainingTemplateTitleHint;
+
+  /// No description provided for @trainingTemplateGoalHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الهدف (اختياري)'**
+  String get trainingTemplateGoalHint;
+
+  /// No description provided for @trainingTemplateNotesHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات (اختياري)'**
+  String get trainingTemplateNotesHint;
+
+  /// No description provided for @trainingTemplateDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف هذا القالب؟'**
+  String get trainingTemplateDeleteConfirm;
+
+  /// No description provided for @trainingTemplateExercisesSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'التمارين'**
+  String get trainingTemplateExercisesSection;
+
+  /// No description provided for @trainingTemplateAddExercise.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة تمرين'**
+  String get trainingTemplateAddExercise;
+
+  /// No description provided for @trainingTemplateMealsSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوجبات'**
+  String get trainingTemplateMealsSection;
+
+  /// No description provided for @trainingTemplateAddMeal.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة وجبة'**
+  String get trainingTemplateAddMeal;
+
+  /// No description provided for @trainingExerciseNameHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم التمرين'**
+  String get trainingExerciseNameHint;
+
+  /// No description provided for @trainingExerciseDayHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم (اختياري)'**
+  String get trainingExerciseDayHint;
+
+  /// No description provided for @trainingExerciseDayAny.
+  ///
+  /// In ar, this message translates to:
+  /// **'أي يوم'**
+  String get trainingExerciseDayAny;
+
+  /// No description provided for @trainingExerciseSetsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'المجموعات (اختياري)'**
+  String get trainingExerciseSetsHint;
+
+  /// No description provided for @trainingExerciseRepsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'التكرارات (اختياري)'**
+  String get trainingExerciseRepsHint;
+
+  /// No description provided for @trainingExerciseRestHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الراحة، ثوانٍ (اختياري)'**
+  String get trainingExerciseRestHint;
+
+  /// No description provided for @trainingMealTypeLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع الوجبة'**
+  String get trainingMealTypeLabel;
+
+  /// No description provided for @trainingMealNameHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الوجبة'**
+  String get trainingMealNameHint;
+
+  /// No description provided for @trainingMealCaloriesHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعرات (اختياري)'**
+  String get trainingMealCaloriesHint;
+
+  /// No description provided for @trainingRemoveRowConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف هذا؟'**
+  String get trainingRemoveRowConfirm;
 }
 
 class _AppLocalizationsDelegate

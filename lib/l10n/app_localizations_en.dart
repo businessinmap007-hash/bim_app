@@ -2590,4 +2590,73 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get clinicSelectWeekdaysError => 'Choose at least one day.';
+
+  @override
+  String get trainingTemplatesTitle => 'My Templates';
+
+  @override
+  String get trainingTemplatesEmpty => 'No templates yet.';
+
+  @override
+  String get trainingTemplateAdd => 'Add template';
+
+  @override
+  String get trainingTemplateAddTitle => 'Add template';
+
+  @override
+  String get trainingTemplateEditTitle => 'Edit template';
+
+  @override
+  String get trainingTemplateTitleHint => 'Title';
+
+  @override
+  String get trainingTemplateGoalHint => 'Goal (optional)';
+
+  @override
+  String get trainingTemplateNotesHint => 'Notes (optional)';
+
+  @override
+  String get trainingTemplateDeleteConfirm => 'Delete this template?';
+
+  @override
+  String get trainingTemplateExercisesSection => 'Exercises';
+
+  @override
+  String get trainingTemplateAddExercise => 'Add exercise';
+
+  @override
+  String get trainingTemplateMealsSection => 'Meals';
+
+  @override
+  String get trainingTemplateAddMeal => 'Add meal';
+
+  @override
+  String get trainingExerciseNameHint => 'Exercise name';
+
+  @override
+  String get trainingExerciseDayHint => 'Day (optional)';
+
+  @override
+  String get trainingExerciseDayAny => 'Any day';
+
+  @override
+  String get trainingExerciseSetsHint => 'Sets (optional)';
+
+  @override
+  String get trainingExerciseRepsHint => 'Reps (optional)';
+
+  @override
+  String get trainingExerciseRestHint => 'Rest, seconds (optional)';
+
+  @override
+  String get trainingMealTypeLabel => 'Meal type';
+
+  @override
+  String get trainingMealNameHint => 'Meal name';
+
+  @override
+  String get trainingMealCaloriesHint => 'Calories (optional)';
+
+  @override
+  String get trainingRemoveRowConfirm => 'Delete this?';
 }
