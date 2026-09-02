@@ -1616,6 +1616,12 @@ abstract class AppLocalizations {
   /// **'حدد الموعد أولًا.'**
   String get bookingDateRequired;
 
+  /// No description provided for @bookingUnitUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير متاحة في هذه المواعيد'**
+  String get bookingUnitUnavailable;
+
   /// No description provided for @ordersBookingsTitle.
   ///
   /// In ar, this message translates to:

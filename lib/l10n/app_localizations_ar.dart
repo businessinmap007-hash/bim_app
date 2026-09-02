@@ -825,6 +825,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get bookingDateRequired => 'حدد الموعد أولًا.';
 
   @override
+  String get bookingUnitUnavailable => 'غير متاحة في هذه المواعيد';
+
+  @override
   String get ordersBookingsTitle => 'طلباتي وحجوزاتي';
 
   @override

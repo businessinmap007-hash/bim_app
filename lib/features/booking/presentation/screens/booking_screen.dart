@@ -205,19 +205,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
               const SizedBox(height: 20),
               if (needsUnit) ...[
                 Text(l10n.bookingChooseUnit, style: Theme.of(context).textTheme.titleSmall),
-                if (units.isEmpty)
-                  Padding(padding: const EdgeInsets.symmetric(vertical: 8), child: Text(l10n.bookingUnitEmpty))
-                else
-                  ...units.map(
-                    (u) => RadioListTile<int>(
-                      contentPadding: EdgeInsets.zero,
-                      value: u.id,
-                      groupValue: _unitId,
-                      onChanged: (v) => setState(() => _unitId = v),
-                      title: Text(u.title.isNotEmpty ? u.title : (u.code ?? '#${u.id}')),
-                      subtitle: u.capacity != null ? Text('${l10n.bookingCapacityLabel}: ${u.capacity}') : null,
-                    ),
-                  ),
+                _unitPickerSection(context, l10n, units),
                 const SizedBox(height: 12),
               ],
               ...fields.map((field) => _fieldWidget(context, l10n, field, form.shape)),
@@ -255,6 +243,99 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
           );
         },
       ),
+    );
+  }
+
+  /// Real named units (rooms/tables/pitches), grouped by kind, with an
+  /// image and — once dates are picked — live availability for those
+  /// exact dates. See Api\V2\UnitDiscoveryController. Falls back to the
+  /// plain unscoped list (no price/image/availability) while loading or on
+  /// error, so a slow/failed request never blocks booking outright.
+  Widget _unitPickerSection(BuildContext context, AppLocalizations l10n, List<BookableUnitOption> fallbackUnits) {
+    final params = (
+      businessId: widget.businessId,
+      serviceId: widget.offering.serviceId,
+      itemType: widget.offering.itemType,
+      startsAt: _startsAt,
+      endsAt: _endsAt,
+    );
+    final discoveryAsync = ref.watch(unitDiscoveryProvider(params));
+
+    return discoveryAsync.when(
+      data: (groups) {
+        final entries = groups.expand((g) => g.units.map((u) => (group: g, unit: u))).toList();
+        if (entries.isEmpty) return _fallbackUnitList(context, l10n, fallbackUnits);
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (final entry in entries)
+              RadioListTile<int>(
+                contentPadding: EdgeInsets.zero,
+                value: entry.unit.id,
+                groupValue: _unitId,
+                onChanged: entry.unit.available == false ? null : (v) => setState(() => _unitId = v),
+                title: Row(
+                  children: [
+                    if (entry.unit.images.isNotEmpty) ...[
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(6),
+                        child: Image.network(
+                          entry.unit.images.first,
+                          width: 40,
+                          height: 40,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) => const SizedBox(width: 40, height: 40),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                    ],
+                    Expanded(child: Text(entry.unit.displayTitle)),
+                  ],
+                ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (entry.unit.capacity != null)
+                      Text('${l10n.bookingCapacityLabel}: ${entry.unit.capacity}'),
+                    if (entry.unit.price != null)
+                      Text('${entry.unit.price!.toStringAsFixed(0)} ${entry.group.currency ?? ''}'),
+                    if (entry.unit.available == false)
+                      Text(
+                        l10n.bookingUnitUnavailable,
+                        style: TextStyle(color: Theme.of(context).colorScheme.error),
+                      ),
+                  ],
+                ),
+              ),
+          ],
+        );
+      },
+      loading: () => const Padding(
+        padding: EdgeInsets.symmetric(vertical: 16),
+        child: Center(child: CircularProgressIndicator()),
+      ),
+      error: (_, _) => _fallbackUnitList(context, l10n, fallbackUnits),
+    );
+  }
+
+  Widget _fallbackUnitList(BuildContext context, AppLocalizations l10n, List<BookableUnitOption> units) {
+    if (units.isEmpty) {
+      return Padding(padding: const EdgeInsets.symmetric(vertical: 8), child: Text(l10n.bookingUnitEmpty));
+    }
+    return Column(
+      children: units
+          .map(
+            (u) => RadioListTile<int>(
+              contentPadding: EdgeInsets.zero,
+              value: u.id,
+              groupValue: _unitId,
+              onChanged: (v) => setState(() => _unitId = v),
+              title: Text(u.title.isNotEmpty ? u.title : (u.code ?? '#${u.id}')),
+              subtitle: u.capacity != null ? Text('${l10n.bookingCapacityLabel}: ${u.capacity}') : null,
+            ),
+          )
+          .toList(),
     );
   }
 

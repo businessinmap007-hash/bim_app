@@ -2,6 +2,7 @@ import '../../../core/network/api_client.dart';
 import '../../../core/network/paginated.dart';
 import 'models/booking.dart';
 import 'models/booking_form.dart';
+import 'models/unit_discovery.dart';
 
 /// /bookings — the customer's own booking requests. See Api\V2\BookingController.
 class BookingApi {
@@ -65,5 +66,29 @@ class BookingApi {
       },
     ) as Map<String, dynamic>;
     return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+  }
+
+  /// The real named units this business has (rooms/tables/pitches), grouped
+  /// by kind with price and — when a date window is given — live
+  /// availability. See Api\V2\UnitDiscoveryController. Public endpoint, no
+  /// auth needed, but the app always calls it signed in anyway.
+  Future<List<UnitKindGroup>> discoverUnits({
+    required int businessId,
+    int? serviceId,
+    String? itemType,
+    DateTime? startsAt,
+    DateTime? endsAt,
+  }) async {
+    final data = await _client.get(
+      '/discovery/units/$businessId',
+      query: {
+        if (serviceId != null) 'service_id': serviceId,
+        if (itemType != null && itemType.isNotEmpty) 'item_type': itemType,
+        if (startsAt != null) 'starts_at': startsAt.toIso8601String(),
+        if (endsAt != null) 'ends_at': endsAt.toIso8601String(),
+      },
+    ) as Map<String, dynamic>;
+    final kinds = data['kinds'] as List<dynamic>? ?? [];
+    return kinds.map((e) => UnitKindGroup.fromJson(e as Map<String, dynamic>)).toList();
   }
 }

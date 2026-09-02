@@ -818,6 +818,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bookingDateRequired => 'Choose a date first.';
 
   @override
+  String get bookingUnitUnavailable => 'Not available for these dates';
+
+  @override
   String get ordersBookingsTitle => 'My orders & bookings';
 
   @override

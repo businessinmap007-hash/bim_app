@@ -4,6 +4,7 @@ import '../../../core/providers/core_providers.dart';
 import '../data/booking_api.dart';
 import '../data/models/booking.dart';
 import '../data/models/booking_form.dart';
+import '../data/models/unit_discovery.dart';
 
 final bookingApiProvider = Provider<BookingApi>((ref) {
   return BookingApi(ref.watch(apiClientProvider));
@@ -11,6 +12,21 @@ final bookingApiProvider = Provider<BookingApi>((ref) {
 
 final bookingFormProvider = FutureProvider.family<BookingFormPayload, int>((ref, businessId) {
   return ref.watch(bookingApiProvider).form(businessId);
+});
+
+typedef UnitDiscoveryParams = ({int businessId, int? serviceId, String? itemType, DateTime? startsAt, DateTime? endsAt});
+
+final unitDiscoveryProvider = FutureProvider.autoDispose.family<List<UnitKindGroup>, UnitDiscoveryParams>((
+  ref,
+  params,
+) {
+  return ref.watch(bookingApiProvider).discoverUnits(
+    businessId: params.businessId,
+    serviceId: params.serviceId,
+    itemType: params.itemType,
+    startsAt: params.startsAt,
+    endsAt: params.endsAt,
+  );
 });
 
 class MyBookingsState {

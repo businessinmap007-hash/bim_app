@@ -271,6 +271,7 @@
   "bookingCapacityLabel": "Capacity",
   "bookingUnitRequired": "Choose a unit first.",
   "bookingDateRequired": "Choose a date first.",
+  "bookingUnitUnavailable": "Not available for these dates",
   "ordersBookingsTitle": "My orders & bookings",
   "ordersTab": "Orders",
   "bookingsTab": "Bookings",

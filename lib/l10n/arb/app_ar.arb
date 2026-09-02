@@ -271,6 +271,7 @@
   "bookingCapacityLabel": "السعة",
   "bookingUnitRequired": "اختر الوحدة أولًا.",
   "bookingDateRequired": "حدد الموعد أولًا.",
+  "bookingUnitUnavailable": "غير متاحة في هذه المواعيد",
   "ordersBookingsTitle": "طلباتي وحجوزاتي",
   "ordersTab": "الطلبات",
   "bookingsTab": "الحجوزات",
