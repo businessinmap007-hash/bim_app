@@ -8,6 +8,7 @@ import '../../../booking/data/models/booking.dart';
 import '../../../cart/application/cart_controller.dart';
 import '../../../cart/presentation/screens/cart_screen.dart';
 import '../../../chat/presentation/screens/operation_chat_screen.dart';
+import '../../../projects/presentation/screens/project_progress_screen.dart';
 import '../../../ratings/presentation/widgets/leave_review_sheet.dart';
 import '../../application/orders_providers.dart';
 import '../../data/models/placed_order.dart';
@@ -324,6 +325,15 @@ class _OrderDetailSheetState extends ConsumerState<_OrderDetailSheet> {
             ),
           ],
           const SizedBox(height: 8),
+          OutlinedButton(
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => ProjectProgressScreen(operationType: 'order', operationId: order.id),
+              ),
+            ),
+            child: Text(l10n.projectViewProgress),
+          ),
+          const SizedBox(height: 8),
           FilledButton(
             onPressed: _busy ? null : () => _reorder(order),
             child: _busy
@@ -562,6 +572,18 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
                   child: Text(l10n.ratingsLeaveReview),
                 ),
               ),
+            const SizedBox(height: 8),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => ProjectProgressScreen(operationType: 'booking', operationId: booking.id),
+                  ),
+                ),
+                child: Text(l10n.projectViewProgress),
+              ),
+            ),
           ],
         ),
       ),

@@ -1185,4 +1185,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get taskStatusDone => 'Done';
+
+  @override
+  String get projectProgressTitle => 'Project progress';
+
+  @override
+  String get projectProgressEmpty => 'No progress plan for this operation yet.';
+
+  @override
+  String get projectViewProgress => 'View project progress';
 }

@@ -1190,4 +1190,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get taskStatusDone => 'مكتملة';
+
+  @override
+  String get projectProgressTitle => 'تقدّم المشروع';
+
+  @override
+  String get projectProgressEmpty => 'لا توجد خطة تقدّم لهذه العملية بعد.';
+
+  @override
+  String get projectViewProgress => 'عرض تقدّم المشروع';
 }

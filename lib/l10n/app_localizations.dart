@@ -2341,6 +2341,24 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'مكتملة'**
   String get taskStatusDone;
+
+  /// No description provided for @projectProgressTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقدّم المشروع'**
+  String get projectProgressTitle;
+
+  /// No description provided for @projectProgressEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد خطة تقدّم لهذه العملية بعد.'**
+  String get projectProgressEmpty;
+
+  /// No description provided for @projectViewProgress.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض تقدّم المشروع'**
+  String get projectViewProgress;
 }
 
 class _AppLocalizationsDelegate

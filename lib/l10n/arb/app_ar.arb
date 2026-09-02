@@ -391,5 +391,8 @@
   "taskStatusPending": "قيد الانتظار",
   "taskStatusInProgress": "جارٍ التنفيذ",
   "taskStatusBlocked": "معلّقة",
-  "taskStatusDone": "مكتملة"
+  "taskStatusDone": "مكتملة",
+  "projectProgressTitle": "تقدّم المشروع",
+  "projectProgressEmpty": "لا توجد خطة تقدّم لهذه العملية بعد.",
+  "projectViewProgress": "عرض تقدّم المشروع"
 }
