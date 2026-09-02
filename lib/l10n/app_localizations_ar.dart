@@ -42,6 +42,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get commonNoInternet => 'لا يوجد اتصال بالإنترنت.';
 
   @override
+  String get notificationsTitle => 'الإشعارات';
+
+  @override
+  String get notificationsEmpty => 'لا توجد إشعارات.';
+
+  @override
+  String get notificationsMarkAllRead => 'تحديد الكل كمقروء';
+
+  @override
   String get authChooseAccountType => 'اختر نوع الحساب';
 
   @override

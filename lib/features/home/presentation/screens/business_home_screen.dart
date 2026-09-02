@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/app_drawer.dart';
+import '../../../../shared/widgets/notification_bell_button.dart';
 import '../../../../shared/widgets/profile_cover_header.dart';
 import '../../../auth/application/auth_controller.dart';
 import '../../../posts/presentation/screens/my_posts_screen.dart';
@@ -28,7 +29,10 @@ class BusinessHomeScreen extends ConsumerWidget {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        appBar: AppBar(title: Text(l10n.homeBusinessTitle)),
+        appBar: AppBar(
+          title: Text(l10n.homeBusinessTitle),
+          actions: const [NotificationBellButton()],
+        ),
         drawer: const AppDrawer(),
         body: Column(
           children: [

@@ -164,6 +164,24 @@ abstract class AppLocalizations {
   /// **'لا يوجد اتصال بالإنترنت.'**
   String get commonNoInternet;
 
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإشعارات'**
+  String get notificationsTitle;
+
+  /// No description provided for @notificationsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد إشعارات.'**
+  String get notificationsEmpty;
+
+  /// No description provided for @notificationsMarkAllRead.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديد الكل كمقروء'**
+  String get notificationsMarkAllRead;
+
   /// No description provided for @authChooseAccountType.
   ///
   /// In ar, this message translates to:

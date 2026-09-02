@@ -12,6 +12,7 @@ import '../features/categories/presentation/screens/specialties_screen.dart';
 import '../features/discovery/presentation/screens/business_list_screen.dart';
 import '../features/home/presentation/screens/home_shell.dart';
 import '../features/media/presentation/screens/media_composer_screen.dart';
+import '../features/notifications/presentation/screens/notifications_screen.dart';
 import '../features/profile/presentation/screens/my_profile_screen.dart';
 import '../features/settings/presentation/screens/settings_screen.dart';
 import '../features/splash/presentation/screens/splash_screen.dart';
@@ -82,6 +83,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/settings',
         builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: '/notifications',
+        builder: (context, state) => const NotificationsScreen(),
       ),
       // Deliberately no id param — always the caller's OWN account. See
       // MyProfileScreen's doc comment for why no "view another profile"

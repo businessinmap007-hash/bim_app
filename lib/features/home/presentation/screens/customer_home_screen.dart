@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/app_drawer.dart';
+import '../../../../shared/widgets/notification_bell_button.dart';
 import '../../../categories/presentation/widgets/category_roots_grid.dart';
 
 /// The customer's landing screen: root categories, per
@@ -16,7 +17,10 @@ class CustomerHomeScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.homeCustomerTitle)),
+      appBar: AppBar(
+        title: Text(l10n.homeCustomerTitle),
+        actions: const [NotificationBellButton()],
+      ),
       drawer: const AppDrawer(),
       body: const CategoryRootsGrid(),
     );

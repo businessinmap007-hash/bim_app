@@ -43,6 +43,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonNoInternet => 'No internet connection.';
 
   @override
+  String get notificationsTitle => 'Notifications';
+
+  @override
+  String get notificationsEmpty => 'No notifications yet.';
+
+  @override
+  String get notificationsMarkAllRead => 'Mark all read';
+
+  @override
   String get authChooseAccountType => 'Choose account type';
 
   @override
