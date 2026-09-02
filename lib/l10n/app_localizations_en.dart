@@ -913,4 +913,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get walletTransactionsEmpty => 'No transactions yet.';
+
+  @override
+  String get chatTitle => 'Chat';
+
+  @override
+  String get chatOpenChat => 'Chat';
+
+  @override
+  String get chatEmpty => 'No messages yet.';
+
+  @override
+  String get chatMessageHint => 'Write a message...';
+
+  @override
+  String get chatLocked =>
+      'This chat has ended; you can no longer send messages.';
 }

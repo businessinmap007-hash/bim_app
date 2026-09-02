@@ -1807,6 +1807,36 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لا توجد حركات بعد.'**
   String get walletTransactionsEmpty;
+
+  /// No description provided for @chatTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المحادثة'**
+  String get chatTitle;
+
+  /// No description provided for @chatOpenChat.
+  ///
+  /// In ar, this message translates to:
+  /// **'محادثة'**
+  String get chatOpenChat;
+
+  /// No description provided for @chatEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد رسائل بعد.'**
+  String get chatEmpty;
+
+  /// No description provided for @chatMessageHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب رسالة...'**
+  String get chatMessageHint;
+
+  /// No description provided for @chatLocked.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتهت المحادثة ولم يعد بالإمكان إرسال رسائل.'**
+  String get chatLocked;
 }
 
 class _AppLocalizationsDelegate

@@ -302,5 +302,10 @@
   "walletAvailableBalance": "Available balance",
   "walletLockedBalance": "Locked balance",
   "walletTransactionsTitle": "Transactions",
-  "walletTransactionsEmpty": "No transactions yet."
+  "walletTransactionsEmpty": "No transactions yet.",
+  "chatTitle": "Chat",
+  "chatOpenChat": "Chat",
+  "chatEmpty": "No messages yet.",
+  "chatMessageHint": "Write a message...",
+  "chatLocked": "This chat has ended; you can no longer send messages."
 }

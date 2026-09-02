@@ -302,5 +302,10 @@
   "walletAvailableBalance": "الرصيد المتاح",
   "walletLockedBalance": "رصيد محجوز",
   "walletTransactionsTitle": "الحركات",
-  "walletTransactionsEmpty": "لا توجد حركات بعد."
+  "walletTransactionsEmpty": "لا توجد حركات بعد.",
+  "chatTitle": "المحادثة",
+  "chatOpenChat": "محادثة",
+  "chatEmpty": "لا توجد رسائل بعد.",
+  "chatMessageHint": "اكتب رسالة...",
+  "chatLocked": "انتهت المحادثة ولم يعد بالإمكان إرسال رسائل."
 }

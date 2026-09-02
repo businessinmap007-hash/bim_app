@@ -920,4 +920,19 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get walletTransactionsEmpty => 'لا توجد حركات بعد.';
+
+  @override
+  String get chatTitle => 'المحادثة';
+
+  @override
+  String get chatOpenChat => 'محادثة';
+
+  @override
+  String get chatEmpty => 'لا توجد رسائل بعد.';
+
+  @override
+  String get chatMessageHint => 'اكتب رسالة...';
+
+  @override
+  String get chatLocked => 'انتهت المحادثة ولم يعد بالإمكان إرسال رسائل.';
 }

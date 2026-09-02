@@ -7,6 +7,7 @@ import '../../../booking/application/booking_providers.dart';
 import '../../../booking/data/models/booking.dart';
 import '../../../cart/application/cart_controller.dart';
 import '../../../cart/presentation/screens/cart_screen.dart';
+import '../../../chat/presentation/screens/operation_chat_screen.dart';
 import '../../../ratings/presentation/widgets/leave_review_sheet.dart';
 import '../../application/orders_providers.dart';
 import '../../data/models/placed_order.dart';
@@ -265,6 +266,19 @@ class _OrderDetailSheetState extends ConsumerState<_OrderDetailSheet> {
               Expanded(
                 child: Text(order.businessName ?? '', style: Theme.of(context).textTheme.titleMedium),
               ),
+              IconButton(
+                tooltip: l10n.chatOpenChat,
+                icon: const Icon(Icons.chat_bubble_outline_rounded),
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => OperationChatScreen(
+                      operationType: 'order',
+                      operationId: order.id,
+                      title: order.businessName ?? l10n.chatTitle,
+                    ),
+                  ),
+                ),
+              ),
               _StatusBadge(label: _orderStatusLabel(order.status, l10n), color: _orderStatusColor(order.status)),
             ],
           ),
@@ -498,6 +512,19 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
               children: [
                 Expanded(
                   child: Text(booking.businessName ?? '', style: Theme.of(context).textTheme.titleMedium),
+                ),
+                IconButton(
+                  tooltip: l10n.chatOpenChat,
+                  icon: const Icon(Icons.chat_bubble_outline_rounded),
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => OperationChatScreen(
+                        operationType: 'booking',
+                        operationId: booking.id,
+                        title: booking.businessName ?? l10n.chatTitle,
+                      ),
+                    ),
+                  ),
                 ),
                 _StatusBadge(
                   label: _bookingStatusLabel(booking.status, l10n),
