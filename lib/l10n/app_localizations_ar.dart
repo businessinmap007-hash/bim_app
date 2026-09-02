@@ -1199,4 +1199,82 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get projectViewProgress => 'عرض تقدّم المشروع';
+
+  @override
+  String get tripSearchTitle => 'بحث الرحلات';
+
+  @override
+  String get tripOrigin => 'من';
+
+  @override
+  String get tripDestination => 'إلى';
+
+  @override
+  String get tripChooseGovernorate => 'اختر المحافظة';
+
+  @override
+  String get tripDateOptional => 'التاريخ (اختياري)';
+
+  @override
+  String get tripSearchAction => 'بحث';
+
+  @override
+  String get tripSearchEmpty => 'لا توجد رحلات مطابقة.';
+
+  @override
+  String get tripSearchFieldsRequired => 'اختر محافظتي الانطلاق والوصول.';
+
+  @override
+  String get tripReserve => 'حجز';
+
+  @override
+  String get tripUnits => 'عدد الوحدات';
+
+  @override
+  String get tripReservationNotes => 'ملاحظات (اختياري)';
+
+  @override
+  String get tripReserved => 'تم إنشاء الحجز، بانتظار تأكيد الناقل.';
+
+  @override
+  String get myReservationsTitle => 'حجوزات الرحلات';
+
+  @override
+  String get myReservationsEmpty => 'لا توجد حجوزات بعد.';
+
+  @override
+  String get tripReservationCancel => 'إلغاء الحجز';
+
+  @override
+  String get tripReservationCancelConfirm => 'هل تريد إلغاء هذا الحجز؟';
+
+  @override
+  String get tripReservationCancelled => 'تم إلغاء الحجز.';
+
+  @override
+  String get tripStatusPending => 'بانتظار التأكيد';
+
+  @override
+  String get tripStatusConfirmed => 'مؤكد';
+
+  @override
+  String get tripStatusCompleted => 'مكتمل';
+
+  @override
+  String get tripStatusCancelled => 'ملغي';
+
+  @override
+  String get tripStatusBlocked => 'حجز يدوي';
+
+  @override
+  String get tripModeFreight => 'شحن بضائع';
+
+  @override
+  String get tripModePassenger => 'نقل ركاب';
+
+  @override
+  String get tripModeLimousine => 'ليموزين';
+
+  @override
+  String get tripModeDistribution => 'توزيع';
 }

@@ -2359,6 +2359,162 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'عرض تقدّم المشروع'**
   String get projectViewProgress;
+
+  /// No description provided for @tripSearchTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'بحث الرحلات'**
+  String get tripSearchTitle;
+
+  /// No description provided for @tripOrigin.
+  ///
+  /// In ar, this message translates to:
+  /// **'من'**
+  String get tripOrigin;
+
+  /// No description provided for @tripDestination.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلى'**
+  String get tripDestination;
+
+  /// No description provided for @tripChooseGovernorate.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر المحافظة'**
+  String get tripChooseGovernorate;
+
+  /// No description provided for @tripDateOptional.
+  ///
+  /// In ar, this message translates to:
+  /// **'التاريخ (اختياري)'**
+  String get tripDateOptional;
+
+  /// No description provided for @tripSearchAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'بحث'**
+  String get tripSearchAction;
+
+  /// No description provided for @tripSearchEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد رحلات مطابقة.'**
+  String get tripSearchEmpty;
+
+  /// No description provided for @tripSearchFieldsRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر محافظتي الانطلاق والوصول.'**
+  String get tripSearchFieldsRequired;
+
+  /// No description provided for @tripReserve.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجز'**
+  String get tripReserve;
+
+  /// No description provided for @tripUnits.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد الوحدات'**
+  String get tripUnits;
+
+  /// No description provided for @tripReservationNotes.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات (اختياري)'**
+  String get tripReservationNotes;
+
+  /// No description provided for @tripReserved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إنشاء الحجز، بانتظار تأكيد الناقل.'**
+  String get tripReserved;
+
+  /// No description provided for @myReservationsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجوزات الرحلات'**
+  String get myReservationsTitle;
+
+  /// No description provided for @myReservationsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد حجوزات بعد.'**
+  String get myReservationsEmpty;
+
+  /// No description provided for @tripReservationCancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء الحجز'**
+  String get tripReservationCancel;
+
+  /// No description provided for @tripReservationCancelConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد إلغاء هذا الحجز؟'**
+  String get tripReservationCancelConfirm;
+
+  /// No description provided for @tripReservationCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إلغاء الحجز.'**
+  String get tripReservationCancelled;
+
+  /// No description provided for @tripStatusPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار التأكيد'**
+  String get tripStatusPending;
+
+  /// No description provided for @tripStatusConfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مؤكد'**
+  String get tripStatusConfirmed;
+
+  /// No description provided for @tripStatusCompleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتمل'**
+  String get tripStatusCompleted;
+
+  /// No description provided for @tripStatusCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغي'**
+  String get tripStatusCancelled;
+
+  /// No description provided for @tripStatusBlocked.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجز يدوي'**
+  String get tripStatusBlocked;
+
+  /// No description provided for @tripModeFreight.
+  ///
+  /// In ar, this message translates to:
+  /// **'شحن بضائع'**
+  String get tripModeFreight;
+
+  /// No description provided for @tripModePassenger.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقل ركاب'**
+  String get tripModePassenger;
+
+  /// No description provided for @tripModeLimousine.
+  ///
+  /// In ar, this message translates to:
+  /// **'ليموزين'**
+  String get tripModeLimousine;
+
+  /// No description provided for @tripModeDistribution.
+  ///
+  /// In ar, this message translates to:
+  /// **'توزيع'**
+  String get tripModeDistribution;
 }
 
 class _AppLocalizationsDelegate

@@ -1194,4 +1194,84 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get projectViewProgress => 'View project progress';
+
+  @override
+  String get tripSearchTitle => 'Search trips';
+
+  @override
+  String get tripOrigin => 'From';
+
+  @override
+  String get tripDestination => 'To';
+
+  @override
+  String get tripChooseGovernorate => 'Choose a governorate';
+
+  @override
+  String get tripDateOptional => 'Date (optional)';
+
+  @override
+  String get tripSearchAction => 'Search';
+
+  @override
+  String get tripSearchEmpty => 'No matching trips.';
+
+  @override
+  String get tripSearchFieldsRequired =>
+      'Choose both an origin and a destination.';
+
+  @override
+  String get tripReserve => 'Reserve';
+
+  @override
+  String get tripUnits => 'Units';
+
+  @override
+  String get tripReservationNotes => 'Notes (optional)';
+
+  @override
+  String get tripReserved =>
+      'Reservation created, awaiting the carrier\'s confirmation.';
+
+  @override
+  String get myReservationsTitle => 'Trip reservations';
+
+  @override
+  String get myReservationsEmpty => 'No reservations yet.';
+
+  @override
+  String get tripReservationCancel => 'Cancel reservation';
+
+  @override
+  String get tripReservationCancelConfirm => 'Cancel this reservation?';
+
+  @override
+  String get tripReservationCancelled => 'Reservation cancelled.';
+
+  @override
+  String get tripStatusPending => 'Awaiting confirmation';
+
+  @override
+  String get tripStatusConfirmed => 'Confirmed';
+
+  @override
+  String get tripStatusCompleted => 'Completed';
+
+  @override
+  String get tripStatusCancelled => 'Cancelled';
+
+  @override
+  String get tripStatusBlocked => 'Manually held';
+
+  @override
+  String get tripModeFreight => 'Freight';
+
+  @override
+  String get tripModePassenger => 'Passengers';
+
+  @override
+  String get tripModeLimousine => 'Limousine';
+
+  @override
+  String get tripModeDistribution => 'Distribution';
 }

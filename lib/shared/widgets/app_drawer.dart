@@ -8,6 +8,7 @@ import '../../features/auth/application/auth_controller.dart';
 import '../../features/fines/presentation/screens/fines_screen.dart';
 import '../../features/orders/presentation/screens/orders_and_bookings_screen.dart';
 import '../../features/posts/presentation/screens/my_posts_screen.dart';
+import '../../features/schedules/presentation/screens/trip_search_screen.dart';
 import '../../features/wallet/presentation/screens/wallet_screen.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -53,57 +54,71 @@ class AppDrawer extends ConsumerWidget {
                 ],
               ),
             ),
-            ListTile(
-              leading: const Icon(Icons.dynamic_feed_outlined),
-              title: Text(l10n.postsMyPostsTitle),
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MyPostsScreen()));
-              },
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.dynamic_feed_outlined),
+                    title: Text(l10n.postsMyPostsTitle),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MyPostsScreen()));
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.receipt_long_outlined),
+                    title: Text(l10n.ordersBookingsTitle),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const OrdersAndBookingsScreen()),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.account_balance_wallet_outlined),
+                    title: Text(l10n.walletTitle),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const WalletScreen()));
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.calendar_month_outlined),
+                    title: Text(l10n.agendaTitle),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AgendaScreen()));
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.gavel_outlined),
+                    title: Text(l10n.finesTitle),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const FinesScreen()));
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.local_shipping_outlined),
+                    title: Text(l10n.tripSearchTitle),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const TripSearchScreen()));
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.settings_outlined),
+                    title: Text(l10n.settingsTitle),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      context.push('/settings');
+                    },
+                  ),
+                ],
+              ),
             ),
-            ListTile(
-              leading: const Icon(Icons.receipt_long_outlined),
-              title: Text(l10n.ordersBookingsTitle),
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const OrdersAndBookingsScreen()),
-                );
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.account_balance_wallet_outlined),
-              title: Text(l10n.walletTitle),
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(MaterialPageRoute(builder: (_) => const WalletScreen()));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.calendar_month_outlined),
-              title: Text(l10n.agendaTitle),
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AgendaScreen()));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.gavel_outlined),
-              title: Text(l10n.finesTitle),
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(MaterialPageRoute(builder: (_) => const FinesScreen()));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.settings_outlined),
-              title: Text(l10n.settingsTitle),
-              onTap: () {
-                Navigator.of(context).pop();
-                context.push('/settings');
-              },
-            ),
-            const Spacer(),
             const Divider(height: 1),
             ListTile(
               leading: Icon(Icons.logout, color: Theme.of(context).colorScheme.error),
