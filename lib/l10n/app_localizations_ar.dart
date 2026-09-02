@@ -2019,4 +2019,70 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get jobFollowed => 'تمت متابعة هذا المجال.';
+
+  @override
+  String get agendaSettingsTitle => 'التذكيرات ومواعيد الوجبات';
+
+  @override
+  String get agendaSettingsMealTimesSection => 'مواعيد الوجبات';
+
+  @override
+  String get agendaSettingsMealTimesHint =>
+      'الجرعات الدوائية المرتبطة بالوجبات تُجدول حول هذه المواعيد.';
+
+  @override
+  String get agendaSettingsBreakfast => 'الإفطار';
+
+  @override
+  String get agendaSettingsLunch => 'الغداء';
+
+  @override
+  String get agendaSettingsDinner => 'العشاء';
+
+  @override
+  String get agendaSettingsMealTimesSaved => 'تم حفظ مواعيد الوجبات.';
+
+  @override
+  String get agendaSettingsRemindersSection => 'التذكيرات';
+
+  @override
+  String get agendaSettingsRemindersHint =>
+      'متى تريد أن يتم تذكيرك قبل موعد أو عنصر في الأجندة.';
+
+  @override
+  String get agendaSettingsFirstLead => 'التذكير الأول بالموعد';
+
+  @override
+  String get agendaSettingsSecondLead => 'التذكير الثاني بالموعد';
+
+  @override
+  String get agendaSettingsSecondLeadNone => 'بدون';
+
+  @override
+  String get agendaSettingsAgendaLead => 'تذكير عنصر الأجندة';
+
+  @override
+  String get agendaSettingsAgendaLeadNone => 'في نفس الوقت';
+
+  @override
+  String get agendaSettingsRemindersSaved => 'تم حفظ تفضيلات التذكير.';
+
+  @override
+  String get agendaSettingsSecondLeadError =>
+      'يجب أن يكون التذكير الثاني أقرب من الأول.';
+
+  @override
+  String durationMinutes(int count) {
+    return '$count د';
+  }
+
+  @override
+  String durationHours(int count) {
+    return '$count س';
+  }
+
+  @override
+  String durationDays(int count) {
+    return '$count يوم';
+  }
 }

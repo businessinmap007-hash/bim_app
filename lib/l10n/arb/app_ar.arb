@@ -666,5 +666,33 @@
   "jobFollowAdd": "متابعة مجال",
   "jobFollowPickTitle": "اختر مجالًا لمتابعته",
   "jobUnfollow": "إلغاء المتابعة",
-  "jobFollowed": "تمت متابعة هذا المجال."
+  "jobFollowed": "تمت متابعة هذا المجال.",
+  "agendaSettingsTitle": "التذكيرات ومواعيد الوجبات",
+  "agendaSettingsMealTimesSection": "مواعيد الوجبات",
+  "agendaSettingsMealTimesHint": "الجرعات الدوائية المرتبطة بالوجبات تُجدول حول هذه المواعيد.",
+  "agendaSettingsBreakfast": "الإفطار",
+  "agendaSettingsLunch": "الغداء",
+  "agendaSettingsDinner": "العشاء",
+  "agendaSettingsMealTimesSaved": "تم حفظ مواعيد الوجبات.",
+  "agendaSettingsRemindersSection": "التذكيرات",
+  "agendaSettingsRemindersHint": "متى تريد أن يتم تذكيرك قبل موعد أو عنصر في الأجندة.",
+  "agendaSettingsFirstLead": "التذكير الأول بالموعد",
+  "agendaSettingsSecondLead": "التذكير الثاني بالموعد",
+  "agendaSettingsSecondLeadNone": "بدون",
+  "agendaSettingsAgendaLead": "تذكير عنصر الأجندة",
+  "agendaSettingsAgendaLeadNone": "في نفس الوقت",
+  "agendaSettingsRemindersSaved": "تم حفظ تفضيلات التذكير.",
+  "agendaSettingsSecondLeadError": "يجب أن يكون التذكير الثاني أقرب من الأول.",
+  "durationMinutes": "{count} د",
+  "@durationMinutes": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "durationHours": "{count} س",
+  "@durationHours": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "durationDays": "{count} يوم",
+  "@durationDays": {
+    "placeholders": { "count": { "type": "int" } }
+  }
 }

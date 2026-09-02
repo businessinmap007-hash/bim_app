@@ -3991,6 +3991,120 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تمت متابعة هذا المجال.'**
   String get jobFollowed;
+
+  /// No description provided for @agendaSettingsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'التذكيرات ومواعيد الوجبات'**
+  String get agendaSettingsTitle;
+
+  /// No description provided for @agendaSettingsMealTimesSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'مواعيد الوجبات'**
+  String get agendaSettingsMealTimesSection;
+
+  /// No description provided for @agendaSettingsMealTimesHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجرعات الدوائية المرتبطة بالوجبات تُجدول حول هذه المواعيد.'**
+  String get agendaSettingsMealTimesHint;
+
+  /// No description provided for @agendaSettingsBreakfast.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإفطار'**
+  String get agendaSettingsBreakfast;
+
+  /// No description provided for @agendaSettingsLunch.
+  ///
+  /// In ar, this message translates to:
+  /// **'الغداء'**
+  String get agendaSettingsLunch;
+
+  /// No description provided for @agendaSettingsDinner.
+  ///
+  /// In ar, this message translates to:
+  /// **'العشاء'**
+  String get agendaSettingsDinner;
+
+  /// No description provided for @agendaSettingsMealTimesSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ مواعيد الوجبات.'**
+  String get agendaSettingsMealTimesSaved;
+
+  /// No description provided for @agendaSettingsRemindersSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'التذكيرات'**
+  String get agendaSettingsRemindersSection;
+
+  /// No description provided for @agendaSettingsRemindersHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'متى تريد أن يتم تذكيرك قبل موعد أو عنصر في الأجندة.'**
+  String get agendaSettingsRemindersHint;
+
+  /// No description provided for @agendaSettingsFirstLead.
+  ///
+  /// In ar, this message translates to:
+  /// **'التذكير الأول بالموعد'**
+  String get agendaSettingsFirstLead;
+
+  /// No description provided for @agendaSettingsSecondLead.
+  ///
+  /// In ar, this message translates to:
+  /// **'التذكير الثاني بالموعد'**
+  String get agendaSettingsSecondLead;
+
+  /// No description provided for @agendaSettingsSecondLeadNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون'**
+  String get agendaSettingsSecondLeadNone;
+
+  /// No description provided for @agendaSettingsAgendaLead.
+  ///
+  /// In ar, this message translates to:
+  /// **'تذكير عنصر الأجندة'**
+  String get agendaSettingsAgendaLead;
+
+  /// No description provided for @agendaSettingsAgendaLeadNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'في نفس الوقت'**
+  String get agendaSettingsAgendaLeadNone;
+
+  /// No description provided for @agendaSettingsRemindersSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ تفضيلات التذكير.'**
+  String get agendaSettingsRemindersSaved;
+
+  /// No description provided for @agendaSettingsSecondLeadError.
+  ///
+  /// In ar, this message translates to:
+  /// **'يجب أن يكون التذكير الثاني أقرب من الأول.'**
+  String get agendaSettingsSecondLeadError;
+
+  /// No description provided for @durationMinutes.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} د'**
+  String durationMinutes(int count);
+
+  /// No description provided for @durationHours.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} س'**
+  String durationHours(int count);
+
+  /// No description provided for @durationDays.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} يوم'**
+  String durationDays(int count);
 }
 
 class _AppLocalizationsDelegate

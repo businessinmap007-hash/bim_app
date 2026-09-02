@@ -2019,4 +2019,70 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get jobFollowed => 'Following this field.';
+
+  @override
+  String get agendaSettingsTitle => 'Reminders & meal times';
+
+  @override
+  String get agendaSettingsMealTimesSection => 'Meal times';
+
+  @override
+  String get agendaSettingsMealTimesHint =>
+      'Medication doses tied to meals are scheduled around these.';
+
+  @override
+  String get agendaSettingsBreakfast => 'Breakfast';
+
+  @override
+  String get agendaSettingsLunch => 'Lunch';
+
+  @override
+  String get agendaSettingsDinner => 'Dinner';
+
+  @override
+  String get agendaSettingsMealTimesSaved => 'Meal times saved.';
+
+  @override
+  String get agendaSettingsRemindersSection => 'Reminders';
+
+  @override
+  String get agendaSettingsRemindersHint =>
+      'How long before an appointment or an agenda item you want to be notified.';
+
+  @override
+  String get agendaSettingsFirstLead => 'First appointment reminder';
+
+  @override
+  String get agendaSettingsSecondLead => 'Second appointment reminder';
+
+  @override
+  String get agendaSettingsSecondLeadNone => 'Off';
+
+  @override
+  String get agendaSettingsAgendaLead => 'Agenda item reminder';
+
+  @override
+  String get agendaSettingsAgendaLeadNone => 'At the time';
+
+  @override
+  String get agendaSettingsRemindersSaved => 'Reminder preferences saved.';
+
+  @override
+  String get agendaSettingsSecondLeadError =>
+      'The second reminder must be closer than the first.';
+
+  @override
+  String durationMinutes(int count) {
+    return '${count}m';
+  }
+
+  @override
+  String durationHours(int count) {
+    return '${count}h';
+  }
+
+  @override
+  String durationDays(int count) {
+    return '${count}d';
+  }
 }

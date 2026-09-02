@@ -5,6 +5,7 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/agenda_providers.dart';
 import '../../data/models/agenda_item.dart';
+import 'agenda_settings_screen.dart';
 
 DateTime _dateOnly(DateTime d) => DateTime(d.year, d.month, d.day);
 
@@ -140,6 +141,13 @@ class _AgendaScreenState extends ConsumerState<AgendaScreen> {
               onPressed: () => setState(() => _date = _dateOnly(DateTime.now())),
               child: Text(l10n.agendaToday, style: TextStyle(color: Theme.of(context).appBarTheme.foregroundColor)),
             ),
+          IconButton(
+            icon: const Icon(Icons.settings_outlined),
+            tooltip: l10n.agendaSettingsTitle,
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const AgendaSettingsScreen()),
+            ),
+          ),
         ],
       ),
       body: Column(

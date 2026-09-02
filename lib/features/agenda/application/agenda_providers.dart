@@ -3,9 +3,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers/core_providers.dart';
 import '../data/agenda_api.dart';
 import '../data/models/agenda_item.dart';
+import '../data/models/agenda_settings.dart';
 
 final agendaApiProvider = Provider<AgendaApi>((ref) {
   return AgendaApi(ref.watch(apiClientProvider));
+});
+
+final mealTimesProvider = FutureProvider.autoDispose<MealTimes>((ref) {
+  return ref.watch(agendaApiProvider).mealTimes();
+});
+
+final reminderPreferencesProvider = FutureProvider.autoDispose<ReminderPreferences>((ref) {
+  return ref.watch(agendaApiProvider).reminderPreferences();
 });
 
 class AgendaDayState {

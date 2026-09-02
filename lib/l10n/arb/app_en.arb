@@ -666,5 +666,33 @@
   "jobFollowAdd": "Follow a field",
   "jobFollowPickTitle": "Choose a field to follow",
   "jobUnfollow": "Unfollow",
-  "jobFollowed": "Following this field."
+  "jobFollowed": "Following this field.",
+  "agendaSettingsTitle": "Reminders & meal times",
+  "agendaSettingsMealTimesSection": "Meal times",
+  "agendaSettingsMealTimesHint": "Medication doses tied to meals are scheduled around these.",
+  "agendaSettingsBreakfast": "Breakfast",
+  "agendaSettingsLunch": "Lunch",
+  "agendaSettingsDinner": "Dinner",
+  "agendaSettingsMealTimesSaved": "Meal times saved.",
+  "agendaSettingsRemindersSection": "Reminders",
+  "agendaSettingsRemindersHint": "How long before an appointment or an agenda item you want to be notified.",
+  "agendaSettingsFirstLead": "First appointment reminder",
+  "agendaSettingsSecondLead": "Second appointment reminder",
+  "agendaSettingsSecondLeadNone": "Off",
+  "agendaSettingsAgendaLead": "Agenda item reminder",
+  "agendaSettingsAgendaLeadNone": "At the time",
+  "agendaSettingsRemindersSaved": "Reminder preferences saved.",
+  "agendaSettingsSecondLeadError": "The second reminder must be closer than the first.",
+  "durationMinutes": "{count}m",
+  "@durationMinutes": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "durationHours": "{count}h",
+  "@durationHours": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "durationDays": "{count}d",
+  "@durationDays": {
+    "placeholders": { "count": { "type": "int" } }
+  }
 }
