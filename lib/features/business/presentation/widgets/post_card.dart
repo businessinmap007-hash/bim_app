@@ -121,7 +121,11 @@ class PostCard extends StatelessWidget {
         // more than one. Edit/delete floats on the photo itself rather than
         // a separate bar above it.
         if (hasImages)
-          PostImageCarousel(images: galleryImages, menuAction: _menu(context, l10n, onImage: true)),
+          PostImageCarousel(
+            images: galleryImages,
+            menuAction: _menu(context, l10n, onImage: true),
+            onOpenComments: onOpenComments,
+          ),
         Padding(
           padding: const EdgeInsets.fromLTRB(8, 6, 8, 12),
           child: Column(

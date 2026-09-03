@@ -11,9 +11,27 @@ import '../../../l10n/app_localizations.dart';
 /// both the UI strings and the language the server replies in.
 class LocaleController extends StateNotifier<Locale> {
   final Ref _ref;
+  // Only until the user explicitly picks a language: once true, the device's
+  // own OS-language changes no longer touch state (setLocale's choice always
+  // wins from then on, same as before this got the live-tracking below).
+  bool _hasExplicitChoice = false;
 
   LocaleController(this._ref) : super(const Locale('ar')) {
     _restore();
+    // The device's language can change while the app stays open (Settings
+    // app on Android/iOS doesn't kill background apps) — without this,
+    // that change was only ever picked up on the NEXT cold start.
+    PlatformDispatcher.instance.onLocaleChanged = _onDeviceLocaleChanged;
+  }
+
+  void _onDeviceLocaleChanged() {
+    if (_hasExplicitChoice) return;
+    final deviceCode = PlatformDispatcher.instance.locale.languageCode;
+    if (deviceCode == state.languageCode) return;
+    if (AppLocalizations.supportedLocales.any((l) => l.languageCode == deviceCode)) {
+      state = Locale(deviceCode);
+      _ref.read(apiClientProvider).languageCode = state.languageCode;
+    }
   }
 
   Future<void> _restore() async {
@@ -24,11 +42,12 @@ class LocaleController extends StateNotifier<Locale> {
             (l) => l.languageCode == saved,
           )) {
         state = Locale(saved);
+        _hasExplicitChoice = true;
       } else {
         // No explicit choice saved yet — follow the device's own language
-        // on first launch instead of always defaulting to Arabic, same as
-        // any well-behaved app. Once the user picks a language explicitly
-        // (setLocale persists it), that choice always wins from then on.
+        // instead of always defaulting to Arabic, same as any well-behaved
+        // app, and keep following it live (see _onDeviceLocaleChanged) until
+        // the user picks a language explicitly in Settings.
         final deviceCode = PlatformDispatcher.instance.locale.languageCode;
         if (AppLocalizations.supportedLocales.any((l) => l.languageCode == deviceCode)) {
           state = Locale(deviceCode);
@@ -41,6 +60,7 @@ class LocaleController extends StateNotifier<Locale> {
   }
 
   Future<void> setLocale(Locale locale) async {
+    _hasExplicitChoice = true;
     state = locale;
     _ref.read(apiClientProvider).languageCode = locale.languageCode;
     try {
@@ -48,6 +68,12 @@ class LocaleController extends StateNotifier<Locale> {
     } catch (_) {
       // Best-effort persistence; the in-memory switch already took effect.
     }
+  }
+
+  @override
+  void dispose() {
+    PlatformDispatcher.instance.onLocaleChanged = null;
+    super.dispose();
   }
 }
 

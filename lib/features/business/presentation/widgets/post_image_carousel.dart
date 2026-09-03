@@ -10,12 +10,14 @@ import '../../data/models/business_post.dart';
 /// full-screen, pinch-to-zoom, starting on whichever page was showing.
 ///
 /// [menuAction] (edit/delete, when the caller owns the post) floats directly
-/// on the photo itself — top-start, opposite the "i/N" badge — rather than
-/// living in a separate header bar above it.
+/// on the photo itself — top-end (left in Arabic, right in English — the
+/// side a "..." menu conventionally sits on in each language), opposite the
+/// "i/N" badge — rather than living in a separate header bar above it.
 class PostImageCarousel extends StatefulWidget {
   final List<PostImage> images;
   final Widget? menuAction;
-  const PostImageCarousel({super.key, required this.images, this.menuAction});
+  final VoidCallback? onOpenComments;
+  const PostImageCarousel({super.key, required this.images, this.menuAction, this.onOpenComments});
 
   @override
   State<PostImageCarousel> createState() => _PostImageCarouselState();
@@ -37,6 +39,7 @@ class _PostImageCarouselState extends State<PostImageCarousel> {
         builder: (_) => _FullScreenGallery(
           urls: widget.images.map((e) => e.url).toList(),
           initialIndex: initialIndex,
+          onOpenComments: widget.onOpenComments,
         ),
         fullscreenDialog: true,
       ),
@@ -52,7 +55,7 @@ class _PostImageCarouselState extends State<PostImageCarousel> {
         imageProvider: NetworkImage(url),
         overlays: [
           GestureDetector(onTap: () => _openFullScreen(0)),
-          if (widget.menuAction != null) PositionedDirectional(top: 6, start: 6, child: widget.menuAction!),
+          if (widget.menuAction != null) PositionedDirectional(top: 6, end: 6, child: widget.menuAction!),
         ],
       );
     }
@@ -69,19 +72,25 @@ class _PostImageCarouselState extends State<PostImageCarousel> {
             child: Image(image: NetworkImage(widget.images[i].url), fit: BoxFit.cover),
           ),
         ),
-        if (widget.menuAction != null) PositionedDirectional(top: 6, start: 6, child: widget.menuAction!),
-        Positioned(
+        if (widget.menuAction != null) PositionedDirectional(top: 6, end: 6, child: widget.menuAction!),
+        PositionedDirectional(
           top: 10,
-          right: 10,
+          start: 10,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
             decoration: BoxDecoration(
               color: Colors.black.withValues(alpha: 0.55),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Text(
-              '${_index + 1}/${widget.images.length}',
-              style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
+            // Forced LTR: a bare "N/M" run reading through an RTL paragraph
+            // can have the bidi algorithm reorder it to "M/N" — a page
+            // counter must read in a fixed digit order regardless of locale.
+            child: Directionality(
+              textDirection: TextDirection.ltr,
+              child: Text(
+                '${_index + 1}/${widget.images.length}',
+                style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
+              ),
             ),
           ),
         ),
@@ -114,7 +123,8 @@ class _PostImageCarouselState extends State<PostImageCarousel> {
 class _FullScreenGallery extends StatefulWidget {
   final List<String> urls;
   final int initialIndex;
-  const _FullScreenGallery({required this.urls, required this.initialIndex});
+  final VoidCallback? onOpenComments;
+  const _FullScreenGallery({required this.urls, required this.initialIndex, this.onOpenComments});
 
   @override
   State<_FullScreenGallery> createState() => _FullScreenGalleryState();
@@ -123,6 +133,12 @@ class _FullScreenGallery extends StatefulWidget {
 class _FullScreenGalleryState extends State<_FullScreenGallery> {
   late final PageController _controller = PageController(initialPage: widget.initialIndex);
   late int _index = widget.initialIndex;
+  double _dragOffset = 0;
+  // A vertical swipe — either direction — closes the viewer, the same
+  // dismiss gesture every full-screen photo view uses. Only free to fire
+  // when the current page isn't zoomed in (see panEnabled below): otherwise
+  // a pinch-pan would trigger it by accident.
+  static const _dismissThreshold = 80.0;
   // One per page, so pinch-zooming one photo doesn't leave the next one
   // pre-zoomed. Its own listener toggles panEnabled below — an
   // InteractiveViewer that's always pan-enabled fights the PageView for
@@ -143,6 +159,26 @@ class _FullScreenGalleryState extends State<_FullScreenGallery> {
     super.dispose();
   }
 
+  bool get _currentPageZoomed => _transformControllers[_index].value.getMaxScaleOnAxis() > 1.01;
+
+  void _onVerticalDragUpdate(DragUpdateDetails details) {
+    if (_currentPageZoomed) return;
+    setState(() => _dragOffset += details.delta.dy);
+  }
+
+  void _onVerticalDragEnd(DragEndDetails details) {
+    if (_dragOffset.abs() > _dismissThreshold) {
+      Navigator.of(context).pop();
+    } else if (_dragOffset != 0) {
+      setState(() => _dragOffset = 0);
+    }
+  }
+
+  void _openComments() {
+    Navigator.of(context).pop();
+    widget.onOpenComments?.call();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -151,26 +187,51 @@ class _FullScreenGalleryState extends State<_FullScreenGallery> {
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
         elevation: 0,
+        // Forced LTR — see the same fix on the inline carousel badge above.
         title: widget.urls.length > 1
-            ? Text('${_index + 1} / ${widget.urls.length}')
+            ? Directionality(
+                textDirection: TextDirection.ltr,
+                child: Text('${_index + 1} / ${widget.urls.length}'),
+              )
             : null,
       ),
-      body: PageView.builder(
-        controller: _controller,
-        itemCount: widget.urls.length,
-        onPageChanged: (i) => setState(() => _index = i),
-        itemBuilder: (context, i) => AnimatedBuilder(
-          animation: _transformControllers[i],
-          builder: (context, child) => InteractiveViewer(
-            transformationController: _transformControllers[i],
-            panEnabled: _transformControllers[i].value.getMaxScaleOnAxis() > 1.01,
-            child: child!,
-          ),
-          child: SizedBox.expand(
-            child: Image(image: NetworkImage(widget.urls[i]), fit: BoxFit.contain),
+      body: GestureDetector(
+        onVerticalDragUpdate: _onVerticalDragUpdate,
+        onVerticalDragEnd: _onVerticalDragEnd,
+        child: Transform.translate(
+          offset: Offset(0, _dragOffset),
+          child: Opacity(
+            opacity: (1 - (_dragOffset.abs() / 400)).clamp(0.3, 1.0),
+            child: PageView.builder(
+              controller: _controller,
+              itemCount: widget.urls.length,
+              onPageChanged: (i) => setState(() => _index = i),
+              itemBuilder: (context, i) => AnimatedBuilder(
+                animation: _transformControllers[i],
+                builder: (context, child) => InteractiveViewer(
+                  transformationController: _transformControllers[i],
+                  panEnabled: _transformControllers[i].value.getMaxScaleOnAxis() > 1.01,
+                  child: child!,
+                ),
+                child: SizedBox.expand(
+                  child: Image(image: NetworkImage(widget.urls[i]), fit: BoxFit.contain),
+                ),
+              ),
+            ),
           ),
         ),
       ),
+      bottomNavigationBar: widget.onOpenComments == null
+          ? null
+          : SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: IconButton(
+                  icon: const Icon(Icons.mode_comment_outlined, color: Colors.white),
+                  onPressed: _openComments,
+                ),
+              ),
+            ),
     );
   }
 }
