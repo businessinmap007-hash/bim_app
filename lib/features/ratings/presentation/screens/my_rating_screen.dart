@@ -42,32 +42,38 @@ class MyRatingScreen extends ConsumerWidget {
           children: [
             _SectionHeader(l10n.myRatingObjectiveSection),
             const SizedBox(height: 8),
-            _StatsCard(rating: myRating.rating, l10n: l10n),
+            if (myRating.ratingEnabled)
+              _StatsCard(rating: myRating.rating, l10n: l10n)
+            else
+              _HiddenCard(hint: l10n.myRatingHiddenHint),
             const SizedBox(height: 24),
             _SectionHeader(l10n.myRatingReviewsSection),
             const SizedBox(height: 8),
-            Card(
-              margin: EdgeInsets.zero,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.star_rounded, color: AppColors.accentGold),
-                        const SizedBox(width: 6),
-                        Text(
-                          myRating.rating.starsAverage.toStringAsFixed(1),
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                      ],
-                    ),
-                    Text(l10n.myRatingReviewCount(myRating.rating.reviewCount)),
-                  ],
+            if (myRating.ratingEnabled)
+              Card(
+                margin: EdgeInsets.zero,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.star_rounded, color: AppColors.accentGold),
+                          const SizedBox(width: 6),
+                          Text(
+                            myRating.rating.starsAverage.toStringAsFixed(1),
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                        ],
+                      ),
+                      Text(l10n.myRatingReviewCount(myRating.rating.reviewCount)),
+                    ],
+                  ),
                 ),
-              ),
-            ),
+              )
+            else
+              _HiddenCard(hint: l10n.myRatingHiddenHint),
             const SizedBox(height: 24),
             _SectionHeader(l10n.myRatingConsentSection),
             const SizedBox(height: 8),
@@ -139,6 +145,38 @@ class _ConsentCard extends ConsumerStatefulWidget {
 
 class _ConsentCardState extends ConsumerState<_ConsentCard> {
   bool _enabling = false;
+  bool _disabling = false;
+
+  Future<void> _confirmAndDisable() async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.myRatingDisableConfirmTitle),
+        content: Text(l10n.myRatingDisableConfirmBody),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l10n.commonCancel)),
+          TextButton(onPressed: () => Navigator.pop(context, true), child: Text(l10n.myRatingDisableConfirm)),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+
+    setState(() => _disabling = true);
+    try {
+      await ref.read(myRatingControllerProvider.notifier).disable();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.myRatingDisabledMessage)));
+      }
+    } catch (e) {
+      if (mounted) {
+        final message = e is ApiException ? e.message : l10n.commonSomethingWentWrong;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      }
+    } finally {
+      if (mounted) setState(() => _disabling = false);
+    }
+  }
 
   Future<void> _confirmAndEnable() async {
     final l10n = AppLocalizations.of(context)!;
@@ -208,7 +246,40 @@ class _ConsentCardState extends ConsumerState<_ConsentCard> {
                       : Text(l10n.myRatingEnableButton),
                 ),
               ),
+            ] else ...[
+              const SizedBox(height: 12),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: OutlinedButton(
+                  onPressed: _disabling ? null : _confirmAndDisable,
+                  child: _disabling
+                      ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2))
+                      : Text(l10n.myRatingDisableButton),
+                ),
+              ),
             ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _HiddenCard extends StatelessWidget {
+  final String hint;
+  const _HiddenCard({required this.hint});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Icon(Icons.visibility_off_outlined, color: Theme.of(context).hintColor),
+            const SizedBox(width: 8),
+            Expanded(child: Text(hint, style: TextStyle(color: Theme.of(context).hintColor))),
           ],
         ),
       ),

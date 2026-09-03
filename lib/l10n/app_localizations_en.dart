@@ -2213,7 +2213,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get myRatingEnableConfirmBody =>
-      'This makes your operations visible with a rating and reviews, and service fees will start applying to your own operations from now on. This cannot be undone from the app.';
+      'This makes your operations visible with a rating and reviews, and service fees will start applying to your own operations from now on. You can close it again later.';
 
   @override
   String get myRatingEnableConfirm => 'Open it';
@@ -2221,6 +2221,25 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get myRatingEnabledMessage =>
       'Your rating is now open. Service fees will apply to your operations from now on.';
+
+  @override
+  String get myRatingDisableButton => 'Close my rating';
+
+  @override
+  String get myRatingDisableConfirmTitle => 'Close your rating?';
+
+  @override
+  String get myRatingDisableConfirmBody =>
+      'Your operation record and reviews will be hidden again, and service fees will stop applying to your new operations.';
+
+  @override
+  String get myRatingDisableConfirm => 'Close it';
+
+  @override
+  String get myRatingDisabledMessage => 'Your rating is now closed.';
+
+  @override
+  String get myRatingHiddenHint => 'Hidden while your rating is closed.';
 
   @override
   String get merchantAccountTitle => 'Merchant account';

@@ -104,6 +104,11 @@ class MyRatingController extends StateNotifier<AsyncValue<MyRating>> {
     await _api.enable();
     await load();
   }
+
+  Future<void> disable() async {
+    await _api.disable();
+    await load();
+  }
 }
 
 final myRatingControllerProvider = StateNotifierProvider<MyRatingController, AsyncValue<MyRating>>((ref) {

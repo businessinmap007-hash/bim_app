@@ -4337,7 +4337,7 @@ abstract class AppLocalizations {
   /// No description provided for @myRatingEnableConfirmBody.
   ///
   /// In ar, this message translates to:
-  /// **'هذا يجعل عملياتك ظاهرة بتقييم ومراجعات، وستبدأ رسوم الخدمة في التطبيق على عملياتك الخاصة من الآن. لا يمكن التراجع عن هذا من داخل التطبيق.'**
+  /// **'هذا يجعل عملياتك ظاهرة بتقييم ومراجعات، وستبدأ رسوم الخدمة على عملياتك الخاصة من الآن. تقدر تغلقه تاني في أي وقت.'**
   String get myRatingEnableConfirmBody;
 
   /// No description provided for @myRatingEnableConfirm.
@@ -4351,6 +4351,42 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تم فتح تقييمك. ستُطبَّق رسوم الخدمة على عملياتك من الآن.'**
   String get myRatingEnabledMessage;
+
+  /// No description provided for @myRatingDisableButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'إغلاق تقييمي'**
+  String get myRatingDisableButton;
+
+  /// No description provided for @myRatingDisableConfirmTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إغلاق تقييمك؟'**
+  String get myRatingDisableConfirmTitle;
+
+  /// No description provided for @myRatingDisableConfirmBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيتم إخفاء سجل عملياتك وتقييماتك مرة أخرى، وستتوقف رسوم الخدمة عن الانطباق على عملياتك الجديدة.'**
+  String get myRatingDisableConfirmBody;
+
+  /// No description provided for @myRatingDisableConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'إغلاقه'**
+  String get myRatingDisableConfirm;
+
+  /// No description provided for @myRatingDisabledMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إغلاق تقييمك.'**
+  String get myRatingDisabledMessage;
+
+  /// No description provided for @myRatingHiddenHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مخفي أثناء إغلاق تقييمك.'**
+  String get myRatingHiddenHint;
 
   /// No description provided for @merchantAccountTitle.
   ///

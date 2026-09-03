@@ -2216,7 +2216,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get myRatingEnableConfirmBody =>
-      'هذا يجعل عملياتك ظاهرة بتقييم ومراجعات، وستبدأ رسوم الخدمة في التطبيق على عملياتك الخاصة من الآن. لا يمكن التراجع عن هذا من داخل التطبيق.';
+      'هذا يجعل عملياتك ظاهرة بتقييم ومراجعات، وستبدأ رسوم الخدمة على عملياتك الخاصة من الآن. تقدر تغلقه تاني في أي وقت.';
 
   @override
   String get myRatingEnableConfirm => 'فتحه';
@@ -2224,6 +2224,25 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get myRatingEnabledMessage =>
       'تم فتح تقييمك. ستُطبَّق رسوم الخدمة على عملياتك من الآن.';
+
+  @override
+  String get myRatingDisableButton => 'إغلاق تقييمي';
+
+  @override
+  String get myRatingDisableConfirmTitle => 'إغلاق تقييمك؟';
+
+  @override
+  String get myRatingDisableConfirmBody =>
+      'سيتم إخفاء سجل عملياتك وتقييماتك مرة أخرى، وستتوقف رسوم الخدمة عن الانطباق على عملياتك الجديدة.';
+
+  @override
+  String get myRatingDisableConfirm => 'إغلاقه';
+
+  @override
+  String get myRatingDisabledMessage => 'تم إغلاق تقييمك.';
+
+  @override
+  String get myRatingHiddenHint => 'مخفي أثناء إغلاق تقييمك.';
 
   @override
   String get merchantAccountTitle => 'حساب Merchant';

@@ -13,11 +13,17 @@ class RatingsApi {
     return MyRating.fromJson(data);
   }
 
-  /// Forward-only: opens the caller's own rating, which also makes THEM
-  /// liable for service fees on their own operations from now on (never
-  /// the counterparty). No API path undoes this once called.
+  /// Opens the caller's own rating, which also makes THEM liable for
+  /// service fees on their own operations from now on (never the
+  /// counterparty).
   Future<void> enable() async {
     await _client.post('/ratings/enable');
+  }
+
+  /// Closes it again — the exact reverse: stops new fee liability and hides
+  /// the operation record/reviews again, same as before ever opening it.
+  Future<void> disable() async {
+    await _client.post('/ratings/disable');
   }
 
   Future<Paginated<OperationReview>> reviews(int userId, {int page = 1, int perPage = 20}) async {
