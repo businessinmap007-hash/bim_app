@@ -8,9 +8,14 @@ import '../../data/models/business_post.dart';
 /// once there's more than one — the gallery a multi-photo post needs but a
 /// static [AdaptiveImageBox] never gave it. Tapping any frame opens it
 /// full-screen, pinch-to-zoom, starting on whichever page was showing.
+///
+/// [menuAction] (edit/delete, when the caller owns the post) floats directly
+/// on the photo itself — top-start, opposite the "i/N" badge — rather than
+/// living in a separate header bar above it.
 class PostImageCarousel extends StatefulWidget {
   final List<PostImage> images;
-  const PostImageCarousel({super.key, required this.images});
+  final Widget? menuAction;
+  const PostImageCarousel({super.key, required this.images, this.menuAction});
 
   @override
   State<PostImageCarousel> createState() => _PostImageCarouselState();
@@ -43,9 +48,12 @@ class _PostImageCarouselState extends State<PostImageCarousel> {
     if (widget.images.length <= 1) {
       final url = widget.images.isEmpty ? null : widget.images.first.url;
       if (url == null) return const SizedBox.shrink();
-      return GestureDetector(
-        onTap: () => _openFullScreen(0),
-        child: AdaptiveImageBox(imageProvider: NetworkImage(url)),
+      return AdaptiveImageBox(
+        imageProvider: NetworkImage(url),
+        overlays: [
+          GestureDetector(onTap: () => _openFullScreen(0)),
+          if (widget.menuAction != null) PositionedDirectional(top: 6, start: 6, child: widget.menuAction!),
+        ],
       );
     }
 
@@ -61,6 +69,7 @@ class _PostImageCarouselState extends State<PostImageCarousel> {
             child: Image(image: NetworkImage(widget.images[i].url), fit: BoxFit.cover),
           ),
         ),
+        if (widget.menuAction != null) PositionedDirectional(top: 6, start: 6, child: widget.menuAction!),
         Positioned(
           top: 10,
           right: 10,

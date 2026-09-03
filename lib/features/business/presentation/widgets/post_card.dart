@@ -34,6 +34,33 @@ class PostCard extends StatelessWidget {
     this.onOpenComments,
   });
 
+  /// Edit/delete, when either is set. [onImage] styles it to float over a
+  /// photo (small, white-on-black-circle) instead of sitting inline in a
+  /// plain header row.
+  Widget? _menu(BuildContext context, AppLocalizations l10n, {required bool onImage}) {
+    if (onEdit == null && onDelete == null) return null;
+
+    final button = PopupMenuButton<String>(
+      padding: EdgeInsets.zero,
+      icon: Icon(Icons.more_vert, size: onImage ? 18 : 20, color: onImage ? Colors.white : null),
+      onSelected: (choice) {
+        if (choice == 'edit') onEdit?.call();
+        if (choice == 'delete') onDelete?.call();
+      },
+      itemBuilder: (context) => [
+        if (onEdit != null) PopupMenuItem(value: 'edit', child: Text(l10n.postsEdit)),
+        if (onDelete != null) PopupMenuItem(value: 'delete', child: Text(l10n.postsDelete)),
+      ],
+    );
+
+    if (!onImage) return button;
+
+    return Container(
+      decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.45), shape: BoxShape.circle),
+      child: button,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -41,6 +68,8 @@ class PostCard extends StatelessWidget {
     final galleryImages = post.images.isNotEmpty
         ? post.images
         : (post.imageUrl != null ? [PostImage(id: 0, url: post.imageUrl!)] : const <PostImage>[]);
+    final hasImages = galleryImages.isNotEmpty;
+    final inlineMenu = hasImages ? null : _menu(context, l10n, onImage: false);
     final liked = post.myReaction == 1;
     final hasCaption = post.title.isNotEmpty || post.body.isNotEmpty;
 
@@ -55,7 +84,7 @@ class PostCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-        if ((showAuthor && post.author != null) || onEdit != null || onDelete != null)
+        if ((showAuthor && post.author != null) || inlineMenu != null)
           Padding(
             padding: const EdgeInsets.fromLTRB(12, 10, 4, 8),
             child: Row(
@@ -82,27 +111,17 @@ class PostCard extends StatelessWidget {
                         )
                       : const SizedBox.shrink(),
                 ),
-                if (onEdit != null || onDelete != null)
-                  PopupMenuButton<String>(
-                    icon: const Icon(Icons.more_vert, size: 20),
-                    onSelected: (choice) {
-                      if (choice == 'edit') onEdit?.call();
-                      if (choice == 'delete') onDelete?.call();
-                    },
-                    itemBuilder: (context) => [
-                      if (onEdit != null)
-                        PopupMenuItem(value: 'edit', child: Text(l10n.postsEdit)),
-                      if (onDelete != null)
-                        PopupMenuItem(value: 'delete', child: Text(l10n.postsDelete)),
-                    ],
-                  ),
+                // On a photo-less post there's nowhere but here to put it.
+                ?inlineMenu,
               ],
             ),
           ),
         // Edge-to-edge, square corners — an Instagram photo isn't boxed
         // inside a card, it IS the card. A swipeable gallery once there's
-        // more than one.
-        if (galleryImages.isNotEmpty) PostImageCarousel(images: galleryImages),
+        // more than one. Edit/delete floats on the photo itself rather than
+        // a separate bar above it.
+        if (hasImages)
+          PostImageCarousel(images: galleryImages, menuAction: _menu(context, l10n, onImage: true)),
         Padding(
           padding: const EdgeInsets.fromLTRB(8, 6, 8, 12),
           child: Column(
