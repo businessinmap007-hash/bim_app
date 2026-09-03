@@ -38,7 +38,7 @@ class PrescriptionItem {
   final int? durationValue;
   final String? durationUnit;
   final double? unitPrice;
-  final String? billedQuantity;
+  final int? billedQuantity;
   final double? lineTotal;
 
   const PrescriptionItem({
@@ -73,7 +73,7 @@ class PrescriptionItem {
     durationValue: (json['duration_value'] as num?)?.toInt(),
     durationUnit: json['duration_unit'] as String?,
     unitPrice: (json['unit_price'] as num?)?.toDouble(),
-    billedQuantity: json['billed_quantity'] as String?,
+    billedQuantity: (json['billed_quantity'] as num?)?.toInt(),
     lineTotal: (json['line_total'] as num?)?.toDouble(),
   );
 }

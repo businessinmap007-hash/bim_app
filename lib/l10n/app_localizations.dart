@@ -5665,6 +5665,114 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'أضف دواءً واحدًا على الأقل.'**
   String get medicineAtLeastOneItem;
+
+  /// No description provided for @pharmacyQueueTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلبات الصيدلية'**
+  String get pharmacyQueueTitle;
+
+  /// No description provided for @pharmacyQueueFilterAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get pharmacyQueueFilterAll;
+
+  /// No description provided for @pharmacyQueueEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد وصفات مُرسلة إليك بعد.'**
+  String get pharmacyQueueEmpty;
+
+  /// No description provided for @pharmacyPriceAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسعير'**
+  String get pharmacyPriceAction;
+
+  /// No description provided for @pharmacyPrepareAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدء التجهيز'**
+  String get pharmacyPrepareAction;
+
+  /// No description provided for @pharmacyMarkReadyAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاهزة'**
+  String get pharmacyMarkReadyAction;
+
+  /// No description provided for @pharmacyDispenseAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'صرف'**
+  String get pharmacyDispenseAction;
+
+  /// No description provided for @pharmacyRejectAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفض'**
+  String get pharmacyRejectAction;
+
+  /// No description provided for @pharmacyRejectConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفض هذه الوصفة وإعادتها للمريض؟'**
+  String get pharmacyRejectConfirm;
+
+  /// No description provided for @pharmacyPreparingStarted.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدأ التجهيز.'**
+  String get pharmacyPreparingStarted;
+
+  /// No description provided for @pharmacyMarkedReady.
+  ///
+  /// In ar, this message translates to:
+  /// **'أصبحت جاهزة للمريض.'**
+  String get pharmacyMarkedReady;
+
+  /// No description provided for @pharmacyDispensed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الصرف.'**
+  String get pharmacyDispensed;
+
+  /// No description provided for @pharmacyRejected.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الرفض وإعادتها للمريض.'**
+  String get pharmacyRejected;
+
+  /// No description provided for @pharmacyPriceTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسعير الوصفة'**
+  String get pharmacyPriceTitle;
+
+  /// No description provided for @pharmacyUnitPriceLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر الوحدة'**
+  String get pharmacyUnitPriceLabel;
+
+  /// No description provided for @pharmacyBilledQuantityLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكمية'**
+  String get pharmacyBilledQuantityLabel;
+
+  /// No description provided for @pharmacyPriced.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تسعير الوصفة.'**
+  String get pharmacyPriced;
+
+  /// No description provided for @pharmacyCurrencyLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'جنيه'**
+  String get pharmacyCurrencyLabel;
 }
 
 class _AppLocalizationsDelegate

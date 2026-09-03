@@ -2902,4 +2902,59 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get medicineAtLeastOneItem => 'Add at least one medicine.';
+
+  @override
+  String get pharmacyQueueTitle => 'Pharmacy Queue';
+
+  @override
+  String get pharmacyQueueFilterAll => 'All';
+
+  @override
+  String get pharmacyQueueEmpty => 'No prescriptions sent to you yet.';
+
+  @override
+  String get pharmacyPriceAction => 'Price';
+
+  @override
+  String get pharmacyPrepareAction => 'Start preparing';
+
+  @override
+  String get pharmacyMarkReadyAction => 'Mark ready';
+
+  @override
+  String get pharmacyDispenseAction => 'Dispense';
+
+  @override
+  String get pharmacyRejectAction => 'Reject';
+
+  @override
+  String get pharmacyRejectConfirm =>
+      'Reject this prescription and send it back to the patient?';
+
+  @override
+  String get pharmacyPreparingStarted => 'Preparation started.';
+
+  @override
+  String get pharmacyMarkedReady => 'Marked ready for the patient.';
+
+  @override
+  String get pharmacyDispensed => 'Dispensed.';
+
+  @override
+  String get pharmacyRejected => 'Rejected and returned to the patient.';
+
+  @override
+  String get pharmacyPriceTitle => 'Price this prescription';
+
+  @override
+  String get pharmacyUnitPriceLabel => 'Unit price';
+
+  @override
+  String get pharmacyBilledQuantityLabel => 'Quantity';
+
+  @override
+  String get pharmacyPriced => 'Prescription priced.';
+
+  @override
+  String get pharmacyCurrencyLabel => 'EGP';
 }

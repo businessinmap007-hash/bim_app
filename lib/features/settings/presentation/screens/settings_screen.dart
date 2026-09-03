@@ -13,6 +13,7 @@ import '../../../clinic_management/presentation/screens/clinic_management_screen
 import '../../../media/presentation/widgets/watermark_repeat_selector.dart';
 import '../../../merchant_account/presentation/screens/merchant_account_screen.dart';
 import '../../../prescriptions/presentation/screens/issued_prescriptions_screen.dart';
+import '../../../prescriptions/presentation/screens/pharmacy_queue_screen.dart';
 import '../../../projects/presentation/screens/projects_screen.dart';
 import '../../../ratings/presentation/screens/my_rating_screen.dart';
 import '../../../retail_listings/presentation/screens/retail_listings_screen.dart';
@@ -155,6 +156,15 @@ class SettingsScreen extends ConsumerWidget {
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => const IssuedPrescriptionsScreen()),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.local_pharmacy_outlined),
+                  title: Text(l10n.pharmacyQueueTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const PharmacyQueueScreen()),
                   ),
                 ),
                 const Divider(height: 1),

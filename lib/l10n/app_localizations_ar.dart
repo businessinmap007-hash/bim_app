@@ -2902,4 +2902,58 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get medicineAtLeastOneItem => 'أضف دواءً واحدًا على الأقل.';
+
+  @override
+  String get pharmacyQueueTitle => 'طلبات الصيدلية';
+
+  @override
+  String get pharmacyQueueFilterAll => 'الكل';
+
+  @override
+  String get pharmacyQueueEmpty => 'لا توجد وصفات مُرسلة إليك بعد.';
+
+  @override
+  String get pharmacyPriceAction => 'تسعير';
+
+  @override
+  String get pharmacyPrepareAction => 'بدء التجهيز';
+
+  @override
+  String get pharmacyMarkReadyAction => 'جاهزة';
+
+  @override
+  String get pharmacyDispenseAction => 'صرف';
+
+  @override
+  String get pharmacyRejectAction => 'رفض';
+
+  @override
+  String get pharmacyRejectConfirm => 'رفض هذه الوصفة وإعادتها للمريض؟';
+
+  @override
+  String get pharmacyPreparingStarted => 'بدأ التجهيز.';
+
+  @override
+  String get pharmacyMarkedReady => 'أصبحت جاهزة للمريض.';
+
+  @override
+  String get pharmacyDispensed => 'تم الصرف.';
+
+  @override
+  String get pharmacyRejected => 'تم الرفض وإعادتها للمريض.';
+
+  @override
+  String get pharmacyPriceTitle => 'تسعير الوصفة';
+
+  @override
+  String get pharmacyUnitPriceLabel => 'سعر الوحدة';
+
+  @override
+  String get pharmacyBilledQuantityLabel => 'الكمية';
+
+  @override
+  String get pharmacyPriced => 'تم تسعير الوصفة.';
+
+  @override
+  String get pharmacyCurrencyLabel => 'جنيه';
 }

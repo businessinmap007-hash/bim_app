@@ -7,8 +7,10 @@ import '../../../../core/network/api_exception.dart';
 import '../../../addresses/presentation/widgets/address_pick_sheet.dart';
 import '../../../auth/application/auth_controller.dart';
 import '../../../discovery/data/models/business_summary.dart';
+import '../../application/pharmacy_prescriptions_providers.dart';
 import '../../application/prescriptions_providers.dart';
 import '../../data/models/prescription.dart';
+import '../../data/pharmacy_prescriptions_api.dart';
 import '../widgets/business_picker_sheet.dart';
 import 'issue_prescription_screen.dart';
 import 'prescriptions_screen.dart' show statusLabel;
@@ -238,6 +240,157 @@ class PrescriptionDetailScreen extends ConsumerWidget {
     }
   }
 
+  Future<void> _pharmacyAction(
+    BuildContext context,
+    WidgetRef ref,
+    Future<void> Function(PharmacyPrescriptionsApi) action,
+    String successMessage, {
+    bool popAfter = false,
+  }) async {
+    try {
+      await action(ref.read(pharmacyPrescriptionsApiProvider));
+      ref.read(pharmacyQueueControllerProvider.notifier).load();
+      if (!context.mounted) return;
+      if (popAfter) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(successMessage)));
+        return;
+      }
+      ref.invalidate(prescriptionDetailProvider(prescriptionId));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(successMessage)));
+    } catch (e) {
+      if (context.mounted) _showError(context, e);
+    }
+  }
+
+  Future<void> _prepare(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    await _pharmacyAction(context, ref, (api) => api.prepare(prescriptionId), l10n.pharmacyPreparingStarted);
+  }
+
+  Future<void> _markReady(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    await _pharmacyAction(context, ref, (api) => api.ready(prescriptionId), l10n.pharmacyMarkedReady);
+  }
+
+  Future<void> _dispense(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    await _pharmacyAction(context, ref, (api) => api.dispense(prescriptionId), l10n.pharmacyDispensed);
+  }
+
+  Future<void> _reject(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Text(l10n.pharmacyRejectConfirm),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l10n.commonCancel)),
+          TextButton(onPressed: () => Navigator.pop(context, true), child: Text(l10n.pharmacyRejectAction)),
+        ],
+      ),
+    );
+    if (confirmed != true || !context.mounted) return;
+    await _pharmacyAction(context, ref, (api) => api.reject(prescriptionId), l10n.pharmacyRejected, popAfter: true);
+  }
+
+  Future<void> _priceItems(BuildContext context, WidgetRef ref, Prescription p) async {
+    final l10n = AppLocalizations.of(context)!;
+    final priceControllers = <int, TextEditingController>{};
+    final qtyControllers = <int, TextEditingController>{};
+    for (final item in p.items) {
+      priceControllers[item.id] = TextEditingController(
+        text: item.unitPrice != null ? _trimNum(item.unitPrice!) : '',
+      );
+      qtyControllers[item.id] = TextEditingController(text: (item.billedQuantity ?? 1).toString());
+    }
+    String? error;
+
+    final saved = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      builder: (sheetContext) => StatefulBuilder(
+        builder: (sheetContext, setSheetState) => Padding(
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 20 + MediaQuery.of(sheetContext).viewInsets.bottom),
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(l10n.pharmacyPriceTitle, style: Theme.of(sheetContext).textTheme.titleMedium),
+                  const SizedBox(height: 16),
+                  for (final item in p.items) ...[
+                    Text(item.name ?? '', style: Theme.of(sheetContext).textTheme.titleSmall),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: TextField(
+                            controller: priceControllers[item.id],
+                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                            decoration: InputDecoration(labelText: l10n.pharmacyUnitPriceLabel),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: TextField(
+                            controller: qtyControllers[item.id],
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(labelText: l10n.pharmacyBilledQuantityLabel),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                  if (error != null) ...[
+                    Text(error!, style: TextStyle(color: Theme.of(sheetContext).colorScheme.error)),
+                    const SizedBox(height: 8),
+                  ],
+                  FilledButton(
+                    onPressed: () {
+                      final items = <PricedItemInput>[];
+                      for (final item in p.items) {
+                        final price = double.tryParse(priceControllers[item.id]!.text.trim());
+                        final qty = int.tryParse(qtyControllers[item.id]!.text.trim());
+                        if (price == null || price < 0 || qty == null || qty < 1) {
+                          setSheetState(() => error = l10n.validationRequired);
+                          return;
+                        }
+                        items.add(PricedItemInput(prescriptionItemId: item.id, unitPrice: price, billedQuantity: qty));
+                      }
+                      Navigator.of(sheetContext).pop(true);
+                      _submitPricing(context, ref, items);
+                    },
+                    child: Text(l10n.commonSave),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    if (saved != true) return;
+  }
+
+  Future<void> _submitPricing(BuildContext context, WidgetRef ref, List<PricedItemInput> items) async {
+    final l10n = AppLocalizations.of(context)!;
+    try {
+      await ref.read(pharmacyPrescriptionsApiProvider).price(prescriptionId, items);
+      ref.invalidate(prescriptionDetailProvider(prescriptionId));
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.pharmacyPriced)));
+      }
+    } catch (e) {
+      if (context.mounted) _showError(context, e);
+    }
+  }
+
+  String _trimNum(double v) => v == v.roundToDouble() ? v.toInt().toString() : v.toString();
+
   void _showError(BuildContext context, Object e) {
     final l10n = AppLocalizations.of(context)!;
     final message = e is ApiException ? e.message : l10n.commonSomethingWentWrong;
@@ -276,6 +429,13 @@ class PrescriptionDetailScreen extends ConsumerWidget {
         // ever opened it before a doctor could too (see IssuePrescriptionScreen).
         final isPatientViewer = currentUserId != null && currentUserId == p.patient.id;
         final canRevise = currentUserId != null && currentUserId == p.doctor.id && p.canCancel;
+        final isPharmacyViewer = currentUserId != null && p.pharmacy != null && currentUserId == p.pharmacy!.id;
+        const openStatuses = ['sent_to_pharmacy', 'preparing', 'ready'];
+        final canPrice = isPharmacyViewer && openStatuses.contains(p.status);
+        final canPrepare = isPharmacyViewer && p.status == 'sent_to_pharmacy';
+        final canMarkReady = isPharmacyViewer && (p.status == 'sent_to_pharmacy' || p.status == 'preparing');
+        final canDispense = isPharmacyViewer && (p.status == 'ready' || p.status == 'preparing');
+        final canReject = isPharmacyViewer && (p.status == 'sent_to_pharmacy' || p.status == 'preparing');
         return Scaffold(
         appBar: AppBar(title: Text(p.doctor.name ?? l10n.prescriptionsTitle)),
         body: ListView(
@@ -382,6 +542,31 @@ class PrescriptionDetailScreen extends ConsumerWidget {
                     onPressed: () => _revise(context, ref, p),
                     child: Text(l10n.prescriptionReviseAction),
                   ),
+                if (canPrice)
+                  OutlinedButton(
+                    onPressed: () => _priceItems(context, ref, p),
+                    child: Text(l10n.pharmacyPriceAction),
+                  ),
+                if (canPrepare)
+                  OutlinedButton(
+                    onPressed: () => _prepare(context, ref),
+                    child: Text(l10n.pharmacyPrepareAction),
+                  ),
+                if (canMarkReady)
+                  OutlinedButton(
+                    onPressed: () => _markReady(context, ref),
+                    child: Text(l10n.pharmacyMarkReadyAction),
+                  ),
+                if (canDispense)
+                  FilledButton(
+                    onPressed: () => _dispense(context, ref),
+                    child: Text(l10n.pharmacyDispenseAction),
+                  ),
+                if (canReject)
+                  OutlinedButton(
+                    onPressed: () => _reject(context, ref),
+                    child: Text(l10n.pharmacyRejectAction),
+                  ),
                 if (p.canCancel)
                   OutlinedButton(
                     onPressed: () => _cancel(context, ref),
@@ -444,6 +629,13 @@ class _ItemCard extends StatelessWidget {
             if (item.instructions != null && item.instructions!.isNotEmpty) ...[
               const SizedBox(height: 4),
               Text(item.instructions!, style: Theme.of(context).textTheme.bodySmall),
+            ],
+            if (item.lineTotal != null) ...[
+              const SizedBox(height: 4),
+              Text(
+                '${item.unitPrice} × ${item.billedQuantity} = ${item.lineTotal} ${l10n.pharmacyCurrencyLabel}',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600),
+              ),
             ],
           ],
         ),
