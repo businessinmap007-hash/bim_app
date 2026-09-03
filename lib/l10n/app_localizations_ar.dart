@@ -21,6 +21,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get commonRetry => 'إعادة المحاولة';
 
   @override
+  String get commonRefresh => 'تحديث';
+
+  @override
   String get commonCancel => 'إلغاء';
 
   @override
@@ -618,12 +621,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get postsJobsEmpty => 'لم تنشر أي وظيفة بعد.';
 
   @override
-  String get postsCreateChoicePost => 'منشور جديد';
-
-  @override
-  String get postsCreateChoiceJob => 'وظيفة جديدة';
-
-  @override
   String get postsCreateTitle => 'منشور جديد';
 
   @override
@@ -634,6 +631,11 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get postsBodyLabel => 'النص';
+
+  @override
+  String postsMaxImagesReached(int max) {
+    return 'بحد أقصى $max صور لكل منشور.';
+  }
 
   @override
   String get postsDeleteConfirmTitle => 'هل تريد حذف هذا المنشور؟';

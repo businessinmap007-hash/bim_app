@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../shared/widgets/adaptive_image_box.dart';
 import '../../data/models/business_post.dart';
+import 'post_image_carousel.dart';
 
 /// One post, laid out like an actual Instagram post rather than a generic
 /// Material card: compact header, the photo edge-to-edge with square
@@ -32,9 +32,9 @@ class PostCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final imageUrl =
-        post.imageUrl ??
-        (post.images.isNotEmpty ? post.images.first.url : null);
+    final galleryImages = post.images.isNotEmpty
+        ? post.images
+        : (post.imageUrl != null ? [PostImage(id: 0, url: post.imageUrl!)] : const <PostImage>[]);
     final liked = post.myReaction == 1;
     final hasCaption = post.title.isNotEmpty || post.body.isNotEmpty;
 
@@ -76,9 +76,9 @@ class PostCard extends StatelessWidget {
             ),
           ),
         // Edge-to-edge, square corners — an Instagram photo isn't boxed
-        // inside a card, it IS the card.
-        if (imageUrl != null)
-          AdaptiveImageBox(imageProvider: NetworkImage(imageUrl)),
+        // inside a card, it IS the card. A swipeable gallery once there's
+        // more than one.
+        if (galleryImages.isNotEmpty) PostImageCarousel(images: galleryImages),
         Padding(
           padding: const EdgeInsets.fromLTRB(8, 6, 8, 12),
           child: Column(

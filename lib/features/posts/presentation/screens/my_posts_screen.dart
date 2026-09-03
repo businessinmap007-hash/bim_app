@@ -12,42 +12,27 @@ import '../../data/models/job_post.dart';
 /// The followed-accounts feed tab — public because [BusinessHomeScreen] and
 /// [CustomerHomeScreen] both embed it directly on Home; there is no separate
 /// "My Posts" screen any more.
-class FollowedFeedTab extends ConsumerStatefulWidget {
+///
+/// Built as a [CustomScrollView] rather than a plain [ListView]: both host
+/// screens wrap this in a [NestedScrollView] so their header (an AppBar,
+/// or a business's cover photo) scrolls away instead of permanently eating
+/// screen space, and a NestedScrollView's body slivers need
+/// [SliverOverlapInjector] to cooperate with its pinned tab bar. Pagination
+/// listens via [NotificationListener] instead of an explicit
+/// [ScrollController] on purpose — a sliver here must resolve its scroll
+/// position from the ambient ScrollController the NestedScrollView provides,
+/// which an explicit controller would silently disconnect from.
+class FollowedFeedTab extends ConsumerWidget {
   const FollowedFeedTab({super.key});
 
   @override
-  ConsumerState<FollowedFeedTab> createState() => _FollowedFeedTabState();
-}
-
-class _FollowedFeedTabState extends ConsumerState<FollowedFeedTab> {
-  final _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-  }
-
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      ref.read(followedFeedControllerProvider.notifier).loadMore();
-    }
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(followedFeedControllerProvider);
 
-    if (state.isLoading)
+    if (state.isLoading) {
       return const Center(child: CircularProgressIndicator());
+    }
     if (state.error != null) {
       return _ErrorRetry(
         onRetry: () => ref.read(followedFeedControllerProvider.notifier).load(),
@@ -62,70 +47,63 @@ class _FollowedFeedTabState extends ConsumerState<FollowedFeedTab> {
       );
     }
 
-    return RefreshIndicator(
-      onRefresh: () => ref.read(followedFeedControllerProvider.notifier).load(),
-      child: ResponsiveCenter(
-        maxWidth: 800,
-        child: ListView.separated(
-          controller: _scrollController,
-          padding: const EdgeInsets.all(16),
-          itemCount: state.items.length + (state.isLoadingMore ? 1 : 0),
-          separatorBuilder: (context, index) => const SizedBox(height: 12),
-          itemBuilder: (context, index) {
-            if (index >= state.items.length) {
-              return const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: Center(child: CircularProgressIndicator()),
-              );
-            }
-            final post = state.items[index];
-            return PostCard(
-              post: post,
-              showAuthor: true,
-              onReact: (reaction) => ref
-                  .read(followedFeedControllerProvider.notifier)
-                  .react(post.id, reaction),
-              onOpenComments: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => CommentsScreen(postId: post.id)),
-              ),
-            );
-          },
+    return NotificationListener<ScrollUpdateNotification>(
+      onNotification: (notification) {
+        if (notification.metrics.pixels >= notification.metrics.maxScrollExtent - 200) {
+          ref.read(followedFeedControllerProvider.notifier).loadMore();
+        }
+        return false;
+      },
+      child: RefreshIndicator(
+        onRefresh: () => ref.read(followedFeedControllerProvider.notifier).load(),
+        child: ResponsiveCenter(
+          maxWidth: 800,
+          child: Builder(
+            builder: (context) => CustomScrollView(
+              key: const PageStorageKey('followed_feed'),
+              slivers: [
+                SliverOverlapInjector(handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
+                SliverPadding(
+                  padding: const EdgeInsets.all(16),
+                  sliver: SliverList.separated(
+                    itemCount: state.items.length + (state.isLoadingMore ? 1 : 0),
+                    separatorBuilder: (context, index) => const SizedBox(height: 12),
+                    itemBuilder: (context, index) {
+                      if (index >= state.items.length) {
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
+                      final post = state.items[index];
+                      return PostCard(
+                        post: post,
+                        showAuthor: true,
+                        onReact: (reaction) => ref
+                            .read(followedFeedControllerProvider.notifier)
+                            .react(post.id, reaction),
+                        onOpenComments: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => CommentsScreen(postId: post.id),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 }
 
-class MyPostsTab extends ConsumerStatefulWidget {
+class MyPostsTab extends ConsumerWidget {
   const MyPostsTab({super.key});
 
-  @override
-  ConsumerState<MyPostsTab> createState() => _MyPostsTabState();
-}
-
-class _MyPostsTabState extends ConsumerState<MyPostsTab> {
-  final _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-  }
-
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      ref.read(myPostsControllerProvider.notifier).loadMore();
-    }
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _confirmDelete(BusinessPost post) async {
+  Future<void> _confirmDelete(BuildContext context, WidgetRef ref, BusinessPost post) async {
     final l10n = AppLocalizations.of(context)!;
     final confirmed = await showDialog<bool>(
       context: context,
@@ -149,12 +127,13 @@ class _MyPostsTabState extends ConsumerState<MyPostsTab> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(myPostsControllerProvider);
 
-    if (state.isLoading)
+    if (state.isLoading) {
       return const Center(child: CircularProgressIndicator());
+    }
     if (state.error != null) {
       return _ErrorRetry(
         onRetry: () => ref.read(myPostsControllerProvider.notifier).load(),
@@ -162,76 +141,70 @@ class _MyPostsTabState extends ConsumerState<MyPostsTab> {
     }
     if (state.items.isEmpty) return Center(child: Text(l10n.postsMineEmpty));
 
-    return RefreshIndicator(
-      onRefresh: () => ref.read(myPostsControllerProvider.notifier).load(),
-      child: ResponsiveCenter(
-        maxWidth: 800,
-        child: ListView.separated(
-          controller: _scrollController,
-          padding: const EdgeInsets.all(16),
-          itemCount: state.items.length + (state.isLoadingMore ? 1 : 0),
-          separatorBuilder: (context, index) => const SizedBox(height: 12),
-          itemBuilder: (context, index) {
-            if (index >= state.items.length) {
-              return const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: Center(child: CircularProgressIndicator()),
-              );
-            }
-            final post = state.items[index];
-            return PostCard(
-              post: post,
-              onReact: (reaction) => ref
-                  .read(myPostsControllerProvider.notifier)
-                  .react(post.id, reaction),
-              onDelete: () => _confirmDelete(post),
-              onOpenComments: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => CommentsScreen(postId: post.id)),
-              ),
-            );
-          },
+    return NotificationListener<ScrollUpdateNotification>(
+      onNotification: (notification) {
+        if (notification.metrics.pixels >= notification.metrics.maxScrollExtent - 200) {
+          ref.read(myPostsControllerProvider.notifier).loadMore();
+        }
+        return false;
+      },
+      child: RefreshIndicator(
+        onRefresh: () => ref.read(myPostsControllerProvider.notifier).load(),
+        child: ResponsiveCenter(
+          maxWidth: 800,
+          child: Builder(
+            builder: (context) => CustomScrollView(
+              key: const PageStorageKey('my_posts'),
+              slivers: [
+                SliverOverlapInjector(handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
+                SliverPadding(
+                  padding: const EdgeInsets.all(16),
+                  sliver: SliverList.separated(
+                    itemCount: state.items.length + (state.isLoadingMore ? 1 : 0),
+                    separatorBuilder: (context, index) => const SizedBox(height: 12),
+                    itemBuilder: (context, index) {
+                      if (index >= state.items.length) {
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
+                      final post = state.items[index];
+                      return PostCard(
+                        post: post,
+                        onReact: (reaction) => ref
+                            .read(myPostsControllerProvider.notifier)
+                            .react(post.id, reaction),
+                        onDelete: () => _confirmDelete(context, ref, post),
+                        onOpenComments: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => CommentsScreen(postId: post.id),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 }
 
-class MyJobsTab extends ConsumerStatefulWidget {
+class MyJobsTab extends ConsumerWidget {
   const MyJobsTab({super.key});
 
   @override
-  ConsumerState<MyJobsTab> createState() => _MyJobsTabState();
-}
-
-class _MyJobsTabState extends ConsumerState<MyJobsTab> {
-  final _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-  }
-
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      ref.read(myJobsControllerProvider.notifier).loadMore();
-    }
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(myJobsControllerProvider);
 
-    if (state.isLoading)
+    if (state.isLoading) {
       return const Center(child: CircularProgressIndicator());
+    }
     if (state.error != null) {
       return _ErrorRetry(
         onRetry: () => ref.read(myJobsControllerProvider.notifier).load(),
@@ -239,24 +212,41 @@ class _MyJobsTabState extends ConsumerState<MyJobsTab> {
     }
     if (state.items.isEmpty) return Center(child: Text(l10n.postsJobsEmpty));
 
-    return RefreshIndicator(
-      onRefresh: () => ref.read(myJobsControllerProvider.notifier).load(),
-      child: ResponsiveCenter(
-        maxWidth: 800,
-        child: ListView.separated(
-          controller: _scrollController,
-          padding: const EdgeInsets.all(16),
-          itemCount: state.items.length + (state.isLoadingMore ? 1 : 0),
-          separatorBuilder: (context, index) => const SizedBox(height: 12),
-          itemBuilder: (context, index) {
-            if (index >= state.items.length) {
-              return const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: Center(child: CircularProgressIndicator()),
-              );
-            }
-            return _JobTile(job: state.items[index]);
-          },
+    return NotificationListener<ScrollUpdateNotification>(
+      onNotification: (notification) {
+        if (notification.metrics.pixels >= notification.metrics.maxScrollExtent - 200) {
+          ref.read(myJobsControllerProvider.notifier).loadMore();
+        }
+        return false;
+      },
+      child: RefreshIndicator(
+        onRefresh: () => ref.read(myJobsControllerProvider.notifier).load(),
+        child: ResponsiveCenter(
+          maxWidth: 800,
+          child: Builder(
+            builder: (context) => CustomScrollView(
+              key: const PageStorageKey('my_jobs'),
+              slivers: [
+                SliverOverlapInjector(handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
+                SliverPadding(
+                  padding: const EdgeInsets.all(16),
+                  sliver: SliverList.separated(
+                    itemCount: state.items.length + (state.isLoadingMore ? 1 : 0),
+                    separatorBuilder: (context, index) => const SizedBox(height: 12),
+                    itemBuilder: (context, index) {
+                      if (index >= state.items.length) {
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
+                      return _JobTile(job: state.items[index]);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

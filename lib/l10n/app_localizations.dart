@@ -122,6 +122,12 @@ abstract class AppLocalizations {
   /// **'إعادة المحاولة'**
   String get commonRetry;
 
+  /// No description provided for @commonRefresh.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديث'**
+  String get commonRefresh;
+
   /// No description provided for @commonCancel.
   ///
   /// In ar, this message translates to:
@@ -1250,18 +1256,6 @@ abstract class AppLocalizations {
   /// **'لم تنشر أي وظيفة بعد.'**
   String get postsJobsEmpty;
 
-  /// No description provided for @postsCreateChoicePost.
-  ///
-  /// In ar, this message translates to:
-  /// **'منشور جديد'**
-  String get postsCreateChoicePost;
-
-  /// No description provided for @postsCreateChoiceJob.
-  ///
-  /// In ar, this message translates to:
-  /// **'وظيفة جديدة'**
-  String get postsCreateChoiceJob;
-
   /// No description provided for @postsCreateTitle.
   ///
   /// In ar, this message translates to:
@@ -1285,6 +1279,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'النص'**
   String get postsBodyLabel;
+
+  /// No description provided for @postsMaxImagesReached.
+  ///
+  /// In ar, this message translates to:
+  /// **'بحد أقصى {max} صور لكل منشور.'**
+  String postsMaxImagesReached(int max);
 
   /// No description provided for @postsDeleteConfirmTitle.
   ///

@@ -24,6 +24,9 @@ class CreatePostScreen extends ConsumerStatefulWidget {
 }
 
 class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
+  // Mirrors PostController::store's `images` => max:10 validation.
+  static const _maxImages = 10;
+
   final _pickerService = MediaPickerService();
   final _titleController = TextEditingController();
   final _bodyController = TextEditingController();
@@ -48,20 +51,35 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
   }
 
   Future<void> _addAll(List<PickedMedia> picked) async {
+    final room = _maxImages - _items.length;
+    if (room <= 0) {
+      _showMaxImagesNotice();
+      return;
+    }
+    final accepted = picked.length > room ? picked.sublist(0, room) : picked;
+
     setState(() => _busy = true);
     try {
       final autoWatermark = ref.read(autoWatermarkServiceProvider);
       final processed = <PickedMedia>[];
-      for (final media in picked) {
+      for (final media in accepted) {
         final original = await media.file.readAsBytes();
         final stamped = await autoWatermark.apply(original);
         processed.add(media.copyWith(processedBytes: stamped));
       }
       if (!mounted) return;
       setState(() => _items.addAll(processed));
+      if (accepted.length < picked.length) _showMaxImagesNotice();
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+  }
+
+  void _showMaxImagesNotice() {
+    final l10n = AppLocalizations.of(context)!;
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(l10n.postsMaxImagesReached(_maxImages))));
   }
 
   void _remove(int index) => setState(() => _items.removeAt(index));
@@ -129,12 +147,12 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
             runSpacing: 12,
             children: [
               OutlinedButton.icon(
-                onPressed: _busy ? null : _addFromCamera,
+                onPressed: _busy || _items.length >= _maxImages ? null : _addFromCamera,
                 icon: const Icon(Icons.photo_camera_outlined),
                 label: Text(l10n.mediaAddFromCamera),
               ),
               OutlinedButton.icon(
-                onPressed: _busy ? null : _addFromGallery,
+                onPressed: _busy || _items.length >= _maxImages ? null : _addFromGallery,
                 icon: const Icon(Icons.photo_library_outlined),
                 label: Text(l10n.mediaAddFromGallery),
               ),

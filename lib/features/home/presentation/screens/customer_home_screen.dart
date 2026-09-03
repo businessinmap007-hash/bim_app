@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/app_drawer.dart';
-import '../../../../shared/widgets/create_post_or_job_button.dart';
+import '../../../../shared/widgets/create_post_button.dart';
 import '../../../../shared/widgets/notification_bell_button.dart';
+import '../../../../shared/widgets/sliver_tab_bar_delegate.dart';
 import '../../../posts/presentation/screens/my_posts_screen.dart';
 
 /// The customer's landing screen: their personal feed, the same "Following /
@@ -13,6 +14,11 @@ import '../../../posts/presentation/screens/my_posts_screen.dart';
 /// duplicated here, so Home is the feed and Categories is where you go
 /// looking for a business, matching the split every other social/marketplace
 /// app makes between the two.
+///
+/// A [NestedScrollView] even though there's no header to scroll away here:
+/// [FollowedFeedTab]/[MyPostsTab] are shared with [BusinessHomeScreen], which
+/// DOES have one, and both rely on the same NestedScrollView-provided
+/// overlap handle to size their pinned tab bar correctly.
 class CustomerHomeScreen extends StatelessWidget {
   const CustomerHomeScreen({super.key});
 
@@ -25,16 +31,28 @@ class CustomerHomeScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(l10n.homeCustomerTitle),
-          actions: const [CreatePostOrJobButton(), NotificationBellButton()],
-          bottom: TabBar(
-            tabs: [
-              Tab(text: l10n.postsTabFollowing),
-              Tab(text: l10n.postsTabMine),
-            ],
-          ),
+          actions: const [CreatePostButton(), NotificationBellButton()],
         ),
         drawer: const AppDrawer(),
-        body: const TabBarView(children: [FollowedFeedTab(), MyPostsTab()]),
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            SliverOverlapAbsorber(
+              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+              sliver: SliverPersistentHeader(
+                pinned: true,
+                delegate: SliverTabBarDelegate(
+                  TabBar(
+                    tabs: [
+                      Tab(text: l10n.postsTabFollowing),
+                      Tab(text: l10n.postsTabMine),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+          body: const TabBarView(children: [FollowedFeedTab(), MyPostsTab()]),
+        ),
       ),
     );
   }

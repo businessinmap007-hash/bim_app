@@ -21,6 +21,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonRetry => 'Retry';
 
   @override
+  String get commonRefresh => 'Refresh';
+
+  @override
   String get commonCancel => 'Cancel';
 
   @override
@@ -617,12 +620,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get postsJobsEmpty => 'You haven\'t posted any jobs yet.';
 
   @override
-  String get postsCreateChoicePost => 'New post';
-
-  @override
-  String get postsCreateChoiceJob => 'New job';
-
-  @override
   String get postsCreateTitle => 'New post';
 
   @override
@@ -633,6 +630,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get postsBodyLabel => 'Text';
+
+  @override
+  String postsMaxImagesReached(int max) {
+    return 'Up to $max photos per post.';
+  }
 
   @override
   String get postsDeleteConfirmTitle => 'Delete this post?';
