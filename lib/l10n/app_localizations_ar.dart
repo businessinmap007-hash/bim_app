@@ -951,6 +951,27 @@ class AppLocalizationsAr extends AppLocalizations {
   String get chatLocked => 'انتهت المحادثة ولم يعد بالإمكان إرسال رسائل.';
 
   @override
+  String get threadAccessConsentPrompt =>
+      'هل توافق على اطلاع الإدارة على هذه المحادثة عند الحاجة (مثلاً فى نزاع)؟ قرارك، فى أي وقت.';
+
+  @override
+  String get threadAccessApprove => 'أوافق';
+
+  @override
+  String get threadAccessDecline => 'لا أوافق';
+
+  @override
+  String get threadAccessStatusApproved =>
+      'وافقت على اطلاع الإدارة على هذه المحادثة';
+
+  @override
+  String get threadAccessStatusDeclined =>
+      'لم توافق على اطلاع الإدارة على هذه المحادثة';
+
+  @override
+  String get threadAccessSheetTitle => 'خصوصية المحادثة';
+
+  @override
   String get agendaTitle => 'أجندتي';
 
   @override

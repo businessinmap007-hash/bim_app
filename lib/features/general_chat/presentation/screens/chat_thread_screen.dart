@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/thread_access_banner.dart';
 import '../../../chat/data/models/thread_message.dart';
 import '../../application/general_chat_providers.dart';
 
@@ -137,6 +138,7 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
       ),
       body: Column(
         children: [
+          ThreadAccessBanner(threadId: widget.threadId),
           Expanded(
             child: state.isLoading
                 ? const Center(child: CircularProgressIndicator())

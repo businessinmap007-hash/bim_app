@@ -1862,6 +1862,42 @@ abstract class AppLocalizations {
   /// **'انتهت المحادثة ولم يعد بالإمكان إرسال رسائل.'**
   String get chatLocked;
 
+  /// No description provided for @threadAccessConsentPrompt.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل توافق على اطلاع الإدارة على هذه المحادثة عند الحاجة (مثلاً فى نزاع)؟ قرارك، فى أي وقت.'**
+  String get threadAccessConsentPrompt;
+
+  /// No description provided for @threadAccessApprove.
+  ///
+  /// In ar, this message translates to:
+  /// **'أوافق'**
+  String get threadAccessApprove;
+
+  /// No description provided for @threadAccessDecline.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا أوافق'**
+  String get threadAccessDecline;
+
+  /// No description provided for @threadAccessStatusApproved.
+  ///
+  /// In ar, this message translates to:
+  /// **'وافقت على اطلاع الإدارة على هذه المحادثة'**
+  String get threadAccessStatusApproved;
+
+  /// No description provided for @threadAccessStatusDeclined.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم توافق على اطلاع الإدارة على هذه المحادثة'**
+  String get threadAccessStatusDeclined;
+
+  /// No description provided for @threadAccessSheetTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'خصوصية المحادثة'**
+  String get threadAccessSheetTitle;
+
   /// No description provided for @agendaTitle.
   ///
   /// In ar, this message translates to:

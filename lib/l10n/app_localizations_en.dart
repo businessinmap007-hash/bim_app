@@ -945,6 +945,27 @@ class AppLocalizationsEn extends AppLocalizations {
       'This chat has ended; you can no longer send messages.';
 
   @override
+  String get threadAccessConsentPrompt =>
+      'May admins read this chat if ever needed (e.g. for a dispute)? Your choice, any time.';
+
+  @override
+  String get threadAccessApprove => 'Allow';
+
+  @override
+  String get threadAccessDecline => 'Don\'t allow';
+
+  @override
+  String get threadAccessStatusApproved =>
+      'You allowed admins to view this chat';
+
+  @override
+  String get threadAccessStatusDeclined =>
+      'You did not allow admins to view this chat';
+
+  @override
+  String get threadAccessSheetTitle => 'Chat privacy';
+
+  @override
   String get agendaTitle => 'My agenda';
 
   @override

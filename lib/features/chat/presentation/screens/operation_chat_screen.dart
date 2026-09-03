@@ -9,6 +9,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../media/application/media_picker_service.dart';
 import '../../../media/data/picked_media.dart';
 import '../../../media/presentation/widgets/picked_media_tile.dart';
+import '../../../../shared/widgets/thread_access_banner.dart';
 import '../../application/chat_providers.dart';
 import '../../data/models/thread_message.dart';
 
@@ -136,6 +137,7 @@ class _OperationChatScreenState extends ConsumerState<OperationChatScreen> {
       ),
       body: Column(
         children: [
+          if (state.thread != null) ThreadAccessBanner(threadId: state.thread!.id),
           Expanded(
             child: state.isLoading
                 ? const Center(child: CircularProgressIndicator())
