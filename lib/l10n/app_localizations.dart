@@ -5773,6 +5773,234 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'جنيه'**
   String get pharmacyCurrencyLabel;
+
+  /// No description provided for @businessOffersTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عروضي'**
+  String get businessOffersTitle;
+
+  /// No description provided for @businessOfferAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف عرضًا'**
+  String get businessOfferAdd;
+
+  /// No description provided for @businessOffersEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد عروض بعد.'**
+  String get businessOffersEmpty;
+
+  /// No description provided for @businessOffersFilterAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get businessOffersFilterAll;
+
+  /// No description provided for @businessOfferStatusActive.
+  ///
+  /// In ar, this message translates to:
+  /// **'فعّال'**
+  String get businessOfferStatusActive;
+
+  /// No description provided for @businessOfferStatusPaused.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوقف'**
+  String get businessOfferStatusPaused;
+
+  /// No description provided for @businessOfferStatusExpired.
+  ///
+  /// In ar, this message translates to:
+  /// **'منتهي'**
+  String get businessOfferStatusExpired;
+
+  /// No description provided for @businessOfferStatusCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغى'**
+  String get businessOfferStatusCancelled;
+
+  /// No description provided for @businessOffersUsage.
+  ///
+  /// In ar, this message translates to:
+  /// **'{active} من {max} عروض فعّالة مستخدمة'**
+  String businessOffersUsage(int active, int max);
+
+  /// No description provided for @businessOfferPause.
+  ///
+  /// In ar, this message translates to:
+  /// **'إيقاف'**
+  String get businessOfferPause;
+
+  /// No description provided for @businessOfferActivate.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفعيل'**
+  String get businessOfferActivate;
+
+  /// No description provided for @businessOfferDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف هذا العرض؟'**
+  String get businessOfferDeleteConfirm;
+
+  /// No description provided for @businessOfferBoostAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعزيز'**
+  String get businessOfferBoostAction;
+
+  /// No description provided for @businessOfferBoostTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعزيز هذا العرض'**
+  String get businessOfferBoostTitle;
+
+  /// No description provided for @businessOfferBoostDuration.
+  ///
+  /// In ar, this message translates to:
+  /// **'{days} يوم'**
+  String businessOfferBoostDuration(int days);
+
+  /// No description provided for @businessOfferBoosted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تعزيز العرض.'**
+  String get businessOfferBoosted;
+
+  /// No description provided for @businessOfferBoostPurchasesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عمليات التعزيز'**
+  String get businessOfferBoostPurchasesTitle;
+
+  /// No description provided for @businessOfferBoostPurchasesEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد عمليات تعزيز بعد.'**
+  String get businessOfferBoostPurchasesEmpty;
+
+  /// No description provided for @businessOfferAddTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض جديد'**
+  String get businessOfferAddTitle;
+
+  /// No description provided for @businessOfferEditTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل العرض'**
+  String get businessOfferEditTitle;
+
+  /// No description provided for @businessOfferTypeLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'على ماذا هذا العرض؟'**
+  String get businessOfferTypeLabel;
+
+  /// No description provided for @businessOfferTypeMenuItem.
+  ///
+  /// In ar, this message translates to:
+  /// **'صنف من المنيو'**
+  String get businessOfferTypeMenuItem;
+
+  /// No description provided for @businessOfferTypeProduct.
+  ///
+  /// In ar, this message translates to:
+  /// **'منتج'**
+  String get businessOfferTypeProduct;
+
+  /// No description provided for @businessOfferTypeService.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدمة'**
+  String get businessOfferTypeService;
+
+  /// No description provided for @businessOfferPickItem.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الصنف'**
+  String get businessOfferPickItem;
+
+  /// No description provided for @businessOfferPickItemFirst.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الصنف الذي سيكون عليه العرض أولًا.'**
+  String get businessOfferPickItemFirst;
+
+  /// No description provided for @businessOfferNoItemsFound.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أصناف.'**
+  String get businessOfferNoItemsFound;
+
+  /// No description provided for @businessOfferCurrentPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر الحالي: {price} {currency}'**
+  String businessOfferCurrentPrice(String price, String currency);
+
+  /// No description provided for @businessOfferTitleLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'عنوان العرض (اختياري)'**
+  String get businessOfferTitleLabel;
+
+  /// No description provided for @businessOfferFinalPriceLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر العرض'**
+  String get businessOfferFinalPriceLabel;
+
+  /// No description provided for @businessOfferPriceTooHigh.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر العرض لا بد أن يقل عن السعر الحالي ({price} {currency}).'**
+  String businessOfferPriceTooHigh(String price, String currency);
+
+  /// No description provided for @businessOfferEndConditionLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'ينتهي هذا العرض...'**
+  String get businessOfferEndConditionLabel;
+
+  /// No description provided for @businessOfferEndsAtLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'في تاريخ محدد'**
+  String get businessOfferEndsAtLabel;
+
+  /// No description provided for @businessOfferPickEndDate.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر تاريخ الانتهاء.'**
+  String get businessOfferPickEndDate;
+
+  /// No description provided for @businessOfferWhileStockLasts.
+  ///
+  /// In ar, this message translates to:
+  /// **'حتى نفاد الكمية'**
+  String get businessOfferWhileStockLasts;
+
+  /// No description provided for @businessOfferLimitedQuantity.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعد كمية محدودة'**
+  String get businessOfferLimitedQuantity;
+
+  /// No description provided for @businessOfferQuantityLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكمية'**
+  String get businessOfferQuantityLabel;
+
+  /// No description provided for @businessOfferRefundableLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'قابل للاسترجاع'**
+  String get businessOfferRefundableLabel;
 }
 
 class _AppLocalizationsDelegate

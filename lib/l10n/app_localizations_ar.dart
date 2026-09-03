@@ -2956,4 +2956,127 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get pharmacyCurrencyLabel => 'جنيه';
+
+  @override
+  String get businessOffersTitle => 'عروضي';
+
+  @override
+  String get businessOfferAdd => 'أضف عرضًا';
+
+  @override
+  String get businessOffersEmpty => 'لا توجد عروض بعد.';
+
+  @override
+  String get businessOffersFilterAll => 'الكل';
+
+  @override
+  String get businessOfferStatusActive => 'فعّال';
+
+  @override
+  String get businessOfferStatusPaused => 'متوقف';
+
+  @override
+  String get businessOfferStatusExpired => 'منتهي';
+
+  @override
+  String get businessOfferStatusCancelled => 'ملغى';
+
+  @override
+  String businessOffersUsage(int active, int max) {
+    return '$active من $max عروض فعّالة مستخدمة';
+  }
+
+  @override
+  String get businessOfferPause => 'إيقاف';
+
+  @override
+  String get businessOfferActivate => 'تفعيل';
+
+  @override
+  String get businessOfferDeleteConfirm => 'حذف هذا العرض؟';
+
+  @override
+  String get businessOfferBoostAction => 'تعزيز';
+
+  @override
+  String get businessOfferBoostTitle => 'تعزيز هذا العرض';
+
+  @override
+  String businessOfferBoostDuration(int days) {
+    return '$days يوم';
+  }
+
+  @override
+  String get businessOfferBoosted => 'تم تعزيز العرض.';
+
+  @override
+  String get businessOfferBoostPurchasesTitle => 'عمليات التعزيز';
+
+  @override
+  String get businessOfferBoostPurchasesEmpty => 'لا توجد عمليات تعزيز بعد.';
+
+  @override
+  String get businessOfferAddTitle => 'عرض جديد';
+
+  @override
+  String get businessOfferEditTitle => 'تعديل العرض';
+
+  @override
+  String get businessOfferTypeLabel => 'على ماذا هذا العرض؟';
+
+  @override
+  String get businessOfferTypeMenuItem => 'صنف من المنيو';
+
+  @override
+  String get businessOfferTypeProduct => 'منتج';
+
+  @override
+  String get businessOfferTypeService => 'خدمة';
+
+  @override
+  String get businessOfferPickItem => 'اختر الصنف';
+
+  @override
+  String get businessOfferPickItemFirst =>
+      'اختر الصنف الذي سيكون عليه العرض أولًا.';
+
+  @override
+  String get businessOfferNoItemsFound => 'لا توجد أصناف.';
+
+  @override
+  String businessOfferCurrentPrice(String price, String currency) {
+    return 'السعر الحالي: $price $currency';
+  }
+
+  @override
+  String get businessOfferTitleLabel => 'عنوان العرض (اختياري)';
+
+  @override
+  String get businessOfferFinalPriceLabel => 'سعر العرض';
+
+  @override
+  String businessOfferPriceTooHigh(String price, String currency) {
+    return 'سعر العرض لا بد أن يقل عن السعر الحالي ($price $currency).';
+  }
+
+  @override
+  String get businessOfferEndConditionLabel => 'ينتهي هذا العرض...';
+
+  @override
+  String get businessOfferEndsAtLabel => 'في تاريخ محدد';
+
+  @override
+  String get businessOfferPickEndDate => 'اختر تاريخ الانتهاء.';
+
+  @override
+  String get businessOfferWhileStockLasts => 'حتى نفاد الكمية';
+
+  @override
+  String get businessOfferLimitedQuantity => 'بعد كمية محدودة';
+
+  @override
+  String get businessOfferQuantityLabel => 'الكمية';
+
+  @override
+  String get businessOfferRefundableLabel => 'قابل للاسترجاع';
 }

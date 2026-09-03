@@ -984,5 +984,55 @@
   "pharmacyUnitPriceLabel": "سعر الوحدة",
   "pharmacyBilledQuantityLabel": "الكمية",
   "pharmacyPriced": "تم تسعير الوصفة.",
-  "pharmacyCurrencyLabel": "جنيه"
+  "pharmacyCurrencyLabel": "جنيه",
+  "businessOffersTitle": "عروضي",
+  "businessOfferAdd": "أضف عرضًا",
+  "businessOffersEmpty": "لا توجد عروض بعد.",
+  "businessOffersFilterAll": "الكل",
+  "businessOfferStatusActive": "فعّال",
+  "businessOfferStatusPaused": "متوقف",
+  "businessOfferStatusExpired": "منتهي",
+  "businessOfferStatusCancelled": "ملغى",
+  "businessOffersUsage": "{active} من {max} عروض فعّالة مستخدمة",
+  "@businessOffersUsage": {
+    "placeholders": { "active": { "type": "int" }, "max": { "type": "int" } }
+  },
+  "businessOfferPause": "إيقاف",
+  "businessOfferActivate": "تفعيل",
+  "businessOfferDeleteConfirm": "حذف هذا العرض؟",
+  "businessOfferBoostAction": "تعزيز",
+  "businessOfferBoostTitle": "تعزيز هذا العرض",
+  "businessOfferBoostDuration": "{days} يوم",
+  "@businessOfferBoostDuration": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "businessOfferBoosted": "تم تعزيز العرض.",
+  "businessOfferBoostPurchasesTitle": "عمليات التعزيز",
+  "businessOfferBoostPurchasesEmpty": "لا توجد عمليات تعزيز بعد.",
+  "businessOfferAddTitle": "عرض جديد",
+  "businessOfferEditTitle": "تعديل العرض",
+  "businessOfferTypeLabel": "على ماذا هذا العرض؟",
+  "businessOfferTypeMenuItem": "صنف من المنيو",
+  "businessOfferTypeProduct": "منتج",
+  "businessOfferTypeService": "خدمة",
+  "businessOfferPickItem": "اختر الصنف",
+  "businessOfferPickItemFirst": "اختر الصنف الذي سيكون عليه العرض أولًا.",
+  "businessOfferNoItemsFound": "لا توجد أصناف.",
+  "businessOfferCurrentPrice": "السعر الحالي: {price} {currency}",
+  "@businessOfferCurrentPrice": {
+    "placeholders": { "price": { "type": "String" }, "currency": { "type": "String" } }
+  },
+  "businessOfferTitleLabel": "عنوان العرض (اختياري)",
+  "businessOfferFinalPriceLabel": "سعر العرض",
+  "businessOfferPriceTooHigh": "سعر العرض لا بد أن يقل عن السعر الحالي ({price} {currency}).",
+  "@businessOfferPriceTooHigh": {
+    "placeholders": { "price": { "type": "String" }, "currency": { "type": "String" } }
+  },
+  "businessOfferEndConditionLabel": "ينتهي هذا العرض...",
+  "businessOfferEndsAtLabel": "في تاريخ محدد",
+  "businessOfferPickEndDate": "اختر تاريخ الانتهاء.",
+  "businessOfferWhileStockLasts": "حتى نفاد الكمية",
+  "businessOfferLimitedQuantity": "بعد كمية محدودة",
+  "businessOfferQuantityLabel": "الكمية",
+  "businessOfferRefundableLabel": "قابل للاسترجاع"
 }

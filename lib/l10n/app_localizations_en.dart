@@ -2957,4 +2957,127 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pharmacyCurrencyLabel => 'EGP';
+
+  @override
+  String get businessOffersTitle => 'My Offers';
+
+  @override
+  String get businessOfferAdd => 'Add offer';
+
+  @override
+  String get businessOffersEmpty => 'No offers yet.';
+
+  @override
+  String get businessOffersFilterAll => 'All';
+
+  @override
+  String get businessOfferStatusActive => 'Active';
+
+  @override
+  String get businessOfferStatusPaused => 'Paused';
+
+  @override
+  String get businessOfferStatusExpired => 'Expired';
+
+  @override
+  String get businessOfferStatusCancelled => 'Cancelled';
+
+  @override
+  String businessOffersUsage(int active, int max) {
+    return '$active of $max active offers used';
+  }
+
+  @override
+  String get businessOfferPause => 'Pause';
+
+  @override
+  String get businessOfferActivate => 'Activate';
+
+  @override
+  String get businessOfferDeleteConfirm => 'Delete this offer?';
+
+  @override
+  String get businessOfferBoostAction => 'Boost';
+
+  @override
+  String get businessOfferBoostTitle => 'Boost this offer';
+
+  @override
+  String businessOfferBoostDuration(int days) {
+    return '$days days';
+  }
+
+  @override
+  String get businessOfferBoosted => 'Offer boosted.';
+
+  @override
+  String get businessOfferBoostPurchasesTitle => 'My boosts';
+
+  @override
+  String get businessOfferBoostPurchasesEmpty => 'No boost purchases yet.';
+
+  @override
+  String get businessOfferAddTitle => 'New offer';
+
+  @override
+  String get businessOfferEditTitle => 'Edit offer';
+
+  @override
+  String get businessOfferTypeLabel => 'What\'s this offer on?';
+
+  @override
+  String get businessOfferTypeMenuItem => 'Menu item';
+
+  @override
+  String get businessOfferTypeProduct => 'Product';
+
+  @override
+  String get businessOfferTypeService => 'Service';
+
+  @override
+  String get businessOfferPickItem => 'Choose the item';
+
+  @override
+  String get businessOfferPickItemFirst =>
+      'Choose the item this offer is on first.';
+
+  @override
+  String get businessOfferNoItemsFound => 'No items found.';
+
+  @override
+  String businessOfferCurrentPrice(String price, String currency) {
+    return 'Current price: $price $currency';
+  }
+
+  @override
+  String get businessOfferTitleLabel => 'Offer title (optional)';
+
+  @override
+  String get businessOfferFinalPriceLabel => 'Offer price';
+
+  @override
+  String businessOfferPriceTooHigh(String price, String currency) {
+    return 'Offer price must be less than the current price ($price $currency).';
+  }
+
+  @override
+  String get businessOfferEndConditionLabel => 'This offer ends...';
+
+  @override
+  String get businessOfferEndsAtLabel => 'On a date';
+
+  @override
+  String get businessOfferPickEndDate => 'Choose an end date for the offer.';
+
+  @override
+  String get businessOfferWhileStockLasts => 'While stock lasts';
+
+  @override
+  String get businessOfferLimitedQuantity => 'After a limited quantity';
+
+  @override
+  String get businessOfferQuantityLabel => 'Quantity';
+
+  @override
+  String get businessOfferRefundableLabel => 'Refundable';
 }

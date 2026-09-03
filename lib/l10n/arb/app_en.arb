@@ -984,5 +984,55 @@
   "pharmacyUnitPriceLabel": "Unit price",
   "pharmacyBilledQuantityLabel": "Quantity",
   "pharmacyPriced": "Prescription priced.",
-  "pharmacyCurrencyLabel": "EGP"
+  "pharmacyCurrencyLabel": "EGP",
+  "businessOffersTitle": "My Offers",
+  "businessOfferAdd": "Add offer",
+  "businessOffersEmpty": "No offers yet.",
+  "businessOffersFilterAll": "All",
+  "businessOfferStatusActive": "Active",
+  "businessOfferStatusPaused": "Paused",
+  "businessOfferStatusExpired": "Expired",
+  "businessOfferStatusCancelled": "Cancelled",
+  "businessOffersUsage": "{active} of {max} active offers used",
+  "@businessOffersUsage": {
+    "placeholders": { "active": { "type": "int" }, "max": { "type": "int" } }
+  },
+  "businessOfferPause": "Pause",
+  "businessOfferActivate": "Activate",
+  "businessOfferDeleteConfirm": "Delete this offer?",
+  "businessOfferBoostAction": "Boost",
+  "businessOfferBoostTitle": "Boost this offer",
+  "businessOfferBoostDuration": "{days} days",
+  "@businessOfferBoostDuration": {
+    "placeholders": { "days": { "type": "int" } }
+  },
+  "businessOfferBoosted": "Offer boosted.",
+  "businessOfferBoostPurchasesTitle": "My boosts",
+  "businessOfferBoostPurchasesEmpty": "No boost purchases yet.",
+  "businessOfferAddTitle": "New offer",
+  "businessOfferEditTitle": "Edit offer",
+  "businessOfferTypeLabel": "What's this offer on?",
+  "businessOfferTypeMenuItem": "Menu item",
+  "businessOfferTypeProduct": "Product",
+  "businessOfferTypeService": "Service",
+  "businessOfferPickItem": "Choose the item",
+  "businessOfferPickItemFirst": "Choose the item this offer is on first.",
+  "businessOfferNoItemsFound": "No items found.",
+  "businessOfferCurrentPrice": "Current price: {price} {currency}",
+  "@businessOfferCurrentPrice": {
+    "placeholders": { "price": { "type": "String" }, "currency": { "type": "String" } }
+  },
+  "businessOfferTitleLabel": "Offer title (optional)",
+  "businessOfferFinalPriceLabel": "Offer price",
+  "businessOfferPriceTooHigh": "Offer price must be less than the current price ({price} {currency}).",
+  "@businessOfferPriceTooHigh": {
+    "placeholders": { "price": { "type": "String" }, "currency": { "type": "String" } }
+  },
+  "businessOfferEndConditionLabel": "This offer ends...",
+  "businessOfferEndsAtLabel": "On a date",
+  "businessOfferPickEndDate": "Choose an end date for the offer.",
+  "businessOfferWhileStockLasts": "While stock lasts",
+  "businessOfferLimitedQuantity": "After a limited quantity",
+  "businessOfferQuantityLabel": "Quantity",
+  "businessOfferRefundableLabel": "Refundable"
 }
