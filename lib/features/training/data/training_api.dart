@@ -6,7 +6,11 @@ import 'models/training_plan.dart';
 import 'models/weekly_summary.dart';
 
 typedef TrainingChatPage = ({List<ThreadMessage> messages, ChatThread thread});
-typedef CompleteRoundResult = ({int roundNumber, int completedRounds, int? totalSets});
+typedef CompleteRoundResult = ({
+  int roundNumber,
+  int completedRounds,
+  int? totalSets,
+});
 
 String _isoDate(DateTime d) => d.toIso8601String().split('T').first;
 
@@ -20,36 +24,55 @@ class TrainingApi {
   final ApiClient _client;
   const TrainingApi(this._client);
 
-  Future<Paginated<TrainingPlan>> myPlans({String? status, int page = 1}) async {
-    final data = await _client.get(
-      '/training-plans',
-      query: {if (status != null) 'status': status, 'page': page},
-    ) as Map<String, dynamic>;
+  Future<Paginated<TrainingPlan>> myPlans({
+    String? status,
+    int page = 1,
+  }) async {
+    final data =
+        await _client.get(
+              '/training-plans',
+              query: {'status': ?status, 'page': page},
+            )
+            as Map<String, dynamic>;
     return Paginated.fromJson(data, TrainingPlan.fromJson);
   }
 
   Future<TrainingPlan> plan(int id) async {
-    final data = await _client.get('/training-plans/$id') as Map<String, dynamic>;
+    final data =
+        await _client.get('/training-plans/$id') as Map<String, dynamic>;
     return TrainingPlan.fromJson(data['plan'] as Map<String, dynamic>);
   }
 
-  Future<PlanProgressLog> logProgress(int planId, {DateTime? loggedOn, double? weight, String? notes}) async {
-    final data = await _client.post(
-      '/training-plans/$planId/progress',
-      data: {
-        if (loggedOn != null) 'logged_on': _isoDate(loggedOn),
-        if (weight != null) 'weight': weight,
-        if (notes != null && notes.isNotEmpty) 'notes': notes,
-      },
-    ) as Map<String, dynamic>;
+  Future<PlanProgressLog> logProgress(
+    int planId, {
+    DateTime? loggedOn,
+    double? weight,
+    String? notes,
+  }) async {
+    final data =
+        await _client.post(
+              '/training-plans/$planId/progress',
+              data: {
+                if (loggedOn != null) 'logged_on': _isoDate(loggedOn),
+                'weight': ?weight,
+                if (notes != null && notes.isNotEmpty) 'notes': notes,
+              },
+            )
+            as Map<String, dynamic>;
     return PlanProgressLog.fromJson(data['progress'] as Map<String, dynamic>);
   }
 
-  Future<CompleteRoundResult> completeRound(int planId, int exerciseId, {DateTime? forDate}) async {
-    final data = await _client.post(
-      '/training-plans/$planId/exercises/$exerciseId/complete-round',
-      data: {if (forDate != null) 'for_date': _isoDate(forDate)},
-    ) as Map<String, dynamic>;
+  Future<CompleteRoundResult> completeRound(
+    int planId,
+    int exerciseId, {
+    DateTime? forDate,
+  }) async {
+    final data =
+        await _client.post(
+              '/training-plans/$planId/exercises/$exerciseId/complete-round',
+              data: {if (forDate != null) 'for_date': _isoDate(forDate)},
+            )
+            as Map<String, dynamic>;
     return (
       roundNumber: data['round_number'] as int,
       completedRounds: data['completed_rounds'] as int,
@@ -57,16 +80,25 @@ class TrainingApi {
     );
   }
 
-  Future<TrainingWeeklySummary> weeklySummary(int planId, {DateTime? from}) async {
-    final data = await _client.get(
-      '/training-plans/$planId/weekly-summary',
-      query: {if (from != null) 'from': _isoDate(from)},
-    ) as Map<String, dynamic>;
-    return TrainingWeeklySummary.fromJson(data['summary'] as Map<String, dynamic>);
+  Future<TrainingWeeklySummary> weeklySummary(
+    int planId, {
+    DateTime? from,
+  }) async {
+    final data =
+        await _client.get(
+              '/training-plans/$planId/weekly-summary',
+              query: {if (from != null) 'from': _isoDate(from)},
+            )
+            as Map<String, dynamic>;
+    return TrainingWeeklySummary.fromJson(
+      data['summary'] as Map<String, dynamic>,
+    );
   }
 
   Future<List<BodyReport>> bodyReports(int planId) async {
-    final data = await _client.get('/training-plans/$planId/body-reports') as Map<String, dynamic>;
+    final data =
+        await _client.get('/training-plans/$planId/body-reports')
+            as Map<String, dynamic>;
     return (data['reports'] as List<dynamic>? ?? [])
         .map((e) => BodyReport.fromJson(e as Map<String, dynamic>))
         .toList();
@@ -83,15 +115,22 @@ class TrainingApi {
     final meta = body['meta'] as Map<String, dynamic>? ?? const {};
     final thread = meta['thread'] != null
         ? ChatThread.fromJson(meta['thread'] as Map<String, dynamic>)
-        : const ChatThread(id: 0, status: 'open', locked: false, expired: false);
+        : const ChatThread(
+            id: 0,
+            status: 'open',
+            locked: false,
+            expired: false,
+          );
     return (messages: messages, thread: thread);
   }
 
   Future<ThreadMessage> chatPost(int planId, String body) async {
-    final data = await _client.post(
-      '/training-plans/$planId/chat/messages',
-      data: {'body': body},
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.post(
+              '/training-plans/$planId/chat/messages',
+              data: {'body': body},
+            )
+            as Map<String, dynamic>;
     return ThreadMessage.fromJson(data);
   }
 
@@ -102,24 +141,33 @@ class TrainingApi {
   // TrainingTemplateController::apply. Image uploads on exercises/meals
   // aren't wired up either — a smaller, skippable multipart flow.
 
-  Future<Paginated<TrainingPlan>> myClientPlans({String? status, int page = 1}) async {
-    final data = await _client.get(
-      '/business/training-plans',
-      query: {if (status != null) 'status': status, 'page': page},
-    ) as Map<String, dynamic>;
+  Future<Paginated<TrainingPlan>> myClientPlans({
+    String? status,
+    int page = 1,
+  }) async {
+    final data =
+        await _client.get(
+              '/business/training-plans',
+              query: {'status': ?status, 'page': page},
+            )
+            as Map<String, dynamic>;
     return Paginated.fromJson(data, TrainingPlan.fromJson);
   }
 
   Future<TrainingPlan> businessPlan(int id) async {
-    final data = await _client.get('/business/training-plans/$id') as Map<String, dynamic>;
+    final data =
+        await _client.get('/business/training-plans/$id')
+            as Map<String, dynamic>;
     return TrainingPlan.fromJson(data['plan'] as Map<String, dynamic>);
   }
 
   Future<TrainingPlan> setPlanStatus(int id, String status) async {
-    final data = await _client.patch(
-      '/business/training-plans/$id',
-      data: {'status': status},
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.patch(
+              '/business/training-plans/$id',
+              data: {'status': status},
+            )
+            as Map<String, dynamic>;
     return TrainingPlan.fromJson(data['plan'] as Map<String, dynamic>);
   }
 
@@ -132,17 +180,19 @@ class TrainingApi {
     int? restSeconds,
     String? notes,
   }) async {
-    final data = await _client.post(
-      '/business/training-plans/$planId/exercises',
-      data: {
-        'name': name,
-        if (dayOfWeek != null) 'day_of_week': dayOfWeek,
-        if (sets != null) 'sets': sets,
-        if (reps != null && reps.isNotEmpty) 'reps': reps,
-        if (restSeconds != null) 'rest_seconds': restSeconds,
-        if (notes != null && notes.isNotEmpty) 'notes': notes,
-      },
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.post(
+              '/business/training-plans/$planId/exercises',
+              data: {
+                'name': name,
+                'day_of_week': ?dayOfWeek,
+                'sets': ?sets,
+                if (reps != null && reps.isNotEmpty) 'reps': reps,
+                'rest_seconds': ?restSeconds,
+                if (notes != null && notes.isNotEmpty) 'notes': notes,
+              },
+            )
+            as Map<String, dynamic>;
     return PlanExercise.fromJson(data['exercise'] as Map<String, dynamic>);
   }
 
@@ -156,15 +206,17 @@ class TrainingApi {
     int? calories,
     String? notes,
   }) async {
-    final data = await _client.post(
-      '/business/training-plans/$planId/meals',
-      data: {
-        'meal_type': mealType,
-        'name': name,
-        if (calories != null) 'calories': calories,
-        if (notes != null && notes.isNotEmpty) 'notes': notes,
-      },
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.post(
+              '/business/training-plans/$planId/meals',
+              data: {
+                'meal_type': mealType,
+                'name': name,
+                'calories': ?calories,
+                if (notes != null && notes.isNotEmpty) 'notes': notes,
+              },
+            )
+            as Map<String, dynamic>;
     return PlanMeal.fromJson(data['meal'] as Map<String, dynamic>);
   }
 
@@ -172,7 +224,9 @@ class TrainingApi {
       _client.delete('/business/training-plans/$planId/meals/$mealId');
 
   Future<List<BodyReport>> businessBodyReports(int planId) async {
-    final data = await _client.get('/business/training-plans/$planId/body-reports') as Map<String, dynamic>;
+    final data =
+        await _client.get('/business/training-plans/$planId/body-reports')
+            as Map<String, dynamic>;
     return (data['reports'] as List<dynamic>? ?? [])
         .map((e) => BodyReport.fromJson(e as Map<String, dynamic>))
         .toList();
@@ -190,10 +244,10 @@ class TrainingApi {
     '/business/training-plans/$planId/body-reports',
     data: {
       if (forMonth != null) 'for_month': _isoDate(forMonth),
-      if (weightKg != null) 'weight_kg': weightKg,
-      if (muscleMassKg != null) 'muscle_mass_kg': muscleMassKg,
-      if (fatPercent != null) 'fat_percent': fatPercent,
-      if (waterPercent != null) 'water_percent': waterPercent,
+      'weight_kg': ?weightKg,
+      'muscle_mass_kg': ?muscleMassKg,
+      'fat_percent': ?fatPercent,
+      'water_percent': ?waterPercent,
       if (notes != null && notes.isNotEmpty) 'notes': notes,
     },
   );

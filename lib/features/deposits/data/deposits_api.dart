@@ -19,7 +19,7 @@ class DepositsApi {
   Future<DepositsPage> list({String? status, int page = 1}) async {
     final body = await _client.getForBody(
       '/deposits',
-      query: {if (status != null) 'status': status, 'page': page},
+      query: {'status': ?status, 'page': page},
     );
     final items = (body['data'] as List<dynamic>? ?? [])
         .map((e) => Deposit.fromJson(e as Map<String, dynamic>))

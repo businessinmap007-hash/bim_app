@@ -30,9 +30,13 @@ class RetailListingsApi {
   }
 
   Future<List<CatalogProductSummary>> lookup(String q) async {
-    final data = await _client.get('/business/retail-listings/lookup', query: {'q': q}) as Map<String, dynamic>;
+    final data =
+        await _client.get('/business/retail-listings/lookup', query: {'q': q})
+            as Map<String, dynamic>;
     final items = data['items'] as List<dynamic>? ?? [];
-    return items.map((e) => CatalogProductSummary.fromJson(e as Map<String, dynamic>)).toList();
+    return items
+        .map((e) => CatalogProductSummary.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   Future<RetailListing> create({
@@ -42,16 +46,18 @@ class RetailListingsApi {
     String? sku,
     bool isActive = true,
   }) async {
-    final data = await _client.post(
-      '/business/retail-listings',
-      data: {
-        'catalog_product_id': catalogProductId,
-        'price': price,
-        if (stock != null) 'stock': stock,
-        if (sku != null && sku.isNotEmpty) 'sku': sku,
-        'is_active': isActive,
-      },
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.post(
+              '/business/retail-listings',
+              data: {
+                'catalog_product_id': catalogProductId,
+                'price': price,
+                'stock': ?stock,
+                if (sku != null && sku.isNotEmpty) 'sku': sku,
+                'is_active': isActive,
+              },
+            )
+            as Map<String, dynamic>;
     return RetailListing.fromJson(data);
   }
 
@@ -62,17 +68,20 @@ class RetailListingsApi {
     String? sku,
     required bool isActive,
   }) async {
-    final data = await _client.put(
-      '/business/retail-listings/$id',
-      data: {
-        'price': price,
-        if (stock != null) 'stock': stock,
-        if (sku != null && sku.isNotEmpty) 'sku': sku,
-        'is_active': isActive,
-      },
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.put(
+              '/business/retail-listings/$id',
+              data: {
+                'price': price,
+                'stock': ?stock,
+                if (sku != null && sku.isNotEmpty) 'sku': sku,
+                'is_active': isActive,
+              },
+            )
+            as Map<String, dynamic>;
     return RetailListing.fromJson(data);
   }
 
-  Future<void> delete(int id) => _client.delete('/business/retail-listings/$id');
+  Future<void> delete(int id) =>
+      _client.delete('/business/retail-listings/$id');
 }

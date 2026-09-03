@@ -9,7 +9,11 @@ class BusinessOffersPage {
   final List<CommercialOffer> items;
   final bool hasMore;
   final OffersUsage usage;
-  const BusinessOffersPage({required this.items, required this.hasMore, required this.usage});
+  const BusinessOffersPage({
+    required this.items,
+    required this.hasMore,
+    required this.usage,
+  });
 }
 
 class BoostPurchasesPage {
@@ -30,7 +34,7 @@ class BusinessOffersApi {
   Future<BusinessOffersPage> list({String? status, int page = 1}) async {
     final body = await _client.getForBody(
       '/business/offers',
-      query: {if (status != null) 'status': status, 'page': page},
+      query: {'status': ?status, 'page': page},
     );
     final data = body['data'] as Map<String, dynamic>? ?? const {};
     final offers = data['offers'] as Map<String, dynamic>? ?? const {};
@@ -42,7 +46,9 @@ class BusinessOffersApi {
     return BusinessOffersPage(
       items: items,
       hasMore: currentPage < lastPage,
-      usage: OffersUsage.fromJson(data['usage'] as Map<String, dynamic>? ?? const {}),
+      usage: OffersUsage.fromJson(
+        data['usage'] as Map<String, dynamic>? ?? const {},
+      ),
     );
   }
 
@@ -56,19 +62,21 @@ class BusinessOffersApi {
     bool isRefundable = false,
     String? titleAr,
   }) async {
-    final data = await _client.post(
-      '/business/offers',
-      data: _payload(
-        offerableType: offerableType,
-        offerableId: offerableId,
-        finalPrice: finalPrice,
-        availabilityMode: availabilityMode,
-        availableQuantity: availableQuantity,
-        endsAt: endsAt,
-        isRefundable: isRefundable,
-        titleAr: titleAr,
-      ),
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.post(
+              '/business/offers',
+              data: _payload(
+                offerableType: offerableType,
+                offerableId: offerableId,
+                finalPrice: finalPrice,
+                availabilityMode: availabilityMode,
+                availableQuantity: availableQuantity,
+                endsAt: endsAt,
+                isRefundable: isRefundable,
+                titleAr: titleAr,
+              ),
+            )
+            as Map<String, dynamic>;
     return CommercialOffer.fromJson(data['offer'] as Map<String, dynamic>);
   }
 
@@ -83,31 +91,37 @@ class BusinessOffersApi {
     bool isRefundable = false,
     String? titleAr,
   }) async {
-    final data = await _client.put(
-      '/business/offers/$id',
-      data: _payload(
-        offerableType: offerableType,
-        offerableId: offerableId,
-        finalPrice: finalPrice,
-        availabilityMode: availabilityMode,
-        availableQuantity: availableQuantity,
-        endsAt: endsAt,
-        isRefundable: isRefundable,
-        titleAr: titleAr,
-      ),
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.put(
+              '/business/offers/$id',
+              data: _payload(
+                offerableType: offerableType,
+                offerableId: offerableId,
+                finalPrice: finalPrice,
+                availabilityMode: availabilityMode,
+                availableQuantity: availableQuantity,
+                endsAt: endsAt,
+                isRefundable: isRefundable,
+                titleAr: titleAr,
+              ),
+            )
+            as Map<String, dynamic>;
     return CommercialOffer.fromJson(data['offer'] as Map<String, dynamic>);
   }
 
   Future<CommercialOffer> toggle(int id) async {
-    final data = await _client.post('/business/offers/$id/toggle') as Map<String, dynamic>;
+    final data =
+        await _client.post('/business/offers/$id/toggle')
+            as Map<String, dynamic>;
     return CommercialOffer.fromJson(data['offer'] as Map<String, dynamic>);
   }
 
   Future<void> delete(int id) => _client.delete('/business/offers/$id');
 
   Future<List<OfferBoostPackage>> boostPackages() async {
-    final data = await _client.get('/business/offers/boost/packages') as Map<String, dynamic>;
+    final data =
+        await _client.get('/business/offers/boost/packages')
+            as Map<String, dynamic>;
     return (data['packages'] as List<dynamic>? ?? [])
         .map((e) => OfferBoostPackage.fromJson(e as Map<String, dynamic>))
         .toList();
@@ -119,7 +133,10 @@ class BusinessOffersApi {
   );
 
   Future<BoostPurchasesPage> boostPurchases({int page = 1}) async {
-    final body = await _client.getForBody('/business/offers/boost/purchases', query: {'page': page});
+    final body = await _client.getForBody(
+      '/business/offers/boost/purchases',
+      query: {'page': page},
+    );
     final data = body['data'] as Map<String, dynamic>? ?? const {};
     final purchases = data['purchases'] as Map<String, dynamic>? ?? const {};
     final items = (purchases['data'] as List<dynamic>? ?? [])
@@ -136,7 +153,9 @@ class BusinessOffersApi {
   /// here — the two aggregate slices are what a "how are my offers doing"
   /// screen actually needs.
   Future<OfferPerformance> performance() async {
-    final data = await _client.get('/business/offers/performance/me') as Map<String, dynamic>;
+    final data =
+        await _client.get('/business/offers/performance/me')
+            as Map<String, dynamic>;
     return OfferPerformance.fromJson(data);
   }
 
@@ -154,7 +173,7 @@ class BusinessOffersApi {
     'offerable_id': offerableId,
     'final_price': finalPrice,
     'availability_mode': availabilityMode,
-    if (availableQuantity != null) 'available_quantity': availableQuantity,
+    'available_quantity': ?availableQuantity,
     if (endsAt != null) 'ends_at': endsAt.toIso8601String(),
     'is_refundable': isRefundable,
     if (titleAr != null && titleAr.isNotEmpty) 'title_ar': titleAr,

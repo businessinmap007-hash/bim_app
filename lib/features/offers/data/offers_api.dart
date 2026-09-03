@@ -13,11 +13,21 @@ class OffersApi {
   final ApiClient _client;
   const OffersApi(this._client);
 
-  Future<Paginated<CommercialOffer>> browse({String? q, String? sort, int page = 1}) async {
-    final body = await _client.get(
-      '/offers',
-      query: {if (q != null && q.isNotEmpty) 'q': q, if (sort != null) 'sort': sort, 'page': page},
-    ) as Map<String, dynamic>;
+  Future<Paginated<CommercialOffer>> browse({
+    String? q,
+    String? sort,
+    int page = 1,
+  }) async {
+    final body =
+        await _client.get(
+              '/offers',
+              query: {
+                if (q != null && q.isNotEmpty) 'q': q,
+                'sort': ?sort,
+                'page': page,
+              },
+            )
+            as Map<String, dynamic>;
     final offers = body['offers'] as Map<String, dynamic>;
     return Paginated.fromJson(offers, CommercialOffer.fromJson);
   }
@@ -34,16 +44,23 @@ class OffersApi {
   }
 
   Future<Paginated<OfferFollow>> myFollows({int page = 1}) async {
-    final data = await _client.get('/offer-follows', query: {'page': page}) as Map<String, dynamic>;
+    final data =
+        await _client.get('/offer-follows', query: {'page': page})
+            as Map<String, dynamic>;
     final follows = data['follows'] as Map<String, dynamic>;
     return Paginated.fromJson(follows, OfferFollow.fromJson);
   }
 
   Future<OfferFollow> followBusiness(int businessId) async {
-    final data = await _client.post(
-      '/offer-follows',
-      data: {'followable_type': 'business', 'followable_id': businessId},
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.post(
+              '/offer-follows',
+              data: {
+                'followable_type': 'business',
+                'followable_id': businessId,
+              },
+            )
+            as Map<String, dynamic>;
     return OfferFollow.fromJson(data['follow'] as Map<String, dynamic>);
   }
 
@@ -57,15 +74,17 @@ class OffersApi {
     int quantity = 1,
     String sort = 'lowest_price',
   }) async {
-    final data = await _client.get(
-      '/offers/compare',
-      query: {
-        'offerable_type': offerableType,
-        'offerable_id': offerableId,
-        'quantity': quantity,
-        'sort': sort,
-      },
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.get(
+              '/offers/compare',
+              query: {
+                'offerable_type': offerableType,
+                'offerable_id': offerableId,
+                'quantity': quantity,
+                'sort': sort,
+              },
+            )
+            as Map<String, dynamic>;
     return OfferComparisonResult.fromJson(data);
   }
 }

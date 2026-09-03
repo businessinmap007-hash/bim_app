@@ -35,18 +35,18 @@ class ProfileApi {
     final data = await _client.put(
       '/profile',
       data: {
-        if (name != null) 'name': name,
-        if (nameEn != null) 'name_en': nameEn,
-        if (phone != null) 'phone': phone,
-        if (about != null) 'about': about,
-        if (latitude != null) 'latitude': latitude,
-        if (longitude != null) 'longitude': longitude,
-        if (countryId != null) 'country_id': countryId,
-        if (governorateId != null) 'governorate_id': governorateId,
-        if (cityId != null) 'city_id': cityId,
-        if (categoryId != null) 'category_id': categoryId,
-        if (categoryChildId != null) 'category_child_id': categoryChildId,
-        if (type != null) 'type': type,
+        'name': ?name,
+        'name_en': ?nameEn,
+        'phone': ?phone,
+        'about': ?about,
+        'latitude': ?latitude,
+        'longitude': ?longitude,
+        'country_id': ?countryId,
+        'governorate_id': ?governorateId,
+        'city_id': ?cityId,
+        'category_id': ?categoryId,
+        'category_child_id': ?categoryChildId,
+        'type': ?type,
       },
     );
     return AuthUser.fromJson(data as Map<String, dynamic>);
@@ -61,7 +61,10 @@ class ProfileApi {
   }
 
   Future<AuthUser> removeImage() async {
-    final data = await _client.post('/profile/image', data: FormData.fromMap({'remove': true}));
+    final data = await _client.post(
+      '/profile/image',
+      data: FormData.fromMap({'remove': true}),
+    );
     return AuthUser.fromJson(data as Map<String, dynamic>);
   }
 
@@ -73,7 +76,10 @@ class ProfileApi {
   }
 
   Future<ProfileOptionsPayload> updateOptions(List<int> optionIds) async {
-    final data = await _client.put('/profile/options', data: {'option_ids': optionIds});
+    final data = await _client.put(
+      '/profile/options',
+      data: {'option_ids': optionIds},
+    );
     return ProfileOptionsPayload.fromJson(data as Map<String, dynamic>);
   }
 }

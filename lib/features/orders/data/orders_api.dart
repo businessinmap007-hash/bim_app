@@ -19,14 +19,14 @@ class OrdersApi {
   final ApiClient _client;
   const OrdersApi(this._client);
 
-  Future<OrdersPage> list({String? status, int page = 1, int perPage = 20}) async {
+  Future<OrdersPage> list({
+    String? status,
+    int page = 1,
+    int perPage = 20,
+  }) async {
     final body = await _client.getForBody(
       '/orders',
-      query: {
-        if (status != null) 'status': status,
-        'page': page,
-        'per_page': perPage,
-      },
+      query: {'status': ?status, 'page': page, 'per_page': perPage},
     );
     final items = (body['data'] as List<dynamic>? ?? [])
         .map((e) => PlacedOrder.fromJson(e as Map<String, dynamic>))
@@ -43,18 +43,23 @@ class OrdersApi {
   }
 
   Future<PlacedOrder> cancel(int id, {String? reason}) async {
-    final data = await _client.post(
-      '/orders/$id/cancel',
-      data: {if (reason != null && reason.isNotEmpty) 'reason': reason},
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.post(
+              '/orders/$id/cancel',
+              data: {if (reason != null && reason.isNotEmpty) 'reason': reason},
+            )
+            as Map<String, dynamic>;
     return PlacedOrder.fromJson(data);
   }
 
   Future<ReorderResult> reorder(int id) async {
-    final data = await _client.post('/orders/$id/reorder') as Map<String, dynamic>;
+    final data =
+        await _client.post('/orders/$id/reorder') as Map<String, dynamic>;
     return (
       added: (data['added'] as num?)?.toInt() ?? 0,
-      skipped: (data['skipped'] as List<dynamic>? ?? []).map((e) => e as int).toList(),
+      skipped: (data['skipped'] as List<dynamic>? ?? [])
+          .map((e) => e as int)
+          .toList(),
       cartOrderId: data['cart_order_id'] as int?,
     );
   }

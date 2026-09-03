@@ -10,10 +10,12 @@ class RetailDiscoveryApi {
   const RetailDiscoveryApi(this._client);
 
   Future<RetailFilters> filters({bool openNow = false}) async {
-    final data = await _client.get(
-      '/discovery/retail/filters',
-      query: {if (openNow) 'open_now': true},
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.get(
+              '/discovery/retail/filters',
+              query: {if (openNow) 'open_now': true},
+            )
+            as Map<String, dynamic>;
     return RetailFilters.fromJson(data);
   }
 
@@ -25,17 +27,19 @@ class RetailDiscoveryApi {
     bool openNow = false,
     int page = 1,
   }) async {
-    final data = await _client.get(
-      '/discovery/retail/products',
-      query: {
-        if (categoryId != null) 'category_id': categoryId,
-        if (childId != null) 'child_id': childId,
-        if (brandId != null) 'brand_id': brandId,
-        if (q != null && q.isNotEmpty) 'q': q,
-        if (openNow) 'open_now': true,
-        'page': page,
-      },
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.get(
+              '/discovery/retail/products',
+              query: {
+                'category_id': ?categoryId,
+                'child_id': ?childId,
+                'brand_id': ?brandId,
+                if (q != null && q.isNotEmpty) 'q': q,
+                if (openNow) 'open_now': true,
+                'page': page,
+              },
+            )
+            as Map<String, dynamic>;
     return Paginated.fromJson(
       data['products'] as Map<String, dynamic>,
       CatalogProductSummary.fromJson,
@@ -43,7 +47,9 @@ class RetailDiscoveryApi {
   }
 
   Future<ProductDetail> show(int productId) async {
-    final data = await _client.get('/discovery/retail/products/$productId') as Map<String, dynamic>;
+    final data =
+        await _client.get('/discovery/retail/products/$productId')
+            as Map<String, dynamic>;
     return ProductDetail.fromJson(data);
   }
 }

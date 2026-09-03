@@ -14,39 +14,55 @@ class ClinicApi {
   const ClinicApi(this._client);
 
   Future<Paginated<ClinicSlot>> slots(int clinicId, {int page = 1}) async {
-    final data = await _client.get(
-      '/clinics/$clinicId/slots',
-      query: {'page': page},
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.get('/clinics/$clinicId/slots', query: {'page': page})
+            as Map<String, dynamic>;
     return Paginated.fromJson(data, ClinicSlot.fromJson);
   }
 
   Future<ClinicAppointment> bookSlot(int slotId, {String? reason}) async {
-    final data = await _client.post(
-      '/clinic-slots/$slotId/book',
-      data: {if (reason != null && reason.isNotEmpty) 'reason': reason},
-    ) as Map<String, dynamic>;
-    return ClinicAppointment.fromJson(data['appointment'] as Map<String, dynamic>);
+    final data =
+        await _client.post(
+              '/clinic-slots/$slotId/book',
+              data: {if (reason != null && reason.isNotEmpty) 'reason': reason},
+            )
+            as Map<String, dynamic>;
+    return ClinicAppointment.fromJson(
+      data['appointment'] as Map<String, dynamic>,
+    );
   }
 
-  Future<Paginated<ClinicAppointment>> myAppointments({String? status, int page = 1}) async {
-    final data = await _client.get(
-      '/clinic-appointments',
-      query: {if (status != null) 'status': status, 'page': page},
-    ) as Map<String, dynamic>;
+  Future<Paginated<ClinicAppointment>> myAppointments({
+    String? status,
+    int page = 1,
+  }) async {
+    final data =
+        await _client.get(
+              '/clinic-appointments',
+              query: {'status': ?status, 'page': page},
+            )
+            as Map<String, dynamic>;
     return Paginated.fromJson(data, ClinicAppointment.fromJson);
   }
 
   Future<ClinicAppointment> cancel(int id) async {
-    final data = await _client.post('/clinic-appointments/$id/cancel') as Map<String, dynamic>;
-    return ClinicAppointment.fromJson(data['appointment'] as Map<String, dynamic>);
+    final data =
+        await _client.post('/clinic-appointments/$id/cancel')
+            as Map<String, dynamic>;
+    return ClinicAppointment.fromJson(
+      data['appointment'] as Map<String, dynamic>,
+    );
   }
 
   Future<ClinicAppointment> reschedule(int id, DateTime scheduledAt) async {
-    final data = await _client.post(
-      '/clinic-appointments/$id/reschedule',
-      data: {'scheduled_at': scheduledAt.toIso8601String()},
-    ) as Map<String, dynamic>;
-    return ClinicAppointment.fromJson(data['appointment'] as Map<String, dynamic>);
+    final data =
+        await _client.post(
+              '/clinic-appointments/$id/reschedule',
+              data: {'scheduled_at': scheduledAt.toIso8601String()},
+            )
+            as Map<String, dynamic>;
+    return ClinicAppointment.fromJson(
+      data['appointment'] as Map<String, dynamic>,
+    );
   }
 }

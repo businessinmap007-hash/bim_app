@@ -13,40 +13,58 @@ class TrainingTemplatesApi {
   const TrainingTemplatesApi(this._client);
 
   Future<Paginated<TrainingTemplate>> list({int page = 1}) async {
-    final data = await _client.get('/business/training-templates', query: {'page': page}) as Map<String, dynamic>;
+    final data =
+        await _client.get('/business/training-templates', query: {'page': page})
+            as Map<String, dynamic>;
     return Paginated.fromJson(data, TrainingTemplate.fromJson);
   }
 
   Future<TrainingTemplate> show(int id) async {
-    final data = await _client.get('/business/training-templates/$id') as Map<String, dynamic>;
+    final data =
+        await _client.get('/business/training-templates/$id')
+            as Map<String, dynamic>;
     return TrainingTemplate.fromJson(data['template'] as Map<String, dynamic>);
   }
 
-  Future<TrainingTemplate> create({required String title, String? goal, String? notes}) async {
-    final data = await _client.post(
-      '/business/training-templates',
-      data: {
-        'title': title,
-        if (goal != null && goal.isNotEmpty) 'goal': goal,
-        if (notes != null && notes.isNotEmpty) 'notes': notes,
-      },
-    ) as Map<String, dynamic>;
+  Future<TrainingTemplate> create({
+    required String title,
+    String? goal,
+    String? notes,
+  }) async {
+    final data =
+        await _client.post(
+              '/business/training-templates',
+              data: {
+                'title': title,
+                if (goal != null && goal.isNotEmpty) 'goal': goal,
+                if (notes != null && notes.isNotEmpty) 'notes': notes,
+              },
+            )
+            as Map<String, dynamic>;
     return TrainingTemplate.fromJson(data['template'] as Map<String, dynamic>);
   }
 
-  Future<TrainingTemplate> update(int id, {required String title, String? goal, String? notes}) async {
-    final data = await _client.put(
-      '/business/training-templates/$id',
-      data: {
-        'title': title,
-        if (goal != null && goal.isNotEmpty) 'goal': goal,
-        if (notes != null && notes.isNotEmpty) 'notes': notes,
-      },
-    ) as Map<String, dynamic>;
+  Future<TrainingTemplate> update(
+    int id, {
+    required String title,
+    String? goal,
+    String? notes,
+  }) async {
+    final data =
+        await _client.put(
+              '/business/training-templates/$id',
+              data: {
+                'title': title,
+                if (goal != null && goal.isNotEmpty) 'goal': goal,
+                if (notes != null && notes.isNotEmpty) 'notes': notes,
+              },
+            )
+            as Map<String, dynamic>;
     return TrainingTemplate.fromJson(data['template'] as Map<String, dynamic>);
   }
 
-  Future<void> delete(int id) => _client.delete('/business/training-templates/$id');
+  Future<void> delete(int id) =>
+      _client.delete('/business/training-templates/$id');
 
   Future<void> addExercise(
     int templateId, {
@@ -57,18 +75,22 @@ class TrainingTemplatesApi {
     int? restSeconds,
     String? notes,
   }) async {
-    await _client.post('/business/training-templates/$templateId/exercises', data: {
-      if (dayOfWeek != null) 'day_of_week': dayOfWeek,
-      'name': name,
-      if (sets != null) 'sets': sets,
-      if (reps != null && reps.isNotEmpty) 'reps': reps,
-      if (restSeconds != null) 'rest_seconds': restSeconds,
-      if (notes != null && notes.isNotEmpty) 'notes': notes,
-    });
+    await _client.post(
+      '/business/training-templates/$templateId/exercises',
+      data: {
+        'day_of_week': ?dayOfWeek,
+        'name': name,
+        'sets': ?sets,
+        if (reps != null && reps.isNotEmpty) 'reps': reps,
+        'rest_seconds': ?restSeconds,
+        if (notes != null && notes.isNotEmpty) 'notes': notes,
+      },
+    );
   }
 
-  Future<void> removeExercise(int templateId, int exerciseId) =>
-      _client.delete('/business/training-templates/$templateId/exercises/$exerciseId');
+  Future<void> removeExercise(int templateId, int exerciseId) => _client.delete(
+    '/business/training-templates/$templateId/exercises/$exerciseId',
+  );
 
   Future<void> addMeal(
     int templateId, {
@@ -77,12 +99,15 @@ class TrainingTemplatesApi {
     int? calories,
     String? notes,
   }) async {
-    await _client.post('/business/training-templates/$templateId/meals', data: {
-      'meal_type': mealType,
-      'name': name,
-      if (calories != null) 'calories': calories,
-      if (notes != null && notes.isNotEmpty) 'notes': notes,
-    });
+    await _client.post(
+      '/business/training-templates/$templateId/meals',
+      data: {
+        'meal_type': mealType,
+        'name': name,
+        'calories': ?calories,
+        if (notes != null && notes.isNotEmpty) 'notes': notes,
+      },
+    );
   }
 
   Future<void> removeMeal(int templateId, int mealId) =>

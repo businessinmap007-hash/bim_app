@@ -11,13 +11,16 @@ class BookingSettingsApi {
   const BookingSettingsApi(this._client);
 
   Future<PricesOptionsPayload> pricesOptions() async {
-    final data = await _client.get('/business/prices/options') as Map<String, dynamic>;
+    final data =
+        await _client.get('/business/prices/options') as Map<String, dynamic>;
     return PricesOptionsPayload.fromJson(data);
   }
 
   Future<List<PriceRow>> prices() async {
     final data = await _client.get('/business/prices') as List<dynamic>;
-    return data.map((e) => PriceRow.fromJson(e as Map<String, dynamic>)).toList();
+    return data
+        .map((e) => PriceRow.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   Future<PriceRow> createPrice({
@@ -34,9 +37,9 @@ class BookingSettingsApi {
         'service_id': serviceId,
         'bookable_item_type': bookableItemType,
         'price': price,
-        if (lineOptionId != null) 'line_option_id': lineOptionId,
+        'line_option_id': ?lineOptionId,
         'charge_mode': chargeMode,
-        if (chargeAmount != null) 'charge_amount': chargeAmount,
+        'charge_amount': ?chargeAmount,
       },
     );
     return PriceRow.fromJson(data as Map<String, dynamic>);
@@ -58,10 +61,10 @@ class BookingSettingsApi {
         'service_id': serviceId,
         'bookable_item_type': bookableItemType,
         'price': price,
-        if (lineOptionId != null) 'line_option_id': lineOptionId,
+        'line_option_id': ?lineOptionId,
         'is_active': isActive,
         'charge_mode': chargeMode,
-        if (chargeAmount != null) 'charge_amount': chargeAmount,
+        'charge_amount': ?chargeAmount,
       },
     );
     return PriceRow.fromJson(data as Map<String, dynamic>);
@@ -70,13 +73,17 @@ class BookingSettingsApi {
   Future<void> deletePrice(int id) => _client.delete('/business/prices/$id');
 
   Future<BookableItemsOptionsPayload> bookableItemsOptions() async {
-    final data = await _client.get('/business/bookable-items/options') as Map<String, dynamic>;
+    final data =
+        await _client.get('/business/bookable-items/options')
+            as Map<String, dynamic>;
     return BookableItemsOptionsPayload.fromJson(data);
   }
 
   Future<List<BookableItemRow>> bookableItems() async {
     final data = await _client.get('/business/bookable-items') as List<dynamic>;
-    return data.map((e) => BookableItemRow.fromJson(e as Map<String, dynamic>)).toList();
+    return data
+        .map((e) => BookableItemRow.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   Future<BookableItemRow> createBookableItem({
@@ -92,17 +99,19 @@ class BookingSettingsApi {
         'service_id': serviceId,
         'item_type': itemType,
         'code': code,
-        if (lineOptionId != null) 'line_option_id': lineOptionId,
-        if (capacity != null) 'capacity': capacity,
+        'line_option_id': ?lineOptionId,
+        'capacity': ?capacity,
       },
     );
     return BookableItemRow.fromJson(data as Map<String, dynamic>);
   }
 
-  Future<void> deleteBookableItem(int id) => _client.delete('/business/bookable-items/$id');
+  Future<void> deleteBookableItem(int id) =>
+      _client.delete('/business/bookable-items/$id');
 
   Future<WorkingHours> hours() async {
-    final data = await _client.get('/business/working-hours') as Map<String, dynamic>;
+    final data =
+        await _client.get('/business/working-hours') as Map<String, dynamic>;
     return WorkingHours.fromJson(data);
   }
 

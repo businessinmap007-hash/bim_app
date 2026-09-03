@@ -14,16 +14,23 @@ class JobsApi {
   final ApiClient _client;
   const JobsApi(this._client);
 
-  Future<Paginated<JobPost>> browse({String? q, int? categoryId, int? categoryChildId, int page = 1}) async {
-    final data = await _client.get(
-      '/jobs',
-      query: {
-        if (q != null && q.isNotEmpty) 'q': q,
-        if (categoryId != null) 'category_id': categoryId,
-        if (categoryChildId != null) 'category_child_id': categoryChildId,
-        'page': page,
-      },
-    ) as Map<String, dynamic>;
+  Future<Paginated<JobPost>> browse({
+    String? q,
+    int? categoryId,
+    int? categoryChildId,
+    int page = 1,
+  }) async {
+    final data =
+        await _client.get(
+              '/jobs',
+              query: {
+                if (q != null && q.isNotEmpty) 'q': q,
+                'category_id': ?categoryId,
+                'category_child_id': ?categoryChildId,
+                'page': page,
+              },
+            )
+            as Map<String, dynamic>;
     return Paginated.fromJson(data, JobPost.fromJson);
   }
 
@@ -34,28 +41,30 @@ class JobsApi {
 
   Future<List<JobCategoryGroup>> categories() async {
     final data = await _client.get('/jobs/categories') as List<dynamic>;
-    return data.map((e) => JobCategoryGroup.fromJson(e as Map<String, dynamic>)).toList();
+    return data
+        .map((e) => JobCategoryGroup.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   /// Returns the application's created-at timestamp on success.
   Future<DateTime?> apply(int jobId) async {
-    final data = await _client.post('/jobs/$jobId/apply') as Map<String, dynamic>;
+    final data =
+        await _client.post('/jobs/$jobId/apply') as Map<String, dynamic>;
     final appliedAt = data['applied_at'] as String?;
     return appliedAt != null ? DateTime.tryParse(appliedAt) : null;
   }
 
   Future<Paginated<JobFollow>> follows({int page = 1}) async {
-    final data = await _client.get('/jobs/follows', query: {'page': page}) as Map<String, dynamic>;
+    final data =
+        await _client.get('/jobs/follows', query: {'page': page})
+            as Map<String, dynamic>;
     return Paginated.fromJson(data, JobFollow.fromJson);
   }
 
   Future<void> follow({int? categoryId, int? categoryChildId}) async {
     await _client.post(
       '/jobs/follows',
-      data: {
-        if (categoryId != null) 'category_id': categoryId,
-        if (categoryChildId != null) 'category_child_id': categoryChildId,
-      },
+      data: {'category_id': ?categoryId, 'category_child_id': ?categoryChildId},
     );
   }
 

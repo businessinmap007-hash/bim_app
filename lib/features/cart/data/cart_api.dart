@@ -21,26 +21,31 @@ class CartApi {
     int? sizeId,
     List<int> extras = const [],
   }) async {
-    final data = await _client.post(
-      '/cart/items',
-      data: {
-        'kind': kind,
-        'offering_id': offeringId,
-        'qty': qty,
-        if (sizeId != null) 'size_id': sizeId,
-        if (extras.isNotEmpty) 'extras': extras,
-      },
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.post(
+              '/cart/items',
+              data: {
+                'kind': kind,
+                'offering_id': offeringId,
+                'qty': qty,
+                'size_id': ?sizeId,
+                if (extras.isNotEmpty) 'extras': extras,
+              },
+            )
+            as Map<String, dynamic>;
     return Cart.fromJson(data['cart'] as Map<String, dynamic>);
   }
 
   Future<Cart> updateItemQty(int itemId, int qty) async {
-    final data = await _client.patch('/cart/items/$itemId', data: {'qty': qty}) as Map<String, dynamic>;
+    final data =
+        await _client.patch('/cart/items/$itemId', data: {'qty': qty})
+            as Map<String, dynamic>;
     return Cart.fromJson(data['cart'] as Map<String, dynamic>);
   }
 
   Future<Cart> removeItem(int itemId) async {
-    final data = await _client.delete('/cart/items/$itemId') as Map<String, dynamic>;
+    final data =
+        await _client.delete('/cart/items/$itemId') as Map<String, dynamic>;
     return Cart.fromJson(data['cart'] as Map<String, dynamic>);
   }
 
@@ -55,18 +60,20 @@ class CartApi {
     String? notes,
     String? paymentMethod,
   }) async {
-    final data = await _client.post(
-      '/cart/$businessId/checkout',
-      data: {
-        if (fulfillmentType != null) 'fulfillment_type': fulfillmentType,
-        if (addressId != null) 'address_id': addressId,
-        if (address != null && address.isNotEmpty) 'address': address,
-        if (lat != null) 'lat': lat,
-        if (lng != null) 'lng': lng,
-        if (notes != null && notes.isNotEmpty) 'notes': notes,
-        if (paymentMethod != null) 'payment_method': paymentMethod,
-      },
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.post(
+              '/cart/$businessId/checkout',
+              data: {
+                'fulfillment_type': ?fulfillmentType,
+                'address_id': ?addressId,
+                if (address != null && address.isNotEmpty) 'address': address,
+                'lat': ?lat,
+                'lng': ?lng,
+                if (notes != null && notes.isNotEmpty) 'notes': notes,
+                'payment_method': ?paymentMethod,
+              },
+            )
+            as Map<String, dynamic>;
     return Cart.fromJson(data['order'] as Map<String, dynamic>);
   }
 }

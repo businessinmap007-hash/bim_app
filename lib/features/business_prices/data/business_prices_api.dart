@@ -18,7 +18,7 @@ class BusinessPricesApi {
   Future<PriceRowsPage> list({int? serviceId, int page = 1}) async {
     final body = await _client.getForBody(
       '/business/prices',
-      query: {if (serviceId != null) 'service_id': serviceId, 'page': page},
+      query: {'service_id': ?serviceId, 'page': page},
     );
     final items = (body['data'] as List<dynamic>? ?? [])
         .map((e) => PriceRow.fromJson(e as Map<String, dynamic>))
@@ -30,12 +30,14 @@ class BusinessPricesApi {
   }
 
   Future<PriceOptions> options() async {
-    final data = await _client.get('/business/prices/options') as Map<String, dynamic>;
+    final data =
+        await _client.get('/business/prices/options') as Map<String, dynamic>;
     return PriceOptions.fromJson(data);
   }
 
   Future<PriceRow> show(int id) async {
-    final data = await _client.get('/business/prices/$id') as Map<String, dynamic>;
+    final data =
+        await _client.get('/business/prices/$id') as Map<String, dynamic>;
     return PriceRow.fromJson(data);
   }
 
@@ -55,25 +57,27 @@ class BusinessPricesApi {
     Map<int, double> modifierAdjust = const {},
     Map<int, String> modifierAdjustType = const {},
   }) async {
-    final data = await _client.post(
-      '/business/prices',
-      data: _payload(
-        serviceId: serviceId,
-        bookableItemType: bookableItemType,
-        price: price,
-        chargeMode: chargeMode,
-        chargeAmount: chargeAmount,
-        durationMinutes: durationMinutes,
-        currency: currency,
-        isActive: isActive,
-        discountEnabled: discountEnabled,
-        discountPercent: discountPercent,
-        lineOptionId: lineOptionId,
-        modifierOptionIds: modifierOptionIds,
-        modifierAdjust: modifierAdjust,
-        modifierAdjustType: modifierAdjustType,
-      ),
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.post(
+              '/business/prices',
+              data: _payload(
+                serviceId: serviceId,
+                bookableItemType: bookableItemType,
+                price: price,
+                chargeMode: chargeMode,
+                chargeAmount: chargeAmount,
+                durationMinutes: durationMinutes,
+                currency: currency,
+                isActive: isActive,
+                discountEnabled: discountEnabled,
+                discountPercent: discountPercent,
+                lineOptionId: lineOptionId,
+                modifierOptionIds: modifierOptionIds,
+                modifierAdjust: modifierAdjust,
+                modifierAdjustType: modifierAdjustType,
+              ),
+            )
+            as Map<String, dynamic>;
     return PriceRow.fromJson(data);
   }
 
@@ -94,25 +98,27 @@ class BusinessPricesApi {
     Map<int, double> modifierAdjust = const {},
     Map<int, String> modifierAdjustType = const {},
   }) async {
-    final data = await _client.put(
-      '/business/prices/$id',
-      data: _payload(
-        serviceId: serviceId,
-        bookableItemType: bookableItemType,
-        price: price,
-        chargeMode: chargeMode,
-        chargeAmount: chargeAmount,
-        durationMinutes: durationMinutes,
-        currency: currency,
-        isActive: isActive,
-        discountEnabled: discountEnabled,
-        discountPercent: discountPercent,
-        lineOptionId: lineOptionId,
-        modifierOptionIds: modifierOptionIds,
-        modifierAdjust: modifierAdjust,
-        modifierAdjustType: modifierAdjustType,
-      ),
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.put(
+              '/business/prices/$id',
+              data: _payload(
+                serviceId: serviceId,
+                bookableItemType: bookableItemType,
+                price: price,
+                chargeMode: chargeMode,
+                chargeAmount: chargeAmount,
+                durationMinutes: durationMinutes,
+                currency: currency,
+                isActive: isActive,
+                discountEnabled: discountEnabled,
+                discountPercent: discountPercent,
+                lineOptionId: lineOptionId,
+                modifierOptionIds: modifierOptionIds,
+                modifierAdjust: modifierAdjust,
+                modifierAdjustType: modifierAdjustType,
+              ),
+            )
+            as Map<String, dynamic>;
     return PriceRow.fromJson(data);
   }
 
@@ -140,15 +146,19 @@ class BusinessPricesApi {
       'price': price,
       'charge_mode': chargeMode,
       'charge_amount': chargeAmount,
-      if (durationMinutes != null) 'duration_minutes': durationMinutes,
+      'duration_minutes': ?durationMinutes,
       'currency': currency,
       'is_active': isActive,
       'discount_enabled': discountEnabled,
       'discount_percent': discountPercent,
-      if (lineOptionId != null) 'line_option_id': lineOptionId,
+      'line_option_id': ?lineOptionId,
       'modifier_option_ids': modifierOptionIds,
-      'modifier_adjust': modifierAdjust.map((id, v) => MapEntry(id.toString(), v)),
-      'modifier_adjust_type': modifierAdjustType.map((id, v) => MapEntry(id.toString(), v)),
+      'modifier_adjust': modifierAdjust.map(
+        (id, v) => MapEntry(id.toString(), v),
+      ),
+      'modifier_adjust_type': modifierAdjustType.map(
+        (id, v) => MapEntry(id.toString(), v),
+      ),
     };
   }
 }

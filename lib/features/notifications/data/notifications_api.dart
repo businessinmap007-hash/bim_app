@@ -16,11 +16,7 @@ class NotificationsApi {
     final data =
         await _client.get(
               '/notifications',
-              query: {
-                if (status != null) 'status': status,
-                'page': page,
-                'per_page': perPage,
-              },
+              query: {'status': ?status, 'page': page, 'per_page': perPage},
             )
             as Map<String, dynamic>;
     return (
@@ -33,7 +29,9 @@ class NotificationsApi {
   }
 
   Future<int> unreadCount() async {
-    final data = await _client.get('/notifications/unread-count') as Map<String, dynamic>;
+    final data =
+        await _client.get('/notifications/unread-count')
+            as Map<String, dynamic>;
     return (data['unread_count'] as num?)?.toInt() ?? 0;
   }
 

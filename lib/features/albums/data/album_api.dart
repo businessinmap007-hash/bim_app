@@ -19,7 +19,7 @@ class AlbumApi {
   Future<Album> create({required String titleAr, String? titleEn}) async {
     final data = await _client.post(
       '/profile/albums',
-      data: {'title_ar': titleAr, if (titleEn != null) 'title_en': titleEn},
+      data: {'title_ar': titleAr, 'title_en': ?titleEn},
     );
     return Album.fromJson(data as Map<String, dynamic>);
   }

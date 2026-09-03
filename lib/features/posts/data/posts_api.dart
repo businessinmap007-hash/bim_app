@@ -28,16 +28,21 @@ class PostsApi {
   final ApiClient _client;
   const PostsApi(this._client);
 
-  Future<PostsPage> mine({int page = 1, int perPage = 15}) => _page('/posts/mine', page, perPage);
+  Future<PostsPage> mine({int page = 1, int perPage = 15}) =>
+      _page('/posts/mine', page, perPage);
 
   /// The personal feed (GET /posts): every post from an account the caller
   /// follows, or whose category the caller belongs to/follows — see
   /// PostAudienceService::authorIdsFor. Same follow relationship
   /// FollowApi.follow()/unfollow() writes to.
-  Future<PostsPage> feed({int page = 1, int perPage = 15}) => _page('/posts', page, perPage);
+  Future<PostsPage> feed({int page = 1, int perPage = 15}) =>
+      _page('/posts', page, perPage);
 
   Future<PostsPage> _page(String path, int page, int perPage) async {
-    final body = await _client.getForBody(path, query: {'page': page, 'per_page': perPage});
+    final body = await _client.getForBody(
+      path,
+      query: {'page': page, 'per_page': perPage},
+    );
     final items = (body['data'] as List<dynamic>? ?? [])
         .map((e) => BusinessPost.fromJson(e as Map<String, dynamic>))
         .toList();
@@ -53,8 +58,15 @@ class PostsApi {
   /// $paginator])), so pagination fields sit at the top of `data` itself,
   /// not under a nested `meta`.
   Future<JobsPage> mineJobs({int page = 1, int perPage = 20}) async {
-    final data = await _client.get('/jobs/mine', query: {'page': page, 'per_page': perPage}) as Map<String, dynamic>;
-    final items = (data['data'] as List<dynamic>? ?? []).map((e) => JobPost.fromJson(e as Map<String, dynamic>)).toList();
+    final data =
+        await _client.get(
+              '/jobs/mine',
+              query: {'page': page, 'per_page': perPage},
+            )
+            as Map<String, dynamic>;
+    final items = (data['data'] as List<dynamic>? ?? [])
+        .map((e) => JobPost.fromJson(e as Map<String, dynamic>))
+        .toList();
     final currentPage = (data['current_page'] as num?)?.toInt() ?? 1;
     final lastPage = (data['last_page'] as num?)?.toInt() ?? 1;
     return JobsPage(items: items, hasMore: currentPage < lastPage);
@@ -81,7 +93,10 @@ class PostsApi {
         if (title != null && title.isNotEmpty) 'title': title,
         'body': body,
         for (var i = 0; i < images.length; i++)
-          'images[$i]': MultipartFile.fromBytes(images[i], filename: 'photo_$i.png'),
+          'images[$i]': MultipartFile.fromBytes(
+            images[i],
+            filename: 'photo_$i.png',
+          ),
       }),
     );
   }
@@ -91,7 +106,9 @@ class PostsApi {
   /// from a business's own page; this is where it's reviewed afterward.
   Future<List<FollowedAccount>> follows() async {
     final data = await _client.get('/follows') as List<dynamic>;
-    return data.map((e) => FollowedAccount.fromJson(e as Map<String, dynamic>)).toList();
+    return data
+        .map((e) => FollowedAccount.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   Future<void> unfollow(int businessId) async {
@@ -110,10 +127,11 @@ class PostsApi {
       '/jobs',
       data: {
         'category_id': categoryId,
-        if (categoryChildId != null) 'category_child_id': categoryChildId,
+        'category_child_id': ?categoryChildId,
         'title': title,
         'body': body,
-        if (requirements != null && requirements.isNotEmpty) 'requirements': requirements,
+        if (requirements != null && requirements.isNotEmpty)
+          'requirements': requirements,
         if (salary != null && salary.isNotEmpty) 'salary': salary,
       },
     );

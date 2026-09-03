@@ -10,7 +10,8 @@ class StaffApi {
   const StaffApi(this._client);
 
   Future<List<CapabilityOption>> capabilities() async {
-    final data = await _client.get('/business/capabilities') as Map<String, dynamic>;
+    final data =
+        await _client.get('/business/capabilities') as Map<String, dynamic>;
     return (data['capabilities'] as List<dynamic>? ?? [])
         .map((e) => CapabilityOption.fromJson(e as Map<String, dynamic>))
         .toList();
@@ -31,15 +32,17 @@ class StaffApi {
     required List<String> capabilities,
     bool isActive = true,
   }) async {
-    final data = await _client.post(
-      '/business/staff',
-      data: {
-        'phone': phone,
-        if (title != null && title.isNotEmpty) 'title': title,
-        'capabilities': capabilities,
-        'is_active': isActive,
-      },
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.post(
+              '/business/staff',
+              data: {
+                'phone': phone,
+                if (title != null && title.isNotEmpty) 'title': title,
+                'capabilities': capabilities,
+                'is_active': isActive,
+              },
+            )
+            as Map<String, dynamic>;
     return StaffMember.fromJson(data['staff'] as Map<String, dynamic>);
   }
 
@@ -49,14 +52,16 @@ class StaffApi {
     List<String>? capabilities,
     bool? isActive,
   }) async {
-    final data = await _client.patch(
-      '/business/staff/$userId',
-      data: {
-        if (title != null) 'title': title,
-        if (capabilities != null) 'capabilities': capabilities,
-        if (isActive != null) 'is_active': isActive,
-      },
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.patch(
+              '/business/staff/$userId',
+              data: {
+                'title': ?title,
+                'capabilities': ?capabilities,
+                'is_active': ?isActive,
+              },
+            )
+            as Map<String, dynamic>;
     return StaffMember.fromJson(data['staff'] as Map<String, dynamic>);
   }
 

@@ -2,7 +2,11 @@ import '../../../core/network/api_client.dart';
 import 'models/guarantee_level.dart';
 
 typedef GuaranteeMe = ({UserGuarantee? guarantee, bool hasUsableGuarantee});
-typedef ActivateResult = ({bool changed, String reason, UserGuarantee? guarantee});
+typedef ActivateResult = ({
+  bool changed,
+  String reason,
+  UserGuarantee? guarantee,
+});
 typedef UnlockResult = ({double unlockedAmount, UserGuarantee guarantee});
 typedef TransactionsPage = ({List<GuaranteeTransaction> items, bool hasMore});
 
@@ -17,7 +21,8 @@ class GuaranteeApi {
   const GuaranteeApi(this._client);
 
   Future<List<GuaranteeLevel>> levels() async {
-    final data = await _client.get('/guarantees/levels') as Map<String, dynamic>;
+    final data =
+        await _client.get('/guarantees/levels') as Map<String, dynamic>;
     return (data['levels'] as List<dynamic>? ?? [])
         .map((e) => GuaranteeLevel.fromJson(e as Map<String, dynamic>))
         .toList();
@@ -34,7 +39,9 @@ class GuaranteeApi {
   }
 
   Future<TransactionsPage> transactions({int page = 1}) async {
-    final data = await _client.get('/guarantees/transactions', query: {'page': page}) as Map<String, dynamic>;
+    final data =
+        await _client.get('/guarantees/transactions', query: {'page': page})
+            as Map<String, dynamic>;
     final items = (data['transactions'] as List<dynamic>? ?? [])
         .map((e) => GuaranteeTransaction.fromJson(e as Map<String, dynamic>))
         .toList();
@@ -45,10 +52,9 @@ class GuaranteeApi {
   }
 
   Future<ActivateResult> activate({int? levelId}) async {
-    final data = await _client.post(
-      '/guarantees/activate',
-      data: {if (levelId != null) 'level_id': levelId},
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.post('/guarantees/activate', data: {'level_id': ?levelId})
+            as Map<String, dynamic>;
     return (
       changed: data['changed'] as bool? ?? false,
       reason: data['reason'] as String? ?? '',
@@ -59,10 +65,13 @@ class GuaranteeApi {
   }
 
   Future<UnlockResult> unlock() async {
-    final data = await _client.post('/guarantees/unlock') as Map<String, dynamic>;
+    final data =
+        await _client.post('/guarantees/unlock') as Map<String, dynamic>;
     return (
       unlockedAmount: (data['unlocked_amount'] as num?)?.toDouble() ?? 0,
-      guarantee: UserGuarantee.fromJson(data['guarantee'] as Map<String, dynamic>),
+      guarantee: UserGuarantee.fromJson(
+        data['guarantee'] as Map<String, dynamic>,
+      ),
     );
   }
 }

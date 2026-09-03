@@ -16,11 +16,17 @@ class ProjectsApi {
   final ApiClient _client;
   const ProjectsApi(this._client);
 
-  Future<Paginated<Project>> list({String? status, int page = 1, int perPage = 20}) async {
-    final data = await _client.get(
-      '/business/projects',
-      query: {if (status != null) 'status': status, 'page': page, 'per_page': perPage},
-    ) as Map<String, dynamic>;
+  Future<Paginated<Project>> list({
+    String? status,
+    int page = 1,
+    int perPage = 20,
+  }) async {
+    final data =
+        await _client.get(
+              '/business/projects',
+              query: {'status': ?status, 'page': page, 'per_page': perPage},
+            )
+            as Map<String, dynamic>;
     return Paginated.fromJson(data, Project.fromJson);
   }
 
@@ -31,32 +37,38 @@ class ProjectsApi {
     DateTime? startsOn,
     DateTime? dueOn,
   }) async {
-    final data = await _client.post(
-      '/business/projects',
-      data: {
-        'title': title,
-        if (description != null && description.isNotEmpty) 'description': description,
-        if (reference != null && reference.isNotEmpty) 'reference': reference,
-        if (startsOn != null) 'starts_on': _dateOnly(startsOn),
-        if (dueOn != null) 'due_on': _dateOnly(dueOn),
-      },
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.post(
+              '/business/projects',
+              data: {
+                'title': title,
+                if (description != null && description.isNotEmpty)
+                  'description': description,
+                if (reference != null && reference.isNotEmpty)
+                  'reference': reference,
+                if (startsOn != null) 'starts_on': _dateOnly(startsOn),
+                if (dueOn != null) 'due_on': _dateOnly(dueOn),
+              },
+            )
+            as Map<String, dynamic>;
     return Project.fromJson(data['project'] as Map<String, dynamic>);
   }
 
   Future<ProjectDetail> show(int id) async {
-    final data = await _client.get('/business/projects/$id') as Map<String, dynamic>;
+    final data =
+        await _client.get('/business/projects/$id') as Map<String, dynamic>;
     return (
       project: Project.fromJson(data['project'] as Map<String, dynamic>),
-      timeline: ProjectTimeline.fromJson(data['timeline'] as Map<String, dynamic>),
+      timeline: ProjectTimeline.fromJson(
+        data['timeline'] as Map<String, dynamic>,
+      ),
     );
   }
 
   Future<Project> updateStatus(int id, String status) async {
-    final data = await _client.patch(
-      '/business/projects/$id',
-      data: {'status': status},
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.patch('/business/projects/$id', data: {'status': status})
+            as Map<String, dynamic>;
     return Project.fromJson(data['project'] as Map<String, dynamic>);
   }
 
@@ -82,13 +94,15 @@ class ProjectsApi {
     );
   }
 
-  Future<void> updateTaskProgress(int projectId, int taskId, {int? progress, String? status}) {
+  Future<void> updateTaskProgress(
+    int projectId,
+    int taskId, {
+    int? progress,
+    String? status,
+  }) {
     return _client.patch(
       '/business/projects/$projectId/tasks/$taskId/progress',
-      data: {
-        if (progress != null) 'progress': progress,
-        if (status != null) 'status': status,
-      },
+      data: {'progress': ?progress, 'status': ?status},
     );
   }
 

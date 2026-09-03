@@ -43,10 +43,14 @@ class DisputesApi {
     return data.map((e) => e.toString()).toList();
   }
 
-  Future<Paginated<Dispute>> myDisputes({String? status, String? role, int page = 1}) async {
+  Future<Paginated<Dispute>> myDisputes({
+    String? status,
+    String? role,
+    int page = 1,
+  }) async {
     final body = await _client.getForBody(
       '/disputes',
-      query: {if (status != null) 'status': status, if (role != null) 'role': role, 'page': page},
+      query: {'status': ?status, 'role': ?role, 'page': page},
     );
     return Paginated.fromJson(body, Dispute.fromJson);
   }
@@ -56,63 +60,108 @@ class DisputesApi {
     return DisputeDetail.fromJson(body);
   }
 
-  Future<Dispute> openForBooking(int bookingId, {required String reasonCode, String? reasonText}) async {
-    final data = await _client.post(
-      '/bookings/$bookingId/disputes',
-      data: {'reason_code': reasonCode, if (reasonText != null && reasonText.isNotEmpty) 'reason_text': reasonText},
-    ) as Map<String, dynamic>;
+  Future<Dispute> openForBooking(
+    int bookingId, {
+    required String reasonCode,
+    String? reasonText,
+  }) async {
+    final data =
+        await _client.post(
+              '/bookings/$bookingId/disputes',
+              data: {
+                'reason_code': reasonCode,
+                if (reasonText != null && reasonText.isNotEmpty)
+                  'reason_text': reasonText,
+              },
+            )
+            as Map<String, dynamic>;
     return Dispute.fromJson(data);
   }
 
-  Future<Dispute> openForOrder(int orderId, {required String reasonCode, String? reasonText}) async {
-    final data = await _client.post(
-      '/orders/$orderId/disputes',
-      data: {'reason_code': reasonCode, if (reasonText != null && reasonText.isNotEmpty) 'reason_text': reasonText},
-    ) as Map<String, dynamic>;
+  Future<Dispute> openForOrder(
+    int orderId, {
+    required String reasonCode,
+    String? reasonText,
+  }) async {
+    final data =
+        await _client.post(
+              '/orders/$orderId/disputes',
+              data: {
+                'reason_code': reasonCode,
+                if (reasonText != null && reasonText.isNotEmpty)
+                  'reason_text': reasonText,
+              },
+            )
+            as Map<String, dynamic>;
     return Dispute.fromJson(data);
   }
 
-  Future<Dispute> openForTrip(int reservationId, {required String reasonCode, String? reasonText}) async {
-    final data = await _client.post(
-      '/schedules/reservations/$reservationId/disputes',
-      data: {'reason_code': reasonCode, if (reasonText != null && reasonText.isNotEmpty) 'reason_text': reasonText},
-    ) as Map<String, dynamic>;
+  Future<Dispute> openForTrip(
+    int reservationId, {
+    required String reasonCode,
+    String? reasonText,
+  }) async {
+    final data =
+        await _client.post(
+              '/schedules/reservations/$reservationId/disputes',
+              data: {
+                'reason_code': reasonCode,
+                if (reasonText != null && reasonText.isNotEmpty)
+                  'reason_text': reasonText,
+              },
+            )
+            as Map<String, dynamic>;
     return Dispute.fromJson(data);
   }
 
   Future<Dispute> cooperate(int id) async {
-    final data = await _client.post('/disputes/$id/cooperate') as Map<String, dynamic>;
+    final data =
+        await _client.post('/disputes/$id/cooperate') as Map<String, dynamic>;
     return Dispute.fromJson(data);
   }
 
   Future<Dispute> requestArbitration(int id) async {
-    final data = await _client.post('/disputes/$id/request-arbitration') as Map<String, dynamic>;
+    final data =
+        await _client.post('/disputes/$id/request-arbitration')
+            as Map<String, dynamic>;
     return Dispute.fromJson(data);
   }
 
   Future<Dispute> agreeSettlement(int id) async {
-    final data = await _client.post('/disputes/$id/settlement') as Map<String, dynamic>;
+    final data =
+        await _client.post('/disputes/$id/settlement') as Map<String, dynamic>;
     return Dispute.fromJson(data);
   }
 
   Future<Dispute> withdrawSettlement(int id) async {
-    final data = await _client.delete('/disputes/$id/settlement') as Map<String, dynamic>;
+    final data =
+        await _client.delete('/disputes/$id/settlement')
+            as Map<String, dynamic>;
     return Dispute.fromJson(data);
   }
 
   Future<Dispute> confirmClosurePurge(int id) async {
-    final data = await _client.post('/disputes/$id/closure-confirmation') as Map<String, dynamic>;
+    final data =
+        await _client.post('/disputes/$id/closure-confirmation')
+            as Map<String, dynamic>;
     return Dispute.fromJson(data);
   }
 
   Future<SettlementPaymentsPage> settlementPayments(int id) async {
-    final data = await _client.get('/disputes/$id/settlement-payments') as Map<String, dynamic>;
+    final data =
+        await _client.get('/disputes/$id/settlement-payments')
+            as Map<String, dynamic>;
     return (
       current: data['current'] != null
-          ? DisputeSettlementProposal.fromJson(data['current'] as Map<String, dynamic>)
+          ? DisputeSettlementProposal.fromJson(
+              data['current'] as Map<String, dynamic>,
+            )
           : null,
       history: (data['history'] as List<dynamic>? ?? [])
-          .map((e) => DisputeSettlementProposal.fromJson(e as Map<String, dynamic>))
+          .map(
+            (e) =>
+                DisputeSettlementProposal.fromJson(e as Map<String, dynamic>),
+          )
           .toList(),
     );
   }
@@ -124,33 +173,53 @@ class DisputesApi {
     String? method,
     String? note,
   }) async {
-    final data = await _client.post(
-      '/disputes/$id/settlement-payments',
-      data: {
-        'payer_side': payerSide,
-        'amount': amount,
-        if (method != null && method.isNotEmpty) 'method': method,
-        if (note != null && note.isNotEmpty) 'note': note,
-      },
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.post(
+              '/disputes/$id/settlement-payments',
+              data: {
+                'payer_side': payerSide,
+                'amount': amount,
+                if (method != null && method.isNotEmpty) 'method': method,
+                if (note != null && note.isNotEmpty) 'note': note,
+              },
+            )
+            as Map<String, dynamic>;
     return DisputeSettlementProposal.fromJson(data);
   }
 
-  Future<DisputeSettlementProposal> acceptSettlementPayment(int id, int settlementId) async {
+  Future<DisputeSettlementProposal> acceptSettlementPayment(
+    int id,
+    int settlementId,
+  ) async {
     final data =
-        await _client.post('/disputes/$id/settlement-payments/$settlementId/accept') as Map<String, dynamic>;
+        await _client.post(
+              '/disputes/$id/settlement-payments/$settlementId/accept',
+            )
+            as Map<String, dynamic>;
     return DisputeSettlementProposal.fromJson(data);
   }
 
-  Future<DisputeSettlementProposal> rejectSettlementPayment(int id, int settlementId) async {
+  Future<DisputeSettlementProposal> rejectSettlementPayment(
+    int id,
+    int settlementId,
+  ) async {
     final data =
-        await _client.post('/disputes/$id/settlement-payments/$settlementId/reject') as Map<String, dynamic>;
+        await _client.post(
+              '/disputes/$id/settlement-payments/$settlementId/reject',
+            )
+            as Map<String, dynamic>;
     return DisputeSettlementProposal.fromJson(data);
   }
 
-  Future<DisputeSettlementProposal> confirmSettlementReceived(int id, int settlementId) async {
+  Future<DisputeSettlementProposal> confirmSettlementReceived(
+    int id,
+    int settlementId,
+  ) async {
     final data =
-        await _client.post('/disputes/$id/settlement-payments/$settlementId/received') as Map<String, dynamic>;
+        await _client.post(
+              '/disputes/$id/settlement-payments/$settlementId/received',
+            )
+            as Map<String, dynamic>;
     return DisputeSettlementProposal.fromJson(data);
   }
 
@@ -159,7 +228,10 @@ class DisputesApi {
   }
 
   Future<DisputeRoomPage> room(int id, {int perPage = 30}) async {
-    final body = await _client.getForBody('/disputes/$id/room', query: {'per_page': perPage});
+    final body = await _client.getForBody(
+      '/disputes/$id/room',
+      query: {'per_page': perPage},
+    );
     final meta = body['meta'] as Map<String, dynamic>? ?? const {};
     final thread = meta['thread'] as Map<String, dynamic>? ?? const {};
     final messages = (body['data'] as List<dynamic>? ?? [])
@@ -176,7 +248,8 @@ class DisputesApi {
   }
 
   Future<ConductCharter> conduct(int id) async {
-    final data = await _client.get('/disputes/$id/room/conduct') as Map<String, dynamic>;
+    final data =
+        await _client.get('/disputes/$id/room/conduct') as Map<String, dynamic>;
     return ConductCharter.fromJson(data);
   }
 
@@ -188,19 +261,27 @@ class DisputesApi {
     await _client.delete('/disputes/$id/room/conduct');
   }
 
-  Future<ThreadMessage> postMessage(int id, String body, {String? imagePath}) async {
-    final data = await _client.post(
-      '/disputes/$id/room/messages',
-      data: FormData.fromMap({
-        'body': body,
-        if (imagePath != null) 'attachments[]': await MultipartFile.fromFile(imagePath),
-      }),
-    ) as Map<String, dynamic>;
+  Future<ThreadMessage> postMessage(
+    int id,
+    String body, {
+    String? imagePath,
+  }) async {
+    final data =
+        await _client.post(
+              '/disputes/$id/room/messages',
+              data: FormData.fromMap({
+                'body': body,
+                if (imagePath != null)
+                  'attachments[]': await MultipartFile.fromFile(imagePath),
+              }),
+            )
+            as Map<String, dynamic>;
     return ThreadMessage.fromJson(data);
   }
 
   Future<ObligationsSummary> obligationsSummary() async {
-    final data = await _client.get('/me/dispute-obligations') as Map<String, dynamic>;
+    final data =
+        await _client.get('/me/dispute-obligations') as Map<String, dynamic>;
     return (
       blocked: data['blocked'] as bool? ?? false,
       outstanding: (data['outstanding'] as num?)?.toDouble() ?? 0,
@@ -215,7 +296,9 @@ class DisputesApi {
 
   /// Returns {settled, still_pending, outstanding, blocked}.
   Future<Map<String, dynamic>> settleObligations() async {
-    final data = await _client.post('/me/dispute-obligations/settle') as Map<String, dynamic>;
+    final data =
+        await _client.post('/me/dispute-obligations/settle')
+            as Map<String, dynamic>;
     return data;
   }
 }

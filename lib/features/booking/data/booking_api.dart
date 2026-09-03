@@ -9,26 +9,33 @@ class BookingApi {
   final ApiClient _client;
   const BookingApi(this._client);
 
-  Future<Paginated<Booking>> list({String? status, int page = 1, int perPage = 20}) async {
-    final data = await _client.get(
-      '/bookings',
-      query: {
-        if (status != null) 'status': status,
-        'page': page,
-        'per_page': perPage,
-      },
-    ) as Map<String, dynamic>;
-    return Paginated.fromJson(data['bookings'] as Map<String, dynamic>, Booking.fromJson);
+  Future<Paginated<Booking>> list({
+    String? status,
+    int page = 1,
+    int perPage = 20,
+  }) async {
+    final data =
+        await _client.get(
+              '/bookings',
+              query: {'status': ?status, 'page': page, 'per_page': perPage},
+            )
+            as Map<String, dynamic>;
+    return Paginated.fromJson(
+      data['bookings'] as Map<String, dynamic>,
+      Booking.fromJson,
+    );
   }
 
   Future<Booking> cancel(int id) async {
-    final data = await _client.post('/bookings/$id/cancel') as Map<String, dynamic>;
+    final data =
+        await _client.post('/bookings/$id/cancel') as Map<String, dynamic>;
     return Booking.fromJson(data['booking'] as Map<String, dynamic>);
   }
 
   /// What this business's booking screen must ask (Api\V2\BookingController::form).
   Future<BookingFormPayload> form(int businessId) async {
-    final data = await _client.get('/bookings/form/$businessId') as Map<String, dynamic>;
+    final data =
+        await _client.get('/bookings/form/$businessId') as Map<String, dynamic>;
     return BookingFormPayload.fromJson(data);
   }
 
@@ -47,24 +54,26 @@ class BookingApi {
     Map<String, dynamic>? meta,
     List<int> optionIds = const [],
   }) async {
-    final data = await _client.post(
-      '/bookings',
-      data: {
-        'business_id': businessId,
-        'service_id': serviceId,
-        if (bookableId != null) 'bookable_id': bookableId,
-        if (offeringId != null) 'offering_id': offeringId,
-        if (offeringType != null) 'offering_type': offeringType,
-        if (startsAt != null) 'starts_at': startsAt.toIso8601String(),
-        if (endsAt != null) 'ends_at': endsAt.toIso8601String(),
-        'all_day': allDay,
-        if (partySize != null) 'party_size': partySize,
-        if (quantity != null) 'quantity': quantity,
-        if (notes != null && notes.isNotEmpty) 'notes': notes,
-        if (meta != null && meta.isNotEmpty) 'meta': meta,
-        if (optionIds.isNotEmpty) 'option_ids': optionIds,
-      },
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.post(
+              '/bookings',
+              data: {
+                'business_id': businessId,
+                'service_id': serviceId,
+                'bookable_id': ?bookableId,
+                'offering_id': ?offeringId,
+                'offering_type': ?offeringType,
+                if (startsAt != null) 'starts_at': startsAt.toIso8601String(),
+                if (endsAt != null) 'ends_at': endsAt.toIso8601String(),
+                'all_day': allDay,
+                'party_size': ?partySize,
+                'quantity': ?quantity,
+                if (notes != null && notes.isNotEmpty) 'notes': notes,
+                if (meta != null && meta.isNotEmpty) 'meta': meta,
+                if (optionIds.isNotEmpty) 'option_ids': optionIds,
+              },
+            )
+            as Map<String, dynamic>;
     return Booking.fromJson(data['booking'] as Map<String, dynamic>);
   }
 
@@ -79,16 +88,21 @@ class BookingApi {
     DateTime? startsAt,
     DateTime? endsAt,
   }) async {
-    final data = await _client.get(
-      '/discovery/units/$businessId',
-      query: {
-        if (serviceId != null) 'service_id': serviceId,
-        if (itemType != null && itemType.isNotEmpty) 'item_type': itemType,
-        if (startsAt != null) 'starts_at': startsAt.toIso8601String(),
-        if (endsAt != null) 'ends_at': endsAt.toIso8601String(),
-      },
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.get(
+              '/discovery/units/$businessId',
+              query: {
+                'service_id': ?serviceId,
+                if (itemType != null && itemType.isNotEmpty)
+                  'item_type': itemType,
+                if (startsAt != null) 'starts_at': startsAt.toIso8601String(),
+                if (endsAt != null) 'ends_at': endsAt.toIso8601String(),
+              },
+            )
+            as Map<String, dynamic>;
     final kinds = data['kinds'] as List<dynamic>? ?? [];
-    return kinds.map((e) => UnitKindGroup.fromJson(e as Map<String, dynamic>)).toList();
+    return kinds
+        .map((e) => UnitKindGroup.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 }
