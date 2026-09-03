@@ -8,6 +8,7 @@ import '../../application/business_offers_providers.dart';
 import '../../data/models/offers_usage.dart';
 import 'boost_purchases_screen.dart';
 import 'offer_form_screen.dart';
+import 'offer_performance_screen.dart';
 
 const _statuses = <String?>[null, 'active', 'paused', 'expired', 'cancelled'];
 
@@ -159,6 +160,13 @@ class _BusinessOffersScreenState extends ConsumerState<BusinessOffersScreen> {
       appBar: AppBar(
         title: Text(l10n.businessOffersTitle),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.bar_chart_outlined),
+            tooltip: l10n.offerPerformanceTitle,
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const OfferPerformanceScreen()),
+            ),
+          ),
           IconButton(
             icon: const Icon(Icons.bolt_outlined),
             tooltip: l10n.businessOfferBoostPurchasesTitle,

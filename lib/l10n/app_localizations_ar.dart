@@ -3109,4 +3109,31 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get chatDeleteConfirm => 'حذف هذه المحادثة؟ لا يمكن التراجع عن هذا.';
+
+  @override
+  String get offerPerformanceTitle => 'أداء العروض';
+
+  @override
+  String get offerPerformanceEmpty => 'لا يوجد نشاط على عروضك بعد.';
+
+  @override
+  String get offerPerformanceByOffer => 'حسب العرض';
+
+  @override
+  String get offerEventView => 'مشاهدات';
+
+  @override
+  String get offerEventClick => 'نقرات';
+
+  @override
+  String get offerEventLead => 'استفسارات';
+
+  @override
+  String get offerEventConversion => 'تحويلات';
+
+  @override
+  String get offerEventShare => 'مشاركات';
+
+  @override
+  String get offerEventSave => 'حفظ';
 }

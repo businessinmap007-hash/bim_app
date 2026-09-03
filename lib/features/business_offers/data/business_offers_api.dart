@@ -2,6 +2,7 @@ import '../../../core/network/api_client.dart';
 import '../../offers/data/models/commercial_offer.dart';
 import 'models/offer_boost_package.dart';
 import 'models/offer_boost_purchase.dart';
+import 'models/offer_performance.dart';
 import 'models/offers_usage.dart';
 
 class BusinessOffersPage {
@@ -127,6 +128,16 @@ class BusinessOffersApi {
     final currentPage = (purchases['current_page'] as num?)?.toInt() ?? 1;
     final lastPage = (purchases['last_page'] as num?)?.toInt() ?? 1;
     return BoostPurchasesPage(items: items, hasMore: currentPage < lastPage);
+  }
+
+  /// Api\V2\OfferTrackingController::myPerformance — totals + per-offer
+  /// breakdown of view/click/lead/conversion/share/save events on this
+  /// business's own offers. The raw paginated event feed isn't surfaced
+  /// here — the two aggregate slices are what a "how are my offers doing"
+  /// screen actually needs.
+  Future<OfferPerformance> performance() async {
+    final data = await _client.get('/business/offers/performance/me') as Map<String, dynamic>;
+    return OfferPerformance.fromJson(data);
   }
 
   Map<String, dynamic> _payload({

@@ -3110,4 +3110,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatDeleteConfirm => 'Delete this chat? This cannot be undone.';
+
+  @override
+  String get offerPerformanceTitle => 'Offer Performance';
+
+  @override
+  String get offerPerformanceEmpty => 'No activity on your offers yet.';
+
+  @override
+  String get offerPerformanceByOffer => 'By offer';
+
+  @override
+  String get offerEventView => 'Views';
+
+  @override
+  String get offerEventClick => 'Clicks';
+
+  @override
+  String get offerEventLead => 'Leads';
+
+  @override
+  String get offerEventConversion => 'Conversions';
+
+  @override
+  String get offerEventShare => 'Shares';
+
+  @override
+  String get offerEventSave => 'Saves';
 }

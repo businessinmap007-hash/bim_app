@@ -6061,6 +6061,60 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'حذف هذه المحادثة؟ لا يمكن التراجع عن هذا.'**
   String get chatDeleteConfirm;
+
+  /// No description provided for @offerPerformanceTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أداء العروض'**
+  String get offerPerformanceTitle;
+
+  /// No description provided for @offerPerformanceEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد نشاط على عروضك بعد.'**
+  String get offerPerformanceEmpty;
+
+  /// No description provided for @offerPerformanceByOffer.
+  ///
+  /// In ar, this message translates to:
+  /// **'حسب العرض'**
+  String get offerPerformanceByOffer;
+
+  /// No description provided for @offerEventView.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشاهدات'**
+  String get offerEventView;
+
+  /// No description provided for @offerEventClick.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقرات'**
+  String get offerEventClick;
+
+  /// No description provided for @offerEventLead.
+  ///
+  /// In ar, this message translates to:
+  /// **'استفسارات'**
+  String get offerEventLead;
+
+  /// No description provided for @offerEventConversion.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحويلات'**
+  String get offerEventConversion;
+
+  /// No description provided for @offerEventShare.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشاركات'**
+  String get offerEventShare;
+
+  /// No description provided for @offerEventSave.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ'**
+  String get offerEventSave;
 }
 
 class _AppLocalizationsDelegate

@@ -8,6 +8,7 @@ import '../../retail_listings/application/retail_listings_providers.dart';
 import '../data/business_offers_api.dart';
 import '../data/models/offer_boost_package.dart';
 import '../data/models/offer_boost_purchase.dart';
+import '../data/models/offer_performance.dart';
 import '../data/models/offers_usage.dart';
 import '../data/offerable_items_api.dart';
 
@@ -25,6 +26,10 @@ final offerableItemsApiProvider = Provider<OfferableItemsApi>((ref) {
 
 final boostPackagesProvider = FutureProvider.autoDispose<List<OfferBoostPackage>>((ref) {
   return ref.watch(businessOffersApiProvider).boostPackages();
+});
+
+final offerPerformanceProvider = FutureProvider.autoDispose<OfferPerformance>((ref) {
+  return ref.watch(businessOffersApiProvider).performance();
 });
 
 class BusinessOffersState {

@@ -1044,5 +1044,14 @@
   "chatDeleteGroupConfirm": "Delete this group for everyone?",
   "chatLeaveGroupConfirm": "Leave this group?",
   "chatLeaveAction": "Leave",
-  "chatDeleteConfirm": "Delete this chat? This cannot be undone."
+  "chatDeleteConfirm": "Delete this chat? This cannot be undone.",
+  "offerPerformanceTitle": "Offer Performance",
+  "offerPerformanceEmpty": "No activity on your offers yet.",
+  "offerPerformanceByOffer": "By offer",
+  "offerEventView": "Views",
+  "offerEventClick": "Clicks",
+  "offerEventLead": "Leads",
+  "offerEventConversion": "Conversions",
+  "offerEventShare": "Shares",
+  "offerEventSave": "Saves"
 }

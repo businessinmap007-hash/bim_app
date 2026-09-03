@@ -1044,5 +1044,14 @@
   "chatDeleteGroupConfirm": "حذف هذه المجموعة للجميع؟",
   "chatLeaveGroupConfirm": "مغادرة هذه المجموعة؟",
   "chatLeaveAction": "مغادرة",
-  "chatDeleteConfirm": "حذف هذه المحادثة؟ لا يمكن التراجع عن هذا."
+  "chatDeleteConfirm": "حذف هذه المحادثة؟ لا يمكن التراجع عن هذا.",
+  "offerPerformanceTitle": "أداء العروض",
+  "offerPerformanceEmpty": "لا يوجد نشاط على عروضك بعد.",
+  "offerPerformanceByOffer": "حسب العرض",
+  "offerEventView": "مشاهدات",
+  "offerEventClick": "نقرات",
+  "offerEventLead": "استفسارات",
+  "offerEventConversion": "تحويلات",
+  "offerEventShare": "مشاركات",
+  "offerEventSave": "حفظ"
 }
