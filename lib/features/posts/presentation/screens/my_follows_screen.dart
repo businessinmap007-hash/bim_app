@@ -6,9 +6,9 @@ import '../../../business/presentation/screens/business_detail_screen.dart';
 import '../../application/posts_controller.dart';
 import '../../data/models/followed_account.dart';
 
-/// GET/DELETE /follows — the accounts feeding MyPostsScreen's "Following"
-/// tab, reached from that tab's app bar so the follow list can be reviewed
-/// and pruned without going back to each business's own page.
+/// GET/DELETE /follows — the accounts feeding Home's "Following" feed tab,
+/// reached from the drawer so the follow list can be reviewed and pruned
+/// without going back to each business's own page.
 class MyFollowsScreen extends ConsumerWidget {
   const MyFollowsScreen({super.key});
 

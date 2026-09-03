@@ -3080,4 +3080,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get businessOfferRefundableLabel => 'Refundable';
+
+  @override
+  String get drawerSectionProfile => 'Profile settings';
+
+  @override
+  String get drawerSectionJobsPosts => 'Jobs & posts';
+
+  @override
+  String get drawerSectionMyServices => 'My services';
 }

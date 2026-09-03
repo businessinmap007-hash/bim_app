@@ -3079,4 +3079,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get businessOfferRefundableLabel => 'قابل للاسترجاع';
+
+  @override
+  String get drawerSectionProfile => 'إعدادات البروفايل';
+
+  @override
+  String get drawerSectionJobsPosts => 'الوظائف والمنشورات';
+
+  @override
+  String get drawerSectionMyServices => 'خدماتي';
 }

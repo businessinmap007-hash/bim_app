@@ -1034,5 +1034,8 @@
   "businessOfferWhileStockLasts": "حتى نفاد الكمية",
   "businessOfferLimitedQuantity": "بعد كمية محدودة",
   "businessOfferQuantityLabel": "الكمية",
-  "businessOfferRefundableLabel": "قابل للاسترجاع"
+  "businessOfferRefundableLabel": "قابل للاسترجاع",
+  "drawerSectionProfile": "إعدادات البروفايل",
+  "drawerSectionJobsPosts": "الوظائف والمنشورات",
+  "drawerSectionMyServices": "خدماتي"
 }

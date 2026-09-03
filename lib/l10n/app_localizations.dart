@@ -6001,6 +6001,24 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'قابل للاسترجاع'**
   String get businessOfferRefundableLabel;
+
+  /// No description provided for @drawerSectionProfile.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعدادات البروفايل'**
+  String get drawerSectionProfile;
+
+  /// No description provided for @drawerSectionJobsPosts.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوظائف والمنشورات'**
+  String get drawerSectionJobsPosts;
+
+  /// No description provided for @drawerSectionMyServices.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدماتي'**
+  String get drawerSectionMyServices;
 }
 
 class _AppLocalizationsDelegate

@@ -1034,5 +1034,8 @@
   "businessOfferWhileStockLasts": "While stock lasts",
   "businessOfferLimitedQuantity": "After a limited quantity",
   "businessOfferQuantityLabel": "Quantity",
-  "businessOfferRefundableLabel": "Refundable"
+  "businessOfferRefundableLabel": "Refundable",
+  "drawerSectionProfile": "Profile settings",
+  "drawerSectionJobsPosts": "Jobs & posts",
+  "drawerSectionMyServices": "My services"
 }

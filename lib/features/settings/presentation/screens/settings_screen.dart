@@ -6,20 +6,8 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/application/auth_controller.dart';
 import '../../../auth/presentation/screens/account_deletion_screen.dart';
-import '../../../booking_settings/presentation/screens/booking_settings_screen.dart';
-import '../../../business_offers/presentation/screens/business_offers_screen.dart';
-import '../../../business_prices/presentation/screens/business_prices_screen.dart';
-import '../../../business_menu/presentation/screens/menu_items_screen.dart';
-import '../../../clinic_management/presentation/screens/clinic_management_screen.dart';
 import '../../../media/presentation/widgets/watermark_repeat_selector.dart';
-import '../../../merchant_account/presentation/screens/merchant_account_screen.dart';
-import '../../../prescriptions/presentation/screens/issued_prescriptions_screen.dart';
-import '../../../prescriptions/presentation/screens/pharmacy_queue_screen.dart';
-import '../../../projects/presentation/screens/projects_screen.dart';
 import '../../../ratings/presentation/screens/my_rating_screen.dart';
-import '../../../retail_listings/presentation/screens/retail_listings_screen.dart';
-import '../../../staff/presentation/screens/staff_screen.dart';
-import '../../../training_templates/presentation/screens/training_templates_screen.dart';
 import '../../application/locale_controller.dart';
 import '../../application/theme_mode_controller.dart';
 import '../../application/watermark_settings_controller.dart';
@@ -33,7 +21,6 @@ class SettingsScreen extends ConsumerWidget {
     final locale = ref.watch(localeControllerProvider);
     final themeMode = ref.watch(themeModeControllerProvider);
     final authState = ref.watch(authControllerProvider);
-    final isBusiness = authState is AuthSignedIn && authState.user.isBusiness;
     final authUser = authState is AuthSignedIn ? authState.user : null;
     final watermarkSettings = ref.watch(watermarkSettingsControllerProvider);
     final watermarkNotifier = ref.read(watermarkSettingsControllerProvider.notifier);
@@ -118,120 +105,6 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ],
           ),
-          if (isBusiness) ...[
-            const SizedBox(height: 24),
-            _SectionHeader(l10n.settingsServicesSection),
-            const SizedBox(height: 8),
-            _OptionCard(
-              children: [
-                ListTile(
-                  leading: const Icon(Icons.restaurant_menu_outlined),
-                  title: Text(l10n.menuManagementTitle),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const MenuItemsScreen()),
-                  ),
-                ),
-                const Divider(height: 1),
-                ListTile(
-                  leading: const Icon(Icons.inventory_2_outlined),
-                  title: Text(l10n.retailListingsTitle),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const RetailListingsScreen()),
-                  ),
-                ),
-                const Divider(height: 1),
-                ListTile(
-                  leading: const Icon(Icons.local_hospital_outlined),
-                  title: Text(l10n.clinicManagementTitle),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const ClinicManagementScreen()),
-                  ),
-                ),
-                const Divider(height: 1),
-                ListTile(
-                  leading: const Icon(Icons.receipt_long_outlined),
-                  title: Text(l10n.prescriptionsIssuedTitle),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const IssuedPrescriptionsScreen()),
-                  ),
-                ),
-                const Divider(height: 1),
-                ListTile(
-                  leading: const Icon(Icons.local_pharmacy_outlined),
-                  title: Text(l10n.pharmacyQueueTitle),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const PharmacyQueueScreen()),
-                  ),
-                ),
-                const Divider(height: 1),
-                ListTile(
-                  leading: const Icon(Icons.fitness_center_outlined),
-                  title: Text(l10n.trainingTemplatesTitle),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const TrainingTemplatesScreen()),
-                  ),
-                ),
-                const Divider(height: 1),
-                ListTile(
-                  leading: const Icon(Icons.sell_outlined),
-                  title: Text(l10n.businessPricesTitle),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const BusinessPricesScreen()),
-                  ),
-                ),
-                const Divider(height: 1),
-                ListTile(
-                  leading: const Icon(Icons.local_offer_outlined),
-                  title: Text(l10n.businessOffersTitle),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const BusinessOffersScreen()),
-                  ),
-                ),
-                const Divider(height: 1),
-                ListTile(
-                  leading: const Icon(Icons.event_available_outlined),
-                  title: Text(l10n.bookingSettingsTitle),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const BookingSettingsScreen()),
-                  ),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.badge_outlined),
-                  title: Text(l10n.staffTitle),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const StaffScreen()),
-                  ),
-                ),
-                ListTile(
-                  leading: const Icon(Icons.timeline_outlined),
-                  title: Text(l10n.projectsTitle),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const ProjectsScreen()),
-                  ),
-                ),
-                const Divider(height: 1),
-                ListTile(
-                  leading: const Icon(Icons.account_balance_outlined),
-                  title: Text(l10n.merchantAccountTitle),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const MerchantAccountScreen()),
-                  ),
-                ),
-              ],
-            ),
-          ],
           const SizedBox(height: 24),
           _SectionHeader(l10n.mediaWatermarkTitle),
           const SizedBox(height: 4),

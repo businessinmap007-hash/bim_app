@@ -15,10 +15,11 @@ import '../../features/jobs/presentation/screens/jobs_screen.dart';
 import '../../features/offers/presentation/screens/my_offer_follows_screen.dart';
 import '../../features/offers/presentation/screens/offers_screen.dart';
 import '../../features/orders/presentation/screens/orders_and_bookings_screen.dart';
-import '../../features/posts/presentation/screens/my_posts_screen.dart';
+import '../../features/posts/presentation/screens/my_follows_screen.dart';
 import '../../features/prescriptions/presentation/screens/prescriptions_screen.dart';
 import '../../features/retail_discovery/presentation/screens/shop_products_screen.dart';
 import '../../features/schedules/presentation/screens/trip_search_screen.dart';
+import '../../features/settings/presentation/screens/services_settings_screen.dart';
 import '../../features/training/presentation/screens/training_plans_screen.dart';
 import '../../features/wallet/presentation/screens/wallet_screen.dart';
 import '../../l10n/app_localizations.dart';
@@ -27,6 +28,14 @@ import '../../l10n/app_localizations.dart';
 /// icon (Scaffold shows it whenever `drawer:` is set). Settings and logout
 /// live here, not as loose AppBar icons or bottom-nav tabs: neither is a
 /// "primary destination" the way Home is.
+///
+/// Grouped into four sections rather than one flat list of 15+ items: profile
+/// & account settings, jobs/posts-adjacent follows, the business's own
+/// service-management screens (business accounts only), and everything else
+/// that's a customer's own activity/history ("My Services"). Posts
+/// management itself isn't here — it's Home's own tabs now (see
+/// [BusinessHomeScreen]/[CustomerHomeScreen]), with `+` in the AppBar to
+/// create one, so it never belonged in an account-utility menu either.
 class AppDrawer extends ConsumerWidget {
   const AppDrawer({super.key});
 
@@ -35,6 +44,9 @@ class AppDrawer extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final authState = ref.watch(authControllerProvider);
     final user = authState is AuthSignedIn ? authState.user : null;
+    final isBusiness = authState is AuthSignedIn && authState.user.isBusiness;
+
+    void close() => Navigator.of(context).pop();
 
     return Drawer(
       child: SafeArea(
@@ -69,61 +81,92 @@ class AppDrawer extends ConsumerWidget {
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
+                  _SectionHeader(l10n.drawerSectionProfile),
                   ListTile(
-                    leading: const Icon(Icons.dynamic_feed_outlined),
-                    title: Text(l10n.postsMyPostsTitle),
+                    leading: const Icon(Icons.settings_outlined),
+                    title: Text(l10n.settingsTitle),
                     onTap: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MyPostsScreen()));
+                      close();
+                      context.push('/settings');
                     },
                   ),
+
+                  _SectionHeader(l10n.drawerSectionJobsPosts),
+                  ListTile(
+                    leading: const Icon(Icons.work_outline),
+                    title: Text(l10n.jobsTitle),
+                    onTap: () {
+                      close();
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const JobsScreen()));
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.people_outline),
+                    title: Text(l10n.myFollowsTitle),
+                    onTap: () {
+                      close();
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MyFollowsScreen()));
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.local_offer_outlined),
+                    title: Text(l10n.offersTitle),
+                    onTap: () {
+                      close();
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const OffersScreen()));
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.notifications_none),
+                    title: Text(l10n.myOfferFollowsTitle),
+                    onTap: () {
+                      close();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const MyOfferFollowsScreen()),
+                      );
+                    },
+                  ),
+
+                  if (isBusiness) ...[
+                    _SectionHeader(l10n.settingsServicesSection),
+                    ListTile(
+                      leading: const Icon(Icons.storefront_outlined),
+                      title: Text(l10n.settingsServicesSection),
+                      onTap: () {
+                        close();
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => const ServicesSettingsScreen()),
+                        );
+                      },
+                    ),
+                  ],
+
+                  _SectionHeader(l10n.drawerSectionMyServices),
                   ListTile(
                     leading: const Icon(Icons.receipt_long_outlined),
                     title: Text(l10n.ordersBookingsTitle),
                     onTap: () {
-                      Navigator.of(context).pop();
+                      close();
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => const OrdersAndBookingsScreen()),
                       );
                     },
                   ),
                   ListTile(
-                    leading: const Icon(Icons.account_balance_wallet_outlined),
-                    title: Text(l10n.walletTitle),
+                    leading: const Icon(Icons.receipt_long_outlined),
+                    title: Text(l10n.prescriptionsTitle),
                     onTap: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const WalletScreen()));
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.calendar_month_outlined),
-                    title: Text(l10n.agendaTitle),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AgendaScreen()));
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.gavel_outlined),
-                    title: Text(l10n.finesTitle),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const FinesScreen()));
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.local_shipping_outlined),
-                    title: Text(l10n.tripSearchTitle),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const TripSearchScreen()));
+                      close();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const PrescriptionsScreen()),
+                      );
                     },
                   ),
                   ListTile(
                     leading: const Icon(Icons.local_hospital_outlined),
                     title: Text(l10n.myClinicAppointmentsTitle),
                     onTap: () {
-                      Navigator.of(context).pop();
+                      close();
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => const MyClinicAppointmentsScreen()),
                       );
@@ -133,37 +176,9 @@ class AppDrawer extends ConsumerWidget {
                     leading: const Icon(Icons.fitness_center_outlined),
                     title: Text(l10n.trainingPlansTitle),
                     onTap: () {
-                      Navigator.of(context).pop();
+                      close();
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => const TrainingPlansScreen()),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.receipt_long_outlined),
-                    title: Text(l10n.prescriptionsTitle),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const PrescriptionsScreen()),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.local_offer_outlined),
-                    title: Text(l10n.offersTitle),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const OffersScreen()));
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.notifications_none),
-                    title: Text(l10n.myOfferFollowsTitle),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const MyOfferFollowsScreen()),
                       );
                     },
                   ),
@@ -171,17 +186,65 @@ class AppDrawer extends ConsumerWidget {
                     leading: const Icon(Icons.storefront_outlined),
                     title: Text(l10n.shopProductsTitle),
                     onTap: () {
-                      Navigator.of(context).pop();
+                      close();
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => const ShopProductsScreen()),
                       );
                     },
                   ),
                   ListTile(
+                    leading: const Icon(Icons.account_balance_wallet_outlined),
+                    title: Text(l10n.walletTitle),
+                    onTap: () {
+                      close();
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const WalletScreen()));
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.calendar_month_outlined),
+                    title: Text(l10n.agendaTitle),
+                    onTap: () {
+                      close();
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AgendaScreen()));
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.local_shipping_outlined),
+                    title: Text(l10n.tripSearchTitle),
+                    onTap: () {
+                      close();
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const TripSearchScreen()));
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.lock_outline),
+                    title: Text(l10n.depositsTitle),
+                    onTap: () {
+                      close();
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const DepositsScreen()));
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.verified_user_outlined),
+                    title: Text(l10n.guaranteeTitle),
+                    onTap: () {
+                      close();
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GuaranteeScreen()));
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.gavel_outlined),
+                    title: Text(l10n.finesTitle),
+                    onTap: () {
+                      close();
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const FinesScreen()));
+                    },
+                  ),
+                  ListTile(
                     leading: const Icon(Icons.gavel_outlined),
                     title: Text(l10n.disputesTitle),
                     onTap: () {
-                      Navigator.of(context).pop();
+                      close();
                       Navigator.of(context).push(MaterialPageRoute(builder: (_) => const DisputesScreen()));
                     },
                   ),
@@ -189,40 +252,8 @@ class AppDrawer extends ConsumerWidget {
                     leading: const Icon(Icons.location_on_outlined),
                     title: Text(l10n.addressesTitle),
                     onTap: () {
-                      Navigator.of(context).pop();
+                      close();
                       Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AddressesScreen()));
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.verified_user_outlined),
-                    title: Text(l10n.guaranteeTitle),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const GuaranteeScreen()));
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.lock_outline),
-                    title: Text(l10n.depositsTitle),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const DepositsScreen()));
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.work_outline),
-                    title: Text(l10n.jobsTitle),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const JobsScreen()));
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.settings_outlined),
-                    title: Text(l10n.settingsTitle),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      context.push('/settings');
                     },
                   ),
                 ],
@@ -240,6 +271,24 @@ class AppDrawer extends ConsumerWidget {
             const SizedBox(height: 8),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _SectionHeader extends StatelessWidget {
+  final String label;
+  const _SectionHeader(this.label);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+      child: Text(
+        label,
+        style: Theme.of(
+          context,
+        ).textTheme.labelMedium?.copyWith(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.w700),
       ),
     );
   }

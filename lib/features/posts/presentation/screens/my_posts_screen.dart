@@ -3,120 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../auth/application/auth_controller.dart';
 import '../../../business/data/models/business_post.dart';
 import '../../../business/presentation/widgets/post_card.dart';
 import '../../../comments/presentation/screens/comments_screen.dart';
 import '../../application/posts_controller.dart';
 import '../../data/models/job_post.dart';
-import 'create_job_screen.dart';
-import 'create_post_screen.dart';
-import 'my_follows_screen.dart';
 
-/// "منشوراتي" — reached from the account Drawer, not the bottom nav (it's a
-/// personal utility screen, not a primary destination the way Home is).
-/// Three tabs: the followed-accounts feed (PostAudienceService's audience),
-/// my own posts, and — business accounts only — my own job postings.
-class MyPostsScreen extends ConsumerStatefulWidget {
-  const MyPostsScreen({super.key});
-
-  @override
-  ConsumerState<MyPostsScreen> createState() => _MyPostsScreenState();
-}
-
-class _MyPostsScreenState extends ConsumerState<MyPostsScreen> {
-  Future<void> _openCreateChoice() async {
-    final l10n = AppLocalizations.of(context)!;
-    final authState = ref.read(authControllerProvider);
-    final isBusiness = authState is AuthSignedIn && authState.user.isBusiness;
-
-    final choice = await showModalBottomSheet<String>(
-      context: context,
-      builder: (context) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.article_outlined),
-              title: Text(l10n.postsCreateChoicePost),
-              onTap: () => Navigator.of(context).pop('post'),
-            ),
-            if (isBusiness)
-              ListTile(
-                leading: const Icon(Icons.work_outline),
-                title: Text(l10n.postsCreateChoiceJob),
-                onTap: () => Navigator.of(context).pop('job'),
-              ),
-          ],
-        ),
-      ),
-    );
-
-    if (!mounted || choice == null) return;
-
-    if (choice == 'post') {
-      final created = await Navigator.of(
-        context,
-      ).push<bool>(MaterialPageRoute(builder: (_) => const CreatePostScreen()));
-      if (created == true) {
-        ref.read(myPostsControllerProvider.notifier).load();
-      }
-    } else {
-      final created = await Navigator.of(
-        context,
-      ).push<bool>(MaterialPageRoute(builder: (_) => const CreateJobScreen()));
-      if (created == true) {
-        ref.read(myJobsControllerProvider.notifier).load();
-      }
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final authState = ref.watch(authControllerProvider);
-    final isBusiness = authState is AuthSignedIn && authState.user.isBusiness;
-
-    final tabs = <Tab>[
-      Tab(text: l10n.postsTabFollowing),
-      Tab(text: l10n.postsTabMine),
-      if (isBusiness) Tab(text: l10n.postsTabJobs),
-    ];
-    final views = <Widget>[
-      const FollowedFeedTab(),
-      const MyPostsTab(),
-      if (isBusiness) const MyJobsTab(),
-    ];
-
-    return DefaultTabController(
-      length: tabs.length,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(l10n.postsMyPostsTitle),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.people_outline),
-              tooltip: l10n.myFollowsTitle,
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const MyFollowsScreen()),
-              ),
-            ),
-          ],
-          bottom: TabBar(tabs: tabs),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _openCreateChoice,
-          child: const Icon(Icons.add),
-        ),
-        body: TabBarView(children: views),
-      ),
-    );
-  }
-}
-
-/// The followed-accounts feed tab — public because [BusinessHomeScreen]
-/// embeds the same three tabs directly on the business dashboard, not just
-/// under the drawer's "My Posts" entry.
+/// The followed-accounts feed tab — public because [BusinessHomeScreen] and
+/// [CustomerHomeScreen] both embed it directly on Home; there is no separate
+/// "My Posts" screen any more.
 class FollowedFeedTab extends ConsumerStatefulWidget {
   const FollowedFeedTab({super.key});
 
