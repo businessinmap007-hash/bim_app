@@ -63,4 +63,58 @@ class OrdersApi {
       cartOrderId: data['cart_order_id'] as int?,
     );
   }
+
+  // ─────────────────────────── Business ───────────────────────────
+  // The business's own incoming-order queue — Api\V2\OrderController's
+  // business* methods. Dine-in (has a business_table_id) shows the table;
+  // delivery/pickup don't.
+
+  Future<OrdersPage> businessList({String? status, int page = 1, int perPage = 20}) async {
+    final body = await _client.getForBody(
+      '/business/orders',
+      query: {'status': ?status, 'page': page, 'per_page': perPage},
+    );
+    final items = (body['data'] as List<dynamic>? ?? [])
+        .map((e) => PlacedOrder.fromJson(e as Map<String, dynamic>))
+        .toList();
+    final meta = body['meta'] as Map<String, dynamic>? ?? const {};
+    final currentPage = (meta['current_page'] as num?)?.toInt() ?? 1;
+    final lastPage = (meta['last_page'] as num?)?.toInt() ?? 1;
+    return OrdersPage(items: items, hasMore: currentPage < lastPage);
+  }
+
+  Future<PlacedOrder> businessShow(int id) async {
+    final data = await _client.get('/business/orders/$id') as Map<String, dynamic>;
+    return PlacedOrder.fromJson(data);
+  }
+
+  Future<PlacedOrder> businessReject(int id, {String? reason}) async {
+    final data =
+        await _client.post(
+              '/business/orders/$id/reject',
+              data: {if (reason != null && reason.isNotEmpty) 'reason': reason},
+            )
+            as Map<String, dynamic>;
+    return PlacedOrder.fromJson(data);
+  }
+
+  Future<PlacedOrder> businessAccept(int id, {bool acceptWithoutDeposit = false}) async {
+    final data =
+        await _client.post(
+              '/business/orders/$id/accept',
+              data: {if (acceptWithoutDeposit) 'accept_without_deposit': true},
+            )
+            as Map<String, dynamic>;
+    return PlacedOrder.fromJson(data);
+  }
+
+  Future<PlacedOrder> businessPreparing(int id) async {
+    final data = await _client.post('/business/orders/$id/preparing') as Map<String, dynamic>;
+    return PlacedOrder.fromJson(data);
+  }
+
+  Future<PlacedOrder> businessReady(int id) async {
+    final data = await _client.post('/business/orders/$id/ready') as Map<String, dynamic>;
+    return PlacedOrder.fromJson(data);
+  }
 }

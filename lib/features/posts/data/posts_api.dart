@@ -101,6 +101,30 @@ class PostsApi {
     );
   }
 
+  /// POST /posts/{id} — title/body always; images only when [replaceImages]
+  /// is true, which wipes the whole gallery and re-adds exactly what's
+  /// passed (PostController::update's own replace-only contract — there's
+  /// no "keep these, drop those" middle ground on the wire).
+  Future<void> updatePost(
+    int postId, {
+    required String title,
+    required String body,
+    List<Uint8List>? replaceImages,
+  }) async {
+    await _client.post(
+      '/posts/$postId',
+      data: FormData.fromMap({
+        'title': title,
+        'body': body,
+        if (replaceImages != null) ...{
+          'replace_images': true,
+          for (var i = 0; i < replaceImages.length; i++)
+            'images[$i]': MultipartFile.fromBytes(replaceImages[i], filename: 'photo_$i.png'),
+        },
+      }),
+    );
+  }
+
   /// GET /follows — accounts feeding [feed]'s audience. See
   /// BusinessPageApi.follow/unfollow, which write the same relationship
   /// from a business's own page; this is where it's reviewed afterward.

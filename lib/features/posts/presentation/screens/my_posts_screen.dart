@@ -8,6 +8,7 @@ import '../../../business/presentation/widgets/post_card.dart';
 import '../../../comments/presentation/screens/comments_screen.dart';
 import '../../application/posts_controller.dart';
 import '../../data/models/job_post.dart';
+import 'edit_post_screen.dart';
 
 /// The followed-accounts feed tab — public because [BusinessHomeScreen] and
 /// [CustomerHomeScreen] both embed it directly on Home; there is no separate
@@ -175,6 +176,9 @@ class MyPostsTab extends ConsumerWidget {
                         onReact: (reaction) => ref
                             .read(myPostsControllerProvider.notifier)
                             .react(post.id, reaction),
+                        onEdit: () => Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => EditPostScreen(post: post)),
+                        ),
                         onDelete: () => _confirmDelete(context, ref, post),
                         onOpenComments: () => Navigator.of(context).push(
                           MaterialPageRoute(

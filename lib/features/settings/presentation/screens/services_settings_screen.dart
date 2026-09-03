@@ -7,6 +7,7 @@ import '../../../business_prices/presentation/screens/business_prices_screen.dar
 import '../../../business_menu/presentation/screens/menu_items_screen.dart';
 import '../../../clinic_management/presentation/screens/clinic_management_screen.dart';
 import '../../../merchant_account/presentation/screens/merchant_account_screen.dart';
+import '../../../orders/presentation/screens/business_orders_screen.dart';
 import '../../../prescriptions/presentation/screens/issued_prescriptions_screen.dart';
 import '../../../prescriptions/presentation/screens/pharmacy_queue_screen.dart';
 import '../../../projects/presentation/screens/projects_screen.dart';
@@ -41,6 +42,15 @@ class ServicesSettingsScreen extends StatelessWidget {
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const MenuItemsScreen()),
+                ),
+              ),
+              const Divider(height: 1),
+              ListTile(
+                leading: const Icon(Icons.receipt_long_outlined),
+                title: Text(l10n.businessOrdersTitle),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const BusinessOrdersScreen()),
                 ),
               ),
               const Divider(height: 1),

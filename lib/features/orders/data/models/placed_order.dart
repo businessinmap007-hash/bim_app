@@ -35,9 +35,10 @@ class OrderLineItem {
   }
 }
 
-/// Mirrors `OrderResource` — used for both the customer's order history list
-/// and detail (list responses omit `items`, matching `whenLoaded('items')`
-/// on the backend).
+/// Mirrors `OrderResource` — used for the customer's order history list and
+/// detail AND the business's incoming-order queue and detail (list
+/// responses omit `items`, matching `whenLoaded('items')` on the backend;
+/// `customer`/`table_label` are only ever loaded for the business side).
 class PlacedOrder {
   final int id;
   final String status;
@@ -54,6 +55,13 @@ class PlacedOrder {
   final String? address;
   final String? notes;
   final DateTime? createdAt;
+  final String? customerName;
+  final String? customerPhone;
+  final String? tableLabel;
+  final bool depositRequired;
+  final double? depositAmount;
+  final bool depositCovered;
+  final bool depositAcceptedWithoutCover;
 
   const PlacedOrder({
     required this.id,
@@ -71,15 +79,29 @@ class PlacedOrder {
     this.address,
     this.notes,
     this.createdAt,
+    this.customerName,
+    this.customerPhone,
+    this.tableLabel,
+    this.depositRequired = false,
+    this.depositAmount,
+    this.depositCovered = false,
+    this.depositAcceptedWithoutCover = false,
   });
 
   /// Mirrors `OrderController::cancelPendingOrder` — pending and not yet
   /// accepted by the business (prep_status still null).
   bool get isCancellable => status == 'pending' && prepStatus == null;
 
+  /// Mirrors `OrderController::businessAccept`'s own gate: an order with no
+  /// deposit/guarantee cover needs the business to explicitly accept the
+  /// risk (`accept_without_deposit=true`) rather than being silently taken.
+  bool get needsExplicitDepositDecision => depositRequired && !depositCovered;
+
   factory PlacedOrder.fromJson(Map<String, dynamic> json) {
     final business = json['business'] as Map<String, dynamic>?;
+    final customer = json['customer'] as Map<String, dynamic>?;
     final totals = json['totals'] as Map<String, dynamic>? ?? const {};
+    final deposit = json['deposit'] as Map<String, dynamic>? ?? const {};
     final items = json['items'] as List<dynamic>? ?? const [];
     return PlacedOrder(
       id: json['id'] as int,
@@ -100,6 +122,13 @@ class PlacedOrder {
       address: json['address'] as String?,
       notes: json['notes'] as String?,
       createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
+      customerName: customer?['name'] as String?,
+      customerPhone: customer?['phone'] as String?,
+      tableLabel: json['table_label'] as String?,
+      depositRequired: deposit['required'] as bool? ?? false,
+      depositAmount: (deposit['amount'] as num?)?.toDouble(),
+      depositCovered: deposit['covered'] as bool? ?? false,
+      depositAcceptedWithoutCover: deposit['accepted_without_cover'] as bool? ?? false,
     );
   }
 }

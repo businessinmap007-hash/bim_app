@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../data/models/business_post.dart';
 import 'post_image_carousel.dart';
 
@@ -11,12 +12,15 @@ import 'post_image_carousel.dart';
 ///
 /// [showAuthor] is on for a multi-author list (the followed-accounts feed)
 /// and off for a single business's own wall, where every card would repeat
-/// the same name. [onReact]/[onDelete] are opt-in per screen: the public
-/// wall stays read-only, the feed can like, and "my posts" can delete.
+/// the same name. [onReact]/[onEdit]/[onDelete] are opt-in per screen: the
+/// public wall stays read-only, the feed can like, and "my posts" can edit
+/// or delete — that menu shows whenever either is set, independently of
+/// [showAuthor], so it isn't silently hidden on the one screen it matters.
 class PostCard extends StatelessWidget {
   final BusinessPost post;
   final bool showAuthor;
   final ValueChanged<int>? onReact;
+  final VoidCallback? onEdit;
   final VoidCallback? onDelete;
   final VoidCallback? onOpenComments;
 
@@ -25,6 +29,7 @@ class PostCard extends StatelessWidget {
     required this.post,
     this.showAuthor = false,
     this.onReact,
+    this.onEdit,
     this.onDelete,
     this.onOpenComments,
   });
@@ -32,45 +37,64 @@ class PostCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final galleryImages = post.images.isNotEmpty
         ? post.images
         : (post.imageUrl != null ? [PostImage(id: 0, url: post.imageUrl!)] : const <PostImage>[]);
     final liked = post.myReaction == 1;
     final hasCaption = post.title.isNotEmpty || post.body.isNotEmpty;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (showAuthor && post.author != null)
+    // A bare Column with no card chrome (see the class doc) reads as one
+    // continuous surface once a second post follows right after it on the
+    // same background — this line is the only thing marking where one post
+    // ends and the next begins.
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: theme.dividerColor)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+        if ((showAuthor && post.author != null) || onEdit != null || onDelete != null)
           Padding(
             padding: const EdgeInsets.fromLTRB(12, 10, 4, 8),
             child: Row(
               children: [
-                CircleAvatar(
-                  radius: 16,
-                  backgroundImage: post.author!.logoUrl != null
-                      ? NetworkImage(post.author!.logoUrl!)
-                      : null,
-                  child: post.author!.logoUrl == null
-                      ? const Icon(Icons.storefront_outlined, size: 16)
-                      : null,
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    post.author!.name,
-                    style: theme.textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                if (showAuthor && post.author != null) ...[
+                  CircleAvatar(
+                    radius: 16,
+                    backgroundImage: post.author!.logoUrl != null
+                        ? NetworkImage(post.author!.logoUrl!)
+                        : null,
+                    child: post.author!.logoUrl == null
+                        ? const Icon(Icons.storefront_outlined, size: 16)
+                        : null,
                   ),
+                  const SizedBox(width: 8),
+                ],
+                Expanded(
+                  child: showAuthor && post.author != null
+                      ? Text(
+                          post.author!.name,
+                          style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        )
+                      : const SizedBox.shrink(),
                 ),
-                if (onDelete != null)
-                  IconButton(
-                    icon: const Icon(Icons.delete_outline, size: 20),
-                    onPressed: onDelete,
-                    visualDensity: VisualDensity.compact,
+                if (onEdit != null || onDelete != null)
+                  PopupMenuButton<String>(
+                    icon: const Icon(Icons.more_vert, size: 20),
+                    onSelected: (choice) {
+                      if (choice == 'edit') onEdit?.call();
+                      if (choice == 'delete') onDelete?.call();
+                    },
+                    itemBuilder: (context) => [
+                      if (onEdit != null)
+                        PopupMenuItem(value: 'edit', child: Text(l10n.postsEdit)),
+                      if (onDelete != null)
+                        PopupMenuItem(value: 'delete', child: Text(l10n.postsDelete)),
+                    ],
                   ),
               ],
             ),
@@ -174,10 +198,11 @@ class PostCard extends StatelessWidget {
                     ),
                   ),
                 ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

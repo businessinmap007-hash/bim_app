@@ -644,6 +644,21 @@ class AppLocalizationsAr extends AppLocalizations {
   String get postsDelete => 'حذف';
 
   @override
+  String get postsEdit => 'تعديل';
+
+  @override
+  String get postsEditTitle => 'تعديل المنشور';
+
+  @override
+  String get postsReplacePhotos => 'استبدال الصور';
+
+  @override
+  String get postsKeepCurrentPhotos => 'الاحتفاظ بالصور الحالية';
+
+  @override
+  String get postsSaveChanges => 'حفظ';
+
+  @override
   String get postsJobsClosed => 'مغلقة';
 
   @override
@@ -837,6 +852,91 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get bookingsTab => 'الحجوزات';
+
+  @override
+  String get businessOrdersTitle => 'الطلبات الواردة';
+
+  @override
+  String get businessOrdersFilterAll => 'الكل';
+
+  @override
+  String get businessOrdersFilterPending => 'قيد الانتظار';
+
+  @override
+  String get businessOrdersFilterCompleted => 'مكتملة';
+
+  @override
+  String get businessOrdersFilterCancelled => 'ملغاة';
+
+  @override
+  String get businessOrdersEmpty => 'لا توجد طلبات بعد.';
+
+  @override
+  String businessOrdersItemsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count عنصر',
+      many: '$count عنصرًا',
+      few: '$count عناصر',
+      two: 'عنصران',
+      one: 'عنصر واحد',
+      zero: 'لا عناصر',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get businessOrdersStatusPending => 'جديد';
+
+  @override
+  String get businessOrdersStatusAccepted => 'مقبول';
+
+  @override
+  String get businessOrdersStatusPreparing => 'قيد التحضير';
+
+  @override
+  String get businessOrdersStatusReady => 'جاهز';
+
+  @override
+  String get businessOrdersStatusCompleted => 'مكتمل';
+
+  @override
+  String get businessOrdersStatusCancelled => 'ملغى';
+
+  @override
+  String get businessOrdersItemsSection => 'الأصناف';
+
+  @override
+  String get businessOrdersTotal => 'الإجمالي';
+
+  @override
+  String get businessOrdersNotes => 'ملاحظات';
+
+  @override
+  String get businessOrdersDepositCovered => 'مغطّى بضمان أو ديبوزيت';
+
+  @override
+  String get businessOrdersDepositUncovered => 'بلا ضمان أو ديبوزيت';
+
+  @override
+  String get businessOrdersReject => 'رفض';
+
+  @override
+  String get businessOrdersAccept => 'قبول';
+
+  @override
+  String get businessOrdersRejectConfirm => 'رفض هذا الطلب؟ سيتم إشعار العميل.';
+
+  @override
+  String get businessOrdersNoDepositWarning =>
+      'هذا الطلب بلا ضمان أو ديبوزيت من العميل. هل تريد قبوله على مسؤوليتك؟';
+
+  @override
+  String get businessOrdersMarkPreparing => 'بدء التحضير';
+
+  @override
+  String get businessOrdersMarkReady => 'تم التجهيز';
 
   @override
   String get ordersEmpty => 'لا توجد طلبات بعد.';

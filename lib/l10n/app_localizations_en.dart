@@ -643,6 +643,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get postsDelete => 'Delete';
 
   @override
+  String get postsEdit => 'Edit';
+
+  @override
+  String get postsEditTitle => 'Edit post';
+
+  @override
+  String get postsReplacePhotos => 'Replace photos';
+
+  @override
+  String get postsKeepCurrentPhotos => 'Keep current photos';
+
+  @override
+  String get postsSaveChanges => 'Save';
+
+  @override
   String get postsJobsClosed => 'Closed';
 
   @override
@@ -830,6 +845,89 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bookingsTab => 'Bookings';
+
+  @override
+  String get businessOrdersTitle => 'Incoming orders';
+
+  @override
+  String get businessOrdersFilterAll => 'All';
+
+  @override
+  String get businessOrdersFilterPending => 'Pending';
+
+  @override
+  String get businessOrdersFilterCompleted => 'Completed';
+
+  @override
+  String get businessOrdersFilterCancelled => 'Cancelled';
+
+  @override
+  String get businessOrdersEmpty => 'No orders yet.';
+
+  @override
+  String businessOrdersItemsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count items',
+      one: '1 item',
+      zero: 'No items',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get businessOrdersStatusPending => 'New';
+
+  @override
+  String get businessOrdersStatusAccepted => 'Accepted';
+
+  @override
+  String get businessOrdersStatusPreparing => 'Preparing';
+
+  @override
+  String get businessOrdersStatusReady => 'Ready';
+
+  @override
+  String get businessOrdersStatusCompleted => 'Completed';
+
+  @override
+  String get businessOrdersStatusCancelled => 'Cancelled';
+
+  @override
+  String get businessOrdersItemsSection => 'Items';
+
+  @override
+  String get businessOrdersTotal => 'Total';
+
+  @override
+  String get businessOrdersNotes => 'Notes';
+
+  @override
+  String get businessOrdersDepositCovered => 'Covered by a deposit/guarantee';
+
+  @override
+  String get businessOrdersDepositUncovered => 'No deposit or guarantee cover';
+
+  @override
+  String get businessOrdersReject => 'Reject';
+
+  @override
+  String get businessOrdersAccept => 'Accept';
+
+  @override
+  String get businessOrdersRejectConfirm =>
+      'Reject this order? The customer will be notified.';
+
+  @override
+  String get businessOrdersNoDepositWarning =>
+      'This order has no deposit or guarantee cover. Accept anyway, at your own risk?';
+
+  @override
+  String get businessOrdersMarkPreparing => 'Start preparing';
+
+  @override
+  String get businessOrdersMarkReady => 'Mark ready';
 
   @override
   String get ordersEmpty => 'No orders yet.';

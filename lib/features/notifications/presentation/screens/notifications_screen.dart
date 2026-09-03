@@ -5,6 +5,7 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/notifications_providers.dart';
 import '../../data/models/app_notification.dart';
+import '../notification_navigator.dart';
 
 class NotificationsScreen extends ConsumerStatefulWidget {
   const NotificationsScreen({super.key});
@@ -130,8 +131,10 @@ class _NotificationTile extends ConsumerWidget {
             ? AppColors.accentGold.withValues(alpha: 0.08)
             : null,
         child: ListTile(
-          onTap: () =>
-              ref.read(notificationsControllerProvider.notifier).markRead(notification),
+          onTap: () {
+            ref.read(notificationsControllerProvider.notifier).markRead(notification);
+            openNotificationTarget(context, notification);
+          },
           leading: CircleAvatar(
             backgroundImage: actor?.imageUrl != null
                 ? NetworkImage(actor!.imageUrl!)

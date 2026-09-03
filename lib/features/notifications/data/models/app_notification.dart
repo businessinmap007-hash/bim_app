@@ -20,9 +20,12 @@ class NotificationActor {
 /// One row from `app_notifications`, as returned by NotificationCenterController
 /// (index/show) — the model's own columns serialized directly, not through an
 /// API Resource, so this mirrors AppNotification.php's `$fillable` shape.
-/// `action_url`/`action_type` point at backend/admin paths (e.g. `/offers/12`,
-/// `/wallet`) that don't correspond 1:1 to this app's routes yet, so they're
-/// kept but not used for navigation — tapping a notification only marks it read.
+/// `action_url` is a backend/admin path (e.g. `/offers/12`) that doesn't
+/// correspond to this app's routes and stays unused; `action_type` is a
+/// stable app-facing vocabulary (`open_wallet`, `open_business_order`, ...)
+/// dispatch() callers already choose deliberately — see
+/// NotificationNavigator, which reads it (with `notifiableId`) to route a
+/// tap to the right screen.
 class AppNotification {
   final int id;
   final String type;
@@ -34,6 +37,8 @@ class AppNotification {
   final String bodyEn;
   final String? actionType;
   final String? actionUrl;
+  final String? notifiableType;
+  final int? notifiableId;
   final NotificationActor? actor;
   final DateTime createdAt;
   final DateTime? readAt;
@@ -49,6 +54,8 @@ class AppNotification {
     required this.bodyEn,
     this.actionType,
     this.actionUrl,
+    this.notifiableType,
+    this.notifiableId,
     this.actor,
     required this.createdAt,
     this.readAt,
@@ -80,6 +87,8 @@ class AppNotification {
     bodyEn: json['body_en'] as String? ?? '',
     actionType: json['action_type'] as String?,
     actionUrl: json['action_url'] as String?,
+    notifiableType: json['notifiable_type'] as String?,
+    notifiableId: (json['notifiable_id'] as num?)?.toInt(),
     actor: json['actor'] != null
         ? NotificationActor.fromJson(json['actor'] as Map<String, dynamic>)
         : null,
@@ -98,6 +107,8 @@ class AppNotification {
     bodyEn: bodyEn,
     actionType: actionType,
     actionUrl: actionUrl,
+    notifiableType: notifiableType,
+    notifiableId: notifiableId,
     actor: actor,
     createdAt: createdAt,
     readAt: readAt ?? this.readAt,

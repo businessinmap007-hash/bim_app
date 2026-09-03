@@ -1298,6 +1298,36 @@ abstract class AppLocalizations {
   /// **'حذف'**
   String get postsDelete;
 
+  /// No description provided for @postsEdit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل'**
+  String get postsEdit;
+
+  /// No description provided for @postsEditTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل المنشور'**
+  String get postsEditTitle;
+
+  /// No description provided for @postsReplacePhotos.
+  ///
+  /// In ar, this message translates to:
+  /// **'استبدال الصور'**
+  String get postsReplacePhotos;
+
+  /// No description provided for @postsKeepCurrentPhotos.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاحتفاظ بالصور الحالية'**
+  String get postsKeepCurrentPhotos;
+
+  /// No description provided for @postsSaveChanges.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ'**
+  String get postsSaveChanges;
+
   /// No description provided for @postsJobsClosed.
   ///
   /// In ar, this message translates to:
@@ -1639,6 +1669,150 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الحجوزات'**
   String get bookingsTab;
+
+  /// No description provided for @businessOrdersTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطلبات الواردة'**
+  String get businessOrdersTitle;
+
+  /// No description provided for @businessOrdersFilterAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get businessOrdersFilterAll;
+
+  /// No description provided for @businessOrdersFilterPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيد الانتظار'**
+  String get businessOrdersFilterPending;
+
+  /// No description provided for @businessOrdersFilterCompleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتملة'**
+  String get businessOrdersFilterCompleted;
+
+  /// No description provided for @businessOrdersFilterCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغاة'**
+  String get businessOrdersFilterCancelled;
+
+  /// No description provided for @businessOrdersEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد طلبات بعد.'**
+  String get businessOrdersEmpty;
+
+  /// No description provided for @businessOrdersItemsCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{لا عناصر} one{عنصر واحد} two{عنصران} few{{count} عناصر} many{{count} عنصرًا} other{{count} عنصر}}'**
+  String businessOrdersItemsCount(int count);
+
+  /// No description provided for @businessOrdersStatusPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'جديد'**
+  String get businessOrdersStatusPending;
+
+  /// No description provided for @businessOrdersStatusAccepted.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقبول'**
+  String get businessOrdersStatusAccepted;
+
+  /// No description provided for @businessOrdersStatusPreparing.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيد التحضير'**
+  String get businessOrdersStatusPreparing;
+
+  /// No description provided for @businessOrdersStatusReady.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاهز'**
+  String get businessOrdersStatusReady;
+
+  /// No description provided for @businessOrdersStatusCompleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتمل'**
+  String get businessOrdersStatusCompleted;
+
+  /// No description provided for @businessOrdersStatusCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغى'**
+  String get businessOrdersStatusCancelled;
+
+  /// No description provided for @businessOrdersItemsSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأصناف'**
+  String get businessOrdersItemsSection;
+
+  /// No description provided for @businessOrdersTotal.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجمالي'**
+  String get businessOrdersTotal;
+
+  /// No description provided for @businessOrdersNotes.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات'**
+  String get businessOrdersNotes;
+
+  /// No description provided for @businessOrdersDepositCovered.
+  ///
+  /// In ar, this message translates to:
+  /// **'مغطّى بضمان أو ديبوزيت'**
+  String get businessOrdersDepositCovered;
+
+  /// No description provided for @businessOrdersDepositUncovered.
+  ///
+  /// In ar, this message translates to:
+  /// **'بلا ضمان أو ديبوزيت'**
+  String get businessOrdersDepositUncovered;
+
+  /// No description provided for @businessOrdersReject.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفض'**
+  String get businessOrdersReject;
+
+  /// No description provided for @businessOrdersAccept.
+  ///
+  /// In ar, this message translates to:
+  /// **'قبول'**
+  String get businessOrdersAccept;
+
+  /// No description provided for @businessOrdersRejectConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفض هذا الطلب؟ سيتم إشعار العميل.'**
+  String get businessOrdersRejectConfirm;
+
+  /// No description provided for @businessOrdersNoDepositWarning.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا الطلب بلا ضمان أو ديبوزيت من العميل. هل تريد قبوله على مسؤوليتك؟'**
+  String get businessOrdersNoDepositWarning;
+
+  /// No description provided for @businessOrdersMarkPreparing.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدء التحضير'**
+  String get businessOrdersMarkPreparing;
+
+  /// No description provided for @businessOrdersMarkReady.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التجهيز'**
+  String get businessOrdersMarkReady;
 
   /// No description provided for @ordersEmpty.
   ///
