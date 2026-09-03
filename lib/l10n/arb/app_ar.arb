@@ -1053,5 +1053,14 @@
   "offerEventLead": "استفسارات",
   "offerEventConversion": "تحويلات",
   "offerEventShare": "مشاركات",
-  "offerEventSave": "حفظ"
+  "offerEventSave": "حفظ",
+  "tableScanTitle": "طلب طاولة",
+  "tableScanHint": "أدخل الكود المطبوع على طاولتك للانضمام إلى طلبها.",
+  "tableScanCodeLabel": "كود الطاولة",
+  "tableScanJoin": "انضمام للطاولة",
+  "tableCallStaff": "نداء الطاقم",
+  "tableCallWaiter": "نداء النادل",
+  "tableCallBill": "طلب الحساب",
+  "tableCallAssistance": "طلب مساعدة",
+  "tableCallSent": "تم الإرسال إلى الطاقم."
 }

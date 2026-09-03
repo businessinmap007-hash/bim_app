@@ -3136,4 +3136,32 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get offerEventSave => 'حفظ';
+
+  @override
+  String get tableScanTitle => 'طلب طاولة';
+
+  @override
+  String get tableScanHint =>
+      'أدخل الكود المطبوع على طاولتك للانضمام إلى طلبها.';
+
+  @override
+  String get tableScanCodeLabel => 'كود الطاولة';
+
+  @override
+  String get tableScanJoin => 'انضمام للطاولة';
+
+  @override
+  String get tableCallStaff => 'نداء الطاقم';
+
+  @override
+  String get tableCallWaiter => 'نداء النادل';
+
+  @override
+  String get tableCallBill => 'طلب الحساب';
+
+  @override
+  String get tableCallAssistance => 'طلب مساعدة';
+
+  @override
+  String get tableCallSent => 'تم الإرسال إلى الطاقم.';
 }

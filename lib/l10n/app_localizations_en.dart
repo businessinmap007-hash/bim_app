@@ -3137,4 +3137,32 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get offerEventSave => 'Saves';
+
+  @override
+  String get tableScanTitle => 'Table order';
+
+  @override
+  String get tableScanHint =>
+      'Enter the code printed on your table to join its order.';
+
+  @override
+  String get tableScanCodeLabel => 'Table code';
+
+  @override
+  String get tableScanJoin => 'Join table';
+
+  @override
+  String get tableCallStaff => 'Call staff';
+
+  @override
+  String get tableCallWaiter => 'Call waiter';
+
+  @override
+  String get tableCallBill => 'Ask for the bill';
+
+  @override
+  String get tableCallAssistance => 'Ask for assistance';
+
+  @override
+  String get tableCallSent => 'Sent to staff.';
 }

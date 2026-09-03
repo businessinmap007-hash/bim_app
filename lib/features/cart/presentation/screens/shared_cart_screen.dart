@@ -3,17 +3,65 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
+import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../business/presentation/screens/business_detail_screen.dart';
+import '../../../table/application/table_providers.dart';
 import '../../application/shared_cart_providers.dart';
 import '../../data/models/shared_cart.dart';
 
 /// The group cart: a host's cart shared by token, friends join and each adds
 /// their own lines. Cash on arrival — each participant's own total is shown,
-/// but there is no per-participant payment step here.
+/// but there is no per-participant payment step here. [tableToken] is set
+/// only when this cart was opened by scanning a restaurant table
+/// (TableScanScreen) — it's what lets this same screen also offer "call
+/// waiter" / "ask for the bill", Api\V2\TableController::call.
 class SharedCartScreen extends ConsumerWidget {
   final int orderId;
-  const SharedCartScreen({super.key, required this.orderId});
+  final String? tableToken;
+  const SharedCartScreen({super.key, required this.orderId, this.tableToken});
+
+  Future<void> _callStaff(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    final type = await showModalBottomSheet<String>(
+      context: context,
+      builder: (sheetContext) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.room_service_outlined),
+              title: Text(l10n.tableCallWaiter),
+              onTap: () => Navigator.pop(sheetContext, 'waiter'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.receipt_long_outlined),
+              title: Text(l10n.tableCallBill),
+              onTap: () => Navigator.pop(sheetContext, 'bill'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.help_outline),
+              title: Text(l10n.tableCallAssistance),
+              onTap: () => Navigator.pop(sheetContext, 'assistance'),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (type == null || !context.mounted) return;
+    try {
+      await ref.read(tableApiProvider).call(tableToken!, type);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.tableCallSent)));
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(e is ApiException ? e.message : l10n.commonSomethingWentWrong)));
+      }
+    }
+  }
 
   Future<void> _addItems(BuildContext context, SharedCart cart) async {
     if (cart.businessId == null) return;
@@ -95,6 +143,12 @@ class SharedCartScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(cart?.businessName ?? l10n.sharedCartTitle),
         actions: [
+          if (tableToken != null)
+            IconButton(
+              icon: const Icon(Icons.room_service_outlined),
+              tooltip: l10n.tableCallStaff,
+              onPressed: () => _callStaff(context, ref),
+            ),
           if (cart?.shareToken != null)
             IconButton(
               icon: const Icon(Icons.share_outlined),

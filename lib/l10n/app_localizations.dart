@@ -6115,6 +6115,60 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'حفظ'**
   String get offerEventSave;
+
+  /// No description provided for @tableScanTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب طاولة'**
+  String get tableScanTitle;
+
+  /// No description provided for @tableScanHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل الكود المطبوع على طاولتك للانضمام إلى طلبها.'**
+  String get tableScanHint;
+
+  /// No description provided for @tableScanCodeLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'كود الطاولة'**
+  String get tableScanCodeLabel;
+
+  /// No description provided for @tableScanJoin.
+  ///
+  /// In ar, this message translates to:
+  /// **'انضمام للطاولة'**
+  String get tableScanJoin;
+
+  /// No description provided for @tableCallStaff.
+  ///
+  /// In ar, this message translates to:
+  /// **'نداء الطاقم'**
+  String get tableCallStaff;
+
+  /// No description provided for @tableCallWaiter.
+  ///
+  /// In ar, this message translates to:
+  /// **'نداء النادل'**
+  String get tableCallWaiter;
+
+  /// No description provided for @tableCallBill.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب الحساب'**
+  String get tableCallBill;
+
+  /// No description provided for @tableCallAssistance.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب مساعدة'**
+  String get tableCallAssistance;
+
+  /// No description provided for @tableCallSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الإرسال إلى الطاقم.'**
+  String get tableCallSent;
 }
 
 class _AppLocalizationsDelegate

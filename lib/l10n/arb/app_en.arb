@@ -1053,5 +1053,14 @@
   "offerEventLead": "Leads",
   "offerEventConversion": "Conversions",
   "offerEventShare": "Shares",
-  "offerEventSave": "Saves"
+  "offerEventSave": "Saves",
+  "tableScanTitle": "Table order",
+  "tableScanHint": "Enter the code printed on your table to join its order.",
+  "tableScanCodeLabel": "Table code",
+  "tableScanJoin": "Join table",
+  "tableCallStaff": "Call staff",
+  "tableCallWaiter": "Call waiter",
+  "tableCallBill": "Ask for the bill",
+  "tableCallAssistance": "Ask for assistance",
+  "tableCallSent": "Sent to staff."
 }
