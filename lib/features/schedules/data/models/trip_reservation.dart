@@ -13,6 +13,9 @@ class TripReservation {
   final String status;
   final String? notes;
   final DateTime? createdAt;
+  // Only present on the carrier's own incoming() list — the backend never
+  // serializes a client name, just the id, so that's all there is to show.
+  final int? clientId;
 
   const TripReservation({
     required this.id,
@@ -24,6 +27,7 @@ class TripReservation {
     required this.status,
     this.notes,
     this.createdAt,
+    this.clientId,
   });
 
   bool get isCancellable => status == 'pending' || status == 'confirmed';
@@ -38,5 +42,6 @@ class TripReservation {
     status: json['status'] as String? ?? 'pending',
     notes: json['notes'] as String?,
     createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
+    clientId: (json['client_id'] as num?)?.toInt(),
   );
 }

@@ -3164,4 +3164,95 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get tableCallSent => 'تم الإرسال إلى الطاقم.';
+
+  @override
+  String get myTripSchedulesTitle => 'خطوط سيري';
+
+  @override
+  String get incomingReservationsTitle => 'الحجوزات الواردة';
+
+  @override
+  String get tripScheduleAdd => 'نشر خط سير';
+
+  @override
+  String get tripScheduleAddTitle => 'خط سير جديد';
+
+  @override
+  String get tripSchedulesEmpty => 'لا توجد خطوط سير منشورة بعد.';
+
+  @override
+  String get tripScheduleDeleteConfirm => 'حذف خط السير هذا؟';
+
+  @override
+  String get tripScheduleModeLabel => 'نوع الرحلة';
+
+  @override
+  String get tripSchedulePatternLabel => 'تعمل هذه الرحلة...';
+
+  @override
+  String get tripSchedulePatternWeekly => 'أسبوعيًا في يوم ثابت';
+
+  @override
+  String get tripSchedulePatternOneOff => 'في تاريخ محدد';
+
+  @override
+  String get tripSchedulePatternOnDemand => 'عند الطلب';
+
+  @override
+  String get tripScheduleDayLabel => 'يوم الأسبوع';
+
+  @override
+  String get tripScheduleDateLabel => 'التاريخ';
+
+  @override
+  String get tripScheduleDatePickRequired => 'اختر تاريخًا لهذه الرحلة.';
+
+  @override
+  String get tripScheduleDepartureTimeLabel => 'وقت الانطلاق';
+
+  @override
+  String get tripScheduleCapacityLabel => 'السعة';
+
+  @override
+  String get tripSchedulePriceLabel => 'السعر لكل وحدة';
+
+  @override
+  String get tripScheduleDepositLabel => 'العربون لكل وحدة (اختياري)';
+
+  @override
+  String get incomingReservationsEmpty => 'لا توجد حجوزات بعد.';
+
+  @override
+  String get tripReservationStatusAll => 'الكل';
+
+  @override
+  String get tripReservationStatusPending => 'قيد الانتظار';
+
+  @override
+  String get tripReservationStatusConfirmed => 'مؤكد';
+
+  @override
+  String get tripReservationStatusCompleted => 'مكتمل';
+
+  @override
+  String get tripReservationStatusCancelled => 'ملغى';
+
+  @override
+  String tripReservationClient(int id) {
+    return 'عميل #$id';
+  }
+
+  @override
+  String tripReservationUnitsCount(int count) {
+    return '$count وحدة';
+  }
+
+  @override
+  String get tripReservationConfirmAction => 'تأكيد';
+
+  @override
+  String get tripReservationCompleteAction => 'إكمال';
+
+  @override
+  String get tripReservationRejectAction => 'رفض';
 }

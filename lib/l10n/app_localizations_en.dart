@@ -3165,4 +3165,95 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tableCallSent => 'Sent to staff.';
+
+  @override
+  String get myTripSchedulesTitle => 'My Trip Schedules';
+
+  @override
+  String get incomingReservationsTitle => 'Incoming Reservations';
+
+  @override
+  String get tripScheduleAdd => 'Publish route';
+
+  @override
+  String get tripScheduleAddTitle => 'New trip schedule';
+
+  @override
+  String get tripSchedulesEmpty => 'No trip schedules published yet.';
+
+  @override
+  String get tripScheduleDeleteConfirm => 'Delete this trip schedule?';
+
+  @override
+  String get tripScheduleModeLabel => 'Trip type';
+
+  @override
+  String get tripSchedulePatternLabel => 'This trip runs...';
+
+  @override
+  String get tripSchedulePatternWeekly => 'Weekly, on a fixed day';
+
+  @override
+  String get tripSchedulePatternOneOff => 'On a specific date';
+
+  @override
+  String get tripSchedulePatternOnDemand => 'On demand';
+
+  @override
+  String get tripScheduleDayLabel => 'Day of the week';
+
+  @override
+  String get tripScheduleDateLabel => 'Date';
+
+  @override
+  String get tripScheduleDatePickRequired => 'Pick a date for this trip.';
+
+  @override
+  String get tripScheduleDepartureTimeLabel => 'Departure time';
+
+  @override
+  String get tripScheduleCapacityLabel => 'Capacity';
+
+  @override
+  String get tripSchedulePriceLabel => 'Price per unit';
+
+  @override
+  String get tripScheduleDepositLabel => 'Deposit per unit (optional)';
+
+  @override
+  String get incomingReservationsEmpty => 'No reservations yet.';
+
+  @override
+  String get tripReservationStatusAll => 'All';
+
+  @override
+  String get tripReservationStatusPending => 'Pending';
+
+  @override
+  String get tripReservationStatusConfirmed => 'Confirmed';
+
+  @override
+  String get tripReservationStatusCompleted => 'Completed';
+
+  @override
+  String get tripReservationStatusCancelled => 'Cancelled';
+
+  @override
+  String tripReservationClient(int id) {
+    return 'Client #$id';
+  }
+
+  @override
+  String tripReservationUnitsCount(int count) {
+    return '$count units';
+  }
+
+  @override
+  String get tripReservationConfirmAction => 'Confirm';
+
+  @override
+  String get tripReservationCompleteAction => 'Complete';
+
+  @override
+  String get tripReservationRejectAction => 'Reject';
 }

@@ -48,6 +48,48 @@ class SchedulesApi {
 
   Future<void> cancel(int reservationId) => _client.post('/schedules/reservations/$reservationId/cancel');
 
+  // ─────────────────────── Carrier (business) side ───────────────────────
+
+  Future<Paginated<TripSchedule>> myTripSchedules({int page = 1}) async {
+    final data = await _client.get(
+      '/business/schedules',
+      query: {'page': page},
+    ) as Map<String, dynamic>;
+    return Paginated.fromJson(data, TripSchedule.fromJson);
+  }
+
+  Future<TripSchedule> createTripSchedule(Map<String, dynamic> payload) async {
+    final data = await _client.post('/business/schedules', data: payload) as Map<String, dynamic>;
+    return TripSchedule.fromJson(data['schedule'] as Map<String, dynamic>);
+  }
+
+  Future<TripSchedule> updateTripSchedule(int id, Map<String, dynamic> payload) async {
+    final data = await _client.patch('/business/schedules/$id', data: payload) as Map<String, dynamic>;
+    return TripSchedule.fromJson(data['schedule'] as Map<String, dynamic>);
+  }
+
+  Future<void> deleteTripSchedule(int id) => _client.delete('/business/schedules/$id');
+
+  Future<Paginated<TripReservation>> incomingReservations({String? status, int page = 1}) async {
+    final data = await _client.get(
+      '/business/schedules/reservations',
+      query: {if (status != null) 'status': status, 'page': page},
+    ) as Map<String, dynamic>;
+    return Paginated.fromJson(data, TripReservation.fromJson);
+  }
+
+  Future<TripReservation> confirmReservation(int id) async {
+    final data = await _client.post('/business/schedules/reservations/$id/confirm') as Map<String, dynamic>;
+    return TripReservation.fromJson(data['reservation'] as Map<String, dynamic>);
+  }
+
+  Future<TripReservation> completeReservation(int id) async {
+    final data = await _client.post('/business/schedules/reservations/$id/complete') as Map<String, dynamic>;
+    return TripReservation.fromJson(data['reservation'] as Map<String, dynamic>);
+  }
+
+  Future<void> rejectReservation(int id) => _client.post('/business/schedules/reservations/$id/reject');
+
   String _dateOnly(DateTime d) =>
       '${d.year.toString().padLeft(4, '0')}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
 }

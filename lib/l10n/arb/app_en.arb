@@ -1062,5 +1062,40 @@
   "tableCallWaiter": "Call waiter",
   "tableCallBill": "Ask for the bill",
   "tableCallAssistance": "Ask for assistance",
-  "tableCallSent": "Sent to staff."
+  "tableCallSent": "Sent to staff.",
+  "myTripSchedulesTitle": "My Trip Schedules",
+  "incomingReservationsTitle": "Incoming Reservations",
+  "tripScheduleAdd": "Publish route",
+  "tripScheduleAddTitle": "New trip schedule",
+  "tripSchedulesEmpty": "No trip schedules published yet.",
+  "tripScheduleDeleteConfirm": "Delete this trip schedule?",
+  "tripScheduleModeLabel": "Trip type",
+  "tripSchedulePatternLabel": "This trip runs...",
+  "tripSchedulePatternWeekly": "Weekly, on a fixed day",
+  "tripSchedulePatternOneOff": "On a specific date",
+  "tripSchedulePatternOnDemand": "On demand",
+  "tripScheduleDayLabel": "Day of the week",
+  "tripScheduleDateLabel": "Date",
+  "tripScheduleDatePickRequired": "Pick a date for this trip.",
+  "tripScheduleDepartureTimeLabel": "Departure time",
+  "tripScheduleCapacityLabel": "Capacity",
+  "tripSchedulePriceLabel": "Price per unit",
+  "tripScheduleDepositLabel": "Deposit per unit (optional)",
+  "incomingReservationsEmpty": "No reservations yet.",
+  "tripReservationStatusAll": "All",
+  "tripReservationStatusPending": "Pending",
+  "tripReservationStatusConfirmed": "Confirmed",
+  "tripReservationStatusCompleted": "Completed",
+  "tripReservationStatusCancelled": "Cancelled",
+  "tripReservationClient": "Client #{id}",
+  "@tripReservationClient": {
+    "placeholders": { "id": { "type": "int" } }
+  },
+  "tripReservationUnitsCount": "{count} units",
+  "@tripReservationUnitsCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "tripReservationConfirmAction": "Confirm",
+  "tripReservationCompleteAction": "Complete",
+  "tripReservationRejectAction": "Reject"
 }

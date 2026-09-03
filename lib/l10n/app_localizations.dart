@@ -6169,6 +6169,180 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تم الإرسال إلى الطاقم.'**
   String get tableCallSent;
+
+  /// No description provided for @myTripSchedulesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'خطوط سيري'**
+  String get myTripSchedulesTitle;
+
+  /// No description provided for @incomingReservationsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحجوزات الواردة'**
+  String get incomingReservationsTitle;
+
+  /// No description provided for @tripScheduleAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشر خط سير'**
+  String get tripScheduleAdd;
+
+  /// No description provided for @tripScheduleAddTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'خط سير جديد'**
+  String get tripScheduleAddTitle;
+
+  /// No description provided for @tripSchedulesEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد خطوط سير منشورة بعد.'**
+  String get tripSchedulesEmpty;
+
+  /// No description provided for @tripScheduleDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف خط السير هذا؟'**
+  String get tripScheduleDeleteConfirm;
+
+  /// No description provided for @tripScheduleModeLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع الرحلة'**
+  String get tripScheduleModeLabel;
+
+  /// No description provided for @tripSchedulePatternLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعمل هذه الرحلة...'**
+  String get tripSchedulePatternLabel;
+
+  /// No description provided for @tripSchedulePatternWeekly.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسبوعيًا في يوم ثابت'**
+  String get tripSchedulePatternWeekly;
+
+  /// No description provided for @tripSchedulePatternOneOff.
+  ///
+  /// In ar, this message translates to:
+  /// **'في تاريخ محدد'**
+  String get tripSchedulePatternOneOff;
+
+  /// No description provided for @tripSchedulePatternOnDemand.
+  ///
+  /// In ar, this message translates to:
+  /// **'عند الطلب'**
+  String get tripSchedulePatternOnDemand;
+
+  /// No description provided for @tripScheduleDayLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'يوم الأسبوع'**
+  String get tripScheduleDayLabel;
+
+  /// No description provided for @tripScheduleDateLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'التاريخ'**
+  String get tripScheduleDateLabel;
+
+  /// No description provided for @tripScheduleDatePickRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر تاريخًا لهذه الرحلة.'**
+  String get tripScheduleDatePickRequired;
+
+  /// No description provided for @tripScheduleDepartureTimeLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقت الانطلاق'**
+  String get tripScheduleDepartureTimeLabel;
+
+  /// No description provided for @tripScheduleCapacityLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعة'**
+  String get tripScheduleCapacityLabel;
+
+  /// No description provided for @tripSchedulePriceLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر لكل وحدة'**
+  String get tripSchedulePriceLabel;
+
+  /// No description provided for @tripScheduleDepositLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'العربون لكل وحدة (اختياري)'**
+  String get tripScheduleDepositLabel;
+
+  /// No description provided for @incomingReservationsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد حجوزات بعد.'**
+  String get incomingReservationsEmpty;
+
+  /// No description provided for @tripReservationStatusAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get tripReservationStatusAll;
+
+  /// No description provided for @tripReservationStatusPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيد الانتظار'**
+  String get tripReservationStatusPending;
+
+  /// No description provided for @tripReservationStatusConfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مؤكد'**
+  String get tripReservationStatusConfirmed;
+
+  /// No description provided for @tripReservationStatusCompleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتمل'**
+  String get tripReservationStatusCompleted;
+
+  /// No description provided for @tripReservationStatusCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغى'**
+  String get tripReservationStatusCancelled;
+
+  /// No description provided for @tripReservationClient.
+  ///
+  /// In ar, this message translates to:
+  /// **'عميل #{id}'**
+  String tripReservationClient(int id);
+
+  /// No description provided for @tripReservationUnitsCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} وحدة'**
+  String tripReservationUnitsCount(int count);
+
+  /// No description provided for @tripReservationConfirmAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد'**
+  String get tripReservationConfirmAction;
+
+  /// No description provided for @tripReservationCompleteAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'إكمال'**
+  String get tripReservationCompleteAction;
+
+  /// No description provided for @tripReservationRejectAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفض'**
+  String get tripReservationRejectAction;
 }
 
 class _AppLocalizationsDelegate

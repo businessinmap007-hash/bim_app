@@ -11,6 +11,7 @@ import '../../../prescriptions/presentation/screens/issued_prescriptions_screen.
 import '../../../prescriptions/presentation/screens/pharmacy_queue_screen.dart';
 import '../../../projects/presentation/screens/projects_screen.dart';
 import '../../../retail_listings/presentation/screens/retail_listings_screen.dart';
+import '../../../schedules/presentation/screens/my_trip_schedules_screen.dart';
 import '../../../staff/presentation/screens/staff_screen.dart';
 import '../../../training_templates/presentation/screens/training_templates_screen.dart';
 
@@ -129,6 +130,15 @@ class ServicesSettingsScreen extends StatelessWidget {
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const ProjectsScreen()),
+                ),
+              ),
+              const Divider(height: 1),
+              ListTile(
+                leading: const Icon(Icons.local_shipping_outlined),
+                title: Text(l10n.myTripSchedulesTitle),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const MyTripSchedulesScreen()),
                 ),
               ),
               const Divider(height: 1),

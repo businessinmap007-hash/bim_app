@@ -1062,5 +1062,40 @@
   "tableCallWaiter": "نداء النادل",
   "tableCallBill": "طلب الحساب",
   "tableCallAssistance": "طلب مساعدة",
-  "tableCallSent": "تم الإرسال إلى الطاقم."
+  "tableCallSent": "تم الإرسال إلى الطاقم.",
+  "myTripSchedulesTitle": "خطوط سيري",
+  "incomingReservationsTitle": "الحجوزات الواردة",
+  "tripScheduleAdd": "نشر خط سير",
+  "tripScheduleAddTitle": "خط سير جديد",
+  "tripSchedulesEmpty": "لا توجد خطوط سير منشورة بعد.",
+  "tripScheduleDeleteConfirm": "حذف خط السير هذا؟",
+  "tripScheduleModeLabel": "نوع الرحلة",
+  "tripSchedulePatternLabel": "تعمل هذه الرحلة...",
+  "tripSchedulePatternWeekly": "أسبوعيًا في يوم ثابت",
+  "tripSchedulePatternOneOff": "في تاريخ محدد",
+  "tripSchedulePatternOnDemand": "عند الطلب",
+  "tripScheduleDayLabel": "يوم الأسبوع",
+  "tripScheduleDateLabel": "التاريخ",
+  "tripScheduleDatePickRequired": "اختر تاريخًا لهذه الرحلة.",
+  "tripScheduleDepartureTimeLabel": "وقت الانطلاق",
+  "tripScheduleCapacityLabel": "السعة",
+  "tripSchedulePriceLabel": "السعر لكل وحدة",
+  "tripScheduleDepositLabel": "العربون لكل وحدة (اختياري)",
+  "incomingReservationsEmpty": "لا توجد حجوزات بعد.",
+  "tripReservationStatusAll": "الكل",
+  "tripReservationStatusPending": "قيد الانتظار",
+  "tripReservationStatusConfirmed": "مؤكد",
+  "tripReservationStatusCompleted": "مكتمل",
+  "tripReservationStatusCancelled": "ملغى",
+  "tripReservationClient": "عميل #{id}",
+  "@tripReservationClient": {
+    "placeholders": { "id": { "type": "int" } }
+  },
+  "tripReservationUnitsCount": "{count} وحدة",
+  "@tripReservationUnitsCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "tripReservationConfirmAction": "تأكيد",
+  "tripReservationCompleteAction": "إكمال",
+  "tripReservationRejectAction": "رفض"
 }
