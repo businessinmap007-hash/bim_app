@@ -57,6 +57,7 @@ class PlanExercise {
 
 /// meal_type is one of PlanMeal::TYPES on the backend: breakfast/lunch/dinner/snack.
 class PlanMeal {
+  final int id;
   final String mealType;
   final String name;
   final int? calories;
@@ -64,6 +65,7 @@ class PlanMeal {
   final List<PlanImage> images;
 
   const PlanMeal({
+    required this.id,
     required this.mealType,
     required this.name,
     this.calories,
@@ -72,6 +74,7 @@ class PlanMeal {
   });
 
   factory PlanMeal.fromJson(Map<String, dynamic> json) => PlanMeal(
+    id: (json['id'] as num?)?.toInt() ?? 0,
     mealType: json['meal_type'] as String? ?? '',
     name: json['name'] as String? ?? '',
     calories: (json['calories'] as num?)?.toInt(),
@@ -109,6 +112,10 @@ class TrainingPlan {
   final int trainerId;
   final String? trainerName;
   final String? trainerLogoUrl;
+  // Only present when parsed from the TRAINER's own side (business/training-
+  // plans) — that response carries `client`, not `trainer`.
+  final int? clientId;
+  final String? clientName;
   final int? exercisesCount;
   final int? mealsCount;
   final List<PlanExercise>? exercises;
@@ -126,6 +133,8 @@ class TrainingPlan {
     required this.trainerId,
     this.trainerName,
     this.trainerLogoUrl,
+    this.clientId,
+    this.clientName,
     this.exercisesCount,
     this.mealsCount,
     this.exercises,
@@ -137,6 +146,7 @@ class TrainingPlan {
 
   factory TrainingPlan.fromJson(Map<String, dynamic> json) {
     final trainer = json['trainer'] as Map<String, dynamic>?;
+    final client = json['client'] as Map<String, dynamic>?;
     return TrainingPlan(
       id: json['id'] as int,
       title: json['title'] as String? ?? '',
@@ -148,6 +158,8 @@ class TrainingPlan {
       trainerId: (trainer?['id'] as int?) ?? 0,
       trainerName: trainer?['name'] as String?,
       trainerLogoUrl: Env.assetUrl(trainer?['logo'] as String?),
+      clientId: (client?['id'] as num?)?.toInt(),
+      clientName: client?['name'] as String?,
       exercisesCount: (json['exercises_count'] as num?)?.toInt(),
       mealsCount: (json['meals_count'] as num?)?.toInt(),
       exercises: (json['exercises'] as List<dynamic>?)

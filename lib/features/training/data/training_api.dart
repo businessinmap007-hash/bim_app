@@ -94,4 +94,110 @@ class TrainingApi {
     ) as Map<String, dynamic>;
     return ThreadMessage.fromJson(data);
   }
+
+  // ─────────────────────────── Trainer (business) side ───────────────────────
+  // Api\V2\TrainingPlanController — the trainer's own view of plans already
+  // assigned to a client. No `store()`/create-plan here: it needs a client_id
+  // this app has no picker for, the same gap already documented for
+  // TrainingTemplateController::apply. Image uploads on exercises/meals
+  // aren't wired up either — a smaller, skippable multipart flow.
+
+  Future<Paginated<TrainingPlan>> myClientPlans({String? status, int page = 1}) async {
+    final data = await _client.get(
+      '/business/training-plans',
+      query: {if (status != null) 'status': status, 'page': page},
+    ) as Map<String, dynamic>;
+    return Paginated.fromJson(data, TrainingPlan.fromJson);
+  }
+
+  Future<TrainingPlan> businessPlan(int id) async {
+    final data = await _client.get('/business/training-plans/$id') as Map<String, dynamic>;
+    return TrainingPlan.fromJson(data['plan'] as Map<String, dynamic>);
+  }
+
+  Future<TrainingPlan> setPlanStatus(int id, String status) async {
+    final data = await _client.patch(
+      '/business/training-plans/$id',
+      data: {'status': status},
+    ) as Map<String, dynamic>;
+    return TrainingPlan.fromJson(data['plan'] as Map<String, dynamic>);
+  }
+
+  Future<PlanExercise> addExercise(
+    int planId, {
+    required String name,
+    int? dayOfWeek,
+    int? sets,
+    String? reps,
+    int? restSeconds,
+    String? notes,
+  }) async {
+    final data = await _client.post(
+      '/business/training-plans/$planId/exercises',
+      data: {
+        'name': name,
+        if (dayOfWeek != null) 'day_of_week': dayOfWeek,
+        if (sets != null) 'sets': sets,
+        if (reps != null && reps.isNotEmpty) 'reps': reps,
+        if (restSeconds != null) 'rest_seconds': restSeconds,
+        if (notes != null && notes.isNotEmpty) 'notes': notes,
+      },
+    ) as Map<String, dynamic>;
+    return PlanExercise.fromJson(data['exercise'] as Map<String, dynamic>);
+  }
+
+  Future<void> removeExercise(int planId, int exerciseId) =>
+      _client.delete('/business/training-plans/$planId/exercises/$exerciseId');
+
+  Future<PlanMeal> addMeal(
+    int planId, {
+    required String mealType,
+    required String name,
+    int? calories,
+    String? notes,
+  }) async {
+    final data = await _client.post(
+      '/business/training-plans/$planId/meals',
+      data: {
+        'meal_type': mealType,
+        'name': name,
+        if (calories != null) 'calories': calories,
+        if (notes != null && notes.isNotEmpty) 'notes': notes,
+      },
+    ) as Map<String, dynamic>;
+    return PlanMeal.fromJson(data['meal'] as Map<String, dynamic>);
+  }
+
+  Future<void> removeMeal(int planId, int mealId) =>
+      _client.delete('/business/training-plans/$planId/meals/$mealId');
+
+  Future<List<BodyReport>> businessBodyReports(int planId) async {
+    final data = await _client.get('/business/training-plans/$planId/body-reports') as Map<String, dynamic>;
+    return (data['reports'] as List<dynamic>? ?? [])
+        .map((e) => BodyReport.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
+  Future<void> addBodyReport(
+    int planId, {
+    DateTime? forMonth,
+    double? weightKg,
+    double? muscleMassKg,
+    double? fatPercent,
+    double? waterPercent,
+    String? notes,
+  }) => _client.post(
+    '/business/training-plans/$planId/body-reports',
+    data: {
+      if (forMonth != null) 'for_month': _isoDate(forMonth),
+      if (weightKg != null) 'weight_kg': weightKg,
+      if (muscleMassKg != null) 'muscle_mass_kg': muscleMassKg,
+      if (fatPercent != null) 'fat_percent': fatPercent,
+      if (waterPercent != null) 'water_percent': waterPercent,
+      if (notes != null && notes.isNotEmpty) 'notes': notes,
+    },
+  );
+
+  Future<void> deleteBodyReport(int planId, int reportId) =>
+      _client.delete('/business/training-plans/$planId/body-reports/$reportId');
 }

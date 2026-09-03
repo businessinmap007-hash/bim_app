@@ -1423,7 +1423,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get trainingLatestWeight => 'آخر وزن';
 
   @override
-  String get trainingBodyReportsEmpty => 'لا توجد تقارير جسم بعد.';
+  String get trainingBodyReportsEmpty => 'لا توجد قراءات مسجلة بعد.';
 
   @override
   String get mealBreakfast => 'فطار';
@@ -3255,4 +3255,86 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get tripReservationRejectAction => 'رفض';
+
+  @override
+  String get myTrainingClientsTitle => 'عملاء تدريبي';
+
+  @override
+  String get trainingClientsEmpty => 'لا توجد خطط عملاء بعد.';
+
+  @override
+  String get trainingPlanStatusActive => 'نشطة';
+
+  @override
+  String get trainingPlanStatusPaused => 'متوقفة';
+
+  @override
+  String get trainingPlanStatusCompleted => 'مكتملة';
+
+  @override
+  String get trainingPlanStatusCancelled => 'ملغاة';
+
+  @override
+  String get mealTypeBreakfast => 'فطار';
+
+  @override
+  String get mealTypeLunch => 'غداء';
+
+  @override
+  String get mealTypeDinner => 'عشاء';
+
+  @override
+  String get mealTypeSnack => 'وجبة خفيفة';
+
+  @override
+  String get trainingAddExercise => 'إضافة تمرين';
+
+  @override
+  String get trainingExerciseName => 'اسم التمرين';
+
+  @override
+  String get trainingAnyDay => 'أي يوم';
+
+  @override
+  String get trainingSets => 'المجموعات';
+
+  @override
+  String get trainingReps => 'التكرارات';
+
+  @override
+  String get trainingAddMeal => 'إضافة وجبة';
+
+  @override
+  String get trainingMealName => 'اسم الوجبة';
+
+  @override
+  String get trainingCalories => 'السعرات الحرارية';
+
+  @override
+  String get trainingAddBodyReport => 'إضافة قراءة شهرية';
+
+  @override
+  String get trainingBodyReportHint =>
+      'قراءة واحدة لكل شهر — إرسال نفس الشهر مرة أخرى يحدّثها.';
+
+  @override
+  String get trainingWeightKg => 'الوزن (كجم)';
+
+  @override
+  String get trainingMuscleKg => 'الكتلة العضلية (كجم)';
+
+  @override
+  String get trainingFatPercent => 'نسبة الدهون %';
+
+  @override
+  String get trainingWaterPercent => 'نسبة الماء %';
+
+  @override
+  String get trainingExercisesSection => 'التمارين';
+
+  @override
+  String get trainingMealsSection => 'الوجبات';
+
+  @override
+  String get trainingBodyReportsSection => 'تركيب الجسم';
 }

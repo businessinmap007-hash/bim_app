@@ -2807,7 +2807,7 @@ abstract class AppLocalizations {
   /// No description provided for @trainingBodyReportsEmpty.
   ///
   /// In ar, this message translates to:
-  /// **'لا توجد تقارير جسم بعد.'**
+  /// **'لا توجد قراءات مسجلة بعد.'**
   String get trainingBodyReportsEmpty;
 
   /// No description provided for @mealBreakfast.
@@ -6343,6 +6343,168 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'رفض'**
   String get tripReservationRejectAction;
+
+  /// No description provided for @myTrainingClientsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عملاء تدريبي'**
+  String get myTrainingClientsTitle;
+
+  /// No description provided for @trainingClientsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد خطط عملاء بعد.'**
+  String get trainingClientsEmpty;
+
+  /// No description provided for @trainingPlanStatusActive.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشطة'**
+  String get trainingPlanStatusActive;
+
+  /// No description provided for @trainingPlanStatusPaused.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوقفة'**
+  String get trainingPlanStatusPaused;
+
+  /// No description provided for @trainingPlanStatusCompleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتملة'**
+  String get trainingPlanStatusCompleted;
+
+  /// No description provided for @trainingPlanStatusCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغاة'**
+  String get trainingPlanStatusCancelled;
+
+  /// No description provided for @mealTypeBreakfast.
+  ///
+  /// In ar, this message translates to:
+  /// **'فطار'**
+  String get mealTypeBreakfast;
+
+  /// No description provided for @mealTypeLunch.
+  ///
+  /// In ar, this message translates to:
+  /// **'غداء'**
+  String get mealTypeLunch;
+
+  /// No description provided for @mealTypeDinner.
+  ///
+  /// In ar, this message translates to:
+  /// **'عشاء'**
+  String get mealTypeDinner;
+
+  /// No description provided for @mealTypeSnack.
+  ///
+  /// In ar, this message translates to:
+  /// **'وجبة خفيفة'**
+  String get mealTypeSnack;
+
+  /// No description provided for @trainingAddExercise.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة تمرين'**
+  String get trainingAddExercise;
+
+  /// No description provided for @trainingExerciseName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم التمرين'**
+  String get trainingExerciseName;
+
+  /// No description provided for @trainingAnyDay.
+  ///
+  /// In ar, this message translates to:
+  /// **'أي يوم'**
+  String get trainingAnyDay;
+
+  /// No description provided for @trainingSets.
+  ///
+  /// In ar, this message translates to:
+  /// **'المجموعات'**
+  String get trainingSets;
+
+  /// No description provided for @trainingReps.
+  ///
+  /// In ar, this message translates to:
+  /// **'التكرارات'**
+  String get trainingReps;
+
+  /// No description provided for @trainingAddMeal.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة وجبة'**
+  String get trainingAddMeal;
+
+  /// No description provided for @trainingMealName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الوجبة'**
+  String get trainingMealName;
+
+  /// No description provided for @trainingCalories.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعرات الحرارية'**
+  String get trainingCalories;
+
+  /// No description provided for @trainingAddBodyReport.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة قراءة شهرية'**
+  String get trainingAddBodyReport;
+
+  /// No description provided for @trainingBodyReportHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'قراءة واحدة لكل شهر — إرسال نفس الشهر مرة أخرى يحدّثها.'**
+  String get trainingBodyReportHint;
+
+  /// No description provided for @trainingWeightKg.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوزن (كجم)'**
+  String get trainingWeightKg;
+
+  /// No description provided for @trainingMuscleKg.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكتلة العضلية (كجم)'**
+  String get trainingMuscleKg;
+
+  /// No description provided for @trainingFatPercent.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة الدهون %'**
+  String get trainingFatPercent;
+
+  /// No description provided for @trainingWaterPercent.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة الماء %'**
+  String get trainingWaterPercent;
+
+  /// No description provided for @trainingExercisesSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'التمارين'**
+  String get trainingExercisesSection;
+
+  /// No description provided for @trainingMealsSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوجبات'**
+  String get trainingMealsSection;
+
+  /// No description provided for @trainingBodyReportsSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'تركيب الجسم'**
+  String get trainingBodyReportsSection;
 }
 
 class _AppLocalizationsDelegate

@@ -1420,7 +1420,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trainingLatestWeight => 'Latest weight';
 
   @override
-  String get trainingBodyReportsEmpty => 'No body reports yet.';
+  String get trainingBodyReportsEmpty => 'No readings recorded yet.';
 
   @override
   String get mealBreakfast => 'Breakfast';
@@ -3256,4 +3256,86 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tripReservationRejectAction => 'Reject';
+
+  @override
+  String get myTrainingClientsTitle => 'My Training Clients';
+
+  @override
+  String get trainingClientsEmpty => 'No client plans yet.';
+
+  @override
+  String get trainingPlanStatusActive => 'Active';
+
+  @override
+  String get trainingPlanStatusPaused => 'Paused';
+
+  @override
+  String get trainingPlanStatusCompleted => 'Completed';
+
+  @override
+  String get trainingPlanStatusCancelled => 'Cancelled';
+
+  @override
+  String get mealTypeBreakfast => 'Breakfast';
+
+  @override
+  String get mealTypeLunch => 'Lunch';
+
+  @override
+  String get mealTypeDinner => 'Dinner';
+
+  @override
+  String get mealTypeSnack => 'Snack';
+
+  @override
+  String get trainingAddExercise => 'Add exercise';
+
+  @override
+  String get trainingExerciseName => 'Exercise name';
+
+  @override
+  String get trainingAnyDay => 'Any day';
+
+  @override
+  String get trainingSets => 'Sets';
+
+  @override
+  String get trainingReps => 'Reps';
+
+  @override
+  String get trainingAddMeal => 'Add meal';
+
+  @override
+  String get trainingMealName => 'Meal name';
+
+  @override
+  String get trainingCalories => 'Calories';
+
+  @override
+  String get trainingAddBodyReport => 'Add monthly reading';
+
+  @override
+  String get trainingBodyReportHint =>
+      'One reading per month — sending the same month again updates it.';
+
+  @override
+  String get trainingWeightKg => 'Weight (kg)';
+
+  @override
+  String get trainingMuscleKg => 'Muscle mass (kg)';
+
+  @override
+  String get trainingFatPercent => 'Fat %';
+
+  @override
+  String get trainingWaterPercent => 'Water %';
+
+  @override
+  String get trainingExercisesSection => 'Exercises';
+
+  @override
+  String get trainingMealsSection => 'Meals';
+
+  @override
+  String get trainingBodyReportsSection => 'Body composition';
 }

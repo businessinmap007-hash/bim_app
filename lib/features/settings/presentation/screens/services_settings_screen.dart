@@ -13,6 +13,7 @@ import '../../../projects/presentation/screens/projects_screen.dart';
 import '../../../retail_listings/presentation/screens/retail_listings_screen.dart';
 import '../../../schedules/presentation/screens/my_trip_schedules_screen.dart';
 import '../../../staff/presentation/screens/staff_screen.dart';
+import '../../../training/presentation/screens/my_training_clients_screen.dart';
 import '../../../training_templates/presentation/screens/training_templates_screen.dart';
 
 /// A business's own service-management screens, one per capability it may
@@ -85,6 +86,15 @@ class ServicesSettingsScreen extends StatelessWidget {
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (_) => const TrainingTemplatesScreen()),
+                ),
+              ),
+              const Divider(height: 1),
+              ListTile(
+                leading: const Icon(Icons.groups_outlined),
+                title: Text(l10n.myTrainingClientsTitle),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const MyTrainingClientsScreen()),
                 ),
               ),
               const Divider(height: 1),
