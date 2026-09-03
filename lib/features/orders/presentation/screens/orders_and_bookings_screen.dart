@@ -476,7 +476,7 @@ class _BookingTile extends StatelessWidget {
               : null,
         ),
         title: Text(booking.businessName ?? '', maxLines: 1, overflow: TextOverflow.ellipsis),
-        subtitle: Text(booking.serviceName(languageCode)),
+        subtitle: Text('${booking.serviceName(languageCode)} · ${booking.price.toStringAsFixed(0)}'),
         trailing: _StatusBadge(
           label: _bookingStatusLabel(booking.status, l10n),
           color: _bookingStatusColor(booking.status),
@@ -616,6 +616,14 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
               const SizedBox(height: 12),
               Text(booking.notes!, style: Theme.of(context).textTheme.bodySmall),
             ],
+            const Divider(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(l10n.cartFinalTotal, style: Theme.of(context).textTheme.titleSmall),
+                Text(booking.price.toStringAsFixed(0), style: Theme.of(context).textTheme.titleSmall),
+              ],
+            ),
             const SizedBox(height: 20),
             if (booking.isCancellable)
               SizedBox(
