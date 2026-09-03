@@ -66,6 +66,9 @@ class BusinessListState {
   final bool hasMore;
   final String? error;
   final String query;
+  final int? governorateId;
+  final int? cityId;
+  final String? locationLabel;
 
   const BusinessListState({
     this.items = const [],
@@ -74,6 +77,9 @@ class BusinessListState {
     this.hasMore = false,
     this.error,
     this.query = '',
+    this.governorateId,
+    this.cityId,
+    this.locationLabel,
   });
 
   BusinessListState copyWith({
@@ -84,6 +90,10 @@ class BusinessListState {
     String? error,
     bool clearError = false,
     String? query,
+    int? governorateId,
+    int? cityId,
+    String? locationLabel,
+    bool clearLocation = false,
   }) {
     return BusinessListState(
       items: items ?? this.items,
@@ -92,6 +102,9 @@ class BusinessListState {
       hasMore: hasMore ?? this.hasMore,
       error: clearError ? null : (error ?? this.error),
       query: query ?? this.query,
+      governorateId: clearLocation ? null : (governorateId ?? this.governorateId),
+      cityId: clearLocation ? null : (cityId ?? this.cityId),
+      locationLabel: clearLocation ? null : (locationLabel ?? this.locationLabel),
     );
   }
 }
@@ -113,6 +126,8 @@ class BusinessListController extends StateNotifier<BusinessListState> {
       final result = await _api.businesses(
         childId: childId,
         q: state.query,
+        governorateId: state.governorateId,
+        cityId: state.cityId,
         page: _page,
       );
       state = state.copyWith(
@@ -132,6 +147,8 @@ class BusinessListController extends StateNotifier<BusinessListState> {
       final result = await _api.businesses(
         childId: childId,
         q: state.query,
+        governorateId: state.governorateId,
+        cityId: state.cityId,
         page: _page + 1,
       );
       _page += 1;
@@ -147,6 +164,29 @@ class BusinessListController extends StateNotifier<BusinessListState> {
 
   void search(String q) {
     state = state.copyWith(query: q);
+    load();
+  }
+
+  /// [cityId] narrows within [governorateId]; pass only a governorate to
+  /// filter by governorate alone. Replaces any previous location outright
+  /// (copyWith's merge semantics can't express "clear cityId but keep
+  /// governorateId", so this builds the state directly instead).
+  void setLocation({required int governorateId, int? cityId, required String label}) {
+    state = BusinessListState(
+      items: state.items,
+      isLoading: state.isLoading,
+      isLoadingMore: state.isLoadingMore,
+      hasMore: state.hasMore,
+      query: state.query,
+      governorateId: governorateId,
+      cityId: cityId,
+      locationLabel: label,
+    );
+    load();
+  }
+
+  void clearLocation() {
+    state = state.copyWith(clearLocation: true);
     load();
   }
 }

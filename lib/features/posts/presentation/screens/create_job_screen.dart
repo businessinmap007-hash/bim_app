@@ -3,13 +3,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../categories/presentation/widgets/category_picker_field.dart';
+import '../../../auth/application/auth_controller.dart';
 import '../../application/posts_controller.dart';
 
-/// A business advertises a vacancy — field (root + specialty), title, body,
-/// plus optional requirements/salary. Mirrors CreatePostScreen's shape
-/// (title/body + a publish action in the AppBar) since both write to the
-/// same underlying `posts` table with `type` deciding which this is.
+/// A business advertises a vacancy — title, body, plus optional
+/// requirements/salary. Mirrors CreatePostScreen's shape (title/body + a
+/// publish action in the AppBar) since both write to the same underlying
+/// `posts` table with `type` deciding which this is.
+///
+/// The job's field (root + specialty) is the posting business's own
+/// category — every business has one (required to become a business at
+/// all, see ProfileController::update's self-upgrade check on the
+/// backend) — not a separate choice on this screen. A vacancy IS what that
+/// business does; there's nothing to ask.
 class CreateJobScreen extends ConsumerStatefulWidget {
   const CreateJobScreen({super.key});
 
@@ -18,13 +24,11 @@ class CreateJobScreen extends ConsumerStatefulWidget {
 }
 
 class _CreateJobScreenState extends ConsumerState<CreateJobScreen> {
-  CategorySelection? _category;
   final _titleController = TextEditingController();
   final _bodyController = TextEditingController();
   final _requirementsController = TextEditingController();
   final _salaryController = TextEditingController();
   bool _busy = false;
-  String? _categoryError;
 
   @override
   void dispose() {
@@ -37,20 +41,30 @@ class _CreateJobScreenState extends ConsumerState<CreateJobScreen> {
 
   Future<void> _publish() async {
     final l10n = AppLocalizations.of(context)!;
-    final category = _category;
     final title = _titleController.text.trim();
     final body = _bodyController.text.trim();
+    if (title.isEmpty || body.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.validationRequired)));
+      return;
+    }
 
-    setState(() => _categoryError = category == null ? l10n.validationRequired : null);
-    if (category == null || title.isEmpty || body.isEmpty) return;
+    final authState = ref.read(authControllerProvider);
+    final me = authState is AuthSignedIn ? authState.user : null;
+    final categoryId = me?.categoryId;
+    if (categoryId == null) {
+      // Can't happen for a real business account (see class doc), but
+      // fail loudly rather than send an invalid categoryId to the server.
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+      return;
+    }
 
     setState(() => _busy = true);
     try {
       await ref
           .read(postsApiProvider)
           .createJob(
-            categoryId: category.rootId!,
-            categoryChildId: category.childId,
+            categoryId: categoryId,
+            categoryChildId: me?.categoryChildId,
             title: title,
             body: body,
             requirements: _requirementsController.text.trim(),
@@ -86,15 +100,6 @@ class _CreateJobScreenState extends ConsumerState<CreateJobScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          CategoryPickerField(
-            value: _category,
-            errorText: _categoryError,
-            onChanged: (selection) => setState(() {
-              _category = selection;
-              _categoryError = null;
-            }),
-          ),
-          const SizedBox(height: 12),
           TextField(controller: _titleController, decoration: InputDecoration(labelText: l10n.jobsTitleLabel)),
           const SizedBox(height: 12),
           TextField(

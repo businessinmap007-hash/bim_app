@@ -14,6 +14,8 @@ class DiscoveryApi {
     required int childId,
     String? q,
     bool openNow = false,
+    int? governorateId,
+    int? cityId,
     int page = 1,
     int perPage = 20,
   }) async {
@@ -23,6 +25,8 @@ class DiscoveryApi {
         'child_id': childId,
         if (q != null && q.isNotEmpty) 'q': q,
         if (openNow) 'open_now': true,
+        if (governorateId != null) 'governorate_id': governorateId,
+        if (cityId != null) 'city_id': cityId,
         'page': page,
         'per_page': perPage,
       },

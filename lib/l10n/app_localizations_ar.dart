@@ -165,6 +165,24 @@ class AppLocalizationsAr extends AppLocalizations {
   String get businessListEmpty => 'لا توجد أنشطة مطابقة.';
 
   @override
+  String get businessFilterByLocation => 'فلترة حسب الموقع';
+
+  @override
+  String get businessFilterGovernorate => 'المحافظة';
+
+  @override
+  String get businessFilterCity => 'المدينة';
+
+  @override
+  String get businessFilterAnyCity => 'كل المدن';
+
+  @override
+  String get businessFilterClearLocation => 'إزالة فلتر الموقع';
+
+  @override
+  String get businessFilterChooseGovernorate => 'اختر المحافظة';
+
+  @override
   String get businessOpenNow => 'مفتوح الآن';
 
   @override

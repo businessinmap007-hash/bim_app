@@ -167,6 +167,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get businessListEmpty => 'No matching businesses.';
 
   @override
+  String get businessFilterByLocation => 'Filter by location';
+
+  @override
+  String get businessFilterGovernorate => 'Governorate';
+
+  @override
+  String get businessFilterCity => 'City';
+
+  @override
+  String get businessFilterAnyCity => 'All cities';
+
+  @override
+  String get businessFilterClearLocation => 'Clear location filter';
+
+  @override
+  String get businessFilterChooseGovernorate => 'Choose a governorate';
+
+  @override
   String get businessOpenNow => 'Open now';
 
   @override

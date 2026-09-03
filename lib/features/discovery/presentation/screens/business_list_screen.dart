@@ -6,8 +6,16 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../location/application/location_providers.dart';
+import '../../../location/data/models/location_models.dart';
 import '../../application/discovery_providers.dart';
 import '../widgets/business_card.dart';
+
+/// Egypt's id in the countries table — the location filter skips the
+/// country step entirely (unlike [LocationPickerField], built for a user's
+/// own address anywhere in the world) since every business on the platform
+/// is Egyptian today.
+const _kEgyptCountryId = 1;
 
 class BusinessListScreen extends ConsumerStatefulWidget {
   final int childId;
@@ -52,6 +60,18 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
     });
   }
 
+  Future<void> _openLocationPicker(BuildContext context) async {
+    final result = await showModalBottomSheet<_LocationFilterResult>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => const _LocationFilterSheet(),
+    );
+    if (result == null || !mounted) return;
+    ref
+        .read(businessListControllerProvider(widget.childId).notifier)
+        .setLocation(governorateId: result.governorateId, cityId: result.cityId, label: result.label);
+  }
+
   @override
   void dispose() {
     _debounce?.cancel();
@@ -72,13 +92,27 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
               child: TextField(
                 controller: _searchController,
                 onChanged: _onSearchChanged,
                 decoration: InputDecoration(
                   hintText: l10n.businessSearchHint,
                   prefixIcon: const Icon(Icons.search),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+              child: Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: InputChip(
+                  avatar: const Icon(Icons.place_outlined, size: 18),
+                  label: Text(state.locationLabel ?? l10n.businessFilterByLocation),
+                  onPressed: () => _openLocationPicker(context),
+                  onDeleted: state.locationLabel != null
+                      ? () => ref.read(businessListControllerProvider(widget.childId).notifier).clearLocation()
+                      : null,
                 ),
               ),
             ),
@@ -148,6 +182,160 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+typedef _LocationFilterResult = ({int governorateId, int? cityId, String label});
+
+/// Governorate → city, city optional (governorate alone still filters).
+/// Simpler than [LocationPickerField] on purpose — a search filter, not an
+/// address, so it skips the country step.
+class _LocationFilterSheet extends ConsumerStatefulWidget {
+  const _LocationFilterSheet();
+
+  @override
+  ConsumerState<_LocationFilterSheet> createState() => _LocationFilterSheetState();
+}
+
+class _LocationFilterSheetState extends ConsumerState<_LocationFilterSheet> {
+  LocationGovernorate? _governorate;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final languageCode = Localizations.localeOf(context).languageCode;
+    final governorate = _governorate;
+
+    return DraggableScrollableSheet(
+      initialChildSize: 0.75,
+      minChildSize: 0.4,
+      maxChildSize: 0.92,
+      expand: false,
+      builder: (context, scrollController) {
+        return SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                child: Row(
+                  children: [
+                    if (governorate != null)
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back),
+                        onPressed: () => setState(() => _governorate = null),
+                      )
+                    else
+                      const SizedBox(width: 48),
+                    Expanded(
+                      child: Text(
+                        governorate != null
+                            ? governorate.localizedName(languageCode)
+                            : l10n.businessFilterChooseGovernorate,
+                        style: Theme.of(context).textTheme.titleMedium,
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.of(context).pop()),
+                  ],
+                ),
+              ),
+              const Divider(height: 1),
+              Expanded(
+                child: governorate == null
+                    ? _GovernorateFilterList(
+                        scrollController: scrollController,
+                        onSelected: (g) => setState(() => _governorate = g),
+                      )
+                    : _CityFilterList(
+                        scrollController: scrollController,
+                        governorate: governorate,
+                        languageCode: languageCode,
+                      ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _GovernorateFilterList extends ConsumerWidget {
+  final ScrollController scrollController;
+  final ValueChanged<LocationGovernorate> onSelected;
+
+  const _GovernorateFilterList({required this.scrollController, required this.onSelected});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final governorates = ref.watch(governoratesProvider(_kEgyptCountryId));
+    final languageCode = Localizations.localeOf(context).languageCode;
+
+    return governorates.when(
+      data: (items) => ListView.separated(
+        controller: scrollController,
+        itemCount: items.length,
+        separatorBuilder: (context, index) => const Divider(height: 1),
+        itemBuilder: (context, index) {
+          final governorate = items[index];
+          return ListTile(
+            title: Text(governorate.localizedName(languageCode)),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => onSelected(governorate),
+          );
+        },
+      ),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stack) => Center(child: Text(l10n.commonSomethingWentWrong)),
+    );
+  }
+}
+
+class _CityFilterList extends ConsumerWidget {
+  final ScrollController scrollController;
+  final LocationGovernorate governorate;
+  final String languageCode;
+
+  const _CityFilterList({required this.scrollController, required this.governorate, required this.languageCode});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final cities = ref.watch(citiesProvider(governorate.id));
+    final governorateName = governorate.localizedName(languageCode);
+
+    return cities.when(
+      data: (items) => ListView.separated(
+        controller: scrollController,
+        itemCount: items.length + 1,
+        separatorBuilder: (context, index) => const Divider(height: 1),
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return ListTile(
+              title: Text(l10n.businessFilterAnyCity),
+              onTap: () => Navigator.of(context).pop((
+                governorateId: governorate.id,
+                cityId: null,
+                label: governorateName,
+              )),
+            );
+          }
+          final city = items[index - 1];
+          return ListTile(
+            title: Text(city.localizedName(languageCode)),
+            onTap: () => Navigator.of(context).pop((
+              governorateId: governorate.id,
+              cityId: city.id,
+              label: '$governorateName — ${city.localizedName(languageCode)}',
+            )),
+          );
+        },
+      ),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stack) => Center(child: Text(l10n.commonSomethingWentWrong)),
     );
   }
 }

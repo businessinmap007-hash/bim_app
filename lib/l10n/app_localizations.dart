@@ -404,6 +404,42 @@ abstract class AppLocalizations {
   /// **'لا توجد أنشطة مطابقة.'**
   String get businessListEmpty;
 
+  /// No description provided for @businessFilterByLocation.
+  ///
+  /// In ar, this message translates to:
+  /// **'فلترة حسب الموقع'**
+  String get businessFilterByLocation;
+
+  /// No description provided for @businessFilterGovernorate.
+  ///
+  /// In ar, this message translates to:
+  /// **'المحافظة'**
+  String get businessFilterGovernorate;
+
+  /// No description provided for @businessFilterCity.
+  ///
+  /// In ar, this message translates to:
+  /// **'المدينة'**
+  String get businessFilterCity;
+
+  /// No description provided for @businessFilterAnyCity.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل المدن'**
+  String get businessFilterAnyCity;
+
+  /// No description provided for @businessFilterClearLocation.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزالة فلتر الموقع'**
+  String get businessFilterClearLocation;
+
+  /// No description provided for @businessFilterChooseGovernorate.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر المحافظة'**
+  String get businessFilterChooseGovernorate;
+
   /// No description provided for @businessOpenNow.
   ///
   /// In ar, this message translates to:
