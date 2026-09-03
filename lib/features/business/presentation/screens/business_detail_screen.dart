@@ -5,12 +5,15 @@ import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
 import '../../../../shared/widgets/profile_cover_header.dart';
+import '../../../auth/application/auth_controller.dart';
 import '../../../booking/presentation/screens/booking_screen.dart';
 import '../../../cart/application/cart_controller.dart';
 import '../../../cart/presentation/screens/cart_screen.dart';
 import '../../../cart/presentation/widgets/add_to_cart_sheet.dart';
 import '../../../clinic/presentation/screens/clinic_slots_screen.dart';
 import '../../../comments/presentation/screens/comments_screen.dart';
+import '../../../general_chat/application/general_chat_providers.dart';
+import '../../../general_chat/presentation/screens/chat_thread_screen.dart';
 import '../../../ratings/presentation/screens/reviews_screen.dart';
 import '../../application/business_page_providers.dart';
 import '../../data/models/business_profile.dart';
@@ -130,6 +133,8 @@ class _BusinessDetailBody extends StatelessWidget {
                           child: BusinessRatingRow(rating: profile.rating, openNow: profile.openNow),
                         ),
                       ),
+                      _MessageButton(businessId: profile.id),
+                      const SizedBox(width: 8),
                       _FollowButton(businessId: profile.id, isFollowing: profile.isFollowing),
                     ],
                   ),
@@ -181,6 +186,41 @@ class _BusinessDetailBody extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Api\V2\ChatController::store — opens (or returns) the DM with this
+/// business. Hidden on your own page; there is no "message yourself".
+class _MessageButton extends ConsumerWidget {
+  final int businessId;
+  const _MessageButton({required this.businessId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authControllerProvider);
+    final myId = authState is AuthSignedIn ? authState.user.id : null;
+    if (myId == businessId) return const SizedBox.shrink();
+
+    return IconButton(
+      icon: const Icon(Icons.chat_bubble_outline),
+      onPressed: () async {
+        final l10n = AppLocalizations.of(context)!;
+        try {
+          final thread = await ref.read(generalChatApiProvider).startWith(businessId);
+          if (context.mounted) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => ChatThreadScreen(threadId: thread.id, title: thread.displayTitle()),
+              ),
+            );
+          }
+        } catch (_) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+          }
+        }
+      },
     );
   }
 }

@@ -3089,4 +3089,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get drawerSectionMyServices => 'My services';
+
+  @override
+  String get chatsListTitle => 'Chats';
+
+  @override
+  String get chatsListEmpty => 'No conversations yet.';
+
+  @override
+  String get chatRenameGroup => 'Rename group';
+
+  @override
+  String get chatDeleteGroupConfirm => 'Delete this group for everyone?';
+
+  @override
+  String get chatLeaveGroupConfirm => 'Leave this group?';
+
+  @override
+  String get chatLeaveAction => 'Leave';
 }

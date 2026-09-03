@@ -6019,6 +6019,42 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'خدماتي'**
   String get drawerSectionMyServices;
+
+  /// No description provided for @chatsListTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المحادثات'**
+  String get chatsListTitle;
+
+  /// No description provided for @chatsListEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد محادثات بعد.'**
+  String get chatsListEmpty;
+
+  /// No description provided for @chatRenameGroup.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة تسمية المجموعة'**
+  String get chatRenameGroup;
+
+  /// No description provided for @chatDeleteGroupConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف هذه المجموعة للجميع؟'**
+  String get chatDeleteGroupConfirm;
+
+  /// No description provided for @chatLeaveGroupConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'مغادرة هذه المجموعة؟'**
+  String get chatLeaveGroupConfirm;
+
+  /// No description provided for @chatLeaveAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'مغادرة'**
+  String get chatLeaveAction;
 }
 
 class _AppLocalizationsDelegate

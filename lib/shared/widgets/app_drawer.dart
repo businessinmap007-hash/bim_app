@@ -9,6 +9,7 @@ import '../../features/auth/application/auth_controller.dart';
 import '../../features/disputes/presentation/screens/disputes_screen.dart';
 import '../../features/clinic/presentation/screens/my_clinic_appointments_screen.dart';
 import '../../features/deposits/presentation/screens/deposits_screen.dart';
+import '../../features/general_chat/presentation/screens/chats_list_screen.dart';
 import '../../features/fines/presentation/screens/fines_screen.dart';
 import '../../features/guarantee/presentation/screens/guarantee_screen.dart';
 import '../../features/jobs/presentation/screens/jobs_screen.dart';
@@ -142,6 +143,14 @@ class AppDrawer extends ConsumerWidget {
                   ],
 
                   _SectionHeader(l10n.drawerSectionMyServices),
+                  ListTile(
+                    leading: const Icon(Icons.chat_bubble_outline),
+                    title: Text(l10n.chatsListTitle),
+                    onTap: () {
+                      close();
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ChatsListScreen()));
+                    },
+                  ),
                   ListTile(
                     leading: const Icon(Icons.receipt_long_outlined),
                     title: Text(l10n.ordersBookingsTitle),

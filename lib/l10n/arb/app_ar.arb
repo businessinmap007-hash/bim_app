@@ -1037,5 +1037,11 @@
   "businessOfferRefundableLabel": "قابل للاسترجاع",
   "drawerSectionProfile": "إعدادات البروفايل",
   "drawerSectionJobsPosts": "الوظائف والمنشورات",
-  "drawerSectionMyServices": "خدماتي"
+  "drawerSectionMyServices": "خدماتي",
+  "chatsListTitle": "المحادثات",
+  "chatsListEmpty": "لا توجد محادثات بعد.",
+  "chatRenameGroup": "إعادة تسمية المجموعة",
+  "chatDeleteGroupConfirm": "حذف هذه المجموعة للجميع؟",
+  "chatLeaveGroupConfirm": "مغادرة هذه المجموعة؟",
+  "chatLeaveAction": "مغادرة"
 }

@@ -1037,5 +1037,11 @@
   "businessOfferRefundableLabel": "Refundable",
   "drawerSectionProfile": "Profile settings",
   "drawerSectionJobsPosts": "Jobs & posts",
-  "drawerSectionMyServices": "My services"
+  "drawerSectionMyServices": "My services",
+  "chatsListTitle": "Chats",
+  "chatsListEmpty": "No conversations yet.",
+  "chatRenameGroup": "Rename group",
+  "chatDeleteGroupConfirm": "Delete this group for everyone?",
+  "chatLeaveGroupConfirm": "Leave this group?",
+  "chatLeaveAction": "Leave"
 }

@@ -3088,4 +3088,22 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get drawerSectionMyServices => 'خدماتي';
+
+  @override
+  String get chatsListTitle => 'المحادثات';
+
+  @override
+  String get chatsListEmpty => 'لا توجد محادثات بعد.';
+
+  @override
+  String get chatRenameGroup => 'إعادة تسمية المجموعة';
+
+  @override
+  String get chatDeleteGroupConfirm => 'حذف هذه المجموعة للجميع؟';
+
+  @override
+  String get chatLeaveGroupConfirm => 'مغادرة هذه المجموعة؟';
+
+  @override
+  String get chatLeaveAction => 'مغادرة';
 }
