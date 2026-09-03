@@ -646,6 +646,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get postsDelete => 'Delete';
 
   @override
+  String get postsReadMore => 'More';
+
+  @override
+  String get postsShare => 'Share';
+
+  @override
   String get postsEdit => 'Edit';
 
   @override

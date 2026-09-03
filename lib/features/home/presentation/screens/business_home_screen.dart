@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/app_drawer.dart';
+import '../../../../shared/widgets/cart_icon_button.dart';
 import '../../../../shared/widgets/create_job_fab.dart';
 import '../../../../shared/widgets/create_post_button.dart';
 import '../../../../shared/widgets/notification_bell_button.dart';
@@ -44,7 +45,7 @@ class BusinessHomeScreen extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(l10n.homeBusinessTitle),
-          actions: const [CreatePostButton(), NotificationBellButton()],
+          actions: const [CreatePostButton(), NotificationBellButton(), CartIconButton()],
         ),
         drawer: const AppDrawer(),
         floatingActionButton: const CreateJobFab(jobsTabIndex: _jobsTabIndex),

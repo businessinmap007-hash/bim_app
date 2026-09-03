@@ -63,13 +63,13 @@ class _HomeShellState extends ConsumerState<HomeShell> {
             label: '',
           ),
           const NavigationDestination(
-            icon: Icon(Icons.category_outlined),
-            selectedIcon: Icon(Icons.category_rounded),
+            icon: Icon(Icons.category_outlined, size: 28),
+            selectedIcon: Icon(Icons.category_rounded, size: 28),
             label: '',
           ),
           const NavigationDestination(
-            icon: Icon(Icons.grid_view_outlined),
-            selectedIcon: Icon(Icons.grid_view_rounded),
+            icon: Icon(Icons.grid_view_outlined, size: 28),
+            selectedIcon: Icon(Icons.grid_view_rounded, size: 28),
             label: '',
           ),
         ],
@@ -89,8 +89,8 @@ class _HomeTabIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 26,
-      height: 26,
+      width: 30,
+      height: 30,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: selected ? Border.all(color: AppColors.accentGold, width: 2) : null,
@@ -100,7 +100,7 @@ class _HomeTabIcon extends StatelessWidget {
             ? CachedNetworkImage(imageUrl: avatarUrl!, fit: BoxFit.cover)
             : Container(
                 color: AppColors.accentGold.withValues(alpha: 0.15),
-                child: const Icon(Icons.person, size: 16, color: AppColors.primaryNavy),
+                child: const Icon(Icons.person, size: 18, color: AppColors.primaryNavy),
               ),
       ),
     );

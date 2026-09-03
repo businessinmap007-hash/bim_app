@@ -78,8 +78,13 @@ class AppDrawer extends ConsumerWidget {
                                 border: Border.all(color: Theme.of(context).scaffoldBackgroundColor, width: 3),
                               ),
                               child: ClipOval(
-                                child: user?.imageUrl != null
-                                    ? CachedNetworkImage(imageUrl: user!.imageUrl!, fit: BoxFit.cover)
+                                // logo first — the field every other resource
+                                // (posts/comments/orders, the public business
+                                // page) reads as "this account's photo" for a
+                                // business; image is a client's own slot and
+                                // the fallback for a business with no logo set.
+                                child: (user?.logoUrl ?? user?.imageUrl) != null
+                                    ? CachedNetworkImage(imageUrl: (user!.logoUrl ?? user.imageUrl)!, fit: BoxFit.cover)
                                     : const Icon(Icons.person, color: AppColors.primaryNavy),
                               ),
                             ),

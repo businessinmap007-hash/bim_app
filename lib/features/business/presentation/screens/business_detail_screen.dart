@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
+import '../../../../shared/widgets/post_share.dart';
 import '../../../../shared/widgets/profile_cover_header.dart';
+import '../../../../shared/widgets/sliver_tab_bar_delegate.dart';
 import '../../../auth/application/auth_controller.dart';
 import '../../../booking/presentation/screens/booking_screen.dart';
 import '../../../cart/application/cart_controller.dart';
@@ -101,89 +103,111 @@ class _BusinessDetailBody extends StatelessWidget {
       tabViews.add(_ServicesTab(businessId: profile.id));
     }
 
+    final header = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => ReviewsScreen(
+                        userId: profile.id,
+                        name: profile.name,
+                        summary: profile.rating,
+                      ),
+                    ),
+                  ),
+                  child: BusinessRatingRow(rating: profile.rating, openNow: profile.openNow),
+                ),
+              ),
+              _MessageButton(businessId: profile.id),
+              const SizedBox(width: 8),
+              _FollowButton(businessId: profile.id, isFollowing: profile.isFollowing),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            l10n.businessFollowersCount(profile.followersCount),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),
+          ),
+          if (profile.about != null) ...[
+            const SizedBox(height: 10),
+            Text(profile.about!, style: Theme.of(context).textTheme.bodyMedium),
+          ],
+          // Health-root businesses only — the same "is this a
+          // clinic" heuristic BusinessCapability::standsUnderHealth()
+          // uses on the backend (category_id against the Health
+          // root). No per-business "offers clinic appointments" flag
+          // exists to check instead; an empty-slots screen for a
+          // health business that doesn't publish any is a harmless
+          // outcome, unlike showing this on an unrelated business.
+          if (profile.categoryId == kHealthRootCategoryId) ...[
+            const SizedBox(height: 10),
+            OutlinedButton.icon(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => ClinicSlotsScreen(clinicId: profile.id, clinicName: profile.name),
+                ),
+              ),
+              icon: const Icon(Icons.local_hospital_outlined),
+              label: Text(l10n.clinicBookAppointment),
+            ),
+          ],
+          const SizedBox(height: 8),
+        ],
+      ),
+    );
+    final cover = ProfileCoverHeader(
+      coverImageUrl: profile.coverUrl,
+      avatarImageUrl: profile.logoUrl,
+      title: profile.name,
+    );
+
+    if (tabs.isEmpty) {
+      return ResponsiveCenter(
+        maxWidth: 800,
+        child: Column(
+          children: [
+            cover,
+            header,
+            Expanded(
+              child: Center(
+                child: Text(
+                  l10n.businessNoContentYet,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).hintColor),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // NestedScrollView so the cover/avatar scroll away like any collapsing
+    // profile header instead of permanently sitting above the tabs (the
+    // same fix BusinessHomeScreen's own dashboard already got) — the tab
+    // bar pins once it reaches the top, and whichever tab is open gets the
+    // full screen once scrolled.
     return ResponsiveCenter(
       maxWidth: 800,
       child: DefaultTabController(
         length: tabs.length,
-        child: Column(
-          children: [
-            ProfileCoverHeader(
-              coverImageUrl: profile.coverUrl,
-              avatarImageUrl: profile.logoUrl,
-              title: profile.name,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: InkWell(
-                          onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => ReviewsScreen(
-                                userId: profile.id,
-                                name: profile.name,
-                                summary: profile.rating,
-                              ),
-                            ),
-                          ),
-                          child: BusinessRatingRow(rating: profile.rating, openNow: profile.openNow),
-                        ),
-                      ),
-                      _MessageButton(businessId: profile.id),
-                      const SizedBox(width: 8),
-                      _FollowButton(businessId: profile.id, isFollowing: profile.isFollowing),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    l10n.businessFollowersCount(profile.followersCount),
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),
-                  ),
-                  if (profile.about != null) ...[
-                    const SizedBox(height: 10),
-                    Text(profile.about!, style: Theme.of(context).textTheme.bodyMedium),
-                  ],
-                  // Health-root businesses only — the same "is this a
-                  // clinic" heuristic BusinessCapability::standsUnderHealth()
-                  // uses on the backend (category_id against the Health
-                  // root). No per-business "offers clinic appointments" flag
-                  // exists to check instead; an empty-slots screen for a
-                  // health business that doesn't publish any is a harmless
-                  // outcome, unlike showing this on an unrelated business.
-                  if (profile.categoryId == kHealthRootCategoryId) ...[
-                    const SizedBox(height: 10),
-                    OutlinedButton.icon(
-                      onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => ClinicSlotsScreen(clinicId: profile.id, clinicName: profile.name),
-                        ),
-                      ),
-                      icon: const Icon(Icons.local_hospital_outlined),
-                      label: Text(l10n.clinicBookAppointment),
-                    ),
-                  ],
-                ],
+        child: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            SliverToBoxAdapter(child: Column(children: [cover, header])),
+            SliverOverlapAbsorber(
+              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+              sliver: SliverPersistentHeader(
+                pinned: true,
+                delegate: SliverTabBarDelegate(TabBar(tabs: tabs)),
               ),
             ),
-            const SizedBox(height: 8),
-            if (tabs.isEmpty)
-              Expanded(
-                child: Center(
-                  child: Text(
-                    l10n.businessNoContentYet,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).hintColor),
-                  ),
-                ),
-              )
-            else ...[
-              TabBar(tabs: tabs),
-              Expanded(child: TabBarView(children: tabViews)),
-            ],
           ],
+          body: TabBarView(children: tabViews),
         ),
       ),
     );
@@ -253,39 +277,14 @@ class _FollowButton extends ConsumerWidget {
   }
 }
 
-class _PostsTab extends ConsumerStatefulWidget {
+class _PostsTab extends ConsumerWidget {
   final int businessId;
   const _PostsTab({required this.businessId});
 
   @override
-  ConsumerState<_PostsTab> createState() => _PostsTabState();
-}
-
-class _PostsTabState extends ConsumerState<_PostsTab> {
-  final _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-  }
-
-  void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
-      ref.read(businessPostsControllerProvider(widget.businessId).notifier).loadMore();
-    }
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final state = ref.watch(businessPostsControllerProvider(widget.businessId));
+    final state = ref.watch(businessPostsControllerProvider(businessId));
 
     if (state.isLoading) return const Center(child: CircularProgressIndicator());
     if (state.error != null) {
@@ -296,7 +295,7 @@ class _PostsTabState extends ConsumerState<_PostsTab> {
             Text(l10n.commonSomethingWentWrong),
             const SizedBox(height: 8),
             OutlinedButton(
-              onPressed: () => ref.read(businessPostsControllerProvider(widget.businessId).notifier).load(),
+              onPressed: () => ref.read(businessPostsControllerProvider(businessId).notifier).load(),
               child: Text(l10n.commonRetry),
             ),
           ],
@@ -305,28 +304,46 @@ class _PostsTabState extends ConsumerState<_PostsTab> {
     }
     if (state.items.isEmpty) return Center(child: Text(l10n.businessPostsEmpty));
 
-    return RefreshIndicator(
-      onRefresh: () => ref.read(businessPostsControllerProvider(widget.businessId).notifier).load(),
-      child: ListView.separated(
-        controller: _scrollController,
-        padding: const EdgeInsets.all(16),
-        itemCount: state.items.length + (state.isLoadingMore ? 1 : 0),
-        separatorBuilder: (context, index) => const SizedBox(height: 12),
-        itemBuilder: (context, index) {
-          if (index >= state.items.length) {
-            return const Padding(
-              padding: EdgeInsets.symmetric(vertical: 16),
-              child: Center(child: CircularProgressIndicator()),
-            );
-          }
-          final post = state.items[index];
-          return PostCard(
-            post: post,
-            onOpenComments: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => CommentsScreen(postId: post.id)),
-            ),
-          );
-        },
+    return NotificationListener<ScrollUpdateNotification>(
+      onNotification: (notification) {
+        if (notification.metrics.pixels >= notification.metrics.maxScrollExtent - 200) {
+          ref.read(businessPostsControllerProvider(businessId).notifier).loadMore();
+        }
+        return false;
+      },
+      child: RefreshIndicator(
+        onRefresh: () => ref.read(businessPostsControllerProvider(businessId).notifier).load(),
+        child: Builder(
+          builder: (context) => CustomScrollView(
+            key: const PageStorageKey('business_posts'),
+            slivers: [
+              SliverOverlapInjector(handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
+              SliverPadding(
+                padding: const EdgeInsets.all(16),
+                sliver: SliverList.separated(
+                  itemCount: state.items.length + (state.isLoadingMore ? 1 : 0),
+                  separatorBuilder: (context, index) => const SizedBox(height: 12),
+                  itemBuilder: (context, index) {
+                    if (index >= state.items.length) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        child: Center(child: CircularProgressIndicator()),
+                      );
+                    }
+                    final post = state.items[index];
+                    return PostCard(
+                      post: post,
+                      onOpenComments: () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => CommentsScreen(postId: post.id)),
+                      ),
+                      onShare: () => sharePost(ref, post),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -348,31 +365,41 @@ class _MenuTab extends ConsumerWidget {
       builder: (context, sections) {
         if (sections.isEmpty) return Center(child: Text(l10n.businessMenuEmpty));
 
-        return ListView.builder(
-          padding: const EdgeInsets.all(16),
-          itemCount: sections.length,
-          itemBuilder: (context, index) {
-            final section = sections[index];
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(section.name, style: Theme.of(context).textTheme.titleSmall),
-                  const SizedBox(height: 8),
-                  ...section.items.map(
-                    (item) => Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: MenuItemTile(
-                        item: item,
-                        onTap: () => showAddToCartSheet(context, item, sharedOrderId: sharedOrderId),
+        return Builder(
+          builder: (context) => CustomScrollView(
+            key: const PageStorageKey('business_menu'),
+            slivers: [
+              SliverOverlapInjector(handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
+              SliverPadding(
+                padding: const EdgeInsets.all(16),
+                sliver: SliverList.builder(
+                  itemCount: sections.length,
+                  itemBuilder: (context, index) {
+                    final section = sections[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(section.name, style: Theme.of(context).textTheme.titleSmall),
+                          const SizedBox(height: 8),
+                          ...section.items.map(
+                            (item) => Padding(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: MenuItemTile(
+                                item: item,
+                                onTap: () => showAddToCartSheet(context, item, sharedOrderId: sharedOrderId),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ),
-                ],
+                    );
+                  },
+                ),
               ),
-            );
-          },
+            ],
+          ),
         );
       },
     );
@@ -407,21 +434,33 @@ class _ServicesTab extends ConsumerWidget {
       builder: (context, offerings) {
         if (offerings.isEmpty) return Center(child: Text(l10n.businessServicesEmpty));
 
-        return ListView.separated(
-          padding: const EdgeInsets.all(16),
-          itemCount: offerings.length,
-          separatorBuilder: (context, index) => const SizedBox(height: 8),
-          itemBuilder: (context, index) {
-            final offering = offerings[index];
-            return OfferingCard(
-              offering: offering,
-              onTap: offering.isBookable
-                  ? () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => BookingScreen(businessId: businessId, offering: offering)),
-                    )
-                  : () => orderRetail(offering),
-            );
-          },
+        return Builder(
+          builder: (context) => CustomScrollView(
+            key: const PageStorageKey('business_services'),
+            slivers: [
+              SliverOverlapInjector(handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
+              SliverPadding(
+                padding: const EdgeInsets.all(16),
+                sliver: SliverList.separated(
+                  itemCount: offerings.length,
+                  separatorBuilder: (context, index) => const SizedBox(height: 8),
+                  itemBuilder: (context, index) {
+                    final offering = offerings[index];
+                    return OfferingCard(
+                      offering: offering,
+                      onTap: offering.isBookable
+                          ? () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => BookingScreen(businessId: businessId, offering: offering),
+                              ),
+                            )
+                          : () => orderRetail(offering),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
         );
       },
     );

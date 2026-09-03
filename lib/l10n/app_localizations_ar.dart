@@ -647,6 +647,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get postsDelete => 'حذف';
 
   @override
+  String get postsReadMore => 'المزيد';
+
+  @override
+  String get postsShare => 'مشاركة';
+
+  @override
   String get postsEdit => 'تعديل';
 
   @override

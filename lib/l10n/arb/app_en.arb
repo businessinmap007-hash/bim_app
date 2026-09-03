@@ -210,6 +210,8 @@
   },
   "postsDeleteConfirmTitle": "Delete this post?",
   "postsDelete": "Delete",
+  "postsReadMore": "More",
+  "postsShare": "Share",
   "postsEdit": "Edit",
   "postsEditTitle": "Edit post",
   "postsReplacePhotos": "Replace photos",

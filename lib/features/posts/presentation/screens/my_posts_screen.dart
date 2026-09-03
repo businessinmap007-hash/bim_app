@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/post_share.dart';
 import '../../../business/data/models/business_post.dart';
+import '../../../business/presentation/screens/business_detail_screen.dart';
 import '../../../business/presentation/widgets/post_card.dart';
 import '../../../comments/presentation/screens/comments_screen.dart';
 import '../../application/posts_controller.dart';
@@ -88,6 +90,14 @@ class FollowedFeedTab extends ConsumerWidget {
                             builder: (_) => CommentsScreen(postId: post.id),
                           ),
                         ),
+                        onOpenAuthor: post.author == null
+                            ? null
+                            : () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => BusinessDetailScreen(businessId: post.author!.id),
+                                ),
+                              ),
+                        onShare: () => sharePost(ref, post),
                       );
                     },
                   ),
@@ -185,6 +195,7 @@ class MyPostsTab extends ConsumerWidget {
                             builder: (_) => CommentsScreen(postId: post.id),
                           ),
                         ),
+                        onShare: () => sharePost(ref, post),
                       );
                     },
                   ),

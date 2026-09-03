@@ -327,10 +327,15 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
           const SizedBox(height: 16),
           Center(
             child: ProfileAvatarPicker(
-              imageUrl: user?.imageUrl,
+              // A business's photo IS its logo (see ProfileController::
+              // updateImage on the backend, which writes there for a
+              // business) — fall back to it the same way the drawer/home
+              // shell already do, so a business with a logo but no separate
+              // `image` still sees its real photo here, not a blank picker.
+              imageUrl: user?.logoUrl ?? user?.imageUrl,
               onCamera: () => _pickImage(ImageSource.camera),
               onGallery: () => _pickImage(ImageSource.gallery),
-              onRemove: user?.imageUrl != null ? _removeImage : null,
+              onRemove: (user?.logoUrl ?? user?.imageUrl) != null ? _removeImage : null,
             ),
           ),
           const SizedBox(height: 24),

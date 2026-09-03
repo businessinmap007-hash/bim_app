@@ -210,6 +210,8 @@
   },
   "postsDeleteConfirmTitle": "هل تريد حذف هذا المنشور؟",
   "postsDelete": "حذف",
+  "postsReadMore": "المزيد",
+  "postsShare": "مشاركة",
   "postsEdit": "تعديل",
   "postsEditTitle": "تعديل المنشور",
   "postsReplacePhotos": "استبدال الصور",

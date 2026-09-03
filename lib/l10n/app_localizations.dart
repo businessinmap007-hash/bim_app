@@ -1304,6 +1304,18 @@ abstract class AppLocalizations {
   /// **'حذف'**
   String get postsDelete;
 
+  /// No description provided for @postsReadMore.
+  ///
+  /// In ar, this message translates to:
+  /// **'المزيد'**
+  String get postsReadMore;
+
+  /// No description provided for @postsShare.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشاركة'**
+  String get postsShare;
+
   /// No description provided for @postsEdit.
   ///
   /// In ar, this message translates to:

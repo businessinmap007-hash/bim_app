@@ -82,6 +82,13 @@ class PostsApi {
     await _client.delete('/posts/$postId');
   }
 
+  /// POST /posts/{id}/share — bumps the post's share_count. Fire-and-forget
+  /// from the caller's side: a failed count bump shouldn't block the actual
+  /// share sheet the user already asked for.
+  Future<void> incrementShareCount(int postId) async {
+    await _client.post('/posts/$postId/share');
+  }
+
   Future<void> createPost({
     String? title,
     required String body,
