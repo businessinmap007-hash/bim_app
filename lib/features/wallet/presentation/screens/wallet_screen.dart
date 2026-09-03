@@ -22,6 +22,10 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+    // The summary/transactions providers aren't autoDispose, so a balance
+    // fetched on an earlier visit would otherwise sit stale forever —
+    // opening this screen always re-fetches, not just the first time.
+    Future.microtask(_refresh);
   }
 
   void _onScroll() {
@@ -49,7 +53,16 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
     final txState = ref.watch(walletTransactionsControllerProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.walletTitle)),
+      appBar: AppBar(
+        title: Text(l10n.walletTitle),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            tooltip: l10n.commonRefresh,
+            onPressed: _refresh,
+          ),
+        ],
+      ),
       body: RefreshIndicator(
         onRefresh: _refresh,
         child: ListView(
