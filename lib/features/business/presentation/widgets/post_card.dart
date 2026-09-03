@@ -131,15 +131,13 @@ class PostCard extends StatelessWidget {
           // The caption sits above the photo (owner's own ordering — the
           // words that give the picture context come first, not tucked
           // underneath it), 2 lines with a "...more" expand for anything
-          // longer.
+          // longer. No author-name prefix here even when showAuthor is on —
+          // the header row right above it already names the author; a
+          // second copy immediately below it just reads as a glitch.
           if (hasCaption)
             Padding(
               padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
-              child: _ExpandableCaption(
-                authorName: showAuthor ? post.author?.name : null,
-                title: post.title,
-                body: post.body,
-              ),
+              child: _ExpandableCaption(title: post.title, body: post.body),
             ),
           // Edge-to-edge, square corners — an Instagram photo isn't boxed
           // inside a card, it IS the card. A swipeable gallery once there's
@@ -243,10 +241,9 @@ class PostCard extends StatelessWidget {
 /// [TextPainter] against the actual laid-out width rather than guessing a
 /// character count, so it's right regardless of font/locale/screen size.
 class _ExpandableCaption extends StatefulWidget {
-  final String? authorName;
   final String title;
   final String body;
-  const _ExpandableCaption({this.authorName, required this.title, required this.body});
+  const _ExpandableCaption({required this.title, required this.body});
 
   @override
   State<_ExpandableCaption> createState() => _ExpandableCaptionState();
@@ -258,11 +255,6 @@ class _ExpandableCaptionState extends State<_ExpandableCaption> {
 
   TextSpan _span(ThemeData theme) => TextSpan(
     children: [
-      if (widget.authorName != null && widget.authorName!.isNotEmpty)
-        TextSpan(
-          text: '${widget.authorName} ',
-          style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700),
-        ),
       if (widget.title.isNotEmpty)
         TextSpan(
           text: widget.body.isNotEmpty ? '${widget.title}\n' : widget.title,
