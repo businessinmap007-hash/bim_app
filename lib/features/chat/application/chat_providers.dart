@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/core_providers.dart';
@@ -77,16 +79,20 @@ class OperationChatController extends StateNotifier<OperationChatState> {
     }
   }
 
-  Future<void> send(String body) async {
-    if (body.trim().isEmpty || state.isSending) return;
+  Future<void> send(String body, {List<Uint8List> attachments = const []}) async {
+    if (body.trim().isEmpty && attachments.isEmpty) return;
+    if (state.isSending) return;
     state = state.copyWith(isSending: true, clearError: true);
     try {
-      final message = await _api.postMessage(key.type, key.id, body.trim());
+      final message = await _api.postMessage(key.type, key.id, body.trim(), attachments: attachments);
       state = state.copyWith(messages: [...state.messages, message], isSending: false);
     } catch (e) {
       state = state.copyWith(isSending: false, error: e.toString());
+      rethrow;
     }
   }
+
+  Future<void> deleteChat() => _api.delete(key.type, key.id);
 }
 
 final operationChatControllerProvider = StateNotifierProvider.family<

@@ -6055,6 +6055,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'مغادرة'**
   String get chatLeaveAction;
+
+  /// No description provided for @chatDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف هذه المحادثة؟ لا يمكن التراجع عن هذا.'**
+  String get chatDeleteConfirm;
 }
 
 class _AppLocalizationsDelegate

@@ -1043,5 +1043,6 @@
   "chatRenameGroup": "إعادة تسمية المجموعة",
   "chatDeleteGroupConfirm": "حذف هذه المجموعة للجميع؟",
   "chatLeaveGroupConfirm": "مغادرة هذه المجموعة؟",
-  "chatLeaveAction": "مغادرة"
+  "chatLeaveAction": "مغادرة",
+  "chatDeleteConfirm": "حذف هذه المحادثة؟ لا يمكن التراجع عن هذا."
 }

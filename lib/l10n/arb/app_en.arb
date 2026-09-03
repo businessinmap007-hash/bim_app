@@ -1043,5 +1043,6 @@
   "chatRenameGroup": "Rename group",
   "chatDeleteGroupConfirm": "Delete this group for everyone?",
   "chatLeaveGroupConfirm": "Leave this group?",
-  "chatLeaveAction": "Leave"
+  "chatLeaveAction": "Leave",
+  "chatDeleteConfirm": "Delete this chat? This cannot be undone."
 }

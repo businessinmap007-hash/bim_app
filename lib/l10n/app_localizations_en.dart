@@ -3107,4 +3107,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get chatLeaveAction => 'Leave';
+
+  @override
+  String get chatDeleteConfirm => 'Delete this chat? This cannot be undone.';
 }

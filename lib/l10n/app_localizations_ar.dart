@@ -3106,4 +3106,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get chatLeaveAction => 'مغادرة';
+
+  @override
+  String get chatDeleteConfirm => 'حذف هذه المحادثة؟ لا يمكن التراجع عن هذا.';
 }
