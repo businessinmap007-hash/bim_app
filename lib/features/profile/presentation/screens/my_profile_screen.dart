@@ -16,9 +16,11 @@ import '../../../albums/presentation/screens/albums_screen.dart';
 import '../../../location/application/location_providers.dart';
 import '../../../location/data/models/location_models.dart';
 import '../../../location/presentation/widgets/location_picker_field.dart';
+import '../../../settings/presentation/screens/services_settings_screen.dart';
 import '../../application/profile_controller.dart';
 import '../../application/profile_options_controller.dart';
 import '../widgets/profile_avatar_picker.dart';
+import '../widgets/profile_cover_picker.dart';
 
 /// The signed-in user's OWN account — private by design. There is no route
 /// anywhere in this app (or endpoint on the backend) that opens someone
@@ -268,6 +270,28 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
     }
   }
 
+  Future<void> _pickCover(ImageSource source) async {
+    final picked = await ImagePicker().pickImage(source: source, imageQuality: 85);
+    if (picked == null) return;
+    try {
+      await ref.read(profileControllerProvider).uploadCover(picked.path);
+    } on ApiException catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message)));
+      }
+    }
+  }
+
+  Future<void> _removeCover() async {
+    try {
+      await ref.read(profileControllerProvider).removeCover();
+    } on ApiException catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message)));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -294,6 +318,13 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          ProfileCoverPicker(
+            imageUrl: user?.coverUrl,
+            onCamera: () => _pickCover(ImageSource.camera),
+            onGallery: () => _pickCover(ImageSource.gallery),
+            onRemove: user?.coverUrl != null ? _removeCover : null,
+          ),
+          const SizedBox(height: 16),
           Center(
             child: ProfileAvatarPicker(
               imageUrl: user?.imageUrl,
@@ -303,6 +334,8 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
             ),
           ),
           const SizedBox(height: 24),
+          _SectionHeader(l10n.settingsAccountSection),
+          const SizedBox(height: 8),
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
@@ -351,14 +384,6 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
             _FieldLabel(l10n.profileAbout),
             const SizedBox(height: 6),
             TextField(controller: _aboutController, maxLines: 3),
-            const SizedBox(height: 16),
-            _FieldLabel(l10n.profileCategory),
-            const SizedBox(height: 6),
-            _RootCategoryLabel(categoryId: user?.categoryId),
-            const SizedBox(height: 16),
-            _FieldLabel(l10n.profileSpecialty),
-            const SizedBox(height: 6),
-            _SpecialtyLabel(categoryId: user?.categoryId, categoryChildId: user?.categoryChildId),
           ],
           const SizedBox(height: 16),
           _FieldLabel(l10n.profileLocation),
@@ -413,11 +438,36 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
                   )
                 : Text(l10n.profileSave),
           ),
-          if (isBusiness && user?.categoryChildId != null) ...[
+          if (isBusiness) ...[
             const SizedBox(height: 32),
-            const Divider(),
+            _SectionHeader(l10n.profileActivitySettingsSection),
+            const SizedBox(height: 8),
+            _FieldLabel(l10n.profileCategory),
+            const SizedBox(height: 6),
+            _RootCategoryLabel(categoryId: user?.categoryId),
             const SizedBox(height: 16),
-            const _OptionsSection(),
+            _FieldLabel(l10n.profileSpecialty),
+            const SizedBox(height: 6),
+            _SpecialtyLabel(categoryId: user?.categoryId, categoryChildId: user?.categoryChildId),
+            if (user?.categoryChildId != null) ...[
+              const SizedBox(height: 16),
+              const _OptionsSection(),
+            ],
+            const SizedBox(height: 32),
+            _SectionHeader(l10n.settingsServicesSection),
+            const SizedBox(height: 8),
+            Card(
+              margin: EdgeInsets.zero,
+              clipBehavior: Clip.antiAlias,
+              child: ListTile(
+                leading: const Icon(Icons.storefront_outlined),
+                title: Text(l10n.settingsServicesSection),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const ServicesSettingsScreen()),
+                ),
+              ),
+            ),
           ],
           if (!isBusiness) ...[
             const SizedBox(height: 32),
@@ -624,6 +674,25 @@ class _FieldLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(label, style: Theme.of(context).textTheme.titleSmall);
+  }
+}
+
+/// Divides the page into "اعدادات الحساب / اعدادات النشاط / اعدادات
+/// الخدمات" — the account's own data, what it does (business only), and
+/// where it manages what it offers (business only, a link out rather than
+/// embedded — ServicesSettingsScreen is its own large screen).
+class _SectionHeader extends StatelessWidget {
+  final String label;
+  const _SectionHeader(this.label);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      label,
+      style: Theme.of(
+        context,
+      ).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.w700),
+    );
   }
 }
 

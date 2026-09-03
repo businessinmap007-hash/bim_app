@@ -1,27 +1,29 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
-import '../../../../l10n/app_localizations.dart';
 import '../../../auth/application/auth_controller.dart';
 import '../../../categories/presentation/screens/all_categories_screen.dart';
-import '../../../discovery/presentation/screens/search_screen.dart';
-import '../../../profile/presentation/screens/my_profile_screen.dart';
 import 'business_home_screen.dart';
 import 'customer_home_screen.dart';
+import 'my_services_screen.dart';
 
 /// The persistent bottom-nav shell for every signed-in account — Home /
-/// Categories / Search / My Profile, each a primary destination reachable
-/// from anywhere with one tap. Only the Home tab's content differs by
-/// account type (the business dashboard vs the category grid); Categories,
-/// Search and My Profile are the same screens for both, since browsing other
-/// businesses and editing your own account info aren't business-vs-customer
-/// concerns. Settings and logout stay in AppDrawer (every tab keeps its own
-/// drawer) since those are account-level actions, not destinations you jump
-/// between.
+/// Categories / My Services, icon-only (no labels, so the Home tab's own
+/// icon can be the account's own avatar instead of a generic house — the
+/// bar tells you which account is signed in at a glance). Only the Home
+/// tab's content differs by account type (the business dashboard vs the
+/// category feed); Categories (browsing + cross-category search, now
+/// inline instead of its own tab) and My Services (a person's own activity
+/// — bookings, orders, wallet, ...) are the same for both, since neither is
+/// a business-vs-customer concern. Account editing and settings stay in
+/// AppDrawer (its own header IS the door to the account) — not a fourth tab
+/// — since jumping to your own account isn't a "destination" the way these
+/// three are.
 ///
-/// An [IndexedStack] keeps all four tabs mounted so switching tabs never
-/// re-fetches — the tradeoff is that all four start loading as soon as the
+/// An [IndexedStack] keeps all three tabs mounted so switching tabs never
+/// re-fetches — the tradeoff is that all three start loading as soon as the
 /// shell mounts, which is fine at this scale (a handful of lightweight
 /// requests, not a heavy screen).
 class HomeShell extends ConsumerStatefulWidget {
@@ -36,15 +38,16 @@ class _HomeShellState extends ConsumerState<HomeShell> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     final authState = ref.watch(authControllerProvider);
     final isBusiness = authState is AuthSignedIn && authState.user.isBusiness;
+    final avatarUrl = authState is AuthSignedIn
+        ? (authState.user.logoUrl ?? authState.user.imageUrl)
+        : null;
 
     final tabs = [
       isBusiness ? const BusinessHomeScreen() : const CustomerHomeScreen(),
       const AllCategoriesScreen(),
-      const SearchScreen(),
-      const MyProfileScreen(),
+      const MyServicesScreen(),
     ];
 
     return Scaffold(
@@ -53,16 +56,52 @@ class _HomeShellState extends ConsumerState<HomeShell> {
         selectedIndex: _index,
         onDestinationSelected: (value) => setState(() => _index = value),
         indicatorColor: AppColors.accentGold.withValues(alpha: 0.2),
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
         destinations: [
           NavigationDestination(
-            icon: const Icon(Icons.home_outlined),
-            selectedIcon: const Icon(Icons.home_rounded),
-            label: isBusiness ? l10n.homeBusinessTitle : l10n.homeCustomerTitle,
+            icon: _HomeTabIcon(avatarUrl: avatarUrl, selected: _index == 0),
+            label: '',
           ),
-          NavigationDestination(icon: const Icon(Icons.category_outlined), selectedIcon: const Icon(Icons.category_rounded), label: l10n.navCategories),
-          NavigationDestination(icon: const Icon(Icons.search_outlined), selectedIcon: const Icon(Icons.search_rounded), label: l10n.navSearch),
-          NavigationDestination(icon: const Icon(Icons.person_outline), selectedIcon: const Icon(Icons.person_rounded), label: l10n.navProfile),
+          const NavigationDestination(
+            icon: Icon(Icons.category_outlined),
+            selectedIcon: Icon(Icons.category_rounded),
+            label: '',
+          ),
+          const NavigationDestination(
+            icon: Icon(Icons.grid_view_outlined),
+            selectedIcon: Icon(Icons.grid_view_rounded),
+            label: '',
+          ),
         ],
+      ),
+    );
+  }
+}
+
+/// The Home tab's own icon: the signed-in account's avatar when it has one,
+/// a ring around it while selected — same "this is you" affordance a house
+/// icon can't give.
+class _HomeTabIcon extends StatelessWidget {
+  final String? avatarUrl;
+  final bool selected;
+  const _HomeTabIcon({required this.avatarUrl, required this.selected});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 26,
+      height: 26,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: selected ? Border.all(color: AppColors.accentGold, width: 2) : null,
+      ),
+      child: ClipOval(
+        child: avatarUrl != null
+            ? CachedNetworkImage(imageUrl: avatarUrl!, fit: BoxFit.cover)
+            : Container(
+                color: AppColors.accentGold.withValues(alpha: 0.15),
+                child: const Icon(Icons.person, size: 16, color: AppColors.primaryNavy),
+              ),
       ),
     );
   }

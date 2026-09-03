@@ -74,6 +74,7 @@
   "settingsAppearanceSystem": "System default",
   "settingsAccountSection": "Account settings",
   "settingsServicesSection": "Service settings",
+  "profileActivitySettingsSection": "Activity settings",
   "settingsComingSoon": "Coming soon",
   "categoryPickerFieldLabel": "Category",
   "categoryPickerChooseHint": "Choose a category",

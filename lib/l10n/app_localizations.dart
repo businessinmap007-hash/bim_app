@@ -506,6 +506,12 @@ abstract class AppLocalizations {
   /// **'إعدادات الخدمات'**
   String get settingsServicesSection;
 
+  /// No description provided for @profileActivitySettingsSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعدادات النشاط'**
+  String get profileActivitySettingsSection;
+
   /// No description provided for @settingsComingSoon.
   ///
   /// In ar, this message translates to:

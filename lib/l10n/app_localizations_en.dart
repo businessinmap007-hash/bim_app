@@ -236,6 +236,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsServicesSection => 'Service settings';
 
   @override
+  String get profileActivitySettingsSection => 'Activity settings';
+
+  @override
   String get settingsComingSoon => 'Coming soon';
 
   @override

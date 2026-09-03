@@ -68,6 +68,22 @@ class ProfileApi {
     return AuthUser.fromJson(data as Map<String, dynamic>);
   }
 
+  Future<AuthUser> uploadCover(String filePath) async {
+    final data = await _client.post(
+      '/profile/cover',
+      data: FormData.fromMap({'cover': await MultipartFile.fromFile(filePath)}),
+    );
+    return AuthUser.fromJson(data as Map<String, dynamic>);
+  }
+
+  Future<AuthUser> removeCover() async {
+    final data = await _client.post(
+      '/profile/cover',
+      data: FormData.fromMap({'remove': true}),
+    );
+    return AuthUser.fromJson(data as Map<String, dynamic>);
+  }
+
   /// Business only — the backend 403s a client account. Only called once
   /// the profile screen already knows `isBusiness`, so that never surfaces.
   Future<ProfileOptionsPayload> showOptions() async {

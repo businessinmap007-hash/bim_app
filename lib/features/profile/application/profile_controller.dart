@@ -61,6 +61,18 @@ class ProfileController {
     _ref.read(authControllerProvider.notifier).setUser(user);
     return user;
   }
+
+  Future<AuthUser> uploadCover(String filePath) async {
+    final user = await _api.uploadCover(filePath);
+    _ref.read(authControllerProvider.notifier).setUser(user);
+    return user;
+  }
+
+  Future<AuthUser> removeCover() async {
+    final user = await _api.removeCover();
+    _ref.read(authControllerProvider.notifier).setUser(user);
+    return user;
+  }
 }
 
 final profileControllerProvider = Provider<ProfileController>((ref) {

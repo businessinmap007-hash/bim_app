@@ -240,6 +240,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get settingsServicesSection => 'إعدادات الخدمات';
 
   @override
+  String get profileActivitySettingsSection => 'إعدادات النشاط';
+
+  @override
   String get settingsComingSoon => 'قريبًا';
 
   @override
