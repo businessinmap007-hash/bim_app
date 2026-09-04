@@ -31,6 +31,11 @@ class ProfileController {
     int? categoryId,
     int? categoryChildId,
     String? type,
+    String? facebook,
+    String? instagram,
+    String? twitter,
+    String? youtube,
+    String? linkedin,
   }) async {
     final user = await _api.update(
       name: name,
@@ -45,6 +50,11 @@ class ProfileController {
       categoryId: categoryId,
       categoryChildId: categoryChildId,
       type: type,
+      facebook: facebook,
+      instagram: instagram,
+      twitter: twitter,
+      youtube: youtube,
+      linkedin: linkedin,
     );
     _ref.read(authControllerProvider.notifier).setUser(user);
     return user;

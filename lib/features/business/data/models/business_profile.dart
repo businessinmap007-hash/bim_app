@@ -24,6 +24,31 @@ class BusinessSections {
   );
 }
 
+/// A business's social media links — every field optional, the object itself
+/// null when nothing was ever set (see BusinessPageController::socialLinks).
+class SocialLinks {
+  final String? facebook;
+  final String? instagram;
+  final String? twitter;
+  final String? youtube;
+  final String? linkedin;
+
+  const SocialLinks({this.facebook, this.instagram, this.twitter, this.youtube, this.linkedin});
+
+  bool get isEmpty => facebook == null && instagram == null && twitter == null && youtube == null && linkedin == null;
+
+  factory SocialLinks.fromJson(Map<String, dynamic> json) => SocialLinks(
+    facebook: json['facebook'] as String?,
+    instagram: json['instagram'] as String?,
+    twitter: json['twitter'] as String?,
+    youtube: json['youtube'] as String?,
+    linkedin: json['linkedin'] as String?,
+  );
+
+  static SocialLinks? fromJsonOrNull(dynamic json) =>
+      json is Map<String, dynamic> ? SocialLinks.fromJson(json) : null;
+}
+
 /// GET /businesses/{id} — the profile aggregate a search result opens into.
 class BusinessProfile {
   final int id;
@@ -38,6 +63,7 @@ class BusinessProfile {
   final AddressPlace? city;
   final int? categoryId;
   final int? categoryChildId;
+  final SocialLinks? social;
   final RatingSummary rating;
   final bool openNow;
   final bool isFollowing;
@@ -58,6 +84,7 @@ class BusinessProfile {
     this.city,
     this.categoryId,
     this.categoryChildId,
+    this.social,
     required this.rating,
     required this.openNow,
     this.isFollowing = false,
@@ -81,6 +108,7 @@ class BusinessProfile {
     city: city,
     categoryId: categoryId,
     categoryChildId: categoryChildId,
+    social: social,
     rating: rating,
     openNow: openNow,
     isFollowing: isFollowing ?? this.isFollowing,
@@ -109,6 +137,7 @@ class BusinessProfile {
       city: location['city'] != null ? AddressPlace.fromJson(location['city'] as Map<String, dynamic>) : null,
       categoryId: (category['id'] as num?)?.toInt(),
       categoryChildId: (category['child_id'] as num?)?.toInt(),
+      social: SocialLinks.fromJsonOrNull(json['social']),
       rating: RatingSummary.fromJson(json['rating'] as Map<String, dynamic>? ?? const {}),
       openNow: json['open_now'] as bool? ?? true,
       isFollowing: json['is_following'] as bool? ?? false,

@@ -11,11 +11,10 @@ import '../../../albums/data/models/album.dart';
 import '../../application/business_page_providers.dart';
 import '../../data/models/business_profile.dart';
 
-/// "Who is this business" — phone, governorate/city, and its photo album,
-/// gathered on one screen instead of scattered (or, until now, simply
-/// missing) across the public business page. Social-media links aren't
-/// here yet: there's no such field on a business account at all today, a
-/// separate feature to add deliberately rather than fake with dead icons.
+/// "Who is this business" — phone, governorate/city, social links, and its
+/// photo album, gathered on one screen instead of scattered (or, until
+/// social links were added 2026-09-04, simply missing) across the public
+/// business page.
 class BusinessInfoScreen extends ConsumerWidget {
   final int businessId;
   const BusinessInfoScreen({super.key, required this.businessId});
@@ -60,6 +59,15 @@ class _BusinessInfoBody extends ConsumerWidget {
     }
   }
 
+  Future<void> _openSocial(BuildContext context, String value) async {
+    final l10n = AppLocalizations.of(context)!;
+    final url = value.startsWith('http://') || value.startsWith('https://') ? value : 'https://$value';
+    final ok = await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    if (!ok && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
@@ -96,6 +104,38 @@ class _BusinessInfoBody extends ConsumerWidget {
             ],
           ],
         ),
+        if (profile.social != null && !profile.social!.isEmpty) ...[
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              if (profile.social!.facebook != null)
+                _SocialIconButton(
+                  icon: Icons.facebook,
+                  onTap: () => _openSocial(context, profile.social!.facebook!),
+                ),
+              if (profile.social!.instagram != null)
+                _SocialIconButton(
+                  icon: Icons.camera_alt_outlined,
+                  onTap: () => _openSocial(context, profile.social!.instagram!),
+                ),
+              if (profile.social!.twitter != null)
+                _SocialIconButton(
+                  icon: Icons.alternate_email,
+                  onTap: () => _openSocial(context, profile.social!.twitter!),
+                ),
+              if (profile.social!.youtube != null)
+                _SocialIconButton(
+                  icon: Icons.play_circle_outline,
+                  onTap: () => _openSocial(context, profile.social!.youtube!),
+                ),
+              if (profile.social!.linkedin != null)
+                _SocialIconButton(
+                  icon: Icons.business_center_outlined,
+                  onTap: () => _openSocial(context, profile.social!.linkedin!),
+                ),
+            ],
+          ),
+        ],
         const SizedBox(height: 20),
         Text(l10n.businessInfoAlbums, style: Theme.of(context).textTheme.titleSmall),
         const SizedBox(height: 8),
@@ -122,6 +162,32 @@ class _InfoRow extends StatelessWidget {
       subtitle: Text(value, style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
       trailing: trailing,
       onTap: onTap,
+    );
+  }
+}
+
+class _SocialIconButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onTap;
+  const _SocialIconButton({required this.icon, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(end: 8),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(24),
+        child: Container(
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: AppColors.primaryNavy.withValues(alpha: 0.08),
+          ),
+          child: Icon(icon, color: AppColors.primaryNavy),
+        ),
+      ),
     );
   }
 }

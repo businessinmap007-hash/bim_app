@@ -457,6 +457,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profileAbout => 'نبذة عن النشاط';
 
   @override
+  String get profileSocialLinks => 'روابط التواصل الاجتماعي';
+
+  @override
   String get profileAccountType => 'نوع الحساب';
 
   @override

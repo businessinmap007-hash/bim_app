@@ -47,6 +47,11 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
   late final TextEditingController _nameEnController;
   late final TextEditingController _phoneController;
   late final TextEditingController _aboutController;
+  late final TextEditingController _facebookController;
+  late final TextEditingController _instagramController;
+  late final TextEditingController _twitterController;
+  late final TextEditingController _youtubeController;
+  late final TextEditingController _linkedinController;
   double? _latitude;
   double? _longitude;
   LocationSelection? _locationSelection;
@@ -69,6 +74,11 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
     _nameEnController = TextEditingController(text: user?.nameEn ?? '');
     _phoneController = TextEditingController(text: user?.phone ?? '');
     _aboutController = TextEditingController(text: user?.about ?? '');
+    _facebookController = TextEditingController(text: user?.social?.facebook ?? '');
+    _instagramController = TextEditingController(text: user?.social?.instagram ?? '');
+    _twitterController = TextEditingController(text: user?.social?.twitter ?? '');
+    _youtubeController = TextEditingController(text: user?.social?.youtube ?? '');
+    _linkedinController = TextEditingController(text: user?.social?.linkedin ?? '');
     _latitude = user?.latitude;
     _longitude = user?.longitude;
     _resolveSavedLocation(user);
@@ -141,6 +151,11 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
     _nameEnController.dispose();
     _phoneController.dispose();
     _aboutController.dispose();
+    _facebookController.dispose();
+    _instagramController.dispose();
+    _twitterController.dispose();
+    _youtubeController.dispose();
+    _linkedinController.dispose();
     super.dispose();
   }
 
@@ -211,6 +226,11 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
             countryId: _locationSelection?.countryId,
             governorateId: _locationSelection?.governorateId,
             cityId: _locationSelection?.cityId,
+            facebook: isBusiness ? _facebookController.text.trim() : null,
+            instagram: isBusiness ? _instagramController.text.trim() : null,
+            twitter: isBusiness ? _twitterController.text.trim() : null,
+            youtube: isBusiness ? _youtubeController.text.trim() : null,
+            linkedin: isBusiness ? _linkedinController.text.trim() : null,
           );
       if (mounted) {
         ScaffoldMessenger.of(
@@ -419,6 +439,35 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
             value: _locationSelection,
             onChanged: (selection) => setState(() => _locationSelection = selection),
           ),
+          if (isBusiness) ...[
+            const SizedBox(height: 24),
+            _FieldLabel(l10n.profileSocialLinks),
+            const SizedBox(height: 6),
+            TextField(
+              controller: _facebookController,
+              decoration: const InputDecoration(prefixIcon: Icon(Icons.facebook), hintText: 'facebook.com/...'),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _instagramController,
+              decoration: const InputDecoration(prefixIcon: Icon(Icons.camera_alt_outlined), hintText: 'instagram.com/...'),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _twitterController,
+              decoration: const InputDecoration(prefixIcon: Icon(Icons.alternate_email), hintText: 'x.com/...'),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _youtubeController,
+              decoration: const InputDecoration(prefixIcon: Icon(Icons.play_circle_outline), hintText: 'youtube.com/...'),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _linkedinController,
+              decoration: const InputDecoration(prefixIcon: Icon(Icons.business_center_outlined), hintText: 'linkedin.com/...'),
+            ),
+          ],
           const SizedBox(height: 16),
           Card(
             margin: EdgeInsets.zero,

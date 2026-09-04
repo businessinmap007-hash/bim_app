@@ -932,6 +932,12 @@ abstract class AppLocalizations {
   /// **'نبذة عن النشاط'**
   String get profileAbout;
 
+  /// No description provided for @profileSocialLinks.
+  ///
+  /// In ar, this message translates to:
+  /// **'روابط التواصل الاجتماعي'**
+  String get profileSocialLinks;
+
   /// No description provided for @profileAccountType.
   ///
   /// In ar, this message translates to:

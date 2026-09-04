@@ -145,6 +145,7 @@
   "profileEmail": "Email",
   "profileNameEnglish": "English name",
   "profileAbout": "About your business",
+  "profileSocialLinks": "Social media links",
   "profileAccountType": "Account type",
   "profileAccountTypeClient": "Customer",
   "profileAccountTypeBusiness": "Business",

@@ -31,6 +31,13 @@ class ProfileApi {
     // Only 'business' is ever sent — see ProfileController::update on the
     // backend for why a business can't self-downgrade through this call.
     String? type,
+    // Social links — each optional on its own; an empty string clears just
+    // that one, omitting the key entirely leaves it untouched.
+    String? facebook,
+    String? instagram,
+    String? twitter,
+    String? youtube,
+    String? linkedin,
   }) async {
     final data = await _client.put(
       '/profile',
@@ -47,6 +54,11 @@ class ProfileApi {
         'category_id': ?categoryId,
         'category_child_id': ?categoryChildId,
         'type': ?type,
+        'facebook': ?facebook,
+        'instagram': ?instagram,
+        'twitter': ?twitter,
+        'youtube': ?youtube,
+        'linkedin': ?linkedin,
       },
     );
     return AuthUser.fromJson(data as Map<String, dynamic>);

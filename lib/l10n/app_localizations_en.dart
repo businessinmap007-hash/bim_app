@@ -454,6 +454,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileAbout => 'About your business';
 
   @override
+  String get profileSocialLinks => 'Social media links';
+
+  @override
   String get profileAccountType => 'Account type';
 
   @override

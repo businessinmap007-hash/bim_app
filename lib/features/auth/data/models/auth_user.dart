@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import '../../../business/data/models/business_profile.dart' show SocialLinks;
 
 /// Mirrors `App\Http\Resources\V2\AccountResource` on the backend.
 /// Kept intentionally small — extend as screens need more fields, but never
@@ -21,6 +22,7 @@ class AuthUser {
   final int? cityId;
   final int? categoryId;
   final int? categoryChildId;
+  final SocialLinks? social;
 
   const AuthUser({
     required this.id,
@@ -40,6 +42,7 @@ class AuthUser {
     this.cityId,
     this.categoryId,
     this.categoryChildId,
+    this.social,
   });
 
   bool get isBusiness => type == 'business';
@@ -63,5 +66,6 @@ class AuthUser {
     cityId: (json['city_id'] as num?)?.toInt(),
     categoryId: (json['category_id'] as num?)?.toInt(),
     categoryChildId: (json['category_child_id'] as num?)?.toInt(),
+    social: SocialLinks.fromJsonOrNull(json['social']),
   );
 }
