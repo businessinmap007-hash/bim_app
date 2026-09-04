@@ -33,4 +33,15 @@ class MarketCatalogApi {
     final data = await _client.post('/business/menu/market-catalog', data: {'rows': payload}) as Map<String, dynamic>;
     return (saved: (data['saved'] as num?)?.toInt() ?? 0, cleared: (data['cleared'] as num?)?.toInt() ?? 0);
   }
+
+  /// Null clears the threshold — alerts then fire only once an item is
+  /// fully at zero, the original behaviour.
+  Future<int?> updateLowStockThreshold(int? threshold) async {
+    final data = await _client.put(
+          '/business/menu/market-catalog/low-stock-threshold',
+          data: {'low_stock_threshold': threshold},
+        )
+        as Map<String, dynamic>;
+    return (data['low_stock_threshold'] as num?)?.toInt();
+  }
 }

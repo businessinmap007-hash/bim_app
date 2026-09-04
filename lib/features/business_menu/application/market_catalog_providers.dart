@@ -71,11 +71,18 @@ class MarketCatalogController extends StateNotifier<AsyncValue<MarketCatalog>> {
       );
     }).toList();
 
-    state = AsyncValue.data(
-      MarketCatalog(groups: updatedGroups, saleUnits: current.saleUnits, defaultMarginPercent: current.defaultMarginPercent),
-    );
+    state = AsyncValue.data(current.copyWith(groups: updatedGroups));
 
     return result;
+  }
+
+  Future<void> updateLowStockThreshold(int? threshold) async {
+    final saved = await _api.updateLowStockThreshold(threshold);
+
+    final current = state.value;
+    if (current == null) return;
+
+    state = AsyncValue.data(current.copyWith(lowStockThreshold: saved, clearLowStockThreshold: saved == null));
   }
 }
 

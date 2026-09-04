@@ -839,6 +839,11 @@
   "@marketCatalogDefaultMargin": {
     "placeholders": { "margin": { "type": "String" } }
   },
+  "marketCatalogLowStockSettings": "تنبيه اقتراب النفاد",
+  "marketCatalogLowStockSettingsHint": "عند وصول كمية أي صنف إلى هذا الحد أو أقل، تصلك رسالة تنبيه لطلب كمية إضافية من موردك. الرقم عام لكل الأصناف بصرف النظر عن وحدة البيع (كيلو، عبوة...). اتركه فارغًا للتنبيه فقط عند النفاد التام.",
+  "marketCatalogLowStockThreshold": "التنبيه عند وصول الكمية إلى",
+  "marketCatalogLowStockNoAlert": "بلا تنبيه مسبق — عند الصفر فقط",
+  "marketCatalogLowStockSaved": "تم حفظ إعداد التنبيه.",
   "menuSectionsTitle": "أقسام القائمة",
   "menuSectionsEmpty": "لا توجد أقسام بعد.",
   "menuSectionAdd": "إضافة قسم",

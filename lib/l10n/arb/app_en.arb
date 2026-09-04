@@ -839,6 +839,11 @@
   "@marketCatalogDefaultMargin": {
     "placeholders": { "margin": { "type": "String" } }
   },
+  "marketCatalogLowStockSettings": "Low-stock alert",
+  "marketCatalogLowStockSettingsHint": "When any item's quantity reaches this number or lower, you'll get an alert to reorder from your supplier. The number applies to every item regardless of its own sale unit (kg, pack...). Leave it blank to alert only once an item is fully out.",
+  "marketCatalogLowStockThreshold": "Alert when quantity reaches",
+  "marketCatalogLowStockNoAlert": "No early alert — only at zero",
+  "marketCatalogLowStockSaved": "Alert setting saved.",
   "menuSectionsTitle": "Menu Sections",
   "menuSectionsEmpty": "No sections yet.",
   "menuSectionAdd": "Add section",

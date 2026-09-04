@@ -2513,6 +2513,22 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get marketCatalogLowStockSettings => 'تنبيه اقتراب النفاد';
+
+  @override
+  String get marketCatalogLowStockSettingsHint =>
+      'عند وصول كمية أي صنف إلى هذا الحد أو أقل، تصلك رسالة تنبيه لطلب كمية إضافية من موردك. الرقم عام لكل الأصناف بصرف النظر عن وحدة البيع (كيلو، عبوة...). اتركه فارغًا للتنبيه فقط عند النفاد التام.';
+
+  @override
+  String get marketCatalogLowStockThreshold => 'التنبيه عند وصول الكمية إلى';
+
+  @override
+  String get marketCatalogLowStockNoAlert => 'بلا تنبيه مسبق — عند الصفر فقط';
+
+  @override
+  String get marketCatalogLowStockSaved => 'تم حفظ إعداد التنبيه.';
+
+  @override
   String get menuSectionsTitle => 'أقسام القائمة';
 
   @override

@@ -4844,6 +4844,36 @@ abstract class AppLocalizations {
   /// **'هامش الربح الافتراضي {margin}% مُفعَّل — اكتب سعر التوريد فقط وسيُحسب سعر البيع تلقائيًا.'**
   String marketCatalogDefaultMargin(String margin);
 
+  /// No description provided for @marketCatalogLowStockSettings.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنبيه اقتراب النفاد'**
+  String get marketCatalogLowStockSettings;
+
+  /// No description provided for @marketCatalogLowStockSettingsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'عند وصول كمية أي صنف إلى هذا الحد أو أقل، تصلك رسالة تنبيه لطلب كمية إضافية من موردك. الرقم عام لكل الأصناف بصرف النظر عن وحدة البيع (كيلو، عبوة...). اتركه فارغًا للتنبيه فقط عند النفاد التام.'**
+  String get marketCatalogLowStockSettingsHint;
+
+  /// No description provided for @marketCatalogLowStockThreshold.
+  ///
+  /// In ar, this message translates to:
+  /// **'التنبيه عند وصول الكمية إلى'**
+  String get marketCatalogLowStockThreshold;
+
+  /// No description provided for @marketCatalogLowStockNoAlert.
+  ///
+  /// In ar, this message translates to:
+  /// **'بلا تنبيه مسبق — عند الصفر فقط'**
+  String get marketCatalogLowStockNoAlert;
+
+  /// No description provided for @marketCatalogLowStockSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ إعداد التنبيه.'**
+  String get marketCatalogLowStockSaved;
+
   /// No description provided for @menuSectionsTitle.
   ///
   /// In ar, this message translates to:

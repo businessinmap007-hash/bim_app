@@ -2507,6 +2507,22 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get marketCatalogLowStockSettings => 'Low-stock alert';
+
+  @override
+  String get marketCatalogLowStockSettingsHint =>
+      'When any item\'s quantity reaches this number or lower, you\'ll get an alert to reorder from your supplier. The number applies to every item regardless of its own sale unit (kg, pack...). Leave it blank to alert only once an item is fully out.';
+
+  @override
+  String get marketCatalogLowStockThreshold => 'Alert when quantity reaches';
+
+  @override
+  String get marketCatalogLowStockNoAlert => 'No early alert — only at zero';
+
+  @override
+  String get marketCatalogLowStockSaved => 'Alert setting saved.';
+
+  @override
   String get menuSectionsTitle => 'Menu Sections';
 
   @override

@@ -112,12 +112,23 @@ class MarketCatalog {
   final List<MarketCatalogGroup> groups;
   final List<SaleUnitOption> saleUnits;
   final double? defaultMarginPercent;
+  final int? lowStockThreshold;
 
   const MarketCatalog({
     required this.groups,
     required this.saleUnits,
     required this.defaultMarginPercent,
+    required this.lowStockThreshold,
   });
+
+  MarketCatalog copyWith({List<MarketCatalogGroup>? groups, int? lowStockThreshold, bool clearLowStockThreshold = false}) {
+    return MarketCatalog(
+      groups: groups ?? this.groups,
+      saleUnits: saleUnits,
+      defaultMarginPercent: defaultMarginPercent,
+      lowStockThreshold: clearLowStockThreshold ? null : (lowStockThreshold ?? this.lowStockThreshold),
+    );
+  }
 
   factory MarketCatalog.fromJson(Map<String, dynamic> json) {
     return MarketCatalog(
@@ -128,6 +139,7 @@ class MarketCatalog {
           .map((e) => SaleUnitOption.fromJson(e as Map<String, dynamic>))
           .toList(),
       defaultMarginPercent: (json['default_margin_percent'] as num?)?.toDouble(),
+      lowStockThreshold: (json['low_stock_threshold'] as num?)?.toInt(),
     );
   }
 }
