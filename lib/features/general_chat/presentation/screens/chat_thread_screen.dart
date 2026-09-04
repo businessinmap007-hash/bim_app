@@ -216,8 +216,12 @@ class _MessageBubble extends StatelessWidget {
     }
 
     final isMine = message.isMine;
-    final bubbleColor = isMine ? AppColors.accentGold : Theme.of(context).colorScheme.surfaceContainerHighest;
-    final textColor = isMine ? AppColors.primaryNavy : Theme.of(context).colorScheme.onSurface;
+    // Outline only, no fill — two colors distinguishing the two sides, both
+    // legible on either theme: gold is the brand's one color that already
+    // reads on light and dark backgrounds alike, and onSurface is the
+    // theme's own ink color (navy in light mode, white in dark).
+    final borderColor = isMine ? AppColors.accentGold : Theme.of(context).colorScheme.onSurface;
+    final textColor = Theme.of(context).colorScheme.onSurface;
 
     return Align(
       alignment: isMine ? AlignmentDirectional.centerEnd : AlignmentDirectional.centerStart,
@@ -228,7 +232,10 @@ class _MessageBubble extends StatelessWidget {
             margin: const EdgeInsets.only(top: 4),
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
-            decoration: BoxDecoration(color: bubbleColor, borderRadius: BorderRadius.circular(14)),
+            decoration: BoxDecoration(
+              border: Border.all(color: borderColor, width: 1.5),
+              borderRadius: BorderRadius.circular(14),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
