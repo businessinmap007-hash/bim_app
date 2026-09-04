@@ -1424,6 +1424,12 @@ abstract class AppLocalizations {
   /// **'الراتب (اختياري)'**
   String get jobsSalaryLabel;
 
+  /// No description provided for @jobsPublishAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشر الوظيفة'**
+  String get jobsPublishAction;
+
   /// No description provided for @cartTitle.
   ///
   /// In ar, this message translates to:

@@ -719,6 +719,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get jobsSalaryLabel => 'الراتب (اختياري)';
 
   @override
+  String get jobsPublishAction => 'نشر الوظيفة';
+
+  @override
   String get cartTitle => 'السلة';
 
   @override

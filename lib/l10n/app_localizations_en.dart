@@ -715,6 +715,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get jobsSalaryLabel => 'Salary (optional)';
 
   @override
+  String get jobsPublishAction => 'Publish job';
+
+  @override
   String get cartTitle => 'Cart';
 
   @override

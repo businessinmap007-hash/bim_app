@@ -115,6 +115,17 @@ class _CreateJobScreenState extends ConsumerState<CreateJobScreen> {
           ),
           const SizedBox(height: 12),
           TextField(controller: _salaryController, decoration: InputDecoration(labelText: l10n.jobsSalaryLabel)),
+          const SizedBox(height: 24),
+          FilledButton(
+            onPressed: _busy ? null : _publish,
+            child: _busy
+                ? const SizedBox(
+                    height: 18,
+                    width: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : Text(l10n.jobsPublishAction),
+          ),
         ],
       ),
     );
