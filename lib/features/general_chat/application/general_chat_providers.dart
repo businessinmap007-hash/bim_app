@@ -44,7 +44,10 @@ class ChatsListController extends StateNotifier<ChatsListState> {
   }
 }
 
-final chatsListControllerProvider = StateNotifierProvider<ChatsListController, ChatsListState>((ref) {
+// autoDispose: a chats-list visit that's no longer on screen is dropped, so
+// reopening the list (or a specific thread below) always re-fetches instead
+// of showing whatever was cached from the last visit.
+final chatsListControllerProvider = StateNotifierProvider.autoDispose<ChatsListController, ChatsListState>((ref) {
   return ChatsListController(ref.watch(generalChatApiProvider));
 });
 
@@ -130,9 +133,7 @@ class ChatThreadController extends StateNotifier<ChatThreadState> {
   }
 }
 
-final chatThreadControllerProvider = StateNotifierProvider.family<ChatThreadController, ChatThreadState, int>((
-  ref,
-  threadId,
-) {
-  return ChatThreadController(ref.watch(generalChatApiProvider), threadId);
-});
+final chatThreadControllerProvider =
+    StateNotifierProvider.autoDispose.family<ChatThreadController, ChatThreadState, int>((ref, threadId) {
+      return ChatThreadController(ref.watch(generalChatApiProvider), threadId);
+    });

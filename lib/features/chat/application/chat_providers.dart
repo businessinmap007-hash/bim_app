@@ -95,7 +95,10 @@ class OperationChatController extends StateNotifier<OperationChatState> {
   Future<void> deleteChat() => _api.delete(key.type, key.id);
 }
 
-final operationChatControllerProvider = StateNotifierProvider.family<
-    OperationChatController, OperationChatState, OperationChatKey>((ref, key) {
-  return OperationChatController(ref.watch(operationChatApiProvider), key);
-});
+// autoDispose: leaving the chat drops the controller, so reopening it (the
+// other party may have sent something meanwhile) always re-fetches instead
+// of showing whatever was cached from the last visit.
+final operationChatControllerProvider = StateNotifierProvider.autoDispose
+    .family<OperationChatController, OperationChatState, OperationChatKey>((ref, key) {
+      return OperationChatController(ref.watch(operationChatApiProvider), key);
+    });
