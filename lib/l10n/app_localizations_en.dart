@@ -2451,6 +2451,62 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuManagementTitle => 'My Menu';
 
   @override
+  String get marketCatalogTitle => 'Bulk Pricing';
+
+  @override
+  String get marketCatalogNotApplicable =>
+      'This screen is for ready-goods merchants (supermarkets, greengrocers, etc.).';
+
+  @override
+  String get marketCatalogEmpty =>
+      'No sections available for your business category.';
+
+  @override
+  String marketCatalogFilledOf(int filled, int total) {
+    return '$filled of $total priced';
+  }
+
+  @override
+  String get marketCatalogSave => 'Save';
+
+  @override
+  String marketCatalogSaved(int saved) {
+    String _temp0 = intl.Intl.pluralLogic(
+      saved,
+      locale: localeName,
+      other: 'Saved $saved items',
+      one: 'Saved 1 item',
+      zero: 'Nothing changed',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String marketCatalogCleared(int cleared) {
+    return ', and cleared $cleared emptied items';
+  }
+
+  @override
+  String get marketCatalogQuantity => 'Quantity';
+
+  @override
+  String get marketCatalogSupplyPrice => 'Supply price';
+
+  @override
+  String get marketCatalogSalePrice => 'Sale price';
+
+  @override
+  String get marketCatalogBrand => 'Brand / supplier';
+
+  @override
+  String get marketCatalogUnit => 'Unit';
+
+  @override
+  String marketCatalogDefaultMargin(String margin) {
+    return 'A default margin of $margin% is on — enter only the supply price and the sale price is computed for you.';
+  }
+
+  @override
   String get menuSectionsTitle => 'Menu Sections';
 
   @override

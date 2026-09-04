@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/business_menu_providers.dart';
 import '../../data/models/menu_item.dart';
+import 'market_catalog_screen.dart';
 import 'menu_item_edit_screen.dart';
 import 'menu_sections_screen.dart';
 
@@ -56,6 +57,13 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
       appBar: AppBar(
         title: Text(l10n.menuItemsTitle),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.checklist_rtl_outlined),
+            tooltip: l10n.marketCatalogTitle,
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const MarketCatalogScreen()),
+            ),
+          ),
           IconButton(
             icon: const Icon(Icons.category_outlined),
             tooltip: l10n.menuSectionsTitle,

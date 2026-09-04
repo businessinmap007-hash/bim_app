@@ -814,6 +814,31 @@
   "merchantAccountApplyButton": "Apply for a merchant account",
   "merchantAccountApplied": "Your application was submitted and will be reviewed.",
   "menuManagementTitle": "My Menu",
+  "marketCatalogTitle": "Bulk Pricing",
+  "marketCatalogNotApplicable": "This screen is for ready-goods merchants (supermarkets, greengrocers, etc.).",
+  "marketCatalogEmpty": "No sections available for your business category.",
+  "marketCatalogFilledOf": "{filled} of {total} priced",
+  "@marketCatalogFilledOf": {
+    "placeholders": { "filled": { "type": "int" }, "total": { "type": "int" } }
+  },
+  "marketCatalogSave": "Save",
+  "marketCatalogSaved": "{saved, plural, =0{Nothing changed} one{Saved 1 item} other{Saved {saved} items}}",
+  "@marketCatalogSaved": {
+    "placeholders": { "saved": { "type": "int" } }
+  },
+  "marketCatalogCleared": ", and cleared {cleared} emptied items",
+  "@marketCatalogCleared": {
+    "placeholders": { "cleared": { "type": "int" } }
+  },
+  "marketCatalogQuantity": "Quantity",
+  "marketCatalogSupplyPrice": "Supply price",
+  "marketCatalogSalePrice": "Sale price",
+  "marketCatalogBrand": "Brand / supplier",
+  "marketCatalogUnit": "Unit",
+  "marketCatalogDefaultMargin": "A default margin of {margin}% is on — enter only the supply price and the sale price is computed for you.",
+  "@marketCatalogDefaultMargin": {
+    "placeholders": { "margin": { "type": "String" } }
+  },
   "menuSectionsTitle": "Menu Sections",
   "menuSectionsEmpty": "No sections yet.",
   "menuSectionAdd": "Add section",

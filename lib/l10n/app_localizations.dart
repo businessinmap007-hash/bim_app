@@ -4766,6 +4766,84 @@ abstract class AppLocalizations {
   /// **'قائمتي'**
   String get menuManagementTitle;
 
+  /// No description provided for @marketCatalogTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'التسعير بالجملة'**
+  String get marketCatalogTitle;
+
+  /// No description provided for @marketCatalogNotApplicable.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذه الشاشة مخصّصة لتجار السلع الجاهزة (كالسوبر ماركت والخضار والفاكهة).'**
+  String get marketCatalogNotApplicable;
+
+  /// No description provided for @marketCatalogEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أقسام متاحة لتصنيف نشاطك.'**
+  String get marketCatalogEmpty;
+
+  /// No description provided for @marketCatalogFilledOf.
+  ///
+  /// In ar, this message translates to:
+  /// **'{filled} من {total} مُسعَّر'**
+  String marketCatalogFilledOf(int filled, int total);
+
+  /// No description provided for @marketCatalogSave.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ'**
+  String get marketCatalogSave;
+
+  /// No description provided for @marketCatalogSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'{saved, plural, =0{لم يتغيّر شيء} one{تم حفظ صنف واحد} two{تم حفظ صنفين} few{تم حفظ {saved} أصناف} many{تم حفظ {saved} صنفًا} other{تم حفظ {saved} صنف}}'**
+  String marketCatalogSaved(int saved);
+
+  /// No description provided for @marketCatalogCleared.
+  ///
+  /// In ar, this message translates to:
+  /// **'، وتعطيل {cleared} صنفًا فُرِّغ'**
+  String marketCatalogCleared(int cleared);
+
+  /// No description provided for @marketCatalogQuantity.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكمية'**
+  String get marketCatalogQuantity;
+
+  /// No description provided for @marketCatalogSupplyPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر التوريد'**
+  String get marketCatalogSupplyPrice;
+
+  /// No description provided for @marketCatalogSalePrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر البيع'**
+  String get marketCatalogSalePrice;
+
+  /// No description provided for @marketCatalogBrand.
+  ///
+  /// In ar, this message translates to:
+  /// **'العلامة التجارية / المورد'**
+  String get marketCatalogBrand;
+
+  /// No description provided for @marketCatalogUnit.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوحدة'**
+  String get marketCatalogUnit;
+
+  /// No description provided for @marketCatalogDefaultMargin.
+  ///
+  /// In ar, this message translates to:
+  /// **'هامش الربح الافتراضي {margin}% مُفعَّل — اكتب سعر التوريد فقط وسيُحسب سعر البيع تلقائيًا.'**
+  String marketCatalogDefaultMargin(String margin);
+
   /// No description provided for @menuSectionsTitle.
   ///
   /// In ar, this message translates to:

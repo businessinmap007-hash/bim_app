@@ -814,6 +814,31 @@
   "merchantAccountApplyButton": "التقدّم بطلب حساب Merchant",
   "merchantAccountApplied": "تم إرسال طلبك وسيتم مراجعته.",
   "menuManagementTitle": "قائمتي",
+  "marketCatalogTitle": "التسعير بالجملة",
+  "marketCatalogNotApplicable": "هذه الشاشة مخصّصة لتجار السلع الجاهزة (كالسوبر ماركت والخضار والفاكهة).",
+  "marketCatalogEmpty": "لا توجد أقسام متاحة لتصنيف نشاطك.",
+  "marketCatalogFilledOf": "{filled} من {total} مُسعَّر",
+  "@marketCatalogFilledOf": {
+    "placeholders": { "filled": { "type": "int" }, "total": { "type": "int" } }
+  },
+  "marketCatalogSave": "حفظ",
+  "marketCatalogSaved": "{saved, plural, =0{لم يتغيّر شيء} one{تم حفظ صنف واحد} two{تم حفظ صنفين} few{تم حفظ {saved} أصناف} many{تم حفظ {saved} صنفًا} other{تم حفظ {saved} صنف}}",
+  "@marketCatalogSaved": {
+    "placeholders": { "saved": { "type": "int" } }
+  },
+  "marketCatalogCleared": "، وتعطيل {cleared} صنفًا فُرِّغ",
+  "@marketCatalogCleared": {
+    "placeholders": { "cleared": { "type": "int" } }
+  },
+  "marketCatalogQuantity": "الكمية",
+  "marketCatalogSupplyPrice": "سعر التوريد",
+  "marketCatalogSalePrice": "سعر البيع",
+  "marketCatalogBrand": "العلامة التجارية / المورد",
+  "marketCatalogUnit": "الوحدة",
+  "marketCatalogDefaultMargin": "هامش الربح الافتراضي {margin}% مُفعَّل — اكتب سعر التوريد فقط وسيُحسب سعر البيع تلقائيًا.",
+  "@marketCatalogDefaultMargin": {
+    "placeholders": { "margin": { "type": "String" } }
+  },
   "menuSectionsTitle": "أقسام القائمة",
   "menuSectionsEmpty": "لا توجد أقسام بعد.",
   "menuSectionAdd": "إضافة قسم",

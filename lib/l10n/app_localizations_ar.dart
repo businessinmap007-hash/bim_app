@@ -2455,6 +2455,64 @@ class AppLocalizationsAr extends AppLocalizations {
   String get menuManagementTitle => 'قائمتي';
 
   @override
+  String get marketCatalogTitle => 'التسعير بالجملة';
+
+  @override
+  String get marketCatalogNotApplicable =>
+      'هذه الشاشة مخصّصة لتجار السلع الجاهزة (كالسوبر ماركت والخضار والفاكهة).';
+
+  @override
+  String get marketCatalogEmpty => 'لا توجد أقسام متاحة لتصنيف نشاطك.';
+
+  @override
+  String marketCatalogFilledOf(int filled, int total) {
+    return '$filled من $total مُسعَّر';
+  }
+
+  @override
+  String get marketCatalogSave => 'حفظ';
+
+  @override
+  String marketCatalogSaved(int saved) {
+    String _temp0 = intl.Intl.pluralLogic(
+      saved,
+      locale: localeName,
+      other: 'تم حفظ $saved صنف',
+      many: 'تم حفظ $saved صنفًا',
+      few: 'تم حفظ $saved أصناف',
+      two: 'تم حفظ صنفين',
+      one: 'تم حفظ صنف واحد',
+      zero: 'لم يتغيّر شيء',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String marketCatalogCleared(int cleared) {
+    return '، وتعطيل $cleared صنفًا فُرِّغ';
+  }
+
+  @override
+  String get marketCatalogQuantity => 'الكمية';
+
+  @override
+  String get marketCatalogSupplyPrice => 'سعر التوريد';
+
+  @override
+  String get marketCatalogSalePrice => 'سعر البيع';
+
+  @override
+  String get marketCatalogBrand => 'العلامة التجارية / المورد';
+
+  @override
+  String get marketCatalogUnit => 'الوحدة';
+
+  @override
+  String marketCatalogDefaultMargin(String margin) {
+    return 'هامش الربح الافتراضي $margin% مُفعَّل — اكتب سعر التوريد فقط وسيُحسب سعر البيع تلقائيًا.';
+  }
+
+  @override
   String get menuSectionsTitle => 'أقسام القائمة';
 
   @override
