@@ -8,6 +8,18 @@ final staffApiProvider = Provider<StaffApi>((ref) {
   return StaffApi(ref.watch(apiClientProvider));
 });
 
+/// The keys of the platform services this business's own category actually
+/// offers (BusinessCapability::forBusiness on the backend) — reused from the
+/// staff-delegation picker to gate which tiles Service Settings shows, so a
+/// hotel stops seeing "Training & Nutrition Plans" just because the field
+/// existed for everyone. `ORDERS`/`OFFERS`/`PRICES`/`WORKING_HOURS` (account
+/// management, not a sellable service) always come back regardless of
+/// category — see the backend's own doc comment on BusinessCapability.
+final myServiceKeysProvider = FutureProvider<Set<String>>((ref) async {
+  final options = await ref.watch(staffApiProvider).capabilities();
+  return options.map((o) => o.key).toSet();
+});
+
 class StaffState {
   final List<CapabilityOption> capabilities;
   final List<StaffMember> staff;
