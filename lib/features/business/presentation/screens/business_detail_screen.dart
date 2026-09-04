@@ -20,6 +20,7 @@ import '../../../ratings/presentation/screens/reviews_screen.dart';
 import '../../application/business_page_providers.dart';
 import '../../data/models/business_profile.dart';
 import '../../data/models/offering_item.dart';
+import 'business_info_screen.dart';
 import '../widgets/business_rating_row.dart';
 import '../widgets/menu_item_tile.dart';
 import '../widgets/offering_card.dart';
@@ -58,6 +59,13 @@ class BusinessDetailScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(profileAsync.valueOrNull?.name ?? ''),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.info_outline),
+            tooltip: AppLocalizations.of(context)!.businessInfoTitle,
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => BusinessInfoScreen(businessId: businessId)),
+            ),
+          ),
           if (sharedOrderId == null)
             IconButton(
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CartScreen())),

@@ -8,6 +8,17 @@ final albumApiProvider = Provider<AlbumApi>((ref) {
   return AlbumApi(ref.watch(apiClientProvider));
 });
 
+/// A business's own albums, read-only — the business info screen a visitor
+/// opens, not the owner's own management screens above.
+final businessAlbumsProvider = FutureProvider.family<List<Album>, int>((ref, businessId) {
+  return ref.watch(albumApiProvider).forBusiness(businessId);
+});
+
+final businessAlbumProvider =
+    FutureProvider.family<Album, ({int businessId, int albumId})>((ref, args) {
+      return ref.watch(albumApiProvider).albumForBusiness(args.businessId, args.albumId);
+    });
+
 class AlbumsState {
   final List<Album> albums;
   final bool isLoading;

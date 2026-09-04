@@ -542,6 +542,12 @@ abstract class AppLocalizations {
   /// **'إعدادات الخدمات'**
   String get settingsServicesSection;
 
+  /// No description provided for @settingsNoServicesForCategory.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد خدمات منصّة متاحة لتصنيف نشاطك الحالي.'**
+  String get settingsNoServicesForCategory;
+
   /// No description provided for @profileActivitySettingsSection.
   ///
   /// In ar, this message translates to:
@@ -763,6 +769,42 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لا يوجد محتوى لعرضه بعد'**
   String get businessNoContentYet;
+
+  /// No description provided for @businessInfoTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'معلومات النشاط'**
+  String get businessInfoTitle;
+
+  /// No description provided for @businessInfoPhone.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الهاتف'**
+  String get businessInfoPhone;
+
+  /// No description provided for @businessInfoLocation.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموقع'**
+  String get businessInfoLocation;
+
+  /// No description provided for @businessInfoOpenInMaps.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح في الخرائط'**
+  String get businessInfoOpenInMaps;
+
+  /// No description provided for @businessInfoAlbums.
+  ///
+  /// In ar, this message translates to:
+  /// **'ألبوم الصور'**
+  String get businessInfoAlbums;
+
+  /// No description provided for @businessInfoNoAlbums.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد صور بعد.'**
+  String get businessInfoNoAlbums;
 
   /// No description provided for @profileTitle.
   ///

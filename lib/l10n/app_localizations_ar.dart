@@ -258,6 +258,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get settingsServicesSection => 'إعدادات الخدمات';
 
   @override
+  String get settingsNoServicesForCategory =>
+      'لا توجد خدمات منصّة متاحة لتصنيف نشاطك الحالي.';
+
+  @override
   String get profileActivitySettingsSection => 'إعدادات النشاط';
 
   @override
@@ -368,6 +372,24 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get businessNoContentYet => 'لا يوجد محتوى لعرضه بعد';
+
+  @override
+  String get businessInfoTitle => 'معلومات النشاط';
+
+  @override
+  String get businessInfoPhone => 'رقم الهاتف';
+
+  @override
+  String get businessInfoLocation => 'الموقع';
+
+  @override
+  String get businessInfoOpenInMaps => 'فتح في الخرائط';
+
+  @override
+  String get businessInfoAlbums => 'ألبوم الصور';
+
+  @override
+  String get businessInfoNoAlbums => 'لا توجد صور بعد.';
 
   @override
   String get profileTitle => 'الملف الشخصي';

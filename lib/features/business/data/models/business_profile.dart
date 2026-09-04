@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import '../../../addresses/data/models/address.dart';
 import 'rating_summary.dart';
 
 /// Which tabs the client should surface — decided by the backend
@@ -31,6 +32,10 @@ class BusinessProfile {
   final String? coverUrl;
   final String? about;
   final String? phone;
+  final double? latitude;
+  final double? longitude;
+  final AddressPlace? governorate;
+  final AddressPlace? city;
   final int? categoryId;
   final int? categoryChildId;
   final RatingSummary rating;
@@ -47,6 +52,10 @@ class BusinessProfile {
     this.coverUrl,
     this.about,
     this.phone,
+    this.latitude,
+    this.longitude,
+    this.governorate,
+    this.city,
     this.categoryId,
     this.categoryChildId,
     required this.rating,
@@ -57,6 +66,8 @@ class BusinessProfile {
     required this.sections,
   });
 
+  bool get hasLocation => latitude != null && longitude != null;
+
   BusinessProfile copyWith({bool? isFollowing, int? followersCount}) => BusinessProfile(
     id: id,
     name: name,
@@ -64,6 +75,10 @@ class BusinessProfile {
     coverUrl: coverUrl,
     about: about,
     phone: phone,
+    latitude: latitude,
+    longitude: longitude,
+    governorate: governorate,
+    city: city,
     categoryId: categoryId,
     categoryChildId: categoryChildId,
     rating: rating,
@@ -77,6 +92,7 @@ class BusinessProfile {
   factory BusinessProfile.fromJson(Map<String, dynamic> json) {
     final category = json['category'] as Map<String, dynamic>? ?? const {};
     final counts = json['counts'] as Map<String, dynamic>? ?? const {};
+    final location = json['location'] as Map<String, dynamic>? ?? const {};
 
     return BusinessProfile(
       id: json['id'] as int,
@@ -85,6 +101,12 @@ class BusinessProfile {
       coverUrl: Env.assetUrl(json['cover'] as String?),
       about: (json['about'] as String?)?.trim().isNotEmpty == true ? json['about'] as String : null,
       phone: json['phone'] as String?,
+      latitude: (location['latitude'] as num?)?.toDouble(),
+      longitude: (location['longitude'] as num?)?.toDouble(),
+      governorate: location['governorate'] != null
+          ? AddressPlace.fromJson(location['governorate'] as Map<String, dynamic>)
+          : null,
+      city: location['city'] != null ? AddressPlace.fromJson(location['city'] as Map<String, dynamic>) : null,
       categoryId: (category['id'] as num?)?.toInt(),
       categoryChildId: (category['child_id'] as num?)?.toInt(),
       rating: RatingSummary.fromJson(json['rating'] as Map<String, dynamic>? ?? const {}),

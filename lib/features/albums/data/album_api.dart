@@ -59,4 +59,18 @@ class AlbumApi {
     );
     return Album.fromJson(data as Map<String, dynamic>);
   }
+
+  // ─────────────────────── Public (any business's own) ───────────────────
+  // GET /businesses/{id}/albums[/…] — read-only, no ownership check on the
+  // backend (that's the point): the business info screen a visitor opens.
+
+  Future<List<Album>> forBusiness(int businessId) async {
+    final data = await _client.get('/businesses/$businessId/albums') as List<dynamic>;
+    return data.map((e) => Album.fromJson(e as Map<String, dynamic>)).toList();
+  }
+
+  Future<Album> albumForBusiness(int businessId, int albumId) async {
+    final data = await _client.get('/businesses/$businessId/albums/$albumId');
+    return Album.fromJson(data as Map<String, dynamic>);
+  }
 }

@@ -64,6 +64,9 @@ dependencies:
   # Native share sheet
   share_plus: ^11.0.0
 
+  # Tap-to-call / open-in-maps from the business info screen
+  url_launcher: ^6.3.1
+
   # Calendar (booking module)
   table_calendar: ^3.1.3
 

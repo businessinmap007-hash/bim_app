@@ -254,6 +254,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsServicesSection => 'Service settings';
 
   @override
+  String get settingsNoServicesForCategory =>
+      'No platform services are available for your business\'s current category.';
+
+  @override
   String get profileActivitySettingsSection => 'Activity settings';
 
   @override
@@ -365,6 +369,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get businessNoContentYet => 'Nothing to show yet';
+
+  @override
+  String get businessInfoTitle => 'Business info';
+
+  @override
+  String get businessInfoPhone => 'Phone number';
+
+  @override
+  String get businessInfoLocation => 'Location';
+
+  @override
+  String get businessInfoOpenInMaps => 'Open in maps';
+
+  @override
+  String get businessInfoAlbums => 'Photo album';
+
+  @override
+  String get businessInfoNoAlbums => 'No photos yet.';
 
   @override
   String get profileTitle => 'My Profile';
