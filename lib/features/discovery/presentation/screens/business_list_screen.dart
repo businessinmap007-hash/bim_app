@@ -72,6 +72,16 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
         .setLocation(governorateId: result.governorateId, cityId: result.cityId, label: result.label);
   }
 
+  Future<void> _openAttributesFilter(BuildContext context, Set<int> current) async {
+    final result = await showModalBottomSheet<Set<int>>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => _AttributesFilterSheet(childId: widget.childId, initial: current),
+    );
+    if (result == null || !mounted) return;
+    ref.read(businessListControllerProvider(widget.childId).notifier).setOptions(result);
+  }
+
   @override
   void dispose() {
     _debounce?.cancel();
@@ -104,16 +114,31 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-              child: Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: InputChip(
-                  avatar: const Icon(Icons.place_outlined, size: 18),
-                  label: Text(state.locationLabel ?? l10n.businessFilterByLocation),
-                  onPressed: () => _openLocationPicker(context),
-                  onDeleted: state.locationLabel != null
-                      ? () => ref.read(businessListControllerProvider(widget.childId).notifier).clearLocation()
-                      : null,
-                ),
+              child: Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  InputChip(
+                    avatar: const Icon(Icons.place_outlined, size: 18),
+                    label: Text(state.locationLabel ?? l10n.businessFilterByLocation),
+                    onPressed: () => _openLocationPicker(context),
+                    onDeleted: state.locationLabel != null
+                        ? () => ref.read(businessListControllerProvider(widget.childId).notifier).clearLocation()
+                        : null,
+                  ),
+                  InputChip(
+                    avatar: const Icon(Icons.tune, size: 18),
+                    label: Text(
+                      state.optionIds.isEmpty
+                          ? l10n.businessFilterByAttributes
+                          : l10n.businessFilterAttributesCount(state.optionIds.length),
+                    ),
+                    onPressed: () => _openAttributesFilter(context, state.optionIds),
+                    onDeleted: state.optionIds.isNotEmpty
+                        ? () => ref.read(businessListControllerProvider(widget.childId).notifier).setOptions({})
+                        : null,
+                  ),
+                ],
               ),
             ),
             Expanded(
@@ -336,6 +361,118 @@ class _CityFilterList extends ConsumerWidget {
       ),
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stack) => Center(child: Text(l10n.commonSomethingWentWrong)),
+    );
+  }
+}
+
+/// Options grouped exactly as the backend groups them (line → modifier →
+/// descriptive, then alphabetical) — only options a real business under this
+/// child actually carries ever reach this list at all.
+class _AttributesFilterSheet extends ConsumerStatefulWidget {
+  final int childId;
+  final Set<int> initial;
+  const _AttributesFilterSheet({required this.childId, required this.initial});
+
+  @override
+  ConsumerState<_AttributesFilterSheet> createState() => _AttributesFilterSheetState();
+}
+
+class _AttributesFilterSheetState extends ConsumerState<_AttributesFilterSheet> {
+  late Set<int> _selected = {...widget.initial};
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final groupsAsync = ref.watch(attributeGroupsProvider(widget.childId));
+
+    return DraggableScrollableSheet(
+      initialChildSize: 0.75,
+      minChildSize: 0.4,
+      maxChildSize: 0.92,
+      expand: false,
+      builder: (context, scrollController) {
+        return SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                child: Row(
+                  children: [
+                    const SizedBox(width: 48),
+                    Expanded(
+                      child: Text(
+                        l10n.businessFilterByAttributes,
+                        style: Theme.of(context).textTheme.titleMedium,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.of(context).pop()),
+                  ],
+                ),
+              ),
+              const Divider(height: 1),
+              Expanded(
+                child: groupsAsync.when(
+                  data: (groups) {
+                    if (groups.isEmpty) {
+                      return Center(child: Text(l10n.businessFilterAttributesEmpty));
+                    }
+                    return ListView(
+                      controller: scrollController,
+                      children: [
+                        for (final group in groups) ...[
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+                            child: Text(
+                              group.name,
+                              style: Theme.of(
+                                context,
+                              ).textTheme.labelMedium?.copyWith(color: Theme.of(context).colorScheme.primary),
+                            ),
+                          ),
+                          for (final option in group.options)
+                            CheckboxListTile(
+                              value: _selected.contains(option.id),
+                              onChanged: (checked) => setState(() {
+                                if (checked ?? false) {
+                                  _selected.add(option.id);
+                                } else {
+                                  _selected.remove(option.id);
+                                }
+                              }),
+                              title: Text(option.name),
+                              subtitle: Text(l10n.businessFilterAttributeBusinessCount(option.businesses)),
+                            ),
+                        ],
+                      ],
+                    );
+                  },
+                  loading: () => const Center(child: CircularProgressIndicator()),
+                  error: (error, stack) => Center(child: Text(l10n.commonSomethingWentWrong)),
+                ),
+              ),
+              const Divider(height: 1),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    if (_selected.isNotEmpty)
+                      TextButton(
+                        onPressed: () => setState(() => _selected = {}),
+                        child: Text(l10n.businessFilterAttributesClear),
+                      ),
+                    const Spacer(),
+                    FilledButton(
+                      onPressed: () => Navigator.of(context).pop(_selected),
+                      child: Text(l10n.businessFilterAttributesApply),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

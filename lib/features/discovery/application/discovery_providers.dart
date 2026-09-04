@@ -2,11 +2,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/core_providers.dart';
 import '../data/discovery_api.dart';
+import '../data/models/attribute_group.dart';
 import '../data/models/business_summary.dart';
 import '../data/search_api.dart';
 
 final discoveryApiProvider = Provider<DiscoveryApi>((ref) {
   return DiscoveryApi(ref.watch(apiClientProvider));
+});
+
+/// The filterable options for one child — only options a real business
+/// actually carries (see DiscoveryApi.attributes). Cached per child for the
+/// life of the filter sheet.
+final attributeGroupsProvider = FutureProvider.family<List<AttributeGroup>, int>((ref, childId) {
+  return ref.watch(discoveryApiProvider).attributes(childId: childId);
 });
 
 final searchApiProvider = Provider<SearchApi>((ref) {
@@ -69,6 +77,7 @@ class BusinessListState {
   final int? governorateId;
   final int? cityId;
   final String? locationLabel;
+  final Set<int> optionIds;
 
   const BusinessListState({
     this.items = const [],
@@ -80,6 +89,7 @@ class BusinessListState {
     this.governorateId,
     this.cityId,
     this.locationLabel,
+    this.optionIds = const {},
   });
 
   BusinessListState copyWith({
@@ -94,6 +104,7 @@ class BusinessListState {
     int? cityId,
     String? locationLabel,
     bool clearLocation = false,
+    Set<int>? optionIds,
   }) {
     return BusinessListState(
       items: items ?? this.items,
@@ -105,6 +116,7 @@ class BusinessListState {
       governorateId: clearLocation ? null : (governorateId ?? this.governorateId),
       cityId: clearLocation ? null : (cityId ?? this.cityId),
       locationLabel: clearLocation ? null : (locationLabel ?? this.locationLabel),
+      optionIds: optionIds ?? this.optionIds,
     );
   }
 }
@@ -128,6 +140,7 @@ class BusinessListController extends StateNotifier<BusinessListState> {
         q: state.query,
         governorateId: state.governorateId,
         cityId: state.cityId,
+        optionIds: state.optionIds.toList(),
         page: _page,
       );
       state = state.copyWith(
@@ -149,6 +162,7 @@ class BusinessListController extends StateNotifier<BusinessListState> {
         q: state.query,
         governorateId: state.governorateId,
         cityId: state.cityId,
+        optionIds: state.optionIds.toList(),
         page: _page + 1,
       );
       _page += 1;
@@ -187,6 +201,11 @@ class BusinessListController extends StateNotifier<BusinessListState> {
 
   void clearLocation() {
     state = state.copyWith(clearLocation: true);
+    load();
+  }
+
+  void setOptions(Set<int> optionIds) {
+    state = state.copyWith(optionIds: optionIds);
     load();
   }
 }

@@ -1,5 +1,6 @@
 import '../../../core/network/api_client.dart';
 import '../../../core/network/paginated.dart';
+import 'models/attribute_group.dart';
 import 'models/business_summary.dart';
 
 /// GET /discovery/businesses — public, no auth required. See
@@ -16,6 +17,7 @@ class DiscoveryApi {
     bool openNow = false,
     int? governorateId,
     int? cityId,
+    List<int> optionIds = const [],
     int page = 1,
     int perPage = 20,
   }) async {
@@ -25,8 +27,9 @@ class DiscoveryApi {
         'child_id': childId,
         if (q != null && q.isNotEmpty) 'q': q,
         if (openNow) 'open_now': true,
-        if (governorateId != null) 'governorate_id': governorateId,
-        if (cityId != null) 'city_id': cityId,
+        'governorate_id': ?governorateId,
+        'city_id': ?cityId,
+        if (optionIds.isNotEmpty) 'option_ids': optionIds,
         'page': page,
         'per_page': perPage,
       },
@@ -34,5 +37,18 @@ class DiscoveryApi {
     final businesses =
         (data as Map<String, dynamic>)['businesses'] as Map<String, dynamic>;
     return Paginated.fromJson(businesses, BusinessSummary.fromJson);
+  }
+
+  /// The filterable options for this child — only ones at least one real,
+  /// live business actually carries (the backend drops the rest so the
+  /// filter never offers a choice that always returns nothing).
+  Future<List<AttributeGroup>> attributes({required int childId, int? categoryId}) async {
+    final data = await _client.get(
+      '/discovery/attributes',
+      query: {'child_id': childId, 'category_id': ?categoryId},
+    ) as Map<String, dynamic>;
+    return (data['groups'] as List<dynamic>? ?? [])
+        .map((e) => AttributeGroup.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 }
