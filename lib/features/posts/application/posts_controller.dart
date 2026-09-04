@@ -224,6 +224,17 @@ class MyJobsController extends StateNotifier<MyJobsState> {
       state = state.copyWith(isLoadingMore: false, error: e.toString());
     }
   }
+
+  Future<void> remove(int jobId) async {
+    final previous = state.items;
+    state = state.copyWith(items: previous.where((j) => j.id != jobId).toList());
+    try {
+      await _api.deleteJob(jobId);
+    } catch (_) {
+      state = state.copyWith(items: previous);
+      rethrow;
+    }
+  }
 }
 
 final myJobsControllerProvider = StateNotifierProvider<MyJobsController, MyJobsState>((ref) {

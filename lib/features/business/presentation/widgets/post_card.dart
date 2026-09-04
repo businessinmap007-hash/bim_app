@@ -9,13 +9,16 @@ import 'post_image_carousel.dart';
 /// square corners (no card chrome boxing it in), then an icon-only action
 /// row with the like count and a "view comments" link.
 ///
-/// [showAuthor] is on for a multi-author list (the followed-accounts feed)
-/// and off for a single business's own wall, where every card would repeat
-/// the same name — on, the avatar/name are also a tap target into
-/// [onOpenAuthor]. [onReact]/[onEdit]/[onDelete] are opt-in per screen: the
-/// public wall stays read-only, the feed can like, and "my posts" can edit
-/// or delete — that menu shows whenever either is set, independently of
-/// [showAuthor], so it isn't silently hidden on the one screen it matters.
+/// [showAuthor] shows the author's photo/name (and the post's creation
+/// time — see [_formatDateTime]) above the post, exactly like any ordinary
+/// social post; on by default everywhere, including a business's own wall,
+/// per the owner's own instruction that this identity/timestamp header
+/// matters and should never be silently dropped. When on, the avatar/name
+/// are also a tap target into [onOpenAuthor]. [onReact]/[onEdit]/[onDelete]
+/// are opt-in per screen: the public wall stays read-only, the feed can
+/// like, and "my posts" can edit or delete — that menu shows whenever
+/// either is set, independently of [showAuthor], so it isn't silently
+/// hidden on the one screen it matters.
 class PostCard extends StatelessWidget {
   final BusinessPost post;
   final bool showAuthor;
@@ -29,7 +32,7 @@ class PostCard extends StatelessWidget {
   const PostCard({
     super.key,
     required this.post,
-    this.showAuthor = false,
+    this.showAuthor = true,
     this.onReact,
     this.onEdit,
     this.onDelete,
@@ -114,11 +117,22 @@ class PostCard extends StatelessWidget {
                     child: showAuthor && post.author != null
                         ? InkWell(
                             onTap: canOpenAuthor ? onOpenAuthor : null,
-                            child: Text(
-                              post.author!.name,
-                              style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  post.author!.name,
+                                  style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                if (post.createdAt != null)
+                                  Text(
+                                    _formatDateTime(post.createdAt!),
+                                    style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
+                                  ),
+                              ],
                             ),
                           )
                         : const SizedBox.shrink(),
@@ -235,6 +249,15 @@ class PostCard extends StatelessWidget {
       ),
     );
   }
+}
+
+/// `created_at` is a real server instant (stamped by `now()`, not a
+/// user-typed wall clock like a booking's `starts_at`), so — unlike the
+/// dates covered in the timezone-display fix — `.toLocal()` is correct here.
+String _formatDateTime(DateTime dt) {
+  final local = dt.toLocal();
+  return '${local.year}-${local.month.toString().padLeft(2, '0')}-${local.day.toString().padLeft(2, '0')} '
+      '${local.hour.toString().padLeft(2, '0')}:${local.minute.toString().padLeft(2, '0')}';
 }
 
 /// The caption text, capped at 2 lines with a "...more" toggle — checked via

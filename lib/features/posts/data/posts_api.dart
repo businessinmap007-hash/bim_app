@@ -167,4 +167,29 @@ class PostsApi {
       },
     );
   }
+
+  /// POST /jobs/{id} — edit own vacancy. category/child are never sent: a
+  /// job is always the posting business's own field, not an editable choice
+  /// (see CreateJobScreen and JobController::update).
+  Future<void> updateJob(
+    int jobId, {
+    required String title,
+    required String body,
+    String? requirements,
+    String? salary,
+  }) async {
+    await _client.post(
+      '/jobs/$jobId',
+      data: {
+        'title': title,
+        'body': body,
+        'requirements': requirements ?? '',
+        'salary': salary ?? '',
+      },
+    );
+  }
+
+  Future<void> deleteJob(int jobId) async {
+    await _client.delete('/jobs/$jobId');
+  }
 }

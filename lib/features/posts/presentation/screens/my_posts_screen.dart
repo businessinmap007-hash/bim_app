@@ -10,6 +10,7 @@ import '../../../business/presentation/widgets/post_card.dart';
 import '../../../comments/presentation/screens/comments_screen.dart';
 import '../../application/posts_controller.dart';
 import '../../data/models/job_post.dart';
+import 'edit_job_screen.dart';
 import 'edit_post_screen.dart';
 
 /// The followed-accounts feed tab — public because [BusinessHomeScreen] and
@@ -212,6 +213,29 @@ class MyPostsTab extends ConsumerWidget {
 class MyJobsTab extends ConsumerWidget {
   const MyJobsTab({super.key});
 
+  Future<void> _confirmDelete(BuildContext context, WidgetRef ref, JobPost job) async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.postsDeleteConfirmTitle),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l10n.commonCancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l10n.postsDelete),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true) {
+      await ref.read(myJobsControllerProvider.notifier).remove(job.id);
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
@@ -255,7 +279,14 @@ class MyJobsTab extends ConsumerWidget {
                           child: Center(child: CircularProgressIndicator()),
                         );
                       }
-                      return _JobTile(job: state.items[index]);
+                      final job = state.items[index];
+                      return _JobTile(
+                        job: job,
+                        onEdit: () => Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => EditJobScreen(job: job)),
+                        ),
+                        onDelete: () => _confirmDelete(context, ref, job),
+                      );
                     },
                   ),
                 ),
@@ -270,7 +301,9 @@ class MyJobsTab extends ConsumerWidget {
 
 class _JobTile extends StatelessWidget {
   final JobPost job;
-  const _JobTile({required this.job});
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
+  const _JobTile({required this.job, this.onEdit, this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -297,6 +330,18 @@ class _JobTile extends StatelessWidget {
                     ),
                     visualDensity: VisualDensity.compact,
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                if (onEdit != null || onDelete != null)
+                  PopupMenuButton<String>(
+                    icon: const Icon(Icons.more_vert, size: 20),
+                    onSelected: (choice) {
+                      if (choice == 'edit') onEdit?.call();
+                      if (choice == 'delete') onDelete?.call();
+                    },
+                    itemBuilder: (context) => [
+                      if (onEdit != null) PopupMenuItem(value: 'edit', child: Text(l10n.postsEdit)),
+                      if (onDelete != null) PopupMenuItem(value: 'delete', child: Text(l10n.postsDelete)),
+                    ],
                   ),
               ],
             ),
