@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/app_drawer.dart';
 import '../../../../shared/widgets/cart_icon_button.dart';
+import '../../../../shared/widgets/chat_icon_button.dart';
 import '../../../../shared/widgets/create_post_button.dart';
 import '../../../../shared/widgets/notification_bell_button.dart';
 import '../../../../shared/widgets/sliver_tab_bar_delegate.dart';
@@ -32,7 +33,7 @@ class CustomerHomeScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(l10n.homeCustomerTitle),
-          actions: const [CreatePostButton(), NotificationBellButton(), CartIconButton()],
+          actions: const [CreatePostButton(), ChatIconButton(), NotificationBellButton(), CartIconButton()],
         ),
         drawer: const AppDrawer(),
         body: NestedScrollView(

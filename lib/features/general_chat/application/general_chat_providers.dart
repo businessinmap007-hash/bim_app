@@ -10,6 +10,12 @@ final generalChatApiProvider = Provider<GeneralChatApi>((ref) {
   return GeneralChatApi(ref.watch(apiClientProvider));
 });
 
+/// A home-screen icon badge — a single lightweight call, not the full list.
+/// Invalidated (not polled) after opening a conversation, which marks it read.
+final unreadChatCountProvider = FutureProvider<int>((ref) {
+  return ref.watch(generalChatApiProvider).unreadCount();
+});
+
 class ChatsListState {
   final List<ChatThreadSummary> items;
   final bool isLoading;
@@ -86,9 +92,10 @@ class ChatThreadState {
 
 class ChatThreadController extends StateNotifier<ChatThreadState> {
   final GeneralChatApi _api;
+  final Ref _ref;
   final int threadId;
 
-  ChatThreadController(this._api, this.threadId) : super(const ChatThreadState()) {
+  ChatThreadController(this._api, this._ref, this.threadId) : super(const ChatThreadState()) {
     load();
   }
 
@@ -101,6 +108,8 @@ class ChatThreadController extends StateNotifier<ChatThreadState> {
         thread: page.thread,
         isLoading: false,
       );
+      // Opening the conversation just marked it read server-side.
+      _ref.invalidate(unreadChatCountProvider);
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
     }
@@ -135,5 +144,5 @@ class ChatThreadController extends StateNotifier<ChatThreadState> {
 
 final chatThreadControllerProvider =
     StateNotifierProvider.autoDispose.family<ChatThreadController, ChatThreadState, int>((ref, threadId) {
-      return ChatThreadController(ref.watch(generalChatApiProvider), threadId);
+      return ChatThreadController(ref.watch(generalChatApiProvider), ref, threadId);
     });

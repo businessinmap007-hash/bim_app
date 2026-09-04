@@ -17,6 +17,13 @@ class GeneralChatApi {
     return data.map((e) => ChatThreadSummary.fromJson(e as Map<String, dynamic>)).toList();
   }
 
+  /// A home-screen icon badge — the total across every conversation, not
+  /// the list itself. See Api\V2\ChatController::unreadCount.
+  Future<int> unreadCount() async {
+    final data = await _client.get('/chats/unread-count') as Map<String, dynamic>;
+    return (data['unread_count'] as num).toInt();
+  }
+
   Future<DirectChatThread> startWith(int userId) async {
     final data = await _client.post('/chats', data: {'user_id': userId}) as Map<String, dynamic>;
     return DirectChatThread.fromJson(data);
