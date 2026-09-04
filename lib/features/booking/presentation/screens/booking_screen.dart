@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -39,16 +41,62 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   final _notesController = TextEditingController();
   bool _submitting = false;
 
+  // Live total — same math as the actual booking (line + selected
+  // modifiers per day, × days/quantity), fetched from the server so it
+  // never disagrees with what create() ends up charging. Debounced so
+  // toggling a few checkboxes in a row doesn't fire a request per tap.
+  double? _previewTotal;
+  bool _previewLoading = false;
+  Timer? _previewDebounce;
+  int _previewRequestId = 0;
+
   TextEditingController _controllerFor(String key) =>
       _textControllers.putIfAbsent(key, () => TextEditingController());
 
   @override
   void dispose() {
     _notesController.dispose();
+    _previewDebounce?.cancel();
     for (final c in _textControllers.values) {
       c.dispose();
     }
     super.dispose();
+  }
+
+  void _schedulePreview() {
+    _previewDebounce?.cancel();
+    _previewDebounce = Timer(const Duration(milliseconds: 350), _fetchPreview);
+  }
+
+  Future<void> _fetchPreview() async {
+    final requestId = ++_previewRequestId;
+    setState(() => _previewLoading = true);
+    try {
+      final total = await ref.read(bookingApiProvider).preview(
+        businessId: widget.businessId,
+        serviceId: widget.offering.serviceId ?? 0,
+        bookableId: _unitId,
+        offeringId: widget.offering.id,
+        offeringType: 'service_price',
+        startsAt: _startsAt,
+        endsAt: _endsAt,
+        quantity: _quantity,
+        partySize: _partySize,
+        optionIds: _modifierOptionIds.toList(),
+      );
+      // A slower earlier request landing after a newer one must not
+      // overwrite it with a stale total.
+      if (mounted && requestId == _previewRequestId) {
+        setState(() {
+          _previewTotal = total;
+          _previewLoading = false;
+        });
+      }
+    } catch (_) {
+      if (mounted && requestId == _previewRequestId) {
+        setState(() => _previewLoading = false);
+      }
+    }
   }
 
   List<BookingFormField> _fallbackFields(AppLocalizations l10n) => [
@@ -73,6 +121,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
         _startsAt = picked;
       }
     });
+    _schedulePreview();
   }
 
   Future<void> _pickDateTime({required bool isEnd}) async {
@@ -95,6 +144,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
         _startsAt = combined;
       }
     });
+    _schedulePreview();
   }
 
   /// Everything the shape asked for that has no dedicated column —
@@ -183,6 +233,9 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
         onRetry: () => ref.invalidate(bookingFormProvider(widget.businessId)),
         builder: (context, form) {
           final l10n = AppLocalizations.of(context)!;
+          if (_previewTotal == null && !_previewLoading && _previewRequestId == 0) {
+            WidgetsBinding.instance.addPostFrameCallback((_) => _fetchPreview());
+          }
           final rawFields = form.shape?.fields ?? _fallbackFields(l10n);
           // DURATION asks for both 'datetime' (a start point) and 'duration'
           // (start + how long) — the 'duration' picker's own "from" already
@@ -216,13 +269,16 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                   (m) => CheckboxListTile(
                     contentPadding: EdgeInsets.zero,
                     value: _modifierOptionIds.contains(m.optionId),
-                    onChanged: (checked) => setState(() {
-                      if (checked ?? false) {
-                        _modifierOptionIds.add(m.optionId);
-                      } else {
-                        _modifierOptionIds.remove(m.optionId);
-                      }
-                    }),
+                    onChanged: (checked) {
+                      setState(() {
+                        if (checked ?? false) {
+                          _modifierOptionIds.add(m.optionId);
+                        } else {
+                          _modifierOptionIds.remove(m.optionId);
+                        }
+                      });
+                      _schedulePreview();
+                    },
                     title: Text(m.name),
                     secondary: Text(
                       m.adjustType == 'percent'
@@ -232,7 +288,29 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                   ),
                 ),
               ],
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
+              Card(
+                margin: EdgeInsets.zero,
+                color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.35),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(l10n.bookingTotalLabel, style: Theme.of(context).textTheme.titleSmall),
+                      _previewLoading && _previewTotal == null
+                          ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
+                          : Text(
+                              _previewTotal != null
+                                  ? '${_previewTotal!.toStringAsFixed(0)} ${widget.offering.currency}'
+                                  : '${widget.offering.price.toStringAsFixed(0)} ${widget.offering.currency}',
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+                            ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
               FilledButton(
                 onPressed: _submitting ? null : () => _submit(form, units),
                 child: _submitting
@@ -274,7 +352,12 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                 contentPadding: EdgeInsets.zero,
                 value: entry.unit.id,
                 groupValue: _unitId,
-                onChanged: entry.unit.available == false ? null : (v) => setState(() => _unitId = v),
+                onChanged: entry.unit.available == false
+                    ? null
+                    : (v) {
+                        setState(() => _unitId = v);
+                        _schedulePreview();
+                      },
                 title: Row(
                   children: [
                     if (entry.unit.images.isNotEmpty) ...[
@@ -330,7 +413,10 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
               contentPadding: EdgeInsets.zero,
               value: u.id,
               groupValue: _unitId,
-              onChanged: (v) => setState(() => _unitId = v),
+              onChanged: (v) {
+                setState(() => _unitId = v);
+                _schedulePreview();
+              },
               title: Text(u.title.isNotEmpty ? u.title : (u.code ?? '#${u.id}')),
               subtitle: u.capacity != null ? Text('${l10n.bookingCapacityLabel}: ${u.capacity}') : null,
             ),
@@ -420,9 +506,15 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
         );
       case 'guest_count':
       case 'party_size':
-        return _stepperRow(context, labelText, _partySize, (v) => setState(() => _partySize = v));
+        return _stepperRow(context, labelText, _partySize, (v) {
+          setState(() => _partySize = v);
+          _schedulePreview();
+        });
       case 'quantity':
-        return _stepperRow(context, labelText, _quantity, (v) => setState(() => _quantity = v));
+        return _stepperRow(context, labelText, _quantity, (v) {
+          setState(() => _quantity = v);
+          _schedulePreview();
+        });
       case 'children_count':
         return _stepperRow(context, labelText, _childrenCount, (v) => setState(() => _childrenCount = v), min: 0);
       case 'channel':

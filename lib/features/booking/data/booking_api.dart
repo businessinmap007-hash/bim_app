@@ -77,6 +77,43 @@ class BookingApi {
     return Booking.fromJson(data['booking'] as Map<String, dynamic>);
   }
 
+  /// Same price math as [create] — line + selected modifiers per period,
+  /// summed then multiplied by quantity — with no booking row created. See
+  /// Api\V2\BookingController::preview. Null fields mean "not chosen yet"
+  /// (e.g. no dates picked), which the backend prices as best it can (a
+  /// single period) rather than rejecting.
+  Future<double> preview({
+    required int businessId,
+    required int serviceId,
+    int? bookableId,
+    int? offeringId,
+    String? offeringType,
+    DateTime? startsAt,
+    DateTime? endsAt,
+    int? quantity,
+    int? partySize,
+    List<int> optionIds = const [],
+  }) async {
+    final data =
+        await _client.post(
+              '/bookings/preview',
+              data: {
+                'business_id': businessId,
+                'service_id': serviceId,
+                'bookable_id': ?bookableId,
+                'offering_id': ?offeringId,
+                'offering_type': ?offeringType,
+                if (startsAt != null) 'starts_at': startsAt.toIso8601String(),
+                if (endsAt != null) 'ends_at': endsAt.toIso8601String(),
+                'quantity': ?quantity,
+                'party_size': ?partySize,
+                if (optionIds.isNotEmpty) 'option_ids': optionIds,
+              },
+            )
+            as Map<String, dynamic>;
+    return (data['price'] as num).toDouble();
+  }
+
   /// The real named units this business has (rooms/tables/pitches), grouped
   /// by kind with price and — when a date window is given — live
   /// availability. See Api\V2\UnitDiscoveryController. Public endpoint, no

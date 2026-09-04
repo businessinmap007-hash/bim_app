@@ -440,6 +440,42 @@ abstract class AppLocalizations {
   /// **'اختر المحافظة'**
   String get businessFilterChooseGovernorate;
 
+  /// No description provided for @businessFilterByAttributes.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخيارات'**
+  String get businessFilterByAttributes;
+
+  /// No description provided for @businessFilterAttributesCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{خيار واحد} two{خياران} few{{count} خيارات} many{{count} خيارًا} other{{count} خيار}}'**
+  String businessFilterAttributesCount(int count);
+
+  /// No description provided for @businessFilterAttributesEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد خيارات متاحة لهذا التصنيف بعد.'**
+  String get businessFilterAttributesEmpty;
+
+  /// No description provided for @businessFilterAttributeBusinessCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{لا يوجد نشاط بهذا الخيار} one{نشاط واحد} two{نشاطان} few{{count} أنشطة} many{{count} نشاطًا} other{{count} نشاط}}'**
+  String businessFilterAttributeBusinessCount(int count);
+
+  /// No description provided for @businessFilterAttributesClear.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسح الكل'**
+  String get businessFilterAttributesClear;
+
+  /// No description provided for @businessFilterAttributesApply.
+  ///
+  /// In ar, this message translates to:
+  /// **'تطبيق'**
+  String get businessFilterAttributesApply;
+
   /// No description provided for @businessOpenNow.
   ///
   /// In ar, this message translates to:
@@ -1681,6 +1717,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'إضافات'**
   String get bookingModifiersTitle;
+
+  /// No description provided for @bookingTotalLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجمالي'**
+  String get bookingTotalLabel;
 
   /// No description provided for @bookingFrom.
   ///

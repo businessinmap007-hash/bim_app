@@ -185,6 +185,42 @@ class AppLocalizationsEn extends AppLocalizations {
   String get businessFilterChooseGovernorate => 'Choose a governorate';
 
   @override
+  String get businessFilterByAttributes => 'Attributes';
+
+  @override
+  String businessFilterAttributesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count attributes',
+      one: '1 attribute',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get businessFilterAttributesEmpty =>
+      'No attributes are available for this specialty yet.';
+
+  @override
+  String businessFilterAttributeBusinessCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count businesses',
+      one: '1 business',
+      zero: 'No businesses',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get businessFilterAttributesClear => 'Clear all';
+
+  @override
+  String get businessFilterAttributesApply => 'Apply';
+
+  @override
   String get businessOpenNow => 'Open now';
 
   @override
@@ -852,6 +888,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bookingModifiersTitle => 'Extras';
+
+  @override
+  String get bookingTotalLabel => 'Total';
 
   @override
   String get bookingFrom => 'From';

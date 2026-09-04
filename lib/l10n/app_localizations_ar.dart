@@ -183,6 +183,48 @@ class AppLocalizationsAr extends AppLocalizations {
   String get businessFilterChooseGovernorate => 'اختر المحافظة';
 
   @override
+  String get businessFilterByAttributes => 'الخيارات';
+
+  @override
+  String businessFilterAttributesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count خيار',
+      many: '$count خيارًا',
+      few: '$count خيارات',
+      two: 'خياران',
+      one: 'خيار واحد',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get businessFilterAttributesEmpty =>
+      'لا توجد خيارات متاحة لهذا التصنيف بعد.';
+
+  @override
+  String businessFilterAttributeBusinessCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count نشاط',
+      many: '$count نشاطًا',
+      few: '$count أنشطة',
+      two: 'نشاطان',
+      one: 'نشاط واحد',
+      zero: 'لا يوجد نشاط بهذا الخيار',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get businessFilterAttributesClear => 'مسح الكل';
+
+  @override
+  String get businessFilterAttributesApply => 'تطبيق';
+
+  @override
   String get businessOpenNow => 'مفتوح الآن';
 
   @override
@@ -859,6 +901,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get bookingModifiersTitle => 'إضافات';
+
+  @override
+  String get bookingTotalLabel => 'الإجمالي';
 
   @override
   String get bookingFrom => 'من';

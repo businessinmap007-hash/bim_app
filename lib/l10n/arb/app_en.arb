@@ -57,6 +57,18 @@
   "businessFilterAnyCity": "All cities",
   "businessFilterClearLocation": "Clear location filter",
   "businessFilterChooseGovernorate": "Choose a governorate",
+  "businessFilterByAttributes": "Attributes",
+  "businessFilterAttributesCount": "{count, plural, =1{1 attribute} other{{count} attributes}}",
+  "@businessFilterAttributesCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "businessFilterAttributesEmpty": "No attributes are available for this specialty yet.",
+  "businessFilterAttributeBusinessCount": "{count, plural, =0{No businesses} one{1 business} other{{count} businesses}}",
+  "@businessFilterAttributeBusinessCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "businessFilterAttributesClear": "Clear all",
+  "businessFilterAttributesApply": "Apply",
   "businessOpenNow": "Open now",
   "businessClosedNow": "Closed now",
   "businessCallForPrice": "Call for price",
@@ -285,6 +297,7 @@
   "bookingChooseUnit": "Choose a unit",
   "bookingUnitEmpty": "No units available right now.",
   "bookingModifiersTitle": "Extras",
+  "bookingTotalLabel": "Total",
   "bookingFrom": "From",
   "bookingTo": "To",
   "bookingChoosePlaceholder": "Choose...",
