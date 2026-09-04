@@ -9,6 +9,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../media/application/media_picker_service.dart';
 import '../../../media/data/picked_media.dart';
 import '../../../media/presentation/widgets/picked_media_tile.dart';
+import '../../../../shared/widgets/message_read_receipt.dart';
 import '../../../../shared/widgets/thread_access_banner.dart';
 import '../../application/chat_providers.dart';
 import '../../data/models/thread_message.dart';
@@ -269,39 +270,49 @@ class _MessageBubble extends ConsumerWidget {
 
     return Align(
       alignment: isMine ? AlignmentDirectional.centerEnd : AlignmentDirectional.centerStart,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 4),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
-        decoration: BoxDecoration(
-          color: bubbleColor,
-          borderRadius: BorderRadius.circular(14),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (!isMine && message.senderName != null)
-              Text(
-                message.senderName!,
-                style: TextStyle(
-                  color: textColor.withValues(alpha: 0.7),
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            for (final attachment in message.attachments)
-              Padding(
-                padding: const EdgeInsets.only(top: 6),
-                child: _AttachmentView(attachment: attachment, textColor: textColor),
-              ),
-            if (message.body != null && message.body!.isNotEmpty)
-              Padding(
-                padding: EdgeInsets.only(top: message.attachments.isNotEmpty ? 6 : 0),
-                child: Text(message.body!, style: TextStyle(color: textColor)),
-              ),
-          ],
-        ),
+      child: Column(
+        crossAxisAlignment: isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(top: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
+            decoration: BoxDecoration(
+              color: bubbleColor,
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (!isMine && message.senderName != null)
+                  Text(
+                    message.senderName!,
+                    style: TextStyle(
+                      color: textColor.withValues(alpha: 0.7),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                for (final attachment in message.attachments)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: _AttachmentView(attachment: attachment, textColor: textColor),
+                  ),
+                if (message.body != null && message.body!.isNotEmpty)
+                  Padding(
+                    padding: EdgeInsets.only(top: message.attachments.isNotEmpty ? 6 : 0),
+                    child: Text(message.body!, style: TextStyle(color: textColor)),
+                  ),
+              ],
+            ),
+          ),
+          if (isMine)
+            Padding(
+              padding: const EdgeInsets.only(top: 2, right: 4),
+              child: MessageReadReceipt(isRead: message.isRead),
+            ),
+        ],
       ),
     );
   }

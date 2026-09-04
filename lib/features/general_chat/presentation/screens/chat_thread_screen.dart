@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/message_read_receipt.dart';
 import '../../../../shared/widgets/thread_access_banner.dart';
 import '../../../chat/data/models/thread_message.dart';
 import '../../application/general_chat_providers.dart';
@@ -220,23 +221,29 @@ class _MessageBubble extends StatelessWidget {
 
     return Align(
       alignment: isMine ? AlignmentDirectional.centerEnd : AlignmentDirectional.centerStart,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 4),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
-        decoration: BoxDecoration(color: bubbleColor, borderRadius: BorderRadius.circular(14)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (!isMine && message.senderName != null)
-              Text(
-                message.senderName!,
-                style: TextStyle(color: textColor.withValues(alpha: 0.7), fontSize: 11, fontWeight: FontWeight.w600),
-              ),
-            Text(message.body ?? '', style: TextStyle(color: textColor)),
-          ],
-        ),
+      child: Column(
+        crossAxisAlignment: isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(top: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
+            decoration: BoxDecoration(color: bubbleColor, borderRadius: BorderRadius.circular(14)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (!isMine && message.senderName != null)
+                  Text(
+                    message.senderName!,
+                    style: TextStyle(color: textColor.withValues(alpha: 0.7), fontSize: 11, fontWeight: FontWeight.w600),
+                  ),
+                Text(message.body ?? '', style: TextStyle(color: textColor)),
+              ],
+            ),
+          ),
+          if (isMine) Padding(padding: const EdgeInsets.only(top: 2, right: 4), child: MessageReadReceipt(isRead: message.isRead)),
+        ],
       ),
     );
   }

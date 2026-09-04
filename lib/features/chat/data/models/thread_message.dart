@@ -30,6 +30,7 @@ class ThreadMessage {
   final String kind;
   final String? body;
   final bool isMine;
+  final bool isRead;
   final String? senderName;
   final DateTime? createdAt;
   final List<ThreadAttachment> attachments;
@@ -39,6 +40,7 @@ class ThreadMessage {
     required this.kind,
     this.body,
     required this.isMine,
+    this.isRead = false,
     this.senderName,
     this.createdAt,
     this.attachments = const [],
@@ -53,6 +55,7 @@ class ThreadMessage {
       kind: json['kind'] as String? ?? 'message',
       body: json['body'] as String?,
       isMine: json['is_mine'] as bool? ?? false,
+      isRead: json['is_read'] as bool? ?? false,
       senderName: sender?['name'] as String?,
       createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
       attachments: (json['attachments'] as List<dynamic>? ?? [])
