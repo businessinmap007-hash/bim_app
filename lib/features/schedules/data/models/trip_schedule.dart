@@ -17,6 +17,28 @@ class TripTrust {
   );
 }
 
+/// One published waypoint on a leg — mirrors `TripScheduleController`'s
+/// `stops` entries. No lat/lng: `address` is a free-text destination for the
+/// Google Maps deep link (see MapsLauncher), never a map picker.
+class TripStop {
+  final int id;
+  final int sequence;
+  final String label;
+  final String? address;
+
+  const TripStop({required this.id, required this.sequence, required this.label, this.address});
+
+  factory TripStop.fromJson(Map<String, dynamic> json) => TripStop(
+    id: json['id'] as int,
+    sequence: json['sequence'] as int? ?? 0,
+    label: json['label'] as String? ?? '',
+    address: json['address'] as String?,
+  );
+
+  /// What to hand MapsLauncher — the address if given, else just the label.
+  String get navigationDestination => (address != null && address!.isNotEmpty) ? address! : label;
+}
+
 /// One trip leg a carrier publishes — mirrors `TripScheduleController`'s
 /// `serialize()`. Domestic (governorate pair) search only; international
 /// (country pair) isn't wired up in this app yet.
@@ -35,6 +57,7 @@ class TripSchedule {
   final int? capacity;
   final double? price;
   final String currency;
+  final List<TripStop> stops;
 
   const TripSchedule({
     required this.id,
@@ -51,6 +74,7 @@ class TripSchedule {
     this.capacity,
     this.price,
     required this.currency,
+    this.stops = const [],
   });
 
   factory TripSchedule.fromJson(Map<String, dynamic> json) {
@@ -72,8 +96,12 @@ class TripSchedule {
       capacity: json['capacity'] as int?,
       price: (json['price'] as num?)?.toDouble(),
       currency: json['currency'] as String? ?? 'EGP',
+      stops: (json['stops'] as List<dynamic>? ?? []).map((e) => TripStop.fromJson(e as Map<String, dynamic>)).toList(),
     );
   }
+
+  bool get isPassengerMode => mode == 'passenger' || mode == 'limousine';
+  bool get isFreightMode => mode == 'freight' || mode == 'distribution';
 }
 
 /// One `/schedules` search result — the leg plus the carrier's trust

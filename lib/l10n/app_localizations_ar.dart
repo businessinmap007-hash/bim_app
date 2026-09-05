@@ -3517,6 +3517,117 @@ class AppLocalizationsAr extends AppLocalizations {
   String get tripScheduleDepositLabel => 'العربون لكل وحدة (اختياري)';
 
   @override
+  String get tripScheduleStopsTitle => 'نقاط التوقف على الطريق (اختياري)';
+
+  @override
+  String get tripScheduleStopLabel => 'اسم النقطة';
+
+  @override
+  String get tripScheduleStopAddress => 'العنوان';
+
+  @override
+  String get tripScheduleAddStop => '+ أضف نقطة';
+
+  @override
+  String get tripRunStart => 'بدء رحلة';
+
+  @override
+  String get tripRunsTitle => 'الرحلات الجارية';
+
+  @override
+  String get tripRunEmpty => 'لا توجد رحلات بعد.';
+
+  @override
+  String get tripRunStartTitle => 'بدء تنفيذ الرحلة';
+
+  @override
+  String get tripRunStartRequiresStops =>
+      'أضف نقاط توقف لهذا الخط أولًا قبل بدء تنفيذ الرحلة.';
+
+  @override
+  String get tripRunPassengerCountLabel => 'عدد الركاب الفعلي';
+
+  @override
+  String get tripRunPassengerCountRequired => 'أدخل عدد الركاب الفعلي.';
+
+  @override
+  String tripRunPassengerCountDisplay(int count) {
+    return 'عدد الركاب: $count';
+  }
+
+  @override
+  String get tripRunManifestTitle => 'قائمة المنتجات المحمّلة';
+
+  @override
+  String get tripRunManifestItemLabel => 'اسم الصنف';
+
+  @override
+  String get tripRunManifestItemUnit => 'الوحدة (اختياري)';
+
+  @override
+  String get tripRunManifestItemQty => 'الكمية';
+
+  @override
+  String get tripRunAddManifestItem => '+ أضف صنفًا';
+
+  @override
+  String get tripRunManifestRequired => 'أضف صنفًا واحدًا على الأقل.';
+
+  @override
+  String get tripRunManifestQtyRequired => 'أدخل كمية صحيحة لكل صنف.';
+
+  @override
+  String get tripRunStartAction => 'بدء الرحلة';
+
+  @override
+  String get tripRunStatusInProgress => 'الرحلة جارية';
+
+  @override
+  String get tripRunStatusAwaitingReconciliation => 'بانتظار تسوية المنتجات';
+
+  @override
+  String get tripRunStatusCompleted => 'اكتملت المهمة';
+
+  @override
+  String tripRunHeadingTo(String stop) {
+    return 'متجه إلى $stop';
+  }
+
+  @override
+  String tripRunArrivedAt(String stop) {
+    return 'وصل إلى $stop';
+  }
+
+  @override
+  String get tripRunArrivedAction => 'لقد وصلت';
+
+  @override
+  String tripRunAdvanceToNext(String stop) {
+    return 'تم الانتهاء، جاري الانتقال إلى $stop';
+  }
+
+  @override
+  String get tripRunFinishAction => 'تم الانتهاء بالكامل';
+
+  @override
+  String get tripRunCompletedMessage => 'تم إنجاز المهمة بالكامل';
+
+  @override
+  String get tripRunNavigate => 'فتح في خرائط جوجل';
+
+  @override
+  String get tripRunReconcileTitle => 'تسوية المنتجات';
+
+  @override
+  String get tripRunReconcileDelivered => 'تم تسليمه';
+
+  @override
+  String get tripRunReconcileReturned => 'مرتجع';
+
+  @override
+  String get tripRunReconcileSubmit => 'إرسال التسوية';
+
+  @override
   String get incomingReservationsEmpty => 'لا توجد حجوزات بعد.';
 
   @override

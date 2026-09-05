@@ -8,6 +8,8 @@ import '../../../location/data/models/location_models.dart';
 import '../../application/schedules_providers.dart';
 import '../../data/models/trip_schedule.dart';
 import 'incoming_reservations_screen.dart';
+import 'runs_list_screen.dart';
+import 'start_run_screen.dart';
 
 String _modeLabel(String mode, AppLocalizations l10n) => switch (mode) {
   'freight' => l10n.tripModeFreight,
@@ -59,6 +61,13 @@ class MyTripSchedulesScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(l10n.myTripSchedulesTitle),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.route_outlined),
+            tooltip: l10n.tripRunsTitle,
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const RunsListScreen()),
+            ),
+          ),
           IconButton(
             icon: const Icon(Icons.inbox_outlined),
             tooltip: l10n.incomingReservationsTitle,
@@ -122,6 +131,13 @@ class MyTripSchedulesScreen extends ConsumerWidget {
                         children: [
                           if (schedule.price != null) Text(schedule.price!.toStringAsFixed(0)),
                           IconButton(
+                            icon: const Icon(Icons.play_circle_outline),
+                            tooltip: l10n.tripRunStart,
+                            onPressed: () => Navigator.of(context).push(
+                              MaterialPageRoute(builder: (_) => StartRunScreen(schedule: schedule)),
+                            ),
+                          ),
+                          IconButton(
                             icon: const Icon(Icons.delete_outline),
                             onPressed: () => _delete(context, ref, schedule),
                           ),
@@ -148,6 +164,16 @@ const _patternWeekly = 'weekly';
 const _patternOneOff = 'one_off';
 const _patternOnDemand = 'on_demand';
 
+class _StopRow {
+  final labelCtrl = TextEditingController();
+  final addressCtrl = TextEditingController();
+
+  void dispose() {
+    labelCtrl.dispose();
+    addressCtrl.dispose();
+  }
+}
+
 class _TripScheduleFormScreenState extends ConsumerState<_TripScheduleFormScreen> {
   String _mode = 'passenger';
   String _pattern = _patternWeekly;
@@ -159,6 +185,7 @@ class _TripScheduleFormScreenState extends ConsumerState<_TripScheduleFormScreen
   final _capacityCtrl = TextEditingController();
   final _priceCtrl = TextEditingController();
   final _depositCtrl = TextEditingController();
+  final List<_StopRow> _stopRows = [_StopRow()];
   bool _saving = false;
   String? _error;
 
@@ -168,6 +195,9 @@ class _TripScheduleFormScreenState extends ConsumerState<_TripScheduleFormScreen
     _capacityCtrl.dispose();
     _priceCtrl.dispose();
     _depositCtrl.dispose();
+    for (final row in _stopRows) {
+      row.dispose();
+    }
     super.dispose();
   }
 
@@ -241,6 +271,11 @@ class _TripScheduleFormScreenState extends ConsumerState<_TripScheduleFormScreen
       if (_capacityCtrl.text.trim().isNotEmpty) 'capacity': int.tryParse(_capacityCtrl.text.trim()),
       if (_priceCtrl.text.trim().isNotEmpty) 'price': double.tryParse(_priceCtrl.text.trim()),
       if (_depositCtrl.text.trim().isNotEmpty) 'deposit_per_unit': double.tryParse(_depositCtrl.text.trim()),
+      'stops': [
+        for (final row in _stopRows)
+          if (row.labelCtrl.text.trim().isNotEmpty)
+            {'label': row.labelCtrl.text.trim(), 'address': row.addressCtrl.text.trim()},
+      ],
     };
 
     try {
@@ -391,6 +426,44 @@ class _TripScheduleFormScreenState extends ConsumerState<_TripScheduleFormScreen
               controller: _depositCtrl,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(labelText: l10n.tripScheduleDepositLabel),
+            ),
+            const SizedBox(height: 20),
+            Text(l10n.tripScheduleStopsTitle, style: Theme.of(context).textTheme.labelLarge),
+            const SizedBox(height: 8),
+            for (final row in _stopRows) ...[
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: row.labelCtrl,
+                      decoration: InputDecoration(labelText: l10n.tripScheduleStopLabel),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    flex: 2,
+                    child: TextField(
+                      controller: row.addressCtrl,
+                      decoration: InputDecoration(labelText: l10n.tripScheduleStopAddress),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.remove_circle_outline),
+                    onPressed: _stopRows.length == 1
+                        ? null
+                        : () => setState(() {
+                            row.dispose();
+                            _stopRows.remove(row);
+                          }),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+            ],
+            OutlinedButton.icon(
+              onPressed: () => setState(() => _stopRows.add(_StopRow())),
+              icon: const Icon(Icons.add),
+              label: Text(l10n.tripScheduleAddStop),
             ),
             if (_error != null) ...[
               const SizedBox(height: 12),

@@ -3508,6 +3508,120 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tripScheduleDepositLabel => 'Deposit per unit (optional)';
 
   @override
+  String get tripScheduleStopsTitle => 'Stops along the route (optional)';
+
+  @override
+  String get tripScheduleStopLabel => 'Stop name';
+
+  @override
+  String get tripScheduleStopAddress => 'Address';
+
+  @override
+  String get tripScheduleAddStop => '+ Add a stop';
+
+  @override
+  String get tripRunStart => 'Start a run';
+
+  @override
+  String get tripRunsTitle => 'Live runs';
+
+  @override
+  String get tripRunEmpty => 'No runs yet.';
+
+  @override
+  String get tripRunStartTitle => 'Start the run';
+
+  @override
+  String get tripRunStartRequiresStops =>
+      'Add stops to this leg first, before starting a run.';
+
+  @override
+  String get tripRunPassengerCountLabel => 'Actual passenger count';
+
+  @override
+  String get tripRunPassengerCountRequired =>
+      'Enter the actual passenger count.';
+
+  @override
+  String tripRunPassengerCountDisplay(int count) {
+    return 'Passengers: $count';
+  }
+
+  @override
+  String get tripRunManifestTitle => 'Cargo manifest';
+
+  @override
+  String get tripRunManifestItemLabel => 'Item name';
+
+  @override
+  String get tripRunManifestItemUnit => 'Unit (optional)';
+
+  @override
+  String get tripRunManifestItemQty => 'Quantity';
+
+  @override
+  String get tripRunAddManifestItem => '+ Add an item';
+
+  @override
+  String get tripRunManifestRequired => 'Add at least one item.';
+
+  @override
+  String get tripRunManifestQtyRequired =>
+      'Enter a valid quantity for each item.';
+
+  @override
+  String get tripRunStartAction => 'Start the run';
+
+  @override
+  String get tripRunStatusInProgress => 'Run in progress';
+
+  @override
+  String get tripRunStatusAwaitingReconciliation =>
+      'Awaiting cargo reconciliation';
+
+  @override
+  String get tripRunStatusCompleted => 'Run completed';
+
+  @override
+  String tripRunHeadingTo(String stop) {
+    return 'Heading to $stop';
+  }
+
+  @override
+  String tripRunArrivedAt(String stop) {
+    return 'Arrived at $stop';
+  }
+
+  @override
+  String get tripRunArrivedAction => 'I\'ve arrived';
+
+  @override
+  String tripRunAdvanceToNext(String stop) {
+    return 'Done — heading to $stop';
+  }
+
+  @override
+  String get tripRunFinishAction => 'Mark fully complete';
+
+  @override
+  String get tripRunCompletedMessage => 'The run is fully completed';
+
+  @override
+  String get tripRunNavigate => 'Open in Google Maps';
+
+  @override
+  String get tripRunReconcileTitle => 'Cargo reconciliation';
+
+  @override
+  String get tripRunReconcileDelivered => 'Delivered';
+
+  @override
+  String get tripRunReconcileReturned => 'Returned';
+
+  @override
+  String get tripRunReconcileSubmit => 'Submit reconciliation';
+
+  @override
   String get incomingReservationsEmpty => 'No reservations yet.';
 
   @override

@@ -6746,6 +6746,210 @@ abstract class AppLocalizations {
   /// **'العربون لكل وحدة (اختياري)'**
   String get tripScheduleDepositLabel;
 
+  /// No description provided for @tripScheduleStopsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقاط التوقف على الطريق (اختياري)'**
+  String get tripScheduleStopsTitle;
+
+  /// No description provided for @tripScheduleStopLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم النقطة'**
+  String get tripScheduleStopLabel;
+
+  /// No description provided for @tripScheduleStopAddress.
+  ///
+  /// In ar, this message translates to:
+  /// **'العنوان'**
+  String get tripScheduleStopAddress;
+
+  /// No description provided for @tripScheduleAddStop.
+  ///
+  /// In ar, this message translates to:
+  /// **'+ أضف نقطة'**
+  String get tripScheduleAddStop;
+
+  /// No description provided for @tripRunStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدء رحلة'**
+  String get tripRunStart;
+
+  /// No description provided for @tripRunsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرحلات الجارية'**
+  String get tripRunsTitle;
+
+  /// No description provided for @tripRunEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد رحلات بعد.'**
+  String get tripRunEmpty;
+
+  /// No description provided for @tripRunStartTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدء تنفيذ الرحلة'**
+  String get tripRunStartTitle;
+
+  /// No description provided for @tripRunStartRequiresStops.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف نقاط توقف لهذا الخط أولًا قبل بدء تنفيذ الرحلة.'**
+  String get tripRunStartRequiresStops;
+
+  /// No description provided for @tripRunPassengerCountLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد الركاب الفعلي'**
+  String get tripRunPassengerCountLabel;
+
+  /// No description provided for @tripRunPassengerCountRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل عدد الركاب الفعلي.'**
+  String get tripRunPassengerCountRequired;
+
+  /// No description provided for @tripRunPassengerCountDisplay.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد الركاب: {count}'**
+  String tripRunPassengerCountDisplay(int count);
+
+  /// No description provided for @tripRunManifestTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'قائمة المنتجات المحمّلة'**
+  String get tripRunManifestTitle;
+
+  /// No description provided for @tripRunManifestItemLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الصنف'**
+  String get tripRunManifestItemLabel;
+
+  /// No description provided for @tripRunManifestItemUnit.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوحدة (اختياري)'**
+  String get tripRunManifestItemUnit;
+
+  /// No description provided for @tripRunManifestItemQty.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكمية'**
+  String get tripRunManifestItemQty;
+
+  /// No description provided for @tripRunAddManifestItem.
+  ///
+  /// In ar, this message translates to:
+  /// **'+ أضف صنفًا'**
+  String get tripRunAddManifestItem;
+
+  /// No description provided for @tripRunManifestRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف صنفًا واحدًا على الأقل.'**
+  String get tripRunManifestRequired;
+
+  /// No description provided for @tripRunManifestQtyRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل كمية صحيحة لكل صنف.'**
+  String get tripRunManifestQtyRequired;
+
+  /// No description provided for @tripRunStartAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدء الرحلة'**
+  String get tripRunStartAction;
+
+  /// No description provided for @tripRunStatusInProgress.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرحلة جارية'**
+  String get tripRunStatusInProgress;
+
+  /// No description provided for @tripRunStatusAwaitingReconciliation.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار تسوية المنتجات'**
+  String get tripRunStatusAwaitingReconciliation;
+
+  /// No description provided for @tripRunStatusCompleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتملت المهمة'**
+  String get tripRunStatusCompleted;
+
+  /// No description provided for @tripRunHeadingTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'متجه إلى {stop}'**
+  String tripRunHeadingTo(String stop);
+
+  /// No description provided for @tripRunArrivedAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصل إلى {stop}'**
+  String tripRunArrivedAt(String stop);
+
+  /// No description provided for @tripRunArrivedAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'لقد وصلت'**
+  String get tripRunArrivedAction;
+
+  /// No description provided for @tripRunAdvanceToNext.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الانتهاء، جاري الانتقال إلى {stop}'**
+  String tripRunAdvanceToNext(String stop);
+
+  /// No description provided for @tripRunFinishAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الانتهاء بالكامل'**
+  String get tripRunFinishAction;
+
+  /// No description provided for @tripRunCompletedMessage.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إنجاز المهمة بالكامل'**
+  String get tripRunCompletedMessage;
+
+  /// No description provided for @tripRunNavigate.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح في خرائط جوجل'**
+  String get tripRunNavigate;
+
+  /// No description provided for @tripRunReconcileTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسوية المنتجات'**
+  String get tripRunReconcileTitle;
+
+  /// No description provided for @tripRunReconcileDelivered.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تسليمه'**
+  String get tripRunReconcileDelivered;
+
+  /// No description provided for @tripRunReconcileReturned.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرتجع'**
+  String get tripRunReconcileReturned;
+
+  /// No description provided for @tripRunReconcileSubmit.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال التسوية'**
+  String get tripRunReconcileSubmit;
+
   /// No description provided for @incomingReservationsEmpty.
   ///
   /// In ar, this message translates to:

@@ -1,6 +1,7 @@
 import '../../../core/network/api_client.dart';
 import '../../../core/network/paginated.dart';
 import 'models/trip_reservation.dart';
+import 'models/trip_run.dart';
 import 'models/trip_schedule.dart';
 
 /// Trip-leg search (GET /search/schedules) + reservation (POST/GET under
@@ -123,6 +124,59 @@ class SchedulesApi {
 
   Future<void> rejectReservation(int id) =>
       _client.post('/business/schedules/reservations/$id/reject');
+
+  // ─────────────────── Carrier: live run execution ───────────────────
+
+  Future<TripRun> startRun(
+    int scheduleId, {
+    int? passengerCount,
+    List<Map<String, dynamic>> manifest = const [],
+  }) async {
+    final data =
+        await _client.post(
+              '/business/schedules/$scheduleId/runs',
+              data: {'passenger_count': passengerCount, if (manifest.isNotEmpty) 'manifest': manifest},
+            )
+            as Map<String, dynamic>;
+    return TripRun.fromJson(data['run'] as Map<String, dynamic>);
+  }
+
+  Future<Paginated<TripRun>> myRuns({String? status, int page = 1}) async {
+    final data =
+        await _client.get('/business/schedules/runs', query: {'status': ?status, 'page': page})
+            as Map<String, dynamic>;
+    return Paginated.fromJson(data, TripRun.fromJson);
+  }
+
+  Future<TripRun> run(int runId) async {
+    final data = await _client.get('/business/schedules/runs/$runId') as Map<String, dynamic>;
+    return TripRun.fromJson(data['run'] as Map<String, dynamic>);
+  }
+
+  Future<TripRun> arriveAtStop(int runId) async {
+    final data = await _client.post('/business/schedules/runs/$runId/arrive') as Map<String, dynamic>;
+    return TripRun.fromJson(data['run'] as Map<String, dynamic>);
+  }
+
+  Future<TripRun> advanceRun(int runId) async {
+    final data = await _client.post('/business/schedules/runs/$runId/advance') as Map<String, dynamic>;
+    return TripRun.fromJson(data['run'] as Map<String, dynamic>);
+  }
+
+  /// [items] keyed by manifest item id -> {delivered_qty, returned_qty}.
+  Future<TripRun> reconcileRun(int runId, Map<int, ({int delivered, int returned})> items) async {
+    final data =
+        await _client.post(
+              '/business/schedules/runs/$runId/reconcile',
+              data: {
+                'items': items.entries
+                    .map((e) => {'manifest_item_id': e.key, 'delivered_qty': e.value.delivered, 'returned_qty': e.value.returned})
+                    .toList(),
+              },
+            )
+            as Map<String, dynamic>;
+    return TripRun.fromJson(data['run'] as Map<String, dynamic>);
+  }
 
   String _dateOnly(DateTime d) =>
       '${d.year.toString().padLeft(4, '0')}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
