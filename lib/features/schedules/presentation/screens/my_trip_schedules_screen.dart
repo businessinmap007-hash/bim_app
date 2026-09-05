@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,6 +9,7 @@ import '../../../location/application/location_providers.dart';
 import '../../../location/data/models/location_models.dart';
 import '../../application/schedules_providers.dart';
 import '../../data/models/trip_schedule.dart';
+import '../../data/schedules_api.dart';
 import 'incoming_reservations_screen.dart';
 import 'runs_list_screen.dart';
 import 'start_run_screen.dart';
@@ -167,6 +170,8 @@ const _patternOnDemand = 'on_demand';
 class _StopRow {
   final labelCtrl = TextEditingController();
   final addressCtrl = TextEditingController();
+  int? businessId;
+  String? businessName;
 
   void dispose() {
     labelCtrl.dispose();
@@ -243,6 +248,28 @@ class _TripScheduleFormScreenState extends ConsumerState<_TripScheduleFormScreen
     });
   }
 
+  Future<void> _pickStopBusiness(_StopRow row) async {
+    final l10n = AppLocalizations.of(context)!;
+    final picked = await showModalBottomSheet<StopBusinessOption>(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => _BusinessPickerSheet(l10n: l10n),
+    );
+    if (picked == null || !mounted) return;
+    setState(() {
+      row.businessId = picked.id;
+      row.businessName = picked.name;
+      row.labelCtrl.text = picked.name;
+    });
+  }
+
+  void _clearStopBusiness(_StopRow row) {
+    setState(() {
+      row.businessId = null;
+      row.businessName = null;
+    });
+  }
+
   Future<void> _save() async {
     final l10n = AppLocalizations.of(context)!;
     if (_origin == null || _destination == null) {
@@ -273,8 +300,12 @@ class _TripScheduleFormScreenState extends ConsumerState<_TripScheduleFormScreen
       if (_depositCtrl.text.trim().isNotEmpty) 'deposit_per_unit': double.tryParse(_depositCtrl.text.trim()),
       'stops': [
         for (final row in _stopRows)
-          if (row.labelCtrl.text.trim().isNotEmpty)
-            {'label': row.labelCtrl.text.trim(), 'address': row.addressCtrl.text.trim()},
+          if (row.labelCtrl.text.trim().isNotEmpty || row.businessId != null)
+            {
+              'label': row.labelCtrl.text.trim(),
+              'address': row.addressCtrl.text.trim(),
+              'business_id': row.businessId,
+            },
       ],
     };
 
@@ -429,6 +460,11 @@ class _TripScheduleFormScreenState extends ConsumerState<_TripScheduleFormScreen
             ),
             const SizedBox(height: 20),
             Text(l10n.tripScheduleStopsTitle, style: Theme.of(context).textTheme.labelLarge),
+            const SizedBox(height: 4),
+            Text(
+              l10n.tripScheduleStopBusinessHint,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),
+            ),
             const SizedBox(height: 8),
             for (final row in _stopRows) ...[
               Row(
@@ -444,7 +480,11 @@ class _TripScheduleFormScreenState extends ConsumerState<_TripScheduleFormScreen
                     flex: 2,
                     child: TextField(
                       controller: row.addressCtrl,
-                      decoration: InputDecoration(labelText: l10n.tripScheduleStopAddress),
+                      enabled: row.businessId == null,
+                      decoration: InputDecoration(
+                        labelText: l10n.tripScheduleStopAddress,
+                        helperText: row.businessId != null ? l10n.tripScheduleStopUsesGps : null,
+                      ),
                     ),
                   ),
                   IconButton(
@@ -456,6 +496,24 @@ class _TripScheduleFormScreenState extends ConsumerState<_TripScheduleFormScreen
                             _stopRows.remove(row);
                           }),
                   ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  ActionChip(
+                    avatar: Icon(row.businessId != null ? Icons.storefront : Icons.storefront_outlined, size: 18),
+                    label: Text(row.businessId != null ? row.businessName ?? '' : l10n.tripScheduleStopPickBusiness),
+                    onPressed: () => _pickStopBusiness(row),
+                  ),
+                  if (row.businessId != null) ...[
+                    const SizedBox(width: 4),
+                    IconButton(
+                      icon: const Icon(Icons.close, size: 16),
+                      tooltip: l10n.tripScheduleStopClearBusiness,
+                      onPressed: () => _clearStopBusiness(row),
+                    ),
+                  ],
                 ],
               ),
               const SizedBox(height: 8),
@@ -475,6 +533,107 @@ class _TripScheduleFormScreenState extends ConsumerState<_TripScheduleFormScreen
               child: _saving
                   ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
                   : Text(l10n.commonSave),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Search-as-you-type picker for "this stop is a registered business" — its
+/// own GPS location then drives the run's Google Maps navigation precisely.
+/// Mirrors the web panel's TomSelect remote lookup against the same
+/// businessLookup endpoint.
+class _BusinessPickerSheet extends ConsumerStatefulWidget {
+  final AppLocalizations l10n;
+  const _BusinessPickerSheet({required this.l10n});
+
+  @override
+  ConsumerState<_BusinessPickerSheet> createState() => _BusinessPickerSheetState();
+}
+
+class _BusinessPickerSheetState extends ConsumerState<_BusinessPickerSheet> {
+  final _searchCtrl = TextEditingController();
+  Timer? _debounce;
+  bool _loading = false;
+  List<StopBusinessOption> _results = const [];
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    _searchCtrl.dispose();
+    super.dispose();
+  }
+
+  void _onChanged(String q) {
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 350), () => _search(q));
+  }
+
+  Future<void> _search(String q) async {
+    if (q.trim().isEmpty) {
+      setState(() => _results = const []);
+      return;
+    }
+    setState(() => _loading = true);
+    try {
+      final results = await ref.read(schedulesApiProvider).businessLookup(q);
+      if (mounted) setState(() => _results = results);
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = widget.l10n;
+    return DraggableScrollableSheet(
+      initialChildSize: 0.7,
+      expand: false,
+      builder: (context, scrollController) => Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(l10n.tripScheduleStopPickBusinessTitle, style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _searchCtrl,
+              autofocus: true,
+              onChanged: _onChanged,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.search),
+                hintText: l10n.tripScheduleStopSearchHint,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Expanded(
+              child: _loading
+                  ? const Center(child: CircularProgressIndicator())
+                  : _results.isEmpty
+                  ? Center(
+                      child: Text(
+                        _searchCtrl.text.trim().isEmpty
+                            ? l10n.tripScheduleStopSearchHint
+                            : l10n.tripScheduleStopSearchEmpty,
+                      ),
+                    )
+                  : ListView.builder(
+                      controller: scrollController,
+                      itemCount: _results.length,
+                      itemBuilder: (context, index) {
+                        final option = _results[index];
+                        return ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage: option.logoUrl != null ? NetworkImage(option.logoUrl!) : null,
+                            child: option.logoUrl == null ? const Icon(Icons.storefront_outlined) : null,
+                          ),
+                          title: Text(option.name),
+                          onTap: () => Navigator.of(context).pop(option),
+                        );
+                      },
+                    ),
             ),
           ],
         ),

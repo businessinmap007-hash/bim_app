@@ -1,8 +1,25 @@
+import '../../../core/env/env.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/network/paginated.dart';
 import 'models/trip_reservation.dart';
 import 'models/trip_run.dart';
 import 'models/trip_schedule.dart';
+
+/// One "pick a business as this stop" search result — see
+/// Api\V2\TripScheduleController::businessLookup.
+class StopBusinessOption {
+  final int id;
+  final String name;
+  final String? logoUrl;
+
+  const StopBusinessOption({required this.id, required this.name, this.logoUrl});
+
+  factory StopBusinessOption.fromJson(Map<String, dynamic> json) => StopBusinessOption(
+    id: json['id'] as int,
+    name: json['name'] as String? ?? '',
+    logoUrl: Env.assetUrl(json['logo'] as String?),
+  );
+}
 
 /// Trip-leg search (GET /search/schedules) + reservation (POST/GET under
 /// /schedules — a different prefix, not a typo). See
@@ -90,6 +107,16 @@ class SchedulesApi {
 
   Future<void> deleteTripSchedule(int id) =>
       _client.delete('/business/schedules/$id');
+
+  /// Search-as-you-type for the "pick a business as this stop" field.
+  Future<List<StopBusinessOption>> businessLookup(String q) async {
+    if (q.trim().isEmpty) return const [];
+    final data =
+        await _client.get('/business/schedules/business-lookup', query: {'q': q.trim()})
+            as Map<String, dynamic>;
+    final businesses = data['businesses'] as List<dynamic>? ?? [];
+    return businesses.map((e) => StopBusinessOption.fromJson(e as Map<String, dynamic>)).toList();
+  }
 
   Future<Paginated<TripReservation>> incomingReservations({
     String? status,

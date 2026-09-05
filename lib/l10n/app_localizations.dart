@@ -6770,6 +6770,48 @@ abstract class AppLocalizations {
   /// **'+ أضف نقطة'**
   String get tripScheduleAddStop;
 
+  /// No description provided for @tripScheduleStopBusinessHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يمكنك اختيار نشاط تجاري مسجّل (عيادة، محل...) بدلاً من كتابة العنوان يدويًا — يُستخدم موقعه الفعلي (GPS) عند التنفيذ.'**
+  String get tripScheduleStopBusinessHint;
+
+  /// No description provided for @tripScheduleStopPickBusiness.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر من الأنشطة المسجّلة'**
+  String get tripScheduleStopPickBusiness;
+
+  /// No description provided for @tripScheduleStopClearBusiness.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء الربط'**
+  String get tripScheduleStopClearBusiness;
+
+  /// No description provided for @tripScheduleStopUsesGps.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيُستخدم موقع النشاط (GPS) بدلاً من هذا العنوان'**
+  String get tripScheduleStopUsesGps;
+
+  /// No description provided for @tripScheduleStopPickBusinessTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر نشاطًا تجاريًا'**
+  String get tripScheduleStopPickBusinessTitle;
+
+  /// No description provided for @tripScheduleStopSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب اسم النشاط للبحث'**
+  String get tripScheduleStopSearchHint;
+
+  /// No description provided for @tripScheduleStopSearchEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد نتائج مطابقة.'**
+  String get tripScheduleStopSearchEmpty;
+
   /// No description provided for @tripRunStart.
   ///
   /// In ar, this message translates to:

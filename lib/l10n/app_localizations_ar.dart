@@ -3529,6 +3529,29 @@ class AppLocalizationsAr extends AppLocalizations {
   String get tripScheduleAddStop => '+ أضف نقطة';
 
   @override
+  String get tripScheduleStopBusinessHint =>
+      'يمكنك اختيار نشاط تجاري مسجّل (عيادة، محل...) بدلاً من كتابة العنوان يدويًا — يُستخدم موقعه الفعلي (GPS) عند التنفيذ.';
+
+  @override
+  String get tripScheduleStopPickBusiness => 'اختر من الأنشطة المسجّلة';
+
+  @override
+  String get tripScheduleStopClearBusiness => 'إلغاء الربط';
+
+  @override
+  String get tripScheduleStopUsesGps =>
+      'سيُستخدم موقع النشاط (GPS) بدلاً من هذا العنوان';
+
+  @override
+  String get tripScheduleStopPickBusinessTitle => 'اختر نشاطًا تجاريًا';
+
+  @override
+  String get tripScheduleStopSearchHint => 'اكتب اسم النشاط للبحث';
+
+  @override
+  String get tripScheduleStopSearchEmpty => 'لا توجد نتائج مطابقة.';
+
+  @override
   String get tripRunStart => 'بدء رحلة';
 
   @override

@@ -3520,6 +3520,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tripScheduleAddStop => '+ Add a stop';
 
   @override
+  String get tripScheduleStopBusinessHint =>
+      'You can pick a registered business (a clinic, a shop...) instead of typing an address — its actual GPS location is used when the run is executed.';
+
+  @override
+  String get tripScheduleStopPickBusiness => 'Pick a registered business';
+
+  @override
+  String get tripScheduleStopClearBusiness => 'Unlink';
+
+  @override
+  String get tripScheduleStopUsesGps =>
+      'The business\'s GPS location will be used instead of this address';
+
+  @override
+  String get tripScheduleStopPickBusinessTitle => 'Pick a business';
+
+  @override
+  String get tripScheduleStopSearchHint => 'Type a business name to search';
+
+  @override
+  String get tripScheduleStopSearchEmpty => 'No matching results.';
+
+  @override
   String get tripRunStart => 'Start a run';
 
   @override

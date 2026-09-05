@@ -25,18 +25,38 @@ class TripStop {
   final int sequence;
   final String label;
   final String? address;
+  final int? businessId;
+  final double? lat;
+  final double? lng;
 
-  const TripStop({required this.id, required this.sequence, required this.label, this.address});
+  const TripStop({
+    required this.id,
+    required this.sequence,
+    required this.label,
+    this.address,
+    this.businessId,
+    this.lat,
+    this.lng,
+  });
 
   factory TripStop.fromJson(Map<String, dynamic> json) => TripStop(
     id: json['id'] as int,
     sequence: json['sequence'] as int? ?? 0,
     label: json['label'] as String? ?? '',
     address: json['address'] as String?,
+    businessId: json['business_id'] as int?,
+    lat: (json['lat'] as num?)?.toDouble(),
+    lng: (json['lng'] as num?)?.toDouble(),
   );
 
-  /// What to hand MapsLauncher — the address if given, else just the label.
-  String get navigationDestination => (address != null && address!.isNotEmpty) ? address! : label;
+  /// What to hand MapsLauncher — a precise coordinate when this stop is a
+  /// registered business's own GPS location, else the typed address, else
+  /// just the label.
+  String get navigationDestination {
+    if (lat != null && lng != null) return '$lat,$lng';
+    if (address != null && address!.isNotEmpty) return address!;
+    return label;
+  }
 }
 
 /// One trip leg a carrier publishes — mirrors `TripScheduleController`'s

@@ -6,6 +6,8 @@ class TripRunStop {
   final int sequence;
   final String label;
   final String? address;
+  final double? lat;
+  final double? lng;
   final String status; // pending | heading | arrived | done
   final DateTime? arrivedAt;
   final DateTime? completedAt;
@@ -15,6 +17,8 @@ class TripRunStop {
     required this.sequence,
     required this.label,
     this.address,
+    this.lat,
+    this.lng,
     required this.status,
     this.arrivedAt,
     this.completedAt,
@@ -24,14 +28,22 @@ class TripRunStop {
   bool get isArrived => status == 'arrived';
   bool get isDone => status == 'done';
 
-  /// What to hand MapsLauncher — the address if given, else just the label.
-  String get navigationDestination => (address != null && address!.isNotEmpty) ? address! : label;
+  /// What to hand MapsLauncher — a precise coordinate when this stop was a
+  /// registered business's own GPS location, else the typed address, else
+  /// just the label.
+  String get navigationDestination {
+    if (lat != null && lng != null) return '$lat,$lng';
+    if (address != null && address!.isNotEmpty) return address!;
+    return label;
+  }
 
   factory TripRunStop.fromJson(Map<String, dynamic> json) => TripRunStop(
     id: json['id'] as int,
     sequence: json['sequence'] as int? ?? 0,
     label: json['label'] as String? ?? '',
     address: json['address'] as String?,
+    lat: (json['lat'] as num?)?.toDouble(),
+    lng: (json['lng'] as num?)?.toDouble(),
     status: json['status'] as String? ?? 'pending',
     arrivedAt: json['arrived_at'] != null ? DateTime.tryParse(json['arrived_at'] as String) : null,
     completedAt: json['completed_at'] != null ? DateTime.tryParse(json['completed_at'] as String) : null,
