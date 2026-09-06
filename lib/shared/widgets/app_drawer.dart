@@ -9,6 +9,7 @@ import '../../features/jobs/presentation/screens/jobs_screen.dart';
 import '../../features/offers/presentation/screens/my_offer_follows_screen.dart';
 import '../../features/offers/presentation/screens/offers_screen.dart';
 import '../../features/posts/presentation/screens/my_follows_screen.dart';
+import '../../features/posts/presentation/screens/my_jobs_screen.dart';
 import '../../features/profile/presentation/screens/my_profile_screen.dart';
 import '../../features/settings/presentation/screens/services_settings_screen.dart';
 import '../../l10n/app_localizations.dart';
@@ -247,6 +248,16 @@ class _AppDrawerContent extends ConsumerWidget {
                         MaterialPageRoute(
                           builder: (_) => const ServicesSettingsScreen(),
                         ),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.work_history_outlined),
+                    title: Text(l10n.postsTabJobs),
+                    onTap: () {
+                      close();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const MyJobsScreen()),
                       );
                     },
                   ),
