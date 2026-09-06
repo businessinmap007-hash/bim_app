@@ -13,9 +13,22 @@ final discoveryApiProvider = Provider<DiscoveryApi>((ref) {
 /// The filterable options for one child — only options a real business
 /// actually carries (see DiscoveryApi.attributes). Cached per child for the
 /// life of the filter sheet.
-final attributeGroupsProvider = FutureProvider.family<List<AttributeGroup>, int>((ref, childId) {
-  return ref.watch(discoveryApiProvider).attributes(childId: childId);
-});
+final attributeGroupsProvider =
+    FutureProvider.family<List<AttributeGroup>, int>((ref, childId) {
+      return ref.watch(discoveryApiProvider).attributes(childId: childId);
+    });
+
+/// Businesses ranked by rating (see DiscoveryApi.recommended) — `categoryId`
+/// null means platform-wide, not scoped to a specific root. Used by all 3
+/// Categories-screen layouts (see [[bim-web-layout-options]]) to show a real
+/// "recommended" list rather than an empty area under the category browser.
+final recommendedBusinessesProvider =
+    FutureProvider.family<List<BusinessSummary>, int?>((ref, categoryId) async {
+      final result = await ref
+          .watch(discoveryApiProvider)
+          .recommended(categoryId: categoryId, perPage: 12);
+      return result.items;
+    });
 
 final searchApiProvider = Provider<SearchApi>((ref) {
   return SearchApi(ref.watch(apiClientProvider));
@@ -27,9 +40,20 @@ class SearchState {
   final String? error;
   final String query;
 
-  const SearchState({this.items = const [], this.isLoading = false, this.error, this.query = ''});
+  const SearchState({
+    this.items = const [],
+    this.isLoading = false,
+    this.error,
+    this.query = '',
+  });
 
-  SearchState copyWith({List<BusinessSummary>? items, bool? isLoading, String? error, bool clearError = false, String? query}) {
+  SearchState copyWith({
+    List<BusinessSummary>? items,
+    bool? isLoading,
+    String? error,
+    bool clearError = false,
+    String? query,
+  }) {
     return SearchState(
       items: items ?? this.items,
       isLoading: isLoading ?? this.isLoading,
@@ -63,9 +87,10 @@ class SearchController extends StateNotifier<SearchState> {
   }
 }
 
-final searchControllerProvider = StateNotifierProvider<SearchController, SearchState>((ref) {
-  return SearchController(ref.watch(searchApiProvider));
-});
+final searchControllerProvider =
+    StateNotifierProvider<SearchController, SearchState>((ref) {
+      return SearchController(ref.watch(searchApiProvider));
+    });
 
 class BusinessListState {
   final List<BusinessSummary> items;
@@ -113,9 +138,13 @@ class BusinessListState {
       hasMore: hasMore ?? this.hasMore,
       error: clearError ? null : (error ?? this.error),
       query: query ?? this.query,
-      governorateId: clearLocation ? null : (governorateId ?? this.governorateId),
+      governorateId: clearLocation
+          ? null
+          : (governorateId ?? this.governorateId),
       cityId: clearLocation ? null : (cityId ?? this.cityId),
-      locationLabel: clearLocation ? null : (locationLabel ?? this.locationLabel),
+      locationLabel: clearLocation
+          ? null
+          : (locationLabel ?? this.locationLabel),
       optionIds: optionIds ?? this.optionIds,
     );
   }
@@ -185,7 +214,11 @@ class BusinessListController extends StateNotifier<BusinessListState> {
   /// filter by governorate alone. Replaces any previous location outright
   /// (copyWith's merge semantics can't express "clear cityId but keep
   /// governorateId", so this builds the state directly instead).
-  void setLocation({required int governorateId, int? cityId, required String label}) {
+  void setLocation({
+    required int governorateId,
+    int? cityId,
+    required String label,
+  }) {
     state = BusinessListState(
       items: state.items,
       isLoading: state.isLoading,

@@ -8,6 +8,7 @@ import '../../../auth/application/auth_controller.dart';
 import '../../../auth/presentation/screens/account_deletion_screen.dart';
 import '../../../media/presentation/widgets/watermark_repeat_selector.dart';
 import '../../../ratings/presentation/screens/my_rating_screen.dart';
+import '../../application/layout_style_controller.dart';
 import '../../application/locale_controller.dart';
 import '../../application/theme_mode_controller.dart';
 import '../../application/watermark_settings_controller.dart';
@@ -20,10 +21,13 @@ class SettingsScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final locale = ref.watch(localeControllerProvider);
     final themeMode = ref.watch(themeModeControllerProvider);
+    final layoutStyle = ref.watch(layoutStyleControllerProvider);
     final authState = ref.watch(authControllerProvider);
     final authUser = authState is AuthSignedIn ? authState.user : null;
     final watermarkSettings = ref.watch(watermarkSettingsControllerProvider);
-    final watermarkNotifier = ref.read(watermarkSettingsControllerProvider.notifier);
+    final watermarkNotifier = ref.read(
+      watermarkSettingsControllerProvider.notifier,
+    );
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsTitle)),
@@ -37,13 +41,17 @@ class SettingsScreen extends ConsumerWidget {
               _OptionRow(
                 label: l10n.settingsLanguageArabic,
                 selected: locale.languageCode == 'ar',
-                onTap: () => ref.read(localeControllerProvider.notifier).setLocale(const Locale('ar')),
+                onTap: () => ref
+                    .read(localeControllerProvider.notifier)
+                    .setLocale(const Locale('ar')),
               ),
               const Divider(height: 1),
               _OptionRow(
                 label: l10n.settingsLanguageEnglish,
                 selected: locale.languageCode == 'en',
-                onTap: () => ref.read(localeControllerProvider.notifier).setLocale(const Locale('en')),
+                onTap: () => ref
+                    .read(localeControllerProvider.notifier)
+                    .setLocale(const Locale('en')),
               ),
             ],
           ),
@@ -55,19 +63,55 @@ class SettingsScreen extends ConsumerWidget {
               _OptionRow(
                 label: l10n.settingsAppearanceLight,
                 selected: themeMode == ThemeMode.light,
-                onTap: () => ref.read(themeModeControllerProvider.notifier).setThemeMode(ThemeMode.light),
+                onTap: () => ref
+                    .read(themeModeControllerProvider.notifier)
+                    .setThemeMode(ThemeMode.light),
               ),
               const Divider(height: 1),
               _OptionRow(
                 label: l10n.settingsAppearanceDark,
                 selected: themeMode == ThemeMode.dark,
-                onTap: () => ref.read(themeModeControllerProvider.notifier).setThemeMode(ThemeMode.dark),
+                onTap: () => ref
+                    .read(themeModeControllerProvider.notifier)
+                    .setThemeMode(ThemeMode.dark),
               ),
               const Divider(height: 1),
               _OptionRow(
                 label: l10n.settingsAppearanceSystem,
                 selected: themeMode == ThemeMode.system,
-                onTap: () => ref.read(themeModeControllerProvider.notifier).setThemeMode(ThemeMode.system),
+                onTap: () => ref
+                    .read(themeModeControllerProvider.notifier)
+                    .setThemeMode(ThemeMode.system),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          _SectionHeader(l10n.settingsCategoriesLayoutSection),
+          const SizedBox(height: 8),
+          _OptionCard(
+            children: [
+              _OptionRow(
+                label: l10n.settingsLayoutIconRow,
+                selected: layoutStyle == CategoriesLayoutStyle.iconRow,
+                onTap: () => ref
+                    .read(layoutStyleControllerProvider.notifier)
+                    .setStyle(CategoriesLayoutStyle.iconRow),
+              ),
+              const Divider(height: 1),
+              _OptionRow(
+                label: l10n.settingsLayoutTabsAndRows,
+                selected: layoutStyle == CategoriesLayoutStyle.tabsAndRows,
+                onTap: () => ref
+                    .read(layoutStyleControllerProvider.notifier)
+                    .setStyle(CategoriesLayoutStyle.tabsAndRows),
+              ),
+              const Divider(height: 1),
+              _OptionRow(
+                label: l10n.settingsLayoutBarAndMenu,
+                selected: layoutStyle == CategoriesLayoutStyle.barAndMenu,
+                onTap: () => ref
+                    .read(layoutStyleControllerProvider.notifier)
+                    .setStyle(CategoriesLayoutStyle.barAndMenu),
               ),
             ],
           ),
@@ -93,14 +137,19 @@ class SettingsScreen extends ConsumerWidget {
               ),
               const Divider(height: 1),
               ListTile(
-                leading: Icon(Icons.delete_forever_outlined, color: Theme.of(context).colorScheme.error),
+                leading: Icon(
+                  Icons.delete_forever_outlined,
+                  color: Theme.of(context).colorScheme.error,
+                ),
                 title: Text(
                   l10n.accountDeletionTitle,
                   style: TextStyle(color: Theme.of(context).colorScheme.error),
                 ),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const AccountDeletionScreen()),
+                  MaterialPageRoute(
+                    builder: (_) => const AccountDeletionScreen(),
+                  ),
                 ),
               ),
             ],
@@ -110,14 +159,17 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: 4),
           Text(
             l10n.mediaWatermarkSettingsHint,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),
           ),
           const SizedBox(height: 8),
           _OptionCard(
             children: [
               CheckboxListTile(
                 value: watermarkSettings.useMobile,
-                onChanged: (value) => watermarkNotifier.setUseMobile(value ?? false),
+                onChanged: (value) =>
+                    watermarkNotifier.setUseMobile(value ?? false),
                 controlAffinity: ListTileControlAffinity.leading,
                 activeColor: AppColors.accentGold,
                 title: Text(l10n.mediaWatermarkUseMobile),
@@ -126,7 +178,8 @@ class SettingsScreen extends ConsumerWidget {
               const Divider(height: 1),
               CheckboxListTile(
                 value: watermarkSettings.useBusinessName,
-                onChanged: (value) => watermarkNotifier.setUseBusinessName(value ?? false),
+                onChanged: (value) =>
+                    watermarkNotifier.setUseBusinessName(value ?? false),
                 controlAffinity: ListTileControlAffinity.leading,
                 activeColor: AppColors.accentGold,
                 title: Text(l10n.mediaWatermarkUseBusinessName),
@@ -136,7 +189,10 @@ class SettingsScreen extends ConsumerWidget {
           ),
           if (watermarkSettings.isEnabled) ...[
             const SizedBox(height: 12),
-            Text(l10n.mediaWatermarkRepeatCount, style: Theme.of(context).textTheme.bodyMedium),
+            Text(
+              l10n.mediaWatermarkRepeatCount,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
             const SizedBox(height: 8),
             WatermarkRepeatSelector(
               value: watermarkSettings.repeatCount,
@@ -196,7 +252,11 @@ class _OptionRow extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
 
-  const _OptionRow({required this.label, required this.selected, required this.onTap});
+  const _OptionRow({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -206,10 +266,16 @@ class _OptionRow extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         child: Row(
           children: [
-            Expanded(child: Text(label, style: Theme.of(context).textTheme.bodyLarge)),
+            Expanded(
+              child: Text(label, style: Theme.of(context).textTheme.bodyLarge),
+            ),
             Icon(
-              selected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
-              color: selected ? Theme.of(context).colorScheme.primary : Theme.of(context).dividerColor,
+              selected
+                  ? Icons.radio_button_checked
+                  : Icons.radio_button_unchecked,
+              color: selected
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).dividerColor,
             ),
           ],
         ),

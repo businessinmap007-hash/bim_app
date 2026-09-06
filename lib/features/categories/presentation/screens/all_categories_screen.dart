@@ -9,7 +9,10 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/app_drawer.dart';
 import '../../../discovery/application/discovery_providers.dart';
 import '../../../discovery/presentation/widgets/business_card.dart';
-import '../widgets/category_roots_grid.dart';
+import '../../../settings/application/layout_style_controller.dart';
+import '../widgets/layouts/bar_and_menu_layout.dart';
+import '../widgets/layouts/icon_row_layout.dart';
+import '../widgets/layouts/tabs_and_rows_layout.dart';
 
 /// A bottom-nav destination for reaching categories directly, separate from
 /// Home's own feed — browsing by category and following a feed are two
@@ -50,6 +53,7 @@ class _AllCategoriesScreenState extends ConsumerState<AllCategoriesScreen> {
     final l10n = AppLocalizations.of(context)!;
     final searchState = ref.watch(searchControllerProvider);
     final hasQuery = searchState.query.trim().isNotEmpty;
+    final layoutStyle = ref.watch(layoutStyleControllerProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navCategories)),
@@ -78,10 +82,18 @@ class _AllCategoriesScreenState extends ConsumerState<AllCategoriesScreen> {
               ),
             ),
           ),
-          if (hasQuery)
-            Expanded(child: _SearchResults(state: searchState))
-          else
-            const CategoryRootsGrid(),
+          Expanded(
+            child: hasQuery
+                ? _SearchResults(state: searchState)
+                : switch (layoutStyle) {
+                    CategoriesLayoutStyle.iconRow =>
+                      const IconRowCategoriesLayout(),
+                    CategoriesLayoutStyle.tabsAndRows =>
+                      const TabsAndRowsCategoriesLayout(),
+                    CategoriesLayoutStyle.barAndMenu =>
+                      const BarAndMenuCategoriesLayout(),
+                  },
+          ),
         ],
       ),
     );

@@ -392,6 +392,24 @@ abstract class AppLocalizations {
   /// **'لا توجد تخصصات متاحة في هذا التصنيف.'**
   String get specialtiesEmpty;
 
+  /// No description provided for @categoriesRecommendedTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أعمال موصى بها'**
+  String get categoriesRecommendedTitle;
+
+  /// No description provided for @categoriesTopRatedTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأعلى تقييمًا'**
+  String get categoriesTopRatedTitle;
+
+  /// No description provided for @categoriesRecommendedEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أعمال بعد.'**
+  String get categoriesRecommendedEmpty;
+
   /// No description provided for @businessSearchHint.
   ///
   /// In ar, this message translates to:
@@ -565,6 +583,30 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'حسب النظام'**
   String get settingsAppearanceSystem;
+
+  /// No description provided for @settingsCategoriesLayoutSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'شكل شاشة التصنيفات'**
+  String get settingsCategoriesLayoutSection;
+
+  /// No description provided for @settingsLayoutIconRow.
+  ///
+  /// In ar, this message translates to:
+  /// **'صف أيقونات مضغوط'**
+  String get settingsLayoutIconRow;
+
+  /// No description provided for @settingsLayoutTabsAndRows.
+  ///
+  /// In ar, this message translates to:
+  /// **'تبويبات وصفوف معاينة'**
+  String get settingsLayoutTabsAndRows;
+
+  /// No description provided for @settingsLayoutBarAndMenu.
+  ///
+  /// In ar, this message translates to:
+  /// **'شريط وقائمة منسدلة'**
+  String get settingsLayoutBarAndMenu;
 
   /// No description provided for @settingsAccountSection.
   ///

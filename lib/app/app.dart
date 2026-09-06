@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/responsive/breakpoints.dart';
 import '../features/settings/application/locale_controller.dart';
 import '../features/settings/application/theme_mode_controller.dart';
 import '../l10n/app_localizations.dart';
@@ -20,6 +21,7 @@ class BimApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'BIM',
       debugShowCheckedModeBanner: false,
+      builder: Breakpoints.builder,
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
       themeMode: themeMode,

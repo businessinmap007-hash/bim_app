@@ -39,9 +39,46 @@ class BusinessCard extends StatelessWidget {
           business.name,
           style: const TextStyle(fontWeight: FontWeight.w600),
         ),
-        subtitle: !business.hasPrices ? Text(l10n.businessCallForPrice) : null,
+        subtitle: business.reviewCount > 0
+            ? _RatingLine(
+                stars: business.starsAverage ?? 0,
+                reviewCount: business.reviewCount,
+              )
+            : (!business.hasPrices ? Text(l10n.businessCallForPrice) : null),
         trailing: _OpenBadge(isOpenNow: business.isOpenNow),
       ),
+    );
+  }
+}
+
+class _RatingLine extends StatelessWidget {
+  final double stars;
+  final int reviewCount;
+  const _RatingLine({required this.stars, required this.reviewCount});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Icon(Icons.star_rounded, color: AppColors.accentGold, size: 15),
+        const SizedBox(width: 2),
+        Text(
+          stars.toStringAsFixed(1),
+          style: Theme.of(
+            context,
+          ).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w700),
+        ),
+        const SizedBox(width: 4),
+        Text(
+          '($reviewCount)',
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: Theme.of(
+              context,
+            ).colorScheme.onSurface.withValues(alpha: 0.6),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -161,6 +161,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get specialtiesEmpty => 'No specialties available in this category.';
 
   @override
+  String get categoriesRecommendedTitle => 'Recommended for you';
+
+  @override
+  String get categoriesTopRatedTitle => 'Top rated';
+
+  @override
+  String get categoriesRecommendedEmpty => 'No businesses yet.';
+
+  @override
   String get businessSearchHint => 'Search by business name...';
 
   @override
@@ -282,6 +291,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsAppearanceSystem => 'System default';
+
+  @override
+  String get settingsCategoriesLayoutSection => 'Categories layout';
+
+  @override
+  String get settingsLayoutIconRow => 'Compact icon row';
+
+  @override
+  String get settingsLayoutTabsAndRows => 'Tabs & preview rows';
+
+  @override
+  String get settingsLayoutBarAndMenu => 'Bar & dropdown menu';
 
   @override
   String get settingsAccountSection => 'Account settings';

@@ -76,6 +76,11 @@ dependencies:
   # Connectivity
   connectivity_plus: ^6.1.0
 
+  # Responsive breakpoints — replaces the hand-rolled Breakpoints class
+  # (lib/core/responsive/breakpoints.dart), which now delegates to this
+  # package internally so no call site elsewhere in the app had to change.
+  responsive_framework: ^1.5.1
+
   # Device location — for the customer's own profile location. No API key
   # needed (that's only google_maps_flutter, for rendering a map view, still
   # deferred below); geolocator is just permission + native location

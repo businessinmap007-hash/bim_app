@@ -1,10 +1,15 @@
 import 'package:flutter/widgets.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 /// Screen-size tiers, matching common tablet/desktop breakpoints. Mobile
 /// stays the design baseline — tablet/desktop only get MORE room, never a
 /// cramped mobile layout stretched wide.
 enum ScreenSize { mobile, tablet, desktop }
 
+/// Thin wrapper around `responsive_framework`'s `ResponsiveBreakpoints` —
+/// every existing call site (`Breakpoints.of(context)`, `ResponsiveCenter`)
+/// keeps this exact API, so adopting the package didn't require touching
+/// the screens that were already using it.
 class Breakpoints {
   const Breakpoints._();
 
@@ -15,8 +20,27 @@ class Breakpoints {
   /// stretch edge-to-edge into unreadable row lengths.
   static const maxContentWidth = 1200.0;
 
-  static ScreenSize of(BuildContext context) =>
-      sizeFor(MediaQuery.sizeOf(context).width);
+  /// Registered once at the app root (see `BimApp`'s `builder:`) — this is
+  /// what makes `ResponsiveBreakpoints.of(context)` (used below, and
+  /// available directly to any screen that wants its `ResponsiveValue`/
+  /// `ResponsiveRowColumn`/etc. widgets) resolvable anywhere in the tree.
+  static Widget builder(BuildContext context, Widget? child) {
+    return ResponsiveBreakpoints.builder(
+      child: child!,
+      breakpoints: [
+        const Breakpoint(start: 0, end: tablet - 1, name: MOBILE),
+        const Breakpoint(start: tablet, end: desktop - 1, name: TABLET),
+        const Breakpoint(start: desktop, end: double.infinity, name: DESKTOP),
+      ],
+    );
+  }
+
+  static ScreenSize of(BuildContext context) {
+    final data = ResponsiveBreakpoints.of(context);
+    if (data.isDesktop) return ScreenSize.desktop;
+    if (data.isTablet) return ScreenSize.tablet;
+    return ScreenSize.mobile;
+  }
 
   static ScreenSize sizeFor(double width) {
     if (width >= desktop) return ScreenSize.desktop;
@@ -25,9 +49,7 @@ class Breakpoints {
   }
 
   /// Column count for a category/grid-style list — grows with screen size
-  /// instead of a fixed count everywhere. 4 on mobile (not 3): with ~21 root
-  /// categories, 4 columns is what lets the whole grid fit one screen
-  /// without scrolling on a typical phone.
+  /// instead of a fixed count everywhere.
   static int gridColumnsFor(double width) {
     switch (sizeFor(width)) {
       case ScreenSize.desktop:

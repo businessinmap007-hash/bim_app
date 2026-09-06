@@ -159,6 +159,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get specialtiesEmpty => 'لا توجد تخصصات متاحة في هذا التصنيف.';
 
   @override
+  String get categoriesRecommendedTitle => 'أعمال موصى بها';
+
+  @override
+  String get categoriesTopRatedTitle => 'الأعلى تقييمًا';
+
+  @override
+  String get categoriesRecommendedEmpty => 'لا توجد أعمال بعد.';
+
+  @override
   String get businessSearchHint => 'ابحث باسم النشاط...';
 
   @override
@@ -292,6 +301,18 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get settingsAppearanceSystem => 'حسب النظام';
+
+  @override
+  String get settingsCategoriesLayoutSection => 'شكل شاشة التصنيفات';
+
+  @override
+  String get settingsLayoutIconRow => 'صف أيقونات مضغوط';
+
+  @override
+  String get settingsLayoutTabsAndRows => 'تبويبات وصفوف معاينة';
+
+  @override
+  String get settingsLayoutBarAndMenu => 'شريط وقائمة منسدلة';
 
   @override
   String get settingsAccountSection => 'إعدادات الحساب';
