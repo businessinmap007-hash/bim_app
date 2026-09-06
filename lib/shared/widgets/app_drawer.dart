@@ -32,19 +32,12 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Drawer(child: AppDrawerContent(isModal: true));
+    return const Drawer(child: _AppDrawerContent());
   }
 }
 
-/// The drawer's actual content, with no [Drawer] chrome of its own — reused
-/// as the modal drawer's child on mobile/tablet ([AppDrawer]) and as the
-/// desktop 3-pane shell's leading sidebar (`HomeShell`), where it's shown
-/// persistently instead of as a slide-over. [isModal] controls whether
-/// tapping an item first pops the (modal) drawer route — a persistent
-/// sidebar has no drawer route to pop.
-class AppDrawerContent extends ConsumerWidget {
-  final bool isModal;
-  const AppDrawerContent({super.key, required this.isModal});
+class _AppDrawerContent extends ConsumerWidget {
+  const _AppDrawerContent();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -53,9 +46,7 @@ class AppDrawerContent extends ConsumerWidget {
     final user = authState is AuthSignedIn ? authState.user : null;
     final isBusiness = authState is AuthSignedIn && authState.user.isBusiness;
 
-    void close() {
-      if (isModal) Navigator.of(context).pop();
-    }
+    void close() => Navigator.of(context).pop();
 
     void openAccount() {
       close();

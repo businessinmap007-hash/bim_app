@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
-import '../../../../core/responsive/breakpoints.dart';
-import '../../../../shared/widgets/app_drawer.dart';
 import '../../../auth/application/auth_controller.dart';
 import '../../../categories/presentation/screens/all_categories_screen.dart';
 import 'business_home_screen.dart';
@@ -33,10 +31,10 @@ import 'my_services_screen.dart';
 /// shell mounts, which is fine at this scale (a handful of lightweight
 /// requests, not a heavy screen).
 ///
-/// On a tablet/desktop-width window, the account drawer's content is shown
-/// as a persistent sidebar alongside this same shell instead of behind the
-/// hamburger icon — everything else (the three tabs, the bottom nav, each
-/// tab's own AppBar) stays exactly as it is on a phone.
+/// Same shell at every width, including desktop: the account drawer stays
+/// behind each tab's own hamburger icon rather than a persistent sidebar —
+/// a persistent sidebar was tried and the owner asked to drop it back to a
+/// menu button.
 class HomeShell extends ConsumerStatefulWidget {
   const HomeShell({super.key});
 
@@ -61,7 +59,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
       const MyServicesScreen(),
     ];
 
-    final shell = Scaffold(
+    return Scaffold(
       body: IndexedStack(index: _index, children: tabs),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _index,
@@ -83,21 +81,6 @@ class _HomeShellState extends ConsumerState<HomeShell> {
             selectedIcon: Icon(Icons.grid_view_rounded, size: 28),
             label: '',
           ),
-        ],
-      ),
-    );
-
-    if (Breakpoints.of(context) == ScreenSize.mobile) {
-      return shell;
-    }
-
-    return Scaffold(
-      body: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const SizedBox(width: 280, child: AppDrawerContent(isModal: false)),
-          const VerticalDivider(width: 1),
-          Expanded(child: shell),
         ],
       ),
     );
