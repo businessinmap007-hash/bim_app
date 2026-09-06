@@ -35,12 +35,23 @@ class AccountTypeScreen extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const Icon(
-                        Icons.push_pin_rounded,
-                        size: 64,
-                        color: AppColors.accentGold,
+                      Center(
+                        child: Container(
+                          width: 96,
+                          height: 96,
+                          decoration: BoxDecoration(
+                            gradient: AppColors.brandGradient,
+                            shape: BoxShape.circle,
+                            boxShadow: AppColors.softShadow(opacity: 0.28),
+                          ),
+                          child: const Icon(
+                            Icons.push_pin_rounded,
+                            size: 44,
+                            color: AppColors.accentGold,
+                          ),
+                        ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 20),
                       Text(
                         l10n.appName,
                         textAlign: TextAlign.center,
@@ -91,9 +102,13 @@ class AccountTypeScreen extends ConsumerWidget {
               child: TextButton.icon(
                 onPressed: () => ref
                     .read(localeControllerProvider.notifier)
-                    .setLocale(Locale(locale.languageCode == 'ar' ? 'en' : 'ar')),
+                    .setLocale(
+                      Locale(locale.languageCode == 'ar' ? 'en' : 'ar'),
+                    ),
                 icon: const Icon(Icons.language, size: 18),
-                label: Text(locale.languageCode == 'ar' ? 'English' : 'العربية'),
+                label: Text(
+                  locale.languageCode == 'ar' ? 'English' : 'العربية',
+                ),
               ),
             ),
           ],

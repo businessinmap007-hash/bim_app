@@ -20,4 +20,25 @@ class AppColors {
   // Not pure black — deliberate per the brand note (dark navy, not #000).
   static const darkBackground = Color(0xFF0A1526);
   static const darkSurface = Color(0xFF11213B);
+
+  /// A soft, brand-tinted shadow (navy, not pure black) for anything drawn
+  /// with a raw `Container`/`BoxDecoration` rather than `Card` — flat cards
+  /// with a hairline border and no depth were the single biggest "looks
+  /// unfinished" tell across the app, so this is the one place every such
+  /// widget should reach for instead of inventing its own shadow value.
+  static List<BoxShadow> softShadow({double opacity = 0.08}) => [
+    BoxShadow(
+      color: primaryNavy.withValues(alpha: opacity),
+      blurRadius: 20,
+      offset: const Offset(0, 6),
+    ),
+  ];
+
+  /// The brand mark's badge background — a subtle navy-to-navy-light
+  /// diagonal gradient instead of a flat fill, used behind the pin logo.
+  static const brandGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [primaryNavy, primaryNavyLight],
+  );
 }

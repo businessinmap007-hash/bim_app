@@ -65,7 +65,45 @@ class AppTheme {
             borderRadius: BorderRadius.circular(12),
           ),
           textStyle: AppTextStyles.titleMedium,
+          elevation: 3,
+          shadowColor: AppColors.primaryNavy.withValues(alpha: 0.35),
         ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: isDark
+              ? AppColors.accentGold
+              : AppColors.primaryNavy,
+          side: BorderSide(
+            color: isDark ? AppColors.accentGold : AppColors.primaryNavy,
+            width: 1.5,
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          textStyle: AppTextStyles.titleMedium,
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: isDark
+              ? AppColors.accentGold
+              : AppColors.primaryNavy,
+        ),
+      ),
+      // No cardTheme before this meant every `Card()` in the app fell back
+      // to Material 3's un-branded default — a faint 1dp shadow plus a
+      // purple-ish `surfaceTint` overlay that has nothing to do with the
+      // navy/gold brand. One themed default here reaches every existing
+      // `Card` in the codebase without touching those files individually.
+      cardTheme: CardThemeData(
+        elevation: 3,
+        shadowColor: AppColors.primaryNavy.withValues(alpha: 0.18),
+        surfaceTintColor: Colors.transparent,
+        color: isDark ? AppColors.darkSurface : Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        margin: EdgeInsets.zero,
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -73,6 +111,17 @@ class AppTheme {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey.shade300),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(
+            color: isDark ? AppColors.accentGold : AppColors.primaryNavy,
+            width: 1.5,
+          ),
         ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,

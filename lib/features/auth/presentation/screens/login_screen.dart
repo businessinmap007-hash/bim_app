@@ -60,98 +60,105 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 440),
-              child: FormBuilder(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      l10n.authWelcomeBack,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(height: 24),
-                    if (_error != null) ...[
-                      _ErrorBanner(message: _error!),
-                      const SizedBox(height: 16),
-                    ],
-                    FormBuilderTextField(
-                      name: 'email',
-                      decoration: InputDecoration(
-                        labelText: l10n.authEmailOrPhone,
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.next,
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(
-                          errorText: l10n.validationRequired,
-                        ),
-                        FormBuilderValidators.email(
-                          errorText: l10n.validationInvalidEmail,
-                        ),
-                      ]),
-                    ),
-                    const SizedBox(height: 16),
-                    FormBuilderTextField(
-                      name: 'password',
-                      decoration: InputDecoration(labelText: l10n.authPassword),
-                      obscureText: true,
-                      textInputAction: TextInputAction.done,
-                      // Enter/Done on the last field submits the form —
-                      // matches what every login form does; requiring a
-                      // pointer click on the button afterward is friction
-                      // nobody asked for.
-                      onSubmitted: (_) => _submit(),
-                      validator: FormBuilderValidators.required(
-                        errorText: l10n.validationRequired,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Align(
-                      alignment: AlignmentDirectional.centerEnd,
-                      child: TextButton(
-                        onPressed: () => context.push('/forgot-password'),
-                        child: Text(l10n.authForgotPassword),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: _submitting ? null : _submit,
-                      child: _submitting
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white,
-                              ),
-                            )
-                          : Text(l10n.authLogin),
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: FormBuilder(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Text(l10n.authDontHaveAccount),
-                        TextButton(
-                          onPressed: () => context.push(
-                            '/register',
-                            extra: widget.accountType,
+                        Text(
+                          l10n.authWelcomeBack,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const SizedBox(height: 24),
+                        if (_error != null) ...[
+                          _ErrorBanner(message: _error!),
+                          const SizedBox(height: 16),
+                        ],
+                        FormBuilderTextField(
+                          name: 'email',
+                          decoration: InputDecoration(
+                            labelText: l10n.authEmailOrPhone,
                           ),
-                          child: Text(l10n.authRegister),
+                          keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
+                          validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(
+                              errorText: l10n.validationRequired,
+                            ),
+                            FormBuilderValidators.email(
+                              errorText: l10n.validationInvalidEmail,
+                            ),
+                          ]),
+                        ),
+                        const SizedBox(height: 16),
+                        FormBuilderTextField(
+                          name: 'password',
+                          decoration: InputDecoration(
+                            labelText: l10n.authPassword,
+                          ),
+                          obscureText: true,
+                          textInputAction: TextInputAction.done,
+                          // Enter/Done on the last field submits the form —
+                          // matches what every login form does; requiring a
+                          // pointer click on the button afterward is friction
+                          // nobody asked for.
+                          onSubmitted: (_) => _submit(),
+                          validator: FormBuilderValidators.required(
+                            errorText: l10n.validationRequired,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Align(
+                          alignment: AlignmentDirectional.centerEnd,
+                          child: TextButton(
+                            onPressed: () => context.push('/forgot-password'),
+                            child: Text(l10n.authForgotPassword),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: _submitting ? null : _submit,
+                          child: _submitting
+                              ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : Text(l10n.authLogin),
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(l10n.authDontHaveAccount),
+                            TextButton(
+                              onPressed: () => context.push(
+                                '/register',
+                                extra: widget.accountType,
+                              ),
+                              child: Text(l10n.authRegister),
+                            ),
+                          ],
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: TextButton(
+                            onPressed: () => context.push('/restore-account'),
+                            child: Text(
+                              l10n.restoreAccountLinkFromLogin,
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: TextButton(
-                        onPressed: () => context.push('/restore-account'),
-                        child: Text(
-                          l10n.restoreAccountLinkFromLogin,
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),

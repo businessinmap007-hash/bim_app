@@ -30,11 +30,13 @@ class CategoryRootTile extends StatelessWidget {
         // Always the light-theme card look, in both app themes — a
         // deliberate fixed choice (not colorScheme.surface) since the icons
         // are drawn for a light backdrop and read as "floating" on a dark
-        // one with nothing behind them.
+        // one with nothing behind them. A soft shadow instead of a hairline
+        // border gives the tile actual depth against the dark background,
+        // rather than reading as a flat outlined box.
         decoration: BoxDecoration(
           color: AppColors.lightSurface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.black.withValues(alpha: 0.08)),
+          boxShadow: AppColors.softShadow(),
         ),
         padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
         // FittedBox is a safety net, not the sizing mechanism — iconSize is
