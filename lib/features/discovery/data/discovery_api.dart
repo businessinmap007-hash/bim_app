@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+
 import '../../../core/network/api_client.dart';
 import '../../../core/network/paginated.dart';
 import 'models/attribute_group.dart';
@@ -29,7 +31,13 @@ class DiscoveryApi {
         if (openNow) 'open_now': true,
         'governorate_id': ?governorateId,
         'city_id': ?cityId,
-        if (optionIds.isNotEmpty) 'option_ids': optionIds,
+        // Dio's default list encoding repeats the bare key with no `[]`
+        // (`option_ids=1&option_ids=2`), which PHP's query parser reads as
+        // a scalar (last value wins), not an array — Laravel's `array`
+        // validation rule then rejects the request outright. multiCompatible
+        // is the one format that actually emits `option_ids[]=1&...=2`.
+        if (optionIds.isNotEmpty)
+          'option_ids': ListParam(optionIds, ListFormat.multiCompatible),
         'page': page,
         'per_page': perPage,
       },
