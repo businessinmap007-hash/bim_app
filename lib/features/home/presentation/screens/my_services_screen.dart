@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/app_drawer.dart';
 import '../../../addresses/presentation/screens/addresses_screen.dart';
@@ -35,148 +36,160 @@ class MyServicesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.drawerSectionMyServices)),
       drawer: const AppDrawer(),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          _OptionCard(
-            children: [
-              ListTile(
-                leading: const Icon(Icons.qr_code_outlined),
-                title: Text(l10n.tableScanTitle),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const TableScanScreen()),
+      body: ResponsiveCenter(
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            _OptionCard(
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.qr_code_outlined),
+                  title: Text(l10n.tableScanTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const TableScanScreen()),
+                  ),
                 ),
-              ),
-              const Divider(height: 1),
-              ListTile(
-                leading: const Icon(Icons.chat_bubble_outline),
-                title: Text(l10n.chatsListTitle),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const ChatsListScreen()),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.chat_bubble_outline),
+                  title: Text(l10n.chatsListTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const ChatsListScreen()),
+                  ),
                 ),
-              ),
-              const Divider(height: 1),
-              ListTile(
-                leading: const Icon(Icons.receipt_long_outlined),
-                title: Text(l10n.ordersBookingsTitle),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const OrdersAndBookingsScreen()),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.receipt_long_outlined),
+                  title: Text(l10n.ordersBookingsTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const OrdersAndBookingsScreen(),
+                    ),
+                  ),
                 ),
-              ),
-              const Divider(height: 1),
-              ListTile(
-                leading: const Icon(Icons.receipt_long_outlined),
-                title: Text(l10n.prescriptionsTitle),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const PrescriptionsScreen()),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.receipt_long_outlined),
+                  title: Text(l10n.prescriptionsTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const PrescriptionsScreen(),
+                    ),
+                  ),
                 ),
-              ),
-              const Divider(height: 1),
-              ListTile(
-                leading: const Icon(Icons.local_hospital_outlined),
-                title: Text(l10n.myClinicAppointmentsTitle),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const MyClinicAppointmentsScreen()),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.local_hospital_outlined),
+                  title: Text(l10n.myClinicAppointmentsTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const MyClinicAppointmentsScreen(),
+                    ),
+                  ),
                 ),
-              ),
-              const Divider(height: 1),
-              ListTile(
-                leading: const Icon(Icons.fitness_center_outlined),
-                title: Text(l10n.trainingPlansTitle),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const TrainingPlansScreen()),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.fitness_center_outlined),
+                  title: Text(l10n.trainingPlansTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const TrainingPlansScreen(),
+                    ),
+                  ),
                 ),
-              ),
-              const Divider(height: 1),
-              ListTile(
-                leading: const Icon(Icons.storefront_outlined),
-                title: Text(l10n.shopProductsTitle),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const ShopProductsScreen()),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.storefront_outlined),
+                  title: Text(l10n.shopProductsTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const ShopProductsScreen(),
+                    ),
+                  ),
                 ),
-              ),
-              const Divider(height: 1),
-              ListTile(
-                leading: const Icon(Icons.account_balance_wallet_outlined),
-                title: Text(l10n.walletTitle),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const WalletScreen()),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.account_balance_wallet_outlined),
+                  title: Text(l10n.walletTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const WalletScreen()),
+                  ),
                 ),
-              ),
-              const Divider(height: 1),
-              ListTile(
-                leading: const Icon(Icons.calendar_month_outlined),
-                title: Text(l10n.agendaTitle),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const AgendaScreen()),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.calendar_month_outlined),
+                  title: Text(l10n.agendaTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const AgendaScreen()),
+                  ),
                 ),
-              ),
-              const Divider(height: 1),
-              ListTile(
-                leading: const Icon(Icons.local_shipping_outlined),
-                title: Text(l10n.tripSearchTitle),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const TripSearchScreen()),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.local_shipping_outlined),
+                  title: Text(l10n.tripSearchTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const TripSearchScreen()),
+                  ),
                 ),
-              ),
-              const Divider(height: 1),
-              ListTile(
-                leading: const Icon(Icons.lock_outline),
-                title: Text(l10n.depositsTitle),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const DepositsScreen()),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.lock_outline),
+                  title: Text(l10n.depositsTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const DepositsScreen()),
+                  ),
                 ),
-              ),
-              const Divider(height: 1),
-              ListTile(
-                leading: const Icon(Icons.verified_user_outlined),
-                title: Text(l10n.guaranteeTitle),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const GuaranteeScreen()),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.verified_user_outlined),
+                  title: Text(l10n.guaranteeTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const GuaranteeScreen()),
+                  ),
                 ),
-              ),
-              const Divider(height: 1),
-              ListTile(
-                leading: const Icon(Icons.gavel_outlined),
-                title: Text(l10n.finesTitle),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const FinesScreen()),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.gavel_outlined),
+                  title: Text(l10n.finesTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const FinesScreen()),
+                  ),
                 ),
-              ),
-              const Divider(height: 1),
-              ListTile(
-                leading: const Icon(Icons.gavel_outlined),
-                title: Text(l10n.disputesTitle),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const DisputesScreen()),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.gavel_outlined),
+                  title: Text(l10n.disputesTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const DisputesScreen()),
+                  ),
                 ),
-              ),
-              const Divider(height: 1),
-              ListTile(
-                leading: const Icon(Icons.location_on_outlined),
-                title: Text(l10n.addressesTitle),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const AddressesScreen()),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.location_on_outlined),
+                  title: Text(l10n.addressesTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const AddressesScreen()),
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

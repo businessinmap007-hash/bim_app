@@ -17,7 +17,6 @@ import 'category_root_tile.dart';
 class CategoryRootsGrid extends ConsumerWidget {
   const CategoryRootsGrid({super.key});
 
-  static const _columns = 3;
   static const _gridPadding = 6.0;
   static const _gridSpacing = 4.0;
 
@@ -34,8 +33,6 @@ class CategoryRootsGrid extends ConsumerWidget {
           return Center(child: Text(l10n.categoriesEmpty));
         }
 
-        final rows = (items.length / _columns).ceil();
-
         return RefreshIndicator(
           onRefresh: () async => ref.invalidate(categoryRootsProvider),
           child: ResponsiveCenter(
@@ -47,16 +44,34 @@ class CategoryRootsGrid extends ConsumerWidget {
             // icon) without re-guessing a ratio each time.
             child: LayoutBuilder(
               builder: (context, constraints) {
+                // Columns grow with width (Breakpoints.gridColumnsFor: 4
+                // mobile / 6 tablet / 8 desktop) instead of a fixed 3 — on a
+                // wide browser window, 3 columns forced each tile into a
+                // huge, very wide-but-short rectangle, and the icon (sized
+                // from tile WIDTH alone) then had to be crushed back down by
+                // FittedBox to fit that short height, leaving the label
+                // unreadably small despite the card itself looking oversized.
+                final columns = Breakpoints.gridColumnsFor(
+                  constraints.maxWidth,
+                );
+                final rows = (items.length / columns).ceil();
                 final tileWidth =
-                    (constraints.maxWidth - _gridPadding * 2 - _gridSpacing * (_columns - 1)) / _columns;
-                final tileHeight = (constraints.maxHeight - _gridPadding * 2 - _gridSpacing * (rows - 1)) / rows;
+                    (constraints.maxWidth -
+                        _gridPadding * 2 -
+                        _gridSpacing * (columns - 1)) /
+                    columns;
+                final tileHeight =
+                    (constraints.maxHeight -
+                        _gridPadding * 2 -
+                        _gridSpacing * (rows - 1)) /
+                    rows;
                 final aspectRatio = tileWidth / tileHeight;
                 final iconSize = tileWidth * 0.9;
 
                 return GridView.builder(
                   padding: const EdgeInsets.all(_gridPadding),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: _columns,
+                    crossAxisCount: columns,
                     mainAxisSpacing: _gridSpacing,
                     crossAxisSpacing: _gridSpacing,
                     childAspectRatio: aspectRatio,
@@ -67,10 +82,14 @@ class CategoryRootsGrid extends ConsumerWidget {
                     return CategoryRootTile(
                       category: category,
                       iconSize: iconSize,
-                      iconColor: index.isEven ? AppColors.accentGold : AppColors.primaryNavy,
+                      iconColor: index.isEven
+                          ? AppColors.accentGold
+                          : AppColors.primaryNavy,
                       onTap: () => context.push(
                         '/categories/${category.id}/specialties',
-                        extra: category.localizedName(Localizations.localeOf(context).languageCode),
+                        extra: category.localizedName(
+                          Localizations.localeOf(context).languageCode,
+                        ),
                       ),
                     );
                   },

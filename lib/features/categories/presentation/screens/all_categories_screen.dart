@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/app_drawer.dart';
 import '../../../discovery/application/discovery_providers.dart';
@@ -104,17 +105,20 @@ class _SearchResults extends StatelessWidget {
     if (state.items.isEmpty) {
       return Center(child: Text(l10n.businessListEmpty));
     }
-    return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-      itemCount: state.items.length,
-      separatorBuilder: (context, index) => const SizedBox(height: 8),
-      itemBuilder: (context, index) {
-        final business = state.items[index];
-        return BusinessCard(
-          business: business,
-          onTap: () => context.push('/business/${business.id}'),
-        );
-      },
+    return ResponsiveCenter(
+      maxWidth: 800,
+      child: ListView.separated(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        itemCount: state.items.length,
+        separatorBuilder: (context, index) => const SizedBox(height: 8),
+        itemBuilder: (context, index) {
+          final business = state.items[index];
+          return BusinessCard(
+            business: business,
+            onTap: () => context.push('/business/${business.id}'),
+          );
+        },
+      ),
     );
   }
 }
