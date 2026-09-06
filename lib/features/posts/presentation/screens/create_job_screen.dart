@@ -92,8 +92,21 @@ class _CreateJobScreenState extends ConsumerState<CreateJobScreen> {
           TextButton(
             onPressed: _busy ? null : _publish,
             child: _busy
-                ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                : Text(l10n.postsPublish, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
+                ? SizedBox(
+                    height: 18,
+                    width: 18,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Theme.of(context).appBarTheme.foregroundColor,
+                    ),
+                  )
+                : Text(
+                    l10n.postsPublish,
+                    style: TextStyle(
+                      color: Theme.of(context).appBarTheme.foregroundColor,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
           ),
         ],
       ),

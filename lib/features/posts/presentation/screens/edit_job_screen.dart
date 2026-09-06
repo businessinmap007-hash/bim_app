@@ -77,12 +77,21 @@ class _EditJobScreenState extends ConsumerState<EditJobScreen> {
           TextButton(
             onPressed: _busy ? null : _save,
             child: _busy
-                ? const SizedBox(
+                ? SizedBox(
                     height: 18,
                     width: 18,
-                    child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Theme.of(context).appBarTheme.foregroundColor,
+                    ),
                   )
-                : Text(l10n.commonSave, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
+                : Text(
+                    l10n.commonSave,
+                    style: TextStyle(
+                      color: Theme.of(context).appBarTheme.foregroundColor,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
           ),
         ],
       ),
