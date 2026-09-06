@@ -29,6 +29,40 @@ import '../../../posts/presentation/screens/my_posts_screen.dart';
 class BusinessHomeScreen extends ConsumerWidget {
   const BusinessHomeScreen({super.key});
 
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(l10n.homeBusinessTitle),
+        actions: const [
+          CreatePostButton(),
+          ChatIconButton(),
+          NotificationBellButton(),
+          CartIconButton(),
+        ],
+      ),
+      drawer: const AppDrawer(),
+      body: const BusinessHomeBody(),
+    );
+  }
+}
+
+/// Just the profile-header + feed content, with no [Scaffold]/[AppBar]/
+/// [AppDrawer] of its own — reused as-is inside [BusinessHomeScreen]
+/// (mobile/tablet) and inside the desktop 3-pane shell's center column
+/// (`HomeShell`), which supplies its own shared top bar instead.
+///
+/// Keeps its own inner [Scaffold] (no AppBar/Drawer — just for
+/// [CreateJobFab]'s floating position): [CreateJobFab] only needs the
+/// ambient [DefaultTabController] this widget already provides, so nesting
+/// it here means the FAB floats correctly within whichever container hosts
+/// this body — the whole window on mobile, just the center column on
+/// desktop — instead of always needing the outer screen's own Scaffold.
+class BusinessHomeBody extends ConsumerWidget {
+  const BusinessHomeBody({super.key});
+
   static const _jobsTabIndex = 2;
 
   @override
@@ -44,11 +78,6 @@ class BusinessHomeScreen extends ConsumerWidget {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(l10n.homeBusinessTitle),
-          actions: const [CreatePostButton(), ChatIconButton(), NotificationBellButton(), CartIconButton()],
-        ),
-        drawer: const AppDrawer(),
         floatingActionButton: const CreateJobFab(jobsTabIndex: _jobsTabIndex),
         body: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) => [

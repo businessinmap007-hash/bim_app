@@ -27,8 +27,24 @@ import '../../l10n/app_localizations.dart';
 /// bottom-nav tab, and posts management is Home's own tabs (see
 /// [BusinessHomeScreen]/[CustomerHomeScreen]), so neither belongs in an
 /// account-utility menu either.
-class AppDrawer extends ConsumerWidget {
+class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Drawer(child: AppDrawerContent(isModal: true));
+  }
+}
+
+/// The drawer's actual content, with no [Drawer] chrome of its own — reused
+/// as the modal drawer's child on mobile/tablet ([AppDrawer]) and as the
+/// desktop 3-pane shell's leading sidebar (`HomeShell`), where it's shown
+/// persistently instead of as a slide-over. [isModal] controls whether
+/// tapping an item first pops the (modal) drawer route — a persistent
+/// sidebar has no drawer route to pop.
+class AppDrawerContent extends ConsumerWidget {
+  final bool isModal;
+  const AppDrawerContent({super.key, required this.isModal});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -37,185 +53,233 @@ class AppDrawer extends ConsumerWidget {
     final user = authState is AuthSignedIn ? authState.user : null;
     final isBusiness = authState is AuthSignedIn && authState.user.isBusiness;
 
-    void close() => Navigator.of(context).pop();
-    void openAccount() {
-      close();
-      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MyProfileScreen()));
+    void close() {
+      if (isModal) Navigator.of(context).pop();
     }
 
-    return Drawer(
-      child: SafeArea(
-        child: Column(
-          children: [
-            InkWell(
-              onTap: openAccount,
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: 96,
-                    color: AppColors.primaryNavy,
-                    child: user?.coverUrl != null
-                        ? CachedNetworkImage(imageUrl: user!.coverUrl!, fit: BoxFit.cover)
-                        : null,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 66),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Container(
-                              width: 56,
-                              height: 56,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColors.accentGold.withValues(alpha: 0.15),
-                                border: Border.all(color: Theme.of(context).scaffoldBackgroundColor, width: 3),
-                              ),
-                              child: ClipOval(
-                                // logo first — the field every other resource
-                                // (posts/comments/orders, the public business
-                                // page) reads as "this account's photo" for a
-                                // business; image is a client's own slot and
-                                // the fallback for a business with no logo set.
-                                child: (user?.logoUrl ?? user?.imageUrl) != null
-                                    ? CachedNetworkImage(imageUrl: (user!.logoUrl ?? user.imageUrl)!, fit: BoxFit.cover)
-                                    : const Icon(Icons.person, color: AppColors.primaryNavy),
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(bottom: 6),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    if (user != null)
-                                      Text(
-                                        user.name,
-                                        style: Theme.of(
-                                          context,
-                                        ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    if (user != null)
-                                      Text(
-                                        user.email,
-                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                          color: Theme.of(context).hintColor,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 6),
-                              child: Container(
-                                padding: const EdgeInsets.all(5),
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppColors.primaryNavy,
-                                ),
-                                child: const Icon(Icons.edit, color: Colors.white, size: 14),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Divider(height: 1),
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: [
-                  _SectionHeader(l10n.drawerSectionProfile),
-                  ListTile(
-                    leading: const Icon(Icons.settings_outlined),
-                    title: Text(l10n.settingsTitle),
-                    onTap: () {
-                      close();
-                      context.push('/settings');
-                    },
-                  ),
+    void openAccount() {
+      close();
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (_) => const MyProfileScreen()));
+    }
 
-                  _SectionHeader(l10n.drawerSectionJobsPosts),
-                  ListTile(
-                    leading: const Icon(Icons.work_outline),
-                    title: Text(l10n.jobsTitle),
-                    onTap: () {
-                      close();
-                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const JobsScreen()));
-                    },
+    return SafeArea(
+      child: Column(
+        children: [
+          InkWell(
+            onTap: openAccount,
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 96,
+                  color: AppColors.primaryNavy,
+                  child: user?.coverUrl != null
+                      ? CachedNetworkImage(
+                          imageUrl: user!.coverUrl!,
+                          fit: BoxFit.cover,
+                        )
+                      : null,
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 66),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Container(
+                            width: 56,
+                            height: 56,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.accentGold.withValues(
+                                alpha: 0.15,
+                              ),
+                              border: Border.all(
+                                color: Theme.of(
+                                  context,
+                                ).scaffoldBackgroundColor,
+                                width: 3,
+                              ),
+                            ),
+                            child: ClipOval(
+                              // logo first — the field every other resource
+                              // (posts/comments/orders, the public business
+                              // page) reads as "this account's photo" for a
+                              // business; image is a client's own slot and
+                              // the fallback for a business with no logo set.
+                              child: (user?.logoUrl ?? user?.imageUrl) != null
+                                  ? CachedNetworkImage(
+                                      imageUrl:
+                                          (user!.logoUrl ?? user.imageUrl)!,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : const Icon(
+                                      Icons.person,
+                                      color: AppColors.primaryNavy,
+                                    ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 6),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  if (user != null)
+                                    Text(
+                                      user.name,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  if (user != null)
+                                    Text(
+                                      user.name,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(
+                                            color: Theme.of(context).hintColor,
+                                          ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 6),
+                            child: Container(
+                              padding: const EdgeInsets.all(5),
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.primaryNavy,
+                              ),
+                              child: const Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                                size: 14,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
+                ),
+              ],
+            ),
+          ),
+          const Divider(height: 1),
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                _SectionHeader(l10n.drawerSectionProfile),
+                ListTile(
+                  leading: const Icon(Icons.settings_outlined),
+                  title: Text(l10n.settingsTitle),
+                  onTap: () {
+                    close();
+                    context.push('/settings');
+                  },
+                ),
+
+                _SectionHeader(l10n.drawerSectionJobsPosts),
+                ListTile(
+                  leading: const Icon(Icons.work_outline),
+                  title: Text(l10n.jobsTitle),
+                  onTap: () {
+                    close();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const JobsScreen()),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.people_outline),
+                  title: Text(l10n.myFollowsTitle),
+                  onTap: () {
+                    close();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const MyFollowsScreen(),
+                      ),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.local_offer_outlined),
+                  title: Text(l10n.offersTitle),
+                  onTap: () {
+                    close();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const OffersScreen()),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.notifications_none),
+                  title: Text(l10n.myOfferFollowsTitle),
+                  onTap: () {
+                    close();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const MyOfferFollowsScreen(),
+                      ),
+                    );
+                  },
+                ),
+
+                if (isBusiness) ...[
+                  _SectionHeader(l10n.settingsServicesSection),
                   ListTile(
-                    leading: const Icon(Icons.people_outline),
-                    title: Text(l10n.myFollowsTitle),
-                    onTap: () {
-                      close();
-                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MyFollowsScreen()));
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.local_offer_outlined),
-                    title: Text(l10n.offersTitle),
-                    onTap: () {
-                      close();
-                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const OffersScreen()));
-                    },
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.notifications_none),
-                    title: Text(l10n.myOfferFollowsTitle),
+                    leading: const Icon(Icons.storefront_outlined),
+                    title: Text(l10n.settingsServicesSection),
                     onTap: () {
                       close();
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const MyOfferFollowsScreen()),
+                        MaterialPageRoute(
+                          builder: (_) => const ServicesSettingsScreen(),
+                        ),
                       );
                     },
                   ),
-
-                  if (isBusiness) ...[
-                    _SectionHeader(l10n.settingsServicesSection),
-                    ListTile(
-                      leading: const Icon(Icons.storefront_outlined),
-                      title: Text(l10n.settingsServicesSection),
-                      onTap: () {
-                        close();
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => const ServicesSettingsScreen()),
-                        );
-                      },
-                    ),
-                  ],
                 ],
-              ),
+              ],
             ),
-            const Divider(height: 1),
-            ListTile(
-              leading: Icon(Icons.logout, color: Theme.of(context).colorScheme.error),
-              title: Text(l10n.authLogout, style: TextStyle(color: Theme.of(context).colorScheme.error)),
-              onTap: () {
-                Navigator.of(context).pop();
-                ref.read(authControllerProvider.notifier).logout();
-              },
+          ),
+          const Divider(height: 1),
+          ListTile(
+            leading: Icon(
+              Icons.logout,
+              color: Theme.of(context).colorScheme.error,
             ),
-            const SizedBox(height: 8),
-          ],
-        ),
+            title: Text(
+              l10n.authLogout,
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
+            onTap: () {
+              close();
+              ref.read(authControllerProvider.notifier).logout();
+            },
+          ),
+          const SizedBox(height: 8),
+        ],
       ),
     );
   }
@@ -231,9 +295,10 @@ class _SectionHeader extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
       child: Text(
         label,
-        style: Theme.of(
-          context,
-        ).textTheme.labelMedium?.copyWith(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.w700),
+        style: Theme.of(context).textTheme.labelMedium?.copyWith(
+          color: Theme.of(context).colorScheme.primary,
+          fontWeight: FontWeight.w700,
+        ),
       ),
     );
   }

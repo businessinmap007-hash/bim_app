@@ -11,26 +11,41 @@ import '../../../discovery/application/discovery_providers.dart';
 import '../../../discovery/presentation/widgets/business_card.dart';
 import '../widgets/category_roots_grid.dart';
 
-/// A bottom-nav destination for reaching categories directly regardless of
-/// what the Home tab ends up showing later (a dashboard/feed, per the
-/// roadmap) — today it's the identical root-category grid Home already has,
-/// since Home has nothing else yet. Kept as the SAME [CategoryRootsGrid]
-/// Home uses (not a second, differently-styled browser) after the first
-/// version here — a separate expandable list — read as "the nice card grid
-/// got replaced" rather than as a new, additional screen.
+/// A bottom-nav destination for reaching categories directly, separate from
+/// Home's own feed — browsing by category and following a feed are two
+/// different jobs, so they're two different destinations.
 ///
 /// Cross-category business search lives inline at the top now (it used to
 /// be its own bottom-nav tab) — the grid shows while the search field is
 /// empty, search results replace it the moment there's a query, so this one
 /// screen covers "browse" and "look for something specific" both.
-class AllCategoriesScreen extends ConsumerStatefulWidget {
+class AllCategoriesScreen extends StatelessWidget {
   const AllCategoriesScreen({super.key});
 
   @override
-  ConsumerState<AllCategoriesScreen> createState() => _AllCategoriesScreenState();
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.navCategories)),
+      drawer: const AppDrawer(),
+      body: const AllCategoriesBody(),
+    );
+  }
 }
 
-class _AllCategoriesScreenState extends ConsumerState<AllCategoriesScreen> {
+/// Just the search field + grid/results content, with no [Scaffold]/
+/// [AppBar]/[AppDrawer] of its own — reused as-is inside [AllCategoriesScreen]
+/// (mobile/tablet) and inside the desktop 3-pane shell's center column
+/// (`HomeShell`), which supplies its own shared top bar instead.
+class AllCategoriesBody extends ConsumerStatefulWidget {
+  const AllCategoriesBody({super.key});
+
+  @override
+  ConsumerState<AllCategoriesBody> createState() => _AllCategoriesBodyState();
+}
+
+class _AllCategoriesBodyState extends ConsumerState<AllCategoriesBody> {
   final _searchController = TextEditingController();
   Timer? _debounce;
 
@@ -54,36 +69,34 @@ class _AllCategoriesScreenState extends ConsumerState<AllCategoriesScreen> {
     final searchState = ref.watch(searchControllerProvider);
     final hasQuery = searchState.query.trim().isNotEmpty;
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.navCategories)),
-      drawer: const AppDrawer(),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: TextField(
-              controller: _searchController,
-              onChanged: _onSearchChanged,
-              decoration: InputDecoration(
-                hintText: l10n.businessSearchHint,
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: hasQuery
-                    ? IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () {
-                          _searchController.clear();
-                          ref.read(searchControllerProvider.notifier).search('');
-                        },
-                      )
-                    : null,
-              ),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: TextField(
+            controller: _searchController,
+            onChanged: _onSearchChanged,
+            decoration: InputDecoration(
+              hintText: l10n.businessSearchHint,
+              prefixIcon: const Icon(Icons.search),
+              suffixIcon: hasQuery
+                  ? IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () {
+                        _searchController.clear();
+                        ref.read(searchControllerProvider.notifier).search('');
+                      },
+                    )
+                  : null,
             ),
           ),
-          Expanded(
-            child: hasQuery ? _SearchResults(state: searchState) : const CategoryRootsGrid(),
-          ),
-        ],
-      ),
+        ),
+        Expanded(
+          child: hasQuery
+              ? _SearchResults(state: searchState)
+              : const CategoryRootsGrid(),
+        ),
+      ],
     );
   }
 }

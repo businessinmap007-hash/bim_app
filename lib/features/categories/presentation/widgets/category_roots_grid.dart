@@ -11,12 +11,12 @@ import '../../data/models/category_root.dart';
 import 'category_root_tile.dart';
 
 /// The root-category grid — every root as one no-scroll-needed card grid,
-/// tapping through to its specialties. Shared by the Home tab and the
-/// Categories tab (identical content, reached two different ways) rather
-/// than each screen re-implementing its own version of the same grid.
+/// tapping through to its specialties. Used by the Categories tab
+/// ([AllCategoriesBody]/`AllCategoriesScreen`).
 class CategoryRootsGrid extends ConsumerWidget {
   const CategoryRootsGrid({super.key});
 
+  static const _columns = 3;
   static const _gridPadding = 6.0;
   static const _gridSpacing = 4.0;
 
@@ -44,22 +44,20 @@ class CategoryRootsGrid extends ConsumerWidget {
             // icon) without re-guessing a ratio each time.
             child: LayoutBuilder(
               builder: (context, constraints) {
-                // Columns grow with width (Breakpoints.gridColumnsFor: 4
-                // mobile / 6 tablet / 8 desktop) instead of a fixed 3 — on a
-                // wide browser window, 3 columns forced each tile into a
-                // huge, very wide-but-short rectangle, and the icon (sized
-                // from tile WIDTH alone) then had to be crushed back down by
-                // FittedBox to fit that short height, leaving the label
+                // Fixed at 3 columns everywhere, including desktop — a wide
+                // screen gets a dedicated 3-pane shell (see HomeShell) that
+                // hands the freed width to side panels instead of stretching
+                // this grid; growing the column count here on its own
+                // previously forced wide-but-short tiles whose icon (sized
+                // from tile WIDTH alone) had to be crushed back down by
+                // FittedBox to fit the short tile height, leaving the label
                 // unreadably small despite the card itself looking oversized.
-                final columns = Breakpoints.gridColumnsFor(
-                  constraints.maxWidth,
-                );
-                final rows = (items.length / columns).ceil();
+                final rows = (items.length / _columns).ceil();
                 final tileWidth =
                     (constraints.maxWidth -
                         _gridPadding * 2 -
-                        _gridSpacing * (columns - 1)) /
-                    columns;
+                        _gridSpacing * (_columns - 1)) /
+                    _columns;
                 final tileHeight =
                     (constraints.maxHeight -
                         _gridPadding * 2 -
@@ -71,7 +69,7 @@ class CategoryRootsGrid extends ConsumerWidget {
                 return GridView.builder(
                   padding: const EdgeInsets.all(_gridPadding),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: columns,
+                    crossAxisCount: _columns,
                     mainAxisSpacing: _gridSpacing,
                     crossAxisSpacing: _gridSpacing,
                     childAspectRatio: aspectRatio,
