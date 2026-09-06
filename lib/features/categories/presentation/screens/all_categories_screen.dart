@@ -78,11 +78,10 @@ class _AllCategoriesScreenState extends ConsumerState<AllCategoriesScreen> {
               ),
             ),
           ),
-          Expanded(
-            child: hasQuery
-                ? _SearchResults(state: searchState)
-                : const CategoryRootsGrid(),
-          ),
+          if (hasQuery)
+            Expanded(child: _SearchResults(state: searchState))
+          else
+            const CategoryRootsGrid(),
         ],
       ),
     );
