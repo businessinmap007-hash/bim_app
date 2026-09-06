@@ -28,53 +28,38 @@ class CustomerHomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.homeCustomerTitle),
-        actions: const [
-          CreatePostButton(),
-          ChatIconButton(),
-          NotificationBellButton(),
-          CartIconButton(),
-        ],
-      ),
-      drawer: const AppDrawer(),
-      body: const CustomerHomeBody(),
-    );
-  }
-}
-
-/// Just the feed content, with no [Scaffold]/[AppBar]/[AppDrawer] of its
-/// own — reused as-is inside [CustomerHomeScreen] (mobile/tablet) and inside
-/// the desktop 3-pane shell's center column (`HomeShell`), which supplies
-/// its own shared top bar instead.
-class CustomerHomeBody extends StatelessWidget {
-  const CustomerHomeBody({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
     return DefaultTabController(
       length: 2,
-      child: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          SliverOverlapAbsorber(
-            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-            sliver: SliverPersistentHeader(
-              pinned: true,
-              delegate: SliverTabBarDelegate(
-                TabBar(
-                  tabs: [
-                    Tab(text: l10n.postsTabFollowing),
-                    Tab(text: l10n.postsTabMine),
-                  ],
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(l10n.homeCustomerTitle),
+          actions: const [
+            CreatePostButton(),
+            ChatIconButton(),
+            NotificationBellButton(),
+            CartIconButton(),
+          ],
+        ),
+        drawer: const AppDrawer(),
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            SliverOverlapAbsorber(
+              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+              sliver: SliverPersistentHeader(
+                pinned: true,
+                delegate: SliverTabBarDelegate(
+                  TabBar(
+                    tabs: [
+                      Tab(text: l10n.postsTabFollowing),
+                      Tab(text: l10n.postsTabMine),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
-        body: const TabBarView(children: [FollowedFeedTab(), MyPostsTab()]),
+          ],
+          body: const TabBarView(children: [FollowedFeedTab(), MyPostsTab()]),
+        ),
       ),
     );
   }

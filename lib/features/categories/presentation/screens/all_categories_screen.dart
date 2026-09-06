@@ -19,33 +19,15 @@ import '../widgets/category_roots_grid.dart';
 /// be its own bottom-nav tab) — the grid shows while the search field is
 /// empty, search results replace it the moment there's a query, so this one
 /// screen covers "browse" and "look for something specific" both.
-class AllCategoriesScreen extends StatelessWidget {
+class AllCategoriesScreen extends ConsumerStatefulWidget {
   const AllCategoriesScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.navCategories)),
-      drawer: const AppDrawer(),
-      body: const AllCategoriesBody(),
-    );
-  }
+  ConsumerState<AllCategoriesScreen> createState() =>
+      _AllCategoriesScreenState();
 }
 
-/// Just the search field + grid/results content, with no [Scaffold]/
-/// [AppBar]/[AppDrawer] of its own — reused as-is inside [AllCategoriesScreen]
-/// (mobile/tablet) and inside the desktop 3-pane shell's center column
-/// (`HomeShell`), which supplies its own shared top bar instead.
-class AllCategoriesBody extends ConsumerStatefulWidget {
-  const AllCategoriesBody({super.key});
-
-  @override
-  ConsumerState<AllCategoriesBody> createState() => _AllCategoriesBodyState();
-}
-
-class _AllCategoriesBodyState extends ConsumerState<AllCategoriesBody> {
+class _AllCategoriesScreenState extends ConsumerState<AllCategoriesScreen> {
   final _searchController = TextEditingController();
   Timer? _debounce;
 
@@ -69,34 +51,40 @@ class _AllCategoriesBodyState extends ConsumerState<AllCategoriesBody> {
     final searchState = ref.watch(searchControllerProvider);
     final hasQuery = searchState.query.trim().isNotEmpty;
 
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: TextField(
-            controller: _searchController,
-            onChanged: _onSearchChanged,
-            decoration: InputDecoration(
-              hintText: l10n.businessSearchHint,
-              prefixIcon: const Icon(Icons.search),
-              suffixIcon: hasQuery
-                  ? IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () {
-                        _searchController.clear();
-                        ref.read(searchControllerProvider.notifier).search('');
-                      },
-                    )
-                  : null,
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.navCategories)),
+      drawer: const AppDrawer(),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: TextField(
+              controller: _searchController,
+              onChanged: _onSearchChanged,
+              decoration: InputDecoration(
+                hintText: l10n.businessSearchHint,
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: hasQuery
+                    ? IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () {
+                          _searchController.clear();
+                          ref
+                              .read(searchControllerProvider.notifier)
+                              .search('');
+                        },
+                      )
+                    : null,
+              ),
             ),
           ),
-        ),
-        Expanded(
-          child: hasQuery
-              ? _SearchResults(state: searchState)
-              : const CategoryRootsGrid(),
-        ),
-      ],
+          Expanded(
+            child: hasQuery
+                ? _SearchResults(state: searchState)
+                : const CategoryRootsGrid(),
+          ),
+        ],
+      ),
     );
   }
 }
