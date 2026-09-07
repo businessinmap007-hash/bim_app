@@ -266,11 +266,53 @@ class BusinessMenuApi {
   Future<void> deleteVariant(int itemId, int variantId) =>
       _client.delete('/business/menu/items/$itemId/variants/$variantId');
 
+  // ────────────────────────── Extra groups ──────────────────────────
+
+  Future<void> addExtraGroup(
+    int itemId, {
+    required String nameAr,
+    String? nameEn,
+    required String selectionType,
+    bool isActive = true,
+  }) async {
+    await _client.post(
+      '/business/menu/items/$itemId/extra-groups',
+      data: {
+        'name_ar': nameAr,
+        if (nameEn != null && nameEn.isNotEmpty) 'name_en': nameEn,
+        'selection_type': selectionType,
+        'is_active': isActive,
+      },
+    );
+  }
+
+  Future<void> updateExtraGroup(
+    int itemId,
+    int groupId, {
+    required String nameAr,
+    String? nameEn,
+    required String selectionType,
+    bool isActive = true,
+  }) async {
+    await _client.put(
+      '/business/menu/items/$itemId/extra-groups/$groupId',
+      data: {
+        'name_ar': nameAr,
+        if (nameEn != null && nameEn.isNotEmpty) 'name_en': nameEn,
+        'selection_type': selectionType,
+        'is_active': isActive,
+      },
+    );
+  }
+
+  Future<void> deleteExtraGroup(int itemId, int groupId) =>
+      _client.delete('/business/menu/items/$itemId/extra-groups/$groupId');
+
   // ─────────────────────────── Extras ───────────────────────────
 
   Future<void> addExtra(
     int itemId, {
-    String? groupKey,
+    int? extraGroupId,
     required String nameAr,
     String? nameEn,
     required double price,
@@ -280,7 +322,7 @@ class BusinessMenuApi {
     await _client.post(
       '/business/menu/items/$itemId/extras',
       data: {
-        if (groupKey != null && groupKey.isNotEmpty) 'group_key': groupKey,
+        'extra_group_id': ?extraGroupId,
         'name_ar': nameAr,
         if (nameEn != null && nameEn.isNotEmpty) 'name_en': nameEn,
         'price': price,
@@ -293,7 +335,7 @@ class BusinessMenuApi {
   Future<void> updateExtra(
     int itemId,
     int extraId, {
-    String? groupKey,
+    int? extraGroupId,
     required String nameAr,
     String? nameEn,
     required double price,
@@ -303,7 +345,7 @@ class BusinessMenuApi {
     await _client.put(
       '/business/menu/items/$itemId/extras/$extraId',
       data: {
-        if (groupKey != null && groupKey.isNotEmpty) 'group_key': groupKey,
+        'extra_group_id': ?extraGroupId,
         'name_ar': nameAr,
         if (nameEn != null && nameEn.isNotEmpty) 'name_en': nameEn,
         'price': price,

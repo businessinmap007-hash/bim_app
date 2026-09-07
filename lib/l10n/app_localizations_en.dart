@@ -2695,6 +2695,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuItemVariantDefaultLabel => 'Default choice';
 
   @override
+  String get menuItemExtraGroupsSection => 'Extra groups';
+
+  @override
+  String get menuItemAddExtraGroup => 'Add group';
+
+  @override
+  String get menuItemEditExtraGroup => 'Edit group';
+
+  @override
+  String get menuItemExtraGroupNameHint => 'Group name (e.g. Sauces)';
+
+  @override
+  String get menuItemExtraGroupSelectionLabel => 'Selection type';
+
+  @override
+  String get menuItemExtraGroupSelectionSingle =>
+      'Single choice (radio button)';
+
+  @override
+  String get menuItemExtraGroupSelectionMultiple =>
+      'Multiple choice (checkbox)';
+
+  @override
+  String get menuItemExtraGroupNone => 'No group';
+
+  @override
   String get menuItemExtrasSection => 'Extras';
 
   @override

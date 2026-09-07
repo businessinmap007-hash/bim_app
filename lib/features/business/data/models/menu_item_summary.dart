@@ -21,17 +21,39 @@ class MenuItemVariant {
   );
 }
 
+/// A group of extras deciding how they're picked — see
+/// MenuDiscoveryController's `extra_groups`.
+class MenuItemExtraGroup {
+  static const selectionSingle = 'single';
+
+  final int id;
+  final String name;
+  final String selectionType;
+
+  const MenuItemExtraGroup({required this.id, required this.name, required this.selectionType});
+
+  bool get isSingle => selectionType == selectionSingle;
+
+  factory MenuItemExtraGroup.fromJson(Map<String, dynamic> json) => MenuItemExtraGroup(
+    id: json['id'] as int,
+    name: json['name'] as String? ?? '',
+    selectionType: json['selection_type'] as String? ?? 'multiple',
+  );
+}
+
 class MenuItemExtra {
   final int id;
   final String name;
   final double price;
+  final int? extraGroupId;
 
-  const MenuItemExtra({required this.id, required this.name, required this.price});
+  const MenuItemExtra({required this.id, required this.name, required this.price, this.extraGroupId});
 
   factory MenuItemExtra.fromJson(Map<String, dynamic> json) => MenuItemExtra(
     id: json['id'] as int,
     name: json['name'] as String? ?? '',
     price: (json['price'] as num?)?.toDouble() ?? 0,
+    extraGroupId: json['extra_group_id'] as int?,
   );
 }
 
@@ -49,6 +71,7 @@ class MenuItemSummary {
   final String? saleUnitLabel;
   final int? availableQuantity;
   final List<MenuItemVariant> variants;
+  final List<MenuItemExtraGroup> extraGroups;
   final List<MenuItemExtra> extras;
 
   const MenuItemSummary({
@@ -62,6 +85,7 @@ class MenuItemSummary {
     this.saleUnitLabel,
     this.availableQuantity,
     required this.variants,
+    this.extraGroups = const [],
     required this.extras,
   });
 
@@ -83,6 +107,9 @@ class MenuItemSummary {
     availableQuantity: (json['available_quantity'] as num?)?.toInt(),
     variants: (json['variants'] as List<dynamic>? ?? [])
         .map((e) => MenuItemVariant.fromJson(e as Map<String, dynamic>))
+        .toList(),
+    extraGroups: (json['extra_groups'] as List<dynamic>? ?? [])
+        .map((e) => MenuItemExtraGroup.fromJson(e as Map<String, dynamic>))
         .toList(),
     extras: (json['extras'] as List<dynamic>? ?? [])
         .map((e) => MenuItemExtra.fromJson(e as Map<String, dynamic>))

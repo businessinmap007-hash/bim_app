@@ -20,6 +20,7 @@ class BusinessMenuItem {
   final bool isActive;
   final List<MenuItemImage> images;
   final List<MenuVariant> variants;
+  final List<MenuExtraGroup> extraGroups;
   final List<MenuExtra> extras;
 
   const BusinessMenuItem({
@@ -37,6 +38,7 @@ class BusinessMenuItem {
     required this.isActive,
     this.images = const [],
     this.variants = const [],
+    this.extraGroups = const [],
     this.extras = const [],
   });
 
@@ -59,6 +61,10 @@ class BusinessMenuItem {
         const [],
     variants: (json['variants'] as List<dynamic>?)
             ?.map((e) => MenuVariant.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        const [],
+    extraGroups: (json['extra_groups'] as List<dynamic>?)
+            ?.map((e) => MenuExtraGroup.fromJson(e as Map<String, dynamic>))
             .toList() ??
         const [],
     extras: (json['extras'] as List<dynamic>?)

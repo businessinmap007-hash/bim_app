@@ -254,32 +254,58 @@ class MenuItemEditController extends StateNotifier<AsyncValue<BusinessMenuItem>>
   }
 
   Future<void> addExtra({
-    String? groupKey,
+    int? extraGroupId,
     required String nameAr,
     String? nameEn,
     required double price,
     int maxQty = 1,
     bool isActive = true,
   }) async {
-    await _api.addExtra(itemId, groupKey: groupKey, nameAr: nameAr, nameEn: nameEn, price: price, maxQty: maxQty, isActive: isActive);
+    await _api.addExtra(itemId, extraGroupId: extraGroupId, nameAr: nameAr, nameEn: nameEn, price: price, maxQty: maxQty, isActive: isActive);
     await load();
   }
 
   Future<void> updateExtra(
     int extraId, {
-    String? groupKey,
+    int? extraGroupId,
     required String nameAr,
     String? nameEn,
     required double price,
     int maxQty = 1,
     bool isActive = true,
   }) async {
-    await _api.updateExtra(itemId, extraId, groupKey: groupKey, nameAr: nameAr, nameEn: nameEn, price: price, maxQty: maxQty, isActive: isActive);
+    await _api.updateExtra(itemId, extraId, extraGroupId: extraGroupId, nameAr: nameAr, nameEn: nameEn, price: price, maxQty: maxQty, isActive: isActive);
     await load();
   }
 
   Future<void> deleteExtra(int extraId) async {
     await _api.deleteExtra(itemId, extraId);
+    await load();
+  }
+
+  Future<void> addExtraGroup({
+    required String nameAr,
+    String? nameEn,
+    required String selectionType,
+    bool isActive = true,
+  }) async {
+    await _api.addExtraGroup(itemId, nameAr: nameAr, nameEn: nameEn, selectionType: selectionType, isActive: isActive);
+    await load();
+  }
+
+  Future<void> updateExtraGroup(
+    int groupId, {
+    required String nameAr,
+    String? nameEn,
+    required String selectionType,
+    bool isActive = true,
+  }) async {
+    await _api.updateExtraGroup(itemId, groupId, nameAr: nameAr, nameEn: nameEn, selectionType: selectionType, isActive: isActive);
+    await load();
+  }
+
+  Future<void> deleteExtraGroup(int groupId) async {
+    await _api.deleteExtraGroup(itemId, groupId);
     await load();
   }
 }

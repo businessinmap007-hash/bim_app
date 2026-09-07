@@ -2707,6 +2707,30 @@ class AppLocalizationsAr extends AppLocalizations {
   String get menuItemVariantDefaultLabel => 'الاختيار الافتراضي';
 
   @override
+  String get menuItemExtraGroupsSection => 'مجموعات الإضافات';
+
+  @override
+  String get menuItemAddExtraGroup => 'إضافة مجموعة';
+
+  @override
+  String get menuItemEditExtraGroup => 'تعديل المجموعة';
+
+  @override
+  String get menuItemExtraGroupNameHint => 'اسم المجموعة (مثال: الصوصات)';
+
+  @override
+  String get menuItemExtraGroupSelectionLabel => 'طريقة الاختيار';
+
+  @override
+  String get menuItemExtraGroupSelectionSingle => 'اختيار واحد (راديو بوتون)';
+
+  @override
+  String get menuItemExtraGroupSelectionMultiple => 'اختيار متعدد (تشيك بوكس)';
+
+  @override
+  String get menuItemExtraGroupNone => 'بدون مجموعة';
+
+  @override
   String get menuItemExtrasSection => 'الإضافات';
 
   @override

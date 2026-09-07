@@ -66,6 +66,25 @@ class _AddToCartSheetState extends ConsumerState<_AddToCartSheet> {
     return base + extrasSum;
   }
 
+  /// The one selected extra in a single-select group, if any — read
+  /// straight off [_extraIds] rather than kept as separate state, so there
+  /// is exactly one source of truth for what is priced in.
+  int? _singleGroupValue(int groupId) {
+    for (final e in widget.item.extras) {
+      if (e.extraGroupId == groupId && _extraIds.contains(e.id)) return e.id;
+    }
+    return null;
+  }
+
+  void _pickSingle(int groupId, int extraId) {
+    setState(() {
+      for (final e in widget.item.extras) {
+        if (e.extraGroupId == groupId) _extraIds.remove(e.id);
+      }
+      _extraIds.add(extraId);
+    });
+  }
+
   Future<void> _confirm() async {
     setState(() => _submitting = true);
     try {
@@ -152,9 +171,44 @@ class _AddToCartSheetState extends ConsumerState<_AddToCartSheet> {
                 ),
                 const SizedBox(height: 8),
               ],
-              if (item.extras.isNotEmpty) ...[
+              // Grouped extras first — each group is either a radio (one
+              // pick, e.g. «المقاس») or a checkbox list (any number, e.g.
+              // «الصوصات»), per the group's own selection_type. Extras with
+              // no group render standalone, same as before groups existed.
+              for (final group in item.extraGroups) ...[
+                Text(group.name, style: Theme.of(context).textTheme.titleSmall),
+                if (group.isSingle)
+                  ...item.extras.where((e) => e.extraGroupId == group.id).map(
+                    (e) => RadioListTile<int>(
+                      contentPadding: EdgeInsets.zero,
+                      value: e.id,
+                      groupValue: _singleGroupValue(group.id),
+                      onChanged: (value) => _pickSingle(group.id, e.id),
+                      title: Text(e.name),
+                      secondary: Text('+${e.price.toStringAsFixed(0)}'),
+                    ),
+                  )
+                else
+                  ...item.extras.where((e) => e.extraGroupId == group.id).map(
+                    (e) => CheckboxListTile(
+                      contentPadding: EdgeInsets.zero,
+                      value: _extraIds.contains(e.id),
+                      onChanged: (checked) => setState(() {
+                        if (checked ?? false) {
+                          _extraIds.add(e.id);
+                        } else {
+                          _extraIds.remove(e.id);
+                        }
+                      }),
+                      title: Text(e.name),
+                      secondary: Text('+${e.price.toStringAsFixed(0)}'),
+                    ),
+                  ),
+                const SizedBox(height: 8),
+              ],
+              if (item.extras.any((e) => e.extraGroupId == null)) ...[
                 Text(l10n.cartExtrasChoose, style: Theme.of(context).textTheme.titleSmall),
-                ...item.extras.map(
+                ...item.extras.where((e) => e.extraGroupId == null).map(
                   (e) => CheckboxListTile(
                     contentPadding: EdgeInsets.zero,
                     value: _extraIds.contains(e.id),

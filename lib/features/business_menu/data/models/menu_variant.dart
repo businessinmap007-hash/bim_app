@@ -33,11 +33,43 @@ class MenuVariant {
   );
 }
 
+/// A group of extras that decides how they're picked — one at a time
+/// (radio, e.g. «المقاس») or any number (checkbox, e.g. «الصوصات»). See
+/// Api\V2\BusinessMenuItemController::storeExtraGroup / MenuItemResource.
+class MenuExtraGroup {
+  static const selectionSingle = 'single';
+  static const selectionMultiple = 'multiple';
+
+  final int id;
+  final String nameAr;
+  final String? nameEn;
+  final String selectionType;
+  final bool isActive;
+
+  const MenuExtraGroup({
+    required this.id,
+    required this.nameAr,
+    this.nameEn,
+    required this.selectionType,
+    required this.isActive,
+  });
+
+  bool get isSingle => selectionType == selectionSingle;
+
+  factory MenuExtraGroup.fromJson(Map<String, dynamic> json) => MenuExtraGroup(
+    id: json['id'] as int,
+    nameAr: json['name_ar'] as String,
+    nameEn: json['name_en'] as String?,
+    selectionType: json['selection_type'] as String? ?? selectionMultiple,
+    isActive: json['is_active'] as bool,
+  );
+}
+
 /// An optional add-on with its own price — see
 /// Api\V2\BusinessMenuItemController::storeExtra / MenuItemResource.
 class MenuExtra {
   final int id;
-  final String? groupKey;
+  final int? extraGroupId;
   final String nameAr;
   final String? nameEn;
   final double price;
@@ -46,7 +78,7 @@ class MenuExtra {
 
   const MenuExtra({
     required this.id,
-    this.groupKey,
+    this.extraGroupId,
     required this.nameAr,
     this.nameEn,
     required this.price,
@@ -56,7 +88,7 @@ class MenuExtra {
 
   factory MenuExtra.fromJson(Map<String, dynamic> json) => MenuExtra(
     id: json['id'] as int,
-    groupKey: json['group_key'] as String?,
+    extraGroupId: json['extra_group_id'] as int?,
     nameAr: json['name_ar'] as String,
     nameEn: json['name_en'] as String?,
     price: (json['price'] as num).toDouble(),

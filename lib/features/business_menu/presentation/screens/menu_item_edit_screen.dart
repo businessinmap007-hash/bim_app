@@ -163,6 +163,8 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
               const SizedBox(height: 24),
               _VariantsSection(item: item),
               const SizedBox(height: 24),
+              _ExtraGroupsSection(item: item),
+              const SizedBox(height: 24),
               _ExtrasSection(item: item),
             ],
           );
@@ -501,13 +503,154 @@ class _VariantsSection extends ConsumerWidget {
   }
 }
 
+class _ExtraGroupsSection extends ConsumerWidget {
+  final BusinessMenuItem item;
+  const _ExtraGroupsSection({required this.item});
+
+  Future<void> _openForm(BuildContext context, WidgetRef ref, {MenuExtraGroup? existing}) async {
+    final l10n = AppLocalizations.of(context)!;
+    final nameArController = TextEditingController(text: existing?.nameAr ?? '');
+    final nameEnController = TextEditingController(text: existing?.nameEn ?? '');
+    String selectionType = existing?.selectionType ?? MenuExtraGroup.selectionMultiple;
+    String? error;
+
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (sheetContext) => StatefulBuilder(
+        builder: (sheetContext, setSheetState) => Padding(
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 20 + MediaQuery.of(sheetContext).viewInsets.bottom),
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    existing == null ? l10n.menuItemAddExtraGroup : l10n.menuItemEditExtraGroup,
+                    style: Theme.of(sheetContext).textTheme.titleMedium,
+                  ),
+                  const SizedBox(height: 16),
+                  TextField(controller: nameArController, decoration: InputDecoration(labelText: l10n.menuItemExtraGroupNameHint)),
+                  const SizedBox(height: 12),
+                  TextField(controller: nameEnController, decoration: InputDecoration(labelText: l10n.menuItemNameEnHint)),
+                  const SizedBox(height: 12),
+                  DropdownButtonFormField<String>(
+                    initialValue: selectionType,
+                    decoration: InputDecoration(labelText: l10n.menuItemExtraGroupSelectionLabel),
+                    items: [
+                      DropdownMenuItem(
+                        value: MenuExtraGroup.selectionSingle,
+                        child: Text(l10n.menuItemExtraGroupSelectionSingle),
+                      ),
+                      DropdownMenuItem(
+                        value: MenuExtraGroup.selectionMultiple,
+                        child: Text(l10n.menuItemExtraGroupSelectionMultiple),
+                      ),
+                    ],
+                    onChanged: (v) => setSheetState(() => selectionType = v ?? MenuExtraGroup.selectionMultiple),
+                  ),
+                  if (error != null) ...[
+                    const SizedBox(height: 8),
+                    Text(error!, style: TextStyle(color: Theme.of(sheetContext).colorScheme.error)),
+                  ],
+                  const SizedBox(height: 16),
+                  FilledButton(
+                    onPressed: () async {
+                      if (nameArController.text.trim().isEmpty) {
+                        setSheetState(() => error = l10n.menuNameRequired);
+                        return;
+                      }
+                      try {
+                        final notifier = ref.read(menuItemEditControllerProvider(item.id).notifier);
+                        if (existing == null) {
+                          await notifier.addExtraGroup(
+                            nameAr: nameArController.text.trim(),
+                            nameEn: nameEnController.text.trim(),
+                            selectionType: selectionType,
+                          );
+                        } else {
+                          await notifier.updateExtraGroup(
+                            existing.id,
+                            nameAr: nameArController.text.trim(),
+                            nameEn: nameEnController.text.trim(),
+                            selectionType: selectionType,
+                          );
+                        }
+                        if (sheetContext.mounted) Navigator.of(sheetContext).pop();
+                      } catch (_) {
+                        setSheetState(() => error = l10n.commonSomethingWentWrong);
+                      }
+                    },
+                    child: Text(l10n.commonSave),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _delete(BuildContext context, WidgetRef ref, MenuExtraGroup group) async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Text(l10n.menuItemDeleteRowConfirm),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l10n.commonCancel)),
+          TextButton(onPressed: () => Navigator.pop(context, true), child: Text(l10n.commonDelete)),
+        ],
+      ),
+    );
+    if (confirmed == true) {
+      await ref.read(menuItemEditControllerProvider(item.id).notifier).deleteExtraGroup(group.id);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(l10n.menuItemExtraGroupsSection, style: Theme.of(context).textTheme.titleSmall),
+            TextButton.icon(
+              onPressed: () => _openForm(context, ref),
+              icon: const Icon(Icons.add),
+              label: Text(l10n.menuItemAddExtraGroup),
+            ),
+          ],
+        ),
+        for (final g in item.extraGroups)
+          Card(
+            margin: const EdgeInsets.only(top: 8),
+            child: ListTile(
+              onTap: () => _openForm(context, ref, existing: g),
+              title: Text(g.nameAr),
+              subtitle: Text(
+                g.isSingle ? l10n.menuItemExtraGroupSelectionSingle : l10n.menuItemExtraGroupSelectionMultiple,
+              ),
+              trailing: IconButton(icon: const Icon(Icons.delete_outline), onPressed: () => _delete(context, ref, g)),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
 class _ExtrasSection extends ConsumerWidget {
   final BusinessMenuItem item;
   const _ExtrasSection({required this.item});
 
   Future<void> _openForm(BuildContext context, WidgetRef ref, {MenuExtra? existing}) async {
     final l10n = AppLocalizations.of(context)!;
-    final groupController = TextEditingController(text: existing?.groupKey ?? '');
+    int? extraGroupId = existing?.extraGroupId;
     final nameArController = TextEditingController(text: existing?.nameAr ?? '');
     final nameEnController = TextEditingController(text: existing?.nameEn ?? '');
     final priceController = TextEditingController(text: existing?.price.toStringAsFixed(2) ?? '');
@@ -531,7 +674,15 @@ class _ExtrasSection extends ConsumerWidget {
                     style: Theme.of(sheetContext).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 16),
-                  TextField(controller: groupController, decoration: InputDecoration(labelText: l10n.menuItemExtraGroupHint)),
+                  DropdownButtonFormField<int?>(
+                    initialValue: extraGroupId,
+                    decoration: InputDecoration(labelText: l10n.menuItemExtraGroupHint),
+                    items: [
+                      DropdownMenuItem(value: null, child: Text(l10n.menuItemExtraGroupNone)),
+                      for (final g in item.extraGroups) DropdownMenuItem(value: g.id, child: Text(g.nameAr)),
+                    ],
+                    onChanged: (v) => setSheetState(() => extraGroupId = v),
+                  ),
                   const SizedBox(height: 12),
                   TextField(controller: nameArController, decoration: InputDecoration(labelText: l10n.menuItemNameArHint)),
                   const SizedBox(height: 12),
@@ -565,7 +716,7 @@ class _ExtrasSection extends ConsumerWidget {
                         final maxQty = int.tryParse(maxQtyController.text.trim()) ?? 1;
                         if (existing == null) {
                           await notifier.addExtra(
-                            groupKey: groupController.text.trim(),
+                            extraGroupId: extraGroupId,
                             nameAr: nameArController.text.trim(),
                             nameEn: nameEnController.text.trim(),
                             price: price,
@@ -574,7 +725,7 @@ class _ExtrasSection extends ConsumerWidget {
                         } else {
                           await notifier.updateExtra(
                             existing.id,
-                            groupKey: groupController.text.trim(),
+                            extraGroupId: extraGroupId,
                             nameAr: nameArController.text.trim(),
                             nameEn: nameEnController.text.trim(),
                             price: price,
@@ -637,7 +788,11 @@ class _ExtrasSection extends ConsumerWidget {
             child: ListTile(
               onTap: () => _openForm(context, ref, existing: e),
               title: Text(e.nameAr),
-              subtitle: Text(e.price.toStringAsFixed(2)),
+              subtitle: Text(
+                e.extraGroupId == null
+                    ? e.price.toStringAsFixed(2)
+                    : '${item.extraGroups.firstWhere((g) => g.id == e.extraGroupId, orElse: () => MenuExtraGroup(id: 0, nameAr: '', selectionType: MenuExtraGroup.selectionMultiple, isActive: true)).nameAr} · ${e.price.toStringAsFixed(2)}',
+              ),
               trailing: IconButton(icon: const Icon(Icons.delete_outline), onPressed: () => _delete(context, ref, e)),
             ),
           ),

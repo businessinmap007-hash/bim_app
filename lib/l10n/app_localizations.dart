@@ -5180,6 +5180,54 @@ abstract class AppLocalizations {
   /// **'الاختيار الافتراضي'**
   String get menuItemVariantDefaultLabel;
 
+  /// No description provided for @menuItemExtraGroupsSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'مجموعات الإضافات'**
+  String get menuItemExtraGroupsSection;
+
+  /// No description provided for @menuItemAddExtraGroup.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة مجموعة'**
+  String get menuItemAddExtraGroup;
+
+  /// No description provided for @menuItemEditExtraGroup.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل المجموعة'**
+  String get menuItemEditExtraGroup;
+
+  /// No description provided for @menuItemExtraGroupNameHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم المجموعة (مثال: الصوصات)'**
+  String get menuItemExtraGroupNameHint;
+
+  /// No description provided for @menuItemExtraGroupSelectionLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة الاختيار'**
+  String get menuItemExtraGroupSelectionLabel;
+
+  /// No description provided for @menuItemExtraGroupSelectionSingle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيار واحد (راديو بوتون)'**
+  String get menuItemExtraGroupSelectionSingle;
+
+  /// No description provided for @menuItemExtraGroupSelectionMultiple.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيار متعدد (تشيك بوكس)'**
+  String get menuItemExtraGroupSelectionMultiple;
+
+  /// No description provided for @menuItemExtraGroupNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون مجموعة'**
+  String get menuItemExtraGroupNone;
+
   /// No description provided for @menuItemExtrasSection.
   ///
   /// In ar, this message translates to:
