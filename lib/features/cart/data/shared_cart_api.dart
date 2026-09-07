@@ -92,6 +92,20 @@ class SharedCartApi {
     return SharedCart.fromJson(data['order'] as Map<String, dynamic>);
   }
 
+  /// Host-only: invites a friend by phone or email — an already-registered
+  /// account only. Sends them a notification with the join link; never adds
+  /// them as a participant directly. Returns the invited friend's name.
+  Future<String> invite(int orderId, String identifier) async {
+    final data =
+        await _client.post(
+              '/cart/shared/$orderId/invite',
+              data: {'identifier': identifier},
+            )
+            as Map<String, dynamic>;
+    final user = data['user'] as Map<String, dynamic>;
+    return user['name'] as String? ?? '';
+  }
+
   /// Member-only: leaves the shared cart, removing the caller's own lines.
   Future<void> leave(int orderId) =>
       _client.post('/cart/shared/$orderId/leave');

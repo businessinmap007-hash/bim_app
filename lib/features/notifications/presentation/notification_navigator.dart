@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../business/presentation/screens/business_detail_screen.dart';
+import '../../cart/application/shared_cart_providers.dart';
+import '../../cart/presentation/screens/shared_cart_screen.dart';
 import '../../jobs/presentation/screens/job_detail_screen.dart';
 import '../../offers/presentation/screens/offer_detail_screen.dart';
 import '../../orders/presentation/screens/business_orders_screen.dart';
@@ -18,7 +21,7 @@ import '../data/models/app_notification.dart';
 /// read) rather than a dead link — `open_business_products`,
 /// `open_shared_cart` (needs a share token, not an id) and
 /// `open_table_calls` (no dedicated screen yet) aren't wired up.
-void openNotificationTarget(BuildContext context, AppNotification notification) {
+Future<void> openNotificationTarget(BuildContext context, WidgetRef ref, AppNotification notification) async {
   final id = notification.notifiableId;
 
   switch (notification.actionType) {
@@ -41,6 +44,21 @@ void openNotificationTarget(BuildContext context, AppNotification notification) 
     case 'open_business':
       if (id != null) {
         Navigator.of(context).push(MaterialPageRoute(builder: (_) => BusinessDetailScreen(businessId: id)));
+      }
+    // The recipient isn't a participant yet — unlike `open_shared_cart_member_joined`- ish notifications
+    // sent to the host, who already is one. Join on the same token a shared
+    // link or QR would use, then land on the cart like any other joiner.
+    case 'open_shared_cart_invite':
+      final token = notification.meta['share_token'] as String?;
+      if (token == null || token.isEmpty) return;
+      try {
+        final cart = await ref.read(sharedCartApiProvider).join(token);
+        if (context.mounted) {
+          Navigator.of(context).push(MaterialPageRoute(builder: (_) => SharedCartScreen(orderId: cart.id)));
+        }
+      } catch (_) {
+        // The cart may have been cancelled/checked out since the invite was
+        // sent — a failed join here is not worth surfacing as an error.
       }
   }
 }

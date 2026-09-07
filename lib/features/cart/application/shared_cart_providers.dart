@@ -77,6 +77,11 @@ class SharedCartController extends StateNotifier<SharedCartState> {
     return _api.checkout(orderId, fulfillmentType: fulfillmentType, address: address, notes: notes);
   }
 
+  /// Host-only: invites a friend by phone or email. Returns their name on
+  /// success; throws ApiException (with a field error on 'identifier') if
+  /// they're not found, are already a participant self-invite, etc.
+  Future<String> invite(String identifier) => _api.invite(orderId, identifier);
+
   Future<void> leave() => _api.leave(orderId);
 
   Future<void> cancel() => _api.cancel(orderId);

@@ -1317,6 +1317,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sharedCartHostBadge => 'Host';
 
   @override
+  String get sharedCartInviteFriend => 'Invite a friend';
+
+  @override
+  String get sharedCartInviteHint => 'Their phone number or email';
+
+  @override
+  String get sharedCartInviteAction => 'Invite';
+
+  @override
+  String sharedCartInviteSent(String name) {
+    return 'Invitation sent to $name.';
+  }
+
+  @override
   String get staffTitle => 'Staff';
 
   @override

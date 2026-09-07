@@ -375,15 +375,20 @@ class _OrderDetailSheetState extends ConsumerState<_OrderDetailSheet> {
               child: Text(l10n.ratingsLeaveReview),
             ),
           ],
-          const SizedBox(height: 8),
-          OutlinedButton(
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => ProjectProgressScreen(operationType: 'order', operationId: order.id),
+          // Most orders (a coffee, a food delivery) never have a project
+          // timeline — only a construction/manufacturing-type business links
+          // one, so this only shows when the order actually has one.
+          if (order.hasProject) ...[
+            const SizedBox(height: 8),
+            OutlinedButton(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => ProjectProgressScreen(operationType: 'order', operationId: order.id),
+                ),
               ),
+              child: Text(l10n.projectViewProgress),
             ),
-            child: Text(l10n.projectViewProgress),
-          ),
+          ],
           const SizedBox(height: 8),
           FilledButton(
             onPressed: _busy ? null : () => _reorder(order),

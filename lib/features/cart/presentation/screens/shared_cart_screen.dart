@@ -87,6 +87,46 @@ class SharedCartScreen extends ConsumerWidget {
     }
   }
 
+  /// Host-only: invites a friend by phone or email — an already-registered
+  /// account only. Sends them a notification carrying the join link; they
+  /// still have to actually join, same as opening a shared link or scanning
+  /// the QR — this never silently pulls anyone in.
+  Future<void> _inviteFriend(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    final controller = TextEditingController();
+    final identifier = await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.sharedCartInviteFriend),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          decoration: InputDecoration(hintText: l10n.sharedCartInviteHint),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.commonCancel)),
+          TextButton(
+            onPressed: () => Navigator.pop(context, controller.text.trim()),
+            child: Text(l10n.sharedCartInviteAction),
+          ),
+        ],
+      ),
+    );
+    if (identifier == null || identifier.isEmpty || !context.mounted) return;
+
+    try {
+      final name = await ref.read(sharedCartControllerProvider(orderId).notifier).invite(identifier);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.sharedCartInviteSent(name))));
+      }
+    } catch (e) {
+      if (context.mounted) {
+        final message = e is ApiException ? (e.firstErrorFor('identifier') ?? e.message) : l10n.commonSomethingWentWrong;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      }
+    }
+  }
+
   Future<void> _leave(BuildContext context, WidgetRef ref) async {
     final l10n = AppLocalizations.of(context)!;
     final confirmed = await showDialog<bool>(
@@ -211,6 +251,12 @@ class SharedCartScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 12),
                   if (cart.viewerIsHost) ...[
+                    OutlinedButton.icon(
+                      onPressed: () => _inviteFriend(context, ref),
+                      icon: const Icon(Icons.person_add_alt_outlined),
+                      label: Text(l10n.sharedCartInviteFriend),
+                    ),
+                    const SizedBox(height: 12),
                     FilledButton(
                       onPressed: () => _checkout(context, ref),
                       child: Text(l10n.cartPlaceOrder),

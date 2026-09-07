@@ -39,6 +39,7 @@ class AppNotification {
   final String? actionUrl;
   final String? notifiableType;
   final int? notifiableId;
+  final Map<String, dynamic> meta;
   final NotificationActor? actor;
   final DateTime createdAt;
   final DateTime? readAt;
@@ -56,6 +57,7 @@ class AppNotification {
     this.actionUrl,
     this.notifiableType,
     this.notifiableId,
+    this.meta = const {},
     this.actor,
     required this.createdAt,
     this.readAt,
@@ -89,6 +91,7 @@ class AppNotification {
     actionUrl: json['action_url'] as String?,
     notifiableType: json['notifiable_type'] as String?,
     notifiableId: (json['notifiable_id'] as num?)?.toInt(),
+    meta: (json['meta'] as Map<String, dynamic>?) ?? const {},
     actor: json['actor'] != null
         ? NotificationActor.fromJson(json['actor'] as Map<String, dynamic>)
         : null,
@@ -109,6 +112,7 @@ class AppNotification {
     actionUrl: actionUrl,
     notifiableType: notifiableType,
     notifiableId: notifiableId,
+    meta: meta,
     actor: actor,
     createdAt: createdAt,
     readAt: readAt ?? this.readAt,

@@ -1330,6 +1330,20 @@ class AppLocalizationsAr extends AppLocalizations {
   String get sharedCartHostBadge => 'المضيف';
 
   @override
+  String get sharedCartInviteFriend => 'ادعُ صديق';
+
+  @override
+  String get sharedCartInviteHint => 'رقم موبايله أو إيميله';
+
+  @override
+  String get sharedCartInviteAction => 'ادعُ';
+
+  @override
+  String sharedCartInviteSent(String name) {
+    return 'اتبعتت الدعوة لـ $name.';
+  }
+
+  @override
   String get staffTitle => 'الموظفون';
 
   @override

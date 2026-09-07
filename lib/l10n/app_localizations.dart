@@ -2516,6 +2516,30 @@ abstract class AppLocalizations {
   /// **'المضيف'**
   String get sharedCartHostBadge;
 
+  /// No description provided for @sharedCartInviteFriend.
+  ///
+  /// In ar, this message translates to:
+  /// **'ادعُ صديق'**
+  String get sharedCartInviteFriend;
+
+  /// No description provided for @sharedCartInviteHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم موبايله أو إيميله'**
+  String get sharedCartInviteHint;
+
+  /// No description provided for @sharedCartInviteAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'ادعُ'**
+  String get sharedCartInviteAction;
+
+  /// No description provided for @sharedCartInviteSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتبعتت الدعوة لـ {name}.'**
+  String sharedCartInviteSent(String name);
+
   /// No description provided for @staffTitle.
   ///
   /// In ar, this message translates to:

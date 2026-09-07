@@ -133,7 +133,7 @@ class _NotificationTile extends ConsumerWidget {
         child: ListTile(
           onTap: () {
             ref.read(notificationsControllerProvider.notifier).markRead(notification);
-            openNotificationTarget(context, notification);
+            openNotificationTarget(context, ref, notification);
           },
           leading: CircleAvatar(
             backgroundImage: actor?.imageUrl != null

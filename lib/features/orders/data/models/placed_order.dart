@@ -68,6 +68,7 @@ class PlacedOrder {
   final String? address;
   final String? notes;
   final String? outOfStockPolicy;
+  final bool hasProject;
   final DateTime? createdAt;
   final String? customerName;
   final String? customerPhone;
@@ -93,6 +94,7 @@ class PlacedOrder {
     this.address,
     this.notes,
     this.outOfStockPolicy,
+    this.hasProject = false,
     this.createdAt,
     this.customerName,
     this.customerPhone,
@@ -137,6 +139,7 @@ class PlacedOrder {
       address: json['address'] as String?,
       notes: json['notes'] as String?,
       outOfStockPolicy: json['out_of_stock_policy'] as String?,
+      hasProject: json['has_project'] as bool? ?? false,
       createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
       customerName: customer?['name'] as String?,
       customerPhone: customer?['phone'] as String?,
