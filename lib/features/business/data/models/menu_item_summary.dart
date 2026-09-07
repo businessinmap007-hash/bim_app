@@ -62,6 +62,9 @@ class MenuItemExtra {
 /// browse shape.
 class MenuItemSummary {
   final int id;
+  /// 'menu' | 'bundle' — see MenuDiscoveryController's `itemPayload`/
+  /// `bundlePayload`. Decides which cart "kind" add-to-cart sends.
+  final String kind;
   final String name;
   final String description;
   final String? offeringLabel;
@@ -76,6 +79,7 @@ class MenuItemSummary {
 
   const MenuItemSummary({
     required this.id,
+    this.kind = 'menu',
     required this.name,
     required this.description,
     this.offeringLabel,
@@ -94,6 +98,7 @@ class MenuItemSummary {
 
   factory MenuItemSummary.fromJson(Map<String, dynamic> json) => MenuItemSummary(
     id: json['id'] as int,
+    kind: json['kind'] as String? ?? 'menu',
     name: json['name'] as String? ?? '',
     description: json['description'] as String? ?? '',
     offeringLabel: json['offering_label'] as String?,

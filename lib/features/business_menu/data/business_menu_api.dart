@@ -84,7 +84,10 @@ class BusinessMenuApi {
       query: {
         if (q != null && q.isNotEmpty) 'q': q,
         'menu_section_id': ?sectionId,
-        'is_active': ?isActive,
+        // Laravel's `boolean` rule accepts 1/0/true/false only as real JSON
+        // booleans or the digits '1'/'0' — the query string's literal word
+        // "true"/"false" fails it with a 422. '1'/'0' works in both worlds.
+        if (isActive != null) 'is_active': isActive ? '1' : '0',
         'page': page,
       },
     );

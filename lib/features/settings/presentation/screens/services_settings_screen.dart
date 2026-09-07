@@ -7,6 +7,7 @@ import '../../../business_offers/presentation/screens/business_offers_screen.dar
 import '../../../business_prices/presentation/screens/business_prices_screen.dart';
 import '../../../business_menu/presentation/screens/menu_items_screen.dart';
 import '../../../clinic_management/presentation/screens/clinic_management_screen.dart';
+import '../../../menu_bundles/presentation/screens/menu_bundles_screen.dart';
 import '../../../merchant_account/presentation/screens/merchant_account_screen.dart';
 import '../../../orders/presentation/screens/business_orders_screen.dart';
 import '../../../prescriptions/presentation/screens/issued_prescriptions_screen.dart';
@@ -70,6 +71,12 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.restaurant_menu_outlined,
         title: l10n.menuManagementTitle,
         builder: (_) => const MenuItemsScreen(),
+      ),
+      _Tile(
+        show: _has('menu'),
+        leading: Icons.fastfood_outlined,
+        title: l10n.menuBundlesTitle,
+        builder: (_) => const MenuBundlesScreen(),
       ),
       _Tile(
         show: _has('orders'),

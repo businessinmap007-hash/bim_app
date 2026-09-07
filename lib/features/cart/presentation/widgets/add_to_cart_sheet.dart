@@ -91,7 +91,7 @@ class _AddToCartSheetState extends ConsumerState<_AddToCartSheet> {
       final sharedOrderId = widget.sharedOrderId;
       if (sharedOrderId != null) {
         await ref.read(sharedCartControllerProvider(sharedOrderId).notifier).addItem(
-          kind: 'menu',
+          kind: widget.item.kind,
           offeringId: widget.item.id,
           qty: _qty,
           sizeId: _variantId,
@@ -99,7 +99,7 @@ class _AddToCartSheetState extends ConsumerState<_AddToCartSheet> {
         );
       } else {
         await ref.read(cartControllerProvider.notifier).addItem(
-          kind: 'menu',
+          kind: widget.item.kind,
           offeringId: widget.item.id,
           qty: _qty,
           sizeId: _variantId,
@@ -140,22 +140,34 @@ class _AddToCartSheetState extends ConsumerState<_AddToCartSheet> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(item.name, style: Theme.of(context).textTheme.titleLarge, textAlign: TextAlign.center),
-              Align(
-                alignment: Alignment.center,
-                child: TextButton.icon(
-                  onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => OfferComparisonScreen(
-                        offerableType: 'menu_item',
-                        offerableId: item.id,
-                        itemTitle: item.name,
+              if (item.description.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text(
+                    item.description,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),
+                  ),
+                ),
+              // A bundle isn't tracked by the offer-performance system a
+              // single menu item is — nothing to compare against.
+              if (item.kind != 'bundle')
+                Align(
+                  alignment: Alignment.center,
+                  child: TextButton.icon(
+                    onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => OfferComparisonScreen(
+                          offerableType: 'menu_item',
+                          offerableId: item.id,
+                          itemTitle: item.name,
+                        ),
                       ),
                     ),
+                    icon: const Icon(Icons.compare_arrows, size: 18),
+                    label: Text(l10n.offerCompareButton),
                   ),
-                  icon: const Icon(Icons.compare_arrows, size: 18),
-                  label: Text(l10n.offerCompareButton),
                 ),
-              ),
               const SizedBox(height: 16),
               if (item.variants.isNotEmpty) ...[
                 Text(l10n.cartVariantChoose, style: Theme.of(context).textTheme.titleSmall),
