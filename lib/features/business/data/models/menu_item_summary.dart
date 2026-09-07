@@ -73,6 +73,7 @@ class MenuItemSummary {
   final double basePrice;
   final String? saleUnitLabel;
   final int? availableQuantity;
+  final bool isFeatured;
   final List<MenuItemVariant> variants;
   final List<MenuItemExtraGroup> extraGroups;
   final List<MenuItemExtra> extras;
@@ -88,6 +89,7 @@ class MenuItemSummary {
     required this.basePrice,
     this.saleUnitLabel,
     this.availableQuantity,
+    this.isFeatured = false,
     required this.variants,
     this.extraGroups = const [],
     required this.extras,
@@ -95,6 +97,15 @@ class MenuItemSummary {
 
   /// `null` = not tracked (always orderable); `0` = tracked and out of stock.
   bool get isOutOfStock => availableQuantity == 0;
+
+  /// Whether picking this item needs a choice at all — decides the card's
+  /// contextual action (a direct add vs. one that opens the picker first).
+  bool get hasChoices => variants.isNotEmpty || extras.isNotEmpty;
+
+  /// The lowest variant price, when there's more than one size/price to
+  /// choose from — the card shows "From X" instead of a single price.
+  double? get startingPrice =>
+      variants.isEmpty ? null : variants.map((v) => v.price).reduce((a, b) => a < b ? a : b);
 
   factory MenuItemSummary.fromJson(Map<String, dynamic> json) => MenuItemSummary(
     id: json['id'] as int,
@@ -110,6 +121,7 @@ class MenuItemSummary {
     basePrice: (json['base_price'] as num?)?.toDouble() ?? 0,
     saleUnitLabel: json['sale_unit_label'] as String?,
     availableQuantity: (json['available_quantity'] as num?)?.toInt(),
+    isFeatured: json['is_featured'] as bool? ?? false,
     variants: (json['variants'] as List<dynamic>? ?? [])
         .map((e) => MenuItemVariant.fromJson(e as Map<String, dynamic>))
         .toList(),

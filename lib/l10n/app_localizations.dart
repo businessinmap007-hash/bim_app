@@ -854,6 +854,24 @@ abstract class AppLocalizations {
   /// **'غير متوفر حاليًا'**
   String get businessOutOfStock;
 
+  /// No description provided for @menuCardBestseller.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأكثر طلبًا'**
+  String get menuCardBestseller;
+
+  /// No description provided for @menuCardPriceFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'من {price}'**
+  String menuCardPriceFrom(String price);
+
+  /// No description provided for @menuCardViewOptions.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر'**
+  String get menuCardViewOptions;
+
   /// No description provided for @businessNoContentYet.
   ///
   /// In ar, this message translates to:

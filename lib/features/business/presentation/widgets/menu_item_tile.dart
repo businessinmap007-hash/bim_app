@@ -1,12 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../data/models/menu_item_summary.dart';
 
-/// One item row on the "menu" tab. Variants/extras exist on [item] but a
-/// price-picker + add-to-cart flow is a later module — the price shown here
-/// is the base price, with a "starting from" hint when variants exist.
+/// One item card on the "menu" tab — modeled on the item-card pattern from
+/// [[ux-references-doc]]'s single-vendor menu review (docs/ux-references.md
+/// §1): a bigger image with a "Bestseller" badge, a starting price when the
+/// item has more than one size, and a contextual trailing action (a plain
+/// add glyph for a fixed-price item vs. a "view options" chevron for one
+/// that needs a choice first) instead of one generic tap target.
 class MenuItemTile extends StatelessWidget {
   final MenuItemSummary item;
   final VoidCallback? onTap;
@@ -24,51 +28,137 @@ class MenuItemTile extends StatelessWidget {
       child: Card(
         margin: EdgeInsets.zero,
         clipBehavior: Clip.antiAlias,
-        child: ListTile(
+        child: InkWell(
           onTap: item.isOutOfStock ? null : onTap,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          leading: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: SizedBox(
-              width: 52,
-              height: 52,
-              child: imageUrl != null
-                  ? CachedNetworkImage(
-                      imageUrl: imageUrl,
-                      fit: BoxFit.cover,
-                      errorWidget: (context, url, error) => const _ImagePlaceholder(),
-                    )
-                  : const _ImagePlaceholder(),
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: SizedBox(
+                        width: 88,
+                        height: 88,
+                        child: imageUrl != null
+                            ? CachedNetworkImage(
+                                imageUrl: imageUrl,
+                                fit: BoxFit.cover,
+                                errorWidget: (context, url, error) => const _ImagePlaceholder(),
+                              )
+                            : const _ImagePlaceholder(),
+                      ),
+                    ),
+                    if (item.isFeatured)
+                      PositionedDirectional(
+                        top: 6,
+                        start: 6,
+                        child: _BestsellerBadge(label: l10n.menuCardBestseller),
+                      ),
+                  ],
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(item.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: theme.textTheme.titleSmall),
+                      if ((item.offeringLabel ?? item.description).isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2),
+                          child: Text(
+                            item.offeringLabel ?? item.description,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
+                          ),
+                        ),
+                      const SizedBox(height: 8),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              _priceLabel(item, l10n),
+                              style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                          if (item.isOutOfStock)
+                            Text(l10n.businessOutOfStock, style: TextStyle(fontSize: 10, color: theme.colorScheme.error))
+                          else
+                            _ContextAction(hasChoices: item.hasChoices, label: l10n.menuCardViewOptions),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ),
-          title: Text(item.name, maxLines: 1, overflow: TextOverflow.ellipsis),
-          subtitle: Text(
-            item.offeringLabel ?? item.description,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: theme.textTheme.bodySmall,
-          ),
-          trailing: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                _priceLabel(item),
-                style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-              ),
-              if (item.isOutOfStock)
-                Text(l10n.businessOutOfStock, style: TextStyle(fontSize: 10, color: theme.colorScheme.error)),
-            ],
           ),
         ),
       ),
     );
   }
 
-  String _priceLabel(MenuItemSummary item) {
+  String _priceLabel(MenuItemSummary item, AppLocalizations l10n) {
     final unit = item.saleUnitLabel;
+    final startingPrice = item.startingPrice;
+    if (startingPrice != null) {
+      return l10n.menuCardPriceFrom(startingPrice.toStringAsFixed(0));
+    }
     final price = item.basePrice.toStringAsFixed(0);
     return unit != null ? '$price $unit' : price;
+  }
+}
+
+class _BestsellerBadge extends StatelessWidget {
+  final String label;
+  const _BestsellerBadge({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: AppColors.accentGold,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Text(
+        label,
+        style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w700, color: AppColors.primaryNavy),
+      ),
+    );
+  }
+}
+
+/// A fixed-price item shows a plain add glyph (tapping the card adds it
+/// straight away, no choice to make); one with variants/extras shows a
+/// "view options" chevron instead, since tapping opens the picker first.
+class _ContextAction extends StatelessWidget {
+  final bool hasChoices;
+  final String label;
+  const _ContextAction({required this.hasChoices, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    if (!hasChoices) {
+      return CircleAvatar(
+        radius: 14,
+        backgroundColor: AppColors.accentGold.withValues(alpha: 0.15),
+        child: const Icon(Icons.add, size: 18, color: AppColors.accentGold),
+      );
+    }
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(label, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.primary)),
+        Icon(Icons.chevron_right, size: 16, color: theme.colorScheme.primary),
+      ],
+    );
   }
 }
 

@@ -431,6 +431,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get businessOutOfStock => 'Currently unavailable';
 
   @override
+  String get menuCardBestseller => 'Bestseller';
+
+  @override
+  String menuCardPriceFrom(String price) {
+    return 'From $price';
+  }
+
+  @override
+  String get menuCardViewOptions => 'View options';
+
+  @override
   String get businessNoContentYet => 'Nothing to show yet';
 
   @override

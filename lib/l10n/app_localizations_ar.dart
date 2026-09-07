@@ -440,6 +440,17 @@ class AppLocalizationsAr extends AppLocalizations {
   String get businessOutOfStock => 'غير متوفر حاليًا';
 
   @override
+  String get menuCardBestseller => 'الأكثر طلبًا';
+
+  @override
+  String menuCardPriceFrom(String price) {
+    return 'من $price';
+  }
+
+  @override
+  String get menuCardViewOptions => 'اختر';
+
+  @override
   String get businessNoContentYet => 'لا يوجد محتوى لعرضه بعد';
 
   @override
