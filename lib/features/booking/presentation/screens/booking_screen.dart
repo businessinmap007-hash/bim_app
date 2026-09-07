@@ -109,6 +109,53 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     }
   }
 
+  /// The one selected modifier in a single-select group, if any — read
+  /// straight off [_modifierOptionIds] rather than kept as separate state,
+  /// mirroring the same pattern used for a menu item's extra groups.
+  int? _singleModifierGroupValue(List<BookingModifier> groupModifiers) {
+    for (final m in groupModifiers) {
+      if (_modifierOptionIds.contains(m.optionId)) return m.optionId;
+    }
+    return null;
+  }
+
+  void _pickSingleModifier(List<BookingModifier> groupModifiers, int optionId) {
+    setState(() {
+      for (final m in groupModifiers) {
+        _modifierOptionIds.remove(m.optionId);
+      }
+      _modifierOptionIds.add(optionId);
+    });
+    _schedulePreview();
+  }
+
+  /// Folds a flat modifier list into its taxonomy groups, in first-seen
+  /// order. An ungrouped modifier becomes its own single-item "group" (no
+  /// name, never single-select) so it keeps rendering as a plain checkbox.
+  List<({String? name, bool isSingle, List<BookingModifier> modifiers})> _modifierGroupsIn(
+    List<BookingModifier> modifiers,
+  ) {
+    final result = <({String? name, bool isSingle, List<BookingModifier> modifiers})>[];
+    final seenGroupIds = <int>{};
+
+    for (final m in modifiers) {
+      final groupId = m.groupId;
+      if (groupId == null) {
+        result.add((name: null, isSingle: false, modifiers: [m]));
+        continue;
+      }
+      if (!seenGroupIds.add(groupId)) continue;
+
+      result.add((
+        name: m.groupName,
+        isSingle: m.isSingleSelect,
+        modifiers: modifiers.where((x) => x.groupId == groupId).toList(),
+      ));
+    }
+
+    return result;
+  }
+
   List<BookingFormField> _fallbackFields(AppLocalizations l10n) => [
     BookingFormField(key: 'datetime', label: l10n.bookingDatetimeLabel, required: true),
     BookingFormField(key: 'notes', label: l10n.cartNotesLabel, required: false),
@@ -275,28 +322,51 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
               if (form.modifiers.isNotEmpty) ...[
                 const SizedBox(height: 8),
                 Text(l10n.bookingModifiersTitle, style: Theme.of(context).textTheme.titleSmall),
-                ...form.modifiers.map(
-                  (m) => CheckboxListTile(
-                    contentPadding: EdgeInsets.zero,
-                    value: _modifierOptionIds.contains(m.optionId),
-                    onChanged: (checked) {
-                      setState(() {
-                        if (checked ?? false) {
-                          _modifierOptionIds.add(m.optionId);
-                        } else {
-                          _modifierOptionIds.remove(m.optionId);
-                        }
-                      });
-                      _schedulePreview();
-                    },
-                    title: Text(m.name),
-                    secondary: Text(
-                      m.adjustType == 'percent'
-                          ? '+${m.adjustValue.toStringAsFixed(0)}%'
-                          : '+${m.adjustValue.toStringAsFixed(0)}',
+                // Grouped modifiers first — a single-select group (e.g.
+                // «نظام الوجبات» set to radio by its owner) renders as
+                // RadioListTile with enforced exclusivity; multiple-select
+                // and ungrouped modifiers keep the plain checkbox list.
+                for (final group in _modifierGroupsIn(form.modifiers)) ...[
+                  if (group.name != null) Text(group.name!, style: Theme.of(context).textTheme.bodyMedium),
+                  if (group.isSingle)
+                    ...group.modifiers.map(
+                      (m) => RadioListTile<int>(
+                        contentPadding: EdgeInsets.zero,
+                        value: m.optionId,
+                        groupValue: _singleModifierGroupValue(group.modifiers),
+                        onChanged: (value) => _pickSingleModifier(group.modifiers, m.optionId),
+                        title: Text(m.name),
+                        secondary: Text(
+                          m.adjustType == 'percent'
+                              ? '+${m.adjustValue.toStringAsFixed(0)}%'
+                              : '+${m.adjustValue.toStringAsFixed(0)}',
+                        ),
+                      ),
+                    )
+                  else
+                    ...group.modifiers.map(
+                      (m) => CheckboxListTile(
+                        contentPadding: EdgeInsets.zero,
+                        value: _modifierOptionIds.contains(m.optionId),
+                        onChanged: (checked) {
+                          setState(() {
+                            if (checked ?? false) {
+                              _modifierOptionIds.add(m.optionId);
+                            } else {
+                              _modifierOptionIds.remove(m.optionId);
+                            }
+                          });
+                          _schedulePreview();
+                        },
+                        title: Text(m.name),
+                        secondary: Text(
+                          m.adjustType == 'percent'
+                              ? '+${m.adjustValue.toStringAsFixed(0)}%'
+                              : '+${m.adjustValue.toStringAsFixed(0)}',
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                ],
               ],
               const SizedBox(height: 20),
               Card(

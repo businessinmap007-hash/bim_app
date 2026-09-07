@@ -99,12 +99,19 @@ class BookableUnitOption {
 }
 
 /// A priced modifier this business already sells («شاشة كبيرة +٢٠»),
-/// grouped by the line it applies to.
+/// grouped by the line it applies to and by its own taxonomy group —
+/// `groupId`/`selectionType` say whether the group is a single (radio) or
+/// multiple (checkbox) pick, same concept as a menu item's extra groups.
 class BookingModifier {
+  static const selectionSingle = 'single';
+
   final int priceId;
   final String? line;
   final int optionId;
   final String name;
+  final int? groupId;
+  final String? groupName;
+  final String selectionType;
   final String adjustType; // 'amount' | 'percent'
   final double adjustValue;
 
@@ -113,15 +120,23 @@ class BookingModifier {
     this.line,
     required this.optionId,
     required this.name,
+    this.groupId,
+    this.groupName,
+    required this.selectionType,
     required this.adjustType,
     required this.adjustValue,
   });
+
+  bool get isSingleSelect => selectionType == selectionSingle;
 
   factory BookingModifier.fromJson(Map<String, dynamic> json) => BookingModifier(
     priceId: json['price_id'] as int? ?? 0,
     line: json['line'] as String?,
     optionId: json['option_id'] as int,
     name: json['name'] as String? ?? '',
+    groupId: json['group_id'] as int?,
+    groupName: json['group_name'] as String?,
+    selectionType: json['selection_type'] as String? ?? 'multiple',
     adjustType: json['adjust_type'] as String? ?? 'amount',
     adjustValue: (json['adjust_value'] as num?)?.toDouble() ?? 0,
   );
