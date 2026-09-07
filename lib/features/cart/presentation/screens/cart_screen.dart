@@ -8,6 +8,7 @@ import '../../application/cart_controller.dart';
 import '../../application/shared_cart_providers.dart';
 import '../../data/models/cart_models.dart';
 import 'checkout_screen.dart';
+import 'qr_scan_screen.dart';
 import 'shared_cart_screen.dart';
 
 /// Every business the customer has a draft order with, one card per
@@ -38,8 +39,20 @@ class CartScreen extends ConsumerWidget {
         ],
       ),
     );
-    if (token == null || token.isEmpty) return;
+    if (token == null || token.isEmpty || !context.mounted) return;
+    await _completeJoin(context, ref, token);
+  }
 
+  Future<void> _scanQrToJoin(BuildContext context, WidgetRef ref) async {
+    final token = await Navigator.of(context).push<String>(
+      MaterialPageRoute(builder: (_) => const QrScanScreen()),
+    );
+    if (token == null || token.isEmpty || !context.mounted) return;
+    await _completeJoin(context, ref, token);
+  }
+
+  Future<void> _completeJoin(BuildContext context, WidgetRef ref, String token) async {
+    final l10n = AppLocalizations.of(context)!;
     try {
       final cart = await ref.read(sharedCartApiProvider).join(token);
       if (context.mounted) {
@@ -63,6 +76,11 @@ class CartScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(l10n.cartTitle),
         actions: [
+          IconButton(
+            tooltip: l10n.qrScanTitle,
+            icon: const Icon(Icons.qr_code_scanner_outlined),
+            onPressed: () => _scanQrToJoin(context, ref),
+          ),
           IconButton(
             tooltip: l10n.cartJoinSharedCart,
             icon: const Icon(Icons.group_add_outlined),

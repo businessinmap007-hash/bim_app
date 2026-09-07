@@ -1344,6 +1344,26 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get sharedCartShowQr => 'اعرض كود QR';
+
+  @override
+  String get sharedCartQrHint =>
+      'خلّي صاحبك يمسح الكود ده بتطبيق BIM، أو أي كاميرا، عشان ينضم للسلة.';
+
+  @override
+  String get sharedCartCopyLink => 'انسخ الرابط';
+
+  @override
+  String get qrScanTitle => 'امسح كود QR';
+
+  @override
+  String get qrScanHint => 'وجّه الكاميرا على كود QR الخاص بسلة صاحبك المشتركة';
+
+  @override
+  String get qrScanCameraUnavailable =>
+      'الكاميرا مش متاحة. اتأكد من إذن الكاميرا للتطبيق وحاول تاني.';
+
+  @override
   String get staffTitle => 'الموظفون';
 
   @override

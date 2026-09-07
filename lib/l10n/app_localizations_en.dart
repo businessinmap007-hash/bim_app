@@ -1331,6 +1331,27 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get sharedCartShowQr => 'Show QR code';
+
+  @override
+  String get sharedCartQrHint =>
+      'Have your friend scan this with bim_app, or any camera, to join the cart.';
+
+  @override
+  String get sharedCartCopyLink => 'Copy link';
+
+  @override
+  String get qrScanTitle => 'Scan QR';
+
+  @override
+  String get qrScanHint =>
+      'Point the camera at your friend\'s shared-cart QR code';
+
+  @override
+  String get qrScanCameraUnavailable =>
+      'Camera isn\'t available. Check the app\'s camera permission and try again.';
+
+  @override
   String get staffTitle => 'Staff';
 
   @override

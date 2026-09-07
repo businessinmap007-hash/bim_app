@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../../../app/theme/app_colors.dart';
+import '../../../../core/env/env.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../business/presentation/screens/business_detail_screen.dart';
@@ -127,6 +129,19 @@ class SharedCartScreen extends ConsumerWidget {
     }
   }
 
+  /// Shows the same join QR the web host-share page renders
+  /// (SharedCartWebController::qr) — a friend who already has bim_app scans
+  /// it right inside the in-app scanner (QrScanScreen) and joins directly;
+  /// anyone else scans it with a plain camera app and lands on the web join
+  /// page instead. One QR, both paths, because it just encodes the join URL.
+  Future<void> _showQr(BuildContext context, String shareToken) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => _QrSheet(shareToken: shareToken),
+    );
+  }
+
   Future<void> _leave(BuildContext context, WidgetRef ref) async {
     final l10n = AppLocalizations.of(context)!;
     final confirmed = await showDialog<bool>(
@@ -191,13 +206,9 @@ class SharedCartScreen extends ConsumerWidget {
             ),
           if (cart?.shareToken != null)
             IconButton(
-              icon: const Icon(Icons.share_outlined),
-              onPressed: () async {
-                await Clipboard.setData(ClipboardData(text: cart!.shareToken!));
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.cartShareCopied)));
-                }
-              },
+              tooltip: l10n.sharedCartShowQr,
+              icon: const Icon(Icons.qr_code_outlined),
+              onPressed: () => _showQr(context, cart!.shareToken!),
             ),
         ],
       ),
@@ -276,6 +287,55 @@ class SharedCartScreen extends ConsumerWidget {
                 ],
               ),
             ),
+    );
+  }
+}
+
+class _QrSheet extends StatelessWidget {
+  final String shareToken;
+  const _QrSheet({required this.shareToken});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    // Same join URL the web host-share page's QR (SharedCartWebController::qr)
+    // encodes — generated on-device instead of fetched from that web route so
+    // this doesn't need CORS opened up on a non-API path just for an image.
+    final joinUrl = '${Env.assetBaseUrl}/cart/join/$shareToken';
+
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 20, 24, 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(l10n.sharedCartShowQr, style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 6),
+            Text(
+              l10n.sharedCartQrHint,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),
+            ),
+            const SizedBox(height: 20),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
+              child: QrImageView(data: joinUrl, size: 220, backgroundColor: Colors.white),
+            ),
+            const SizedBox(height: 20),
+            OutlinedButton.icon(
+              onPressed: () async {
+                await Clipboard.setData(ClipboardData(text: joinUrl));
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.cartShareCopied)));
+                }
+              },
+              icon: const Icon(Icons.copy_outlined),
+              label: Text(l10n.sharedCartCopyLink),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

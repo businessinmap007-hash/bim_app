@@ -2540,6 +2540,42 @@ abstract class AppLocalizations {
   /// **'اتبعتت الدعوة لـ {name}.'**
   String sharedCartInviteSent(String name);
 
+  /// No description provided for @sharedCartShowQr.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعرض كود QR'**
+  String get sharedCartShowQr;
+
+  /// No description provided for @sharedCartQrHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'خلّي صاحبك يمسح الكود ده بتطبيق BIM، أو أي كاميرا، عشان ينضم للسلة.'**
+  String get sharedCartQrHint;
+
+  /// No description provided for @sharedCartCopyLink.
+  ///
+  /// In ar, this message translates to:
+  /// **'انسخ الرابط'**
+  String get sharedCartCopyLink;
+
+  /// No description provided for @qrScanTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'امسح كود QR'**
+  String get qrScanTitle;
+
+  /// No description provided for @qrScanHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'وجّه الكاميرا على كود QR الخاص بسلة صاحبك المشتركة'**
+  String get qrScanHint;
+
+  /// No description provided for @qrScanCameraUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكاميرا مش متاحة. اتأكد من إذن الكاميرا للتطبيق وحاول تاني.'**
+  String get qrScanCameraUnavailable;
+
   /// No description provided for @staffTitle.
   ///
   /// In ar, this message translates to:

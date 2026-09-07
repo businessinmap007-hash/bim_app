@@ -86,6 +86,8 @@ dependencies:
   # deferred below); geolocator is just permission + native location
   # services.
   geolocator: ^13.0.2
+  mobile_scanner: ^7.4.0
+  qr_flutter: ^4.1.0
 
   # NOTE: google_fonts was removed on purpose. On Flutter Web it never
   # actually fetches the font bytes for the CanvasKit/Skwasm renderer (only a
