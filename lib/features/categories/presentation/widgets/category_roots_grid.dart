@@ -50,9 +50,14 @@ class CategoryRootsGrid extends ConsumerWidget {
                 final category = items[index];
                 return CategoryRootTile(
                   category: category,
+                  // Gold reads on both backgrounds; the brand-navy "ink" used
+                  // for the other half is near-invisible in dark mode (same
+                  // root cause as app_theme.dart's `interactive` comment), so
+                  // the alternate swaps to the theme's own onSurface instead
+                  // of the hardcoded navy.
                   iconColor: index.isEven
                       ? AppColors.accentGold
-                      : AppColors.primaryNavy,
+                      : Theme.of(context).colorScheme.onSurface,
                   onTap: () => context.push(
                     '/categories/${category.id}/specialties',
                     extra: category.localizedName(
