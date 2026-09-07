@@ -2576,6 +2576,90 @@ abstract class AppLocalizations {
   /// **'الكاميرا مش متاحة. اتأكد من إذن الكاميرا للتطبيق وحاول تاني.'**
   String get qrScanCameraUnavailable;
 
+  /// No description provided for @sharedCartInviteGroup.
+  ///
+  /// In ar, this message translates to:
+  /// **'ادعُ مجموعة'**
+  String get sharedCartInviteGroup;
+
+  /// No description provided for @sharedCartNoGroupsYet.
+  ///
+  /// In ar, this message translates to:
+  /// **'لسه معملتش أي مجموعة تواصل. اعمل واحدة الأول من القائمة الجانبية.'**
+  String get sharedCartNoGroupsYet;
+
+  /// No description provided for @sharedCartGroupInviteSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{محدش جديد يتدعى — كلهم موجودين بالفعل.} one{اتبعتت الدعوة لشخص واحد.} two{اتبعتت الدعوة لشخصين.} few{اتبعتت الدعوة لـ {count} أشخاص.} many{اتبعتت الدعوة لـ {count} شخصًا.} other{اتبعتت الدعوة لـ {count} شخص.}}'**
+  String sharedCartGroupInviteSent(int count);
+
+  /// No description provided for @contactGroupsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مجموعات التواصل'**
+  String get contactGroupsTitle;
+
+  /// No description provided for @contactGroupsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لسه معملتش أي مجموعة تواصل. اعمل واحدة عشان تدعو نفس الدائرة من الأصدقاء لسلة مشتركة دفعة واحدة.'**
+  String get contactGroupsEmpty;
+
+  /// No description provided for @contactGroupsCreate.
+  ///
+  /// In ar, this message translates to:
+  /// **'مجموعة جديدة'**
+  String get contactGroupsCreate;
+
+  /// No description provided for @contactGroupNameHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'زي: العيلة، أصدقاء دمياط'**
+  String get contactGroupNameHint;
+
+  /// No description provided for @commonCreate.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء'**
+  String get commonCreate;
+
+  /// No description provided for @contactGroupMembersCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{لا يوجد أعضاء} one{عضو واحد} two{عضوان} few{{count} أعضاء} many{{count} عضوًا} other{{count} عضو}}'**
+  String contactGroupMembersCount(int count);
+
+  /// No description provided for @contactGroupAddMember.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة عضو'**
+  String get contactGroupAddMember;
+
+  /// No description provided for @contactGroupAddAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة'**
+  String get contactGroupAddAction;
+
+  /// No description provided for @contactGroupRename.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة تسمية المجموعة'**
+  String get contactGroupRename;
+
+  /// No description provided for @contactGroupDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل تريد حذف هذه المجموعة؟ ده مش بيأثر على أي سلة اتشاركت قبل كده.'**
+  String get contactGroupDeleteConfirm;
+
+  /// No description provided for @contactGroupNoMembers.
+  ///
+  /// In ar, this message translates to:
+  /// **'لسه مفيش أعضاء. أضف حد برقم موبايله أو إيميله.'**
+  String get contactGroupNoMembers;
+
   /// No description provided for @staffTitle.
   ///
   /// In ar, this message translates to:

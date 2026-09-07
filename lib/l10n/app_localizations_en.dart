@@ -1352,6 +1352,70 @@ class AppLocalizationsEn extends AppLocalizations {
       'Camera isn\'t available. Check the app\'s camera permission and try again.';
 
   @override
+  String get sharedCartInviteGroup => 'Invite a group';
+
+  @override
+  String get sharedCartNoGroupsYet =>
+      'You don\'t have any contact groups yet. Create one from the drawer first.';
+
+  @override
+  String sharedCartGroupInviteSent(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Invited $count people.',
+      one: 'Invited 1 person.',
+      zero: 'No one new to invite — they\'re all already in.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get contactGroupsTitle => 'Contact groups';
+
+  @override
+  String get contactGroupsEmpty =>
+      'No contact groups yet. Create one to invite the same circle of friends to a shared cart at once.';
+
+  @override
+  String get contactGroupsCreate => 'New group';
+
+  @override
+  String get contactGroupNameHint => 'e.g. Family, Damietta friends';
+
+  @override
+  String get commonCreate => 'Create';
+
+  @override
+  String contactGroupMembersCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count members',
+      one: '1 member',
+      zero: 'No members',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get contactGroupAddMember => 'Add member';
+
+  @override
+  String get contactGroupAddAction => 'Add';
+
+  @override
+  String get contactGroupRename => 'Rename group';
+
+  @override
+  String get contactGroupDeleteConfirm =>
+      'Delete this group? This does not affect any cart you\'ve already shared.';
+
+  @override
+  String get contactGroupNoMembers =>
+      'No members yet. Add someone by their phone number or email.';
+
+  @override
   String get staffTitle => 'Staff';
 
   @override

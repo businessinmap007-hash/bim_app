@@ -1364,6 +1364,76 @@ class AppLocalizationsAr extends AppLocalizations {
       'الكاميرا مش متاحة. اتأكد من إذن الكاميرا للتطبيق وحاول تاني.';
 
   @override
+  String get sharedCartInviteGroup => 'ادعُ مجموعة';
+
+  @override
+  String get sharedCartNoGroupsYet =>
+      'لسه معملتش أي مجموعة تواصل. اعمل واحدة الأول من القائمة الجانبية.';
+
+  @override
+  String sharedCartGroupInviteSent(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'اتبعتت الدعوة لـ $count شخص.',
+      many: 'اتبعتت الدعوة لـ $count شخصًا.',
+      few: 'اتبعتت الدعوة لـ $count أشخاص.',
+      two: 'اتبعتت الدعوة لشخصين.',
+      one: 'اتبعتت الدعوة لشخص واحد.',
+      zero: 'محدش جديد يتدعى — كلهم موجودين بالفعل.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get contactGroupsTitle => 'مجموعات التواصل';
+
+  @override
+  String get contactGroupsEmpty =>
+      'لسه معملتش أي مجموعة تواصل. اعمل واحدة عشان تدعو نفس الدائرة من الأصدقاء لسلة مشتركة دفعة واحدة.';
+
+  @override
+  String get contactGroupsCreate => 'مجموعة جديدة';
+
+  @override
+  String get contactGroupNameHint => 'زي: العيلة، أصدقاء دمياط';
+
+  @override
+  String get commonCreate => 'إنشاء';
+
+  @override
+  String contactGroupMembersCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count عضو',
+      many: '$count عضوًا',
+      few: '$count أعضاء',
+      two: 'عضوان',
+      one: 'عضو واحد',
+      zero: 'لا يوجد أعضاء',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get contactGroupAddMember => 'إضافة عضو';
+
+  @override
+  String get contactGroupAddAction => 'إضافة';
+
+  @override
+  String get contactGroupRename => 'إعادة تسمية المجموعة';
+
+  @override
+  String get contactGroupDeleteConfirm =>
+      'هل تريد حذف هذه المجموعة؟ ده مش بيأثر على أي سلة اتشاركت قبل كده.';
+
+  @override
+  String get contactGroupNoMembers =>
+      'لسه مفيش أعضاء. أضف حد برقم موبايله أو إيميله.';
+
+  @override
   String get staffTitle => 'الموظفون';
 
   @override

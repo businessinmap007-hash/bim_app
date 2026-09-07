@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../app/theme/app_colors.dart';
 import '../../features/auth/application/auth_controller.dart';
+import '../../features/contact_groups/presentation/screens/contact_groups_screen.dart';
 import '../../features/jobs/presentation/screens/jobs_screen.dart';
 import '../../features/offers/presentation/screens/my_offer_follows_screen.dart';
 import '../../features/offers/presentation/screens/offers_screen.dart';
@@ -188,6 +189,16 @@ class _AppDrawerContent extends ConsumerWidget {
                   onTap: () {
                     close();
                     context.push('/settings');
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.groups_outlined),
+                  title: Text(l10n.contactGroupsTitle),
+                  onTap: () {
+                    close();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const ContactGroupsScreen()),
+                    );
                   },
                 ),
 

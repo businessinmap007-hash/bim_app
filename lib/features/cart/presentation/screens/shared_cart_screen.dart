@@ -8,6 +8,8 @@ import '../../../../core/env/env.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../business/presentation/screens/business_detail_screen.dart';
+import '../../../contact_groups/application/contact_groups_providers.dart';
+import '../../../contact_groups/data/models/contact_group.dart';
 import '../../../table/application/table_providers.dart';
 import '../../application/shared_cart_providers.dart';
 import '../../data/models/shared_cart.dart';
@@ -125,6 +127,62 @@ class SharedCartScreen extends ConsumerWidget {
       if (context.mounted) {
         final message = e is ApiException ? (e.firstErrorFor('identifier') ?? e.message) : l10n.commonSomethingWentWrong;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      }
+    }
+  }
+
+  /// Host-only: invites every member of one of the host's own contact
+  /// groups at once — picks a group from ContactGroupsController's already-
+  /// loaded list (falling back to fetching it), then reuses the same
+  /// notify-then-join flow as a single invite for every member.
+  Future<void> _inviteGroup(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    final groupsNotifier = ref.read(contactGroupsControllerProvider.notifier);
+    var groups = ref.read(contactGroupsControllerProvider).groups;
+    if (groups.isEmpty) {
+      await groupsNotifier.load();
+      groups = ref.read(contactGroupsControllerProvider).groups;
+    }
+    if (!context.mounted) return;
+
+    if (groups.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.sharedCartNoGroupsYet)));
+      return;
+    }
+
+    final group = await showModalBottomSheet<ContactGroup>(
+      context: context,
+      builder: (sheetContext) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+              child: Text(l10n.sharedCartInviteGroup, style: Theme.of(context).textTheme.titleMedium),
+            ),
+            for (final g in groups)
+              ListTile(
+                leading: const Icon(Icons.groups_outlined),
+                title: Text(g.name),
+                subtitle: Text(l10n.contactGroupMembersCount(g.membersCount)),
+                onTap: () => Navigator.pop(sheetContext, g),
+              ),
+          ],
+        ),
+      ),
+    );
+    if (group == null || !context.mounted) return;
+
+    try {
+      final names = await ref.read(sharedCartControllerProvider(orderId).notifier).inviteGroup(group.id);
+      if (context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.sharedCartGroupInviteSent(names.length))));
+      }
+    } catch (_) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
       }
     }
   }
@@ -266,6 +324,12 @@ class SharedCartScreen extends ConsumerWidget {
                       onPressed: () => _inviteFriend(context, ref),
                       icon: const Icon(Icons.person_add_alt_outlined),
                       label: Text(l10n.sharedCartInviteFriend),
+                    ),
+                    const SizedBox(height: 12),
+                    OutlinedButton.icon(
+                      onPressed: () => _inviteGroup(context, ref),
+                      icon: const Icon(Icons.groups_outlined),
+                      label: Text(l10n.sharedCartInviteGroup),
                     ),
                     const SizedBox(height: 12),
                     FilledButton(
