@@ -70,7 +70,7 @@ class _ActionBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isBookable ? AppColors.primaryNavy : AppColors.accentGold;
+    final color = isBookable ? Theme.of(context).colorScheme.onSurface : AppColors.accentGold;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(color: color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(20)),

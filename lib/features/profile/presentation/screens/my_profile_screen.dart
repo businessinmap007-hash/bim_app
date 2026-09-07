@@ -766,7 +766,7 @@ class _AccountTypeBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final color = isBusiness ? AppColors.primaryNavy : AppColors.accentGold;
+    final color = isBusiness ? Theme.of(context).colorScheme.onSurface : AppColors.accentGold;
 
     return Align(
       alignment: AlignmentDirectional.centerStart,

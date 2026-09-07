@@ -66,6 +66,13 @@ class ProfileAvatarPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Blended against white rather than the page background so the navy
+    // icon's contrast stays the same in both themes — see the matching note
+    // on profile_cover_header.dart's _Avatar.
+    final placeholderFill = Color.alphaBlend(
+      AppColors.accentGold.withValues(alpha: 0.15),
+      Colors.white,
+    );
     return GestureDetector(
       onTap: () => _openSheet(context),
       child: Stack(
@@ -75,7 +82,7 @@ class ProfileAvatarPicker extends StatelessWidget {
             height: radius * 2,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.accentGold.withValues(alpha: 0.15),
+              color: placeholderFill,
             ),
             child: ClipOval(
               child: imageUrl != null

@@ -211,6 +211,7 @@ class _SocialIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final onSurface = Theme.of(context).colorScheme.onSurface;
     return Padding(
       padding: const EdgeInsetsDirectional.only(end: 8),
       child: InkWell(
@@ -221,9 +222,9 @@ class _SocialIconButton extends StatelessWidget {
           height: 44,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: AppColors.primaryNavy.withValues(alpha: 0.08),
+            color: onSurface.withValues(alpha: 0.08),
           ),
-          child: Icon(icon, color: AppColors.primaryNavy),
+          child: Icon(icon, color: onSurface),
         ),
       ),
     );

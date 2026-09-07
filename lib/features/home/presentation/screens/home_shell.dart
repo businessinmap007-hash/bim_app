@@ -97,6 +97,13 @@ class _HomeTabIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Blended against white rather than the tab bar's own background so the
+    // navy icon's contrast stays the same in both themes — see the matching
+    // note on profile_cover_header.dart's _Avatar.
+    final placeholderFill = Color.alphaBlend(
+      AppColors.accentGold.withValues(alpha: 0.15),
+      Colors.white,
+    );
     return Container(
       width: 30,
       height: 30,
@@ -110,7 +117,7 @@ class _HomeTabIcon extends StatelessWidget {
         child: avatarUrl != null
             ? CachedNetworkImage(imageUrl: avatarUrl!, fit: BoxFit.cover)
             : Container(
-                color: AppColors.accentGold.withValues(alpha: 0.15),
+                color: placeholderFill,
                 child: const Icon(
                   Icons.person,
                   size: 18,
