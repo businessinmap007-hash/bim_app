@@ -860,6 +860,18 @@ abstract class AppLocalizations {
   /// **'رقم الهاتف'**
   String get businessInfoPhone;
 
+  /// No description provided for @businessInfoAddress.
+  ///
+  /// In ar, this message translates to:
+  /// **'العنوان'**
+  String get businessInfoAddress;
+
+  /// No description provided for @businessInfoCountry.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدولة'**
+  String get businessInfoCountry;
+
   /// No description provided for @businessInfoLocation.
   ///
   /// In ar, this message translates to:

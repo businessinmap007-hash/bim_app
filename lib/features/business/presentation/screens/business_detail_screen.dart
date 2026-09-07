@@ -59,13 +59,6 @@ class BusinessDetailScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(profileAsync.valueOrNull?.name ?? ''),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.info_outline),
-            tooltip: AppLocalizations.of(context)!.businessInfoTitle,
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => BusinessInfoScreen(businessId: businessId)),
-            ),
-          ),
           if (sharedOrderId == null)
             IconButton(
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CartScreen())),
@@ -130,6 +123,13 @@ class _BusinessDetailBody extends StatelessWidget {
                     ),
                   ),
                   child: BusinessRatingRow(rating: profile.rating, openNow: profile.openNow),
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.info_outline),
+                tooltip: l10n.businessInfoTitle,
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => BusinessInfoScreen(businessId: profile.id)),
                 ),
               ),
               _MessageButton(businessId: profile.id),

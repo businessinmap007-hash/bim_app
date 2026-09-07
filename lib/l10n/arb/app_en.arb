@@ -139,6 +139,8 @@
   "businessNoContentYet": "Nothing to show yet",
   "businessInfoTitle": "Business info",
   "businessInfoPhone": "Phone number",
+  "businessInfoAddress": "Address",
+  "businessInfoCountry": "Country",
   "businessInfoLocation": "Location",
   "businessInfoOpenInMaps": "Open in maps",
   "businessInfoAlbums": "Photo album",

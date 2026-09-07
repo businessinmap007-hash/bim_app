@@ -434,6 +434,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get businessInfoPhone => 'Phone number';
 
   @override
+  String get businessInfoAddress => 'Address';
+
+  @override
+  String get businessInfoCountry => 'Country';
+
+  @override
   String get businessInfoLocation => 'Location';
 
   @override

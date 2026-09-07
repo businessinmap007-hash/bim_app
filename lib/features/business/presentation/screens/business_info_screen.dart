@@ -78,32 +78,69 @@ class _BusinessInfoBody extends ConsumerWidget {
       profile.city?.localizedName(languageCode),
     ].whereType<String>().where((s) => s.isNotEmpty).join(' — ');
 
+    final rows = <Widget>[
+      if (profile.address != null)
+        _InfoRow(icon: Icons.home_outlined, label: l10n.businessInfoAddress, value: profile.address!),
+      if (profile.phone != null && profile.phone!.isNotEmpty)
+        _InfoRow(
+          icon: Icons.call_outlined,
+          label: l10n.businessInfoPhone,
+          value: profile.phone!,
+          onTap: () => _call(context),
+        ),
+      if (profile.country != null)
+        _InfoRow(
+          icon: Icons.flag_outlined,
+          label: l10n.businessInfoCountry,
+          value: profile.country!.localizedName(languageCode),
+        ),
+      if (placeLine.isNotEmpty || profile.hasLocation)
+        _InfoRow(
+          icon: Icons.location_on_outlined,
+          label: l10n.businessInfoLocation,
+          value: placeLine.isNotEmpty ? placeLine : l10n.businessInfoOpenInMaps,
+          onTap: profile.hasLocation ? () => _openInMaps(context) : null,
+          trailing: profile.hasLocation
+              ? Icon(Icons.open_in_new, size: 18, color: Theme.of(context).hintColor)
+              : null,
+        ),
+      if (profile.categoryName != null)
+        _InfoRow(
+          icon: Icons.category_outlined,
+          label: l10n.profileCategory,
+          value: profile.categoryName!.localizedName(languageCode),
+        ),
+      if (profile.categoryChildName != null)
+        _InfoRow(
+          icon: Icons.storefront_outlined,
+          label: l10n.profileSpecialty,
+          value: profile.categoryChildName!.localizedName(languageCode),
+        ),
+    ];
+
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
         _InfoCard(
           children: [
-            if (profile.phone != null && profile.phone!.isNotEmpty)
-              _InfoRow(
-                icon: Icons.call_outlined,
-                label: l10n.businessInfoPhone,
-                value: profile.phone!,
-                onTap: () => _call(context),
-              ),
-            if (placeLine.isNotEmpty || profile.hasLocation) ...[
-              if (profile.phone != null && profile.phone!.isNotEmpty) const Divider(height: 1),
-              _InfoRow(
-                icon: Icons.location_on_outlined,
-                label: l10n.businessInfoLocation,
-                value: placeLine.isNotEmpty ? placeLine : l10n.businessInfoOpenInMaps,
-                onTap: profile.hasLocation ? () => _openInMaps(context) : null,
-                trailing: profile.hasLocation
-                    ? Icon(Icons.open_in_new, size: 18, color: Theme.of(context).hintColor)
-                    : null,
-              ),
+            for (var i = 0; i < rows.length; i++) ...[
+              if (i > 0) const Divider(height: 1),
+              rows[i],
             ],
           ],
         ),
+        if (profile.options.isNotEmpty) ...[
+          const SizedBox(height: 20),
+          Text(l10n.businessFilterByAttributes, style: Theme.of(context).textTheme.titleSmall),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: profile.options
+                .map((o) => Chip(label: Text(o.localizedName(languageCode))))
+                .toList(),
+          ),
+        ],
         if (profile.social != null && !profile.social!.isEmpty) ...[
           const SizedBox(height: 16),
           Row(

@@ -57,12 +57,17 @@ class BusinessProfile {
   final String? coverUrl;
   final String? about;
   final String? phone;
+  final String? address;
   final double? latitude;
   final double? longitude;
+  final AddressPlace? country;
   final AddressPlace? governorate;
   final AddressPlace? city;
   final int? categoryId;
+  final AddressPlace? categoryName;
   final int? categoryChildId;
+  final AddressPlace? categoryChildName;
+  final List<AddressPlace> options;
   final SocialLinks? social;
   final RatingSummary rating;
   final bool openNow;
@@ -78,12 +83,17 @@ class BusinessProfile {
     this.coverUrl,
     this.about,
     this.phone,
+    this.address,
     this.latitude,
     this.longitude,
+    this.country,
     this.governorate,
     this.city,
     this.categoryId,
+    this.categoryName,
     this.categoryChildId,
+    this.categoryChildName,
+    this.options = const [],
     this.social,
     required this.rating,
     required this.openNow,
@@ -102,12 +112,17 @@ class BusinessProfile {
     coverUrl: coverUrl,
     about: about,
     phone: phone,
+    address: address,
     latitude: latitude,
     longitude: longitude,
+    country: country,
     governorate: governorate,
     city: city,
     categoryId: categoryId,
+    categoryName: categoryName,
     categoryChildId: categoryChildId,
+    categoryChildName: categoryChildName,
+    options: options,
     social: social,
     rating: rating,
     openNow: openNow,
@@ -129,14 +144,27 @@ class BusinessProfile {
       coverUrl: Env.assetUrl(json['cover'] as String?),
       about: (json['about'] as String?)?.trim().isNotEmpty == true ? json['about'] as String : null,
       phone: json['phone'] as String?,
+      address: (json['address'] as String?)?.trim().isNotEmpty == true ? json['address'] as String : null,
       latitude: (location['latitude'] as num?)?.toDouble(),
       longitude: (location['longitude'] as num?)?.toDouble(),
+      country: location['country'] != null
+          ? AddressPlace.fromJson(location['country'] as Map<String, dynamic>)
+          : null,
       governorate: location['governorate'] != null
           ? AddressPlace.fromJson(location['governorate'] as Map<String, dynamic>)
           : null,
       city: location['city'] != null ? AddressPlace.fromJson(location['city'] as Map<String, dynamic>) : null,
       categoryId: (category['id'] as num?)?.toInt(),
+      categoryName: category['name'] != null
+          ? AddressPlace.fromJson(category['name'] as Map<String, dynamic>)
+          : null,
       categoryChildId: (category['child_id'] as num?)?.toInt(),
+      categoryChildName: category['child_name'] != null
+          ? AddressPlace.fromJson(category['child_name'] as Map<String, dynamic>)
+          : null,
+      options: (json['options'] as List<dynamic>? ?? const [])
+          .map((e) => AddressPlace.fromJson(e as Map<String, dynamic>))
+          .toList(),
       social: SocialLinks.fromJsonOrNull(json['social']),
       rating: RatingSummary.fromJson(json['rating'] as Map<String, dynamic>? ?? const {}),
       openNow: json['open_now'] as bool? ?? true,

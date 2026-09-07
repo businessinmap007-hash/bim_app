@@ -443,6 +443,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get businessInfoPhone => 'رقم الهاتف';
 
   @override
+  String get businessInfoAddress => 'العنوان';
+
+  @override
+  String get businessInfoCountry => 'الدولة';
+
+  @override
   String get businessInfoLocation => 'الموقع';
 
   @override

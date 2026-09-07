@@ -139,6 +139,8 @@
   "businessNoContentYet": "لا يوجد محتوى لعرضه بعد",
   "businessInfoTitle": "معلومات النشاط",
   "businessInfoPhone": "رقم الهاتف",
+  "businessInfoAddress": "العنوان",
+  "businessInfoCountry": "الدولة",
   "businessInfoLocation": "الموقع",
   "businessInfoOpenInMaps": "فتح في الخرائط",
   "businessInfoAlbums": "ألبوم الصور",
