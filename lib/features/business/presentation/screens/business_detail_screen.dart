@@ -98,7 +98,7 @@ class _BusinessDetailBody extends StatelessWidget {
     }
     if (profile.sections.menu) {
       tabs.add(Tab(text: l10n.businessTabMenu));
-      tabViews.add(_MenuTab(businessId: profile.id, sharedOrderId: sharedOrderId));
+      tabViews.add(_MenuTab(businessId: profile.id, fulfillment: profile.fulfillment, sharedOrderId: sharedOrderId));
     }
     if (profile.sections.services) {
       tabs.add(Tab(text: l10n.businessTabServices));
@@ -146,14 +146,6 @@ class _BusinessDetailBody extends StatelessWidget {
           if (profile.about != null) ...[
             const SizedBox(height: 10),
             Text(profile.about!, style: Theme.of(context).textTheme.bodyMedium),
-          ],
-          // Menu businesses only — the one entry point for delivery/pickup/
-          // dine-in, above the menu and before checkout (product doc, "منيو
-          // ومطاعم" section). A services-only business orders nothing this
-          // way, so it never shows here.
-          if (profile.sections.menu) ...[
-            const SizedBox(height: 10),
-            FulfillmentSelectorBar(businessId: profile.id, fulfillment: profile.fulfillment),
           ],
           // Health-root businesses only — the same "is this a
           // clinic" heuristic BusinessCapability::standsUnderHealth()
@@ -368,8 +360,9 @@ class _PostsTab extends ConsumerWidget {
 
 class _MenuTab extends ConsumerWidget {
   final int businessId;
+  final BusinessFulfillment fulfillment;
   final int? sharedOrderId;
-  const _MenuTab({required this.businessId, this.sharedOrderId});
+  const _MenuTab({required this.businessId, required this.fulfillment, this.sharedOrderId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -387,6 +380,16 @@ class _MenuTab extends ConsumerWidget {
             key: const PageStorageKey('business_menu'),
             slivers: [
               SliverOverlapInjector(handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
+              // The one entry point for delivery/pickup/dine-in, right above
+              // the products it applies to (product doc, "منيو ومطاعم"
+              // section) — not in the shared page header, since it has
+              // nothing to do with the Posts/Services tabs.
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                sliver: SliverToBoxAdapter(
+                  child: FulfillmentSelectorBar(businessId: businessId, fulfillment: fulfillment),
+                ),
+              ),
               SliverPadding(
                 padding: const EdgeInsets.all(16),
                 sliver: SliverList.builder(
