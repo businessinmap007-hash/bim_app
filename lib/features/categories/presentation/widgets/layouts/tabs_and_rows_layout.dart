@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../app/theme/app_colors.dart';
 import '../../../../../l10n/app_localizations.dart';
 import '../../../../../shared/widgets/async_value_view.dart';
+import '../../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../../discovery/application/discovery_providers.dart';
 import '../../../../discovery/data/models/business_summary.dart';
 import '../../../../discovery/presentation/widgets/business_card.dart';
@@ -51,20 +52,23 @@ class _TabsAndRowsCategoriesLayoutState
           children: [
             SizedBox(
               height: 76,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                itemCount: items.length,
-                separatorBuilder: (context, index) => const SizedBox(width: 20),
-                itemBuilder: (context, index) {
-                  final category = items[index];
-                  return _CategoryTab(
-                    category: category,
-                    active: category.id == activeId,
-                    onTap: () =>
-                        setState(() => _activeCategoryId = category.id),
-                  );
-                },
+              child: MouseWheelHorizontalScroll(
+                builder: (context, controller) => ListView.separated(
+                  controller: controller,
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  itemCount: items.length,
+                  separatorBuilder: (context, index) => const SizedBox(width: 20),
+                  itemBuilder: (context, index) {
+                    final category = items[index];
+                    return _CategoryTab(
+                      category: category,
+                      active: category.id == activeId,
+                      onTap: () =>
+                          setState(() => _activeCategoryId = category.id),
+                    );
+                  },
+                ),
               ),
             ),
             const Divider(height: 1),
@@ -176,21 +180,24 @@ class _TopRatedRow extends ConsumerWidget {
         }
         return SizedBox(
           height: 108,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemCount: list.length,
-            separatorBuilder: (context, index) => const SizedBox(width: 12),
-            itemBuilder: (context, index) {
-              final business = list[index];
-              return SizedBox(
-                width: 240,
-                child: BusinessCard(
-                  business: business,
-                  onTap: () => context.push('/business/${business.id}'),
-                ),
-              );
-            },
+          child: MouseWheelHorizontalScroll(
+            builder: (context, controller) => ListView.separated(
+              controller: controller,
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: list.length,
+              separatorBuilder: (context, index) => const SizedBox(width: 12),
+              itemBuilder: (context, index) {
+                final business = list[index];
+                return SizedBox(
+                  width: 240,
+                  child: BusinessCard(
+                    business: business,
+                    onTap: () => context.push('/business/${business.id}'),
+                  ),
+                );
+              },
+            ),
           ),
         );
       },

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../app/theme/app_colors.dart';
 import '../../../../../l10n/app_localizations.dart';
 import '../../../../../shared/widgets/async_value_view.dart';
+import '../../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../application/categories_providers.dart';
 import '../../../data/models/category_root.dart';
 import '../../../data/models/specialty.dart';
@@ -47,22 +48,25 @@ class _BarAndMenuCategoriesLayoutState
             }
             return SizedBox(
               height: 48,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                itemCount: items.length,
-                separatorBuilder: (context, index) => const SizedBox(width: 8),
-                itemBuilder: (context, index) {
-                  final category = items[index];
-                  final open = category.id == _openCategoryId;
-                  return _CategoryChip(
-                    category: category,
-                    open: open,
-                    onTap: () => setState(
-                      () => _openCategoryId = open ? null : category.id,
-                    ),
-                  );
-                },
+              child: MouseWheelHorizontalScroll(
+                builder: (context, controller) => ListView.separated(
+                  controller: controller,
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  itemCount: items.length,
+                  separatorBuilder: (context, index) => const SizedBox(width: 8),
+                  itemBuilder: (context, index) {
+                    final category = items[index];
+                    final open = category.id == _openCategoryId;
+                    return _CategoryChip(
+                      category: category,
+                      open: open,
+                      onTap: () => setState(
+                        () => _openCategoryId = open ? null : category.id,
+                      ),
+                    );
+                  },
+                ),
               ),
             );
           },

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
+import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../application/categories_providers.dart';
 import '../../data/models/category_root.dart';
 import 'category_root_tile.dart';
@@ -38,26 +39,29 @@ class CategoryRootsGrid extends ConsumerWidget {
 
         return SizedBox(
           height: _rowHeight,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemCount: items.length,
-            separatorBuilder: (context, index) => const SizedBox(width: 12),
-            itemBuilder: (context, index) {
-              final category = items[index];
-              return CategoryRootTile(
-                category: category,
-                iconColor: index.isEven
-                    ? AppColors.accentGold
-                    : AppColors.primaryNavy,
-                onTap: () => context.push(
-                  '/categories/${category.id}/specialties',
-                  extra: category.localizedName(
-                    Localizations.localeOf(context).languageCode,
+          child: MouseWheelHorizontalScroll(
+            builder: (context, controller) => ListView.separated(
+              controller: controller,
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: items.length,
+              separatorBuilder: (context, index) => const SizedBox(width: 12),
+              itemBuilder: (context, index) {
+                final category = items[index];
+                return CategoryRootTile(
+                  category: category,
+                  iconColor: index.isEven
+                      ? AppColors.accentGold
+                      : AppColors.primaryNavy,
+                  onTap: () => context.push(
+                    '/categories/${category.id}/specialties',
+                    extra: category.localizedName(
+                      Localizations.localeOf(context).languageCode,
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         );
       },
