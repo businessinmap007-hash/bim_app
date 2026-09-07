@@ -173,6 +173,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get categoriesRecommendedEmpty => 'No businesses yet.';
 
   @override
+  String get categoriesServiceTypeAll => 'All';
+
+  @override
   String get businessSearchHint => 'Search by business name...';
 
   @override
@@ -2791,6 +2794,59 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get menuItemDeleteConfirm => 'Delete this item?';
+
+  @override
+  String get menuBundlesTitle => 'Menu Bundles';
+
+  @override
+  String get menuBundlesEmpty => 'No bundles yet.';
+
+  @override
+  String get menuBundleAdd => 'Add bundle';
+
+  @override
+  String get menuBundleEditTitle => 'Edit bundle';
+
+  @override
+  String get menuBundleDeleteConfirm => 'Delete this bundle?';
+
+  @override
+  String get menuBundleFormError =>
+      'Enter a name, a price, and pick at least 2 components.';
+
+  @override
+  String get menuBundlePricingMode => 'Pricing';
+
+  @override
+  String get menuBundlePricingFixed => 'Flat price';
+
+  @override
+  String get menuBundlePricingDiscountPercent => '% off components';
+
+  @override
+  String get menuBundlePricingDiscountFixed => 'Amount off components';
+
+  @override
+  String get menuBundleFixedPrice => 'Bundle price';
+
+  @override
+  String get menuBundleDiscountPercent => 'Discount %';
+
+  @override
+  String get menuBundleDiscountFixed => 'Discount amount';
+
+  @override
+  String get menuBundleComponents => 'Components';
+
+  @override
+  String get menuBundleComponentsHint =>
+      'Pick at least 2 menu items — the composition is fixed, the customer can\'t swap them.';
+
+  @override
+  String get menuBundleComponentsSubtotal => 'Components total';
+
+  @override
+  String get menuBundleFinalPrice => 'Bundle price';
 
   @override
   String get menuItemNameArHint => 'Name (Arabic)';

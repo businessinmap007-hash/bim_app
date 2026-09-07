@@ -16,26 +16,29 @@ import '../../../discovery/presentation/widgets/business_card.dart';
 /// that unifying it here would cost more than the ~15 lines it would save).
 ///
 /// [categoryId] null means platform-wide; passing one narrows to that root.
+/// [serviceId] narrows to businesses pricing that platform service (see the
+/// service-type chip row) — independent of, and combinable with, [categoryId].
 class RecommendedBusinessesList extends ConsumerWidget {
   final int? categoryId;
+  final int? serviceId;
 
-  const RecommendedBusinessesList({super.key, this.categoryId});
+  const RecommendedBusinessesList({super.key, this.categoryId, this.serviceId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final items = ref.watch(recommendedBusinessesProvider(categoryId));
+    final filter = (categoryId: categoryId, serviceId: serviceId);
+    final items = ref.watch(recommendedBusinessesProvider(filter));
 
     return AsyncValueView<List<BusinessSummary>>(
       value: items,
-      onRetry: () => ref.invalidate(recommendedBusinessesProvider(categoryId)),
+      onRetry: () => ref.invalidate(recommendedBusinessesProvider(filter)),
       builder: (context, list) {
         if (list.isEmpty) {
           return Center(child: Text(l10n.categoriesRecommendedEmpty));
         }
         return RefreshIndicator(
-          onRefresh: () async =>
-              ref.invalidate(recommendedBusinessesProvider(categoryId)),
+          onRefresh: () async => ref.invalidate(recommendedBusinessesProvider(filter)),
           child: ResponsiveCenter(
             maxWidth: 800,
             child: ListView.separated(

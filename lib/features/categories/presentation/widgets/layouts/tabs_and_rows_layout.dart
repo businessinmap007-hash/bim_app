@@ -12,6 +12,7 @@ import '../../../../discovery/presentation/widgets/business_card.dart';
 import '../../../application/categories_providers.dart';
 import '../../category_icon_mapping.dart';
 import '../../../data/models/category_root.dart';
+import '../service_type_chips_row.dart';
 
 /// Layout ب (Airbnb-inspired): root categories as fixed tabs; the active
 /// tab's top-rated businesses show as a horizontally-scrolling row
@@ -47,6 +48,7 @@ class _TabsAndRowsCategoriesLayoutState
         }
 
         final activeId = _activeCategoryId ?? items.first.id;
+        final serviceId = ref.watch(selectedServiceTypeProvider);
 
         return Column(
           children: [
@@ -72,6 +74,8 @@ class _TabsAndRowsCategoriesLayoutState
               ),
             ),
             const Divider(height: 1),
+            const SizedBox(height: 8),
+            const ServiceTypeChipsRow(),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.only(top: 12, bottom: 16),
@@ -89,12 +93,16 @@ class _TabsAndRowsCategoriesLayoutState
                       ),
                     ),
                     const SizedBox(height: 8),
-                    // A KEYED subtree per category: without it, Flutter would
-                    // reuse the same _TopRatedRow element across tab switches
-                    // and its internal `ref.watch` would resolve against
-                    // whichever categoryId that element was FIRST built
+                    // A KEYED subtree per (category, service): without it,
+                    // Flutter would reuse the same _TopRatedRow element across
+                    // switches and its internal `ref.watch` would resolve
+                    // against whichever filter that element was FIRST built
                     // with — the row would never actually refresh.
-                    _TopRatedRow(key: ValueKey(activeId), categoryId: activeId),
+                    _TopRatedRow(
+                      key: ValueKey((activeId, serviceId)),
+                      categoryId: activeId,
+                      serviceId: serviceId,
+                    ),
                   ],
                 ),
               ),
@@ -161,16 +169,18 @@ class _CategoryTab extends StatelessWidget {
 
 class _TopRatedRow extends ConsumerWidget {
   final int categoryId;
-  const _TopRatedRow({super.key, required this.categoryId});
+  final int? serviceId;
+  const _TopRatedRow({super.key, required this.categoryId, this.serviceId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final items = ref.watch(recommendedBusinessesProvider(categoryId));
+    final filter = (categoryId: categoryId, serviceId: serviceId);
+    final items = ref.watch(recommendedBusinessesProvider(filter));
 
     return AsyncValueView<List<BusinessSummary>>(
       value: items,
-      onRetry: () => ref.invalidate(recommendedBusinessesProvider(categoryId)),
+      onRetry: () => ref.invalidate(recommendedBusinessesProvider(filter)),
       builder: (context, list) {
         if (list.isEmpty) {
           return Padding(

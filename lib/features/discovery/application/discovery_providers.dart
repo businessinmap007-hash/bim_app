@@ -4,6 +4,7 @@ import '../../../core/providers/core_providers.dart';
 import '../data/discovery_api.dart';
 import '../data/models/attribute_group.dart';
 import '../data/models/business_summary.dart';
+import '../data/models/platform_service_type.dart';
 import '../data/search_api.dart';
 
 final discoveryApiProvider = Provider<DiscoveryApi>((ref) {
@@ -18,17 +19,32 @@ final attributeGroupsProvider =
       return ref.watch(discoveryApiProvider).attributes(childId: childId);
     });
 
-/// Businesses ranked by rating (see DiscoveryApi.recommended) — `categoryId`
-/// null means platform-wide, not scoped to a specific root. Used by all 3
+/// [categoryId]/[serviceId]: the two narrowing axes [recommendedBusinessesProvider]
+/// accepts — both null means platform-wide.
+typedef RecommendedFilter = ({int? categoryId, int? serviceId});
+
+/// Businesses ranked by rating (see DiscoveryApi.recommended) — null fields
+/// in [filter] mean platform-wide/no filter on that axis. Used by all 3
 /// Categories-screen layouts (see [[bim-web-layout-options]]) to show a real
 /// "recommended" list rather than an empty area under the category browser.
 final recommendedBusinessesProvider =
-    FutureProvider.family<List<BusinessSummary>, int?>((ref, categoryId) async {
+    FutureProvider.family<List<BusinessSummary>, RecommendedFilter>((ref, filter) async {
       final result = await ref
           .watch(discoveryApiProvider)
-          .recommended(categoryId: categoryId, perPage: 12);
+          .recommended(categoryId: filter.categoryId, serviceId: filter.serviceId, perPage: 12);
       return result.items;
     });
+
+/// The platform's own service vocabulary (see DiscoveryApi.serviceTypes) —
+/// powers the discovery screen's "what kind of service?" chip row.
+final serviceTypesProvider = FutureProvider<List<PlatformServiceType>>((ref) {
+  return ref.watch(discoveryApiProvider).serviceTypes();
+});
+
+/// The customer's current service-type chip choice on the Categories screen
+/// (null = "all"). Shared across all 3 layouts so switching the layout style
+/// doesn't reset the filter mid-session.
+final selectedServiceTypeProvider = StateProvider<int?>((ref) => null);
 
 final searchApiProvider = Provider<SearchApi>((ref) {
   return SearchApi(ref.watch(apiClientProvider));

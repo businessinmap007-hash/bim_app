@@ -416,6 +416,12 @@ abstract class AppLocalizations {
   /// **'لا توجد أعمال بعد.'**
   String get categoriesRecommendedEmpty;
 
+  /// No description provided for @categoriesServiceTypeAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get categoriesServiceTypeAll;
+
   /// No description provided for @businessSearchHint.
   ///
   /// In ar, this message translates to:
@@ -5299,6 +5305,108 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'حذف هذا الصنف؟'**
   String get menuItemDeleteConfirm;
+
+  /// No description provided for @menuBundlesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'باقات المنيو'**
+  String get menuBundlesTitle;
+
+  /// No description provided for @menuBundlesEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد باقات بعد.'**
+  String get menuBundlesEmpty;
+
+  /// No description provided for @menuBundleAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة باقة'**
+  String get menuBundleAdd;
+
+  /// No description provided for @menuBundleEditTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل الباقة'**
+  String get menuBundleEditTitle;
+
+  /// No description provided for @menuBundleDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف هذه الباقة؟'**
+  String get menuBundleDeleteConfirm;
+
+  /// No description provided for @menuBundleFormError.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب اسمًا وسعرًا، واختر صنفين على الأقل.'**
+  String get menuBundleFormError;
+
+  /// No description provided for @menuBundlePricingMode.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة التسعير'**
+  String get menuBundlePricingMode;
+
+  /// No description provided for @menuBundlePricingFixed.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر ثابت'**
+  String get menuBundlePricingFixed;
+
+  /// No description provided for @menuBundlePricingDiscountPercent.
+  ///
+  /// In ar, this message translates to:
+  /// **'خصم % عن مجموع الأصناف'**
+  String get menuBundlePricingDiscountPercent;
+
+  /// No description provided for @menuBundlePricingDiscountFixed.
+  ///
+  /// In ar, this message translates to:
+  /// **'خصم مبلغ عن مجموع الأصناف'**
+  String get menuBundlePricingDiscountFixed;
+
+  /// No description provided for @menuBundleFixedPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر الباقة'**
+  String get menuBundleFixedPrice;
+
+  /// No description provided for @menuBundleDiscountPercent.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة الخصم'**
+  String get menuBundleDiscountPercent;
+
+  /// No description provided for @menuBundleDiscountFixed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مبلغ الخصم'**
+  String get menuBundleDiscountFixed;
+
+  /// No description provided for @menuBundleComponents.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأصناف المكوّنة'**
+  String get menuBundleComponents;
+
+  /// No description provided for @menuBundleComponentsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر صنفين على الأقل — التركيبة ثابتة ولا يقدر العميل يستبدلها.'**
+  String get menuBundleComponentsHint;
+
+  /// No description provided for @menuBundleComponentsSubtotal.
+  ///
+  /// In ar, this message translates to:
+  /// **'مجموع أسعار الأصناف'**
+  String get menuBundleComponentsSubtotal;
+
+  /// No description provided for @menuBundleFinalPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر الباقة'**
+  String get menuBundleFinalPrice;
 
   /// No description provided for @menuItemNameArHint.
   ///

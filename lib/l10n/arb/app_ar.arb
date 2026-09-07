@@ -53,6 +53,7 @@
   "categoriesRecommendedTitle": "أعمال موصى بها",
   "categoriesTopRatedTitle": "الأعلى تقييمًا",
   "categoriesRecommendedEmpty": "لا توجد أعمال بعد.",
+  "categoriesServiceTypeAll": "الكل",
   "businessSearchHint": "ابحث باسم النشاط...",
   "businessListEmpty": "لا توجد أنشطة مطابقة.",
   "businessFilterByLocation": "فلترة حسب الموقع",

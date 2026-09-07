@@ -6,11 +6,13 @@ import '../../../../../app/theme/app_colors.dart';
 import '../../../../../l10n/app_localizations.dart';
 import '../../../../../shared/widgets/async_value_view.dart';
 import '../../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
+import '../../../../discovery/application/discovery_providers.dart';
 import '../../../application/categories_providers.dart';
 import '../../../data/models/category_root.dart';
 import '../../../data/models/specialty.dart';
 import '../../category_icon_mapping.dart';
 import '../recommended_businesses_list.dart';
+import '../service_type_chips_row.dart';
 
 /// Layout ج (Yelp-inspired): root categories as a persistent bar; tapping
 /// one opens its specialties in a dropdown panel instead of navigating away
@@ -34,6 +36,7 @@ class _BarAndMenuCategoriesLayoutState
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final roots = ref.watch(categoryRootsProvider);
+    final serviceId = ref.watch(selectedServiceTypeProvider);
 
     return Column(
       children: [
@@ -81,6 +84,8 @@ class _BarAndMenuCategoriesLayoutState
           ),
         ],
         const Divider(height: 1),
+        const SizedBox(height: 8),
+        const ServiceTypeChipsRow(),
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
           child: Align(
@@ -91,7 +96,7 @@ class _BarAndMenuCategoriesLayoutState
             ),
           ),
         ),
-        const Expanded(child: RecommendedBusinessesList()),
+        Expanded(child: RecommendedBusinessesList(serviceId: serviceId)),
       ],
     );
   }

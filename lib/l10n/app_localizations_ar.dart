@@ -171,6 +171,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get categoriesRecommendedEmpty => 'لا توجد أعمال بعد.';
 
   @override
+  String get categoriesServiceTypeAll => 'الكل';
+
+  @override
   String get businessSearchHint => 'ابحث باسم النشاط...';
 
   @override
@@ -2806,6 +2809,58 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get menuItemDeleteConfirm => 'حذف هذا الصنف؟';
+
+  @override
+  String get menuBundlesTitle => 'باقات المنيو';
+
+  @override
+  String get menuBundlesEmpty => 'لا توجد باقات بعد.';
+
+  @override
+  String get menuBundleAdd => 'إضافة باقة';
+
+  @override
+  String get menuBundleEditTitle => 'تعديل الباقة';
+
+  @override
+  String get menuBundleDeleteConfirm => 'حذف هذه الباقة؟';
+
+  @override
+  String get menuBundleFormError => 'اكتب اسمًا وسعرًا، واختر صنفين على الأقل.';
+
+  @override
+  String get menuBundlePricingMode => 'طريقة التسعير';
+
+  @override
+  String get menuBundlePricingFixed => 'سعر ثابت';
+
+  @override
+  String get menuBundlePricingDiscountPercent => 'خصم % عن مجموع الأصناف';
+
+  @override
+  String get menuBundlePricingDiscountFixed => 'خصم مبلغ عن مجموع الأصناف';
+
+  @override
+  String get menuBundleFixedPrice => 'سعر الباقة';
+
+  @override
+  String get menuBundleDiscountPercent => 'نسبة الخصم';
+
+  @override
+  String get menuBundleDiscountFixed => 'مبلغ الخصم';
+
+  @override
+  String get menuBundleComponents => 'الأصناف المكوّنة';
+
+  @override
+  String get menuBundleComponentsHint =>
+      'اختر صنفين على الأقل — التركيبة ثابتة ولا يقدر العميل يستبدلها.';
+
+  @override
+  String get menuBundleComponentsSubtotal => 'مجموع أسعار الأصناف';
+
+  @override
+  String get menuBundleFinalPrice => 'سعر الباقة';
 
   @override
   String get menuItemNameArHint => 'الاسم (عربي)';

@@ -53,6 +53,7 @@
   "categoriesRecommendedTitle": "Recommended for you",
   "categoriesTopRatedTitle": "Top rated",
   "categoriesRecommendedEmpty": "No businesses yet.",
+  "categoriesServiceTypeAll": "All",
   "businessSearchHint": "Search by business name...",
   "businessListEmpty": "No matching businesses.",
   "businessFilterByLocation": "Filter by location",
