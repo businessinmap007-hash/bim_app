@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -145,33 +143,6 @@ class _BusinessCartCard extends ConsumerWidget {
               ),
               child: Text(l10n.cartCheckout),
             ),
-            if (cart.business != null) ...[
-              const SizedBox(height: 8),
-              OutlinedButton.icon(
-                onPressed: () async {
-                  final businessId = cart.business!.id;
-                  // Captured before any await: reloading the cart list below
-                  // rebuilds this very card with a fresh BuildContext, so a
-                  // Navigator looked up afterward would belong to a disposed
-                  // widget and silently no-op.
-                  final navigator = Navigator.of(context);
-                  final messenger = ScaffoldMessenger.of(context);
-                  try {
-                    final shared = await ref.read(sharedCartApiProvider).share(businessId);
-                    unawaited(ref.read(cartControllerProvider.notifier).load());
-                    navigator.push(
-                      MaterialPageRoute(builder: (_) => SharedCartScreen(orderId: shared.orderId)),
-                    );
-                  } catch (_) {
-                    messenger.showSnackBar(
-                      SnackBar(content: Text(l10n.commonSomethingWentWrong)),
-                    );
-                  }
-                },
-                icon: const Icon(Icons.share_outlined),
-                label: Text(l10n.cartShareCart),
-              ),
-            ],
           ],
         ),
       ),

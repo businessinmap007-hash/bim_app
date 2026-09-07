@@ -106,12 +106,17 @@ class SharedCartApi {
     return user['name'] as String? ?? '';
   }
 
-  /// Host-only: invites every member of one of the host's own contact
-  /// groups at once. Returns the names of the friends genuinely newly
-  /// notified — a member already in the cart is silently skipped, not
-  /// re-notified, so this list can be shorter than the group itself.
-  Future<List<String>> inviteGroup(int orderId, int groupId) async {
-    final data = await _client.post('/cart/shared/$orderId/invite-group/$groupId') as Map<String, dynamic>;
+  /// Host-only: invites members of one of the host's own contact groups at
+  /// once — every member, or only the ones in [memberIds] (user ids) when
+  /// the caller picked a subset instead of the whole group. Returns the
+  /// names of the friends genuinely newly notified — a member already in
+  /// the cart is silently skipped, not re-notified, so this list can be
+  /// shorter than the selection itself.
+  Future<List<String>> inviteGroup(int orderId, int groupId, {List<int>? memberIds}) async {
+    final data = await _client.post(
+      '/cart/shared/$orderId/invite-group/$groupId',
+      data: memberIds != null ? {'member_ids': memberIds} : null,
+    ) as Map<String, dynamic>;
     return (data['invited'] as List<dynamic>? ?? [])
         .map((e) => (e as Map<String, dynamic>)['name'] as String? ?? '')
         .toList();

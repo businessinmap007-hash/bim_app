@@ -2600,6 +2600,18 @@ abstract class AppLocalizations {
   /// **'{count, plural, =0{محدش جديد يتدعى — كلهم موجودين بالفعل.} one{اتبعتت الدعوة لشخص واحد.} two{اتبعتت الدعوة لشخصين.} few{اتبعتت الدعوة لـ {count} أشخاص.} many{اتبعتت الدعوة لـ {count} شخصًا.} other{اتبعتت الدعوة لـ {count} شخص.}}'**
   String sharedCartGroupInviteSent(int count);
 
+  /// No description provided for @sharedCartSelectMembers.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار مين تحب تدعوه'**
+  String get sharedCartSelectMembers;
+
+  /// No description provided for @sharedCartSelectAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختار الكل'**
+  String get sharedCartSelectAll;
+
   /// No description provided for @contactGroupsTitle.
   ///
   /// In ar, this message translates to:

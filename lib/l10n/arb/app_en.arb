@@ -451,6 +451,8 @@
   "sharedCartNoGroupsYet": "You don't have any contact groups yet. Create one from the drawer first.",
   "sharedCartGroupInviteSent": "{count, plural, =0{No one new to invite — they're all already in.} one{Invited 1 person.} other{Invited {count} people.}}",
   "@sharedCartGroupInviteSent": { "placeholders": { "count": { "type": "int" } } },
+  "sharedCartSelectMembers": "Choose who to invite",
+  "sharedCartSelectAll": "Select all",
   "contactGroupsTitle": "Contact groups",
   "contactGroupsEmpty": "No contact groups yet. Create one to invite the same circle of friends to a shared cart at once.",
   "contactGroupsCreate": "New group",

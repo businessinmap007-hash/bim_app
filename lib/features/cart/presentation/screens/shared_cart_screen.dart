@@ -13,6 +13,7 @@ import '../../../contact_groups/data/models/contact_group.dart';
 import '../../../table/application/table_providers.dart';
 import '../../application/shared_cart_providers.dart';
 import '../../data/models/shared_cart.dart';
+import '../widgets/group_member_picker_sheet.dart';
 
 /// The group cart: a host's cart shared by token, friends join and each adds
 /// their own lines. Cash on arrival — each participant's own total is shown,
@@ -173,8 +174,22 @@ class SharedCartScreen extends ConsumerWidget {
     );
     if (group == null || !context.mounted) return;
 
+    if (group.members.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.contactGroupNoMembers)));
+      return;
+    }
+
+    final memberIds = await showModalBottomSheet<List<int>>(
+      context: context,
+      isScrollControlled: true,
+      builder: (sheetContext) => GroupMemberPickerSheet(members: group.members),
+    );
+    if (memberIds == null || memberIds.isEmpty || !context.mounted) return;
+
     try {
-      final names = await ref.read(sharedCartControllerProvider(orderId).notifier).inviteGroup(group.id);
+      final names = await ref
+          .read(sharedCartControllerProvider(orderId).notifier)
+          .inviteGroup(group.id, memberIds: memberIds);
       if (context.mounted) {
         ScaffoldMessenger.of(
           context,
@@ -355,6 +370,10 @@ class SharedCartScreen extends ConsumerWidget {
   }
 }
 
+/// Lets the host pick which of a group's members actually get invited —
+/// a "select all" toggle plus one checkbox per member, defaulting to
+/// everyone checked (so a host who just wants the whole group can still
+/// confirm in one tap, same as before this picker existed).
 class _QrSheet extends StatelessWidget {
   final String shareToken;
   const _QrSheet({required this.shareToken});

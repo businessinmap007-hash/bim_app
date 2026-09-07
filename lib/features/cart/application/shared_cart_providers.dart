@@ -82,9 +82,11 @@ class SharedCartController extends StateNotifier<SharedCartState> {
   /// they're not found, are already a participant self-invite, etc.
   Future<String> invite(String identifier) => _api.invite(orderId, identifier);
 
-  /// Host-only: invites a whole contact group at once. Returns the names
-  /// genuinely newly notified (may be fewer than the group's own size).
-  Future<List<String>> inviteGroup(int groupId) => _api.inviteGroup(orderId, groupId);
+  /// Host-only: invites a contact group — every member, or only [memberIds]
+  /// when the caller picked a subset. Returns the names genuinely newly
+  /// notified (may be fewer than the selection itself).
+  Future<List<String>> inviteGroup(int groupId, {List<int>? memberIds}) =>
+      _api.inviteGroup(orderId, groupId, memberIds: memberIds);
 
   Future<void> leave() => _api.leave(orderId);
 

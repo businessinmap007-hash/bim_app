@@ -451,6 +451,8 @@
   "sharedCartNoGroupsYet": "لسه معملتش أي مجموعة تواصل. اعمل واحدة الأول من القائمة الجانبية.",
   "sharedCartGroupInviteSent": "{count, plural, =0{محدش جديد يتدعى — كلهم موجودين بالفعل.} one{اتبعتت الدعوة لشخص واحد.} two{اتبعتت الدعوة لشخصين.} few{اتبعتت الدعوة لـ {count} أشخاص.} many{اتبعتت الدعوة لـ {count} شخصًا.} other{اتبعتت الدعوة لـ {count} شخص.}}",
   "@sharedCartGroupInviteSent": { "placeholders": { "count": { "type": "int" } } },
+  "sharedCartSelectMembers": "اختار مين تحب تدعوه",
+  "sharedCartSelectAll": "اختار الكل",
   "contactGroupsTitle": "مجموعات التواصل",
   "contactGroupsEmpty": "لسه معملتش أي مجموعة تواصل. اعمل واحدة عشان تدعو نفس الدائرة من الأصدقاء لسلة مشتركة دفعة واحدة.",
   "contactGroupsCreate": "مجموعة جديدة",

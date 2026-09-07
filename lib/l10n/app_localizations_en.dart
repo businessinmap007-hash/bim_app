@@ -1374,6 +1374,12 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get sharedCartSelectMembers => 'Choose who to invite';
+
+  @override
+  String get sharedCartSelectAll => 'Select all';
+
+  @override
   String get contactGroupsTitle => 'Contact groups';
 
   @override

@@ -1389,6 +1389,12 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get sharedCartSelectMembers => 'اختار مين تحب تدعوه';
+
+  @override
+  String get sharedCartSelectAll => 'اختار الكل';
+
+  @override
   String get contactGroupsTitle => 'مجموعات التواصل';
 
   @override

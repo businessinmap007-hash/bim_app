@@ -10,8 +10,10 @@ import '../../../../shared/widgets/sliver_tab_bar_delegate.dart';
 import '../../../auth/application/auth_controller.dart';
 import '../../../booking/presentation/screens/booking_screen.dart';
 import '../../../cart/application/cart_controller.dart';
+import '../../../cart/application/shared_cart_providers.dart';
 import '../../../cart/presentation/screens/cart_screen.dart';
 import '../../../cart/presentation/widgets/add_to_cart_sheet.dart';
+import '../../../cart/presentation/widgets/share_cart_sheet.dart';
 import '../../../clinic/presentation/screens/clinic_slots_screen.dart';
 import '../../../comments/presentation/screens/comments_screen.dart';
 import '../../../general_chat/application/general_chat_providers.dart';
@@ -364,6 +366,26 @@ class _MenuTab extends ConsumerWidget {
   final int? sharedOrderId;
   const _MenuTab({required this.businessId, required this.fulfillment, this.sharedOrderId});
 
+  /// Turns the caller's cart for this business into a shared one (idempotent
+  /// — reuses the existing share token if it's already shared) and opens the
+  /// one popup for every way to bring someone into it. Lives beside the
+  /// fulfillment choice, before the customer has added anything, instead of
+  /// only surfacing after they've built up a cart (ShareCartSheet's own doc
+  /// comment has the full rationale).
+  Future<void> _startShareCart(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    try {
+      final shared = await ref.read(sharedCartApiProvider).share(businessId);
+      if (context.mounted) {
+        await showShareCartSheet(context, orderId: shared.orderId, shareToken: shared.shareToken);
+      }
+    } catch (_) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
@@ -383,11 +405,24 @@ class _MenuTab extends ConsumerWidget {
               // The one entry point for delivery/pickup/dine-in, right above
               // the products it applies to (product doc, "منيو ومطاعم"
               // section) — not in the shared page header, since it has
-              // nothing to do with the Posts/Services tabs.
+              // nothing to do with the Posts/Services tabs. The share
+              // shortcut rides along here too — not buried in the Cart
+              // screen, since sharing is a decision made before ordering.
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                 sliver: SliverToBoxAdapter(
-                  child: FulfillmentSelectorBar(businessId: businessId, fulfillment: fulfillment),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(child: FulfillmentSelectorBar(businessId: businessId, fulfillment: fulfillment)),
+                      if (sharedOrderId == null)
+                        IconButton(
+                          tooltip: l10n.cartShareCart,
+                          icon: const Icon(Icons.ios_share_outlined),
+                          onPressed: () => _startShareCart(context, ref),
+                        ),
+                    ],
+                  ),
                 ),
               ),
               SliverPadding(
