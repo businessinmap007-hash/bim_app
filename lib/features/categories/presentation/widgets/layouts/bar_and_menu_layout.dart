@@ -9,6 +9,7 @@ import '../../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../application/categories_providers.dart';
 import '../../../data/models/category_root.dart';
 import '../../../data/models/specialty.dart';
+import '../../category_icon_mapping.dart';
 import '../recommended_businesses_list.dart';
 
 /// Layout ج (Yelp-inspired): root categories as a persistent bar; tapping
@@ -180,6 +181,7 @@ class _SpecialtiesPanel extends ConsumerWidget {
                 Localizations.localeOf(context).languageCode,
               );
               return ActionChip(
+                avatar: Icon(iconForCategoryChild(specialty.nameAr), size: 18),
                 label: Text(displayName),
                 onPressed: () {
                   onPicked();

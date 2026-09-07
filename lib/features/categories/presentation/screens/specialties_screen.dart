@@ -7,6 +7,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
 import '../../application/categories_providers.dart';
 import '../../data/models/specialty.dart';
+import '../category_icon_mapping.dart';
 
 class SpecialtiesScreen extends ConsumerWidget {
   final int categoryId;
@@ -49,6 +50,7 @@ class SpecialtiesScreen extends ConsumerWidget {
                   return Card(
                     margin: EdgeInsets.zero,
                     child: ListTile(
+                      leading: Icon(iconForCategoryChild(specialty.nameAr)),
                       // Same size/weight as the bottom nav bar's labels
                       // (NavigationBar has no style override, so it reads
                       // straight off textTheme.labelMedium too) — matched
