@@ -49,6 +49,12 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   bool _previewLoading = false;
   Timer? _previewDebounce;
   int _previewRequestId = 0;
+  // Set when the server refuses to price the current selection (e.g. a
+  // required unit hasn't been chosen). Shown next to the total so the
+  // customer isn't left staring at a flat single-unit price that silently
+  // never accounted for their dates/options, and blocks submitting into the
+  // same guaranteed failure.
+  String? _previewError;
 
   TextEditingController _controllerFor(String key) =>
       _textControllers.putIfAbsent(key, () => TextEditingController());
@@ -89,12 +95,16 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
       if (mounted && requestId == _previewRequestId) {
         setState(() {
           _previewTotal = total;
+          _previewError = null;
           _previewLoading = false;
         });
       }
-    } catch (_) {
+    } catch (e) {
       if (mounted && requestId == _previewRequestId) {
-        setState(() => _previewLoading = false);
+        setState(() {
+          _previewError = e is ApiException && e.message.isNotEmpty ? e.message : null;
+          _previewLoading = false;
+        });
       }
     }
   }
@@ -294,25 +304,42 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                 color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.35),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(l10n.bookingTotalLabel, style: Theme.of(context).textTheme.titleSmall),
-                      _previewLoading && _previewTotal == null
-                          ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
-                          : Text(
-                              _previewTotal != null
-                                  ? '${_previewTotal!.toStringAsFixed(0)} ${widget.offering.currency}'
-                                  : '${widget.offering.price.toStringAsFixed(0)} ${widget.offering.currency}',
-                              style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
-                            ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(l10n.bookingTotalLabel, style: Theme.of(context).textTheme.titleSmall),
+                          _previewLoading && _previewTotal == null
+                              ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
+                              : Text(
+                                  _previewTotal != null
+                                      ? '${_previewTotal!.toStringAsFixed(0)} ${widget.offering.currency}'
+                                      : '${widget.offering.price.toStringAsFixed(0)} ${widget.offering.currency}',
+                                  style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+                                ),
+                        ],
+                      ),
+                      // The number above may still be showing the flat
+                      // single-unit price (never mind selected dates/options)
+                      // when the server couldn't price the current
+                      // selection — say so instead of letting it pass as
+                      // the real total.
+                      if (_previewError != null) ...[
+                        const SizedBox(height: 6),
+                        Text(
+                          _previewError!,
+                          style: TextStyle(color: Theme.of(context).colorScheme.error),
+                        ),
+                      ],
                     ],
                   ),
                 ),
               ),
               const SizedBox(height: 16),
               FilledButton(
-                onPressed: _submitting ? null : () => _submit(form, units),
+                onPressed: _submitting || _previewError != null ? null : () => _submit(form, units),
                 child: _submitting
                     ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
                     : Text(l10n.bookingSubmit),
