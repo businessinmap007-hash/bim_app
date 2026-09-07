@@ -27,6 +27,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get commonCancel => 'إلغاء';
 
   @override
+  String get commonOk => 'تمام';
+
+  @override
   String get commonSubmit => 'إرسال';
 
   @override
@@ -894,6 +897,27 @@ class AppLocalizationsAr extends AppLocalizations {
   String get businessFulfillmentPrompt => 'عايز تستلم طلبك إزاي؟';
 
   @override
+  String get cartOutOfStockPolicyPrompt =>
+      'لو حاجة في طلبك نفذت، تحب نعمل إيه؟';
+
+  @override
+  String get cartOutOfStockSubstitute => 'بديل (نختار الأقرب)';
+
+  @override
+  String get cartOutOfStockRemove => 'احذف الصنف الناقص بس';
+
+  @override
+  String get cartOutOfStockCancel => 'الغِ الطلب كله';
+
+  @override
+  String orderLineSubstituted(String note) {
+    return 'تم الاستبدال بـ: $note';
+  }
+
+  @override
+  String get orderLineRemoved => 'غير متاح — تم حذفه';
+
+  @override
   String get cartAddressLabel => 'العنوان';
 
   @override
@@ -1067,6 +1091,36 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get businessOrdersMarkReady => 'تم التجهيز';
+
+  @override
+  String get businessOrdersItemUnavailable => 'علّم كغير متاح';
+
+  @override
+  String get businessOrdersItemUnavailableTitle => 'هذا الصنف غير متاح';
+
+  @override
+  String get businessOrdersItemUnavailableSubstituteNoteLabel =>
+      'استبدلته بإيه؟';
+
+  @override
+  String get businessOrdersItemUnavailableSubstituteNoteHint =>
+      'مثال: بيبسي بدل كوكاكولا';
+
+  @override
+  String get businessOrdersItemUnavailableRemoveConfirm =>
+      'سيتم حذف هذا الصنف من الطلب وتحديث الإجمالي. سيتم إشعار العميل.';
+
+  @override
+  String businessOrdersItemUnavailableCancelConfirm(int id) {
+    return 'العميل اختار إلغاء الطلب كله لو نفذ صنف. سيتم إلغاء الطلب رقم #$id بالكامل.';
+  }
+
+  @override
+  String get businessOrdersItemUnavailableNoPolicy =>
+      'العميل لم يحدد ماذا يفعل لو نفذ صنف. تواصل معه مباشرة عبر شات الطلب.';
+
+  @override
+  String get businessOrdersItemUnavailableDone => 'تم — وصل إشعار للعميل.';
 
   @override
   String get ordersEmpty => 'لا توجد طلبات بعد.';

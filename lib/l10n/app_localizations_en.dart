@@ -27,6 +27,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonCancel => 'Cancel';
 
   @override
+  String get commonOk => 'OK';
+
+  @override
   String get commonSubmit => 'Submit';
 
   @override
@@ -882,6 +885,27 @@ class AppLocalizationsEn extends AppLocalizations {
       'How would you like to get your order?';
 
   @override
+  String get cartOutOfStockPolicyPrompt =>
+      'If something in your order runs out, what would you like us to do?';
+
+  @override
+  String get cartOutOfStockSubstitute => 'Substitute (closest match)';
+
+  @override
+  String get cartOutOfStockRemove => 'Just remove that item';
+
+  @override
+  String get cartOutOfStockCancel => 'Cancel the whole order';
+
+  @override
+  String orderLineSubstituted(String note) {
+    return 'Substituted: $note';
+  }
+
+  @override
+  String get orderLineRemoved => 'Unavailable — removed';
+
+  @override
   String get cartAddressLabel => 'Address';
 
   @override
@@ -1053,6 +1077,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get businessOrdersMarkReady => 'Mark ready';
+
+  @override
+  String get businessOrdersItemUnavailable => 'Mark unavailable';
+
+  @override
+  String get businessOrdersItemUnavailableTitle => 'This item is unavailable';
+
+  @override
+  String get businessOrdersItemUnavailableSubstituteNoteLabel =>
+      'What did you substitute it with?';
+
+  @override
+  String get businessOrdersItemUnavailableSubstituteNoteHint =>
+      'e.g. Pepsi instead of Coke';
+
+  @override
+  String get businessOrdersItemUnavailableRemoveConfirm =>
+      'This item will be removed from the order and the total updated. The customer will be notified.';
+
+  @override
+  String businessOrdersItemUnavailableCancelConfirm(int id) {
+    return 'The customer asked to cancel the whole order if an item runs out. This will cancel order #$id entirely.';
+  }
+
+  @override
+  String get businessOrdersItemUnavailableNoPolicy =>
+      'The customer did not state what to do if an item runs out. Contact them directly through the order chat.';
+
+  @override
+  String get businessOrdersItemUnavailableDone =>
+      'Done — the customer has been notified.';
 
   @override
   String get ordersEmpty => 'No orders yet.';

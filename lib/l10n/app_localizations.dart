@@ -134,6 +134,12 @@ abstract class AppLocalizations {
   /// **'إلغاء'**
   String get commonCancel;
 
+  /// No description provided for @commonOk.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمام'**
+  String get commonOk;
+
   /// No description provided for @commonSubmit.
   ///
   /// In ar, this message translates to:
@@ -1700,6 +1706,42 @@ abstract class AppLocalizations {
   /// **'عايز تستلم طلبك إزاي؟'**
   String get businessFulfillmentPrompt;
 
+  /// No description provided for @cartOutOfStockPolicyPrompt.
+  ///
+  /// In ar, this message translates to:
+  /// **'لو حاجة في طلبك نفذت، تحب نعمل إيه؟'**
+  String get cartOutOfStockPolicyPrompt;
+
+  /// No description provided for @cartOutOfStockSubstitute.
+  ///
+  /// In ar, this message translates to:
+  /// **'بديل (نختار الأقرب)'**
+  String get cartOutOfStockSubstitute;
+
+  /// No description provided for @cartOutOfStockRemove.
+  ///
+  /// In ar, this message translates to:
+  /// **'احذف الصنف الناقص بس'**
+  String get cartOutOfStockRemove;
+
+  /// No description provided for @cartOutOfStockCancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الغِ الطلب كله'**
+  String get cartOutOfStockCancel;
+
+  /// No description provided for @orderLineSubstituted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الاستبدال بـ: {note}'**
+  String orderLineSubstituted(String note);
+
+  /// No description provided for @orderLineRemoved.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير متاح — تم حذفه'**
+  String get orderLineRemoved;
+
   /// No description provided for @cartAddressLabel.
   ///
   /// In ar, this message translates to:
@@ -2023,6 +2065,54 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تم التجهيز'**
   String get businessOrdersMarkReady;
+
+  /// No description provided for @businessOrdersItemUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'علّم كغير متاح'**
+  String get businessOrdersItemUnavailable;
+
+  /// No description provided for @businessOrdersItemUnavailableTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا الصنف غير متاح'**
+  String get businessOrdersItemUnavailableTitle;
+
+  /// No description provided for @businessOrdersItemUnavailableSubstituteNoteLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'استبدلته بإيه؟'**
+  String get businessOrdersItemUnavailableSubstituteNoteLabel;
+
+  /// No description provided for @businessOrdersItemUnavailableSubstituteNoteHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مثال: بيبسي بدل كوكاكولا'**
+  String get businessOrdersItemUnavailableSubstituteNoteHint;
+
+  /// No description provided for @businessOrdersItemUnavailableRemoveConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيتم حذف هذا الصنف من الطلب وتحديث الإجمالي. سيتم إشعار العميل.'**
+  String get businessOrdersItemUnavailableRemoveConfirm;
+
+  /// No description provided for @businessOrdersItemUnavailableCancelConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'العميل اختار إلغاء الطلب كله لو نفذ صنف. سيتم إلغاء الطلب رقم #{id} بالكامل.'**
+  String businessOrdersItemUnavailableCancelConfirm(int id);
+
+  /// No description provided for @businessOrdersItemUnavailableNoPolicy.
+  ///
+  /// In ar, this message translates to:
+  /// **'العميل لم يحدد ماذا يفعل لو نفذ صنف. تواصل معه مباشرة عبر شات الطلب.'**
+  String get businessOrdersItemUnavailableNoPolicy;
+
+  /// No description provided for @businessOrdersItemUnavailableDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم — وصل إشعار للعميل.'**
+  String get businessOrdersItemUnavailableDone;
 
   /// No description provided for @ordersEmpty.
   ///

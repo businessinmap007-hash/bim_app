@@ -25,6 +25,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   // there is nothing to reconcile between what the segmented button shows
   // and what _placeOrder actually submits.
   String? _fulfillmentTypeOverride;
+  // "لو الصنف نفذ، تحب نعمل إيه؟" — one policy for the whole order, asked
+  // once here rather than per line (see product doc, "منيو ومطاعم"
+  // section). Defaults to the lowest-friction choice so an order is never
+  // silently blocked on this question.
+  String _outOfStockPolicy = 'substitute';
   final _addressController = TextEditingController();
   final _notesController = TextEditingController();
   int? _selectedAddressId;
@@ -59,6 +64,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             : null,
         notes: _notesController.text.trim(),
         paymentMethod: 'cash',
+        outOfStockPolicy: _outOfStockPolicy,
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.cartOrderPlaced)));
@@ -134,6 +140,32 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             controller: _notesController,
             decoration: InputDecoration(labelText: l10n.cartNotesLabel),
             maxLines: 3,
+          ),
+          const SizedBox(height: 16),
+          Text(l10n.cartOutOfStockPolicyPrompt, style: Theme.of(context).textTheme.titleSmall),
+          RadioListTile<String>(
+            title: Text(l10n.cartOutOfStockSubstitute),
+            value: 'substitute',
+            groupValue: _outOfStockPolicy,
+            dense: true,
+            contentPadding: EdgeInsets.zero,
+            onChanged: (value) => setState(() => _outOfStockPolicy = value!),
+          ),
+          RadioListTile<String>(
+            title: Text(l10n.cartOutOfStockRemove),
+            value: 'remove',
+            groupValue: _outOfStockPolicy,
+            dense: true,
+            contentPadding: EdgeInsets.zero,
+            onChanged: (value) => setState(() => _outOfStockPolicy = value!),
+          ),
+          RadioListTile<String>(
+            title: Text(l10n.cartOutOfStockCancel),
+            value: 'cancel',
+            groupValue: _outOfStockPolicy,
+            dense: true,
+            contentPadding: EdgeInsets.zero,
+            onChanged: (value) => setState(() => _outOfStockPolicy = value!),
           ),
           const SizedBox(height: 16),
           Text(l10n.cartPaymentMethod, style: Theme.of(context).textTheme.titleSmall),

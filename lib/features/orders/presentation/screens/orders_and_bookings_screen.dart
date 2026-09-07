@@ -321,12 +321,32 @@ class _OrderDetailSheetState extends ConsumerState<_OrderDetailSheet> {
             for (final item in order.items)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Row(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Text('${item.qty}× ${item.name}'),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            '${item.qty}× ${item.name}',
+                            style: item.isRemoved
+                                ? TextStyle(
+                                    decoration: TextDecoration.lineThrough,
+                                    color: Theme.of(context).hintColor,
+                                  )
+                                : null,
+                          ),
+                        ),
+                        if (!item.isRemoved) Text(item.totalPrice.toStringAsFixed(0)),
+                      ],
                     ),
-                    Text(item.totalPrice.toStringAsFixed(0)),
+                    if (item.isRemoved)
+                      Text(l10n.orderLineRemoved, style: TextStyle(color: AppColors.error, fontSize: 12))
+                    else if (item.isSubstituted)
+                      Text(
+                        l10n.orderLineSubstituted(item.resolutionNote ?? ''),
+                        style: TextStyle(color: AppColors.accentGold, fontSize: 12),
+                      ),
                   ],
                 ),
               ),

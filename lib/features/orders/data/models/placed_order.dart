@@ -9,6 +9,12 @@ class OrderLineItem {
   final double totalPrice;
   final List<String> addonNames;
 
+  /// Set once a business marks this line unavailable — 'substituted' (kept,
+  /// [resolutionNote] says what it became) or 'removed' (dropped from the
+  /// order's total). Null for the overwhelming majority of lines.
+  final String? resolution;
+  final String? resolutionNote;
+
   const OrderLineItem({
     required this.id,
     required this.name,
@@ -16,7 +22,12 @@ class OrderLineItem {
     required this.price,
     required this.totalPrice,
     required this.addonNames,
+    this.resolution,
+    this.resolutionNote,
   });
+
+  bool get isSubstituted => resolution == 'substituted';
+  bool get isRemoved => resolution == 'removed';
 
   factory OrderLineItem.fromJson(Map<String, dynamic> json) {
     final addons = json['addons'] as List<dynamic>? ?? const [];
@@ -31,6 +42,8 @@ class OrderLineItem {
           .map((a) => a['name'] as String? ?? '')
           .where((name) => name.isNotEmpty)
           .toList(),
+      resolution: json['resolution'] as String?,
+      resolutionNote: json['resolution_note'] as String?,
     );
   }
 }
@@ -54,6 +67,7 @@ class PlacedOrder {
   final List<OrderLineItem> items;
   final String? address;
   final String? notes;
+  final String? outOfStockPolicy;
   final DateTime? createdAt;
   final String? customerName;
   final String? customerPhone;
@@ -78,6 +92,7 @@ class PlacedOrder {
     required this.items,
     this.address,
     this.notes,
+    this.outOfStockPolicy,
     this.createdAt,
     this.customerName,
     this.customerPhone,
@@ -121,6 +136,7 @@ class PlacedOrder {
           .toList(),
       address: json['address'] as String?,
       notes: json['notes'] as String?,
+      outOfStockPolicy: json['out_of_stock_policy'] as String?,
       createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
       customerName: customer?['name'] as String?,
       customerPhone: customer?['phone'] as String?,

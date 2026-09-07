@@ -257,6 +257,80 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
     }
   }
 
+  /// A specific line turned out unavailable — applies whatever the customer
+  /// chose at checkout (Order.out_of_stock_policy). Never guesses: with no
+  /// stated policy, points the business at the order chat instead.
+  Future<void> _markItemUnavailable(BuildContext context, WidgetRef ref, PlacedOrder order, OrderLineItem item) async {
+    final l10n = AppLocalizations.of(context)!;
+
+    if (order.outOfStockPolicy == null) {
+      await showDialog<void>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(l10n.businessOrdersItemUnavailableTitle),
+          content: Text(l10n.businessOrdersItemUnavailableNoPolicy),
+          actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.commonOk))],
+        ),
+      );
+      return;
+    }
+
+    String? note;
+    if (order.outOfStockPolicy == 'substitute') {
+      final controller = TextEditingController();
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(l10n.businessOrdersItemUnavailableTitle),
+          content: TextField(
+            controller: controller,
+            autofocus: true,
+            decoration: InputDecoration(
+              labelText: l10n.businessOrdersItemUnavailableSubstituteNoteLabel,
+              hintText: l10n.businessOrdersItemUnavailableSubstituteNoteHint,
+            ),
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l10n.commonCancel)),
+            TextButton(onPressed: () => Navigator.pop(context, true), child: Text(l10n.businessOrdersItemUnavailable)),
+          ],
+        ),
+      );
+      if (confirmed != true || controller.text.trim().isEmpty) return;
+      note = controller.text.trim();
+    } else {
+      final message = order.outOfStockPolicy == 'cancel'
+          ? l10n.businessOrdersItemUnavailableCancelConfirm(order.id)
+          : l10n.businessOrdersItemUnavailableRemoveConfirm;
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(l10n.businessOrdersItemUnavailableTitle),
+          content: Text(message),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l10n.commonCancel)),
+            TextButton(onPressed: () => Navigator.pop(context, true), child: Text(l10n.businessOrdersItemUnavailable)),
+          ],
+        ),
+      );
+      if (confirmed != true) return;
+    }
+
+    try {
+      await ref.read(businessOrderDetailControllerProvider(orderId).notifier).markItemUnavailable(item.id, note: note);
+      ref.read(businessOrdersControllerProvider.notifier).load();
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.businessOrdersItemUnavailableDone)));
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(e is ApiException ? e.message : l10n.commonSomethingWentWrong)));
+      }
+    }
+  }
+
   Future<void> _advance(BuildContext context, WidgetRef ref, bool toReady) async {
     final l10n = AppLocalizations.of(context)!;
     try {
@@ -314,12 +388,43 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                 for (final item in order.items)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('${item.qty}×'),
-                        const SizedBox(width: 8),
-                        Expanded(child: Text(item.name)),
-                        Text(item.totalPrice.toStringAsFixed(2)),
+                        Row(
+                          children: [
+                            Text('${item.qty}×'),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                item.name,
+                                style: item.isRemoved
+                                    ? TextStyle(
+                                        decoration: TextDecoration.lineThrough,
+                                        color: Theme.of(context).hintColor,
+                                      )
+                                    : null,
+                              ),
+                            ),
+                            if (!item.isRemoved) Text(item.totalPrice.toStringAsFixed(2)),
+                            if (item.resolution == null &&
+                                order.status == 'pending' &&
+                                order.prepStatus != 'ready' &&
+                                !state.isBusy)
+                              IconButton(
+                                tooltip: l10n.businessOrdersItemUnavailable,
+                                icon: const Icon(Icons.remove_shopping_cart_outlined, size: 20),
+                                onPressed: () => _markItemUnavailable(context, ref, order, item),
+                              ),
+                          ],
+                        ),
+                        if (item.isRemoved)
+                          Text(l10n.orderLineRemoved, style: TextStyle(color: AppColors.error, fontSize: 12))
+                        else if (item.isSubstituted)
+                          Text(
+                            l10n.orderLineSubstituted(item.resolutionNote ?? ''),
+                            style: TextStyle(color: AppColors.accentGold, fontSize: 12),
+                          ),
                       ],
                     ),
                   ),

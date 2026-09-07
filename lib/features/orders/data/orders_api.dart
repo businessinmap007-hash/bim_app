@@ -117,4 +117,17 @@ class OrdersApi {
     final data = await _client.post('/business/orders/$id/ready') as Map<String, dynamic>;
     return PlacedOrder.fromJson(data);
   }
+
+  /// A specific line turned out unavailable while preparing — applies
+  /// whatever the customer chose at checkout (Order.out_of_stock_policy).
+  /// `note` is required only when that policy is "substitute".
+  Future<PlacedOrder> businessMarkItemUnavailable(int orderId, int itemId, {String? note}) async {
+    final data =
+        await _client.post(
+              '/business/orders/$orderId/items/$itemId/unavailable',
+              data: {if (note != null && note.isNotEmpty) 'note': note},
+            )
+            as Map<String, dynamic>;
+    return PlacedOrder.fromJson(data);
+  }
 }

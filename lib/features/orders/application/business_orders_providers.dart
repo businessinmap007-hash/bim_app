@@ -161,6 +161,16 @@ class BusinessOrderDetailController extends StateNotifier<BusinessOrderDetailSta
       if (mounted) state = state.copyWith(isBusy: false);
     }
   }
+
+  Future<void> markItemUnavailable(int itemId, {String? note}) async {
+    state = state.copyWith(isBusy: true);
+    try {
+      final order = await _api.businessMarkItemUnavailable(orderId, itemId, note: note);
+      state = state.copyWith(order: order, isBusy: false);
+    } finally {
+      if (mounted) state = state.copyWith(isBusy: false);
+    }
+  }
 }
 
 final businessOrderDetailControllerProvider =

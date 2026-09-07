@@ -77,6 +77,7 @@ class CartController extends StateNotifier<CartState> {
     double? lng,
     String? notes,
     String? paymentMethod,
+    String? outOfStockPolicy,
   }) async {
     final order = await _api.checkout(
       businessId,
@@ -87,6 +88,7 @@ class CartController extends StateNotifier<CartState> {
       lng: lng,
       notes: notes,
       paymentMethod: paymentMethod,
+      outOfStockPolicy: outOfStockPolicy,
     );
     // The business's cart is now a placed order — drop it from the open carts.
     state = state.copyWith(carts: state.carts.where((c) => c.business?.id != businessId).toList());
