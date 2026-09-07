@@ -293,6 +293,7 @@
   "cartFulfillmentDelivery": "Delivery",
   "cartFulfillmentPickup": "Pickup",
   "cartFulfillmentDineIn": "Dine in",
+  "businessFulfillmentPrompt": "How would you like to get your order?",
   "cartAddressLabel": "Address",
   "cartAddressHint": "Enter the delivery address",
   "cartNotesLabel": "Notes (optional)",

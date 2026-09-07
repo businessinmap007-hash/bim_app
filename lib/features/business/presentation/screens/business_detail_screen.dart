@@ -22,6 +22,7 @@ import '../../data/models/business_profile.dart';
 import '../../data/models/offering_item.dart';
 import 'business_info_screen.dart';
 import '../widgets/business_rating_row.dart';
+import '../widgets/fulfillment_selector_bar.dart';
 import '../widgets/menu_item_tile.dart';
 import '../widgets/offering_card.dart';
 import '../widgets/post_card.dart';
@@ -145,6 +146,14 @@ class _BusinessDetailBody extends StatelessWidget {
           if (profile.about != null) ...[
             const SizedBox(height: 10),
             Text(profile.about!, style: Theme.of(context).textTheme.bodyMedium),
+          ],
+          // Menu businesses only — the one entry point for delivery/pickup/
+          // dine-in, above the menu and before checkout (product doc, "منيو
+          // ومطاعم" section). A services-only business orders nothing this
+          // way, so it never shows here.
+          if (profile.sections.menu) ...[
+            const SizedBox(height: 10),
+            FulfillmentSelectorBar(businessId: profile.id, fulfillment: profile.fulfillment),
           ],
           // Health-root businesses only — the same "is this a
           // clinic" heuristic BusinessCapability::standsUnderHealth()

@@ -11,6 +11,12 @@ final businessPageApiProvider = Provider<BusinessPageApi>((ref) {
   return BusinessPageApi(ref.watch(apiClientProvider));
 });
 
+/// The customer's chosen fulfillment method for this business visit —
+/// 'delivery' / 'pickup' / 'dine_in', or null before they've picked one.
+/// Session-only (not persisted): picked once above the menu via
+/// FulfillmentSelectorBar, read by CheckoutScreen so it isn't asked again.
+final businessFulfillmentChoiceProvider = StateProvider.family<String?, int>((ref, businessId) => null);
+
 final businessProfileProvider =
     StateNotifierProvider.family<BusinessProfileController, AsyncValue<BusinessProfile>, int>((ref, businessId) {
       return BusinessProfileController(ref.watch(businessPageApiProvider), businessId);

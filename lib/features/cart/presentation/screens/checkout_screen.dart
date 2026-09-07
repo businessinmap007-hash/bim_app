@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../addresses/presentation/widgets/address_pick_sheet.dart';
+import '../../../business/application/business_page_providers.dart';
 import '../../application/cart_controller.dart';
 import '../../data/models/cart_models.dart';
 
@@ -19,7 +20,11 @@ class CheckoutScreen extends ConsumerStatefulWidget {
 }
 
 class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
-  String _fulfillmentType = 'delivery';
+  // Null until the user overrides it here; the effective value (`build`'s
+  // `selected`) falls back to the choice already made above the menu, so
+  // there is nothing to reconcile between what the segmented button shows
+  // and what _placeOrder actually submits.
+  String? _fulfillmentTypeOverride;
   final _addressController = TextEditingController();
   final _notesController = TextEditingController();
   int? _selectedAddressId;
@@ -41,15 +46,15 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     super.dispose();
   }
 
-  Future<void> _placeOrder() async {
+  Future<void> _placeOrder(String fulfillmentType) async {
     final l10n = AppLocalizations.of(context)!;
     setState(() => _submitting = true);
     try {
       await ref.read(cartControllerProvider.notifier).checkout(
         widget.cart.business!.id,
-        fulfillmentType: _fulfillmentType,
-        addressId: _fulfillmentType == 'delivery' ? _selectedAddressId : null,
-        address: _fulfillmentType == 'delivery' && _selectedAddressId == null
+        fulfillmentType: fulfillmentType,
+        addressId: fulfillmentType == 'delivery' ? _selectedAddressId : null,
+        address: fulfillmentType == 'delivery' && _selectedAddressId == null
             ? _addressController.text.trim()
             : null,
         notes: _notesController.text.trim(),
@@ -72,6 +77,28 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
+    // The business page already filtered this to what the business actually
+    // offers (BusinessPageController::show → BusinessFulfillment) — reusing
+    // that same cached profile here keeps checkout from ever offering a
+    // method (e.g. dine-in with no table) the business never advertised.
+    // Falls back to all three only if the profile somehow isn't cached yet.
+    final businessId = widget.cart.business?.id;
+    final available =
+        (businessId != null ? ref.watch(businessProfileProvider(businessId)).valueOrNull?.fulfillment.available : null) ??
+        const ['delivery', 'pickup', 'dine_in'];
+    // Preference order: the user's own tap here > the choice already made
+    // above the menu > whatever the business offers first — always clamped
+    // to what this business actually supports.
+    final preferred =
+        _fulfillmentTypeOverride ?? (businessId != null ? ref.watch(businessFulfillmentChoiceProvider(businessId)) : null);
+    final selected = (preferred != null && available.contains(preferred)) ? preferred : available.first;
+
+    String labelFor(String method) => switch (method) {
+      'delivery' => l10n.cartFulfillmentDelivery,
+      'pickup' => l10n.cartFulfillmentPickup,
+      _ => l10n.cartFulfillmentDineIn,
+    };
+
     return Scaffold(
       appBar: AppBar(title: Text(l10n.cartCheckoutTitle)),
       body: ListView(
@@ -80,15 +107,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           Text(l10n.cartFulfillmentType, style: Theme.of(context).textTheme.titleSmall),
           const SizedBox(height: 8),
           SegmentedButton<String>(
-            segments: [
-              ButtonSegment(value: 'delivery', label: Text(l10n.cartFulfillmentDelivery)),
-              ButtonSegment(value: 'pickup', label: Text(l10n.cartFulfillmentPickup)),
-              ButtonSegment(value: 'dine_in', label: Text(l10n.cartFulfillmentDineIn)),
-            ],
-            selected: {_fulfillmentType},
-            onSelectionChanged: (value) => setState(() => _fulfillmentType = value.first),
+            segments: available.map((m) => ButtonSegment(value: m, label: Text(labelFor(m)))).toList(),
+            selected: {selected},
+            onSelectionChanged: (value) => setState(() => _fulfillmentTypeOverride = value.first),
           ),
-          if (_fulfillmentType == 'delivery') ...[
+          if (selected == 'delivery') ...[
             const SizedBox(height: 16),
             TextField(
               controller: _addressController,
@@ -126,7 +149,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           ),
           const SizedBox(height: 16),
           FilledButton(
-            onPressed: _submitting ? null : _placeOrder,
+            onPressed: _submitting ? null : () => _placeOrder(selected),
             child: _submitting
                 ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
                 : Text(l10n.cartPlaceOrder),

@@ -878,6 +878,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cartFulfillmentDineIn => 'Dine in';
 
   @override
+  String get businessFulfillmentPrompt =>
+      'How would you like to get your order?';
+
+  @override
   String get cartAddressLabel => 'Address';
 
   @override

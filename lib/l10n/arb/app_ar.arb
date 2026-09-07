@@ -293,6 +293,7 @@
   "cartFulfillmentDelivery": "توصيل",
   "cartFulfillmentPickup": "استلام من المكان",
   "cartFulfillmentDineIn": "تناول في المكان",
+  "businessFulfillmentPrompt": "عايز تستلم طلبك إزاي؟",
   "cartAddressLabel": "العنوان",
   "cartAddressHint": "اكتب عنوان التوصيل",
   "cartNotesLabel": "ملاحظات (اختياري)",

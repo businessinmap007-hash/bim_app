@@ -891,6 +891,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get cartFulfillmentDineIn => 'تناول في المكان';
 
   @override
+  String get businessFulfillmentPrompt => 'عايز تستلم طلبك إزاي؟';
+
+  @override
   String get cartAddressLabel => 'العنوان';
 
   @override

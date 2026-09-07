@@ -1694,6 +1694,12 @@ abstract class AppLocalizations {
   /// **'تناول في المكان'**
   String get cartFulfillmentDineIn;
 
+  /// No description provided for @businessFulfillmentPrompt.
+  ///
+  /// In ar, this message translates to:
+  /// **'عايز تستلم طلبك إزاي؟'**
+  String get businessFulfillmentPrompt;
+
   /// No description provided for @cartAddressLabel.
   ///
   /// In ar, this message translates to:

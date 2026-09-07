@@ -24,6 +24,34 @@ class BusinessSections {
   );
 }
 
+/// Which fulfillment methods the unified entry point above the menu should
+/// offer — decided by the backend (BusinessPageController::show), not
+/// guessed client-side. `dineIn` reflects whether the business has any
+/// active table (BIM-13.3), not a setting the owner toggles directly.
+class BusinessFulfillment {
+  final bool delivery;
+  final bool pickup;
+  final bool dineIn;
+
+  const BusinessFulfillment({required this.delivery, required this.pickup, required this.dineIn});
+
+  bool get any => delivery || pickup || dineIn;
+
+  /// Every method this business offers, as the `fulfillment_type` values the
+  /// checkout API already accepts.
+  List<String> get available => [
+    if (delivery) 'delivery',
+    if (pickup) 'pickup',
+    if (dineIn) 'dine_in',
+  ];
+
+  factory BusinessFulfillment.fromJson(Map<String, dynamic> json) => BusinessFulfillment(
+    delivery: json['delivery'] as bool? ?? true,
+    pickup: json['pickup'] as bool? ?? true,
+    dineIn: json['dine_in'] as bool? ?? false,
+  );
+}
+
 /// A business's social media links — every field optional, the object itself
 /// null when nothing was ever set (see BusinessPageController::socialLinks).
 class SocialLinks {
@@ -75,6 +103,7 @@ class BusinessProfile {
   final int postsCount;
   final int followersCount;
   final BusinessSections sections;
+  final BusinessFulfillment fulfillment;
 
   const BusinessProfile({
     required this.id,
@@ -101,6 +130,7 @@ class BusinessProfile {
     required this.postsCount,
     this.followersCount = 0,
     required this.sections,
+    required this.fulfillment,
   });
 
   bool get hasLocation => latitude != null && longitude != null;
@@ -130,6 +160,7 @@ class BusinessProfile {
     postsCount: postsCount,
     followersCount: followersCount ?? this.followersCount,
     sections: sections,
+    fulfillment: fulfillment,
   );
 
   factory BusinessProfile.fromJson(Map<String, dynamic> json) {
@@ -172,6 +203,7 @@ class BusinessProfile {
       postsCount: (counts['posts'] as num?)?.toInt() ?? 0,
       followersCount: (counts['followers'] as num?)?.toInt() ?? 0,
       sections: BusinessSections.fromJson(json['sections'] as Map<String, dynamic>? ?? const {}),
+      fulfillment: BusinessFulfillment.fromJson(json['fulfillment'] as Map<String, dynamic>? ?? const {}),
     );
   }
 }
