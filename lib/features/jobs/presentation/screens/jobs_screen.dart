@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../posts/data/models/job_post.dart';
 import '../../application/jobs_providers.dart';
 import 'job_detail_screen.dart';
@@ -83,29 +84,32 @@ class _JobsScreenState extends ConsumerState<JobsScreen> {
             error: (_, _) => const SizedBox.shrink(),
             data: (categories) => SizedBox(
               height: 44,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: ChoiceChip(
-                      label: Text(l10n.jobsAllCategories),
-                      selected: state.categoryId == null,
-                      onSelected: (_) => ref.read(jobsControllerProvider.notifier).filterByCategory(),
-                    ),
-                  ),
-                  for (final cat in categories)
+              child: MouseWheelHorizontalScroll(
+                builder: (context, controller) => ListView(
+                  controller: controller,
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  children: [
                     Padding(
                       padding: const EdgeInsets.only(right: 8),
                       child: ChoiceChip(
-                        label: Text('${cat.name ?? ''} (${cat.jobsCount})'),
-                        selected: state.categoryId == cat.id && state.categoryChildId == null,
-                        onSelected: (_) =>
-                            ref.read(jobsControllerProvider.notifier).filterByCategory(categoryId: cat.id),
+                        label: Text(l10n.jobsAllCategories),
+                        selected: state.categoryId == null,
+                        onSelected: (_) => ref.read(jobsControllerProvider.notifier).filterByCategory(),
                       ),
                     ),
-                ],
+                    for (final cat in categories)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: ChoiceChip(
+                          label: Text('${cat.name ?? ''} (${cat.jobsCount})'),
+                          selected: state.categoryId == cat.id && state.categoryChildId == null,
+                          onSelected: (_) =>
+                              ref.read(jobsControllerProvider.notifier).filterByCategory(categoryId: cat.id),
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
           ),

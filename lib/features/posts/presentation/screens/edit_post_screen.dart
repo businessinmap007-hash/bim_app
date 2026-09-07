@@ -10,6 +10,7 @@ import '../../../media/application/auto_watermark_service.dart';
 import '../../../media/application/media_picker_service.dart';
 import '../../../media/data/picked_media.dart';
 import '../../../media/presentation/widgets/picked_media_tile.dart';
+import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../settings/application/watermark_settings_controller.dart';
 import '../../application/posts_controller.dart';
 
@@ -152,13 +153,16 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
             if (currentImages.isNotEmpty)
               SizedBox(
                 height: 90,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: currentImages.length,
-                  separatorBuilder: (context, index) => const SizedBox(width: 8),
-                  itemBuilder: (context, index) => ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.network(currentImages[index].url, width: 90, height: 90, fit: BoxFit.cover),
+                child: MouseWheelHorizontalScroll(
+                  builder: (context, controller) => ListView.separated(
+                    controller: controller,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: currentImages.length,
+                    separatorBuilder: (context, index) => const SizedBox(width: 8),
+                    itemBuilder: (context, index) => ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.network(currentImages[index].url, width: 90, height: 90, fit: BoxFit.cover),
+                    ),
                   ),
                 ),
               ),

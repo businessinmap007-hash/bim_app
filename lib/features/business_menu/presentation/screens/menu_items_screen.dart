@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../application/business_menu_providers.dart';
 import '../../data/models/menu_item.dart';
 import 'market_catalog_screen.dart';
@@ -99,28 +100,31 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
           ),
           SizedBox(
             height: 44,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: ChoiceChip(
-                    label: Text(l10n.menuItemsAllSections),
-                    selected: state.sectionId == null,
-                    onSelected: (_) => ref.read(menuItemsControllerProvider.notifier).filterBySection(null),
-                  ),
-                ),
-                for (final section in sectionsState.items)
+            child: MouseWheelHorizontalScroll(
+              builder: (context, controller) => ListView(
+                controller: controller,
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                children: [
                   Padding(
                     padding: const EdgeInsets.only(right: 8),
                     child: ChoiceChip(
-                      label: Text(section.nameAr),
-                      selected: state.sectionId == section.id,
-                      onSelected: (_) => ref.read(menuItemsControllerProvider.notifier).filterBySection(section.id),
+                      label: Text(l10n.menuItemsAllSections),
+                      selected: state.sectionId == null,
+                      onSelected: (_) => ref.read(menuItemsControllerProvider.notifier).filterBySection(null),
                     ),
                   ),
-              ],
+                  for (final section in sectionsState.items)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: ChoiceChip(
+                        label: Text(section.nameAr),
+                        selected: state.sectionId == section.id,
+                        onSelected: (_) => ref.read(menuItemsControllerProvider.notifier).filterBySection(section.id),
+                      ),
+                    ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 8),

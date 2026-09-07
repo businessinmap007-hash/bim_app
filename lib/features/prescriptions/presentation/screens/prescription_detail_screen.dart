@@ -7,6 +7,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../addresses/presentation/widgets/address_pick_sheet.dart';
 import '../../../auth/application/auth_controller.dart';
 import '../../../discovery/data/models/business_summary.dart';
+import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../application/pharmacy_prescriptions_providers.dart';
 import '../../application/prescriptions_providers.dart';
 import '../../data/models/prescription.dart';
@@ -496,26 +497,29 @@ class PrescriptionDetailScreen extends ConsumerWidget {
             const SizedBox(height: 8),
             SizedBox(
               height: 84,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  for (final img in p.images) ...[
-                    _ImageThumb(image: img, onRemove: () => _removeImage(context, ref, img)),
-                    const SizedBox(width: 8),
-                  ],
-                  InkWell(
-                    onTap: () => _addImage(context, ref),
-                    child: Container(
-                      width: 64,
-                      height: 64,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Theme.of(context).dividerColor),
-                        borderRadius: BorderRadius.circular(8),
+              child: MouseWheelHorizontalScroll(
+                builder: (context, controller) => ListView(
+                  controller: controller,
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    for (final img in p.images) ...[
+                      _ImageThumb(image: img, onRemove: () => _removeImage(context, ref, img)),
+                      const SizedBox(width: 8),
+                    ],
+                    InkWell(
+                      onTap: () => _addImage(context, ref),
+                      child: Container(
+                        width: 64,
+                        height: 64,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Theme.of(context).dividerColor),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(Icons.add_a_photo_outlined),
                       ),
-                      child: const Icon(Icons.add_a_photo_outlined),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 24),

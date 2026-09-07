@@ -9,6 +9,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../media/application/media_picker_service.dart';
 import '../../../media/data/picked_media.dart';
 import '../../../media/presentation/widgets/picked_media_tile.dart';
+import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../../shared/widgets/message_read_receipt.dart';
 import '../../../../shared/widgets/thread_access_banner.dart';
 import '../../application/chat_providers.dart';
@@ -185,15 +186,18 @@ class _OperationChatScreenState extends ConsumerState<OperationChatScreen> {
                     if (_pending.isNotEmpty)
                       SizedBox(
                         height: 72,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: _pending.length,
-                          separatorBuilder: (context, index) => const SizedBox(width: 8),
-                          itemBuilder: (context, index) => SizedBox(
-                            width: 72,
-                            child: PickedMediaTile(
-                              media: _pending[index],
-                              onRemove: () => _removePending(index),
+                        child: MouseWheelHorizontalScroll(
+                          builder: (context, controller) => ListView.separated(
+                            controller: controller,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: _pending.length,
+                            separatorBuilder: (context, index) => const SizedBox(width: 8),
+                            itemBuilder: (context, index) => SizedBox(
+                              width: 72,
+                              child: PickedMediaTile(
+                                media: _pending[index],
+                                onRemove: () => _removePending(index),
+                              ),
                             ),
                           ),
                         ),

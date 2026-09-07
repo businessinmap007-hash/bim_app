@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../application/deposits_providers.dart';
 import '../../data/models/deposit.dart';
 
@@ -52,27 +53,30 @@ class _DepositsScreenState extends ConsumerState<DepositsScreen> {
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
             child: SizedBox(
               height: 40,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: ChoiceChip(
-                      label: Text(l10n.depositsAllStatuses),
-                      selected: state.status == null,
-                      onSelected: (_) => ref.read(depositsControllerProvider.notifier).filterByStatus(null),
-                    ),
-                  ),
-                  for (final s in _statuses)
+              child: MouseWheelHorizontalScroll(
+                builder: (context, controller) => ListView(
+                  controller: controller,
+                  scrollDirection: Axis.horizontal,
+                  children: [
                     Padding(
                       padding: const EdgeInsets.only(right: 8),
                       child: ChoiceChip(
-                        label: Text(_statusLabel(s, l10n)),
-                        selected: state.status == s,
-                        onSelected: (_) => ref.read(depositsControllerProvider.notifier).filterByStatus(s),
+                        label: Text(l10n.depositsAllStatuses),
+                        selected: state.status == null,
+                        onSelected: (_) => ref.read(depositsControllerProvider.notifier).filterByStatus(null),
                       ),
                     ),
-                ],
+                    for (final s in _statuses)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: ChoiceChip(
+                          label: Text(_statusLabel(s, l10n)),
+                          selected: state.status == s,
+                          onSelected: (_) => ref.read(depositsControllerProvider.notifier).filterByStatus(s),
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
           ),

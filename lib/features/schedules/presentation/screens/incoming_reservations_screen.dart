@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../application/schedules_providers.dart';
 import '../../data/models/trip_reservation.dart';
 
@@ -51,20 +52,24 @@ class IncomingReservationsScreen extends ConsumerWidget {
         children: [
           SizedBox(
             height: 44,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-              children: [
-                for (final status in _statuses)
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: ChoiceChip(
-                      label: Text(_statusLabel(l10n, status)),
-                      selected: state.status == status,
-                      onSelected: (_) => ref.read(incomingReservationsControllerProvider.notifier).setStatus(status),
+            child: MouseWheelHorizontalScroll(
+              builder: (context, controller) => ListView(
+                controller: controller,
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                children: [
+                  for (final status in _statuses)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: ChoiceChip(
+                        label: Text(_statusLabel(l10n, status)),
+                        selected: state.status == status,
+                        onSelected: (_) =>
+                            ref.read(incomingReservationsControllerProvider.notifier).setStatus(status),
+                      ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
           ),
           Expanded(

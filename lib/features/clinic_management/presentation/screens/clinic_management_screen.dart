@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../prescriptions/presentation/screens/issue_prescription_screen.dart';
 import '../../../prescriptions/presentation/screens/prescription_detail_screen.dart';
 import '../../application/business_clinic_providers.dart';
@@ -76,28 +77,31 @@ class _AppointmentsQueueState extends ConsumerState<_AppointmentsQueue> {
       children: [
         SizedBox(
           height: 44,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: ChoiceChip(
-                  label: Text(l10n.clinicQueueAllStatuses),
-                  selected: state.status == null,
-                  onSelected: (_) => ref.read(clinicAppointmentsControllerProvider.notifier).filterByStatus(null),
-                ),
-              ),
-              for (final s in _statuses)
+          child: MouseWheelHorizontalScroll(
+            builder: (context, controller) => ListView(
+              controller: controller,
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              children: [
                 Padding(
                   padding: const EdgeInsets.only(right: 8),
                   child: ChoiceChip(
-                    label: Text(_statusLabel(s, l10n)),
-                    selected: state.status == s,
-                    onSelected: (_) => ref.read(clinicAppointmentsControllerProvider.notifier).filterByStatus(s),
+                    label: Text(l10n.clinicQueueAllStatuses),
+                    selected: state.status == null,
+                    onSelected: (_) => ref.read(clinicAppointmentsControllerProvider.notifier).filterByStatus(null),
                   ),
                 ),
-            ],
+                for (final s in _statuses)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: ChoiceChip(
+                      label: Text(_statusLabel(s, l10n)),
+                      selected: state.status == s,
+                      onSelected: (_) => ref.read(clinicAppointmentsControllerProvider.notifier).filterByStatus(s),
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
         Expanded(

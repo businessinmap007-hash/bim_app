@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../application/business_prices_providers.dart';
 import '../../data/models/price_options.dart';
 import '../../data/models/price_row.dart';
@@ -162,28 +163,31 @@ class _ServiceFilterBar extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return SizedBox(
       height: 44,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: ChoiceChip(
-              label: Text(l10n.businessPricesFilterAll),
-              selected: selectedId == null,
-              onSelected: (_) => onChanged(null),
-            ),
-          ),
-          for (final service in services)
+      child: MouseWheelHorizontalScroll(
+        builder: (context, controller) => ListView(
+          controller: controller,
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          children: [
             Padding(
               padding: const EdgeInsets.only(right: 8),
               child: ChoiceChip(
-                label: Text(service.name ?? service.key ?? '#${service.id}'),
-                selected: selectedId == service.id,
-                onSelected: (_) => onChanged(service.id),
+                label: Text(l10n.businessPricesFilterAll),
+                selected: selectedId == null,
+                onSelected: (_) => onChanged(null),
               ),
             ),
-        ],
+            for (final service in services)
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: ChoiceChip(
+                  label: Text(service.name ?? service.key ?? '#${service.id}'),
+                  selected: selectedId == service.id,
+                  onSelected: (_) => onChanged(service.id),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

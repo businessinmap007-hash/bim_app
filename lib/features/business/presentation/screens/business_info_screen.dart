@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
+import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../albums/application/albums_controller.dart';
 import '../../../albums/data/models/album.dart';
 import '../../application/business_page_providers.dart';
@@ -262,11 +263,14 @@ class _AlbumsSection extends ConsumerWidget {
         }
         return SizedBox(
           height: 128,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: albums.length,
-            separatorBuilder: (context, index) => const SizedBox(width: 12),
-            itemBuilder: (context, index) => _AlbumTile(businessId: businessId, album: albums[index]),
+          child: MouseWheelHorizontalScroll(
+            builder: (context, controller) => ListView.separated(
+              controller: controller,
+              scrollDirection: Axis.horizontal,
+              itemCount: albums.length,
+              separatorBuilder: (context, index) => const SizedBox(width: 12),
+              itemBuilder: (context, index) => _AlbumTile(businessId: businessId, album: albums[index]),
+            ),
           ),
         );
       },

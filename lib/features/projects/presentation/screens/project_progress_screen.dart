@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../application/customer_project_providers.dart';
 import '../../data/models/customer_project_view.dart';
 
@@ -109,13 +110,16 @@ class _CustomerTaskTile extends StatelessWidget {
               const SizedBox(height: 8),
               SizedBox(
                 height: 72,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: task.photoUrls.length,
-                  separatorBuilder: (context, index) => const SizedBox(width: 8),
-                  itemBuilder: (context, index) => ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.network(task.photoUrls[index], width: 72, height: 72, fit: BoxFit.cover),
+                child: MouseWheelHorizontalScroll(
+                  builder: (context, controller) => ListView.separated(
+                    controller: controller,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: task.photoUrls.length,
+                    separatorBuilder: (context, index) => const SizedBox(width: 8),
+                    itemBuilder: (context, index) => ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.network(task.photoUrls[index], width: 72, height: 72, fit: BoxFit.cover),
+                    ),
                   ),
                 ),
               ),

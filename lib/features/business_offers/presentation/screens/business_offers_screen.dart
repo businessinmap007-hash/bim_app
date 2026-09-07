@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/network/api_exception.dart';
+import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../offers/data/models/commercial_offer.dart';
 import '../../application/business_offers_providers.dart';
 import '../../data/models/offers_usage.dart';
@@ -274,20 +275,23 @@ class _StatusFilterBar extends StatelessWidget {
     };
     return SizedBox(
       height: 44,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        children: [
-          for (final status in _statuses)
-            Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: ChoiceChip(
-                label: Text(label(status)),
-                selected: selected == status,
-                onSelected: (_) => onChanged(status),
+      child: MouseWheelHorizontalScroll(
+        builder: (context, controller) => ListView(
+          controller: controller,
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          children: [
+            for (final status in _statuses)
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: ChoiceChip(
+                  label: Text(label(status)),
+                  selected: selected == status,
+                  onSelected: (_) => onChanged(status),
+                ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

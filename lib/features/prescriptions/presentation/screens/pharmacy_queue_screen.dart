@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../application/pharmacy_prescriptions_providers.dart';
 import '../../data/models/prescription.dart';
 import 'prescription_detail_screen.dart';
@@ -55,20 +56,23 @@ class _PharmacyQueueScreenState extends ConsumerState<PharmacyQueueScreen> {
         children: [
           SizedBox(
             height: 44,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              children: [
-                for (final status in _statuses)
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: ChoiceChip(
-                      label: Text(_filterLabel(l10n, status)),
-                      selected: state.status == status,
-                      onSelected: (_) => ref.read(pharmacyQueueControllerProvider.notifier).setStatus(status),
+            child: MouseWheelHorizontalScroll(
+              builder: (context, controller) => ListView(
+                controller: controller,
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                children: [
+                  for (final status in _statuses)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: ChoiceChip(
+                        label: Text(_filterLabel(l10n, status)),
+                        selected: state.status == status,
+                        onSelected: (_) => ref.read(pharmacyQueueControllerProvider.notifier).setStatus(status),
+                      ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 8),

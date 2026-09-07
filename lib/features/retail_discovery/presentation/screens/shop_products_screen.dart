@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../application/retail_discovery_providers.dart';
 import '../../data/models/catalog_product_listing.dart';
 import 'product_offers_screen.dart';
@@ -140,28 +141,31 @@ class _BrandFilterBar extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return SizedBox(
       height: 44,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: ChoiceChip(
-              label: Text(l10n.shopProductsFilterAllBrands),
-              selected: selectedId == null,
-              onSelected: (_) => onChanged(null),
-            ),
-          ),
-          for (final brand in brands)
+      child: MouseWheelHorizontalScroll(
+        builder: (context, controller) => ListView(
+          controller: controller,
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          children: [
             Padding(
               padding: const EdgeInsets.only(right: 8),
               child: ChoiceChip(
-                label: Text('${brand.name} (${brand.products})'),
-                selected: selectedId == brand.id,
-                onSelected: (_) => onChanged(brand.id),
+                label: Text(l10n.shopProductsFilterAllBrands),
+                selected: selectedId == null,
+                onSelected: (_) => onChanged(null),
               ),
             ),
-        ],
+            for (final brand in brands)
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: ChoiceChip(
+                  label: Text('${brand.name} (${brand.products})'),
+                  selected: selectedId == brand.id,
+                  onSelected: (_) => onChanged(brand.id),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

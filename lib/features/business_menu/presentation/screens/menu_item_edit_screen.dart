@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../media/application/media_picker_service.dart';
 import '../../application/business_menu_providers.dart';
 import '../../data/models/menu_item.dart';
@@ -312,33 +313,36 @@ class _ImagesSectionState extends ConsumerState<_ImagesSection> {
         if (widget.item.images.isNotEmpty)
           SizedBox(
             height: 90,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: widget.item.images.length,
-              separatorBuilder: (context, index) => const SizedBox(width: 8),
-              itemBuilder: (context, index) {
-                final image = widget.item.images[index];
-                return Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.network(image.url, width: 90, height: 90, fit: BoxFit.cover),
-                    ),
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: InkWell(
-                        onTap: () => _deleteImage(image.id),
-                        child: const CircleAvatar(
-                          radius: 12,
-                          backgroundColor: Colors.black54,
-                          child: Icon(Icons.close, size: 14, color: Colors.white),
+            child: MouseWheelHorizontalScroll(
+              builder: (context, controller) => ListView.separated(
+                controller: controller,
+                scrollDirection: Axis.horizontal,
+                itemCount: widget.item.images.length,
+                separatorBuilder: (context, index) => const SizedBox(width: 8),
+                itemBuilder: (context, index) {
+                  final image = widget.item.images[index];
+                  return Stack(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(image.url, width: 90, height: 90, fit: BoxFit.cover),
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: InkWell(
+                          onTap: () => _deleteImage(image.id),
+                          child: const CircleAvatar(
+                            radius: 12,
+                            backgroundColor: Colors.black54,
+                            child: Icon(Icons.close, size: 14, color: Colors.white),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                );
-              },
+                    ],
+                  );
+                },
+              ),
             ),
           ),
       ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../application/training_providers.dart';
 import '../../data/models/body_report.dart';
 import '../../data/models/training_plan.dart';
@@ -184,17 +185,20 @@ class _ExerciseCard extends StatelessWidget {
               const SizedBox(height: 8),
               SizedBox(
                 height: 64,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: exercise.images.length,
-                  separatorBuilder: (context, index) => const SizedBox(width: 6),
-                  itemBuilder: (context, index) => ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      exercise.images[index].url,
-                      width: 64,
-                      height: 64,
-                      fit: BoxFit.cover,
+                child: MouseWheelHorizontalScroll(
+                  builder: (context, controller) => ListView.separated(
+                    controller: controller,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: exercise.images.length,
+                    separatorBuilder: (context, index) => const SizedBox(width: 6),
+                    itemBuilder: (context, index) => ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.network(
+                        exercise.images[index].url,
+                        width: 64,
+                        height: 64,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
@@ -261,17 +265,20 @@ class _MealsTab extends StatelessWidget {
                   const SizedBox(height: 8),
                   SizedBox(
                     height: 64,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: meal.images.length,
-                      separatorBuilder: (context, index) => const SizedBox(width: 6),
-                      itemBuilder: (context, index) => ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          meal.images[index].url,
-                          width: 64,
-                          height: 64,
-                          fit: BoxFit.cover,
+                    child: MouseWheelHorizontalScroll(
+                      builder: (context, controller) => ListView.separated(
+                        controller: controller,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: meal.images.length,
+                        separatorBuilder: (context, index) => const SizedBox(width: 6),
+                        itemBuilder: (context, index) => ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.network(
+                            meal.images[index].url,
+                            width: 64,
+                            height: 64,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
