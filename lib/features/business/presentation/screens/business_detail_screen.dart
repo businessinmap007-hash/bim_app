@@ -59,10 +59,8 @@ class BusinessDetailScreen extends ConsumerWidget {
     final itemsCount = ref.watch(cartControllerProvider.select((s) => s.itemsCount));
 
     return Scaffold(
-      // No title text here — the avatar+name overlapping the cover's top
-      // edge (see ProfileCoverHeader's overlapAtTop) is the one place the
-      // name shows now, instead of duplicating it here too.
       appBar: AppBar(
+        title: Text(profileAsync.valueOrNull?.name ?? ''),
         actions: [
           if (sharedOrderId == null)
             IconButton(
@@ -178,10 +176,6 @@ class _BusinessDetailBody extends StatelessWidget {
       coverImageUrl: profile.coverUrl,
       avatarImageUrl: profile.logoUrl,
       title: profile.name,
-      // The AppBar carries no title (see BusinessDetailScreen.build) — the
-      // name shows exactly once, here, beside the avatar overlapping the
-      // cover's TOP edge instead of its usual bottom.
-      overlapAtTop: true,
     );
 
     if (tabs.isEmpty) {
