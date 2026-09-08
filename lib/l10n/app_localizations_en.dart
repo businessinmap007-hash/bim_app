@@ -431,6 +431,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get businessOutOfStock => 'Currently unavailable';
 
   @override
+  String businessMenuAvailableQuantity(int quantity) {
+    return 'Available $quantity';
+  }
+
+  @override
   String get menuCardBestseller => 'Bestseller';
 
   @override
@@ -2833,6 +2838,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String menuItemsQuantityShort(int quantity) {
     return 'Available: $quantity';
   }
+
+  @override
+  String get menuItemsDisplayModeLabel => 'Customer display';
+
+  @override
+  String get menuItemsDisplayModeList => 'List';
+
+  @override
+  String get menuItemsDisplayModeGrid => 'Grid';
 
   @override
   String get menuItemAdd => 'Add item';

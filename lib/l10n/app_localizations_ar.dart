@@ -440,6 +440,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get businessOutOfStock => 'غير متوفر حاليًا';
 
   @override
+  String businessMenuAvailableQuantity(int quantity) {
+    return 'متاح $quantity';
+  }
+
+  @override
   String get menuCardBestseller => 'الأكثر طلبًا';
 
   @override
@@ -2848,6 +2853,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String menuItemsQuantityShort(int quantity) {
     return 'الكمية المتاحة: $quantity';
   }
+
+  @override
+  String get menuItemsDisplayModeLabel => 'طريقة العرض للعميل';
+
+  @override
+  String get menuItemsDisplayModeList => 'قائمة';
+
+  @override
+  String get menuItemsDisplayModeGrid => 'شبكة';
 
   @override
   String get menuItemAdd => 'إضافة صنف';

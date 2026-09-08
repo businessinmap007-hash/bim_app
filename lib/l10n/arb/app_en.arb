@@ -138,6 +138,10 @@
   "businessActionBook": "Book",
   "businessActionOrder": "Order",
   "businessOutOfStock": "Currently unavailable",
+  "businessMenuAvailableQuantity": "Available {quantity}",
+  "@businessMenuAvailableQuantity": {
+    "placeholders": { "quantity": { "type": "int" } }
+  },
   "menuCardBestseller": "Bestseller",
   "menuCardPriceFrom": "From {price}",
   "@menuCardPriceFrom": { "placeholders": { "price": { "type": "String" } } },
@@ -937,6 +941,9 @@
   "@menuItemsQuantityShort": {
     "placeholders": { "quantity": { "type": "int" } }
   },
+  "menuItemsDisplayModeLabel": "Customer display",
+  "menuItemsDisplayModeList": "List",
+  "menuItemsDisplayModeGrid": "Grid",
   "menuItemAdd": "Add item",
   "menuItemEditTitle": "Edit item",
   "menuItemAddTitle": "Add item",

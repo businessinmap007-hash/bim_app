@@ -15,6 +15,18 @@ class BusinessPostsPage {
   const BusinessPostsPage({required this.items, required this.hasMore});
 }
 
+/// A business's menu, plus how the merchant chose to display it — see
+/// MenuDiscoveryController::show()'s `business.menu_display_mode`.
+class MenuPageData {
+  final List<MenuSectionGroup> sections;
+  /// 'list' (the default, a plain row per item) or 'grid' (a photo-first
+  /// 2-column card grid) — see BusinessMenuSetting::DISPLAY_MODES.
+  final String displayMode;
+  const MenuPageData({required this.sections, required this.displayMode});
+
+  bool get isGrid => displayMode == 'grid';
+}
+
 /// Everything the public business page (GET /businesses/{id} and its
 /// sub-resources) needs. See BusinessPageController, PostController::business,
 /// MenuDiscoveryController, BusinessOfferingsController on the backend.
@@ -42,10 +54,14 @@ class BusinessPageApi {
     return BusinessPostsPage(items: items, hasMore: currentPage < lastPage);
   }
 
-  Future<List<MenuSectionGroup>> menu(int businessId) async {
+  Future<MenuPageData> menu(int businessId) async {
     final data = await _client.get('/discovery/menu/$businessId') as Map<String, dynamic>;
     final sections = data['sections'] as List<dynamic>? ?? [];
-    return sections.map((e) => MenuSectionGroup.fromJson(e as Map<String, dynamic>)).toList();
+    final business = data['business'] as Map<String, dynamic>? ?? const {};
+    return MenuPageData(
+      sections: sections.map((e) => MenuSectionGroup.fromJson(e as Map<String, dynamic>)).toList(),
+      displayMode: business['menu_display_mode'] as String? ?? 'list',
+    );
   }
 
   Future<List<OfferingItem>> offerings(int businessId) async {

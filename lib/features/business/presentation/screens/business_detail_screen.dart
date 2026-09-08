@@ -27,6 +27,7 @@ import '../../data/models/offering_item.dart';
 import 'business_info_screen.dart';
 import '../widgets/business_rating_row.dart';
 import '../widgets/fulfillment_selector_bar.dart';
+import '../widgets/menu_item_grid_card.dart';
 import '../widgets/menu_item_tile.dart';
 import '../widgets/offering_card.dart';
 import '../widgets/post_card.dart';
@@ -455,10 +456,10 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
     return AsyncValueView(
       value: menuAsync,
       onRetry: () => ref.invalidate(businessMenuProvider(widget.businessId)),
-      builder: (context, rawSections) {
-        if (rawSections.isEmpty) return Center(child: Text(l10n.businessMenuEmpty));
+      builder: (context, page) {
+        if (page.sections.isEmpty) return Center(child: Text(l10n.businessMenuEmpty));
 
-        final sections = _prepareSections(rawSections);
+        final sections = _prepareSections(page.sections);
         if (_activeSectionIndex >= sections.length) _activeSectionIndex = 0;
         final activeSection = sections[_activeSectionIndex];
 
@@ -531,15 +532,36 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
                                     padding: const EdgeInsets.symmetric(vertical: 6),
                                     child: Text(branch.name, style: Theme.of(context).textTheme.titleSmall),
                                   ),
-                                ...branch.items.map(
-                                  (item) => Padding(
+                                if (page.isGrid)
+                                  GridView.builder(
+                                    shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
                                     padding: const EdgeInsets.only(bottom: 8),
-                                    child: MenuItemTile(
-                                      item: item,
-                                      onTap: () => showAddToCartSheet(context, item, sharedOrderId: widget.sharedOrderId),
+                                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      mainAxisSpacing: 10,
+                                      crossAxisSpacing: 10,
+                                      childAspectRatio: 0.72,
+                                    ),
+                                    itemCount: branch.items.length,
+                                    itemBuilder: (context, index) {
+                                      final item = branch.items[index];
+                                      return MenuItemGridCard(
+                                        item: item,
+                                        onTap: () => showAddToCartSheet(context, item, sharedOrderId: widget.sharedOrderId),
+                                      );
+                                    },
+                                  )
+                                else
+                                  ...branch.items.map(
+                                    (item) => Padding(
+                                      padding: const EdgeInsets.only(bottom: 8),
+                                      child: MenuItemTile(
+                                        item: item,
+                                        onTap: () => showAddToCartSheet(context, item, sharedOrderId: widget.sharedOrderId),
+                                      ),
                                     ),
                                   ),
-                                ),
                               ],
                             ],
                           ),

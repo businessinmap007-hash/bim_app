@@ -138,6 +138,10 @@
   "businessActionBook": "احجز",
   "businessActionOrder": "اطلب",
   "businessOutOfStock": "غير متوفر حاليًا",
+  "businessMenuAvailableQuantity": "متاح {quantity}",
+  "@businessMenuAvailableQuantity": {
+    "placeholders": { "quantity": { "type": "int" } }
+  },
   "menuCardBestseller": "الأكثر طلبًا",
   "menuCardPriceFrom": "من {price}",
   "@menuCardPriceFrom": { "placeholders": { "price": { "type": "String" } } },
@@ -937,6 +941,9 @@
   "@menuItemsQuantityShort": {
     "placeholders": { "quantity": { "type": "int" } }
   },
+  "menuItemsDisplayModeLabel": "طريقة العرض للعميل",
+  "menuItemsDisplayModeList": "قائمة",
+  "menuItemsDisplayModeGrid": "شبكة",
   "menuItemAdd": "إضافة صنف",
   "menuItemEditTitle": "تعديل الصنف",
   "menuItemAddTitle": "إضافة صنف",

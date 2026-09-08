@@ -22,6 +22,41 @@ final menuVocabularyProvider = FutureProvider<MenuVocabulary>((ref) {
   return ref.watch(businessMenuApiProvider).vocabulary();
 });
 
+/// 'list' or 'grid' — this business's own choice for how customers see the
+/// menu. A StateNotifier (not a plain FutureProvider) since the settings
+/// screen changes it in place and every reader should see that change
+/// immediately, without waiting for a refetch.
+class MenuDisplayModeController extends StateNotifier<AsyncValue<String>> {
+  final BusinessMenuApi _api;
+  MenuDisplayModeController(this._api) : super(const AsyncValue.loading()) {
+    _load();
+  }
+
+  Future<void> _load() async {
+    try {
+      state = AsyncValue.data(await _api.displayMode());
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
+  }
+
+  Future<void> setMode(String mode) async {
+    final previous = state;
+    state = AsyncValue.data(mode);
+    try {
+      await _api.setDisplayMode(mode);
+    } catch (e, st) {
+      state = previous;
+      state = AsyncValue.error(e, st);
+    }
+  }
+}
+
+final menuDisplayModeControllerProvider =
+    StateNotifierProvider<MenuDisplayModeController, AsyncValue<String>>((ref) {
+      return MenuDisplayModeController(ref.watch(businessMenuApiProvider));
+    });
+
 // ─────────────────────────── Sections ───────────────────────────
 
 class MenuSectionsState {

@@ -97,6 +97,17 @@ class BusinessMenuApi {
     return MenuVocabulary.fromJson(body['data'] as Map<String, dynamic>);
   }
 
+  /// 'list' (the default) or 'grid' — how this business's menu renders for a
+  /// customer. See Api\V2\BusinessMenuItemController::displayMode().
+  Future<String> displayMode() async {
+    final body = await _client.getForBody('/business/menu/display-mode');
+    return body['data']['display_mode'] as String? ?? 'list';
+  }
+
+  Future<void> setDisplayMode(String mode) async {
+    await _client.put('/business/menu/display-mode', data: {'display_mode': mode});
+  }
+
   // ─────────────────────────── Items ───────────────────────────
 
   Future<MenuItemsPage> items({

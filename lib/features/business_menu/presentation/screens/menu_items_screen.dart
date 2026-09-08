@@ -208,6 +208,7 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
       ),
       body: Column(
         children: [
+          const _DisplayModeToggle(),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
             child: TextField(
@@ -281,6 +282,43 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// "طريقة العرض للعميل: قائمة/شبكة" — only worth showing once this business
+/// has a catalog vocabulary; a hand-typed restaurant menu has no grid mode
+/// to offer.
+class _DisplayModeToggle extends ConsumerWidget {
+  const _DisplayModeToggle();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final hasLines = ref.watch(menuVocabularyProvider).maybeWhen(data: (v) => v.hasLines, orElse: () => false);
+    if (!hasLines) return const SizedBox.shrink();
+
+    final l10n = AppLocalizations.of(context)!;
+    final modeAsync = ref.watch(menuDisplayModeControllerProvider);
+
+    return modeAsync.maybeWhen(
+      data: (mode) => Padding(
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+        child: Row(
+          children: [
+            Text(l10n.menuItemsDisplayModeLabel, style: Theme.of(context).textTheme.labelMedium),
+            const Spacer(),
+            SegmentedButton<String>(
+              segments: [
+                ButtonSegment(value: 'list', label: Text(l10n.menuItemsDisplayModeList), icon: const Icon(Icons.view_list_outlined)),
+                ButtonSegment(value: 'grid', label: Text(l10n.menuItemsDisplayModeGrid), icon: const Icon(Icons.grid_view_outlined)),
+              ],
+              selected: {mode},
+              onSelectionChanged: (selection) => ref.read(menuDisplayModeControllerProvider.notifier).setMode(selection.first),
+            ),
+          ],
+        ),
+      ),
+      orElse: () => const SizedBox.shrink(),
     );
   }
 }

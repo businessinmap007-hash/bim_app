@@ -4,7 +4,6 @@ import '../../../core/providers/core_providers.dart';
 import '../data/business_page_api.dart';
 import '../data/models/business_post.dart';
 import '../data/models/business_profile.dart';
-import '../data/models/menu_section_group.dart';
 import '../data/models/offering_item.dart';
 
 final businessPageApiProvider = Provider<BusinessPageApi>((ref) {
@@ -71,7 +70,7 @@ class BusinessProfileController extends StateNotifier<AsyncValue<BusinessProfile
   }
 }
 
-final businessMenuProvider = FutureProvider.family<List<MenuSectionGroup>, int>((ref, businessId) {
+final businessMenuProvider = FutureProvider.family<MenuPageData, int>((ref, businessId) {
   return ref.watch(businessPageApiProvider).menu(businessId);
 });
 

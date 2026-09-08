@@ -854,6 +854,12 @@ abstract class AppLocalizations {
   /// **'غير متوفر حاليًا'**
   String get businessOutOfStock;
 
+  /// No description provided for @businessMenuAvailableQuantity.
+  ///
+  /// In ar, this message translates to:
+  /// **'متاح {quantity}'**
+  String businessMenuAvailableQuantity(int quantity);
+
   /// No description provided for @menuCardBestseller.
   ///
   /// In ar, this message translates to:
@@ -5371,6 +5377,24 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الكمية المتاحة: {quantity}'**
   String menuItemsQuantityShort(int quantity);
+
+  /// No description provided for @menuItemsDisplayModeLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة العرض للعميل'**
+  String get menuItemsDisplayModeLabel;
+
+  /// No description provided for @menuItemsDisplayModeList.
+  ///
+  /// In ar, this message translates to:
+  /// **'قائمة'**
+  String get menuItemsDisplayModeList;
+
+  /// No description provided for @menuItemsDisplayModeGrid.
+  ///
+  /// In ar, this message translates to:
+  /// **'شبكة'**
+  String get menuItemsDisplayModeGrid;
 
   /// No description provided for @menuItemAdd.
   ///

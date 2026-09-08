@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/full_screen_gallery.dart';
 import '../../data/models/menu_item_summary.dart';
 
 /// One item card on the "menu" tab — modeled on the item-card pattern from
@@ -57,6 +58,15 @@ class MenuItemTile extends StatelessWidget {
                         top: 6,
                         start: 6,
                         child: _BestsellerBadge(label: l10n.menuCardBestseller),
+                      ),
+                    if (item.imageUrls.length > 1)
+                      PositionedDirectional(
+                        bottom: -4,
+                        end: -4,
+                        child: _PhotoCountBadge(
+                          count: item.imageUrls.length,
+                          onTap: () => FullScreenGallery.show(context, urls: item.imageUrls),
+                        ),
                       ),
                   ],
                 ),
@@ -158,6 +168,36 @@ class _ContextAction extends StatelessWidget {
         Text(label, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.primary)),
         Icon(Icons.chevron_right, size: 16, color: theme.colorScheme.primary),
       ],
+    );
+  }
+}
+
+/// The small "how many photos" badge on a catalog item's thumbnail — tap
+/// opens the full gallery starting from the first photo.
+class _PhotoCountBadge extends StatelessWidget {
+  final int count;
+  final VoidCallback onTap;
+  const _PhotoCountBadge({required this.count, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        width: 20,
+        height: 20,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: AppColors.primaryNavy,
+          border: Border.all(color: Theme.of(context).scaffoldBackgroundColor, width: 1.5),
+        ),
+        child: Text(
+          '$count',
+          style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.white),
+        ),
+      ),
     );
   }
 }
