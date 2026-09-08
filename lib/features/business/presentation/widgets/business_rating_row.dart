@@ -27,14 +27,25 @@ class BusinessRatingRow extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700),
           ),
           const SizedBox(width: 4),
-          Text(
-            '(${rating.reviewCount})',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),
+          // The review count is the one piece here with no fixed width (a
+          // popular business's count can run several digits) — Flexible so
+          // it ellipsizes under a squeezed parent (e.g. this row's own
+          // Expanded on the business header, competing with the follow
+          // button's text) instead of overflowing the row.
+          Flexible(
+            child: Text(
+              '(${rating.reviewCount})',
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),
+            ),
           ),
         ] else
-          Text(
-            l10n.businessRatingNoReviews,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),
+          Flexible(
+            child: Text(
+              l10n.businessRatingNoReviews,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),
+            ),
           ),
         const SizedBox(width: 12),
         _OpenBadge(isOpenNow: openNow),

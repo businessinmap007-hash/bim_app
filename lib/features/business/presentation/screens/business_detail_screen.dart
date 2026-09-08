@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../app/theme/app_colors.dart';
 import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
@@ -58,9 +60,21 @@ class BusinessDetailScreen extends ConsumerWidget {
     final profileAsync = ref.watch(businessProfileProvider(businessId));
     final itemsCount = ref.watch(cartControllerProvider.select((s) => s.itemsCount));
 
+    final profile = profileAsync.valueOrNull;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(profileAsync.valueOrNull?.name ?? ''),
+        title: Row(
+          children: [
+            if (profile != null) ...[
+              _AppBarAvatar(imageUrl: profile.logoUrl),
+              const SizedBox(width: 10),
+            ],
+            Expanded(
+              child: Text(profile?.name ?? '', maxLines: 1, overflow: TextOverflow.ellipsis),
+            ),
+          ],
+        ),
         actions: [
           if (sharedOrderId == null)
             IconButton(
@@ -77,6 +91,39 @@ class BusinessDetailScreen extends ConsumerWidget {
         value: profileAsync,
         onRetry: () => ref.invalidate(businessProfileProvider(businessId)),
         builder: (context, profile) => _BusinessDetailBody(profile: profile, sharedOrderId: sharedOrderId),
+      ),
+    );
+  }
+}
+
+/// The business's logo, small, beside its name in the AppBar — see
+/// ProfileCoverHeader's `showOverlay: false` right below for why it no
+/// longer also sits on the cover.
+class _AppBarAvatar extends StatelessWidget {
+  final String? imageUrl;
+  const _AppBarAvatar({required this.imageUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    const radius = 16.0;
+    final placeholderFill = Color.alphaBlend(
+      AppColors.accentGold.withValues(alpha: 0.15),
+      Colors.white,
+    );
+
+    return Container(
+      width: radius * 2,
+      height: radius * 2,
+      decoration: BoxDecoration(shape: BoxShape.circle, color: placeholderFill),
+      child: ClipOval(
+        child: imageUrl != null
+            ? CachedNetworkImage(
+                imageUrl: imageUrl!,
+                fit: BoxFit.cover,
+                errorWidget: (context, url, error) =>
+                    Icon(Icons.storefront_outlined, color: AppColors.primaryNavy, size: radius),
+              )
+            : Icon(Icons.storefront_outlined, color: AppColors.primaryNavy, size: radius),
       ),
     );
   }
@@ -176,6 +223,10 @@ class _BusinessDetailBody extends StatelessWidget {
       coverImageUrl: profile.coverUrl,
       avatarImageUrl: profile.logoUrl,
       title: profile.name,
+      // The AppBar already shows the avatar beside the name (see
+      // BusinessDetailScreen.build) — showing it again here duplicated the
+      // name and ate into the space right under the cover for nothing.
+      showOverlay: false,
     );
 
     if (tabs.isEmpty) {

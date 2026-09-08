@@ -16,6 +16,11 @@ class ProfileCoverHeader extends StatelessWidget {
   final String? subtitle;
   final double coverHeight;
   final double avatarRadius;
+  /// False for a screen whose AppBar already shows the avatar beside the
+  /// name (see BusinessDetailScreen) — skips the avatar/name overlap
+  /// entirely so the name isn't duplicated and the plain cover doesn't
+  /// reserve extra height underneath it for a redundant title row.
+  final bool showOverlay;
 
   const ProfileCoverHeader({
     super.key,
@@ -25,10 +30,15 @@ class ProfileCoverHeader extends StatelessWidget {
     this.subtitle,
     this.coverHeight = 160,
     this.avatarRadius = 40,
+    this.showOverlay = true,
   });
 
   @override
   Widget build(BuildContext context) {
+    if (!showOverlay) {
+      return _Cover(imageUrl: coverImageUrl, height: coverHeight);
+    }
+
     final overlap = avatarRadius * 0.7;
 
     return Padding(
