@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../media/application/media_picker_service.dart';
@@ -135,7 +136,11 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
     if (widget.itemId == null) {
       return Scaffold(
         appBar: AppBar(title: Text(l10n.menuItemAddTitle)),
-        body: _buildForm(context, l10n, sectionsState.items),
+        body: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [_buildFormFields(context, l10n, sectionsState.items)],
+        ),
+        bottomNavigationBar: _SaveBar(saving: _saving, onSave: _save),
       );
     }
 
@@ -162,9 +167,9 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              _buildFormFields(context, l10n, sectionsState.items),
-              const SizedBox(height: 24),
               _ImagesSection(item: item),
+              const SizedBox(height: 22),
+              _buildFormFields(context, l10n, sectionsState.items),
               const SizedBox(height: 24),
               _VariantsSection(item: item),
               const SizedBox(height: 24),
@@ -175,13 +180,23 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
           );
         },
       ),
+      bottomNavigationBar: async.maybeWhen(
+        data: (_) => _SaveBar(saving: _saving, onSave: _save),
+        orElse: () => null,
+      ),
     );
   }
 
-  Widget _buildForm(BuildContext context, AppLocalizations l10n, List<BusinessMenuSection> sections) {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [_buildFormFields(context, l10n, sections)],
+  static InputDecoration _fieldDecoration(String label, {String? helper}) {
+    return InputDecoration(
+      labelText: label,
+      helperText: helper,
+      helperMaxLines: 2,
+      // Always-floated: the label sits small above the value, like every
+      // other field on this screen, instead of only moving there on
+      // focus/content — a plain unfocused empty field looked identical to
+      // a filled one otherwise.
+      floatingLabelBehavior: FloatingLabelBehavior.always,
     );
   }
 
@@ -191,17 +206,17 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
       children: [
         TextField(
           controller: _nameArController,
-          decoration: InputDecoration(labelText: l10n.menuItemNameArHint),
+          decoration: _fieldDecoration(l10n.menuItemNameArHint),
         ),
         const SizedBox(height: 12),
         TextField(
           controller: _nameEnController,
-          decoration: InputDecoration(labelText: l10n.menuItemNameEnHint),
+          decoration: _fieldDecoration(l10n.menuItemNameEnHint),
         ),
         const SizedBox(height: 12),
         DropdownButtonFormField<int?>(
           initialValue: _sectionId,
-          decoration: InputDecoration(labelText: l10n.menuItemSectionLabel),
+          decoration: _fieldDecoration(l10n.menuItemSectionLabel),
           items: [
             DropdownMenuItem(value: null, child: Text(l10n.menuItemNoSection)),
             for (final s in sections) DropdownMenuItem(value: s.id, child: Text(s.nameAr)),
@@ -212,58 +227,121 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
         TextField(
           controller: _descArController,
           maxLines: 2,
-          decoration: InputDecoration(labelText: l10n.menuItemDescriptionArHint),
+          decoration: _fieldDecoration(l10n.menuItemDescriptionArHint),
         ),
         const SizedBox(height: 12),
         TextField(
           controller: _descEnController,
           maxLines: 2,
-          decoration: InputDecoration(labelText: l10n.menuItemDescriptionEnHint),
+          decoration: _fieldDecoration(l10n.menuItemDescriptionEnHint),
         ),
-        const SizedBox(height: 12),
-        TextField(
-          controller: _priceController,
-          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          decoration: InputDecoration(labelText: l10n.menuItemBasePriceHint),
+        const SizedBox(height: 16),
+        Text(l10n.menuItemBasePriceHint, style: Theme.of(context).textTheme.labelMedium),
+        const SizedBox(height: 8),
+        // Price and its unit answer one question together ("how much, per
+        // what") — grouped side by side instead of two unrelated-looking
+        // stacked fields. The price side is the one the owner sets most
+        // often, so its border stays visible even unfocused.
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _priceController,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                decoration: InputDecoration(
+                  labelText: l10n.menuItemBasePriceHint,
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: AppColors.accentGold, width: 1.5),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: _SaleUnitField(value: _saleUnit, onChanged: (v) => setState(() => _saleUnit = v)),
+            ),
+          ],
         ),
-        const SizedBox(height: 12),
-        _SaleUnitField(value: _saleUnit, onChanged: (v) => setState(() => _saleUnit = v)),
         const SizedBox(height: 12),
         TextField(
           controller: _supplyPriceController,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          decoration: InputDecoration(labelText: l10n.menuItemSupplyPriceHint),
+          decoration: _fieldDecoration(l10n.menuItemSupplyPriceHint, helper: l10n.menuItemSupplyPriceHelper),
         ),
         const SizedBox(height: 12),
         TextField(
           controller: _brandController,
-          decoration: InputDecoration(labelText: l10n.menuItemBrandNameHint),
+          decoration: _fieldDecoration(l10n.menuItemBrandNameHint),
         ),
         const SizedBox(height: 12),
         TextField(
           controller: _sortController,
           keyboardType: TextInputType.number,
-          decoration: InputDecoration(labelText: l10n.menuItemSortOrderHint),
+          decoration: _fieldDecoration(l10n.menuItemSortOrderHint),
         ),
-        const SizedBox(height: 8),
-        SwitchListTile(
-          contentPadding: EdgeInsets.zero,
-          title: Text(l10n.menuItemActiveLabel),
-          value: _isActive,
-          onChanged: (v) => setState(() => _isActive = v),
-        ),
+        const SizedBox(height: 12),
+        _ActiveToggleCard(value: _isActive, onChanged: (v) => setState(() => _isActive = v)),
         if (_error != null) ...[
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
           Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
         ],
-        const SizedBox(height: 16),
-        FilledButton(
-          onPressed: _saving ? null : _save,
-          child: _saving
+      ],
+    );
+  }
+}
+
+/// The "نشط" row as a bordered card matching every other field on this
+/// screen, instead of the bare SwitchListTile every other admin form uses —
+/// this one screen got the closer visual pass, not a new house style.
+class _ActiveToggleCard extends StatelessWidget {
+  final bool value;
+  final ValueChanged<bool> onChanged;
+  const _ActiveToggleCard({required this.value, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.inputDecorationTheme.fillColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: theme.dividerColor),
+      ),
+      child: SwitchListTile(
+        title: Text(l10n.menuItemActiveLabel, style: theme.textTheme.titleSmall),
+        value: value,
+        onChanged: onChanged,
+      ),
+    );
+  }
+}
+
+/// The save action, pinned to the bottom of the screen instead of scrolling
+/// away at the end of a long form — the one action every visit to this
+/// screen ends with.
+class _SaveBar extends StatelessWidget {
+  final bool saving;
+  final VoidCallback onSave;
+  const _SaveBar({required this.saving, required this.onSave});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return SafeArea(
+      minimum: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+      child: SizedBox(
+        width: double.infinity,
+        child: FilledButton(
+          onPressed: saving ? null : onSave,
+          child: saving
               ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
               : Text(l10n.commonSave),
         ),
-      ],
+      ),
     );
   }
 }
@@ -290,7 +368,10 @@ class _SaleUnitField extends ConsumerWidget {
         final validValue = units.any((u) => u.code == value) ? value : null;
         return DropdownButtonFormField<String?>(
           initialValue: validValue,
-          decoration: InputDecoration(labelText: l10n.menuItemSaleUnitLabel),
+          decoration: InputDecoration(
+            labelText: l10n.menuItemSaleUnitLabel,
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+          ),
           items: [
             DropdownMenuItem(value: null, child: Text(l10n.menuItemSaleUnitByItem)),
             for (final u in units) DropdownMenuItem(value: u.code, child: Text(u.label)),
@@ -331,61 +412,104 @@ class _ImagesSectionState extends ConsumerState<_ImagesSection> {
     await ref.read(menuItemEditControllerProvider(widget.item.id).notifier).deleteImage(imageId);
   }
 
+  static const _tileSize = 92.0;
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final images = widget.item.images;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(l10n.menuItemImagesSection, style: Theme.of(context).textTheme.titleSmall),
-            TextButton.icon(
-              onPressed: _uploading ? null : _addImage,
-              icon: _uploading
-                  ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                  : const Icon(Icons.add_photo_alternate_outlined),
-              label: Text(l10n.menuItemAddImage),
-            ),
-          ],
-        ),
-        if (widget.item.images.isNotEmpty)
-          SizedBox(
-            height: 90,
-            child: MouseWheelHorizontalScroll(
-              builder: (context, controller) => ListView.separated(
-                controller: controller,
-                scrollDirection: Axis.horizontal,
-                itemCount: widget.item.images.length,
-                separatorBuilder: (context, index) => const SizedBox(width: 8),
-                itemBuilder: (context, index) {
-                  final image = widget.item.images[index];
-                  return Stack(
+        Text(l10n.menuItemImagesSection, style: Theme.of(context).textTheme.titleSmall),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: _tileSize,
+          child: MouseWheelHorizontalScroll(
+            builder: (context, controller) => ListView.separated(
+              controller: controller,
+              scrollDirection: Axis.horizontal,
+              // +1 for the trailing "add photo" tile.
+              itemCount: images.length + 1,
+              separatorBuilder: (context, index) => const SizedBox(width: 10),
+              itemBuilder: (context, index) {
+                if (index == images.length) {
+                  return _AddImageTile(uploading: _uploading, onTap: _uploading ? null : _addImage);
+                }
+                final image = images[index];
+                return SizedBox(
+                  width: _tileSize,
+                  height: _tileSize,
+                  child: Stack(
+                    clipBehavior: Clip.none,
                     children: [
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(image.url, width: 90, height: 90, fit: BoxFit.cover),
+                        borderRadius: BorderRadius.circular(14),
+                        child: Image.network(
+                          image.url,
+                          width: _tileSize,
+                          height: _tileSize,
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                      Positioned(
-                        top: 0,
-                        right: 0,
+                      PositionedDirectional(
+                        top: 6,
+                        start: 6,
                         child: InkWell(
                           onTap: () => _deleteImage(image.id),
+                          borderRadius: BorderRadius.circular(11),
                           child: const CircleAvatar(
-                            radius: 12,
+                            radius: 11,
                             backgroundColor: Colors.black54,
-                            child: Icon(Icons.close, size: 14, color: Colors.white),
+                            child: Icon(Icons.close, size: 13, color: Colors.white),
                           ),
                         ),
                       ),
                     ],
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
           ),
+        ),
       ],
+    );
+  }
+}
+
+class _AddImageTile extends StatelessWidget {
+  final bool uploading;
+  final VoidCallback? onTap;
+  const _AddImageTile({required this.uploading, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(14),
+      child: Container(
+        width: _ImagesSectionState._tileSize,
+        height: _ImagesSectionState._tileSize,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: AppColors.accentGold.withValues(alpha: 0.55), width: 1.5),
+        ),
+        child: uploading
+            ? const Center(child: SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2)))
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.add, color: AppColors.accentGold, size: 22),
+                  const SizedBox(height: 4),
+                  Text(
+                    l10n.menuItemAddImage,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: AppColors.accentGold, fontSize: 11, fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
+      ),
     );
   }
 }
@@ -523,26 +647,105 @@ class _VariantsSection extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(l10n.menuItemVariantsSection, style: Theme.of(context).textTheme.titleSmall),
-            TextButton.icon(
-              onPressed: () => _openForm(context, ref),
-              icon: const Icon(Icons.add),
-              label: Text(l10n.menuItemAddVariant),
+            InkWell(
+              onTap: () => _openForm(context, ref),
+              borderRadius: BorderRadius.circular(8),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.add, size: 16, color: AppColors.accentGold),
+                    const SizedBox(width: 4),
+                    Text(
+                      l10n.menuItemAddVariant,
+                      style: const TextStyle(color: AppColors.accentGold, fontWeight: FontWeight.w600, fontSize: 13),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
-        for (final v in item.variants)
-          Card(
-            margin: const EdgeInsets.only(top: 8),
-            child: ListTile(
-              onTap: () => _openForm(context, ref, existing: v),
-              title: Text('${v.type}: ${v.nameAr}${v.isDefault ? ' ★' : ''}'),
-              subtitle: Text(
-                v.price != null ? v.price!.toStringAsFixed(2) : (v.priceDelta != null ? '+${v.priceDelta!.toStringAsFixed(2)}' : ''),
+        const SizedBox(height: 10),
+        if (item.variants.isNotEmpty)
+          SizedBox(
+            height: 60,
+            child: MouseWheelHorizontalScroll(
+              builder: (context, controller) => ListView.separated(
+                controller: controller,
+                scrollDirection: Axis.horizontal,
+                itemCount: item.variants.length,
+                separatorBuilder: (context, index) => const SizedBox(width: 10),
+                itemBuilder: (context, index) {
+                  final v = item.variants[index];
+                  final priceLabel = v.price != null
+                      ? v.price!.toStringAsFixed(0)
+                      : (v.priceDelta != null ? '+${v.priceDelta!.toStringAsFixed(0)}' : '');
+                  return _VariantChip(
+                    label: v.nameAr,
+                    priceLabel: priceLabel,
+                    highlighted: v.isDefault,
+                    onTap: () => _openForm(context, ref, existing: v),
+                    onLongPress: () => _delete(context, ref, v),
+                  );
+                },
               ),
-              trailing: IconButton(icon: const Icon(Icons.delete_outline), onPressed: () => _delete(context, ref, v)),
             ),
           ),
       ],
+    );
+  }
+}
+
+/// One size/variant as a tappable chip — tap edits, long-press deletes
+/// (the sheet itself has no delete action, so this is the only way in).
+/// The item's default variant is highlighted gold, the same "this is the
+/// one" treatment the customer-facing menu gives it.
+class _VariantChip extends StatelessWidget {
+  final String label;
+  final String priceLabel;
+  final bool highlighted;
+  final VoidCallback onTap;
+  final VoidCallback onLongPress;
+  const _VariantChip({
+    required this.label,
+    required this.priceLabel,
+    required this.highlighted,
+    required this.onTap,
+    required this.onLongPress,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return InkWell(
+      onTap: onTap,
+      onLongPress: onLongPress,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        decoration: BoxDecoration(
+          color: highlighted ? AppColors.accentGold.withValues(alpha: 0.14) : theme.inputDecorationTheme.fillColor,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: highlighted ? AppColors.accentGold : theme.dividerColor, width: highlighted ? 1.5 : 1),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(label, style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+            if (priceLabel.isNotEmpty)
+              Text(
+                priceLabel,
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: highlighted ? AppColors.accentGold : theme.hintColor,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

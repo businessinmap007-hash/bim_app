@@ -2919,6 +2919,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuItemSupplyPriceHint => 'Cost price (optional)';
 
   @override
+  String get menuItemSupplyPriceHelper =>
+      'For your own records only — never shown to the customer';
+
+  @override
   String get menuItemBrandNameHint => 'Brand (optional)';
 
   @override

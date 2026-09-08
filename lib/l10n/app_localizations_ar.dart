@@ -2933,6 +2933,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get menuItemSupplyPriceHint => 'سعر التكلفة (اختياري)';
 
   @override
+  String get menuItemSupplyPriceHelper => 'لحسابك الداخلي فقط — لا يظهر للعميل';
+
+  @override
   String get menuItemBrandNameHint => 'الماركة (اختياري)';
 
   @override

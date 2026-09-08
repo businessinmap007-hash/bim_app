@@ -5540,6 +5540,12 @@ abstract class AppLocalizations {
   /// **'سعر التكلفة (اختياري)'**
   String get menuItemSupplyPriceHint;
 
+  /// No description provided for @menuItemSupplyPriceHelper.
+  ///
+  /// In ar, this message translates to:
+  /// **'لحسابك الداخلي فقط — لا يظهر للعميل'**
+  String get menuItemSupplyPriceHelper;
+
   /// No description provided for @menuItemBrandNameHint.
   ///
   /// In ar, this message translates to:

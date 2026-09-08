@@ -962,6 +962,7 @@
   "menuItemSaleUnitLabel": "يُباع بـ",
   "menuItemSaleUnitByItem": "بالقطعة",
   "menuItemSupplyPriceHint": "سعر التكلفة (اختياري)",
+  "menuItemSupplyPriceHelper": "لحسابك الداخلي فقط — لا يظهر للعميل",
   "menuItemBrandNameHint": "الماركة (اختياري)",
   "menuItemSortOrderHint": "ترتيب العرض",
   "menuItemActiveLabel": "نشط",

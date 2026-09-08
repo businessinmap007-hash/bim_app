@@ -962,6 +962,7 @@
   "menuItemSaleUnitLabel": "Sold by",
   "menuItemSaleUnitByItem": "By the item",
   "menuItemSupplyPriceHint": "Cost price (optional)",
+  "menuItemSupplyPriceHelper": "For your own records only — never shown to the customer",
   "menuItemBrandNameHint": "Brand (optional)",
   "menuItemSortOrderHint": "Sort order",
   "menuItemActiveLabel": "Active",
