@@ -20,6 +20,21 @@ class MenuItemsScreen extends ConsumerStatefulWidget {
 class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
   final _scrollController = ScrollController();
   final _searchController = TextEditingController();
+  // Anchors for the sticky group/branch nav — rebuilt each time the
+  // vocabulary's shape changes, reused across scroll-driven rebuilds so a
+  // key already handed to a mounted widget doesn't change identity under it.
+  final Map<int, GlobalKey> _groupKeys = {};
+  final Map<int, GlobalKey> _branchKeys = {};
+  int _activeGroupIndex = 0;
+
+  GlobalKey _groupKey(int groupId) => _groupKeys.putIfAbsent(groupId, () => GlobalKey());
+  GlobalKey _branchKey(int branchId) => _branchKeys.putIfAbsent(branchId, () => GlobalKey());
+
+  void _jumpTo(GlobalKey key) {
+    final target = key.currentContext;
+    if (target == null) return;
+    Scrollable.ensureVisible(target, duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+  }
 
   @override
   void initState() {
@@ -111,15 +126,18 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
     // Items with no line option at all (a hand-typed extra) still need a home.
     final unbranched = state.items.where((i) => i.lineOption == null).toList();
 
+    final groups = vocabulary.lines.where((g) => g.options.isNotEmpty).toList();
+
     return ListView(
       controller: _scrollController,
       padding: const EdgeInsets.all(16),
       children: [
-        for (final group in vocabulary.lines.where((g) => g.options.isNotEmpty)) ...[
-          Text(group.groupName, style: Theme.of(context).textTheme.titleSmall),
+        for (final group in groups) ...[
+          Text(group.groupName, key: _groupKey(group.groupId), style: Theme.of(context).textTheme.titleSmall),
           const SizedBox(height: 8),
           for (final branch in group.options) ...[
             Padding(
+              key: _branchKey(branch.id),
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -255,6 +273,15 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
               ),
             ),
           ),
+          _GroupBranchNav(
+            vocabulary: _vocabularyForGrouping(state),
+            activeGroupIndex: _activeGroupIndex,
+            onGroupTap: (index, groupId) {
+              setState(() => _activeGroupIndex = index);
+              _jumpTo(_groupKey(groupId));
+            },
+            onBranchTap: (branchId) => _jumpTo(_branchKey(branchId)),
+          ),
           const SizedBox(height: 8),
           Expanded(
             child: state.isLoading
@@ -282,6 +309,81 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Two chip rows — vocabulary groups, then the tapped group's branches —
+/// that jump the list to the tapped heading instead of filtering it away.
+/// A long catalog (several groups, dozens of branches) is otherwise a
+/// straight scroll with no way to skip ahead; the manual "All sections"
+/// filter chips above this stay untouched for hand-typed sections, which
+/// this grouping doesn't apply to in the first place.
+class _GroupBranchNav extends StatelessWidget {
+  final MenuVocabulary? vocabulary;
+  final int activeGroupIndex;
+  final void Function(int index, int groupId) onGroupTap;
+  final ValueChanged<int> onBranchTap;
+
+  const _GroupBranchNav({
+    required this.vocabulary,
+    required this.activeGroupIndex,
+    required this.onGroupTap,
+    required this.onBranchTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final groups = vocabulary?.lines.where((g) => g.options.isNotEmpty).toList() ?? const [];
+    if (groups.isEmpty) return const SizedBox.shrink();
+
+    final activeIndex = activeGroupIndex < groups.length ? activeGroupIndex : 0;
+    final active = groups[activeIndex];
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (groups.length > 1)
+          SizedBox(
+            height: 40,
+            child: MouseWheelHorizontalScroll(
+              builder: (context, controller) => ListView.separated(
+                controller: controller,
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                itemCount: groups.length,
+                separatorBuilder: (context, index) => const SizedBox(width: 8),
+                itemBuilder: (context, index) {
+                  return ChoiceChip(
+                    label: Text(groups[index].groupName),
+                    selected: index == activeIndex,
+                    onSelected: (_) => onGroupTap(index, groups[index].groupId),
+                  );
+                },
+              ),
+            ),
+          ),
+        if (groups.length > 1) const SizedBox(height: 6),
+        SizedBox(
+          height: 36,
+          child: MouseWheelHorizontalScroll(
+            builder: (context, controller) => ListView.separated(
+              controller: controller,
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: active.options.length,
+              separatorBuilder: (context, index) => const SizedBox(width: 8),
+              itemBuilder: (context, index) {
+                final branch = active.options[index];
+                return ActionChip(
+                  label: Text(branch.nameAr),
+                  onPressed: () => onBranchTap(branch.id),
+                );
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
