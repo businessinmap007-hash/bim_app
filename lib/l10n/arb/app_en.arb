@@ -269,12 +269,6 @@
   "jobsRequirementsLabel": "Requirements (optional)",
   "jobsSalaryLabel": "Salary (optional)",
   "jobsPublishAction": "Publish job",
-  "businessFollow": "Follow",
-  "businessUnfollow": "Unfollow",
-  "businessFollowersCount": "{count, plural, =0{No followers} one{1 follower} other{{count} followers}}",
-  "@businessFollowersCount": {
-    "placeholders": { "count": { "type": "int" } }
-  },
   "cartTitle": "Cart",
   "cartEmpty": "Your cart is empty.",
   "cartAdd": "Add to cart",

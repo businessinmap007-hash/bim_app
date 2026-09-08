@@ -269,12 +269,6 @@
   "jobsRequirementsLabel": "المتطلبات (اختياري)",
   "jobsSalaryLabel": "الراتب (اختياري)",
   "jobsPublishAction": "نشر الوظيفة",
-  "businessFollow": "متابعة",
-  "businessUnfollow": "إلغاء المتابعة",
-  "businessFollowersCount": "{count, plural, =0{لا يوجد متابعون} one{متابع واحد} two{متابعان} few{{count} متابعين} many{{count} متابعًا} other{{count} متابع}}",
-  "@businessFollowersCount": {
-    "placeholders": { "count": { "type": "int" } }
-  },
   "cartTitle": "السلة",
   "cartEmpty": "السلة فارغة.",
   "cartAdd": "أضف للسلة",
