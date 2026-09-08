@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import '../../../core/network/api_client.dart';
 import 'models/menu_item.dart';
 import 'models/menu_section.dart';
+import 'models/menu_vocabulary.dart';
 
 class MenuItemsPage {
   final List<BusinessMenuItem> items;
@@ -89,6 +90,13 @@ class BusinessMenuApi {
         .toList();
   }
 
+  /// What this merchant may say a catalog item IS (`lines`) and what may
+  /// qualify it (`modifiers`) — narrowed to their own specialty.
+  Future<MenuVocabulary> vocabulary() async {
+    final body = await _client.getForBody('/business/menu/vocabulary');
+    return MenuVocabulary.fromJson(body['data'] as Map<String, dynamic>);
+  }
+
   // ─────────────────────────── Items ───────────────────────────
 
   Future<MenuItemsPage> items({
@@ -134,6 +142,9 @@ class BusinessMenuApi {
     double? supplyPrice,
     String? saleUnit,
     String? brandName,
+    int? availableQuantity,
+    int? lineOptionId,
+    List<int> modifierOptionIds = const [],
     int sortOrder = 0,
     bool isActive = true,
   }) async {
@@ -150,6 +161,9 @@ class BusinessMenuApi {
                 supplyPrice: supplyPrice,
                 saleUnit: saleUnit,
                 brandName: brandName,
+                availableQuantity: availableQuantity,
+                lineOptionId: lineOptionId,
+                modifierOptionIds: modifierOptionIds,
                 sortOrder: sortOrder,
                 isActive: isActive,
               ),
@@ -169,6 +183,9 @@ class BusinessMenuApi {
     double? supplyPrice,
     String? saleUnit,
     String? brandName,
+    int? availableQuantity,
+    int? lineOptionId,
+    List<int> modifierOptionIds = const [],
     int sortOrder = 0,
     bool isActive = true,
   }) async {
@@ -185,6 +202,9 @@ class BusinessMenuApi {
                 supplyPrice: supplyPrice,
                 saleUnit: saleUnit,
                 brandName: brandName,
+                availableQuantity: availableQuantity,
+                lineOptionId: lineOptionId,
+                modifierOptionIds: modifierOptionIds,
                 sortOrder: sortOrder,
                 isActive: isActive,
               ),
@@ -203,6 +223,9 @@ class BusinessMenuApi {
     double? supplyPrice,
     String? saleUnit,
     String? brandName,
+    int? availableQuantity,
+    int? lineOptionId,
+    List<int> modifierOptionIds = const [],
     required int sortOrder,
     required bool isActive,
   }) {
@@ -221,6 +244,11 @@ class BusinessMenuApi {
       // same convention as supply_price/brand_name above.
       'sale_unit': ?saleUnit,
       if (brandName != null && brandName.isNotEmpty) 'brand_name': brandName,
+      'available_quantity': ?availableQuantity,
+      // What this item IS/what qualifies it — see HasOfferingOptions. Always
+      // sent (even empty) so clearing a pick on a resubmit actually clears it.
+      'line_option_id': lineOptionId ?? 0,
+      'modifier_option_ids': modifierOptionIds,
       'sort_order': sortOrder,
       'is_active': isActive,
     };

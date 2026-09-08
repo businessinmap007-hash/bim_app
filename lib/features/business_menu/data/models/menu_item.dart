@@ -1,6 +1,21 @@
 import 'menu_item_image.dart';
 import 'menu_variant.dart';
 
+/// One option row as it comes back attached to an item or listed in the
+/// merchant's vocabulary — {id, name_ar, name_en} everywhere it appears.
+class VocabularyOptionRef {
+  final int id;
+  final String nameAr;
+  final String? nameEn;
+  const VocabularyOptionRef({required this.id, required this.nameAr, this.nameEn});
+
+  factory VocabularyOptionRef.fromJson(Map<String, dynamic> json) => VocabularyOptionRef(
+    id: json['id'] as int,
+    nameAr: json['name_ar'] as String,
+    nameEn: json['name_en'] as String?,
+  );
+}
+
 /// A business's own menu item — see Api\V2\BusinessMenuItemController /
 /// MenuItemResource. `images`/`variants`/`extras` are only populated when
 /// the backend eager-loads them (the list endpoint carries images only;
@@ -22,6 +37,12 @@ class BusinessMenuItem {
   final int? availableQuantity;
   final int sortOrder;
   final bool isActive;
+  /// What this item IS — a `line` option (e.g. "ثلاجات") from the merchant's
+  /// own vocabulary. Null for a hand-typed item (a restaurant's dish).
+  final VocabularyOptionRef? lineOption;
+  /// What qualifies it — brand, condition... any number, from `modifier`
+  /// groups in the merchant's vocabulary.
+  final List<VocabularyOptionRef> modifierOptions;
   final List<MenuItemImage> images;
   final List<MenuVariant> variants;
   final List<MenuExtraGroup> extraGroups;
@@ -42,6 +63,8 @@ class BusinessMenuItem {
     this.availableQuantity,
     required this.sortOrder,
     required this.isActive,
+    this.lineOption,
+    this.modifierOptions = const [],
     this.images = const [],
     this.variants = const [],
     this.extraGroups = const [],
@@ -63,6 +86,13 @@ class BusinessMenuItem {
     availableQuantity: json['available_quantity'] as int?,
     sortOrder: json['sort_order'] as int,
     isActive: json['is_active'] as bool,
+    lineOption: json['line_option'] != null
+        ? VocabularyOptionRef.fromJson(json['line_option'] as Map<String, dynamic>)
+        : null,
+    modifierOptions: (json['modifier_options'] as List<dynamic>?)
+            ?.map((e) => VocabularyOptionRef.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        const [],
     images: (json['images'] as List<dynamic>?)
             ?.map((e) => MenuItemImage.fromJson(e as Map<String, dynamic>))
             .toList() ??

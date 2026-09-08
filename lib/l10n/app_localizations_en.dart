@@ -2907,6 +2907,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuItemNoSection => 'No section';
 
   @override
+  String get menuItemBranchLabel => 'Type';
+
+  @override
+  String get menuItemNoBranch => '— Not set —';
+
+  @override
+  String get menuItemNotSpecified => 'Not specified';
+
+  @override
+  String get menuItemAvailableQuantityHint => 'Available quantity (optional)';
+
+  @override
   String get menuItemBasePriceHint => 'Price';
 
   @override

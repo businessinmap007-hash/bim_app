@@ -4,6 +4,7 @@ import '../../../core/providers/core_providers.dart';
 import '../data/business_menu_api.dart';
 import '../data/models/menu_item.dart';
 import '../data/models/menu_section.dart';
+import '../data/models/menu_vocabulary.dart';
 
 final businessMenuApiProvider = Provider<BusinessMenuApi>((ref) {
   return BusinessMenuApi(ref.watch(apiClientProvider));
@@ -13,6 +14,12 @@ final businessMenuApiProvider = Provider<BusinessMenuApi>((ref) {
 /// session, so one fetch per app run is enough.
 final saleUnitOptionsProvider = FutureProvider<List<SaleUnitOption>>((ref) {
   return ref.watch(businessMenuApiProvider).saleUnits();
+});
+
+/// What THIS business may say a catalog item is/what qualifies it — narrowed
+/// server-side to its own specialty, so one fetch per app run is enough.
+final menuVocabularyProvider = FutureProvider<MenuVocabulary>((ref) {
+  return ref.watch(businessMenuApiProvider).vocabulary();
 });
 
 // ─────────────────────────── Sections ───────────────────────────

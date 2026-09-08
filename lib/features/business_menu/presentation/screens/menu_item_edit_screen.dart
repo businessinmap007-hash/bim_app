@@ -30,6 +30,7 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
   final _priceController = TextEditingController();
   final _supplyPriceController = TextEditingController();
   final _brandController = TextEditingController();
+  final _availableQuantityController = TextEditingController();
   final _sortController = TextEditingController(text: '0');
   int? _sectionId;
   String? _saleUnit;
@@ -37,6 +38,11 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
   bool _saving = false;
   String? _error;
   bool _initialized = false;
+  // What this item IS (a `line` option, e.g. "ثلاجات") and what qualifies it
+  // (brand, condition...) — from the merchant's own vocabulary, see
+  // HasOfferingOptions. Null/empty for a hand-typed item (a restaurant dish).
+  int? _lineOptionId;
+  Set<int> _modifierOptionIds = {};
 
   @override
   void dispose() {
@@ -47,6 +53,7 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
     _priceController.dispose();
     _supplyPriceController.dispose();
     _brandController.dispose();
+    _availableQuantityController.dispose();
     _sortController.dispose();
     super.dispose();
   }
@@ -61,9 +68,12 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
     _priceController.text = item.basePrice.toStringAsFixed(2);
     _supplyPriceController.text = item.supplyPrice?.toStringAsFixed(2) ?? '';
     _brandController.text = item.brandName ?? '';
+    _availableQuantityController.text = item.availableQuantity?.toString() ?? '';
     _sortController.text = '${item.sortOrder}';
     _sectionId = item.menuSectionId;
     _saleUnit = item.saleUnit;
+    _lineOptionId = item.lineOption?.id;
+    _modifierOptionIds = item.modifierOptions.map((o) => o.id).toSet();
   }
 
   Future<void> _save() async {
@@ -86,17 +96,26 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
     try {
       final api = ref.read(businessMenuApiProvider);
       final supplyPrice = double.tryParse(_supplyPriceController.text.trim());
+      final availableQuantity = int.tryParse(_availableQuantityController.text.trim());
+      // Once this business has a `line` vocabulary, the section is grown
+      // from the picked line option's own group server-side — sending a
+      // manual one here would fight that (see BusinessMenuItemController's
+      // `explicitSection` guard), so it stays null in that mode.
+      final hasLines = ref.read(menuVocabularyProvider).maybeWhen(data: (v) => v.hasLines, orElse: () => false);
       if (widget.itemId == null) {
         final created = await api.createItem(
           nameAr: _nameArController.text.trim(),
           nameEn: _nameEnController.text.trim(),
-          menuSectionId: _sectionId,
+          menuSectionId: hasLines ? null : _sectionId,
           descriptionAr: _descArController.text.trim(),
           descriptionEn: _descEnController.text.trim(),
           basePrice: price,
           supplyPrice: supplyPrice,
           saleUnit: _saleUnit,
           brandName: _brandController.text.trim(),
+          availableQuantity: availableQuantity,
+          lineOptionId: _lineOptionId,
+          modifierOptionIds: _modifierOptionIds.toList(),
           sortOrder: int.tryParse(_sortController.text.trim()) ?? 0,
           isActive: _isActive,
         );
@@ -106,13 +125,16 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
           widget.itemId!,
           nameAr: _nameArController.text.trim(),
           nameEn: _nameEnController.text.trim(),
-          menuSectionId: _sectionId,
+          menuSectionId: hasLines ? null : _sectionId,
           descriptionAr: _descArController.text.trim(),
           descriptionEn: _descEnController.text.trim(),
           basePrice: price,
           supplyPrice: supplyPrice,
           saleUnit: _saleUnit,
           brandName: _brandController.text.trim(),
+          availableQuantity: availableQuantity,
+          lineOptionId: _lineOptionId,
+          modifierOptionIds: _modifierOptionIds.toList(),
           sortOrder: int.tryParse(_sortController.text.trim()) ?? 0,
           isActive: _isActive,
         );
@@ -201,6 +223,9 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
   }
 
   Widget _buildFormFields(BuildContext context, AppLocalizations l10n, List<BusinessMenuSection> sections) {
+    final vocabAsync = ref.watch(menuVocabularyProvider);
+    final hasLines = vocabAsync.maybeWhen(data: (v) => v.hasLines, orElse: () => false);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -214,15 +239,22 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
           decoration: _fieldDecoration(l10n.menuItemNameEnHint),
         ),
         const SizedBox(height: 12),
-        DropdownButtonFormField<int?>(
-          initialValue: _sectionId,
-          decoration: _fieldDecoration(l10n.menuItemSectionLabel),
-          items: [
-            DropdownMenuItem(value: null, child: Text(l10n.menuItemNoSection)),
-            for (final s in sections) DropdownMenuItem(value: s.id, child: Text(s.nameAr)),
-          ],
-          onChanged: (v) => setState(() => _sectionId = v),
-        ),
+        // Once this business has its own catalog vocabulary, what an item
+        // IS comes from there instead of a hand-typed section — see
+        // Business\MenuItemController::itemTypes()'s "one vocabulary, not
+        // two" rule on the web panel this mirrors.
+        if (hasLines)
+          _LineOptionField(value: _lineOptionId, onChanged: (v) => setState(() => _lineOptionId = v))
+        else
+          DropdownButtonFormField<int?>(
+            initialValue: _sectionId,
+            decoration: _fieldDecoration(l10n.menuItemSectionLabel),
+            items: [
+              DropdownMenuItem(value: null, child: Text(l10n.menuItemNoSection)),
+              for (final s in sections) DropdownMenuItem(value: s.id, child: Text(s.nameAr)),
+            ],
+            onChanged: (v) => setState(() => _sectionId = v),
+          ),
         const SizedBox(height: 12),
         TextField(
           controller: _descArController,
@@ -275,6 +307,17 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
         TextField(
           controller: _brandController,
           decoration: _fieldDecoration(l10n.menuItemBrandNameHint),
+        ),
+        const SizedBox(height: 12),
+        TextField(
+          controller: _availableQuantityController,
+          keyboardType: TextInputType.number,
+          decoration: _fieldDecoration(l10n.menuItemAvailableQuantityHint),
+        ),
+        const SizedBox(height: 12),
+        _ModifiersField(
+          selectedIds: _modifierOptionIds,
+          onChanged: (ids) => setState(() => _modifierOptionIds = ids),
         ),
         const SizedBox(height: 12),
         TextField(
@@ -377,6 +420,105 @@ class _SaleUnitField extends ConsumerWidget {
             for (final u in units) DropdownMenuItem(value: u.code, child: Text(u.label)),
           ],
           onChanged: onChanged,
+        );
+      },
+    );
+  }
+}
+
+/// What this item IS, from the merchant's own vocabulary — e.g. "ثلاجات"
+/// under "أنواع الأجهزة الكهربائية". Replaces the free-text section picker
+/// once a business has one (see the "one vocabulary, not two" rule this
+/// mirrors from Business\MenuItemController::itemTypes() on the web panel):
+/// picking a value here is what grows the item's section server-side.
+class _LineOptionField extends ConsumerWidget {
+  final int? value;
+  final ValueChanged<int?> onChanged;
+  const _LineOptionField({required this.value, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final vocabAsync = ref.watch(menuVocabularyProvider);
+
+    return vocabAsync.when(
+      loading: () => const LinearProgressIndicator(),
+      error: (_, _) => const SizedBox.shrink(),
+      data: (vocab) {
+        final groups = vocab.lines.where((g) => g.options.isNotEmpty).toList();
+        if (groups.isEmpty) return const SizedBox.shrink();
+        // Only worth naming the group beside the option when this business
+        // actually has more than one to tell apart.
+        final multipleGroups = groups.length > 1;
+        final validValue = groups.expand((g) => g.options).any((o) => o.id == value) ? value : null;
+
+        return DropdownButtonFormField<int?>(
+          initialValue: validValue,
+          decoration: InputDecoration(
+            labelText: l10n.menuItemBranchLabel,
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+          ),
+          items: [
+            DropdownMenuItem(value: null, child: Text(l10n.menuItemNoBranch)),
+            for (final g in groups)
+              for (final o in g.options)
+                DropdownMenuItem(
+                  value: o.id,
+                  child: Text(multipleGroups ? '${o.nameAr} — ${g.groupName}' : o.nameAr),
+                ),
+          ],
+          onChanged: onChanged,
+        );
+      },
+    );
+  }
+}
+
+/// What qualifies the item — brand, condition... any number of `modifier`
+/// options, grouped by their own vocabulary group. One chip row per group;
+/// picking within a group toggles that option (a business may need more
+/// than one qualifier at once, e.g. a brand AND a condition).
+class _ModifiersField extends ConsumerWidget {
+  final Set<int> selectedIds;
+  final ValueChanged<Set<int>> onChanged;
+  const _ModifiersField({required this.selectedIds, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final vocabAsync = ref.watch(menuVocabularyProvider);
+
+    return vocabAsync.when(
+      loading: () => const SizedBox.shrink(),
+      error: (_, _) => const SizedBox.shrink(),
+      data: (vocab) {
+        final groups = vocab.modifiers.where((g) => g.options.isNotEmpty).toList();
+        if (groups.isEmpty) return const SizedBox.shrink();
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (final g in groups) ...[
+              Text(g.groupName, style: Theme.of(context).textTheme.labelMedium),
+              const SizedBox(height: 6),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  for (final o in g.options)
+                    FilterChip(
+                      label: Text(o.nameAr),
+                      selected: selectedIds.contains(o.id),
+                      onSelected: (selected) {
+                        final next = Set<int>.from(selectedIds);
+                        selected ? next.add(o.id) : next.remove(o.id);
+                        onChanged(next);
+                      },
+                    ),
+                ],
+              ),
+              const SizedBox(height: 12),
+            ],
+          ],
         );
       },
     );

@@ -5516,6 +5516,30 @@ abstract class AppLocalizations {
   /// **'بدون قسم'**
   String get menuItemNoSection;
 
+  /// No description provided for @menuItemBranchLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'النوع'**
+  String get menuItemBranchLabel;
+
+  /// No description provided for @menuItemNoBranch.
+  ///
+  /// In ar, this message translates to:
+  /// **'— بدون تحديد —'**
+  String get menuItemNoBranch;
+
+  /// No description provided for @menuItemNotSpecified.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير محدد'**
+  String get menuItemNotSpecified;
+
+  /// No description provided for @menuItemAvailableQuantityHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكمية المتاحة (اختياري)'**
+  String get menuItemAvailableQuantityHint;
+
   /// No description provided for @menuItemBasePriceHint.
   ///
   /// In ar, this message translates to:

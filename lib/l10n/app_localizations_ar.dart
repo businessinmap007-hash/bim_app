@@ -2921,6 +2921,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get menuItemNoSection => 'بدون قسم';
 
   @override
+  String get menuItemBranchLabel => 'النوع';
+
+  @override
+  String get menuItemNoBranch => '— بدون تحديد —';
+
+  @override
+  String get menuItemNotSpecified => 'غير محدد';
+
+  @override
+  String get menuItemAvailableQuantityHint => 'الكمية المتاحة (اختياري)';
+
+  @override
   String get menuItemBasePriceHint => 'السعر';
 
   @override
