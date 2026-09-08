@@ -2330,6 +2330,48 @@ abstract class AppLocalizations {
   /// **'لا توجد حركات بعد.'**
   String get walletTransactionsEmpty;
 
+  /// No description provided for @walletPinCreateTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر رمز محفظتك'**
+  String get walletPinCreateTitle;
+
+  /// No description provided for @walletPinCreateHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر رمز مكوّن من {length} أرقام لحماية إجراءات المحفظة زي ده.'**
+  String walletPinCreateHint(int length);
+
+  /// No description provided for @walletPinEnterTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل رمز محفظتك'**
+  String get walletPinEnterTitle;
+
+  /// No description provided for @walletPinFieldHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرمز'**
+  String get walletPinFieldHint;
+
+  /// No description provided for @walletPinConfirmHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد الرمز'**
+  String get walletPinConfirmHint;
+
+  /// No description provided for @walletPinMismatch.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرمزان غير متطابقين.'**
+  String get walletPinMismatch;
+
+  /// No description provided for @walletPinInvalidLength.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل {length} أرقام.'**
+  String walletPinInvalidLength(int length);
+
   /// No description provided for @chatTitle.
   ///
   /// In ar, this message translates to:

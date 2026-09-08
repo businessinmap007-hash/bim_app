@@ -1221,6 +1221,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletTransactionsEmpty => 'No transactions yet.';
 
   @override
+  String get walletPinCreateTitle => 'Set your wallet PIN';
+
+  @override
+  String walletPinCreateHint(int length) {
+    return 'Choose a $length-digit PIN to protect wallet actions like this one.';
+  }
+
+  @override
+  String get walletPinEnterTitle => 'Enter your wallet PIN';
+
+  @override
+  String get walletPinFieldHint => 'PIN';
+
+  @override
+  String get walletPinConfirmHint => 'Confirm PIN';
+
+  @override
+  String get walletPinMismatch => 'PINs don\'t match.';
+
+  @override
+  String walletPinInvalidLength(int length) {
+    return 'Enter $length digits.';
+  }
+
+  @override
   String get chatTitle => 'Chat';
 
   @override

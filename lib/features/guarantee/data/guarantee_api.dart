@@ -51,9 +51,12 @@ class GuaranteeApi {
     return (items: items, hasMore: currentPage < lastPage);
   }
 
-  Future<ActivateResult> activate({int? levelId}) async {
+  /// [pin] is the caller's wallet PIN — required by the backend since
+  /// activating/upgrading spends from the wallet as collateral. See
+  /// WalletPinPrompt for where it comes from.
+  Future<ActivateResult> activate({int? levelId, required String pin}) async {
     final data =
-        await _client.post('/guarantees/activate', data: {'level_id': ?levelId})
+        await _client.post('/guarantees/activate', data: {'level_id': ?levelId, 'pin': pin})
             as Map<String, dynamic>;
     return (
       changed: data['changed'] as bool? ?? false,
@@ -64,9 +67,11 @@ class GuaranteeApi {
     );
   }
 
-  Future<UnlockResult> unlock() async {
+  /// [pin] is the caller's wallet PIN — required by the backend since
+  /// unlocking drops coverage it protects, same gate as activate.
+  Future<UnlockResult> unlock({required String pin}) async {
     final data =
-        await _client.post('/guarantees/unlock') as Map<String, dynamic>;
+        await _client.post('/guarantees/unlock', data: {'pin': pin}) as Map<String, dynamic>;
     return (
       unlockedAmount: (data['unlocked_amount'] as num?)?.toDouble() ?? 0,
       guarantee: UserGuarantee.fromJson(

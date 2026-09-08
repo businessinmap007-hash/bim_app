@@ -1234,6 +1234,31 @@ class AppLocalizationsAr extends AppLocalizations {
   String get walletTransactionsEmpty => 'لا توجد حركات بعد.';
 
   @override
+  String get walletPinCreateTitle => 'اختر رمز محفظتك';
+
+  @override
+  String walletPinCreateHint(int length) {
+    return 'اختر رمز مكوّن من $length أرقام لحماية إجراءات المحفظة زي ده.';
+  }
+
+  @override
+  String get walletPinEnterTitle => 'أدخل رمز محفظتك';
+
+  @override
+  String get walletPinFieldHint => 'الرمز';
+
+  @override
+  String get walletPinConfirmHint => 'تأكيد الرمز';
+
+  @override
+  String get walletPinMismatch => 'الرمزان غير متطابقين.';
+
+  @override
+  String walletPinInvalidLength(int length) {
+    return 'أدخل $length أرقام.';
+  }
+
+  @override
   String get chatTitle => 'المحادثة';
 
   @override

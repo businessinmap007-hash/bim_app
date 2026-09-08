@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../wallet/presentation/widgets/wallet_pin_prompt.dart';
 import '../../application/guarantee_providers.dart';
 import '../../data/models/guarantee_level.dart';
 import 'guarantee_transactions_screen.dart';
@@ -24,15 +25,18 @@ class _GuaranteeScreenState extends ConsumerState<GuaranteeScreen> {
 
   void _showError(Object e) {
     final l10n = AppLocalizations.of(context)!;
-    final message = e is ApiException ? e.message : l10n.commonSomethingWentWrong;
+    final message = e is ApiException ? (e.firstErrorFor('pin') ?? e.message) : l10n.commonSomethingWentWrong;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
 
   Future<void> _activate({int? levelId}) async {
     final l10n = AppLocalizations.of(context)!;
+    final pin = await promptWalletPin(context, ref);
+    if (pin == null || !mounted) return;
+
     setState(() => _busy = true);
     try {
-      final result = await ref.read(guaranteeApiProvider).activate(levelId: levelId);
+      final result = await ref.read(guaranteeApiProvider).activate(levelId: levelId, pin: pin);
       ref.invalidate(guaranteeMeProvider);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -58,11 +62,14 @@ class _GuaranteeScreenState extends ConsumerState<GuaranteeScreen> {
         ],
       ),
     );
-    if (confirmed != true) return;
+    if (confirmed != true || !mounted) return;
+
+    final pin = await promptWalletPin(context, ref);
+    if (pin == null || !mounted) return;
 
     setState(() => _busy = true);
     try {
-      await ref.read(guaranteeApiProvider).unlock();
+      await ref.read(guaranteeApiProvider).unlock(pin: pin);
       ref.invalidate(guaranteeMeProvider);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.guaranteeUnlocked)));
