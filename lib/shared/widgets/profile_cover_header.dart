@@ -16,11 +16,14 @@ class ProfileCoverHeader extends StatelessWidget {
   final String? subtitle;
   final double coverHeight;
   final double avatarRadius;
-  /// False for a screen whose AppBar already shows the avatar beside the
-  /// name (see BusinessDetailScreen) — skips the avatar/name overlap
-  /// entirely so the name isn't duplicated and the plain cover doesn't
-  /// reserve extra height underneath it for a redundant title row.
+  /// False skips the avatar/name overlap entirely — a plain cover, for a
+  /// screen that shows the name somewhere else itself.
   final bool showOverlay;
+  /// True overlaps the avatar+name on the cover's TOP edge instead of its
+  /// bottom (see BusinessDetailScreen, whose AppBar carries no title of its
+  /// own) — half the avatar floats above the cover, half sits on it, the
+  /// same split the bottom layout has always had, just mirrored.
+  final bool overlapAtTop;
 
   const ProfileCoverHeader({
     super.key,
@@ -31,6 +34,7 @@ class ProfileCoverHeader extends StatelessWidget {
     this.coverHeight = 160,
     this.avatarRadius = 40,
     this.showOverlay = true,
+    this.overlapAtTop = false,
   });
 
   @override
@@ -40,6 +44,58 @@ class ProfileCoverHeader extends StatelessWidget {
     }
 
     final overlap = avatarRadius * 0.7;
+    final titleColumn = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        if (subtitle != null)
+          Text(
+            subtitle!,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+      ],
+    );
+
+    if (overlapAtTop) {
+      final gap = overlap + 8;
+      return SizedBox(
+        height: coverHeight + gap,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Positioned(
+              top: gap,
+              left: 0,
+              right: 0,
+              child: _Cover(imageUrl: coverImageUrl, height: coverHeight),
+            ),
+            PositionedDirectional(
+              start: 20,
+              top: gap - avatarRadius,
+              child: _Avatar(imageUrl: avatarImageUrl, radius: avatarRadius),
+            ),
+            PositionedDirectional(
+              start: 20 + avatarRadius * 2 + 16,
+              // Vertically centered on the avatar's floating (off-cover)
+              // half, not the whole circle — that's the part actually
+              // beside open space up here, same as the bottom layout
+              // centers its title on the space below the cover.
+              top: gap - avatarRadius * 0.8,
+              end: 16,
+              child: titleColumn,
+            ),
+          ],
+        ),
+      );
+    }
 
     return Padding(
       padding: EdgeInsets.only(bottom: overlap + 8),
@@ -56,24 +112,7 @@ class ProfileCoverHeader extends StatelessWidget {
             start: 20 + avatarRadius * 2 + 16,
             top: coverHeight + 4,
             end: 16,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                if (subtitle != null)
-                  Text(
-                    subtitle!,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-              ],
-            ),
+            child: titleColumn,
           ),
         ],
       ),
