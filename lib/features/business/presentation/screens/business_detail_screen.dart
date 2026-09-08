@@ -409,6 +409,15 @@ List<_SectionData> _prepareSections(List<MenuSectionGroup> sections) {
   }).toList();
 }
 
+/// The exact height _MenuNavRows renders below — one 44px row per chip row
+/// it actually draws, zero when neither is worth showing.
+double _menuNavHeight(List<_SectionData> sections, _SectionData activeSection) {
+  var height = 0.0;
+  if (sections.length > 1) height += 44;
+  if (activeSection.hasBranches) height += 44;
+  return height;
+}
+
 class _MenuTab extends ConsumerStatefulWidget {
   final int businessId;
   final BusinessFulfillment fulfillment;
@@ -493,12 +502,18 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
               ),
               // A sticky nav is only worth the chrome once there is more than
               // one heading to jump between — a one-section restaurant menu
-              // stays exactly as it was.
-              if (sections.length > 1)
+              // stays exactly as it was, but a single-section catalog with
+              // several branches (a greengrocer with just "الخضروات") still
+              // gets the branch row even though there is only one section to
+              // (not) switch between. The height is the sum of exactly the
+              // rows _MenuNavRows itself renders below — it must never drift
+              // from that, or the sliver either clips its own content or
+              // leaves a gap the size of a row that was never drawn.
+              if (_menuNavHeight(sections, activeSection) > 0)
                 SliverPersistentHeader(
                   pinned: true,
                   delegate: _MenuNavDelegate(
-                    height: activeSection.hasBranches ? 96 : 52,
+                    height: _menuNavHeight(sections, activeSection),
                     child: _MenuNavRows(
                       sections: sections,
                       activeSectionIndex: _activeSectionIndex,
@@ -604,23 +619,24 @@ class _MenuNavRows extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
-            height: 44,
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-              scrollDirection: Axis.horizontal,
-              itemCount: sections.length,
-              separatorBuilder: (context, index) => const SizedBox(width: 8),
-              itemBuilder: (context, index) {
-                final selected = index == activeSectionIndex;
-                return ChoiceChip(
-                  label: Text(sections[index].group.name),
-                  selected: selected,
-                  onSelected: (_) => onSectionTap(index),
-                );
-              },
+          if (sections.length > 1)
+            SizedBox(
+              height: 44,
+              child: ListView.separated(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                scrollDirection: Axis.horizontal,
+                itemCount: sections.length,
+                separatorBuilder: (context, index) => const SizedBox(width: 8),
+                itemBuilder: (context, index) {
+                  final selected = index == activeSectionIndex;
+                  return ChoiceChip(
+                    label: Text(sections[index].group.name),
+                    selected: selected,
+                    onSelected: (_) => onSectionTap(index),
+                  );
+                },
+              ),
             ),
-          ),
           if (active.hasBranches)
             SizedBox(
               height: 44,
