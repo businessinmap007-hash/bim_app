@@ -931,6 +931,12 @@
   "menuItemsEmpty": "No items yet.",
   "menuItemsSearchHint": "Search items...",
   "menuItemsAllSections": "All sections",
+  "menuItemsAddBrandRow": "Add brand",
+  "menuItemsUnbranchedSection": "Other items",
+  "menuItemsQuantityShort": "Available: {quantity}",
+  "@menuItemsQuantityShort": {
+    "placeholders": { "quantity": { "type": "int" } }
+  },
   "menuItemAdd": "Add item",
   "menuItemEditTitle": "Edit item",
   "menuItemAddTitle": "Add item",

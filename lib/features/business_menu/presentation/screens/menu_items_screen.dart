@@ -5,6 +5,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../application/business_menu_providers.dart';
 import '../../data/models/menu_item.dart';
+import '../../data/models/menu_vocabulary.dart';
 import 'market_catalog_screen.dart';
 import 'menu_item_edit_screen.dart';
 import 'menu_sections_screen.dart';
@@ -46,6 +47,132 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
     if (createdId != null) {
       ref.read(menuItemsControllerProvider.notifier).load();
     }
+  }
+
+  Future<void> _openCreateForBranch(int branchOptionId) async {
+    final createdId = await Navigator.of(context).push<int>(
+      MaterialPageRoute(builder: (_) => MenuItemEditScreen(initialLineOptionId: branchOptionId)),
+    );
+    if (createdId != null) {
+      ref.read(menuItemsControllerProvider.notifier).load();
+    }
+  }
+
+  /// Grouping-by-branch is only worth it once this business has a real
+  /// catalog vocabulary, and only on the unfiltered "all sections" view — a
+  /// merchant who filtered to one hand-typed section is asking for a plain
+  /// list of exactly that section's items, not a re-grouping of them.
+  MenuVocabulary? _vocabularyForGrouping(MenuItemsState state) {
+    if (state.sectionId != null) return null;
+    return ref.watch(menuVocabularyProvider).maybeWhen(data: (v) => v.hasLines ? v : null, orElse: () => null);
+  }
+
+  bool _hasEmptyBranchesToShow(MenuItemsState state) {
+    final vocabulary = _vocabularyForGrouping(state);
+    return vocabulary != null && vocabulary.lines.any((g) => g.options.isNotEmpty);
+  }
+
+  Widget _buildList(BuildContext context, MenuItemsState state) {
+    final vocabulary = _vocabularyForGrouping(state);
+    if (vocabulary == null) {
+      return ListView.separated(
+        controller: _scrollController,
+        padding: const EdgeInsets.all(16),
+        itemCount: state.items.length + (state.isLoadingMore ? 1 : 0),
+        separatorBuilder: (context, index) => const SizedBox(height: 8),
+        itemBuilder: (context, index) {
+          if (index >= state.items.length) {
+            return const Padding(
+              padding: EdgeInsets.symmetric(vertical: 16),
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }
+          final item = state.items[index];
+          return _ItemTile(
+            item: item,
+            onTap: () async {
+              await Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => MenuItemEditScreen(itemId: item.id)),
+              );
+              ref.read(menuItemsControllerProvider.notifier).load();
+            },
+          );
+        },
+      );
+    }
+
+    // Every branch the vocabulary knows about, in order — even one with no
+    // items yet, so "+ إضافة علامة تجارية" is always there to start it.
+    final itemsByBranch = <int, List<BusinessMenuItem>>{};
+    for (final item in state.items) {
+      final id = item.lineOption?.id;
+      if (id != null) (itemsByBranch[id] ??= []).add(item);
+    }
+    // Items with no line option at all (a hand-typed extra) still need a home.
+    final unbranched = state.items.where((i) => i.lineOption == null).toList();
+
+    return ListView(
+      controller: _scrollController,
+      padding: const EdgeInsets.all(16),
+      children: [
+        for (final group in vocabulary.lines.where((g) => g.options.isNotEmpty)) ...[
+          Text(group.groupName, style: Theme.of(context).textTheme.titleSmall),
+          const SizedBox(height: 8),
+          for (final branch in group.options) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(branch.nameAr, style: const TextStyle(fontWeight: FontWeight.w700)),
+                  TextButton.icon(
+                    onPressed: () => _openCreateForBranch(branch.id),
+                    icon: const Icon(Icons.add, size: 16),
+                    label: Text(AppLocalizations.of(context)!.menuItemsAddBrandRow),
+                  ),
+                ],
+              ),
+            ),
+            for (final item in itemsByBranch[branch.id] ?? const <BusinessMenuItem>[])
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: _ItemTile(
+                  item: item,
+                  onTap: () async {
+                    await Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => MenuItemEditScreen(itemId: item.id)),
+                    );
+                    ref.read(menuItemsControllerProvider.notifier).load();
+                  },
+                ),
+              ),
+            const SizedBox(height: 8),
+          ],
+        ],
+        if (unbranched.isNotEmpty) ...[
+          Text(AppLocalizations.of(context)!.menuItemsUnbranchedSection, style: Theme.of(context).textTheme.titleSmall),
+          const SizedBox(height: 8),
+          for (final item in unbranched)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: _ItemTile(
+                item: item,
+                onTap: () async {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => MenuItemEditScreen(itemId: item.id)),
+                  );
+                  ref.read(menuItemsControllerProvider.notifier).load();
+                },
+              ),
+            ),
+        ],
+        if (state.isLoadingMore)
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            child: Center(child: CircularProgressIndicator()),
+          ),
+      ],
+    );
   }
 
   @override
@@ -145,34 +272,11 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
                       ],
                     ),
                   )
-                : state.items.isEmpty
+                : state.items.isEmpty && !_hasEmptyBranchesToShow(state)
                 ? Center(child: Text(l10n.menuItemsEmpty))
                 : RefreshIndicator(
                     onRefresh: () => ref.read(menuItemsControllerProvider.notifier).load(),
-                    child: ListView.separated(
-                      controller: _scrollController,
-                      padding: const EdgeInsets.all(16),
-                      itemCount: state.items.length + (state.isLoadingMore ? 1 : 0),
-                      separatorBuilder: (context, index) => const SizedBox(height: 8),
-                      itemBuilder: (context, index) {
-                        if (index >= state.items.length) {
-                          return const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 16),
-                            child: Center(child: CircularProgressIndicator()),
-                          );
-                        }
-                        final item = state.items[index];
-                        return _ItemTile(
-                          item: item,
-                          onTap: () async {
-                            await Navigator.of(context).push(
-                              MaterialPageRoute(builder: (_) => MenuItemEditScreen(itemId: item.id)),
-                            );
-                            ref.read(menuItemsControllerProvider.notifier).load();
-                          },
-                        );
-                      },
-                    ),
+                    child: _buildList(context, state),
                   ),
           ),
         ],
@@ -214,7 +318,9 @@ class _ItemTile extends ConsumerWidget {
           child: item.images.isEmpty ? const Icon(Icons.fastfood_outlined) : null,
         ),
         title: Text(item.nameAr, style: TextStyle(color: item.isActive ? null : Theme.of(context).hintColor)),
-        subtitle: item.nameEn != null ? Text(item.nameEn!) : null,
+        subtitle: item.availableQuantity != null
+            ? Text(AppLocalizations.of(context)!.menuItemsQuantityShort(item.availableQuantity!))
+            : (item.nameEn != null ? Text(item.nameEn!) : null),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

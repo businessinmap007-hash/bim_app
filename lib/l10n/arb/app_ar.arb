@@ -931,6 +931,12 @@
   "menuItemsEmpty": "لا توجد أصناف بعد.",
   "menuItemsSearchHint": "ابحث عن صنف...",
   "menuItemsAllSections": "كل الأقسام",
+  "menuItemsAddBrandRow": "إضافة علامة تجارية",
+  "menuItemsUnbranchedSection": "أصناف أخرى",
+  "menuItemsQuantityShort": "الكمية المتاحة: {quantity}",
+  "@menuItemsQuantityShort": {
+    "placeholders": { "quantity": { "type": "int" } }
+  },
   "menuItemAdd": "إضافة صنف",
   "menuItemEditTitle": "تعديل الصنف",
   "menuItemAddTitle": "إضافة صنف",

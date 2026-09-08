@@ -2839,6 +2839,17 @@ class AppLocalizationsAr extends AppLocalizations {
   String get menuItemsAllSections => 'كل الأقسام';
 
   @override
+  String get menuItemsAddBrandRow => 'إضافة علامة تجارية';
+
+  @override
+  String get menuItemsUnbranchedSection => 'أصناف أخرى';
+
+  @override
+  String menuItemsQuantityShort(int quantity) {
+    return 'الكمية المتاحة: $quantity';
+  }
+
+  @override
   String get menuItemAdd => 'إضافة صنف';
 
   @override

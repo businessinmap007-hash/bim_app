@@ -2824,6 +2824,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuItemsAllSections => 'All sections';
 
   @override
+  String get menuItemsAddBrandRow => 'Add brand';
+
+  @override
+  String get menuItemsUnbranchedSection => 'Other items';
+
+  @override
+  String menuItemsQuantityShort(int quantity) {
+    return 'Available: $quantity';
+  }
+
+  @override
   String get menuItemAdd => 'Add item';
 
   @override

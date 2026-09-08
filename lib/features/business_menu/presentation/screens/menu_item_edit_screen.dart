@@ -16,7 +16,13 @@ import '../../data/models/menu_variant.dart';
 /// the backend itself models them as sub-resources of a saved MenuItem).
 class MenuItemEditScreen extends ConsumerStatefulWidget {
   final int? itemId;
-  const MenuItemEditScreen({super.key, this.itemId});
+  /// Pre-selects a branch (line option) on a NEW item — e.g. tapping
+  /// "+ إضافة علامة تجارية" under "ثلاجات" in the grouped items list opens
+  /// this already pointed at that branch, so the merchant only fills in the
+  /// brand and price. Ignored when editing an existing item (its own value
+  /// wins via `_seedFrom`).
+  final int? initialLineOptionId;
+  const MenuItemEditScreen({super.key, this.itemId, this.initialLineOptionId});
 
   @override
   ConsumerState<MenuItemEditScreen> createState() => _MenuItemEditScreenState();
@@ -41,7 +47,7 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
   // What this item IS (a `line` option, e.g. "ثلاجات") and what qualifies it
   // (brand, condition...) — from the merchant's own vocabulary, see
   // HasOfferingOptions. Null/empty for a hand-typed item (a restaurant dish).
-  int? _lineOptionId;
+  late int? _lineOptionId = widget.initialLineOptionId;
   Set<int> _modifierOptionIds = {};
 
   @override

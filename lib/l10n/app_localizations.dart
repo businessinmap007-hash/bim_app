@@ -5354,6 +5354,24 @@ abstract class AppLocalizations {
   /// **'كل الأقسام'**
   String get menuItemsAllSections;
 
+  /// No description provided for @menuItemsAddBrandRow.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة علامة تجارية'**
+  String get menuItemsAddBrandRow;
+
+  /// No description provided for @menuItemsUnbranchedSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'أصناف أخرى'**
+  String get menuItemsUnbranchedSection;
+
+  /// No description provided for @menuItemsQuantityShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكمية المتاحة: {quantity}'**
+  String menuItemsQuantityShort(int quantity);
+
   /// No description provided for @menuItemAdd.
   ///
   /// In ar, this message translates to:

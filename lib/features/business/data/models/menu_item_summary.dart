@@ -41,6 +41,21 @@ class MenuItemExtraGroup {
   );
 }
 
+/// The branch an item sits under within its section — e.g. "ثلاجات" inside
+/// "أنواع الأجهزة الكهربائية" — see MenuDiscoveryController::itemPayload().
+class MenuItemBranch {
+  final int id;
+  final String nameAr;
+  final String? nameEn;
+  const MenuItemBranch({required this.id, required this.nameAr, this.nameEn});
+
+  factory MenuItemBranch.fromJson(Map<String, dynamic> json) => MenuItemBranch(
+    id: json['id'] as int,
+    nameAr: json['name_ar'] as String,
+    nameEn: json['name_en'] as String?,
+  );
+}
+
 class MenuItemExtra {
   final int id;
   final String name;
@@ -74,6 +89,7 @@ class MenuItemSummary {
   final String? saleUnitLabel;
   final int? availableQuantity;
   final bool isFeatured;
+  final MenuItemBranch? lineOption;
   final List<MenuItemVariant> variants;
   final List<MenuItemExtraGroup> extraGroups;
   final List<MenuItemExtra> extras;
@@ -90,6 +106,7 @@ class MenuItemSummary {
     this.saleUnitLabel,
     this.availableQuantity,
     this.isFeatured = false,
+    this.lineOption,
     required this.variants,
     this.extraGroups = const [],
     required this.extras,
@@ -122,6 +139,9 @@ class MenuItemSummary {
     saleUnitLabel: json['sale_unit_label'] as String?,
     availableQuantity: (json['available_quantity'] as num?)?.toInt(),
     isFeatured: json['is_featured'] as bool? ?? false,
+    lineOption: json['line_option'] != null
+        ? MenuItemBranch.fromJson(json['line_option'] as Map<String, dynamic>)
+        : null,
     variants: (json['variants'] as List<dynamic>? ?? [])
         .map((e) => MenuItemVariant.fromJson(e as Map<String, dynamic>))
         .toList(),

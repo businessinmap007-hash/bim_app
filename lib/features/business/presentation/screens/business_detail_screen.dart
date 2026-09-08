@@ -21,6 +21,8 @@ import '../../../general_chat/presentation/screens/chat_thread_screen.dart';
 import '../../../ratings/presentation/screens/reviews_screen.dart';
 import '../../application/business_page_providers.dart';
 import '../../data/models/business_profile.dart';
+import '../../data/models/menu_item_summary.dart';
+import '../../data/models/menu_section_group.dart';
 import '../../data/models/offering_item.dart';
 import 'business_info_screen.dart';
 import '../widgets/business_rating_row.dart';
@@ -360,11 +362,64 @@ class _PostsTab extends ConsumerWidget {
   }
 }
 
-class _MenuTab extends ConsumerWidget {
+/// One branch's worth of items within a section — e.g. "ثلاجات" inside
+/// "أنواع الأجهزة الكهربائية". `id == null` is the bucket for items with no
+/// line option (a restaurant dish) — shown directly, no branch subheader.
+class _BranchBucket {
+  final int? id;
+  final String name;
+  final List<MenuItemSummary> items;
+  final GlobalKey key = GlobalKey();
+  _BranchBucket({required this.id, required this.name, required this.items});
+}
+
+class _SectionData {
+  final MenuSectionGroup group;
+  final List<_BranchBucket> branches;
+  final GlobalKey key = GlobalKey();
+  _SectionData({required this.group, required this.branches});
+
+  bool get hasBranches => branches.any((b) => b.id != null);
+}
+
+List<_SectionData> _prepareSections(List<MenuSectionGroup> sections) {
+  return sections.map((section) {
+    final order = <int?>[];
+    final byBranch = <int?, List<MenuItemSummary>>{};
+    final names = <int?, String>{};
+
+    for (final item in section.items) {
+      final branch = item.lineOption;
+      final key = branch?.id;
+      if (!byBranch.containsKey(key)) {
+        order.add(key);
+        byBranch[key] = [];
+        names[key] = branch?.nameAr ?? '';
+      }
+      byBranch[key]!.add(item);
+    }
+
+    return _SectionData(
+      group: section,
+      branches: order
+          .map((key) => _BranchBucket(id: key, name: names[key]!, items: byBranch[key]!))
+          .toList(),
+    );
+  }).toList();
+}
+
+class _MenuTab extends ConsumerStatefulWidget {
   final int businessId;
   final BusinessFulfillment fulfillment;
   final int? sharedOrderId;
   const _MenuTab({required this.businessId, required this.fulfillment, this.sharedOrderId});
+
+  @override
+  ConsumerState<_MenuTab> createState() => _MenuTabState();
+}
+
+class _MenuTabState extends ConsumerState<_MenuTab> {
+  int _activeSectionIndex = 0;
 
   /// Turns the caller's cart for this business into a shared one (idempotent
   /// — reuses the existing share token if it's already shared) and opens the
@@ -375,7 +430,7 @@ class _MenuTab extends ConsumerWidget {
   Future<void> _startShareCart(BuildContext context, WidgetRef ref) async {
     final l10n = AppLocalizations.of(context)!;
     try {
-      final shared = await ref.read(sharedCartApiProvider).share(businessId);
+      final shared = await ref.read(sharedCartApiProvider).share(widget.businessId);
       if (context.mounted) {
         await showShareCartSheet(context, orderId: shared.orderId, shareToken: shared.shareToken);
       }
@@ -386,16 +441,26 @@ class _MenuTab extends ConsumerWidget {
     }
   }
 
+  void _jumpTo(GlobalKey key) {
+    final target = key.currentContext;
+    if (target == null) return;
+    Scrollable.ensureVisible(target, duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final menuAsync = ref.watch(businessMenuProvider(businessId));
+    final menuAsync = ref.watch(businessMenuProvider(widget.businessId));
 
     return AsyncValueView(
       value: menuAsync,
-      onRetry: () => ref.invalidate(businessMenuProvider(businessId)),
-      builder: (context, sections) {
-        if (sections.isEmpty) return Center(child: Text(l10n.businessMenuEmpty));
+      onRetry: () => ref.invalidate(businessMenuProvider(widget.businessId)),
+      builder: (context, rawSections) {
+        if (rawSections.isEmpty) return Center(child: Text(l10n.businessMenuEmpty));
+
+        final sections = _prepareSections(rawSections);
+        if (_activeSectionIndex >= sections.length) _activeSectionIndex = 0;
+        final activeSection = sections[_activeSectionIndex];
 
         return Builder(
           builder: (context) => CustomScrollView(
@@ -414,8 +479,8 @@ class _MenuTab extends ConsumerWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(child: FulfillmentSelectorBar(businessId: businessId, fulfillment: fulfillment)),
-                      if (sharedOrderId == null)
+                      Expanded(child: FulfillmentSelectorBar(businessId: widget.businessId, fulfillment: widget.fulfillment)),
+                      if (widget.sharedOrderId == null)
                         IconButton(
                           tooltip: l10n.cartShareCart,
                           icon: const Icon(Icons.ios_share_outlined),
@@ -425,32 +490,62 @@ class _MenuTab extends ConsumerWidget {
                   ),
                 ),
               ),
+              // A sticky nav is only worth the chrome once there is more than
+              // one heading to jump between — a one-section restaurant menu
+              // stays exactly as it was.
+              if (sections.length > 1)
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: _MenuNavDelegate(
+                    height: activeSection.hasBranches ? 96 : 52,
+                    child: _MenuNavRows(
+                      sections: sections,
+                      activeSectionIndex: _activeSectionIndex,
+                      onSectionTap: (index) {
+                        setState(() => _activeSectionIndex = index);
+                        _jumpTo(sections[index].key);
+                      },
+                      onBranchTap: _jumpTo,
+                    ),
+                  ),
+                ),
               SliverPadding(
                 padding: const EdgeInsets.all(16),
-                sliver: SliverList.builder(
-                  itemCount: sections.length,
-                  itemBuilder: (context, index) {
-                    final section = sections[index];
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(section.name, style: Theme.of(context).textTheme.titleSmall),
-                          const SizedBox(height: 8),
-                          ...section.items.map(
-                            (item) => Padding(
-                              padding: const EdgeInsets.only(bottom: 8),
-                              child: MenuItemTile(
-                                item: item,
-                                onTap: () => showAddToCartSheet(context, item, sharedOrderId: sharedOrderId),
-                              ),
-                            ),
+                sliver: SliverToBoxAdapter(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      for (final section in sections)
+                        Padding(
+                          key: section.key,
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(section.group.name, style: Theme.of(context).textTheme.titleSmall),
+                              const SizedBox(height: 8),
+                              for (final branch in section.branches) ...[
+                                if (branch.id != null)
+                                  Padding(
+                                    key: branch.key,
+                                    padding: const EdgeInsets.symmetric(vertical: 6),
+                                    child: Text(branch.name, style: Theme.of(context).textTheme.titleSmall),
+                                  ),
+                                ...branch.items.map(
+                                  (item) => Padding(
+                                    padding: const EdgeInsets.only(bottom: 8),
+                                    child: MenuItemTile(
+                                      item: item,
+                                      onTap: () => showAddToCartSheet(context, item, sharedOrderId: widget.sharedOrderId),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ],
                           ),
-                        ],
-                      ),
-                    );
-                  },
+                        ),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -459,6 +554,90 @@ class _MenuTab extends ConsumerWidget {
       },
     );
   }
+}
+
+/// Two horizontal chip rows pinned above the menu — sections, then the
+/// active section's branches — mirroring the sticky category-nav pattern
+/// used by delivery-menu sites: tap a chip, jump straight to its heading.
+class _MenuNavRows extends StatelessWidget {
+  final List<_SectionData> sections;
+  final int activeSectionIndex;
+  final ValueChanged<int> onSectionTap;
+  final ValueChanged<GlobalKey> onBranchTap;
+
+  const _MenuNavRows({
+    required this.sections,
+    required this.activeSectionIndex,
+    required this.onSectionTap,
+    required this.onBranchTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final active = sections[activeSectionIndex];
+
+    return ColoredBox(
+      color: theme.scaffoldBackgroundColor,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            height: 44,
+            child: ListView.separated(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              scrollDirection: Axis.horizontal,
+              itemCount: sections.length,
+              separatorBuilder: (context, index) => const SizedBox(width: 8),
+              itemBuilder: (context, index) {
+                final selected = index == activeSectionIndex;
+                return ChoiceChip(
+                  label: Text(sections[index].group.name),
+                  selected: selected,
+                  onSelected: (_) => onSectionTap(index),
+                );
+              },
+            ),
+          ),
+          if (active.hasBranches)
+            SizedBox(
+              height: 44,
+              child: ListView.separated(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                scrollDirection: Axis.horizontal,
+                itemCount: active.branches.where((b) => b.id != null).length,
+                separatorBuilder: (context, index) => const SizedBox(width: 8),
+                itemBuilder: (context, index) {
+                  final branch = active.branches.where((b) => b.id != null).toList()[index];
+                  return ActionChip(
+                    label: Text(branch.name),
+                    onPressed: () => onBranchTap(branch.key),
+                  );
+                },
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MenuNavDelegate extends SliverPersistentHeaderDelegate {
+  final double height;
+  final Widget child;
+  const _MenuNavDelegate({required this.height, required this.child});
+
+  @override
+  double get minExtent => height;
+  @override
+  double get maxExtent => height;
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) => child;
+
+  @override
+  bool shouldRebuild(covariant _MenuNavDelegate oldDelegate) =>
+      height != oldDelegate.height || child != oldDelegate.child;
 }
 
 class _ServicesTab extends ConsumerWidget {
