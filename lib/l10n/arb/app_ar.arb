@@ -959,6 +959,8 @@
   "menuItemSectionLabel": "القسم",
   "menuItemNoSection": "بدون قسم",
   "menuItemBasePriceHint": "السعر",
+  "menuItemSaleUnitLabel": "يُباع بـ",
+  "menuItemSaleUnitByItem": "بالقطعة",
   "menuItemSupplyPriceHint": "سعر التكلفة (اختياري)",
   "menuItemBrandNameHint": "الماركة (اختياري)",
   "menuItemSortOrderHint": "ترتيب العرض",

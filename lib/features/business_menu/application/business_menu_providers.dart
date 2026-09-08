@@ -9,6 +9,12 @@ final businessMenuApiProvider = Provider<BusinessMenuApi>((ref) {
   return BusinessMenuApi(ref.watch(apiClientProvider));
 });
 
+/// The shared catalog_units vocabulary — small and effectively static per
+/// session, so one fetch per app run is enough.
+final saleUnitOptionsProvider = FutureProvider<List<SaleUnitOption>>((ref) {
+  return ref.watch(businessMenuApiProvider).saleUnits();
+});
+
 // ─────────────────────────── Sections ───────────────────────────
 
 class MenuSectionsState {

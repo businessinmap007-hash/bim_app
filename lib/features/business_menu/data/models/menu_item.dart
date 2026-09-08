@@ -14,6 +14,10 @@ class BusinessMenuItem {
   final String? descriptionEn;
   final double basePrice;
   final double? supplyPrice;
+  /// null = priced by the item. Set means the price is "per" this unit
+  /// (كجم، لتر...) — see Api\V2\BusinessMenuItemController::saleUnits().
+  final String? saleUnit;
+  final String? saleUnitLabel;
   final String? brandName;
   final int? availableQuantity;
   final int sortOrder;
@@ -32,6 +36,8 @@ class BusinessMenuItem {
     this.descriptionEn,
     required this.basePrice,
     this.supplyPrice,
+    this.saleUnit,
+    this.saleUnitLabel,
     this.brandName,
     this.availableQuantity,
     required this.sortOrder,
@@ -51,6 +57,8 @@ class BusinessMenuItem {
     descriptionEn: json['description_en'] as String?,
     basePrice: (json['base_price'] as num).toDouble(),
     supplyPrice: (json['supply_price'] as num?)?.toDouble(),
+    saleUnit: json['sale_unit'] as String?,
+    saleUnitLabel: json['sale_unit_label'] as String?,
     brandName: json['brand_name'] as String?,
     availableQuantity: json['available_quantity'] as int?,
     sortOrder: json['sort_order'] as int,

@@ -10,6 +10,17 @@ class MenuItemsPage {
   const MenuItemsPage({required this.items, required this.hasMore});
 }
 
+/// One row from GET /business/menu/sale-units — a unit an item's price can
+/// be "per" (كجم، لتر، قطعة...).
+class SaleUnitOption {
+  final String code;
+  final String label;
+  const SaleUnitOption({required this.code, required this.label});
+
+  factory SaleUnitOption.fromJson(Map<String, dynamic> json) =>
+      SaleUnitOption(code: json['code'] as String, label: json['label'] as String);
+}
+
 /// /business/menu/... — see Api\V2\BusinessMenuSectionController /
 /// BusinessMenuItemController. Gated server-side on the "menu" business
 /// capability (owner, or a delegate granted it) via business.member
@@ -71,6 +82,13 @@ class BusinessMenuApi {
   Future<void> deleteSection(int id) =>
       _client.delete('/business/menu/sections/$id');
 
+  Future<List<SaleUnitOption>> saleUnits() async {
+    final body = await _client.getForBody('/business/menu/sale-units');
+    return (body['data']['units'] as List<dynamic>? ?? [])
+        .map((e) => SaleUnitOption.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
   // ─────────────────────────── Items ───────────────────────────
 
   Future<MenuItemsPage> items({
@@ -114,6 +132,7 @@ class BusinessMenuApi {
     String? descriptionEn,
     required double basePrice,
     double? supplyPrice,
+    String? saleUnit,
     String? brandName,
     int sortOrder = 0,
     bool isActive = true,
@@ -129,6 +148,7 @@ class BusinessMenuApi {
                 descriptionEn: descriptionEn,
                 basePrice: basePrice,
                 supplyPrice: supplyPrice,
+                saleUnit: saleUnit,
                 brandName: brandName,
                 sortOrder: sortOrder,
                 isActive: isActive,
@@ -147,6 +167,7 @@ class BusinessMenuApi {
     String? descriptionEn,
     required double basePrice,
     double? supplyPrice,
+    String? saleUnit,
     String? brandName,
     int sortOrder = 0,
     bool isActive = true,
@@ -162,6 +183,7 @@ class BusinessMenuApi {
                 descriptionEn: descriptionEn,
                 basePrice: basePrice,
                 supplyPrice: supplyPrice,
+                saleUnit: saleUnit,
                 brandName: brandName,
                 sortOrder: sortOrder,
                 isActive: isActive,
@@ -179,6 +201,7 @@ class BusinessMenuApi {
     String? descriptionEn,
     required double basePrice,
     double? supplyPrice,
+    String? saleUnit,
     String? brandName,
     required int sortOrder,
     required bool isActive,
@@ -193,6 +216,10 @@ class BusinessMenuApi {
         'description_en': descriptionEn,
       'base_price': basePrice,
       'supply_price': ?supplyPrice,
+      // A resubmitted form always carries the field's current state, so an
+      // absent key here means "by the item" just as much as an empty one —
+      // same convention as supply_price/brand_name above.
+      'sale_unit': ?saleUnit,
       if (brandName != null && brandName.isNotEmpty) 'brand_name': brandName,
       'sort_order': sortOrder,
       'is_active': isActive,

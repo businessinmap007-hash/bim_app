@@ -31,6 +31,7 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
   final _brandController = TextEditingController();
   final _sortController = TextEditingController(text: '0');
   int? _sectionId;
+  String? _saleUnit;
   bool _isActive = true;
   bool _saving = false;
   String? _error;
@@ -61,6 +62,7 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
     _brandController.text = item.brandName ?? '';
     _sortController.text = '${item.sortOrder}';
     _sectionId = item.menuSectionId;
+    _saleUnit = item.saleUnit;
   }
 
   Future<void> _save() async {
@@ -92,6 +94,7 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
           descriptionEn: _descEnController.text.trim(),
           basePrice: price,
           supplyPrice: supplyPrice,
+          saleUnit: _saleUnit,
           brandName: _brandController.text.trim(),
           sortOrder: int.tryParse(_sortController.text.trim()) ?? 0,
           isActive: _isActive,
@@ -107,6 +110,7 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
           descriptionEn: _descEnController.text.trim(),
           basePrice: price,
           supplyPrice: supplyPrice,
+          saleUnit: _saleUnit,
           brandName: _brandController.text.trim(),
           sortOrder: int.tryParse(_sortController.text.trim()) ?? 0,
           isActive: _isActive,
@@ -223,6 +227,8 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
           decoration: InputDecoration(labelText: l10n.menuItemBasePriceHint),
         ),
         const SizedBox(height: 12),
+        _SaleUnitField(value: _saleUnit, onChanged: (v) => setState(() => _saleUnit = v)),
+        const SizedBox(height: 12),
         TextField(
           controller: _supplyPriceController,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -258,6 +264,40 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
               : Text(l10n.commonSave),
         ),
       ],
+    );
+  }
+}
+
+/// "بالقطعة" (null) or one of the shared catalog_units — a burger and a
+/// kilo of onions live in the same item list, priced differently.
+class _SaleUnitField extends ConsumerWidget {
+  final String? value;
+  final ValueChanged<String?> onChanged;
+  const _SaleUnitField({required this.value, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final unitsAsync = ref.watch(saleUnitOptionsProvider);
+
+    return unitsAsync.when(
+      loading: () => const LinearProgressIndicator(),
+      error: (_, _) => const SizedBox.shrink(),
+      data: (units) {
+        // The saved code might not be in the freshly-fetched list (retired
+        // from catalog_units after this item was set) — fall back to "by
+        // the item" rather than crashing the dropdown on a stale value.
+        final validValue = units.any((u) => u.code == value) ? value : null;
+        return DropdownButtonFormField<String?>(
+          initialValue: validValue,
+          decoration: InputDecoration(labelText: l10n.menuItemSaleUnitLabel),
+          items: [
+            DropdownMenuItem(value: null, child: Text(l10n.menuItemSaleUnitByItem)),
+            for (final u in units) DropdownMenuItem(value: u.code, child: Text(u.label)),
+          ],
+          onChanged: onChanged,
+        );
+      },
     );
   }
 }

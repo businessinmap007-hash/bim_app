@@ -959,6 +959,8 @@
   "menuItemSectionLabel": "Section",
   "menuItemNoSection": "No section",
   "menuItemBasePriceHint": "Price",
+  "menuItemSaleUnitLabel": "Sold by",
+  "menuItemSaleUnitByItem": "By the item",
   "menuItemSupplyPriceHint": "Cost price (optional)",
   "menuItemBrandNameHint": "Brand (optional)",
   "menuItemSortOrderHint": "Sort order",

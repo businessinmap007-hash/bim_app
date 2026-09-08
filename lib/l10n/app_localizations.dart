@@ -5522,6 +5522,18 @@ abstract class AppLocalizations {
   /// **'السعر'**
   String get menuItemBasePriceHint;
 
+  /// No description provided for @menuItemSaleUnitLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُباع بـ'**
+  String get menuItemSaleUnitLabel;
+
+  /// No description provided for @menuItemSaleUnitByItem.
+  ///
+  /// In ar, this message translates to:
+  /// **'بالقطعة'**
+  String get menuItemSaleUnitByItem;
+
   /// No description provided for @menuItemSupplyPriceHint.
   ///
   /// In ar, this message translates to:

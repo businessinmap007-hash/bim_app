@@ -2924,6 +2924,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get menuItemBasePriceHint => 'السعر';
 
   @override
+  String get menuItemSaleUnitLabel => 'يُباع بـ';
+
+  @override
+  String get menuItemSaleUnitByItem => 'بالقطعة';
+
+  @override
   String get menuItemSupplyPriceHint => 'سعر التكلفة (اختياري)';
 
   @override

@@ -2910,6 +2910,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuItemBasePriceHint => 'Price';
 
   @override
+  String get menuItemSaleUnitLabel => 'Sold by';
+
+  @override
+  String get menuItemSaleUnitByItem => 'By the item';
+
+  @override
   String get menuItemSupplyPriceHint => 'Cost price (optional)';
 
   @override
