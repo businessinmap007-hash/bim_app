@@ -2366,11 +2366,11 @@ abstract class AppLocalizations {
   /// **'الرمزان غير متطابقين.'**
   String get walletPinMismatch;
 
-  /// No description provided for @walletPinInvalidLength.
+  /// No description provided for @walletPinWrong.
   ///
   /// In ar, this message translates to:
-  /// **'أدخل {length} أرقام.'**
-  String walletPinInvalidLength(int length);
+  /// **'رمز خاطئ.'**
+  String get walletPinWrong;
 
   /// No description provided for @chatTitle.
   ///

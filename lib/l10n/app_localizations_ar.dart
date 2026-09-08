@@ -1254,9 +1254,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get walletPinMismatch => 'الرمزان غير متطابقين.';
 
   @override
-  String walletPinInvalidLength(int length) {
-    return 'أدخل $length أرقام.';
-  }
+  String get walletPinWrong => 'رمز خاطئ.';
 
   @override
   String get chatTitle => 'المحادثة';

@@ -31,23 +31,22 @@ class _GuaranteeScreenState extends ConsumerState<GuaranteeScreen> {
 
   Future<void> _activate({int? levelId}) async {
     final l10n = AppLocalizations.of(context)!;
-    final pin = await promptWalletPin(context, ref);
-    if (pin == null || !mounted) return;
-
     setState(() => _busy = true);
-    try {
-      final result = await ref.read(guaranteeApiProvider).activate(levelId: levelId, pin: pin);
-      ref.invalidate(guaranteeMeProvider);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(result.changed ? l10n.guaranteeActivated : l10n.guaranteeNoChange)),
-        );
-      }
-    } catch (e) {
-      if (mounted) _showError(e);
-    } finally {
-      if (mounted) setState(() => _busy = false);
-    }
+    await promptWalletPin(
+      context,
+      ref,
+      action: (pin) async {
+        final result = await ref.read(guaranteeApiProvider).activate(levelId: levelId, pin: pin);
+        ref.invalidate(guaranteeMeProvider);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(result.changed ? l10n.guaranteeActivated : l10n.guaranteeNoChange)),
+          );
+        }
+      },
+      onError: _showError,
+    );
+    if (mounted) setState(() => _busy = false);
   }
 
   Future<void> _unlock() async {
@@ -64,21 +63,20 @@ class _GuaranteeScreenState extends ConsumerState<GuaranteeScreen> {
     );
     if (confirmed != true || !mounted) return;
 
-    final pin = await promptWalletPin(context, ref);
-    if (pin == null || !mounted) return;
-
     setState(() => _busy = true);
-    try {
-      await ref.read(guaranteeApiProvider).unlock(pin: pin);
-      ref.invalidate(guaranteeMeProvider);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.guaranteeUnlocked)));
-      }
-    } catch (e) {
-      if (mounted) _showError(e);
-    } finally {
-      if (mounted) setState(() => _busy = false);
-    }
+    await promptWalletPin(
+      context,
+      ref,
+      action: (pin) async {
+        await ref.read(guaranteeApiProvider).unlock(pin: pin);
+        ref.invalidate(guaranteeMeProvider);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.guaranteeUnlocked)));
+        }
+      },
+      onError: _showError,
+    );
+    if (mounted) setState(() => _busy = false);
   }
 
   @override

@@ -1241,9 +1241,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletPinMismatch => 'PINs don\'t match.';
 
   @override
-  String walletPinInvalidLength(int length) {
-    return 'Enter $length digits.';
-  }
+  String get walletPinWrong => 'Incorrect PIN.';
 
   @override
   String get chatTitle => 'Chat';
