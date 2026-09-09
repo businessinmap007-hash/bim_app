@@ -11,6 +11,13 @@ import 'menu_item_edit_screen.dart';
 import 'menu_sections_screen.dart';
 import 'menu_type_selection_screen.dart';
 
+/// An item's own name is the best key for its emoji — "بطاطس" IS a potato
+/// regardless of which vocabulary group it happens to sell under — falling
+/// back to its line option's name for the (usual) case where the item was
+/// created directly from that vocabulary branch and never got its own
+/// English name typed in.
+String _itemEmoji(BusinessMenuItem item) => produceEmoji(item.nameEn ?? item.lineOption?.nameEn);
+
 class MenuItemsScreen extends ConsumerStatefulWidget {
   const MenuItemsScreen({super.key});
 
@@ -504,7 +511,7 @@ class _ItemTile extends ConsumerWidget {
         onTap: onTap,
         leading: CircleAvatar(
           backgroundImage: item.images.isNotEmpty ? NetworkImage(item.images.first.url) : null,
-          child: item.images.isEmpty ? const Icon(Icons.fastfood_outlined) : null,
+          child: item.images.isEmpty ? Text(_itemEmoji(item), style: const TextStyle(fontSize: 18)) : null,
         ),
         title: Text(item.nameAr, style: TextStyle(color: item.isActive ? null : Theme.of(context).hintColor)),
         subtitle: item.availableQuantity != null
@@ -571,8 +578,9 @@ class _ItemGridTile extends ConsumerWidget {
                 child: item.images.isNotEmpty
                     ? Image.network(item.images.first.url, fit: BoxFit.cover)
                     : Container(
+                        alignment: Alignment.center,
                         color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
-                        child: Icon(Icons.fastfood_outlined, color: theme.colorScheme.onSurface),
+                        child: Text(_itemEmoji(item), style: const TextStyle(fontSize: 36)),
                       ),
               ),
               Padding(
