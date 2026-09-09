@@ -409,6 +409,35 @@ List<_SectionData> _prepareSections(List<MenuSectionGroup> sections) {
   }).toList();
 }
 
+/// Every item in one SECTION, packed two-per-row regardless of which branch
+/// each came from — see the "grid mode drops branch headers" note where
+/// this is built.
+class _SectionGrid extends StatelessWidget {
+  final List<MenuItemSummary> items;
+  final ValueChanged<MenuItemSummary> onTap;
+  const _SectionGrid({required this.items, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.only(bottom: 8),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 10,
+        crossAxisSpacing: 10,
+        childAspectRatio: 0.62,
+      ),
+      itemCount: items.length,
+      itemBuilder: (context, index) {
+        final item = items[index];
+        return MenuItemGridCard(item: item, onTap: () => onTap(item));
+      },
+    );
+  }
+}
+
 /// The exact height _MenuNavRows renders below — one 44px row per chip row
 /// it actually draws, zero when neither is worth showing.
 double _menuNavHeight(List<_SectionData> sections, _SectionData activeSection) {
@@ -430,6 +459,11 @@ class _MenuTab extends ConsumerStatefulWidget {
 
 class _MenuTabState extends ConsumerState<_MenuTab> {
   int _activeSectionIndex = 0;
+  /// The customer's own list/grid choice for THIS visit, overriding the
+  /// merchant's stored default the moment they touch the toggle — a
+  /// customer browsing preference, not something written back to the
+  /// business's own `display_mode` setting.
+  String? _displayModeOverride;
 
   /// Turns the caller's cart for this business into a shared one (idempotent
   /// — reuses the existing share token if it's already shared) and opens the
@@ -471,6 +505,7 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
         final sections = _prepareSections(page.sections);
         if (_activeSectionIndex >= sections.length) _activeSectionIndex = 0;
         final activeSection = sections[_activeSectionIndex];
+        final isGrid = (_displayModeOverride ?? page.displayMode) == 'grid';
 
         return Builder(
           builder: (context) => CustomScrollView(
@@ -497,6 +532,27 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
                           onPressed: () => _startShareCart(context, ref),
                         ),
                     ],
+                  ),
+                ),
+              ),
+              // The merchant's `display_mode` is only the STARTING choice —
+              // a customer browsing this menu gets the same list/grid
+              // capability the merchant's own "My Menu" screen has, kept
+              // locally for this visit rather than written back to the
+              // business's stored setting.
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                sliver: SliverToBoxAdapter(
+                  child: Align(
+                    alignment: AlignmentDirectional.centerEnd,
+                    child: SegmentedButton<String>(
+                      segments: [
+                        ButtonSegment(value: 'list', label: Text(l10n.menuItemsDisplayModeList), icon: const Icon(Icons.view_list_outlined)),
+                        ButtonSegment(value: 'grid', label: Text(l10n.menuItemsDisplayModeGrid), icon: const Icon(Icons.grid_view_outlined)),
+                      ],
+                      selected: {isGrid ? 'grid' : 'list'},
+                      onSelectionChanged: (selection) => setState(() => _displayModeOverride = selection.first),
+                    ),
                   ),
                 ),
               ),
@@ -540,34 +596,27 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
                             children: [
                               Text(section.group.name, style: Theme.of(context).textTheme.titleSmall),
                               const SizedBox(height: 8),
-                              for (final branch in section.branches) ...[
-                                if (branch.id != null)
-                                  Padding(
-                                    key: branch.key,
-                                    padding: const EdgeInsets.symmetric(vertical: 6),
-                                    child: Text(branch.name, style: Theme.of(context).textTheme.titleSmall),
-                                  ),
-                                if (page.isGrid)
-                                  GridView.builder(
-                                    shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    padding: const EdgeInsets.only(bottom: 8),
-                                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      mainAxisSpacing: 10,
-                                      crossAxisSpacing: 10,
-                                      childAspectRatio: 0.72,
+                              // Grid mode packs every item in the SECTION into
+                              // one flat, two-per-row grid — branch headers
+                              // are dropped here (not per LIST mode below):
+                              // keeping one branch's items in a grid of their
+                              // own left a branch with a single item taking a
+                              // whole row to itself, the exact "one product
+                              // per row" this mode exists to avoid whenever a
+                              // second card could sit right beside it.
+                              if (isGrid)
+                                _SectionGrid(
+                                  items: section.branches.expand((b) => b.items).toList(),
+                                  onTap: (item) => showAddToCartSheet(context, item, sharedOrderId: widget.sharedOrderId),
+                                )
+                              else
+                                for (final branch in section.branches) ...[
+                                  if (branch.id != null)
+                                    Padding(
+                                      key: branch.key,
+                                      padding: const EdgeInsets.symmetric(vertical: 6),
+                                      child: Text(branch.name, style: Theme.of(context).textTheme.titleSmall),
                                     ),
-                                    itemCount: branch.items.length,
-                                    itemBuilder: (context, index) {
-                                      final item = branch.items[index];
-                                      return MenuItemGridCard(
-                                        item: item,
-                                        onTap: () => showAddToCartSheet(context, item, sharedOrderId: widget.sharedOrderId),
-                                      );
-                                    },
-                                  )
-                                else
                                   ...branch.items.map(
                                     (item) => Padding(
                                       padding: const EdgeInsets.only(bottom: 8),
