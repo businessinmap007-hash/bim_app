@@ -5396,6 +5396,30 @@ abstract class AppLocalizations {
   /// **'شبكة'**
   String get menuItemsDisplayModeGrid;
 
+  /// No description provided for @menuItemsManageTypesAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'إدارة الأصناف'**
+  String get menuItemsManageTypesAction;
+
+  /// No description provided for @menuTypeSelectionSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الأصناف التي تقدمها من نشاطك — تقدر تضيف أصناف تانية من هنا في أي وقت.'**
+  String get menuTypeSelectionSubtitle;
+
+  /// No description provided for @menuTypeSelectionContinue.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة ({count})'**
+  String menuTypeSelectionContinue(int count);
+
+  /// No description provided for @menuTypeSelectionSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تحديث الأصناف'**
+  String get menuTypeSelectionSaved;
+
   /// No description provided for @menuItemAdd.
   ///
   /// In ar, this message translates to:

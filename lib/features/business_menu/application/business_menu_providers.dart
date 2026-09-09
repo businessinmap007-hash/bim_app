@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/core_providers.dart';
 import '../data/business_menu_api.dart';
+import '../data/models/menu_available_types.dart';
 import '../data/models/menu_item.dart';
 import '../data/models/menu_section.dart';
 import '../data/models/menu_vocabulary.dart';
@@ -20,6 +21,13 @@ final saleUnitOptionsProvider = FutureProvider<List<SaleUnitOption>>((ref) {
 /// server-side to its own specialty, so one fetch per app run is enough.
 final menuVocabularyProvider = FutureProvider<MenuVocabulary>((ref) {
   return ref.watch(businessMenuApiProvider).vocabulary();
+});
+
+/// The FULL `line` catalog (not narrowed by ticks) — autoDispose so the
+/// "which types do you carry" screen always sees a fresh selection state
+/// instead of a stale one from a previous visit.
+final menuAvailableTypesProvider = FutureProvider.autoDispose<List<AvailableTypeGroup>>((ref) {
+  return ref.watch(businessMenuApiProvider).availableTypes();
 });
 
 /// 'list' or 'grid' — this business's own choice for how customers see the

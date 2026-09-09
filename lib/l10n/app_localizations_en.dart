@@ -2849,6 +2849,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuItemsDisplayModeGrid => 'Grid';
 
   @override
+  String get menuItemsManageTypesAction => 'Manage types';
+
+  @override
+  String get menuTypeSelectionSubtitle =>
+      'Pick the types your business carries — you can add more from here any time.';
+
+  @override
+  String menuTypeSelectionContinue(int count) {
+    return 'Continue ($count)';
+  }
+
+  @override
+  String get menuTypeSelectionSaved => 'Types updated';
+
+  @override
   String get menuItemAdd => 'Add item';
 
   @override

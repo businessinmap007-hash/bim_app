@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
 import '../../../core/network/api_client.dart';
+import 'models/menu_available_types.dart';
 import 'models/menu_item.dart';
 import 'models/menu_section.dart';
 import 'models/menu_vocabulary.dart';
@@ -106,6 +107,24 @@ class BusinessMenuApi {
 
   Future<void> setDisplayMode(String mode) async {
     await _client.put('/business/menu/display-mode', data: {'display_mode': mode});
+  }
+
+  /// The FULL `line` catalog for this business's specialty (not narrowed by
+  /// ticks) — powers the "which types do you carry" checklist.
+  Future<List<AvailableTypeGroup>> availableTypes() async {
+    final body = await _client.getForBody('/business/menu/available-types');
+    return (body['data']['groups'] as List<dynamic>? ?? [])
+        .map((e) => AvailableTypeGroup.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
+  /// Sets exactly which options WITHIN one group this business carries —
+  /// every other group's ticks are left untouched server-side.
+  Future<void> updateAvailableTypes({required int groupId, required List<int> optionIds}) async {
+    await _client.put(
+      '/business/menu/available-types',
+      data: {'group_id': groupId, 'option_ids': optionIds},
+    );
   }
 
   // ─────────────────────────── Items ───────────────────────────

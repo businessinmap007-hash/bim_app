@@ -944,6 +944,13 @@
   "menuItemsDisplayModeLabel": "Customer display",
   "menuItemsDisplayModeList": "List",
   "menuItemsDisplayModeGrid": "Grid",
+  "menuItemsManageTypesAction": "Manage types",
+  "menuTypeSelectionSubtitle": "Pick the types your business carries — you can add more from here any time.",
+  "menuTypeSelectionContinue": "Continue ({count})",
+  "@menuTypeSelectionContinue": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "menuTypeSelectionSaved": "Types updated",
   "menuItemAdd": "Add item",
   "menuItemEditTitle": "Edit item",
   "menuItemAddTitle": "Add item",

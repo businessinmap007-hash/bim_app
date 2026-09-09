@@ -2864,6 +2864,21 @@ class AppLocalizationsAr extends AppLocalizations {
   String get menuItemsDisplayModeGrid => 'شبكة';
 
   @override
+  String get menuItemsManageTypesAction => 'إدارة الأصناف';
+
+  @override
+  String get menuTypeSelectionSubtitle =>
+      'اختر الأصناف التي تقدمها من نشاطك — تقدر تضيف أصناف تانية من هنا في أي وقت.';
+
+  @override
+  String menuTypeSelectionContinue(int count) {
+    return 'متابعة ($count)';
+  }
+
+  @override
+  String get menuTypeSelectionSaved => 'تم تحديث الأصناف';
+
+  @override
   String get menuItemAdd => 'إضافة صنف';
 
   @override

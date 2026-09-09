@@ -944,6 +944,13 @@
   "menuItemsDisplayModeLabel": "طريقة العرض للعميل",
   "menuItemsDisplayModeList": "قائمة",
   "menuItemsDisplayModeGrid": "شبكة",
+  "menuItemsManageTypesAction": "إدارة الأصناف",
+  "menuTypeSelectionSubtitle": "اختر الأصناف التي تقدمها من نشاطك — تقدر تضيف أصناف تانية من هنا في أي وقت.",
+  "menuTypeSelectionContinue": "متابعة ({count})",
+  "@menuTypeSelectionContinue": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "menuTypeSelectionSaved": "تم تحديث الأصناف",
   "menuItemAdd": "إضافة صنف",
   "menuItemEditTitle": "تعديل الصنف",
   "menuItemAddTitle": "إضافة صنف",

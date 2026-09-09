@@ -9,6 +9,7 @@ import '../../data/models/menu_vocabulary.dart';
 import 'market_catalog_screen.dart';
 import 'menu_item_edit_screen.dart';
 import 'menu_sections_screen.dart';
+import 'menu_type_selection_screen.dart';
 
 class MenuItemsScreen extends ConsumerStatefulWidget {
   const MenuItemsScreen({super.key});
@@ -73,6 +74,19 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
     }
   }
 
+  /// "أنواع الأجهزة الكهربائية" as a SECTION: tapping its heading opens the
+  /// full checklist of every type in that section (not just the narrow set
+  /// already ticked), so a merchant isn't stuck with whatever a handful of
+  /// ticks looked like when the account was seeded.
+  Future<void> _openTypeSelection(int groupId, String groupTitle) async {
+    final changed = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(builder: (_) => MenuTypeSelectionScreen(groupId: groupId, groupTitle: groupTitle)),
+    );
+    if (changed == true) {
+      ref.read(menuItemsControllerProvider.notifier).load();
+    }
+  }
+
   /// Grouping-by-branch is only worth it once this business has a real
   /// catalog vocabulary, and only on the unfiltered "all sections" view — a
   /// merchant who filtered to one hand-typed section is asking for a plain
@@ -133,7 +147,18 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
       padding: const EdgeInsets.all(16),
       children: [
         for (final group in groups) ...[
-          Text(group.groupName, key: _groupKey(group.groupId), style: Theme.of(context).textTheme.titleSmall),
+          Row(
+            key: _groupKey(group.groupId),
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(group.groupName, style: Theme.of(context).textTheme.titleSmall),
+              TextButton.icon(
+                onPressed: () => _openTypeSelection(group.groupId, group.groupName),
+                icon: const Icon(Icons.tune, size: 16),
+                label: Text(AppLocalizations.of(context)!.menuItemsManageTypesAction),
+              ),
+            ],
+          ),
           const SizedBox(height: 8),
           for (final branch in group.options) ...[
             Padding(
