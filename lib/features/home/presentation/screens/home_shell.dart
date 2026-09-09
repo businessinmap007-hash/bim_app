@@ -44,6 +44,18 @@ class HomeShell extends ConsumerStatefulWidget {
 
 class _HomeShellState extends ConsumerState<HomeShell> {
   int _index = 1;
+  /// One key per tab, so switching tabs can close whichever tab we're
+  /// LEAVING own drawer first — each tab's `Scaffold` stays mounted inside
+  /// the `IndexedStack` below (that's the whole point: switching tabs never
+  /// re-fetches), so a drawer left open on tab A is still open, unclosed,
+  /// the next time tab A comes back on screen unless something closes it
+  /// first.
+  final _scaffoldKeys = List.generate(3, (_) => GlobalKey<ScaffoldState>());
+
+  void _selectTab(int value) {
+    _scaffoldKeys[_index].currentState?.closeDrawer();
+    setState(() => _index = value);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,16 +66,18 @@ class _HomeShellState extends ConsumerState<HomeShell> {
         : null;
 
     final tabs = [
-      isBusiness ? const BusinessHomeScreen() : const CustomerHomeScreen(),
-      const AllCategoriesScreen(),
-      const MyServicesScreen(),
+      isBusiness
+          ? BusinessHomeScreen(scaffoldKey: _scaffoldKeys[0])
+          : CustomerHomeScreen(scaffoldKey: _scaffoldKeys[0]),
+      AllCategoriesScreen(scaffoldKey: _scaffoldKeys[1]),
+      MyServicesScreen(scaffoldKey: _scaffoldKeys[2]),
     ];
 
     return Scaffold(
       body: IndexedStack(index: _index, children: tabs),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _index,
-        onDestinationSelected: (value) => setState(() => _index = value),
+        onDestinationSelected: _selectTab,
         indicatorColor: AppColors.accentGold.withValues(alpha: 0.2),
         labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
         destinations: [

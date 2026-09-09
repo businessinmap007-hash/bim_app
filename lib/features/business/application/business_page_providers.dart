@@ -16,6 +16,41 @@ final businessPageApiProvider = Provider<BusinessPageApi>((ref) {
 /// FulfillmentSelectorBar, read by CheckoutScreen so it isn't asked again.
 final businessFulfillmentChoiceProvider = StateProvider.family<String?, int>((ref, businessId) => null);
 
+/// A customer's own list/grid preference, persisted across EVERY business's
+/// menu — once they pick one, it overrides that specific merchant's stored
+/// `display_mode` default from then on, everywhere. Null until they touch
+/// the toggle for the first time, in which case each business's own default
+/// still applies.
+class CustomerMenuDisplayModeController extends StateNotifier<String?> {
+  final Ref _ref;
+
+  CustomerMenuDisplayModeController(this._ref) : super(null) {
+    _restore();
+  }
+
+  Future<void> _restore() async {
+    try {
+      state = await _ref.read(customerMenuDisplayModeStorageProvider).read();
+    } catch (_) {
+      // Keep null — storage being unavailable just means no override yet.
+    }
+  }
+
+  Future<void> setMode(String mode) async {
+    state = mode;
+    try {
+      await _ref.read(customerMenuDisplayModeStorageProvider).write(mode);
+    } catch (_) {
+      // Best-effort persistence; the in-memory switch already took effect.
+    }
+  }
+}
+
+final customerMenuDisplayModeControllerProvider =
+    StateNotifierProvider<CustomerMenuDisplayModeController, String?>((ref) {
+      return CustomerMenuDisplayModeController(ref);
+    });
+
 final businessProfileProvider =
     StateNotifierProvider.family<BusinessProfileController, AsyncValue<BusinessProfile>, int>((ref, businessId) {
       ref.watch(localeEpochProvider);

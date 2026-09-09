@@ -23,7 +23,11 @@ import '../widgets/layouts/tabs_and_rows_layout.dart';
 /// empty, search results replace it the moment there's a query, so this one
 /// screen covers "browse" and "look for something specific" both.
 class AllCategoriesScreen extends ConsumerStatefulWidget {
-  const AllCategoriesScreen({super.key});
+  /// Lets [HomeShell] close this tab's own drawer before switching away from
+  /// it — an [IndexedStack] tab never disposes, so a drawer left open would
+  /// otherwise still be open the next time this tab comes back on screen.
+  final GlobalKey<ScaffoldState>? scaffoldKey;
+  const AllCategoriesScreen({super.key, this.scaffoldKey});
 
   @override
   ConsumerState<AllCategoriesScreen> createState() =>
@@ -56,6 +60,7 @@ class _AllCategoriesScreenState extends ConsumerState<AllCategoriesScreen> {
     final layoutStyle = ref.watch(layoutStyleControllerProvider);
 
     return Scaffold(
+      key: widget.scaffoldKey,
       appBar: AppBar(title: Text(l10n.navCategories)),
       drawer: const AppDrawer(),
       body: Column(

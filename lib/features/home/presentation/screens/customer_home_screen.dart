@@ -22,7 +22,11 @@ import '../../../posts/presentation/screens/my_posts_screen.dart';
 /// DOES have one, and both rely on the same NestedScrollView-provided
 /// overlap handle to size their pinned tab bar correctly.
 class CustomerHomeScreen extends StatelessWidget {
-  const CustomerHomeScreen({super.key});
+  /// Lets [HomeShell] close this tab's own drawer before switching away from
+  /// it — an [IndexedStack] tab never disposes, so a drawer left open would
+  /// otherwise still be open the next time this tab comes back on screen.
+  final GlobalKey<ScaffoldState>? scaffoldKey;
+  const CustomerHomeScreen({super.key, this.scaffoldKey});
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +35,7 @@ class CustomerHomeScreen extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        key: scaffoldKey,
         appBar: AppBar(
           title: Text(l10n.homeCustomerTitle),
           actions: const [

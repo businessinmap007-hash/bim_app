@@ -27,13 +27,18 @@ import '../../../wallet/presentation/screens/wallet_screen.dart';
 /// concern, unlike the business's own "Service settings" (what IT offers),
 /// which stays business-only inside My Account.
 class MyServicesScreen extends StatelessWidget {
-  const MyServicesScreen({super.key});
+  /// Lets [HomeShell] close this tab's own drawer before switching away from
+  /// it — an [IndexedStack] tab never disposes, so a drawer left open would
+  /// otherwise still be open the next time this tab comes back on screen.
+  final GlobalKey<ScaffoldState>? scaffoldKey;
+  const MyServicesScreen({super.key, this.scaffoldKey});
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(title: Text(l10n.drawerSectionMyServices)),
       drawer: const AppDrawer(),
       body: ResponsiveCenter(

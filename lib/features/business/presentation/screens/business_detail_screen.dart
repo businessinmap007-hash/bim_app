@@ -473,11 +473,6 @@ class _MenuTab extends ConsumerStatefulWidget {
 
 class _MenuTabState extends ConsumerState<_MenuTab> {
   int _activeSectionIndex = 0;
-  /// The customer's own list/grid choice for THIS visit, overriding the
-  /// merchant's stored default the moment they touch the toggle — a
-  /// customer browsing preference, not something written back to the
-  /// business's own `display_mode` setting.
-  String? _displayModeOverride;
 
   /// Turns the caller's cart for this business into a shared one (idempotent
   /// — reuses the existing share token if it's already shared) and opens the
@@ -519,7 +514,8 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
         final sections = _prepareSections(page.sections, Localizations.localeOf(context).languageCode == 'en');
         if (_activeSectionIndex >= sections.length) _activeSectionIndex = 0;
         final activeSection = sections[_activeSectionIndex];
-        final isGrid = (_displayModeOverride ?? page.displayMode) == 'grid';
+        final displayModeOverride = ref.watch(customerMenuDisplayModeControllerProvider);
+        final isGrid = (displayModeOverride ?? page.displayMode) == 'grid';
 
         return Builder(
           builder: (context) => CustomScrollView(
@@ -546,7 +542,8 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
                         isGrid: isGrid,
                         listLabel: l10n.menuItemsDisplayModeList,
                         gridLabel: l10n.menuItemsDisplayModeGrid,
-                        onChanged: (grid) => setState(() => _displayModeOverride = grid ? 'grid' : 'list'),
+                        onChanged: (grid) =>
+                            ref.read(customerMenuDisplayModeControllerProvider.notifier).setMode(grid ? 'grid' : 'list'),
                       ),
                       if (widget.sharedOrderId == null) ...[
                         IconButton(

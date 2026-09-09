@@ -130,18 +130,6 @@ class _BusinessInfoBody extends ConsumerWidget {
             ],
           ],
         ),
-        if (profile.options.isNotEmpty) ...[
-          const SizedBox(height: 20),
-          Text(l10n.businessFilterByAttributes, style: Theme.of(context).textTheme.titleSmall),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: profile.options
-                .map((o) => Chip(label: Text(o.localizedName(languageCode))))
-                .toList(),
-          ),
-        ],
         if (profile.social != null && !profile.social!.isEmpty) ...[
           const SizedBox(height: 16),
           Row(
