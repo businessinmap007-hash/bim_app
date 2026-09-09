@@ -101,8 +101,56 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
     return vocabulary != null && vocabulary.lines.any((g) => g.options.isNotEmpty);
   }
 
+  /// A [_ItemTile] column, or — once the merchant picked "Grid" for
+  /// customer display — the SAME items as [_ItemGridTile] cards, so this
+  /// screen actually shows what that toggle does instead of only ever
+  /// looking like a plain list regardless of which mode is selected.
+  Widget _itemsFor(List<BusinessMenuItem> items, String displayMode) {
+    if (displayMode == 'grid') {
+      return GridView.count(
+        crossAxisCount: 2,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        mainAxisSpacing: 8,
+        crossAxisSpacing: 8,
+        childAspectRatio: 0.62,
+        children: [
+          for (final item in items)
+            _ItemGridTile(
+              item: item,
+              onTap: () async {
+                await Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => MenuItemEditScreen(itemId: item.id)),
+                );
+                ref.read(menuItemsControllerProvider.notifier).load();
+              },
+            ),
+        ],
+      );
+    }
+
+    return Column(
+      children: [
+        for (final item in items)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: _ItemTile(
+              item: item,
+              onTap: () async {
+                await Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => MenuItemEditScreen(itemId: item.id)),
+                );
+                ref.read(menuItemsControllerProvider.notifier).load();
+              },
+            ),
+          ),
+      ],
+    );
+  }
+
   Widget _buildList(BuildContext context, MenuItemsState state) {
     final vocabulary = _vocabularyForGrouping(state);
+    final displayMode = ref.watch(menuDisplayModeControllerProvider).maybeWhen(data: (m) => m, orElse: () => 'list');
     if (vocabulary == null) {
       return ListView.separated(
         controller: _scrollController,
@@ -176,38 +224,14 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
                 ],
               ),
             ),
-            for (final item in itemsByBranch[branch.id] ?? const <BusinessMenuItem>[])
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: _ItemTile(
-                  item: item,
-                  onTap: () async {
-                    await Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => MenuItemEditScreen(itemId: item.id)),
-                    );
-                    ref.read(menuItemsControllerProvider.notifier).load();
-                  },
-                ),
-              ),
+            _itemsFor(itemsByBranch[branch.id] ?? const <BusinessMenuItem>[], displayMode),
             const SizedBox(height: 8),
           ],
         ],
         if (unbranched.isNotEmpty) ...[
           Text(AppLocalizations.of(context)!.menuItemsUnbranchedSection, style: Theme.of(context).textTheme.titleSmall),
           const SizedBox(height: 8),
-          for (final item in unbranched)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: _ItemTile(
-                item: item,
-                onTap: () async {
-                  await Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => MenuItemEditScreen(itemId: item.id)),
-                  );
-                  ref.read(menuItemsControllerProvider.notifier).load();
-                },
-              ),
-            ),
+          _itemsFor(unbranched, displayMode),
         ],
         if (state.isLoadingMore)
           const Padding(
@@ -495,6 +519,92 @@ class _ItemTile extends ConsumerWidget {
               onPressed: () => _delete(context, ref),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// [_ItemTile]'s counterpart for the "Grid" customer-display mode — a photo
+/// card, two per row, same tap-to-edit and delete actions. Merchants kept
+/// seeing a plain list here no matter which mode they picked, since this
+/// screen never actually rendered the mode it was letting them choose.
+class _ItemGridTile extends ConsumerWidget {
+  final BusinessMenuItem item;
+  final VoidCallback onTap;
+  const _ItemGridTile({required this.item, required this.onTap});
+
+  Future<void> _delete(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Text(l10n.menuItemDeleteConfirm),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l10n.commonCancel)),
+          TextButton(onPressed: () => Navigator.pop(context, true), child: Text(l10n.commonDelete)),
+        ],
+      ),
+    );
+    if (confirmed == true) {
+      await ref.read(menuItemsControllerProvider.notifier).delete(item.id);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
+    return Opacity(
+      opacity: item.isActive ? 1 : 0.5,
+      child: Card(
+        margin: EdgeInsets.zero,
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              AspectRatio(
+                aspectRatio: 1,
+                child: item.images.isNotEmpty
+                    ? Image.network(item.images.first.url, fit: BoxFit.cover)
+                    : Container(
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
+                        child: Icon(Icons.fastfood_outlined, color: theme.colorScheme.onSurface),
+                      ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(item.nameAr, maxLines: 1, overflow: TextOverflow.ellipsis, style: theme.textTheme.titleSmall),
+                    if (item.availableQuantity != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2),
+                        child: Text(
+                          l10n.menuItemsQuantityShort(item.availableQuantity!),
+                          style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
+                        ),
+                      ),
+                    const SizedBox(height: 6),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(item.basePrice.toStringAsFixed(2), style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+                        InkWell(
+                          onTap: () => _delete(context, ref),
+                          child: Icon(Icons.delete_outline, size: 18, color: theme.hintColor),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
