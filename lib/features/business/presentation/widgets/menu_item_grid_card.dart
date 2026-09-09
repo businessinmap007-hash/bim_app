@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/utils/produce_emoji.dart';
 import '../../../../shared/widgets/full_screen_gallery.dart';
 import '../../data/models/menu_item_summary.dart';
 
@@ -13,6 +14,14 @@ class MenuItemGridCard extends StatelessWidget {
   final MenuItemSummary item;
   final VoidCallback? onTap;
   const MenuItemGridCard({super.key, required this.item, this.onTap});
+
+  /// Only a goods item (one sold under a vocabulary branch — "بطاطس", not a
+  /// hand-typed restaurant dish) gets a produce emoji; a plain "برجر" keeps
+  /// the neutral fork-and-knife icon rather than a random 🧺 fallback.
+  String? get _placeholderEmoji {
+    final branch = item.lineOption;
+    return branch == null ? null : produceEmoji(branch.nameEn);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +49,9 @@ class MenuItemGridCard extends StatelessWidget {
                           ? CachedNetworkImage(
                               imageUrl: imageUrl,
                               fit: BoxFit.cover,
-                              errorWidget: (context, url, error) => const _ImagePlaceholder(),
+                              errorWidget: (context, url, error) => _ImagePlaceholder(emoji: _placeholderEmoji),
                             )
-                          : const _ImagePlaceholder(),
+                          : _ImagePlaceholder(emoji: _placeholderEmoji),
                     ),
                     if (item.isFeatured)
                       PositionedDirectional(
@@ -117,14 +126,18 @@ class MenuItemGridCard extends StatelessWidget {
 }
 
 class _ImagePlaceholder extends StatelessWidget {
-  const _ImagePlaceholder();
+  final String? emoji;
+  const _ImagePlaceholder({this.emoji});
 
   @override
   Widget build(BuildContext context) {
     final onSurface = Theme.of(context).colorScheme.onSurface;
     return Container(
+      alignment: Alignment.center,
       color: onSurface.withValues(alpha: 0.08),
-      child: Icon(Icons.restaurant_menu_outlined, color: onSurface),
+      child: emoji != null
+          ? Text(emoji!, style: const TextStyle(fontSize: 36))
+          : Icon(Icons.restaurant_menu_outlined, color: onSurface),
     );
   }
 }

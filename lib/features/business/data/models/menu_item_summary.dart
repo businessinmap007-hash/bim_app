@@ -54,6 +54,15 @@ class MenuItemBranch {
     nameAr: json['name_ar'] as String,
     nameEn: json['name_en'] as String?,
   );
+
+  /// The app's own language first, the other name if that one is blank —
+  /// same rule as the backend's OptionGroup::displayName()/User::displayName().
+  String displayName(bool isEnglish) {
+    final primary = isEnglish ? nameEn : nameAr;
+    if (primary != null && primary.isNotEmpty) return primary;
+    final secondary = isEnglish ? nameAr : nameEn;
+    return secondary ?? '';
+  }
 }
 
 class MenuItemExtra {

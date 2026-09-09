@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/utils/produce_emoji.dart';
 import '../../application/business_menu_providers.dart';
 import '../../data/models/menu_available_types.dart';
 
@@ -188,85 +189,3 @@ class _TypeRow extends StatelessWidget {
   }
 }
 
-/// A best-effort emoji for a produce name — a lightweight, offline stand-in
-/// for a real photo per item (downloading and licensing photos for ~120
-/// generic vegetables/fruits isn't something to do sight-unseen). Matched by
-/// substring on the English name so e.g. "Baladi Orange"/"Navel Orange"/
-/// "Blood Orange" all land on 🍊. Falls back to a neutral basket for the long
-/// tail (okra, molokhia, taro...) that has no fitting emoji.
-String produceEmoji(String? nameEn) {
-  final name = (nameEn ?? '').toLowerCase();
-  if (name.isEmpty) return '🧺';
-
-  const byMostSpecificFirst = <String, String>{
-    'sweet potato': '🍠',
-    'watermelon': '🍉',
-    'cantaloupe': '🍈',
-    'melon': '🍈',
-    'papaya': '🍈',
-    'mango': '🥭',
-    'strawberry': '🍓',
-    'grapes': '🍇',
-    'vine leaves': '🍇',
-    'orange': '🍊',
-    'mandarin': '🍊',
-    'grapefruit': '🍊',
-    'lemon': '🍋',
-    'lime': '🍋',
-    'banana': '🍌',
-    'apple': '🍎',
-    'pear': '🍐',
-    'peach': '🍑',
-    'apricot': '🍑',
-    'nectarine': '🍑',
-    'plum': '🍑',
-    'cherry tomato': '🍅',
-    'cherries': '🍒',
-    'pineapple': '🍍',
-    'avocado': '🥑',
-    'kiwi': '🥝',
-    'coconut': '🥥',
-    'mulberry': '🫐',
-    'date': '🌴',
-    'tomato': '🍅',
-    'potato': '🥔',
-    'onion': '🧅',
-    'garlic': '🧄',
-    'cucumber': '🥒',
-    'courgette': '🥒',
-    'zucchini': '🥒',
-    'chilli': '🌶️',
-    'pepper': '🫑',
-    'aubergine': '🍆',
-    'eggplant': '🍆',
-    'carrot': '🥕',
-    'bean': '🫘',
-    'pea': '🫛',
-    'spinach': '🥬',
-    'lettuce': '🥬',
-    'cabbage': '🥬',
-    'chard': '🥬',
-    'broccoli': '🥦',
-    'cauliflower': '🥦',
-    'pumpkin': '🎃',
-    'corn': '🌽',
-    'mushroom': '🍄',
-    'ginger': '🫚',
-    'herb': '🌿',
-    'parsley': '🌿',
-    'coriander': '🌿',
-    'dill': '🌿',
-    'mint': '🌿',
-    'basil': '🌿',
-    'rocket': '🌿',
-    'celery': '🌿',
-    'leek': '🌿',
-    'radish': '🌿',
-  };
-
-  for (final entry in byMostSpecificFirst.entries) {
-    if (name.contains(entry.key)) return entry.value;
-  }
-
-  return '🧺';
-}

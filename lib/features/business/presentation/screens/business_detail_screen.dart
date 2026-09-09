@@ -7,6 +7,7 @@ import '../../../../shared/widgets/async_value_view.dart';
 import '../../../../shared/widgets/post_share.dart';
 import '../../../../shared/widgets/profile_cover_header.dart';
 import '../../../../shared/widgets/sliver_tab_bar_delegate.dart';
+import '../../../../shared/widgets/view_mode_toggle.dart';
 import '../../../auth/application/auth_controller.dart';
 import '../../../booking/presentation/screens/booking_screen.dart';
 import '../../../cart/application/cart_controller.dart';
@@ -97,13 +98,17 @@ class _BusinessDetailBody extends StatelessWidget {
 
     final tabs = <Tab>[];
     final tabViews = <Widget>[];
-    if (profile.sections.posts) {
-      tabs.add(Tab(text: l10n.businessTabPosts));
-      tabViews.add(_PostsTab(businessId: profile.id));
-    }
+    // A business with something to sell leads with that, not its feed — a
+    // greengrocer's menu is why a customer opened this page at all, and
+    // Posts is worth a look, not the first thing to look at. A business
+    // with no menu keeps Posts first, same as before.
     if (profile.sections.menu) {
       tabs.add(Tab(text: l10n.businessTabMenu));
       tabViews.add(_MenuTab(businessId: profile.id, fulfillment: profile.fulfillment, sharedOrderId: sharedOrderId));
+    }
+    if (profile.sections.posts) {
+      tabs.add(Tab(text: l10n.businessTabPosts));
+      tabViews.add(_PostsTab(businessId: profile.id));
     }
     if (profile.sections.services) {
       tabs.add(Tab(text: l10n.businessTabServices));
@@ -383,7 +388,7 @@ class _SectionData {
   bool get hasBranches => branches.any((b) => b.id != null);
 }
 
-List<_SectionData> _prepareSections(List<MenuSectionGroup> sections) {
+List<_SectionData> _prepareSections(List<MenuSectionGroup> sections, bool isEnglish) {
   return sections.map((section) {
     final order = <int?>[];
     final byBranch = <int?, List<MenuItemSummary>>{};
@@ -395,7 +400,7 @@ List<_SectionData> _prepareSections(List<MenuSectionGroup> sections) {
       if (!byBranch.containsKey(key)) {
         order.add(key);
         byBranch[key] = [];
-        names[key] = branch?.nameAr ?? '';
+        names[key] = branch?.displayName(isEnglish) ?? '';
       }
       byBranch[key]!.add(item);
     }
@@ -502,7 +507,7 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
       builder: (context, page) {
         if (page.sections.isEmpty) return Center(child: Text(l10n.businessMenuEmpty));
 
-        final sections = _prepareSections(page.sections);
+        final sections = _prepareSections(page.sections, Localizations.localeOf(context).languageCode == 'en');
         if (_activeSectionIndex >= sections.length) _activeSectionIndex = 0;
         final activeSection = sections[_activeSectionIndex];
         final isGrid = (_displayModeOverride ?? page.displayMode) == 'grid';
@@ -525,12 +530,14 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(child: FulfillmentSelectorBar(businessId: widget.businessId, fulfillment: widget.fulfillment)),
-                      if (widget.sharedOrderId == null)
+                      if (widget.sharedOrderId == null) ...[
                         IconButton(
                           tooltip: l10n.cartShareCart,
-                          icon: const Icon(Icons.ios_share_outlined),
+                          icon: const Icon(Icons.group_add_outlined),
                           onPressed: () => _startShareCart(context, ref),
                         ),
+                        const SizedBox(width: 4),
+                      ],
                     ],
                   ),
                 ),
@@ -541,17 +548,15 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
               // locally for this visit rather than written back to the
               // business's stored setting.
               SliverPadding(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
                 sliver: SliverToBoxAdapter(
                   child: Align(
                     alignment: AlignmentDirectional.centerEnd,
-                    child: SegmentedButton<String>(
-                      segments: [
-                        ButtonSegment(value: 'list', label: Text(l10n.menuItemsDisplayModeList), icon: const Icon(Icons.view_list_outlined)),
-                        ButtonSegment(value: 'grid', label: Text(l10n.menuItemsDisplayModeGrid), icon: const Icon(Icons.grid_view_outlined)),
-                      ],
-                      selected: {isGrid ? 'grid' : 'list'},
-                      onSelectionChanged: (selection) => setState(() => _displayModeOverride = selection.first),
+                    child: ViewModeToggle(
+                      isGrid: isGrid,
+                      listLabel: l10n.menuItemsDisplayModeList,
+                      gridLabel: l10n.menuItemsDisplayModeGrid,
+                      onChanged: (grid) => setState(() => _displayModeOverride = grid ? 'grid' : 'list'),
                     ),
                   ),
                 ),

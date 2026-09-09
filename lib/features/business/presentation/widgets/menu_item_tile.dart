@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/utils/produce_emoji.dart';
 import '../../../../shared/widgets/full_screen_gallery.dart';
 import '../../data/models/menu_item_summary.dart';
 
@@ -17,6 +18,13 @@ class MenuItemTile extends StatelessWidget {
   final VoidCallback? onTap;
 
   const MenuItemTile({super.key, required this.item, this.onTap});
+
+  /// See MenuItemGridCard's identical getter — only a goods item (sold under
+  /// a vocabulary branch) gets a produce emoji.
+  String? get _placeholderEmoji {
+    final branch = item.lineOption;
+    return branch == null ? null : produceEmoji(branch.nameEn);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,9 +56,9 @@ class MenuItemTile extends StatelessWidget {
                             ? CachedNetworkImage(
                                 imageUrl: imageUrl,
                                 fit: BoxFit.cover,
-                                errorWidget: (context, url, error) => const _ImagePlaceholder(),
+                                errorWidget: (context, url, error) => _ImagePlaceholder(emoji: _placeholderEmoji),
                               )
-                            : const _ImagePlaceholder(),
+                            : _ImagePlaceholder(emoji: _placeholderEmoji),
                       ),
                     ),
                     if (item.isFeatured)
@@ -203,14 +211,18 @@ class _PhotoCountBadge extends StatelessWidget {
 }
 
 class _ImagePlaceholder extends StatelessWidget {
-  const _ImagePlaceholder();
+  final String? emoji;
+  const _ImagePlaceholder({this.emoji});
 
   @override
   Widget build(BuildContext context) {
     final onSurface = Theme.of(context).colorScheme.onSurface;
     return Container(
+      alignment: Alignment.center,
       color: onSurface.withValues(alpha: 0.08),
-      child: Icon(Icons.restaurant_menu_outlined, color: onSurface),
+      child: emoji != null
+          ? Text(emoji!, style: const TextStyle(fontSize: 28))
+          : Icon(Icons.restaurant_menu_outlined, color: onSurface),
     );
   }
 }

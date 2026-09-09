@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/utils/produce_emoji.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
+import '../../../../shared/widgets/view_mode_toggle.dart';
 import '../../application/business_menu_providers.dart';
 import '../../data/models/menu_item.dart';
 import '../../data/models/menu_vocabulary.dart';
@@ -492,16 +494,14 @@ class _DisplayModeToggle extends ConsumerWidget {
       data: (mode) => Padding(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(l10n.menuItemsDisplayModeLabel, style: Theme.of(context).textTheme.labelMedium),
-            const Spacer(),
-            SegmentedButton<String>(
-              segments: [
-                ButtonSegment(value: 'list', label: Text(l10n.menuItemsDisplayModeList), icon: const Icon(Icons.view_list_outlined)),
-                ButtonSegment(value: 'grid', label: Text(l10n.menuItemsDisplayModeGrid), icon: const Icon(Icons.grid_view_outlined)),
-              ],
-              selected: {mode},
-              onSelectionChanged: (selection) => ref.read(menuDisplayModeControllerProvider.notifier).setMode(selection.first),
+            ViewModeToggle(
+              isGrid: mode == 'grid',
+              listLabel: l10n.menuItemsDisplayModeList,
+              gridLabel: l10n.menuItemsDisplayModeGrid,
+              onChanged: (grid) => ref.read(menuDisplayModeControllerProvider.notifier).setMode(grid ? 'grid' : 'list'),
             ),
           ],
         ),
