@@ -2976,6 +2976,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get menuItemBrandNameHint => 'الماركة (اختياري)';
 
   @override
+  String get menuItemBrandLabel => 'الماركة';
+
+  @override
+  String get menuItemNoBrand => '— بدون تحديد —';
+
+  @override
   String get menuItemSortOrderHint => 'ترتيب العرض';
 
   @override

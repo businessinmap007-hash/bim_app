@@ -5618,6 +5618,18 @@ abstract class AppLocalizations {
   /// **'الماركة (اختياري)'**
   String get menuItemBrandNameHint;
 
+  /// No description provided for @menuItemBrandLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الماركة'**
+  String get menuItemBrandLabel;
+
+  /// No description provided for @menuItemNoBrand.
+  ///
+  /// In ar, this message translates to:
+  /// **'— بدون تحديد —'**
+  String get menuItemNoBrand;
+
   /// No description provided for @menuItemSortOrderHint.
   ///
   /// In ar, this message translates to:

@@ -7,7 +7,16 @@ class VocabularyGroup {
   final int groupId;
   final String groupName;
   final List<VocabularyOptionRef> options;
-  const VocabularyGroup({required this.groupId, required this.groupName, required this.options});
+  /// True for a group like "ماركات الأجهزة الكهربائية" — a closed brand
+  /// dictionary, singled out by the backend so the item form can give it
+  /// its own dropdown instead of lumping it into the generic modifier chips.
+  final bool isBrand;
+  const VocabularyGroup({
+    required this.groupId,
+    required this.groupName,
+    required this.options,
+    this.isBrand = false,
+  });
 
   factory VocabularyGroup.fromJson(Map<String, dynamic> json) => VocabularyGroup(
     groupId: json['group_id'] as int,
@@ -15,6 +24,7 @@ class VocabularyGroup {
     options: (json['options'] as List<dynamic>? ?? [])
         .map((e) => VocabularyOptionRef.fromJson(e as Map<String, dynamic>))
         .toList(),
+    isBrand: json['is_brand'] as bool? ?? false,
   );
 }
 
@@ -37,4 +47,15 @@ class MenuVocabulary {
   );
 
   bool get hasLines => lines.any((g) => g.options.isNotEmpty);
+
+  /// The closed brand dictionary for this business's specialty, if it has
+  /// one (e.g. appliance businesses see "ماركات الأجهزة الكهربائية"). Null
+  /// for a business with no brand vocabulary — the item form falls back to
+  /// a free-text brand field for those.
+  VocabularyGroup? get brandGroup {
+    for (final g in modifiers) {
+      if (g.isBrand && g.options.isNotEmpty) return g;
+    }
+    return null;
+  }
 }

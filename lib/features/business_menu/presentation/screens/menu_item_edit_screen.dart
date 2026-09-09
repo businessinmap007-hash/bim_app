@@ -9,6 +9,7 @@ import '../../application/business_menu_providers.dart';
 import '../../data/models/menu_item.dart';
 import '../../data/models/menu_section.dart';
 import '../../data/models/menu_variant.dart';
+import '../../data/models/menu_vocabulary.dart';
 
 /// Create (itemId == null) or edit (itemId set) one menu item. Create shows
 /// only the base-fields form — images/variants/extras all hang off an
@@ -231,6 +232,12 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
   Widget _buildFormFields(BuildContext context, AppLocalizations l10n, List<BusinessMenuSection> sections) {
     final vocabAsync = ref.watch(menuVocabularyProvider);
     final hasLines = vocabAsync.maybeWhen(data: (v) => v.hasLines, orElse: () => false);
+    // A business without its own brand dictionary (e.g. "hhh" — vegetables,
+    // no brands) keeps the free-text field exactly as before; one WITH a
+    // closed brand vocabulary (e.g. an appliance business) gets a proper
+    // dropdown instead, driven by the same modifier-option mechanism as
+    // any other qualifier — see `_BrandField`.
+    final brandGroup = vocabAsync.maybeWhen(data: (v) => v.brandGroup, orElse: () => null);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -310,10 +317,17 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
           decoration: _fieldDecoration(l10n.menuItemSupplyPriceHint, helper: l10n.menuItemSupplyPriceHelper),
         ),
         const SizedBox(height: 12),
-        TextField(
-          controller: _brandController,
-          decoration: _fieldDecoration(l10n.menuItemBrandNameHint),
-        ),
+        if (brandGroup != null)
+          _BrandField(
+            group: brandGroup,
+            selectedIds: _modifierOptionIds,
+            onChanged: (ids) => setState(() => _modifierOptionIds = ids),
+          )
+        else
+          TextField(
+            controller: _brandController,
+            decoration: _fieldDecoration(l10n.menuItemBrandNameHint),
+          ),
         const SizedBox(height: 12),
         TextField(
           controller: _availableQuantityController,
@@ -324,6 +338,7 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
         _ModifiersField(
           selectedIds: _modifierOptionIds,
           onChanged: (ids) => setState(() => _modifierOptionIds = ids),
+          excludeGroupId: brandGroup?.groupId,
         ),
         const SizedBox(height: 12),
         TextField(
@@ -480,6 +495,43 @@ class _LineOptionField extends ConsumerWidget {
   }
 }
 
+/// The merchant's closed brand dictionary (e.g. "ماركات الأجهزة الكهربائية")
+/// as a single-select dropdown, replacing the free-text brand field for any
+/// business whose specialty has one. Backed by the same `modifier_option_ids`
+/// mechanism as every other qualifier — selecting a brand here just means
+/// "this group's chosen option is X", so picking a new one first drops
+/// whichever option from THIS group was previously selected.
+class _BrandField extends StatelessWidget {
+  final VocabularyGroup group;
+  final Set<int> selectedIds;
+  final ValueChanged<Set<int>> onChanged;
+  const _BrandField({required this.group, required this.selectedIds, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final groupOptionIds = group.options.map((o) => o.id).toSet();
+    final current = selectedIds.where(groupOptionIds.contains).firstOrNull;
+
+    return DropdownButtonFormField<int?>(
+      initialValue: current,
+      decoration: InputDecoration(
+        labelText: l10n.menuItemBrandLabel,
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+      ),
+      items: [
+        DropdownMenuItem(value: null, child: Text(l10n.menuItemNoBrand)),
+        for (final o in group.options) DropdownMenuItem(value: o.id, child: Text(o.nameAr)),
+      ],
+      onChanged: (v) {
+        final next = Set<int>.from(selectedIds)..removeAll(groupOptionIds);
+        if (v != null) next.add(v);
+        onChanged(next);
+      },
+    );
+  }
+}
+
 /// What qualifies the item — brand, condition... any number of `modifier`
 /// options, grouped by their own vocabulary group. One chip row per group;
 /// picking within a group toggles that option (a business may need more
@@ -487,7 +539,11 @@ class _LineOptionField extends ConsumerWidget {
 class _ModifiersField extends ConsumerWidget {
   final Set<int> selectedIds;
   final ValueChanged<Set<int>> onChanged;
-  const _ModifiersField({required this.selectedIds, required this.onChanged});
+  /// The brand group's id, when this business has one — it gets its own
+  /// `_BrandField` dropdown above, so it's skipped here to avoid showing
+  /// the same data twice.
+  final int? excludeGroupId;
+  const _ModifiersField({required this.selectedIds, required this.onChanged, this.excludeGroupId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -497,7 +553,9 @@ class _ModifiersField extends ConsumerWidget {
       loading: () => const SizedBox.shrink(),
       error: (_, _) => const SizedBox.shrink(),
       data: (vocab) {
-        final groups = vocab.modifiers.where((g) => g.options.isNotEmpty).toList();
+        final groups = vocab.modifiers
+            .where((g) => g.options.isNotEmpty && g.groupId != excludeGroupId)
+            .toList();
         if (groups.isEmpty) return const SizedBox.shrink();
 
         return Column(

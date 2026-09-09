@@ -981,6 +981,8 @@
   "menuItemSupplyPriceHint": "سعر التكلفة (اختياري)",
   "menuItemSupplyPriceHelper": "لحسابك الداخلي فقط — لا يظهر للعميل",
   "menuItemBrandNameHint": "الماركة (اختياري)",
+  "menuItemBrandLabel": "الماركة",
+  "menuItemNoBrand": "— بدون تحديد —",
   "menuItemSortOrderHint": "ترتيب العرض",
   "menuItemActiveLabel": "نشط",
   "menuItemImagesSection": "الصور",

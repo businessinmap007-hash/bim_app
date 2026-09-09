@@ -2963,6 +2963,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuItemBrandNameHint => 'Brand (optional)';
 
   @override
+  String get menuItemBrandLabel => 'Brand';
+
+  @override
+  String get menuItemNoBrand => '— Not set —';
+
+  @override
   String get menuItemSortOrderHint => 'Sort order';
 
   @override
