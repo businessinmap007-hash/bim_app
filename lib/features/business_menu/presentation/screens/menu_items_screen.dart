@@ -196,10 +196,28 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
     final unbranched = state.items.where((i) => i.lineOption == null).toList();
 
     final groups = vocabulary.lines.where((g) => g.options.isNotEmpty).toList();
+    // "+ Add brand" only makes sense when this business actually HAS a
+    // brand vocabulary (an appliance business: "ثلاجات" — توشيبا، فريش...).
+    // A greengrocer's "فراولة" has no brand at all, and a business whose
+    // branches themselves ARE the brand (no separate brand group exists)
+    // needs no extra brand step either — both get the generic "Add item"
+    // instead of a label promising a step that isn't there.
+    final hasBrand = vocabulary.brandGroup != null;
 
     return ListView(
       controller: _scrollController,
       padding: const EdgeInsets.all(16),
+      // A `ListView`'s `children:` list still builds through the Sliver
+      // protocol — passing every child up front does NOT mount them all;
+      // anything past the default ~250px cache extent stays unmounted with
+      // a null `GlobalKey.currentContext` until scrolled near. That silently
+      // broke jumping to a group far down a long catalog (e.g. "الفواكه"
+      // sitting after "الخضروات"'s 45 branches): the chip's own state
+      // updated, but `Scrollable.ensureVisible` had no context to jump to
+      // and `_jumpTo`'s null-guard quietly did nothing. A generous fixed
+      // extent keeps a business's whole catalog mounted — this screen is a
+      // merchant's own low-traffic management view, not an infinite feed.
+      cacheExtent: 10000,
       children: [
         for (final group in groups) ...[
           Row(
@@ -226,7 +244,7 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
                   TextButton.icon(
                     onPressed: () => _openCreateForBranch(branch.id),
                     icon: const Icon(Icons.add, size: 16),
-                    label: Text(AppLocalizations.of(context)!.menuItemsAddBrandRow),
+                    label: Text(hasBrand ? AppLocalizations.of(context)!.menuItemsAddBrandRow : AppLocalizations.of(context)!.menuItemAdd),
                   ),
                 ],
               ),
