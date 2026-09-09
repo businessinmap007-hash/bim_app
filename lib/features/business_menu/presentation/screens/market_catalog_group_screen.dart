@@ -224,9 +224,10 @@ class _RowEditor extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             SizedBox(
-              width: 110,
+              width: 130,
               child: DropdownButtonFormField<String>(
                 initialValue: saleUnit != null && saleUnits.any((u) => u.code == saleUnit) ? saleUnit : null,
+                isExpanded: true,
                 decoration: InputDecoration(labelText: l10n.marketCatalogUnit, isDense: true, border: const OutlineInputBorder()),
                 items: saleUnits.map((u) => DropdownMenuItem(value: u.code, child: Text(u.label, overflow: TextOverflow.ellipsis))).toList(),
                 onChanged: onUnitChanged,

@@ -377,6 +377,15 @@ class _BranchBucket {
   final List<MenuItemSummary> items;
   final GlobalKey key = GlobalKey();
   _BranchBucket({required this.id, required this.name, required this.items});
+
+  /// A branch with exactly one item named after itself (the common produce
+  /// case — a "Potato" branch holding a single "Potato" item) would repeat
+  /// the same name right above its own card; skip the heading then and let
+  /// the card's own name carry it, but keep it for a branch that groups
+  /// several differently-named items (e.g. several fridge models under one
+  /// brand/size branch), where the heading is the only place that grouping
+  /// is named at all.
+  bool get headingIsRedundant => items.length == 1 && items.first.name.trim() == name.trim();
 }
 
 class _SectionData {
@@ -520,9 +529,11 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
               // The one entry point for delivery/pickup/dine-in, right above
               // the products it applies to (product doc, "منيو ومطاعم"
               // section) — not in the shared page header, since it has
-              // nothing to do with the Posts/Services tabs. The share
-              // shortcut rides along here too — not buried in the Cart
-              // screen, since sharing is a decision made before ordering.
+              // nothing to do with the Posts/Services tabs. The list/grid
+              // toggle (a customer's own browsing preference — see the
+              // merchant's identical "My Menu" screen) and the share
+              // shortcut ride along here too, instead of each getting its
+              // own row, since sharing is a decision made before ordering.
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                 sliver: SliverToBoxAdapter(
@@ -530,6 +541,13 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(child: FulfillmentSelectorBar(businessId: widget.businessId, fulfillment: widget.fulfillment)),
+                      const SizedBox(width: 4),
+                      ViewModeToggle(
+                        isGrid: isGrid,
+                        listLabel: l10n.menuItemsDisplayModeList,
+                        gridLabel: l10n.menuItemsDisplayModeGrid,
+                        onChanged: (grid) => setState(() => _displayModeOverride = grid ? 'grid' : 'list'),
+                      ),
                       if (widget.sharedOrderId == null) ...[
                         IconButton(
                           tooltip: l10n.cartShareCart,
@@ -539,25 +557,6 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
                         const SizedBox(width: 4),
                       ],
                     ],
-                  ),
-                ),
-              ),
-              // The merchant's `display_mode` is only the STARTING choice —
-              // a customer browsing this menu gets the same list/grid
-              // capability the merchant's own "My Menu" screen has, kept
-              // locally for this visit rather than written back to the
-              // business's stored setting.
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
-                sliver: SliverToBoxAdapter(
-                  child: Align(
-                    alignment: AlignmentDirectional.centerEnd,
-                    child: ViewModeToggle(
-                      isGrid: isGrid,
-                      listLabel: l10n.menuItemsDisplayModeList,
-                      gridLabel: l10n.menuItemsDisplayModeGrid,
-                      onChanged: (grid) => setState(() => _displayModeOverride = grid ? 'grid' : 'list'),
-                    ),
                   ),
                 ),
               ),
@@ -619,8 +618,10 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
                                   if (branch.id != null)
                                     Padding(
                                       key: branch.key,
-                                      padding: const EdgeInsets.symmetric(vertical: 6),
-                                      child: Text(branch.name, style: Theme.of(context).textTheme.titleSmall),
+                                      padding: EdgeInsets.symmetric(vertical: branch.headingIsRedundant ? 0 : 6),
+                                      child: branch.headingIsRedundant
+                                          ? const SizedBox.shrink()
+                                          : Text(branch.name, style: Theme.of(context).textTheme.titleSmall),
                                     ),
                                   ...branch.items.map(
                                     (item) => Padding(
