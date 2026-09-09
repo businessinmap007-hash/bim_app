@@ -31,6 +31,7 @@ class LocaleController extends StateNotifier<Locale> {
     if (AppLocalizations.supportedLocales.any((l) => l.languageCode == deviceCode)) {
       state = Locale(deviceCode);
       _ref.read(apiClientProvider).languageCode = state.languageCode;
+      _ref.read(localeEpochProvider.notifier).state++;
     }
   }
 
@@ -63,6 +64,7 @@ class LocaleController extends StateNotifier<Locale> {
     _hasExplicitChoice = true;
     state = locale;
     _ref.read(apiClientProvider).languageCode = locale.languageCode;
+    _ref.read(localeEpochProvider.notifier).state++;
     try {
       await _ref.read(localeStorageProvider).write(locale.languageCode);
     } catch (_) {

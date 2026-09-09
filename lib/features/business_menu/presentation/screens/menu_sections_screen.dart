@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/utils/localized_name.dart';
 import '../../application/business_menu_providers.dart';
 import '../../data/models/menu_section.dart';
 
@@ -156,11 +157,14 @@ class MenuSectionsScreen extends ConsumerWidget {
               separatorBuilder: (context, index) => const SizedBox(height: 8),
               itemBuilder: (context, index) {
                 final section = state.items[index];
+                final isEnglish = Localizations.localeOf(context).languageCode == 'en';
+                final title = localizedName(section.nameAr, section.nameEn, isEnglish);
+                final secondary = isEnglish ? section.nameAr : section.nameEn;
                 return Card(
                   margin: EdgeInsets.zero,
                   child: ListTile(
-                    title: Text(section.nameAr, style: TextStyle(color: section.isActive ? null : Theme.of(context).hintColor)),
-                    subtitle: section.nameEn != null ? Text(section.nameEn!) : null,
+                    title: Text(title, style: TextStyle(color: section.isActive ? null : Theme.of(context).hintColor)),
+                    subtitle: secondary != null && secondary.isNotEmpty && secondary != title ? Text(secondary) : null,
                     onTap: () => _openForm(context, ref, existing: section),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete_outline),

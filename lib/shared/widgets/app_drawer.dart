@@ -14,6 +14,7 @@ import '../../features/posts/presentation/screens/my_jobs_screen.dart';
 import '../../features/profile/presentation/screens/my_profile_screen.dart';
 import '../../features/settings/presentation/screens/services_settings_screen.dart';
 import '../../l10n/app_localizations.dart';
+import '../utils/localized_name.dart';
 
 /// The app's account menu — reached via the AppBar's automatic hamburger
 /// icon (Scaffold shows it whenever `drawer:` is set). Settings and logout
@@ -47,6 +48,7 @@ class _AppDrawerContent extends ConsumerWidget {
     final authState = ref.watch(authControllerProvider);
     final user = authState is AuthSignedIn ? authState.user : null;
     final isBusiness = authState is AuthSignedIn && authState.user.isBusiness;
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
 
     void close() => Navigator.of(context).pop();
 
@@ -128,7 +130,7 @@ class _AppDrawerContent extends ConsumerWidget {
                                 children: [
                                   if (user != null)
                                     Text(
-                                      user.name,
+                                      localizedName(user.name, user.nameEn, isEnglish),
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleSmall
@@ -140,7 +142,7 @@ class _AppDrawerContent extends ConsumerWidget {
                                     ),
                                   if (user != null)
                                     Text(
-                                      user.name,
+                                      user.email,
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyLarge

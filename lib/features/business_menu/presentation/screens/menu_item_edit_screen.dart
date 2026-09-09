@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/utils/localized_name.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../media/application/media_picker_service.dart';
 import '../../application/business_menu_providers.dart';
@@ -146,6 +147,11 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
           isActive: _isActive,
         );
         ref.invalidate(menuItemEditControllerProvider(widget.itemId!));
+        // A save here can change anything the LIST screen already rendered
+        // for this item (name, price, type, brand...) — refresh it too, or
+        // the merchant sees the old values until they leave and come back.
+        ref.read(menuItemsControllerProvider.notifier).load();
+        ref.invalidate(menuVocabularyProvider);
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSave)));
         }
@@ -232,6 +238,7 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
   Widget _buildFormFields(BuildContext context, AppLocalizations l10n, List<BusinessMenuSection> sections) {
     final vocabAsync = ref.watch(menuVocabularyProvider);
     final hasLines = vocabAsync.maybeWhen(data: (v) => v.hasLines, orElse: () => false);
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
     // A business without its own brand dictionary (e.g. "hhh" — vegetables,
     // no brands) keeps the free-text field exactly as before; one WITH a
     // closed brand vocabulary (e.g. an appliance business) gets a proper
@@ -264,7 +271,7 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
             decoration: _fieldDecoration(l10n.menuItemSectionLabel),
             items: [
               DropdownMenuItem(value: null, child: Text(l10n.menuItemNoSection)),
-              for (final s in sections) DropdownMenuItem(value: s.id, child: Text(s.nameAr)),
+              for (final s in sections) DropdownMenuItem(value: s.id, child: Text(localizedName(s.nameAr, s.nameEn, isEnglish))),
             ],
             onChanged: (v) => setState(() => _sectionId = v),
           ),
@@ -461,6 +468,7 @@ class _LineOptionField extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final vocabAsync = ref.watch(menuVocabularyProvider);
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
 
     return vocabAsync.when(
       loading: () => const LinearProgressIndicator(),
@@ -485,7 +493,11 @@ class _LineOptionField extends ConsumerWidget {
               for (final o in g.options)
                 DropdownMenuItem(
                   value: o.id,
-                  child: Text(multipleGroups ? '${o.nameAr} — ${g.groupName}' : o.nameAr),
+                  child: Text(
+                    multipleGroups
+                        ? '${localizedName(o.nameAr, o.nameEn, isEnglish)} — ${g.groupName}'
+                        : localizedName(o.nameAr, o.nameEn, isEnglish),
+                  ),
                 ),
           ],
           onChanged: onChanged,
@@ -510,6 +522,7 @@ class _BrandField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
     final groupOptionIds = group.options.map((o) => o.id).toSet();
     final current = selectedIds.where(groupOptionIds.contains).firstOrNull;
 
@@ -521,7 +534,8 @@ class _BrandField extends StatelessWidget {
       ),
       items: [
         DropdownMenuItem(value: null, child: Text(l10n.menuItemNoBrand)),
-        for (final o in group.options) DropdownMenuItem(value: o.id, child: Text(o.nameAr)),
+        for (final o in group.options)
+          DropdownMenuItem(value: o.id, child: Text(localizedName(o.nameAr, o.nameEn, isEnglish))),
       ],
       onChanged: (v) {
         final next = Set<int>.from(selectedIds)..removeAll(groupOptionIds);
@@ -548,6 +562,7 @@ class _ModifiersField extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final vocabAsync = ref.watch(menuVocabularyProvider);
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
 
     return vocabAsync.when(
       loading: () => const SizedBox.shrink(),
@@ -579,7 +594,7 @@ class _ModifiersField extends ConsumerWidget {
                 children: [
                   for (final o in g.options)
                     FilterChip(
-                      label: Text(o.nameAr),
+                      label: Text(localizedName(o.nameAr, o.nameEn, isEnglish)),
                       selected: selectedIds.contains(o.id),
                       onSelected: (selected) {
                         final next = Set<int>.from(selectedIds);
@@ -898,7 +913,7 @@ class _VariantsSection extends ConsumerWidget {
                       ? v.price!.toStringAsFixed(0)
                       : (v.priceDelta != null ? '+${v.priceDelta!.toStringAsFixed(0)}' : '');
                   return _VariantChip(
-                    label: v.nameAr,
+                    label: localizedName(v.nameAr, v.nameEn, Localizations.localeOf(context).languageCode == 'en'),
                     priceLabel: priceLabel,
                     highlighted: v.isDefault,
                     onTap: () => _openForm(context, ref, existing: v),
@@ -1075,6 +1090,7 @@ class _ExtraGroupsSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1094,7 +1110,7 @@ class _ExtraGroupsSection extends ConsumerWidget {
             margin: const EdgeInsets.only(top: 8),
             child: ListTile(
               onTap: () => _openForm(context, ref, existing: g),
-              title: Text(g.nameAr),
+              title: Text(localizedName(g.nameAr, g.nameEn, isEnglish)),
               subtitle: Text(
                 g.isSingle ? l10n.menuItemExtraGroupSelectionSingle : l10n.menuItemExtraGroupSelectionMultiple,
               ),
@@ -1112,6 +1128,7 @@ class _ExtrasSection extends ConsumerWidget {
 
   Future<void> _openForm(BuildContext context, WidgetRef ref, {MenuExtra? existing}) async {
     final l10n = AppLocalizations.of(context)!;
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
     int? extraGroupId = existing?.extraGroupId;
     final nameArController = TextEditingController(text: existing?.nameAr ?? '');
     final nameEnController = TextEditingController(text: existing?.nameEn ?? '');
@@ -1141,7 +1158,8 @@ class _ExtrasSection extends ConsumerWidget {
                     decoration: InputDecoration(labelText: l10n.menuItemExtraGroupHint),
                     items: [
                       DropdownMenuItem(value: null, child: Text(l10n.menuItemExtraGroupNone)),
-                      for (final g in item.extraGroups) DropdownMenuItem(value: g.id, child: Text(g.nameAr)),
+                      for (final g in item.extraGroups)
+                        DropdownMenuItem(value: g.id, child: Text(localizedName(g.nameAr, g.nameEn, isEnglish))),
                     ],
                     onChanged: (v) => setSheetState(() => extraGroupId = v),
                   ),
@@ -1230,6 +1248,7 @@ class _ExtrasSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1245,19 +1264,28 @@ class _ExtrasSection extends ConsumerWidget {
           ],
         ),
         for (final e in item.extras)
-          Card(
-            margin: const EdgeInsets.only(top: 8),
-            child: ListTile(
-              onTap: () => _openForm(context, ref, existing: e),
-              title: Text(e.nameAr),
-              subtitle: Text(
-                e.extraGroupId == null
-                    ? e.price.toStringAsFixed(2)
-                    : '${item.extraGroups.firstWhere((g) => g.id == e.extraGroupId, orElse: () => MenuExtraGroup(id: 0, nameAr: '', selectionType: MenuExtraGroup.selectionMultiple, isActive: true)).nameAr} · ${e.price.toStringAsFixed(2)}',
+          () {
+            final group = e.extraGroupId == null
+                ? null
+                : item.extraGroups.firstWhere(
+                    (g) => g.id == e.extraGroupId,
+                    orElse: () =>
+                        MenuExtraGroup(id: 0, nameAr: '', selectionType: MenuExtraGroup.selectionMultiple, isActive: true),
+                  );
+            return Card(
+              margin: const EdgeInsets.only(top: 8),
+              child: ListTile(
+                onTap: () => _openForm(context, ref, existing: e),
+                title: Text(localizedName(e.nameAr, e.nameEn, isEnglish)),
+                subtitle: Text(
+                  group == null
+                      ? e.price.toStringAsFixed(2)
+                      : '${localizedName(group.nameAr, group.nameEn, isEnglish)} · ${e.price.toStringAsFixed(2)}',
+                ),
+                trailing: IconButton(icon: const Icon(Icons.delete_outline), onPressed: () => _delete(context, ref, e)),
               ),
-              trailing: IconButton(icon: const Icon(Icons.delete_outline), onPressed: () => _delete(context, ref, e)),
-            ),
-          ),
+            );
+          }(),
       ],
     );
   }

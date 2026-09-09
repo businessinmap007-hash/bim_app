@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/utils/localized_name.dart';
 import '../../../../shared/widgets/app_drawer.dart';
 import '../../../../shared/widgets/cart_icon_button.dart';
 import '../../../../shared/widgets/chat_icon_button.dart';
@@ -31,8 +32,9 @@ class BusinessHomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(authControllerProvider);
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
     final name = state is AuthSignedIn
-        ? (state.user.nameEn ?? state.user.name)
+        ? localizedName(state.user.name, state.user.nameEn, isEnglish)
         : '';
 
     final business = state is AuthSignedIn ? state.user : null;

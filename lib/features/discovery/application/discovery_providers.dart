@@ -16,6 +16,7 @@ final discoveryApiProvider = Provider<DiscoveryApi>((ref) {
 /// life of the filter sheet.
 final attributeGroupsProvider =
     FutureProvider.family<List<AttributeGroup>, int>((ref, childId) {
+      ref.watch(localeEpochProvider);
       return ref.watch(discoveryApiProvider).attributes(childId: childId);
     });
 
@@ -29,6 +30,7 @@ typedef RecommendedFilter = ({int? categoryId, int? serviceId});
 /// "recommended" list rather than an empty area under the category browser.
 final recommendedBusinessesProvider =
     FutureProvider.family<List<BusinessSummary>, RecommendedFilter>((ref, filter) async {
+      ref.watch(localeEpochProvider);
       final result = await ref
           .watch(discoveryApiProvider)
           .recommended(categoryId: filter.categoryId, serviceId: filter.serviceId, perPage: 12);
@@ -38,6 +40,7 @@ final recommendedBusinessesProvider =
 /// The platform's own service vocabulary (see DiscoveryApi.serviceTypes) —
 /// powers the discovery screen's "what kind of service?" chip row.
 final serviceTypesProvider = FutureProvider<List<PlatformServiceType>>((ref) {
+  ref.watch(localeEpochProvider);
   return ref.watch(discoveryApiProvider).serviceTypes();
 });
 
@@ -105,6 +108,7 @@ class SearchController extends StateNotifier<SearchState> {
 
 final searchControllerProvider =
     StateNotifierProvider<SearchController, SearchState>((ref) {
+      ref.watch(localeEpochProvider);
       return SearchController(ref.watch(searchApiProvider));
     });
 
@@ -265,6 +269,8 @@ final businessListControllerProvider =
       BusinessListState,
       int
     >(
-      (ref, childId) =>
-          BusinessListController(ref.watch(discoveryApiProvider), childId),
+      (ref, childId) {
+        ref.watch(localeEpochProvider);
+        return BusinessListController(ref.watch(discoveryApiProvider), childId);
+      },
     );

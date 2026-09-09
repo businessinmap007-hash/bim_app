@@ -12,21 +12,27 @@ final businessMenuApiProvider = Provider<BusinessMenuApi>((ref) {
 });
 
 /// The shared catalog_units vocabulary — small and effectively static per
-/// session, so one fetch per app run is enough.
+/// session, so one fetch per app run is enough (re-fetched on a language
+/// change so unit labels switch immediately, see [localeEpochProvider]).
 final saleUnitOptionsProvider = FutureProvider<List<SaleUnitOption>>((ref) {
+  ref.watch(localeEpochProvider);
   return ref.watch(businessMenuApiProvider).saleUnits();
 });
 
 /// What THIS business may say a catalog item is/what qualifies it — narrowed
-/// server-side to its own specialty, so one fetch per app run is enough.
+/// server-side to its own specialty, so one fetch per app run is enough
+/// (re-fetched on a language change, see [localeEpochProvider]).
 final menuVocabularyProvider = FutureProvider<MenuVocabulary>((ref) {
+  ref.watch(localeEpochProvider);
   return ref.watch(businessMenuApiProvider).vocabulary();
 });
 
 /// The FULL `line` catalog (not narrowed by ticks) — autoDispose so the
 /// "which types do you carry" screen always sees a fresh selection state
-/// instead of a stale one from a previous visit.
+/// instead of a stale one from a previous visit; also re-fetched on a
+/// language change (see [localeEpochProvider]).
 final menuAvailableTypesProvider = FutureProvider.autoDispose<List<AvailableTypeGroup>>((ref) {
+  ref.watch(localeEpochProvider);
   return ref.watch(businessMenuApiProvider).availableTypes();
 });
 
@@ -117,6 +123,7 @@ class MenuSectionsController extends StateNotifier<MenuSectionsState> {
 }
 
 final menuSectionsControllerProvider = StateNotifierProvider<MenuSectionsController, MenuSectionsState>((ref) {
+  ref.watch(localeEpochProvider);
   return MenuSectionsController(ref.watch(businessMenuApiProvider));
 });
 
@@ -222,6 +229,7 @@ class MenuItemsController extends StateNotifier<MenuItemsState> {
 }
 
 final menuItemsControllerProvider = StateNotifierProvider<MenuItemsController, MenuItemsState>((ref) {
+  ref.watch(localeEpochProvider);
   return MenuItemsController(ref.watch(businessMenuApiProvider));
 });
 
@@ -368,5 +376,6 @@ class MenuItemEditController extends StateNotifier<AsyncValue<BusinessMenuItem>>
 
 final menuItemEditControllerProvider =
     StateNotifierProvider.family<MenuItemEditController, AsyncValue<BusinessMenuItem>, int>((ref, itemId) {
+      ref.watch(localeEpochProvider);
       return MenuItemEditController(ref.watch(businessMenuApiProvider), itemId);
     });

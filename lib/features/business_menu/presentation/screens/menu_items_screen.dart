@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/utils/localized_name.dart';
 import '../../../../shared/utils/produce_emoji.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../../shared/widgets/view_mode_toggle.dart';
@@ -160,6 +161,7 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
   Widget _buildList(BuildContext context, MenuItemsState state) {
     final vocabulary = _vocabularyForGrouping(state);
     final displayMode = ref.watch(menuDisplayModeControllerProvider).maybeWhen(data: (m) => m, orElse: () => 'list');
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
     if (vocabulary == null) {
       return ListView.separated(
         controller: _scrollController,
@@ -242,7 +244,7 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(branch.nameAr, style: const TextStyle(fontWeight: FontWeight.w700)),
+                  Text(localizedName(branch.nameAr, branch.nameEn, isEnglish), style: const TextStyle(fontWeight: FontWeight.w700)),
                   TextButton.icon(
                     onPressed: () => _openCreateForBranch(branch.id),
                     icon: const Icon(Icons.add, size: 16),
@@ -272,6 +274,7 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
     final state = ref.watch(menuItemsControllerProvider);
     final sectionsState = ref.watch(menuSectionsControllerProvider);
     // Once this business has a vocabulary, its "sections" ARE the
@@ -352,7 +355,7 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
                       Padding(
                         padding: const EdgeInsets.only(right: 8),
                         child: ChoiceChip(
-                          label: Text(section.nameAr),
+                          label: Text(localizedName(section.nameAr, section.nameEn, isEnglish)),
                           selected: state.sectionId == section.id,
                           onSelected: (_) => ref.read(menuItemsControllerProvider.notifier).filterBySection(section.id),
                         ),
@@ -424,6 +427,7 @@ class _GroupBranchNav extends StatelessWidget {
   Widget build(BuildContext context) {
     final groups = vocabulary?.lines.where((g) => g.options.isNotEmpty).toList() ?? const [];
     if (groups.isEmpty) return const SizedBox.shrink();
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
 
     final activeIndex = activeGroupIndex < groups.length ? activeGroupIndex : 0;
     final active = groups[activeIndex];
@@ -464,7 +468,7 @@ class _GroupBranchNav extends StatelessWidget {
               itemBuilder: (context, index) {
                 final branch = active.options[index];
                 return ActionChip(
-                  label: Text(branch.nameAr),
+                  label: Text(localizedName(branch.nameAr, branch.nameEn, isEnglish)),
                   onPressed: () => onBranchTap(branch.id),
                 );
               },
@@ -535,6 +539,13 @@ class _ItemTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
+    final title = localizedName(item.nameAr, item.nameEn, isEnglish);
+    // The OTHER language, as a secondary hint — same role this subtitle
+    // always had, just no longer hardcoded to "always English" now that
+    // the title itself follows the screen's language.
+    final secondary = isEnglish ? item.nameAr : item.nameEn;
+
     return Card(
       margin: EdgeInsets.zero,
       child: ListTile(
@@ -543,10 +554,10 @@ class _ItemTile extends ConsumerWidget {
           backgroundImage: item.images.isNotEmpty ? NetworkImage(item.images.first.url) : null,
           child: item.images.isEmpty ? Text(_itemEmoji(item), style: const TextStyle(fontSize: 18)) : null,
         ),
-        title: Text(item.nameAr, style: TextStyle(color: item.isActive ? null : Theme.of(context).hintColor)),
+        title: Text(title, style: TextStyle(color: item.isActive ? null : Theme.of(context).hintColor)),
         subtitle: item.availableQuantity != null
             ? Text(AppLocalizations.of(context)!.menuItemsQuantityShort(item.availableQuantity!))
-            : (item.nameEn != null ? Text(item.nameEn!) : null),
+            : (secondary != null && secondary.isNotEmpty && secondary != title ? Text(secondary) : null),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -592,6 +603,7 @@ class _ItemGridTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
 
     return Opacity(
       opacity: item.isActive ? 1 : 0.5,
@@ -618,7 +630,12 @@ class _ItemGridTile extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(item.nameAr, maxLines: 1, overflow: TextOverflow.ellipsis, style: theme.textTheme.titleSmall),
+                    Text(
+                      localizedName(item.nameAr, item.nameEn, isEnglish),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.titleSmall,
+                    ),
                     if (item.availableQuantity != null)
                       Padding(
                         padding: const EdgeInsets.only(top: 2),

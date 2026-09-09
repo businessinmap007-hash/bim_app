@@ -18,6 +18,7 @@ final businessFulfillmentChoiceProvider = StateProvider.family<String?, int>((re
 
 final businessProfileProvider =
     StateNotifierProvider.family<BusinessProfileController, AsyncValue<BusinessProfile>, int>((ref, businessId) {
+      ref.watch(localeEpochProvider);
       return BusinessProfileController(ref.watch(businessPageApiProvider), businessId);
     });
 
@@ -71,10 +72,12 @@ class BusinessProfileController extends StateNotifier<AsyncValue<BusinessProfile
 }
 
 final businessMenuProvider = FutureProvider.family<MenuPageData, int>((ref, businessId) {
+  ref.watch(localeEpochProvider);
   return ref.watch(businessPageApiProvider).menu(businessId);
 });
 
 final businessOfferingsProvider = FutureProvider.family<List<OfferingItem>, int>((ref, businessId) {
+  ref.watch(localeEpochProvider);
   return ref.watch(businessPageApiProvider).offerings(businessId);
 });
 
