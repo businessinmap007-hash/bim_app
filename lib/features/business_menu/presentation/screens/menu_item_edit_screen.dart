@@ -553,8 +553,17 @@ class _ModifiersField extends ConsumerWidget {
       loading: () => const SizedBox.shrink(),
       error: (_, _) => const SizedBox.shrink(),
       data: (vocab) {
+        // The backend offers every ticked option in BOTH `lines` and
+        // `modifiers` — the platform-wide role ordering documented on
+        // MerchantOfferingVocabulary ("الحاجز مفتوح: الدور ترتيبٌ لا
+        // إذن") — so a goods business's own `line` groups ("الخضروات",
+        // "الفواكه"...) show up here too unless excluded: what an item
+        // IS is already picked via the "Type" dropdown above, so showing
+        // the SAME 40+ options again as generic qualifier chips is pure
+        // clutter, not a second, different question.
+        final lineGroupIds = vocab.lines.map((g) => g.groupId).toSet();
         final groups = vocab.modifiers
-            .where((g) => g.options.isNotEmpty && g.groupId != excludeGroupId)
+            .where((g) => g.options.isNotEmpty && g.groupId != excludeGroupId && !lineGroupIds.contains(g.groupId))
             .toList();
         if (groups.isEmpty) return const SizedBox.shrink();
 

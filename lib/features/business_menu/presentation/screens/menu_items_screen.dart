@@ -254,6 +254,17 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(menuItemsControllerProvider);
     final sectionsState = ref.watch(menuSectionsControllerProvider);
+    // Once this business has a vocabulary, its "sections" ARE the
+    // vocabulary's own line groups — shown right below by _GroupBranchNav,
+    // always in sync with what's ticked. The hand-picked `menu_sections`
+    // filter row below is for a business with NO vocabulary at all (a
+    // hand-typed restaurant menu); showing BOTH for a vocabulary business
+    // was two different, sometimes-disagreeing answers to "what are my
+    // sections" (the real menu_sections table lags until an item is
+    // actually priced under a group, per MenuSectionFromOptionGroup) —
+    // and filtering into it silently dropped grid mode, since that path
+    // never learned about displayMode at all.
+    final hasLines = ref.watch(menuVocabularyProvider).maybeWhen(data: (v) => v.hasLines, orElse: () => false);
 
     return Scaffold(
       appBar: AppBar(
@@ -300,35 +311,36 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
               onSubmitted: (q) => ref.read(menuItemsControllerProvider.notifier).setQuery(q),
             ),
           ),
-          SizedBox(
-            height: 44,
-            child: MouseWheelHorizontalScroll(
-              builder: (context, controller) => ListView(
-                controller: controller,
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: ChoiceChip(
-                      label: Text(l10n.menuItemsAllSections),
-                      selected: state.sectionId == null,
-                      onSelected: (_) => ref.read(menuItemsControllerProvider.notifier).filterBySection(null),
-                    ),
-                  ),
-                  for (final section in sectionsState.items)
+          if (!hasLines)
+            SizedBox(
+              height: 44,
+              child: MouseWheelHorizontalScroll(
+                builder: (context, controller) => ListView(
+                  controller: controller,
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  children: [
                     Padding(
                       padding: const EdgeInsets.only(right: 8),
                       child: ChoiceChip(
-                        label: Text(section.nameAr),
-                        selected: state.sectionId == section.id,
-                        onSelected: (_) => ref.read(menuItemsControllerProvider.notifier).filterBySection(section.id),
+                        label: Text(l10n.menuItemsAllSections),
+                        selected: state.sectionId == null,
+                        onSelected: (_) => ref.read(menuItemsControllerProvider.notifier).filterBySection(null),
                       ),
                     ),
-                ],
+                    for (final section in sectionsState.items)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: ChoiceChip(
+                          label: Text(section.nameAr),
+                          selected: state.sectionId == section.id,
+                          onSelected: (_) => ref.read(menuItemsControllerProvider.notifier).filterBySection(section.id),
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
-          ),
           _GroupBranchNav(
             vocabulary: _vocabularyForGrouping(state),
             activeGroupIndex: _activeGroupIndex,
