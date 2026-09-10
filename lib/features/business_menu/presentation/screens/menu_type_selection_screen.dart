@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/utils/localized_name.dart';
 import '../../../../shared/utils/produce_emoji.dart';
 import '../../application/business_menu_providers.dart';
 import '../../data/models/menu_available_types.dart';
@@ -86,6 +87,7 @@ class _MenuTypeSelectionScreenState extends ConsumerState<MenuTypeSelectionScree
             orElse: () => AvailableTypeGroup(groupId: widget.groupId, groupName: widget.groupTitle, options: const []),
           );
           _seedFrom(group);
+          final isEnglish = Localizations.localeOf(context).languageCode == 'en';
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,7 +109,7 @@ class _MenuTypeSelectionScreenState extends ConsumerState<MenuTypeSelectionScree
                     final selected = _selectedIds.contains(option.id);
                     return _TypeRow(
                       emoji: produceEmoji(option.nameEn),
-                      label: option.nameAr,
+                      label: localizedName(option.nameAr, option.nameEn, isEnglish),
                       selected: selected,
                       onTap: () => setState(() {
                         selected ? _selectedIds.remove(option.id) : _selectedIds.add(option.id);

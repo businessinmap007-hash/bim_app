@@ -375,7 +375,6 @@ class _BranchBucket {
   final int? id;
   final String name;
   final List<MenuItemSummary> items;
-  final GlobalKey key = GlobalKey();
   _BranchBucket({required this.id, required this.name, required this.items});
 
   /// A branch with exactly one item named after itself (the common produce
@@ -391,10 +390,7 @@ class _BranchBucket {
 class _SectionData {
   final MenuSectionGroup group;
   final List<_BranchBucket> branches;
-  final GlobalKey key = GlobalKey();
   _SectionData({required this.group, required this.branches});
-
-  bool get hasBranches => branches.any((b) => b.id != null);
 }
 
 List<_SectionData> _prepareSections(List<MenuSectionGroup> sections, bool isEnglish) {
@@ -452,14 +448,9 @@ class _SectionGrid extends StatelessWidget {
   }
 }
 
-/// The exact height _MenuNavRows renders below — one 44px row per chip row
-/// it actually draws, zero when neither is worth showing.
-double _menuNavHeight(List<_SectionData> sections, _SectionData activeSection) {
-  var height = 0.0;
-  if (sections.length > 1) height += 44;
-  if (activeSection.hasBranches) height += 44;
-  return height;
-}
+/// The exact height _MenuNavRows renders below — 44px for the section-chip
+/// row, zero when there's only one section to (not) switch between.
+double _menuNavHeight(List<_SectionData> sections) => sections.length > 1 ? 44 : 0;
 
 class _MenuTab extends ConsumerStatefulWidget {
   final int businessId;
@@ -472,7 +463,11 @@ class _MenuTab extends ConsumerStatefulWidget {
 }
 
 class _MenuTabState extends ConsumerState<_MenuTab> {
-  int _activeSectionIndex = 0;
+  // null = "All" — every section renders, stacked, scrollable. Picking one
+  // FILTERS the page down to just it instead of merely scrolling there, so
+  // the rest of the catalog doesn't stay sitting below the section a
+  // customer actually asked to see.
+  int? _activeSectionIndex;
 
   /// Turns the caller's cart for this business into a shared one (idempotent
   /// — reuses the existing share token if it's already shared) and opens the
@@ -494,12 +489,6 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
     }
   }
 
-  void _jumpTo(GlobalKey key) {
-    final target = key.currentContext;
-    if (target == null) return;
-    Scrollable.ensureVisible(target, duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -512,8 +501,8 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
         if (page.sections.isEmpty) return Center(child: Text(l10n.businessMenuEmpty));
 
         final sections = _prepareSections(page.sections, Localizations.localeOf(context).languageCode == 'en');
-        if (_activeSectionIndex >= sections.length) _activeSectionIndex = 0;
-        final activeSection = sections[_activeSectionIndex];
+        if (_activeSectionIndex != null && _activeSectionIndex! >= sections.length) _activeSectionIndex = null;
+        final visibleSections = _activeSectionIndex != null ? [sections[_activeSectionIndex!]] : sections;
         final displayModeOverride = ref.watch(customerMenuDisplayModeControllerProvider);
         final isGrid = (displayModeOverride ?? page.displayMode) == 'grid';
 
@@ -558,27 +547,17 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
                 ),
               ),
               // A sticky nav is only worth the chrome once there is more than
-              // one heading to jump between — a one-section restaurant menu
-              // stays exactly as it was, but a single-section catalog with
-              // several branches (a greengrocer with just "الخضروات") still
-              // gets the branch row even though there is only one section to
-              // (not) switch between. The height is the sum of exactly the
-              // rows _MenuNavRows itself renders below — it must never drift
-              // from that, or the sliver either clips its own content or
-              // leaves a gap the size of a row that was never drawn.
-              if (_menuNavHeight(sections, activeSection) > 0)
+              // one heading to filter between — a one-section restaurant
+              // menu stays exactly as it was.
+              if (_menuNavHeight(sections) > 0)
                 SliverPersistentHeader(
                   pinned: true,
                   delegate: _MenuNavDelegate(
-                    height: _menuNavHeight(sections, activeSection),
+                    height: _menuNavHeight(sections),
                     child: _MenuNavRows(
                       sections: sections,
                       activeSectionIndex: _activeSectionIndex,
-                      onSectionTap: (index) {
-                        setState(() => _activeSectionIndex = index);
-                        _jumpTo(sections[index].key);
-                      },
-                      onBranchTap: _jumpTo,
+                      onSectionTap: (index) => setState(() => _activeSectionIndex = index),
                     ),
                   ),
                 ),
@@ -588,9 +567,8 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      for (final section in sections)
+                      for (final section in visibleSections)
                         Padding(
-                          key: section.key,
                           padding: const EdgeInsets.only(bottom: 20),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -614,7 +592,6 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
                                 for (final branch in section.branches) ...[
                                   if (branch.id != null)
                                     Padding(
-                                      key: branch.key,
                                       padding: EdgeInsets.symmetric(vertical: branch.headingIsRedundant ? 0 : 6),
                                       child: branch.headingIsRedundant
                                           ? const SizedBox.shrink()
@@ -645,68 +622,48 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
   }
 }
 
-/// Two horizontal chip rows pinned above the menu — sections, then the
-/// active section's branches — mirroring the sticky category-nav pattern
-/// used by delivery-menu sites: tap a chip, jump straight to its heading.
+/// A single chip row pinned above the menu — an "All" chip plus one per
+/// section. Picking one FILTERS the page down to it instead of merely
+/// scrolling there — see [_MenuTabState._activeSectionIndex]. No second
+/// branch-chip row: the item cards themselves are the branch list once a
+/// section is this short a scroll away.
 class _MenuNavRows extends StatelessWidget {
   final List<_SectionData> sections;
-  final int activeSectionIndex;
-  final ValueChanged<int> onSectionTap;
-  final ValueChanged<GlobalKey> onBranchTap;
+  final int? activeSectionIndex;
+  final ValueChanged<int?> onSectionTap;
 
-  const _MenuNavRows({
-    required this.sections,
-    required this.activeSectionIndex,
-    required this.onSectionTap,
-    required this.onBranchTap,
-  });
+  const _MenuNavRows({required this.sections, required this.activeSectionIndex, required this.onSectionTap});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final active = sections[activeSectionIndex];
+    final l10n = AppLocalizations.of(context)!;
 
     return ColoredBox(
       color: theme.scaffoldBackgroundColor,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (sections.length > 1)
-            SizedBox(
-              height: 44,
-              child: ListView.separated(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                scrollDirection: Axis.horizontal,
-                itemCount: sections.length,
-                separatorBuilder: (context, index) => const SizedBox(width: 8),
-                itemBuilder: (context, index) {
-                  final selected = index == activeSectionIndex;
-                  return ChoiceChip(
-                    label: Text(sections[index].group.name),
-                    selected: selected,
-                    onSelected: (_) => onSectionTap(index),
-                  );
-                },
-              ),
-            ),
-          if (active.hasBranches)
-            SizedBox(
-              height: 44,
-              child: ListView.separated(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                scrollDirection: Axis.horizontal,
-                itemCount: active.branches.where((b) => b.id != null).length,
-                separatorBuilder: (context, index) => const SizedBox(width: 8),
-                itemBuilder: (context, index) {
-                  final branch = active.branches.where((b) => b.id != null).toList()[index];
-                  return ActionChip(
-                    label: Text(branch.name),
-                    onPressed: () => onBranchTap(branch.key),
-                  );
-                },
-              ),
-            ),
-        ],
+      child: SizedBox(
+        height: 44,
+        child: ListView.separated(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+          scrollDirection: Axis.horizontal,
+          itemCount: sections.length + 1,
+          separatorBuilder: (context, index) => const SizedBox(width: 8),
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              return ChoiceChip(
+                label: Text(l10n.menuItemsAllSections),
+                selected: activeSectionIndex == null,
+                onSelected: (_) => onSectionTap(null),
+              );
+            }
+            final sectionIndex = index - 1;
+            return ChoiceChip(
+              label: Text(sections[sectionIndex].group.name),
+              selected: sectionIndex == activeSectionIndex,
+              onSelected: (_) => onSectionTap(sectionIndex),
+            );
+          },
+        ),
       ),
     );
   }

@@ -31,14 +31,16 @@ class MenuItemsScreen extends ConsumerStatefulWidget {
 class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
   final _scrollController = ScrollController();
   final _searchController = TextEditingController();
-  // Anchors for the sticky group/branch nav — rebuilt each time the
-  // vocabulary's shape changes, reused across scroll-driven rebuilds so a
-  // key already handed to a mounted widget doesn't change identity under it.
-  final Map<int, GlobalKey> _groupKeys = {};
+  // Anchors for the sticky branch nav — rebuilt each time the vocabulary's
+  // shape changes, reused across scroll-driven rebuilds so a key already
+  // handed to a mounted widget doesn't change identity under it.
   final Map<int, GlobalKey> _branchKeys = {};
-  int _activeGroupIndex = 0;
+  // null = "All" — every group renders. Picking one group FILTERS the list
+  // down to just it instead of merely scrolling there, so a long catalog
+  // (several groups, dozens of branches each) doesn't leave every other
+  // group's items still sitting in the way below the one you asked for.
+  int? _activeGroupId;
 
-  GlobalKey _groupKey(int groupId) => _groupKeys.putIfAbsent(groupId, () => GlobalKey());
   GlobalKey _branchKey(int branchId) => _branchKeys.putIfAbsent(branchId, () => GlobalKey());
 
   void _jumpTo(GlobalKey key) {
@@ -199,7 +201,9 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
     // Items with no line option at all (a hand-typed extra) still need a home.
     final unbranched = state.items.where((i) => i.lineOption == null).toList();
 
-    final groups = vocabulary.lines.where((g) => g.options.isNotEmpty).toList();
+    final groups = vocabulary.lines
+        .where((g) => g.options.isNotEmpty && (_activeGroupId == null || g.groupId == _activeGroupId))
+        .toList();
     // "+ Add brand" only makes sense when this business actually HAS a
     // brand vocabulary (an appliance business: "ثلاجات" — توشيبا، فريش...).
     // A greengrocer's "فراولة" has no brand at all, and a business whose
@@ -215,24 +219,32 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
       // protocol — passing every child up front does NOT mount them all;
       // anything past the default ~250px cache extent stays unmounted with
       // a null `GlobalKey.currentContext` until scrolled near. That silently
-      // broke jumping to a group far down a long catalog (e.g. "الفواكه"
-      // sitting after "الخضروات"'s 45 branches): the chip's own state
-      // updated, but `Scrollable.ensureVisible` had no context to jump to
-      // and `_jumpTo`'s null-guard quietly did nothing. A generous fixed
-      // extent keeps a business's whole catalog mounted — this screen is a
-      // merchant's own low-traffic management view, not an infinite feed.
+      // broke jumping to a branch far down a long catalog while "All" is
+      // selected (e.g. "الفواكه" sitting after "الخضروات"'s 45 branches):
+      // the chip's own state updated, but `Scrollable.ensureVisible` had no
+      // context to jump to and `_jumpTo`'s null-guard quietly did nothing. A
+      // generous fixed extent keeps a business's whole catalog mounted —
+      // this screen is a merchant's own low-traffic management view, not an
+      // infinite feed.
       cacheExtent: 10000,
       children: [
         for (final group in groups) ...[
           Row(
-            key: _groupKey(group.groupId),
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(group.groupName, style: Theme.of(context).textTheme.titleSmall),
-              TextButton.icon(
+              // A plain TextButton read as just more label text next to the
+              // heading — easy to miss even though it's the one control that
+              // grows this group's whole catalog. A tonal pill makes it look
+              // like the distinct action it is.
+              FilledButton.tonalIcon(
                 onPressed: () => _openTypeSelection(group.groupId, group.groupName),
                 icon: const Icon(Icons.tune, size: 16),
                 label: Text(AppLocalizations.of(context)!.menuItemsManageTypesAction),
+                style: FilledButton.styleFrom(
+                  visualDensity: VisualDensity.compact,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                ),
               ),
             ],
           ),
@@ -366,11 +378,8 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
             ),
           _GroupBranchNav(
             vocabulary: _vocabularyForGrouping(state),
-            activeGroupIndex: _activeGroupIndex,
-            onGroupTap: (index, groupId) {
-              setState(() => _activeGroupIndex = index);
-              _jumpTo(_groupKey(groupId));
-            },
+            selectedGroupId: _activeGroupId,
+            onGroupTap: (groupId) => setState(() => _activeGroupId = groupId),
             onBranchTap: (branchId) => _jumpTo(_branchKey(branchId)),
           ),
           const SizedBox(height: 8),
@@ -404,21 +413,23 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
   }
 }
 
-/// Two chip rows — vocabulary groups, then the tapped group's branches —
-/// that jump the list to the tapped heading instead of filtering it away.
-/// A long catalog (several groups, dozens of branches) is otherwise a
-/// straight scroll with no way to skip ahead; the manual "All sections"
-/// filter chips above this stay untouched for hand-typed sections, which
-/// this grouping doesn't apply to in the first place.
+/// Two chip rows — an "All" chip plus one per vocabulary group, then (once
+/// one group is picked) that group's branches — that FILTER the list down
+/// to the picked group instead of merely scrolling there. A long catalog
+/// (several groups, dozens of branches) otherwise leaves every other
+/// group's items still sitting below the one you actually asked to see;
+/// the manual "All sections" filter chips above this stay untouched for
+/// hand-typed sections, which this grouping doesn't apply to in the first
+/// place.
 class _GroupBranchNav extends StatelessWidget {
   final MenuVocabulary? vocabulary;
-  final int activeGroupIndex;
-  final void Function(int index, int groupId) onGroupTap;
+  final int? selectedGroupId;
+  final ValueChanged<int?> onGroupTap;
   final ValueChanged<int> onBranchTap;
 
   const _GroupBranchNav({
     required this.vocabulary,
-    required this.activeGroupIndex,
+    required this.selectedGroupId,
     required this.onGroupTap,
     required this.onBranchTap,
   });
@@ -428,9 +439,9 @@ class _GroupBranchNav extends StatelessWidget {
     final groups = vocabulary?.lines.where((g) => g.options.isNotEmpty).toList() ?? const [];
     if (groups.isEmpty) return const SizedBox.shrink();
     final isEnglish = Localizations.localeOf(context).languageCode == 'en';
+    final l10n = AppLocalizations.of(context)!;
 
-    final activeIndex = activeGroupIndex < groups.length ? activeGroupIndex : 0;
-    final active = groups[activeIndex];
+    final active = groups.where((g) => g.groupId == selectedGroupId).firstOrNull;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -443,38 +454,47 @@ class _GroupBranchNav extends StatelessWidget {
                 controller: controller,
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                itemCount: groups.length,
+                itemCount: groups.length + 1,
                 separatorBuilder: (context, index) => const SizedBox(width: 8),
                 itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return ChoiceChip(
+                      label: Text(l10n.menuItemsAllSections),
+                      selected: selectedGroupId == null,
+                      onSelected: (_) => onGroupTap(null),
+                    );
+                  }
+                  final group = groups[index - 1];
                   return ChoiceChip(
-                    label: Text(groups[index].groupName),
-                    selected: index == activeIndex,
-                    onSelected: (_) => onGroupTap(index, groups[index].groupId),
+                    label: Text(group.groupName),
+                    selected: group.groupId == selectedGroupId,
+                    onSelected: (_) => onGroupTap(group.groupId),
                   );
                 },
               ),
             ),
           ),
-        if (groups.length > 1) const SizedBox(height: 6),
-        SizedBox(
-          height: 36,
-          child: MouseWheelHorizontalScroll(
-            builder: (context, controller) => ListView.separated(
-              controller: controller,
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: active.options.length,
-              separatorBuilder: (context, index) => const SizedBox(width: 8),
-              itemBuilder: (context, index) {
-                final branch = active.options[index];
-                return ActionChip(
-                  label: Text(localizedName(branch.nameAr, branch.nameEn, isEnglish)),
-                  onPressed: () => onBranchTap(branch.id),
-                );
-              },
+        if (groups.length > 1 && active != null) const SizedBox(height: 6),
+        if (active != null)
+          SizedBox(
+            height: 36,
+            child: MouseWheelHorizontalScroll(
+              builder: (context, controller) => ListView.separated(
+                controller: controller,
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                itemCount: active.options.length,
+                separatorBuilder: (context, index) => const SizedBox(width: 8),
+                itemBuilder: (context, index) {
+                  final branch = active.options[index];
+                  return ActionChip(
+                    label: Text(localizedName(branch.nameAr, branch.nameEn, isEnglish)),
+                    onPressed: () => onBranchTap(branch.id),
+                  );
+                },
+              ),
             ),
           ),
-        ),
       ],
     );
   }
