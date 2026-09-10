@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/core_providers.dart';
+import '../../discovery/application/discovery_providers.dart';
 import '../data/models/catalog_product_listing.dart';
 import '../data/retail_discovery_api.dart';
 
@@ -10,6 +11,25 @@ final retailDiscoveryApiProvider = Provider<RetailDiscoveryApi>((ref) {
 
 final retailFiltersProvider = FutureProvider.autoDispose<RetailFilters>((ref) {
   return ref.watch(retailDiscoveryApiProvider).filters();
+});
+
+/// The Categories screen's "Retail" service feed — one card per listing,
+/// narrowed by [selectedCategoryRootIdProvider] the same way
+/// [recommendedBusinessesProvider] is for every other service. Mirrors that
+/// provider's own simplicity (first page only, no "load more") since this
+/// sits in the same spot on the same screen.
+final retailListingsProvider = FutureProvider.autoDispose<List<RetailListingCard>>((ref) async {
+  ref.watch(localeEpochProvider);
+  final categoryId = ref.watch(selectedCategoryRootIdProvider);
+  final result = await ref.watch(retailDiscoveryApiProvider).listings(categoryId: categoryId, page: 1);
+  return result.items;
+});
+
+/// GET /discovery/retail/business/{id} — the storefront a [RetailListingCard]
+/// opens into: one seller's whole retail shelf plus their own minimum order.
+final retailStorefrontProvider = FutureProvider.autoDispose.family<RetailStorefront, int>((ref, businessId) {
+  ref.watch(localeEpochProvider);
+  return ref.watch(retailDiscoveryApiProvider).business(businessId);
 });
 
 typedef ProductOffersParams = int;

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/utils/retail_quantity_format.dart';
 import '../../../categories/presentation/widgets/category_picker_field.dart';
 import '../../../discovery/application/discovery_providers.dart';
 import '../../../discovery/data/models/business_summary.dart';
@@ -174,6 +175,15 @@ class _RetailListingsScreenState extends ConsumerState<RetailListingsScreen> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 if (listing.stock != null) Text('${listing.stock}'),
+                                if (listing.minOrderQty != null) ...[
+                                  if (listing.stock != null) const SizedBox(width: 6),
+                                  Text(
+                                    l10n.retailListingMinOrderQtyBadge(
+                                      formatRetailQty(listing.minOrderQty!, listing.unit),
+                                    ),
+                                    style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12),
+                                  ),
+                                ],
                                 if (listing.isRestricted) ...[
                                   if (listing.stock != null) const SizedBox(width: 6),
                                   Icon(Icons.lock_outline, size: 14, color: Theme.of(context).colorScheme.primary),
@@ -418,6 +428,8 @@ class _ListingFormSheet extends ConsumerStatefulWidget {
 class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
   late final _priceController = TextEditingController(text: widget.existing?.price.toStringAsFixed(2) ?? '');
   late final _stockController = TextEditingController(text: widget.existing?.stock?.toString() ?? '');
+  late final _minOrderQtyController = TextEditingController(text: widget.existing?.minOrderQty?.toString() ?? '');
+  late final _unitController = TextEditingController(text: widget.existing?.unit ?? '');
   late final _skuController = TextEditingController(text: widget.existing?.sku ?? '');
   late bool _isActive = widget.existing?.isActive ?? true;
   late String _visibility = widget.existing?.visibility ?? 'public';
@@ -430,6 +442,8 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
   void dispose() {
     _priceController.dispose();
     _stockController.dispose();
+    _minOrderQtyController.dispose();
+    _unitController.dispose();
     _skuController.dispose();
     super.dispose();
   }
@@ -475,6 +489,8 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
 
     try {
       final stock = int.tryParse(_stockController.text.trim());
+      final minOrderQty = int.tryParse(_minOrderQtyController.text.trim());
+      final unit = _unitController.text.trim();
       final sku = _skuController.text.trim();
       final audienceChildIds = _audienceChildren.map((e) => e.id).toList();
       final audienceBusinessIds = _audienceBusinesses.map((e) => e.id).toList();
@@ -489,6 +505,8 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
               catalogProductId: widget.product!.id,
               price: price,
               stock: stock,
+              minOrderQty: minOrderQty,
+              unit: unit,
               sku: sku,
               visibility: _visibility,
               audienceChildIds: audienceChildIds,
@@ -502,6 +520,8 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
               widget.existing!.id,
               price: price,
               stock: stock,
+              minOrderQty: minOrderQty,
+              unit: unit,
               sku: sku,
               isActive: _isActive,
               visibility: _visibility,
@@ -552,6 +572,33 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
                 controller: _stockController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(labelText: l10n.retailListingStockHint),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: TextField(
+                      controller: _minOrderQtyController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: l10n.retailListingMinOrderQtyLabel,
+                        hintText: l10n.retailListingMinOrderQtyHint,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: TextField(
+                      controller: _unitController,
+                      decoration: InputDecoration(
+                        labelText: l10n.retailListingUnitLabel,
+                        hintText: l10n.retailListingUnitHint,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 12),
               TextField(

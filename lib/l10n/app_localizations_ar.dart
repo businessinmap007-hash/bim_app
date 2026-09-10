@@ -3111,6 +3111,25 @@ class AppLocalizationsAr extends AppLocalizations {
   String get retailListingStockHint => 'المخزون (اختياري)';
 
   @override
+  String get retailListingMinOrderQtyLabel =>
+      'الحد الأدنى للكمية بالطلب (اختياري)';
+
+  @override
+  String get retailListingMinOrderQtyHint =>
+      'مثال: ٢٠ — لن يستطيع المشتري طلب أقل من هذه الكمية';
+
+  @override
+  String retailListingMinOrderQtyBadge(String qty) {
+    return 'الحد الأدنى $qty';
+  }
+
+  @override
+  String get retailListingUnitLabel => 'الوحدة (اختياري)';
+
+  @override
+  String get retailListingUnitHint => 'كيلو، كرتونة، طن...';
+
+  @override
   String get retailListingSkuHint => 'رمز المنتج SKU (اختياري)';
 
   @override
@@ -3169,6 +3188,20 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get retailListingBusinessSearchEmpty => 'لا توجد نتائج مطابقة.';
+
+  @override
+  String get retailListingsFeedEmpty => 'لا توجد منتجات بعد.';
+
+  @override
+  String retailStorefrontMinQtyLabel(String qty) {
+    return 'الحد الأدنى للطلب: $qty';
+  }
+
+  @override
+  String get retailStorefrontQuantityLabel => 'الكمية';
+
+  @override
+  String get retailStorefrontEmpty => 'لا توجد منتجات لدى هذا النشاط بعد.';
 
   @override
   String get accountDeletionTitle => 'حذف حسابي';

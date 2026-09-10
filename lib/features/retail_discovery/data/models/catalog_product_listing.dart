@@ -127,6 +127,135 @@ class ProductOffer {
   }
 }
 
+/// One row on the Categories screen's "Retail" service feed — a single
+/// LISTING (business + product + price), not a bare business card or a
+/// cross-seller product summary. See
+/// Api\V2\RetailDiscoveryController::listings().
+class RetailListingCard {
+  final int listingId;
+  final double price;
+  final String currency;
+  final int? stock;
+  final int? minOrderQty;
+  final String? unit;
+  final int productId;
+  final String productName;
+  final String? productImage;
+  final int businessId;
+  final String businessName;
+  final String? businessLogo;
+  final int? businessCategoryId;
+  final int? businessCategoryChildId;
+  final bool isOpenNow;
+
+  const RetailListingCard({
+    required this.listingId,
+    required this.price,
+    required this.currency,
+    this.stock,
+    this.minOrderQty,
+    this.unit,
+    required this.productId,
+    required this.productName,
+    this.productImage,
+    required this.businessId,
+    required this.businessName,
+    this.businessLogo,
+    this.businessCategoryId,
+    this.businessCategoryChildId,
+    required this.isOpenNow,
+  });
+
+  factory RetailListingCard.fromJson(Map<String, dynamic> json) {
+    final product = json['product'] as Map<String, dynamic>? ?? const {};
+    final business = json['business'] as Map<String, dynamic>? ?? const {};
+    return RetailListingCard(
+      listingId: (json['listing_id'] as num).toInt(),
+      price: (json['price'] as num?)?.toDouble() ?? 0,
+      currency: json['currency'] as String? ?? 'EGP',
+      stock: (json['stock'] as num?)?.toInt(),
+      minOrderQty: (json['min_order_qty'] as num?)?.toInt(),
+      unit: json['unit'] as String?,
+      productId: (product['id'] as num?)?.toInt() ?? 0,
+      productName: product['name'] as String? ?? '',
+      productImage: Env.assetUrl(product['image'] as String?),
+      businessId: (business['id'] as num?)?.toInt() ?? 0,
+      businessName: business['name'] as String? ?? '',
+      businessLogo: Env.assetUrl(business['logo'] as String?),
+      businessCategoryId: (business['category_id'] as num?)?.toInt(),
+      businessCategoryChildId: (business['category_child_id'] as num?)?.toInt(),
+      isOpenNow: business['is_open_now'] as bool? ?? true,
+    );
+  }
+}
+
+/// GET /discovery/retail/business/{id} — one seller's whole retail shelf,
+/// the storefront a [RetailListingCard] opens into.
+class RetailStorefrontListing {
+  final int listingId;
+  final double price;
+  final String currency;
+  final int? stock;
+  final int? minOrderQty;
+  final String? unit;
+  final int productId;
+  final String productName;
+  final String? productImage;
+
+  const RetailStorefrontListing({
+    required this.listingId,
+    required this.price,
+    required this.currency,
+    this.stock,
+    this.minOrderQty,
+    this.unit,
+    required this.productId,
+    required this.productName,
+    this.productImage,
+  });
+
+  factory RetailStorefrontListing.fromJson(Map<String, dynamic> json) {
+    final product = json['product'] as Map<String, dynamic>? ?? const {};
+    return RetailStorefrontListing(
+      listingId: (json['listing_id'] as num).toInt(),
+      price: (json['price'] as num?)?.toDouble() ?? 0,
+      currency: json['currency'] as String? ?? 'EGP',
+      stock: (json['stock'] as num?)?.toInt(),
+      minOrderQty: (json['min_order_qty'] as num?)?.toInt(),
+      unit: json['unit'] as String?,
+      productId: (product['id'] as num?)?.toInt() ?? 0,
+      productName: product['name'] as String? ?? '',
+      productImage: Env.assetUrl(product['image'] as String?),
+    );
+  }
+}
+
+class RetailStorefront {
+  final int businessId;
+  final String businessName;
+  final String? businessLogo;
+  final List<RetailStorefrontListing> listings;
+
+  const RetailStorefront({
+    required this.businessId,
+    required this.businessName,
+    this.businessLogo,
+    this.listings = const [],
+  });
+
+  factory RetailStorefront.fromJson(Map<String, dynamic> json) {
+    final business = json['business'] as Map<String, dynamic>? ?? const {};
+    return RetailStorefront(
+      businessId: (business['id'] as num?)?.toInt() ?? 0,
+      businessName: business['name'] as String? ?? '',
+      businessLogo: Env.assetUrl(business['logo'] as String?),
+      listings: (json['listings'] as List<dynamic>? ?? [])
+          .map((e) => RetailStorefrontListing.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+}
+
 /// GET /discovery/retail/products/{id} — one product master with every
 /// business that sells it, cheapest first.
 class ProductDetail {

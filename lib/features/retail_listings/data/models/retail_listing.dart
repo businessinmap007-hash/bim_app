@@ -28,6 +28,8 @@ class RetailListing {
   final double price;
   final String currency;
   final int? stock;
+  final int? minOrderQty;
+  final String? unit;
   final String? sku;
   final bool isActive;
   final String visibility;
@@ -44,6 +46,8 @@ class RetailListing {
     required this.price,
     required this.currency,
     this.stock,
+    this.minOrderQty,
+    this.unit,
     this.sku,
     required this.isActive,
     required this.visibility,
@@ -66,6 +70,8 @@ class RetailListing {
       price: (json['price'] as num).toDouble(),
       currency: json['currency'] as String? ?? 'EGP',
       stock: json['stock'] as int?,
+      minOrderQty: json['min_order_qty'] as int?,
+      unit: json['unit'] as String?,
       sku: json['sku'] as String?,
       isActive: json['is_active'] as bool,
       visibility: json['visibility'] as String? ?? 'public',

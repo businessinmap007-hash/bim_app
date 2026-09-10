@@ -696,9 +696,24 @@ class _ServicesTab extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final offeringsAsync = ref.watch(businessOfferingsProvider(businessId));
 
-    Future<void> orderRetail(OfferingItem offering) async {
+    Future<void> orderOffering(OfferingItem offering) async {
+      // This tab's rows come from `OfferingDiscovery`, which only ever
+      // returns two `source`s: 'menu' (a MenuItem) or 'price' (a raw
+      // BusinessServicePrice — a booking add-on, or a schedules/training
+      // rate). Retail listings never appear here at all — that's a separate
+      // discovery path — so 'retail' as a cart kind was always wrong for
+      // every row this tab shows.
+      //
+      // A 'price'-sourced, non-bookable row (schedules/training) has no cart
+      // kind of its own yet — those services are requested through their own
+      // dedicated screens, not a generic cart — so it's not orderable here.
+      if (offering.source != 'menu') {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.settingsComingSoon)));
+        return;
+      }
+
       try {
-        await ref.read(cartControllerProvider.notifier).addItem(kind: 'retail', offeringId: offering.id);
+        await ref.read(cartControllerProvider.notifier).addItem(kind: 'menu', offeringId: offering.id);
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.cartAddedToCart)));
         }
@@ -735,7 +750,7 @@ class _ServicesTab extends ConsumerWidget {
                                 builder: (_) => BookingScreen(businessId: businessId, offering: offering),
                               ),
                             )
-                          : () => orderRetail(offering),
+                          : () => orderOffering(offering),
                     );
                   },
                 ),

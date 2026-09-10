@@ -49,6 +49,19 @@ final serviceTypesProvider = FutureProvider<List<PlatformServiceType>>((ref) {
 /// doesn't reset the filter mid-session.
 final selectedServiceTypeProvider = StateProvider<int?>((ref) => null);
 
+/// A SECOND, narrower filter shown once a service is picked — the seller's
+/// own root category (e.g. "Factories" vs "Shops"). General across every
+/// service, not retail-only: a "Retail" feed mixing a greengrocer and a
+/// furniture factory is exactly as hard to browse as any other service
+/// would be if it mixed unrelated trades. Reset whenever the service choice
+/// itself changes (see [[bim-app-category-root-filter]]) — a customer who
+/// picks a fresh service is starting a fresh browse, not narrowing a stale
+/// root within it.
+final selectedCategoryRootIdProvider = StateProvider<int?>((ref) {
+  ref.watch(selectedServiceTypeProvider);
+  return null;
+});
+
 final searchApiProvider = Provider<SearchApi>((ref) {
   return SearchApi(ref.watch(apiClientProvider));
 });

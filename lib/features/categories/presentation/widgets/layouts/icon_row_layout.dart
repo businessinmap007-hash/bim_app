@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../l10n/app_localizations.dart';
 import '../../../../discovery/application/discovery_providers.dart';
+import '../category_root_chips_row.dart';
 import '../category_roots_grid.dart';
 import '../recommended_businesses_list.dart';
 import '../service_type_chips_row.dart';
@@ -19,12 +20,14 @@ class IconRowCategoriesLayout extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final serviceId = ref.watch(selectedServiceTypeProvider);
+    final categoryId = ref.watch(selectedCategoryRootIdProvider);
 
     return Column(
       children: [
         const SizedBox(height: 96, child: CategoryRootsGrid()),
         const SizedBox(height: 8),
         const ServiceTypeChipsRow(),
+        const CategoryRootChipsRow(),
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
           child: Align(
@@ -35,7 +38,7 @@ class IconRowCategoriesLayout extends ConsumerWidget {
             ),
           ),
         ),
-        Expanded(child: RecommendedBusinessesList(serviceId: serviceId)),
+        Expanded(child: RecommendedBusinessesList(serviceId: serviceId, categoryId: categoryId)),
       ],
     );
   }

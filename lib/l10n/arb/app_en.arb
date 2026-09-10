@@ -1028,6 +1028,14 @@
   "retailListingEditTitle": "Edit listing",
   "retailListingPriceHint": "Price",
   "retailListingStockHint": "Stock (optional)",
+  "retailListingMinOrderQtyLabel": "Minimum order quantity (optional)",
+  "retailListingMinOrderQtyHint": "e.g. 20 — wholesale buyers must order at least this much",
+  "retailListingMinOrderQtyBadge": "Min {qty}",
+  "@retailListingMinOrderQtyBadge": {
+    "placeholders": { "qty": { "type": "String" } }
+  },
+  "retailListingUnitLabel": "Unit (optional)",
+  "retailListingUnitHint": "kg, carton, ton...",
   "retailListingSkuHint": "SKU (optional)",
   "retailListingActiveLabel": "Active",
   "retailListingDeleteConfirm": "Remove this product from your listings?",
@@ -1047,6 +1055,13 @@
   "retailListingBusinessSearchTitle": "Choose a business",
   "retailListingBusinessSearchHint": "Search by business name...",
   "retailListingBusinessSearchEmpty": "No matching businesses.",
+  "retailListingsFeedEmpty": "No products yet.",
+  "retailStorefrontMinQtyLabel": "Min order: {qty}",
+  "@retailStorefrontMinQtyLabel": {
+    "placeholders": { "qty": { "type": "String" } }
+  },
+  "retailStorefrontQuantityLabel": "Quantity",
+  "retailStorefrontEmpty": "This business has no products listed yet.",
   "accountDeletionTitle": "Delete my account",
   "accountDeletionHint": "You'll have {days} days to change your mind — logging in again during that window restores everything exactly as it was.",
   "@accountDeletionHint": {

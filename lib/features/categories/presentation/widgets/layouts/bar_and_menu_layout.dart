@@ -11,6 +11,7 @@ import '../../../application/categories_providers.dart';
 import '../../../data/models/category_root.dart';
 import '../../../data/models/specialty.dart';
 import '../../category_icon_mapping.dart';
+import '../category_root_chips_row.dart';
 import '../recommended_businesses_list.dart';
 import '../service_type_chips_row.dart';
 
@@ -37,6 +38,7 @@ class _BarAndMenuCategoriesLayoutState
     final l10n = AppLocalizations.of(context)!;
     final roots = ref.watch(categoryRootsProvider);
     final serviceId = ref.watch(selectedServiceTypeProvider);
+    final categoryId = ref.watch(selectedCategoryRootIdProvider);
 
     return Column(
       children: [
@@ -86,6 +88,7 @@ class _BarAndMenuCategoriesLayoutState
         const Divider(height: 1),
         const SizedBox(height: 8),
         const ServiceTypeChipsRow(),
+        const CategoryRootChipsRow(),
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
           child: Align(
@@ -96,7 +99,7 @@ class _BarAndMenuCategoriesLayoutState
             ),
           ),
         ),
-        Expanded(child: RecommendedBusinessesList(serviceId: serviceId)),
+        Expanded(child: RecommendedBusinessesList(serviceId: serviceId, categoryId: categoryId)),
       ],
     );
   }

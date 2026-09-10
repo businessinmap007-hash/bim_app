@@ -1028,6 +1028,14 @@
   "retailListingEditTitle": "تعديل الإدراج",
   "retailListingPriceHint": "السعر",
   "retailListingStockHint": "المخزون (اختياري)",
+  "retailListingMinOrderQtyLabel": "الحد الأدنى للكمية بالطلب (اختياري)",
+  "retailListingMinOrderQtyHint": "مثال: ٢٠ — لن يستطيع المشتري طلب أقل من هذه الكمية",
+  "retailListingMinOrderQtyBadge": "الحد الأدنى {qty}",
+  "@retailListingMinOrderQtyBadge": {
+    "placeholders": { "qty": { "type": "String" } }
+  },
+  "retailListingUnitLabel": "الوحدة (اختياري)",
+  "retailListingUnitHint": "كيلو، كرتونة، طن...",
   "retailListingSkuHint": "رمز المنتج SKU (اختياري)",
   "retailListingActiveLabel": "نشط",
   "retailListingDeleteConfirm": "إزالة هذا المنتج من منتجاتك؟",
@@ -1047,6 +1055,13 @@
   "retailListingBusinessSearchTitle": "اختر شركة",
   "retailListingBusinessSearchHint": "ابحث باسم النشاط...",
   "retailListingBusinessSearchEmpty": "لا توجد نتائج مطابقة.",
+  "retailListingsFeedEmpty": "لا توجد منتجات بعد.",
+  "retailStorefrontMinQtyLabel": "الحد الأدنى للطلب: {qty}",
+  "@retailStorefrontMinQtyLabel": {
+    "placeholders": { "qty": { "type": "String" } }
+  },
+  "retailStorefrontQuantityLabel": "الكمية",
+  "retailStorefrontEmpty": "لا توجد منتجات لدى هذا النشاط بعد.",
   "accountDeletionTitle": "حذف حسابي",
   "accountDeletionHint": "لديك {days} يومًا لتغيير رأيك — تسجيل الدخول مرة أخرى خلال هذه المدة يستعيد كل شيء كما كان.",
   "@accountDeletionHint": {

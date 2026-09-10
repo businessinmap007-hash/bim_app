@@ -5882,6 +5882,36 @@ abstract class AppLocalizations {
   /// **'المخزون (اختياري)'**
   String get retailListingStockHint;
 
+  /// No description provided for @retailListingMinOrderQtyLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحد الأدنى للكمية بالطلب (اختياري)'**
+  String get retailListingMinOrderQtyLabel;
+
+  /// No description provided for @retailListingMinOrderQtyHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مثال: ٢٠ — لن يستطيع المشتري طلب أقل من هذه الكمية'**
+  String get retailListingMinOrderQtyHint;
+
+  /// No description provided for @retailListingMinOrderQtyBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحد الأدنى {qty}'**
+  String retailListingMinOrderQtyBadge(String qty);
+
+  /// No description provided for @retailListingUnitLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوحدة (اختياري)'**
+  String get retailListingUnitLabel;
+
+  /// No description provided for @retailListingUnitHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'كيلو، كرتونة، طن...'**
+  String get retailListingUnitHint;
+
   /// No description provided for @retailListingSkuHint.
   ///
   /// In ar, this message translates to:
@@ -5995,6 +6025,30 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لا توجد نتائج مطابقة.'**
   String get retailListingBusinessSearchEmpty;
+
+  /// No description provided for @retailListingsFeedEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد منتجات بعد.'**
+  String get retailListingsFeedEmpty;
+
+  /// No description provided for @retailStorefrontMinQtyLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحد الأدنى للطلب: {qty}'**
+  String retailStorefrontMinQtyLabel(String qty);
+
+  /// No description provided for @retailStorefrontQuantityLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكمية'**
+  String get retailStorefrontQuantityLabel;
+
+  /// No description provided for @retailStorefrontEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد منتجات لدى هذا النشاط بعد.'**
+  String get retailStorefrontEmpty;
 
   /// No description provided for @accountDeletionTitle.
   ///

@@ -52,4 +52,35 @@ class RetailDiscoveryApi {
             as Map<String, dynamic>;
     return ProductDetail.fromJson(data);
   }
+
+  /// GET /discovery/retail/listings — the feed behind the Categories
+  /// screen's "Retail" service chip: one card per listing.
+  Future<Paginated<RetailListingCard>> listings({
+    int? categoryId,
+    String? q,
+    int page = 1,
+  }) async {
+    final data =
+        await _client.get(
+              '/discovery/retail/listings',
+              query: {
+                'category_id': ?categoryId,
+                if (q != null && q.isNotEmpty) 'q': q,
+                'page': page,
+              },
+            )
+            as Map<String, dynamic>;
+    return Paginated.fromJson(
+      data['listings'] as Map<String, dynamic>,
+      RetailListingCard.fromJson,
+    );
+  }
+
+  /// GET /discovery/retail/business/{id} — one seller's whole retail shelf.
+  Future<RetailStorefront> business(int businessId) async {
+    final data =
+        await _client.get('/discovery/retail/business/$businessId')
+            as Map<String, dynamic>;
+    return RetailStorefront.fromJson(data);
+  }
 }

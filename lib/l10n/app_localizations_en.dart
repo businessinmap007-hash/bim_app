@@ -3100,6 +3100,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get retailListingStockHint => 'Stock (optional)';
 
   @override
+  String get retailListingMinOrderQtyLabel =>
+      'Minimum order quantity (optional)';
+
+  @override
+  String get retailListingMinOrderQtyHint =>
+      'e.g. 20 — wholesale buyers must order at least this much';
+
+  @override
+  String retailListingMinOrderQtyBadge(String qty) {
+    return 'Min $qty';
+  }
+
+  @override
+  String get retailListingUnitLabel => 'Unit (optional)';
+
+  @override
+  String get retailListingUnitHint => 'kg, carton, ton...';
+
+  @override
   String get retailListingSkuHint => 'SKU (optional)';
 
   @override
@@ -3159,6 +3178,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get retailListingBusinessSearchEmpty => 'No matching businesses.';
+
+  @override
+  String get retailListingsFeedEmpty => 'No products yet.';
+
+  @override
+  String retailStorefrontMinQtyLabel(String qty) {
+    return 'Min order: $qty';
+  }
+
+  @override
+  String get retailStorefrontQuantityLabel => 'Quantity';
+
+  @override
+  String get retailStorefrontEmpty =>
+      'This business has no products listed yet.';
 
   @override
   String get accountDeletionTitle => 'Delete my account';
