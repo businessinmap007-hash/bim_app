@@ -203,6 +203,18 @@ class _ProductPickerSheetState extends ConsumerState<_ProductPickerSheet> {
   bool _loading = false;
   bool _searched = false;
 
+  @override
+  void initState() {
+    super.initState();
+    // Show what this business already carries the moment the sheet opens —
+    // the backend's lookup() is already scoped to the item types the
+    // owner's own category child offers under retail, so an empty query
+    // isn't "search everything," it's "browse my own product types." A
+    // merchant shouldn't have to guess a search term for a product that's
+    // already within the one list they sell from.
+    _search('');
+  }
+
   Future<void> _search(String q) async {
     setState(() {
       _loading = true;
