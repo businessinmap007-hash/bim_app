@@ -90,8 +90,21 @@ class RetailListingsController extends StateNotifier<RetailListingsState> {
     required double price,
     int? stock,
     String? sku,
+    String visibility = 'public',
+    List<int> audienceBusinessIds = const [],
+    List<int> audienceChildIds = const [],
+    List<int> audienceCategoryIds = const [],
   }) async {
-    await _api.create(catalogProductId: catalogProductId, price: price, stock: stock, sku: sku);
+    await _api.create(
+      catalogProductId: catalogProductId,
+      price: price,
+      stock: stock,
+      sku: sku,
+      visibility: visibility,
+      audienceBusinessIds: audienceBusinessIds,
+      audienceChildIds: audienceChildIds,
+      audienceCategoryIds: audienceCategoryIds,
+    );
     await load();
   }
 
@@ -101,8 +114,22 @@ class RetailListingsController extends StateNotifier<RetailListingsState> {
     int? stock,
     String? sku,
     required bool isActive,
+    String visibility = 'public',
+    List<int> audienceBusinessIds = const [],
+    List<int> audienceChildIds = const [],
+    List<int> audienceCategoryIds = const [],
   }) async {
-    await _api.update(id, price: price, stock: stock, sku: sku, isActive: isActive);
+    await _api.update(
+      id,
+      price: price,
+      stock: stock,
+      sku: sku,
+      isActive: isActive,
+      visibility: visibility,
+      audienceBusinessIds: audienceBusinessIds,
+      audienceChildIds: audienceChildIds,
+      audienceCategoryIds: audienceCategoryIds,
+    );
     await load();
   }
 

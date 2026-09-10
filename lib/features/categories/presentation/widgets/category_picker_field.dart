@@ -43,7 +43,7 @@ class CategoryPickerField extends StatelessWidget {
         final selection = await showModalBottomSheet<CategorySelection>(
           context: context,
           isScrollControlled: true,
-          builder: (context) => const _CategoryPickerSheet(),
+          builder: (context) => const CategoryPickerSheet(),
         );
         if (selection != null) onChanged(selection);
       },
@@ -63,14 +63,14 @@ class CategoryPickerField extends StatelessWidget {
   }
 }
 
-class _CategoryPickerSheet extends StatefulWidget {
-  const _CategoryPickerSheet();
+class CategoryPickerSheet extends StatefulWidget {
+  const CategoryPickerSheet({super.key});
 
   @override
-  State<_CategoryPickerSheet> createState() => _CategoryPickerSheetState();
+  State<CategoryPickerSheet> createState() => CategoryPickerSheetState();
 }
 
-class _CategoryPickerSheetState extends State<_CategoryPickerSheet> {
+class CategoryPickerSheetState extends State<CategoryPickerSheet> {
   CategoryRoot? _selectedRoot;
 
   @override

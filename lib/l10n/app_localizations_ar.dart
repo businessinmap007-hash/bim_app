@@ -3123,6 +3123,54 @@ class AppLocalizationsAr extends AppLocalizations {
   String get retailPriceRequired => 'أدخل سعرًا صحيحًا.';
 
   @override
+  String get retailListingVisibilityLabel => 'من يرى هذا المنتج';
+
+  @override
+  String get retailListingVisibilityPublic => 'الجميع';
+
+  @override
+  String get retailListingVisibilityPublicHint =>
+      'يظهر لكل عميل، مثل باقي منتجاتك.';
+
+  @override
+  String get retailListingVisibilityRestricted => 'جهات محددة فقط';
+
+  @override
+  String get retailListingVisibilityRestrictedHint =>
+      'مخفي عن الجميع إلا أنواع المحلات أو الشركات التي تحددها بالأسفل — سعر جملة لا يراه سواهم.';
+
+  @override
+  String get retailListingRestrictedBadge => 'مقيّد';
+
+  @override
+  String get retailListingAudienceShopTypesLabel => 'أنواع المحلات';
+
+  @override
+  String get retailListingAudienceBusinessesLabel => 'شركات/محلات بعينها';
+
+  @override
+  String get retailListingAddShopType => 'إضافة نوع محل';
+
+  @override
+  String get retailListingAddBusiness => 'إضافة شركة';
+
+  @override
+  String get retailListingAudienceEmpty => 'لم يتم اختيار أحد بعد.';
+
+  @override
+  String get retailListingAudienceRequired =>
+      'اختر نوع محل واحدًا أو شركة واحدة على الأقل.';
+
+  @override
+  String get retailListingBusinessSearchTitle => 'اختر شركة';
+
+  @override
+  String get retailListingBusinessSearchHint => 'ابحث باسم النشاط...';
+
+  @override
+  String get retailListingBusinessSearchEmpty => 'لا توجد نتائج مطابقة.';
+
+  @override
   String get accountDeletionTitle => 'حذف حسابي';
 
   @override

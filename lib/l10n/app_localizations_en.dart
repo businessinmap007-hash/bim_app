@@ -3113,6 +3113,54 @@ class AppLocalizationsEn extends AppLocalizations {
   String get retailPriceRequired => 'Enter a valid price.';
 
   @override
+  String get retailListingVisibilityLabel => 'Who can see this';
+
+  @override
+  String get retailListingVisibilityPublic => 'Everyone';
+
+  @override
+  String get retailListingVisibilityPublicHint =>
+      'Shown to every customer, like the rest of your products.';
+
+  @override
+  String get retailListingVisibilityRestricted => 'Chosen buyers only';
+
+  @override
+  String get retailListingVisibilityRestrictedHint =>
+      'Hidden from everyone except the shop types or businesses you pick below — a wholesale price only they can even see exists.';
+
+  @override
+  String get retailListingRestrictedBadge => 'Restricted';
+
+  @override
+  String get retailListingAudienceShopTypesLabel => 'Shop types';
+
+  @override
+  String get retailListingAudienceBusinessesLabel => 'Specific businesses';
+
+  @override
+  String get retailListingAddShopType => 'Add a shop type';
+
+  @override
+  String get retailListingAddBusiness => 'Add a business';
+
+  @override
+  String get retailListingAudienceEmpty => 'None chosen yet.';
+
+  @override
+  String get retailListingAudienceRequired =>
+      'Choose at least one shop type or business.';
+
+  @override
+  String get retailListingBusinessSearchTitle => 'Choose a business';
+
+  @override
+  String get retailListingBusinessSearchHint => 'Search by business name...';
+
+  @override
+  String get retailListingBusinessSearchEmpty => 'No matching businesses.';
+
+  @override
   String get accountDeletionTitle => 'Delete my account';
 
   @override

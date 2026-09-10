@@ -45,6 +45,10 @@ class RetailListingsApi {
     int? stock,
     String? sku,
     bool isActive = true,
+    String visibility = 'public',
+    List<int> audienceBusinessIds = const [],
+    List<int> audienceChildIds = const [],
+    List<int> audienceCategoryIds = const [],
   }) async {
     final data =
         await _client.post(
@@ -55,6 +59,10 @@ class RetailListingsApi {
                 'stock': ?stock,
                 if (sku != null && sku.isNotEmpty) 'sku': sku,
                 'is_active': isActive,
+                'visibility': visibility,
+                'audience_business_ids': audienceBusinessIds,
+                'audience_child_ids': audienceChildIds,
+                'audience_category_ids': audienceCategoryIds,
               },
             )
             as Map<String, dynamic>;
@@ -67,6 +75,10 @@ class RetailListingsApi {
     int? stock,
     String? sku,
     required bool isActive,
+    String visibility = 'public',
+    List<int> audienceBusinessIds = const [],
+    List<int> audienceChildIds = const [],
+    List<int> audienceCategoryIds = const [],
   }) async {
     final data =
         await _client.put(
@@ -76,6 +88,10 @@ class RetailListingsApi {
                 'stock': ?stock,
                 if (sku != null && sku.isNotEmpty) 'sku': sku,
                 'is_active': isActive,
+                'visibility': visibility,
+                'audience_business_ids': audienceBusinessIds,
+                'audience_child_ids': audienceChildIds,
+                'audience_category_ids': audienceCategoryIds,
               },
             )
             as Map<String, dynamic>;

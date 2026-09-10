@@ -5906,6 +5906,96 @@ abstract class AppLocalizations {
   /// **'أدخل سعرًا صحيحًا.'**
   String get retailPriceRequired;
 
+  /// No description provided for @retailListingVisibilityLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'من يرى هذا المنتج'**
+  String get retailListingVisibilityLabel;
+
+  /// No description provided for @retailListingVisibilityPublic.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجميع'**
+  String get retailListingVisibilityPublic;
+
+  /// No description provided for @retailListingVisibilityPublicHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يظهر لكل عميل، مثل باقي منتجاتك.'**
+  String get retailListingVisibilityPublicHint;
+
+  /// No description provided for @retailListingVisibilityRestricted.
+  ///
+  /// In ar, this message translates to:
+  /// **'جهات محددة فقط'**
+  String get retailListingVisibilityRestricted;
+
+  /// No description provided for @retailListingVisibilityRestrictedHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مخفي عن الجميع إلا أنواع المحلات أو الشركات التي تحددها بالأسفل — سعر جملة لا يراه سواهم.'**
+  String get retailListingVisibilityRestrictedHint;
+
+  /// No description provided for @retailListingRestrictedBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقيّد'**
+  String get retailListingRestrictedBadge;
+
+  /// No description provided for @retailListingAudienceShopTypesLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنواع المحلات'**
+  String get retailListingAudienceShopTypesLabel;
+
+  /// No description provided for @retailListingAudienceBusinessesLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'شركات/محلات بعينها'**
+  String get retailListingAudienceBusinessesLabel;
+
+  /// No description provided for @retailListingAddShopType.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة نوع محل'**
+  String get retailListingAddShopType;
+
+  /// No description provided for @retailListingAddBusiness.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة شركة'**
+  String get retailListingAddBusiness;
+
+  /// No description provided for @retailListingAudienceEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يتم اختيار أحد بعد.'**
+  String get retailListingAudienceEmpty;
+
+  /// No description provided for @retailListingAudienceRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر نوع محل واحدًا أو شركة واحدة على الأقل.'**
+  String get retailListingAudienceRequired;
+
+  /// No description provided for @retailListingBusinessSearchTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر شركة'**
+  String get retailListingBusinessSearchTitle;
+
+  /// No description provided for @retailListingBusinessSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث باسم النشاط...'**
+  String get retailListingBusinessSearchHint;
+
+  /// No description provided for @retailListingBusinessSearchEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد نتائج مطابقة.'**
+  String get retailListingBusinessSearchEmpty;
+
   /// No description provided for @accountDeletionTitle.
   ///
   /// In ar, this message translates to:

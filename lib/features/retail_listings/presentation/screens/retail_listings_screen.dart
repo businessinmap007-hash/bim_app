@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../categories/presentation/widgets/category_picker_field.dart';
+import '../../../discovery/application/discovery_providers.dart';
+import '../../../discovery/data/models/business_summary.dart';
 import '../../application/retail_listings_providers.dart';
 import '../../data/models/catalog_product_summary.dart';
 import '../../data/models/retail_listing.dart';
@@ -167,7 +170,21 @@ class _RetailListingsScreenState extends ConsumerState<RetailListingsScreen> {
                               listing.productName ?? '#${listing.productId}',
                               style: TextStyle(color: listing.isActive ? null : Theme.of(context).hintColor),
                             ),
-                            subtitle: listing.stock != null ? Text('${listing.stock}') : null,
+                            subtitle: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (listing.stock != null) Text('${listing.stock}'),
+                                if (listing.isRestricted) ...[
+                                  if (listing.stock != null) const SizedBox(width: 6),
+                                  Icon(Icons.lock_outline, size: 14, color: Theme.of(context).colorScheme.primary),
+                                  const SizedBox(width: 2),
+                                  Text(
+                                    l10n.retailListingRestrictedBadge,
+                                    style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12),
+                                  ),
+                                ],
+                              ],
+                            ),
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -293,6 +310,102 @@ class _ProductPickerSheetState extends ConsumerState<_ProductPickerSheet> {
   }
 }
 
+/// Picks one business to name in a restricted listing's audience — a plain
+/// search over the platform's own cross-category business search (the same
+/// one Categories' search box uses), since there is no bounded "your own
+/// scope" list the way the product picker has for catalog items.
+class _BusinessPickerSheet extends ConsumerStatefulWidget {
+  const _BusinessPickerSheet();
+
+  @override
+  ConsumerState<_BusinessPickerSheet> createState() => _BusinessPickerSheetState();
+}
+
+class _BusinessPickerSheetState extends ConsumerState<_BusinessPickerSheet> {
+  final _controller = TextEditingController();
+  List<BusinessSummary> _results = const [];
+  bool _loading = false;
+  bool _searched = false;
+
+  Future<void> _search(String q) async {
+    setState(() {
+      _loading = true;
+      _searched = true;
+    });
+    try {
+      final results = await ref.read(searchApiProvider).businesses(q);
+      if (mounted) setState(() => _results = results);
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Padding(
+      padding: EdgeInsets.fromLTRB(20, 20, 20, 20 + MediaQuery.of(context).viewInsets.bottom),
+      child: SafeArea(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.7,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(l10n.retailListingBusinessSearchTitle, style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 12),
+              TextField(
+                controller: _controller,
+                decoration: InputDecoration(
+                  hintText: l10n.retailListingBusinessSearchHint,
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.arrow_forward),
+                    onPressed: () => _search(_controller.text),
+                  ),
+                ),
+                textInputAction: TextInputAction.search,
+                onSubmitted: _search,
+              ),
+              const SizedBox(height: 12),
+              Expanded(
+                child: _loading
+                    ? const Center(child: CircularProgressIndicator())
+                    : !_searched
+                    ? const SizedBox.shrink()
+                    : _results.isEmpty
+                    ? Center(child: Text(l10n.retailListingBusinessSearchEmpty))
+                    : ListView.separated(
+                        itemCount: _results.length,
+                        separatorBuilder: (context, index) => const Divider(height: 1),
+                        itemBuilder: (context, index) {
+                          final business = _results[index];
+                          return ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage: business.logoUrl != null ? NetworkImage(business.logoUrl!) : null,
+                              child: business.logoUrl == null ? const Icon(Icons.storefront_outlined) : null,
+                            ),
+                            title: Text(business.name),
+                            onTap: () => Navigator.of(
+                              context,
+                            ).pop(RetailAudienceEntry(id: business.id, name: business.name)),
+                          );
+                        },
+                      ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _ListingFormSheet extends ConsumerStatefulWidget {
   final CatalogProductSummary? product;
   final RetailListing? existing;
@@ -307,6 +420,9 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
   late final _stockController = TextEditingController(text: widget.existing?.stock?.toString() ?? '');
   late final _skuController = TextEditingController(text: widget.existing?.sku ?? '');
   late bool _isActive = widget.existing?.isActive ?? true;
+  late String _visibility = widget.existing?.visibility ?? 'public';
+  late final List<RetailAudienceEntry> _audienceChildren = List.of(widget.existing?.audienceChildren ?? const []);
+  late final List<RetailAudienceEntry> _audienceBusinesses = List.of(widget.existing?.audienceBusinesses ?? const []);
   bool _saving = false;
   String? _error;
 
@@ -318,11 +434,37 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
     super.dispose();
   }
 
+  Future<void> _addShopType() async {
+    final selection = await showModalBottomSheet<CategorySelection>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => const CategoryPickerSheet(),
+    );
+    if (selection == null) return;
+    if (_audienceChildren.any((e) => e.id == selection.childId)) return;
+    setState(() => _audienceChildren.add(RetailAudienceEntry(id: selection.childId, name: selection.label)));
+  }
+
+  Future<void> _addBusiness() async {
+    final picked = await showModalBottomSheet<RetailAudienceEntry>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => const _BusinessPickerSheet(),
+    );
+    if (picked == null) return;
+    if (_audienceBusinesses.any((e) => e.id == picked.id)) return;
+    setState(() => _audienceBusinesses.add(picked));
+  }
+
   Future<void> _save() async {
     final l10n = AppLocalizations.of(context)!;
     final price = double.tryParse(_priceController.text.trim());
     if (price == null || price < 0) {
       setState(() => _error = l10n.retailPriceRequired);
+      return;
+    }
+    if (_visibility == 'restricted' && _audienceChildren.isEmpty && _audienceBusinesses.isEmpty) {
+      setState(() => _error = l10n.retailListingAudienceRequired);
       return;
     }
 
@@ -334,14 +476,39 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
     try {
       final stock = int.tryParse(_stockController.text.trim());
       final sku = _skuController.text.trim();
+      final audienceChildIds = _audienceChildren.map((e) => e.id).toList();
+      final audienceBusinessIds = _audienceBusinesses.map((e) => e.id).toList();
+      // Preserved as-is: this form has no picker for a whole root category
+      // (only specific businesses and shop types), so a save that never
+      // mentions it must not silently wipe one set some other way.
+      final audienceCategoryIds = widget.existing?.audienceCategoryIds ?? const <int>[];
       if (widget.existing == null) {
         await ref
             .read(retailListingsControllerProvider.notifier)
-            .create(catalogProductId: widget.product!.id, price: price, stock: stock, sku: sku);
+            .create(
+              catalogProductId: widget.product!.id,
+              price: price,
+              stock: stock,
+              sku: sku,
+              visibility: _visibility,
+              audienceChildIds: audienceChildIds,
+              audienceBusinessIds: audienceBusinessIds,
+              audienceCategoryIds: audienceCategoryIds,
+            );
       } else {
         await ref
             .read(retailListingsControllerProvider.notifier)
-            .update(widget.existing!.id, price: price, stock: stock, sku: sku, isActive: _isActive);
+            .update(
+              widget.existing!.id,
+              price: price,
+              stock: stock,
+              sku: sku,
+              isActive: _isActive,
+              visibility: _visibility,
+              audienceChildIds: audienceChildIds,
+              audienceBusinessIds: audienceBusinessIds,
+              audienceCategoryIds: audienceCategoryIds,
+            );
       }
       if (mounted) Navigator.of(context).pop(true);
     } catch (e) {
@@ -391,6 +558,44 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
                 controller: _skuController,
                 decoration: InputDecoration(labelText: l10n.retailListingSkuHint),
               ),
+              const SizedBox(height: 16),
+              Text(l10n.retailListingVisibilityLabel, style: Theme.of(context).textTheme.titleSmall),
+              RadioListTile<String>(
+                contentPadding: EdgeInsets.zero,
+                value: 'public',
+                groupValue: _visibility,
+                onChanged: (v) => setState(() => _visibility = v!),
+                title: Text(l10n.retailListingVisibilityPublic),
+                subtitle: Text(l10n.retailListingVisibilityPublicHint),
+              ),
+              RadioListTile<String>(
+                contentPadding: EdgeInsets.zero,
+                value: 'restricted',
+                groupValue: _visibility,
+                onChanged: (v) => setState(() => _visibility = v!),
+                title: Text(l10n.retailListingVisibilityRestricted),
+                subtitle: Text(l10n.retailListingVisibilityRestrictedHint),
+              ),
+              if (_visibility == 'restricted') ...[
+                const SizedBox(height: 4),
+                _AudienceSection(
+                  label: l10n.retailListingAudienceShopTypesLabel,
+                  addLabel: l10n.retailListingAddShopType,
+                  emptyLabel: l10n.retailListingAudienceEmpty,
+                  entries: _audienceChildren,
+                  onAdd: _addShopType,
+                  onRemove: (i) => setState(() => _audienceChildren.removeAt(i)),
+                ),
+                const SizedBox(height: 12),
+                _AudienceSection(
+                  label: l10n.retailListingAudienceBusinessesLabel,
+                  addLabel: l10n.retailListingAddBusiness,
+                  emptyLabel: l10n.retailListingAudienceEmpty,
+                  entries: _audienceBusinesses,
+                  onAdd: _addBusiness,
+                  onRemove: (i) => setState(() => _audienceBusinesses.removeAt(i)),
+                ),
+              ],
               if (widget.existing != null) ...[
                 const SizedBox(height: 8),
                 SwitchListTile(
@@ -415,6 +620,55 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// One named-audience list inside the restricted-visibility form — a wrap of
+/// removable chips plus an "add" chip, shared between the shop-type and the
+/// specific-business sections since both are just "a list of named things
+/// with an add button" once the id is already resolved to a label.
+class _AudienceSection extends StatelessWidget {
+  final String label;
+  final String addLabel;
+  final String emptyLabel;
+  final List<RetailAudienceEntry> entries;
+  final VoidCallback onAdd;
+  final ValueChanged<int> onRemove;
+
+  const _AudienceSection({
+    required this.label,
+    required this.addLabel,
+    required this.emptyLabel,
+    required this.entries,
+    required this.onAdd,
+    required this.onRemove,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+        const SizedBox(height: 6),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            if (entries.isEmpty)
+              Text(emptyLabel, style: TextStyle(color: Theme.of(context).hintColor))
+            else
+              for (var i = 0; i < entries.length; i++)
+                Chip(label: Text(entries[i].name), onDeleted: () => onRemove(i)),
+            ActionChip(
+              avatar: const Icon(Icons.add, size: 18),
+              label: Text(addLabel),
+              onPressed: onAdd,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
