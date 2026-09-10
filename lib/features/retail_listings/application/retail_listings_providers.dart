@@ -119,5 +119,6 @@ class RetailListingsController extends StateNotifier<RetailListingsState> {
 }
 
 final retailListingsControllerProvider = StateNotifierProvider<RetailListingsController, RetailListingsState>((ref) {
+  ref.watch(localeEpochProvider);
   return RetailListingsController(ref.watch(retailListingsApiProvider));
 });

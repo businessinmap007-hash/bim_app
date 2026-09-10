@@ -26,6 +26,19 @@ class MenuItemTile extends StatelessWidget {
     return branch == null ? null : produceEmoji(branch.nameEn);
   }
 
+  /// The offering heading (or a plain description) under the item's name —
+  /// but not when it's just the item's own name again. A restaurant item
+  /// with no modifiers on its line option gets a heading that's nothing but
+  /// that line option's own name (MenuItem::heading()'s "option_combo"
+  /// branch with an empty modifier list), which is exactly the item's own
+  /// name whenever the merchant typed the item the same as its type — the
+  /// common case for a single-item branch.
+  String? get _subtitle {
+    final label = item.offeringLabel ?? item.description;
+    if (label.isEmpty || label.trim() == item.name.trim()) return null;
+    return label;
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -84,11 +97,11 @@ class MenuItemTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(item.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: theme.textTheme.titleSmall),
-                      if ((item.offeringLabel ?? item.description).isNotEmpty)
+                      if (_subtitle != null)
                         Padding(
                           padding: const EdgeInsets.only(top: 2),
                           child: Text(
-                            item.offeringLabel ?? item.description,
+                            _subtitle!,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
