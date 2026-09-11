@@ -1051,6 +1051,10 @@
   "retailListingEditTitle": "Edit listing",
   "retailListingPriceHint": "Price",
   "retailListingStockHint": "Stock (optional)",
+  "retailListingAvailableQtyBadge": "Available: {qty}",
+  "@retailListingAvailableQtyBadge": {
+    "placeholders": { "qty": { "type": "String" } }
+  },
   "retailListingMinOrderQtyLabel": "Minimum order quantity (optional)",
   "retailListingMinOrderQtyHint": "e.g. 20 — wholesale buyers must order at least this much",
   "retailListingMinOrderQtyBadge": "Min {qty}",

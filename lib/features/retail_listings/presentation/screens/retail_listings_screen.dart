@@ -202,7 +202,12 @@ class _RetailListingsScreenState extends ConsumerState<RetailListingsScreen>
                                 subtitle: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    if (listing.stock != null) Text('${listing.stock}'),
+                                    if (listing.stock != null)
+                                      Text(
+                                        l10n.retailListingAvailableQtyBadge(
+                                          formatRetailQty(listing.stock!, listing.unit),
+                                        ),
+                                      ),
                                     if (listing.minOrderQty != null) ...[
                                       if (listing.stock != null) const SizedBox(width: 6),
                                       Text(

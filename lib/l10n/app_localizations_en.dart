@@ -3166,6 +3166,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get retailListingStockHint => 'Stock (optional)';
 
   @override
+  String retailListingAvailableQtyBadge(String qty) {
+    return 'Available: $qty';
+  }
+
+  @override
   String get retailListingMinOrderQtyLabel =>
       'Minimum order quantity (optional)';
 

@@ -3176,6 +3176,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get retailListingStockHint => 'المخزون (اختياري)';
 
   @override
+  String retailListingAvailableQtyBadge(String qty) {
+    return 'المتاح: $qty';
+  }
+
+  @override
   String get retailListingMinOrderQtyLabel =>
       'الحد الأدنى للكمية بالطلب (اختياري)';
 

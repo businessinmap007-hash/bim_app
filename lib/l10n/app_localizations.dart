@@ -6002,6 +6002,12 @@ abstract class AppLocalizations {
   /// **'المخزون (اختياري)'**
   String get retailListingStockHint;
 
+  /// No description provided for @retailListingAvailableQtyBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتاح: {qty}'**
+  String retailListingAvailableQtyBadge(String qty);
+
   /// No description provided for @retailListingMinOrderQtyLabel.
   ///
   /// In ar, this message translates to:

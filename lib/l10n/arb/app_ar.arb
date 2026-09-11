@@ -1051,6 +1051,10 @@
   "retailListingEditTitle": "تعديل الإدراج",
   "retailListingPriceHint": "السعر",
   "retailListingStockHint": "المخزون (اختياري)",
+  "retailListingAvailableQtyBadge": "المتاح: {qty}",
+  "@retailListingAvailableQtyBadge": {
+    "placeholders": { "qty": { "type": "String" } }
+  },
   "retailListingMinOrderQtyLabel": "الحد الأدنى للكمية بالطلب (اختياري)",
   "retailListingMinOrderQtyHint": "مثال: ٢٠ — لن يستطيع المشتري طلب أقل من هذه الكمية",
   "retailListingMinOrderQtyBadge": "الحد الأدنى {qty}",
