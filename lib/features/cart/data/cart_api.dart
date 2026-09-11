@@ -60,6 +60,7 @@ class CartApi {
     String? notes,
     String? paymentMethod,
     String? outOfStockPolicy,
+    DateTime? pickupAt,
   }) async {
     final data =
         await _client.post(
@@ -73,6 +74,7 @@ class CartApi {
                 if (notes != null && notes.isNotEmpty) 'notes': notes,
                 'payment_method': ?paymentMethod,
                 'out_of_stock_policy': ?outOfStockPolicy,
+                if (pickupAt != null) 'pickup_at': pickupAt.toIso8601String(),
               },
             )
             as Map<String, dynamic>;

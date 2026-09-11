@@ -34,6 +34,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   final _addressController = TextEditingController();
   final _notesController = TextEditingController();
   int? _selectedAddressId;
+  DateTime? _pickupAt;
   bool _submitting = false;
 
   Future<void> _pickAddress() async {
@@ -45,6 +46,30 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     });
   }
 
+  /// Required up front for pickup — the same "commit to a real appointment"
+  /// treatment delivery gets from an address. Floors to whole minutes so the
+  /// value sent to the backend's `after:now` check never trails behind the
+  /// picker's own display by stray seconds.
+  Future<void> _pickPickupTime() async {
+    final now = DateTime.now();
+    final initialDate = _pickupAt ?? now.add(const Duration(minutes: 30));
+    final date = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: now,
+      lastDate: now.add(const Duration(days: 14)),
+    );
+    if (date == null || !mounted) return;
+
+    final time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(initialDate),
+    );
+    if (time == null || !mounted) return;
+
+    setState(() => _pickupAt = DateTime(date.year, date.month, date.day, time.hour, time.minute));
+  }
+
   @override
   void dispose() {
     _addressController.dispose();
@@ -54,6 +79,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
   Future<void> _placeOrder(String fulfillmentType) async {
     final l10n = AppLocalizations.of(context)!;
+    if (fulfillmentType == 'pickup' && _pickupAt == null) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.cartPickupTimeRequired)));
+      return;
+    }
+
     setState(() => _submitting = true);
     try {
       await ref.read(cartControllerProvider.notifier).checkout(
@@ -66,6 +96,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         notes: _notesController.text.trim(),
         paymentMethod: 'cash',
         outOfStockPolicy: _outOfStockPolicy,
+        pickupAt: fulfillmentType == 'pickup' ? _pickupAt : null,
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.cartOrderPlaced)));
@@ -74,7 +105,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     } catch (e) {
       if (mounted) {
         final message = e is ApiException
-            ? (e.firstErrorFor('cart') ?? e.message)
+            ? (e.firstErrorFor('cart') ?? e.firstErrorFor('pickup_at') ?? e.message)
             : l10n.commonSomethingWentWrong;
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
       }
@@ -139,6 +170,16 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               },
             ),
           ],
+          if (selected == 'pickup') ...[
+            const SizedBox(height: 16),
+            Text(l10n.cartPickupTimeLabel, style: Theme.of(context).textTheme.titleSmall),
+            const SizedBox(height: 8),
+            OutlinedButton.icon(
+              onPressed: _pickPickupTime,
+              icon: const Icon(Icons.schedule_outlined),
+              label: Text(_pickupAt == null ? l10n.cartPickupTimeChoose : _formatPickupAt(context, _pickupAt!)),
+            ),
+          ],
           const SizedBox(height: 16),
           TextField(
             controller: _notesController,
@@ -194,4 +235,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       ),
     );
   }
+}
+
+String _formatPickupAt(BuildContext context, DateTime pickupAt) {
+  final l10n = MaterialLocalizations.of(context);
+  return '${l10n.formatCompactDate(pickupAt)} · ${l10n.formatTimeOfDay(TimeOfDay.fromDateTime(pickupAt))}';
 }

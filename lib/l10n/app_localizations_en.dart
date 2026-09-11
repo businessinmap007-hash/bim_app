@@ -941,6 +941,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cartAddressHint => 'Enter the delivery address';
 
   @override
+  String get cartPickupTimeLabel => 'Pickup time';
+
+  @override
+  String get cartPickupTimeChoose => 'Choose a pickup time';
+
+  @override
+  String get cartPickupTimeRequired => 'Choose when you\'ll pick up the order.';
+
+  @override
   String get cartNotesLabel => 'Notes (optional)';
 
   @override
@@ -3122,6 +3131,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get retailListingsTitle => 'My Products';
+
+  @override
+  String get retailListingsProductsTab => 'Products';
+
+  @override
+  String get retailListingsVisibilityTab => 'Visibility';
 
   @override
   String get retailListingsEmpty => 'No products listed yet.';

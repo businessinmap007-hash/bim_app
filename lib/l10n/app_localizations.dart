@@ -1802,6 +1802,24 @@ abstract class AppLocalizations {
   /// **'اكتب عنوان التوصيل'**
   String get cartAddressHint;
 
+  /// No description provided for @cartPickupTimeLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'موعد الاستلام'**
+  String get cartPickupTimeLabel;
+
+  /// No description provided for @cartPickupTimeChoose.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر موعد الاستلام'**
+  String get cartPickupTimeChoose;
+
+  /// No description provided for @cartPickupTimeRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدد الموعد الذي ستستلم فيه الطلب.'**
+  String get cartPickupTimeRequired;
+
   /// No description provided for @cartNotesLabel.
   ///
   /// In ar, this message translates to:
@@ -5917,6 +5935,18 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'منتجاتي'**
   String get retailListingsTitle;
+
+  /// No description provided for @retailListingsProductsTab.
+  ///
+  /// In ar, this message translates to:
+  /// **'المنتجات'**
+  String get retailListingsProductsTab;
+
+  /// No description provided for @retailListingsVisibilityTab.
+  ///
+  /// In ar, this message translates to:
+  /// **'من يشاهدها'**
+  String get retailListingsVisibilityTab;
 
   /// No description provided for @retailListingsEmpty.
   ///

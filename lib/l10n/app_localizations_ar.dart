@@ -953,6 +953,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get cartAddressHint => 'اكتب عنوان التوصيل';
 
   @override
+  String get cartPickupTimeLabel => 'موعد الاستلام';
+
+  @override
+  String get cartPickupTimeChoose => 'اختر موعد الاستلام';
+
+  @override
+  String get cartPickupTimeRequired => 'حدد الموعد الذي ستستلم فيه الطلب.';
+
+  @override
   String get cartNotesLabel => 'ملاحظات (اختياري)';
 
   @override
@@ -3132,6 +3141,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get retailListingsTitle => 'منتجاتي';
+
+  @override
+  String get retailListingsProductsTab => 'المنتجات';
+
+  @override
+  String get retailListingsVisibilityTab => 'من يشاهدها';
 
   @override
   String get retailListingsEmpty => 'لا توجد منتجات مضافة بعد.';
