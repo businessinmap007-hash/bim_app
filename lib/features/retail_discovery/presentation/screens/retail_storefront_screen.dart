@@ -107,10 +107,21 @@ class _StorefrontListingTile extends ConsumerWidget {
             ),
           ),
           title: Text(listing.productName),
-          subtitle: Text(
-            listing.minOrderQty != null
-                ? '${listing.price.toStringAsFixed(0)} ${listing.currency} · ${l10n.retailStorefrontMinQtyLabel(formatRetailQty(listing.minOrderQty!, listing.unit))}'
-                : '${listing.price.toStringAsFixed(0)} ${listing.currency}',
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                listing.minOrderQty != null
+                    ? '${listing.price.toStringAsFixed(0)} ${listing.currency} · ${l10n.retailStorefrontMinQtyLabel(formatRetailQty(listing.minOrderQty!, listing.unit))}'
+                    : '${listing.price.toStringAsFixed(0)} ${listing.currency}',
+              ),
+              if (!outOfStock && listing.stock != null)
+                Text(
+                  l10n.retailListingAvailableQtyBadge(formatRetailQty(listing.stock!, listing.unit)),
+                  style: TextStyle(color: Theme.of(context).hintColor, fontSize: 11),
+                ),
+            ],
           ),
           trailing: outOfStock
               ? Text(l10n.businessOutOfStock, style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.error))

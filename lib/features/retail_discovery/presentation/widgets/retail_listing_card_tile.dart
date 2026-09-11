@@ -91,6 +91,15 @@ class RetailListingCardTile extends StatelessWidget {
                           style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor, fontSize: 11),
                         ),
                       ],
+                      if (!outOfStock && listing.stock != null) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          AppLocalizations.of(context)!.retailListingAvailableQtyBadge(
+                            formatRetailQty(listing.stock!, listing.unit),
+                          ),
+                          style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor, fontSize: 11),
+                        ),
+                      ],
                       const SizedBox(height: 8),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
