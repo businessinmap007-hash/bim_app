@@ -35,6 +35,13 @@ class _RetailListingsScreenState extends ConsumerState<RetailListingsScreen>
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+    // The controller is a plain (non-autoDispose) provider so a sale placed
+    // elsewhere while this screen was off-stage never reaches it on its
+    // own — refresh whenever a merchant opens My Products to see current
+    // stock, not whatever was cached from the last visit.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) ref.read(retailListingsControllerProvider.notifier).load();
+    });
   }
 
   void _onScroll() {
