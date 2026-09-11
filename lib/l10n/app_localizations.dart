@@ -6026,6 +6026,30 @@ abstract class AppLocalizations {
   /// **'الحد الأدنى {qty}'**
   String retailListingMinOrderQtyBadge(String qty);
 
+  /// No description provided for @retailListingMaxOrderQtyLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحد الأقصى للكمية بالطلب (اختياري)'**
+  String get retailListingMaxOrderQtyLabel;
+
+  /// No description provided for @retailListingMaxOrderQtyHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مثال: ١٠٠ — لن يستطيع مشترٍ واحد طلب أكثر من هذه الكمية في نفس الطلب'**
+  String get retailListingMaxOrderQtyHint;
+
+  /// No description provided for @retailListingMaxOrderQtyBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحد الأقصى {qty}'**
+  String retailListingMaxOrderQtyBadge(String qty);
+
+  /// No description provided for @retailListingMaxBelowMinError.
+  ///
+  /// In ar, this message translates to:
+  /// **'يجب أن يكون الحد الأقصى أكبر من أو يساوي الحد الأدنى.'**
+  String get retailListingMaxBelowMinError;
+
   /// No description provided for @retailListingUnitLabel.
   ///
   /// In ar, this message translates to:
@@ -6169,6 +6193,24 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الحد الأدنى للطلب: {qty}'**
   String retailStorefrontMinQtyLabel(String qty);
+
+  /// No description provided for @retailStorefrontMaxQtyLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحد الأقصى للطلب: {qty}'**
+  String retailStorefrontMaxQtyLabel(String qty);
+
+  /// No description provided for @retailStorefrontQtyBelowMin.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحد الأدنى للطلب {min}'**
+  String retailStorefrontQtyBelowMin(String min);
+
+  /// No description provided for @retailStorefrontQtyOutOfRange.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلب كمية بين {min} و {max}'**
+  String retailStorefrontQtyOutOfRange(String min, String max);
 
   /// No description provided for @retailStorefrontQuantityLabel.
   ///

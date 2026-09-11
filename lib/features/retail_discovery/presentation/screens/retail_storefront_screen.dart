@@ -148,12 +148,64 @@ class _QuantitySheet extends StatefulWidget {
 
 class _QuantitySheetState extends State<_QuantitySheet> {
   late int _qty = widget.listing.minOrderQty ?? 1;
+  late final _qtyController = TextEditingController(text: '$_qty');
+  final _qtyFocusNode = FocusNode();
+  String? _error;
+
+  int get _minQty => widget.listing.minOrderQty ?? 1;
+
+  /// Whichever of stock and the listing's own max-order cap is tighter —
+  /// either, both, or neither may be set. Null means no ceiling at all.
+  int? get _maxQty {
+    final stock = widget.listing.stock;
+    final cap = widget.listing.maxOrderQty;
+    if (stock == null) return cap;
+    if (cap == null) return stock;
+    return stock < cap ? stock : cap;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Clamp on blur rather than on every keystroke — rewriting the field
+    // mid-type would stop a user typing "25" the moment they'd typed "2"
+    // and the minimum happened to be above that.
+    _qtyFocusNode.addListener(() {
+      if (!_qtyFocusNode.hasFocus) _commitTypedQty();
+    });
+  }
+
+  @override
+  void dispose() {
+    _qtyController.dispose();
+    _qtyFocusNode.dispose();
+    super.dispose();
+  }
+
+  void _commitTypedQty() => _setQty(int.tryParse(_qtyController.text.trim()) ?? _qty);
+
+  void _setQty(int value) {
+    final max = _maxQty;
+    var clamped = value < _minQty ? _minQty : value;
+    if (max != null && clamped > max) clamped = max;
+    final l10n = AppLocalizations.of(context)!;
+
+    setState(() {
+      _qty = clamped;
+      _error = value != clamped
+          ? (max != null
+              ? l10n.retailStorefrontQtyOutOfRange(formatRetailQty(_minQty, widget.listing.unit), formatRetailQty(max, widget.listing.unit))
+              : l10n.retailStorefrontQtyBelowMin(formatRetailQty(_minQty, widget.listing.unit)))
+          : null;
+    });
+    _qtyController.text = '$_qty';
+    _qtyController.selection = TextSelection.collapsed(offset: _qtyController.text.length);
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final maxQty = widget.listing.stock;
-    final minQty = widget.listing.minOrderQty ?? 1;
+    final maxQty = _maxQty;
 
     return Padding(
       padding: EdgeInsets.fromLTRB(20, 20, 20, 20 + MediaQuery.of(context).viewInsets.bottom),
@@ -175,6 +227,13 @@ class _QuantitySheetState extends State<_QuantitySheet> {
                 style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12),
               ),
             ],
+            if (widget.listing.maxOrderQty != null) ...[
+              const SizedBox(height: 2),
+              Text(
+                l10n.retailStorefrontMaxQtyLabel(formatRetailQty(widget.listing.maxOrderQty!, widget.listing.unit)),
+                style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12),
+              ),
+            ],
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -184,22 +243,43 @@ class _QuantitySheetState extends State<_QuantitySheet> {
                   children: [
                     IconButton(
                       icon: const Icon(Icons.remove_circle_outline),
-                      onPressed: _qty > minQty ? () => setState(() => _qty--) : null,
+                      onPressed: _qty > _minQty ? () => _setQty(_qty - 1) : null,
                     ),
-                    Text('$_qty', style: const TextStyle(fontWeight: FontWeight.w700)),
+                    SizedBox(
+                      width: 64,
+                      child: TextField(
+                        controller: _qtyController,
+                        focusNode: _qtyFocusNode,
+                        keyboardType: TextInputType.number,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontWeight: FontWeight.w700),
+                        decoration: const InputDecoration(isDense: true, contentPadding: EdgeInsets.symmetric(vertical: 8)),
+                        onSubmitted: (_) => _commitTypedQty(),
+                      ),
+                    ),
                     IconButton(
                       icon: const Icon(Icons.add_circle_outline),
-                      onPressed: (maxQty == null || _qty < maxQty) ? () => setState(() => _qty++) : null,
+                      onPressed: (maxQty == null || _qty < maxQty) ? () => _setQty(_qty + 1) : null,
                     ),
                   ],
                 ),
               ],
             ),
+            if (_error != null) ...[
+              const SizedBox(height: 4),
+              Align(
+                alignment: AlignmentDirectional.centerEnd,
+                child: Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error, fontSize: 12)),
+              ),
+            ],
             const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
               child: FilledButton(
-                onPressed: () => Navigator.of(context).pop(_qty),
+                onPressed: () {
+                  _commitTypedQty();
+                  Navigator.of(context).pop(_qty);
+                },
                 child: Text(l10n.cartAdd),
               ),
             ),

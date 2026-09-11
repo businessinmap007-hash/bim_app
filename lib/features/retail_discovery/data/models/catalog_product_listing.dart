@@ -137,6 +137,7 @@ class RetailListingCard {
   final String currency;
   final int? stock;
   final int? minOrderQty;
+  final int? maxOrderQty;
   final String? unit;
   final int productId;
   final String productName;
@@ -155,6 +156,7 @@ class RetailListingCard {
     required this.currency,
     this.stock,
     this.minOrderQty,
+    this.maxOrderQty,
     this.unit,
     required this.productId,
     required this.productName,
@@ -177,6 +179,7 @@ class RetailListingCard {
       currency: json['currency'] as String? ?? 'EGP',
       stock: (json['stock'] as num?)?.toInt(),
       minOrderQty: (json['min_order_qty'] as num?)?.toInt(),
+      maxOrderQty: (json['max_order_qty'] as num?)?.toInt(),
       unit: json['unit'] as String?,
       productId: (product['id'] as num?)?.toInt() ?? 0,
       productName: product['name'] as String? ?? '',
@@ -200,6 +203,7 @@ class RetailStorefrontListing {
   final String currency;
   final int? stock;
   final int? minOrderQty;
+  final int? maxOrderQty;
   final String? unit;
   final int productId;
   final String productName;
@@ -212,6 +216,7 @@ class RetailStorefrontListing {
     required this.currency,
     this.stock,
     this.minOrderQty,
+    this.maxOrderQty,
     this.unit,
     required this.productId,
     required this.productName,
@@ -227,6 +232,7 @@ class RetailStorefrontListing {
       currency: json['currency'] as String? ?? 'EGP',
       stock: (json['stock'] as num?)?.toInt(),
       minOrderQty: (json['min_order_qty'] as num?)?.toInt(),
+      maxOrderQty: (json['max_order_qty'] as num?)?.toInt(),
       unit: json['unit'] as String?,
       productId: (product['id'] as num?)?.toInt() ?? 0,
       productName: product['name'] as String? ?? '',

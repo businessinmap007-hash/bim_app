@@ -224,6 +224,15 @@ class _RetailListingsScreenState extends ConsumerState<RetailListingsScreen>
                                         style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12),
                                       ),
                                     ],
+                                    if (listing.maxOrderQty != null) ...[
+                                      if (listing.stock != null || listing.minOrderQty != null) const SizedBox(width: 6),
+                                      Text(
+                                        l10n.retailListingMaxOrderQtyBadge(
+                                          formatRetailQty(listing.maxOrderQty!, listing.unit),
+                                        ),
+                                        style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12),
+                                      ),
+                                    ],
                                     if (listing.isRestricted) ...[
                                       if (listing.stock != null) const SizedBox(width: 6),
                                       Icon(Icons.lock_outline, size: 14, color: Theme.of(context).colorScheme.primary),
@@ -442,6 +451,7 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
   late final _priceController = TextEditingController(text: widget.existing?.price.toStringAsFixed(2) ?? '');
   late final _stockController = TextEditingController(text: widget.existing?.stock?.toString() ?? '');
   late final _minOrderQtyController = TextEditingController(text: widget.existing?.minOrderQty?.toString() ?? '');
+  late final _maxOrderQtyController = TextEditingController(text: widget.existing?.maxOrderQty?.toString() ?? '');
   late final _unitController = TextEditingController(text: widget.existing?.unit ?? '');
   String? _unitPreset;
   bool _unitPresetInitialized = false;
@@ -455,6 +465,7 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
     _priceController.dispose();
     _stockController.dispose();
     _minOrderQtyController.dispose();
+    _maxOrderQtyController.dispose();
     _unitController.dispose();
     _skuController.dispose();
     super.dispose();
@@ -476,6 +487,14 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
     try {
       final stock = int.tryParse(_stockController.text.trim());
       final minOrderQty = int.tryParse(_minOrderQtyController.text.trim());
+      final maxOrderQty = int.tryParse(_maxOrderQtyController.text.trim());
+      if (minOrderQty != null && maxOrderQty != null && maxOrderQty < minOrderQty) {
+        setState(() {
+          _error = l10n.retailListingMaxBelowMinError;
+          _saving = false;
+        });
+        return;
+      }
       final unit = _unitPreset == _kOtherUnit ? _unitController.text.trim() : (_unitPreset ?? '');
       final sku = _skuController.text.trim();
       if (widget.existing == null) {
@@ -486,6 +505,7 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
               price: price,
               stock: stock,
               minOrderQty: minOrderQty,
+              maxOrderQty: maxOrderQty,
               unit: unit,
               sku: sku,
             );
@@ -501,6 +521,7 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
               price: price,
               stock: stock,
               minOrderQty: minOrderQty,
+              maxOrderQty: maxOrderQty,
               unit: unit,
               sku: sku,
               isActive: _isActive,
@@ -513,7 +534,9 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
       if (mounted) Navigator.of(context).pop(true);
     } catch (e) {
       if (mounted) {
-        setState(() => _error = e is ApiException ? e.message : l10n.commonSomethingWentWrong);
+        setState(() {
+          _error = e is ApiException ? (e.firstErrorFor('max_order_qty') ?? e.message) : l10n.commonSomethingWentWrong;
+        });
       }
     } finally {
       if (mounted) setState(() => _saving = false);
@@ -608,6 +631,15 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
                   decoration: InputDecoration(hintText: l10n.retailListingUnitHint),
                 ),
               ],
+              const SizedBox(height: 12),
+              TextField(
+                controller: _maxOrderQtyController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: l10n.retailListingMaxOrderQtyLabel,
+                  hintText: l10n.retailListingMaxOrderQtyHint,
+                ),
+              ),
               const SizedBox(height: 12),
               TextField(
                 controller: _skuController,
@@ -719,6 +751,7 @@ class _VisibilityEditSheetState extends ConsumerState<_VisibilityEditSheet> {
             price: existing.price,
             stock: existing.stock,
             minOrderQty: existing.minOrderQty,
+            maxOrderQty: existing.maxOrderQty,
             unit: existing.unit,
             sku: existing.sku,
             isActive: existing.isActive,

@@ -3194,6 +3194,23 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get retailListingMaxOrderQtyLabel =>
+      'الحد الأقصى للكمية بالطلب (اختياري)';
+
+  @override
+  String get retailListingMaxOrderQtyHint =>
+      'مثال: ١٠٠ — لن يستطيع مشترٍ واحد طلب أكثر من هذه الكمية في نفس الطلب';
+
+  @override
+  String retailListingMaxOrderQtyBadge(String qty) {
+    return 'الحد الأقصى $qty';
+  }
+
+  @override
+  String get retailListingMaxBelowMinError =>
+      'يجب أن يكون الحد الأقصى أكبر من أو يساوي الحد الأدنى.';
+
+  @override
   String get retailListingUnitLabel => 'الوحدة (اختياري)';
 
   @override
@@ -3268,6 +3285,21 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String retailStorefrontMinQtyLabel(String qty) {
     return 'الحد الأدنى للطلب: $qty';
+  }
+
+  @override
+  String retailStorefrontMaxQtyLabel(String qty) {
+    return 'الحد الأقصى للطلب: $qty';
+  }
+
+  @override
+  String retailStorefrontQtyBelowMin(String min) {
+    return 'الحد الأدنى للطلب $min';
+  }
+
+  @override
+  String retailStorefrontQtyOutOfRange(String min, String max) {
+    return 'اطلب كمية بين $min و $max';
   }
 
   @override

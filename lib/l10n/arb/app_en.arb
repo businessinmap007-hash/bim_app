@@ -1061,6 +1061,13 @@
   "@retailListingMinOrderQtyBadge": {
     "placeholders": { "qty": { "type": "String" } }
   },
+  "retailListingMaxOrderQtyLabel": "Maximum order quantity (optional)",
+  "retailListingMaxOrderQtyHint": "e.g. 100 — a single order can't take more than this, so one buyer can't clear your whole shelf",
+  "retailListingMaxOrderQtyBadge": "Max {qty}",
+  "@retailListingMaxOrderQtyBadge": {
+    "placeholders": { "qty": { "type": "String" } }
+  },
+  "retailListingMaxBelowMinError": "The maximum must be greater than or equal to the minimum.",
   "retailListingUnitLabel": "Unit (optional)",
   "retailListingUnitHint": "Type your own unit",
   "retailListingUnitOther": "Other...",
@@ -1087,6 +1094,18 @@
   "retailStorefrontMinQtyLabel": "Min order: {qty}",
   "@retailStorefrontMinQtyLabel": {
     "placeholders": { "qty": { "type": "String" } }
+  },
+  "retailStorefrontMaxQtyLabel": "Max order: {qty}",
+  "@retailStorefrontMaxQtyLabel": {
+    "placeholders": { "qty": { "type": "String" } }
+  },
+  "retailStorefrontQtyBelowMin": "Minimum order is {min}",
+  "@retailStorefrontQtyBelowMin": {
+    "placeholders": { "min": { "type": "String" } }
+  },
+  "retailStorefrontQtyOutOfRange": "Order between {min} and {max}",
+  "@retailStorefrontQtyOutOfRange": {
+    "placeholders": { "min": { "type": "String" }, "max": { "type": "String" } }
   },
   "retailStorefrontQuantityLabel": "Quantity",
   "retailStorefrontEmpty": "This business has no products listed yet.",

@@ -29,6 +29,7 @@ class RetailListing {
   final String currency;
   final int? stock;
   final int? minOrderQty;
+  final int? maxOrderQty;
   final String? unit;
   final String? sku;
   final bool isActive;
@@ -48,6 +49,7 @@ class RetailListing {
     required this.currency,
     this.stock,
     this.minOrderQty,
+    this.maxOrderQty,
     this.unit,
     this.sku,
     required this.isActive,
@@ -73,6 +75,7 @@ class RetailListing {
       currency: json['currency'] as String? ?? 'EGP',
       stock: json['stock'] as int?,
       minOrderQty: json['min_order_qty'] as int?,
+      maxOrderQty: json['max_order_qty'] as int?,
       unit: json['unit'] as String?,
       sku: json['sku'] as String?,
       isActive: json['is_active'] as bool,

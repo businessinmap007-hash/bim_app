@@ -3184,6 +3184,23 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get retailListingMaxOrderQtyLabel =>
+      'Maximum order quantity (optional)';
+
+  @override
+  String get retailListingMaxOrderQtyHint =>
+      'e.g. 100 — a single order can\'t take more than this, so one buyer can\'t clear your whole shelf';
+
+  @override
+  String retailListingMaxOrderQtyBadge(String qty) {
+    return 'Max $qty';
+  }
+
+  @override
+  String get retailListingMaxBelowMinError =>
+      'The maximum must be greater than or equal to the minimum.';
+
+  @override
   String get retailListingUnitLabel => 'Unit (optional)';
 
   @override
@@ -3259,6 +3276,21 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String retailStorefrontMinQtyLabel(String qty) {
     return 'Min order: $qty';
+  }
+
+  @override
+  String retailStorefrontMaxQtyLabel(String qty) {
+    return 'Max order: $qty';
+  }
+
+  @override
+  String retailStorefrontQtyBelowMin(String min) {
+    return 'Minimum order is $min';
+  }
+
+  @override
+  String retailStorefrontQtyOutOfRange(String min, String max) {
+    return 'Order between $min and $max';
   }
 
   @override

@@ -1061,6 +1061,13 @@
   "@retailListingMinOrderQtyBadge": {
     "placeholders": { "qty": { "type": "String" } }
   },
+  "retailListingMaxOrderQtyLabel": "الحد الأقصى للكمية بالطلب (اختياري)",
+  "retailListingMaxOrderQtyHint": "مثال: ١٠٠ — لن يستطيع مشترٍ واحد طلب أكثر من هذه الكمية في نفس الطلب",
+  "retailListingMaxOrderQtyBadge": "الحد الأقصى {qty}",
+  "@retailListingMaxOrderQtyBadge": {
+    "placeholders": { "qty": { "type": "String" } }
+  },
+  "retailListingMaxBelowMinError": "يجب أن يكون الحد الأقصى أكبر من أو يساوي الحد الأدنى.",
   "retailListingUnitLabel": "الوحدة (اختياري)",
   "retailListingUnitHint": "اكتب وحدتك الخاصة",
   "retailListingUnitOther": "أخرى...",
@@ -1087,6 +1094,18 @@
   "retailStorefrontMinQtyLabel": "الحد الأدنى للطلب: {qty}",
   "@retailStorefrontMinQtyLabel": {
     "placeholders": { "qty": { "type": "String" } }
+  },
+  "retailStorefrontMaxQtyLabel": "الحد الأقصى للطلب: {qty}",
+  "@retailStorefrontMaxQtyLabel": {
+    "placeholders": { "qty": { "type": "String" } }
+  },
+  "retailStorefrontQtyBelowMin": "الحد الأدنى للطلب {min}",
+  "@retailStorefrontQtyBelowMin": {
+    "placeholders": { "min": { "type": "String" } }
+  },
+  "retailStorefrontQtyOutOfRange": "اطلب كمية بين {min} و {max}",
+  "@retailStorefrontQtyOutOfRange": {
+    "placeholders": { "min": { "type": "String" }, "max": { "type": "String" } }
   },
   "retailStorefrontQuantityLabel": "الكمية",
   "retailStorefrontEmpty": "لا توجد منتجات لدى هذا النشاط بعد.",
