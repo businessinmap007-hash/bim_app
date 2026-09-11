@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
@@ -9,6 +10,9 @@ import '../../../../shared/widgets/profile_cover_header.dart';
 import '../../../../shared/widgets/sliver_tab_bar_delegate.dart';
 import '../../../../shared/widgets/view_mode_toggle.dart';
 import '../../../auth/application/auth_controller.dart';
+import '../../../business_groups/application/business_groups_providers.dart';
+import '../../../business_groups/data/models/business_group.dart';
+import '../../../business_groups/presentation/widgets/business_group_picker_sheet.dart';
 import '../../../booking/presentation/screens/booking_screen.dart';
 import '../../../cart/application/cart_controller.dart';
 import '../../../cart/application/shared_cart_providers.dart';
@@ -57,15 +61,52 @@ class BusinessDetailScreen extends ConsumerWidget {
 
   const BusinessDetailScreen({super.key, required this.businessId, this.sharedOrderId});
 
+  /// Picks (or creates) one of the viewer's own business groups and adds
+  /// this business to it — the quick path from a target's own page, the
+  /// mirror of building the same list one search at a time from the retail
+  /// listing form's audience picker.
+  Future<void> _addToOffersGroup(BuildContext context, WidgetRef ref, String businessName) async {
+    final l10n = AppLocalizations.of(context)!;
+    final group = await showModalBottomSheet<BusinessGroup>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => const BusinessGroupPickerSheet(),
+    );
+    if (group == null || !context.mounted) return;
+
+    try {
+      await ref.read(businessGroupsControllerProvider.notifier).addMember(group.id, businessId);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.businessGroupMemberAdded(businessName, group.name))),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        final message = e is ApiException ? (e.firstErrorFor('business_id') ?? e.message) : l10n.commonSomethingWentWrong;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profileAsync = ref.watch(businessProfileProvider(businessId));
     final itemsCount = ref.watch(cartControllerProvider.select((s) => s.itemsCount));
+    final authState = ref.watch(authControllerProvider);
+    final viewer = authState is AuthSignedIn ? authState.user : null;
+    final canAddToOffersGroup = viewer != null && viewer.isBusiness && viewer.id != businessId;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(profileAsync.valueOrNull?.name ?? ''),
         actions: [
+          if (canAddToOffersGroup)
+            IconButton(
+              tooltip: AppLocalizations.of(context)!.businessGroupAddToOffersGroup,
+              icon: const Icon(Icons.playlist_add_outlined),
+              onPressed: () => _addToOffersGroup(context, ref, profileAsync.valueOrNull?.name ?? ''),
+            ),
           if (sharedOrderId == null)
             IconButton(
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CartScreen())),

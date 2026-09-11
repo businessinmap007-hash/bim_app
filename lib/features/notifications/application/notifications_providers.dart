@@ -127,6 +127,19 @@ class NotificationsController extends StateNotifier<NotificationsState> {
     }
   }
 
+  Future<void> archiveAll() async {
+    final previous = state.items;
+    state = state.copyWith(items: []);
+    try {
+      await _api.archiveAll();
+    } catch (e) {
+      state = state.copyWith(items: previous, error: e.toString());
+      rethrow;
+    } finally {
+      _ref.invalidate(unreadNotificationCountProvider);
+    }
+  }
+
   void _replace(AppNotification updated) {
     state = state.copyWith(
       items: [

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../app/theme/app_colors.dart';
 import '../../features/auth/application/auth_controller.dart';
+import '../../features/business_groups/presentation/screens/business_groups_screen.dart';
 import '../../features/contact_groups/presentation/screens/contact_groups_screen.dart';
 import '../../features/jobs/presentation/screens/jobs_screen.dart';
 import '../../features/offers/presentation/screens/my_offer_follows_screen.dart';
@@ -203,6 +204,17 @@ class _AppDrawerContent extends ConsumerWidget {
                     );
                   },
                 ),
+                if (isBusiness)
+                  ListTile(
+                    leading: const Icon(Icons.groups_2_outlined),
+                    title: Text(l10n.businessGroupsTitle),
+                    onTap: () {
+                      close();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const BusinessGroupsScreen()),
+                      );
+                    },
+                  ),
 
                 _SectionHeader(l10n.drawerSectionJobsPosts),
                 ListTile(

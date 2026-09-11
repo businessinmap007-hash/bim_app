@@ -3,9 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/utils/produce_emoji.dart';
 import '../../../../shared/utils/retail_quantity_format.dart';
+import '../../../../shared/widgets/business_picker_sheet.dart';
+import '../../../business_groups/data/models/business_group.dart';
+import '../../../business_groups/presentation/widgets/business_group_picker_sheet.dart';
 import '../../../categories/presentation/widgets/category_picker_field.dart';
-import '../../../discovery/application/discovery_providers.dart';
 import '../../../discovery/data/models/business_summary.dart';
 import '../../application/retail_listings_providers.dart';
 import '../../data/models/catalog_product_summary.dart';
@@ -164,7 +167,7 @@ class _RetailListingsScreenState extends ConsumerState<RetailListingsScreen> {
                                   ? NetworkImage(listing.productImageUrl!)
                                   : null,
                               child: listing.productImageUrl == null
-                                  ? const Icon(Icons.inventory_2_outlined)
+                                  ? Text(produceEmoji(listing.productNameEn), style: const TextStyle(fontSize: 18))
                                   : null,
                             ),
                             title: Text(
@@ -320,101 +323,6 @@ class _ProductPickerSheetState extends ConsumerState<_ProductPickerSheet> {
   }
 }
 
-/// Picks one business to name in a restricted listing's audience — a plain
-/// search over the platform's own cross-category business search (the same
-/// one Categories' search box uses), since there is no bounded "your own
-/// scope" list the way the product picker has for catalog items.
-class _BusinessPickerSheet extends ConsumerStatefulWidget {
-  const _BusinessPickerSheet();
-
-  @override
-  ConsumerState<_BusinessPickerSheet> createState() => _BusinessPickerSheetState();
-}
-
-class _BusinessPickerSheetState extends ConsumerState<_BusinessPickerSheet> {
-  final _controller = TextEditingController();
-  List<BusinessSummary> _results = const [];
-  bool _loading = false;
-  bool _searched = false;
-
-  Future<void> _search(String q) async {
-    setState(() {
-      _loading = true;
-      _searched = true;
-    });
-    try {
-      final results = await ref.read(searchApiProvider).businesses(q);
-      if (mounted) setState(() => _results = results);
-    } finally {
-      if (mounted) setState(() => _loading = false);
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Padding(
-      padding: EdgeInsets.fromLTRB(20, 20, 20, 20 + MediaQuery.of(context).viewInsets.bottom),
-      child: SafeArea(
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.7,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(l10n.retailListingBusinessSearchTitle, style: Theme.of(context).textTheme.titleMedium),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _controller,
-                decoration: InputDecoration(
-                  hintText: l10n.retailListingBusinessSearchHint,
-                  prefixIcon: const Icon(Icons.search),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.arrow_forward),
-                    onPressed: () => _search(_controller.text),
-                  ),
-                ),
-                textInputAction: TextInputAction.search,
-                onSubmitted: _search,
-              ),
-              const SizedBox(height: 12),
-              Expanded(
-                child: _loading
-                    ? const Center(child: CircularProgressIndicator())
-                    : !_searched
-                    ? const SizedBox.shrink()
-                    : _results.isEmpty
-                    ? Center(child: Text(l10n.retailListingBusinessSearchEmpty))
-                    : ListView.separated(
-                        itemCount: _results.length,
-                        separatorBuilder: (context, index) => const Divider(height: 1),
-                        itemBuilder: (context, index) {
-                          final business = _results[index];
-                          return ListTile(
-                            leading: CircleAvatar(
-                              backgroundImage: business.logoUrl != null ? NetworkImage(business.logoUrl!) : null,
-                              child: business.logoUrl == null ? const Icon(Icons.storefront_outlined) : null,
-                            ),
-                            title: Text(business.name),
-                            onTap: () => Navigator.of(
-                              context,
-                            ).pop(RetailAudienceEntry(id: business.id, name: business.name)),
-                          );
-                        },
-                      ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class _ListingFormSheet extends ConsumerStatefulWidget {
   final CatalogProductSummary? product;
@@ -426,10 +334,20 @@ class _ListingFormSheet extends ConsumerStatefulWidget {
 }
 
 class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
+  // A small closed set per locale, plus an "other" escape hatch — a dropdown
+  // avoids typos ("kgs" vs "kg" vs "كيلو") for the common cases while still
+  // letting a merchant name their own wholesale unit (a sack, a dozen...)
+  // the backend column is free text either way.
+  static const _unitPresetsAr = ['كيلو', 'جرام', 'طن', 'كرتونة', 'شوال', 'دستة', 'قطعة', 'لتر'];
+  static const _unitPresetsEn = ['kg', 'g', 'ton', 'carton', 'sack', 'dozen', 'piece', 'liter'];
+  static const _kOtherUnit = '__other__';
+
   late final _priceController = TextEditingController(text: widget.existing?.price.toStringAsFixed(2) ?? '');
   late final _stockController = TextEditingController(text: widget.existing?.stock?.toString() ?? '');
   late final _minOrderQtyController = TextEditingController(text: widget.existing?.minOrderQty?.toString() ?? '');
   late final _unitController = TextEditingController(text: widget.existing?.unit ?? '');
+  String? _unitPreset;
+  bool _unitPresetInitialized = false;
   late final _skuController = TextEditingController(text: widget.existing?.sku ?? '');
   late bool _isActive = widget.existing?.isActive ?? true;
   late String _visibility = widget.existing?.visibility ?? 'public';
@@ -460,14 +378,31 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
   }
 
   Future<void> _addBusiness() async {
-    final picked = await showModalBottomSheet<RetailAudienceEntry>(
+    final picked = await showModalBottomSheet<BusinessSummary>(
       context: context,
       isScrollControlled: true,
-      builder: (_) => const _BusinessPickerSheet(),
+      builder: (_) => const BusinessPickerSheet(),
     );
     if (picked == null) return;
     if (_audienceBusinesses.any((e) => e.id == picked.id)) return;
-    setState(() => _audienceBusinesses.add(picked));
+    setState(() => _audienceBusinesses.add(RetailAudienceEntry(id: picked.id, name: picked.name)));
+  }
+
+  /// Adds every member of a saved business group at once — see
+  /// [[bim-business-groups]] — instead of searching for each business again.
+  Future<void> _addBusinessGroup() async {
+    final group = await showModalBottomSheet<BusinessGroup>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => const BusinessGroupPickerSheet(),
+    );
+    if (group == null) return;
+    setState(() {
+      for (final m in group.members) {
+        if (_audienceBusinesses.any((e) => e.id == m.businessId)) continue;
+        _audienceBusinesses.add(RetailAudienceEntry(id: m.businessId, name: m.name));
+      }
+    });
   }
 
   Future<void> _save() async {
@@ -490,7 +425,7 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
     try {
       final stock = int.tryParse(_stockController.text.trim());
       final minOrderQty = int.tryParse(_minOrderQtyController.text.trim());
-      final unit = _unitController.text.trim();
+      final unit = _unitPreset == _kOtherUnit ? _unitController.text.trim() : (_unitPreset ?? '');
       final sku = _skuController.text.trim();
       final audienceChildIds = _audienceChildren.map((e) => e.id).toList();
       final audienceBusinessIds = _audienceBusinesses.map((e) => e.id).toList();
@@ -544,6 +479,21 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final name = widget.existing?.productName ?? widget.product?.name ?? '';
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
+    final unitPresets = isEnglish ? _unitPresetsEn : _unitPresetsAr;
+
+    if (!_unitPresetInitialized) {
+      _unitPresetInitialized = true;
+      final existingUnit = widget.existing?.unit;
+      if (existingUnit == null || existingUnit.isEmpty) {
+        _unitPreset = null;
+      } else if (unitPresets.contains(existingUnit)) {
+        _unitPreset = existingUnit;
+      } else {
+        _unitPreset = _kOtherUnit;
+        _unitController.text = existingUnit;
+      }
+    }
 
     return Padding(
       padding: EdgeInsets.fromLTRB(20, 20, 20, 20 + MediaQuery.of(context).viewInsets.bottom),
@@ -590,16 +540,29 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
                   ),
                   const SizedBox(width: 8),
                   Expanded(
-                    child: TextField(
-                      controller: _unitController,
-                      decoration: InputDecoration(
-                        labelText: l10n.retailListingUnitLabel,
-                        hintText: l10n.retailListingUnitHint,
-                      ),
+                    child: DropdownButtonFormField<String>(
+                      initialValue: _unitPreset,
+                      isExpanded: true,
+                      decoration: InputDecoration(labelText: l10n.retailListingUnitLabel),
+                      items: [
+                        for (final u in unitPresets) DropdownMenuItem(value: u, child: Text(u)),
+                        DropdownMenuItem(value: _kOtherUnit, child: Text(l10n.retailListingUnitOther)),
+                      ],
+                      onChanged: (v) => setState(() {
+                        _unitPreset = v;
+                        if (v != null && v != _kOtherUnit) _unitController.text = v;
+                      }),
                     ),
                   ),
                 ],
               ),
+              if (_unitPreset == _kOtherUnit) ...[
+                const SizedBox(height: 12),
+                TextField(
+                  controller: _unitController,
+                  decoration: InputDecoration(hintText: l10n.retailListingUnitHint),
+                ),
+              ],
               const SizedBox(height: 12),
               TextField(
                 controller: _skuController,
@@ -641,6 +604,8 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
                   entries: _audienceBusinesses,
                   onAdd: _addBusiness,
                   onRemove: (i) => setState(() => _audienceBusinesses.removeAt(i)),
+                  addGroupLabel: l10n.retailListingAddBusinessGroup,
+                  onAddGroup: _addBusinessGroup,
                 ),
               ],
               if (widget.existing != null) ...[
@@ -682,6 +647,8 @@ class _AudienceSection extends StatelessWidget {
   final List<RetailAudienceEntry> entries;
   final VoidCallback onAdd;
   final ValueChanged<int> onRemove;
+  final String? addGroupLabel;
+  final VoidCallback? onAddGroup;
 
   const _AudienceSection({
     required this.label,
@@ -690,6 +657,8 @@ class _AudienceSection extends StatelessWidget {
     required this.entries,
     required this.onAdd,
     required this.onRemove,
+    this.addGroupLabel,
+    this.onAddGroup,
   });
 
   @override
@@ -713,6 +682,12 @@ class _AudienceSection extends StatelessWidget {
               label: Text(addLabel),
               onPressed: onAdd,
             ),
+            if (onAddGroup != null)
+              ActionChip(
+                avatar: const Icon(Icons.groups_outlined, size: 18),
+                label: Text(addGroupLabel!),
+                onPressed: onAddGroup,
+              ),
           ],
         ),
       ],

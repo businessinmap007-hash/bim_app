@@ -38,6 +38,7 @@ class RetailListing {
   final List<int> audienceCategoryIds;
   final int productId;
   final String? productName;
+  final String? productNameEn;
   final String? productImageUrl;
   final String? productBarcode;
 
@@ -56,6 +57,7 @@ class RetailListing {
     this.audienceCategoryIds = const [],
     required this.productId,
     this.productName,
+    this.productNameEn,
     this.productImageUrl,
     this.productBarcode,
   });
@@ -86,6 +88,7 @@ class RetailListing {
           .toList(),
       productId: product?['id'] as int? ?? 0,
       productName: product?['name'] as String?,
+      productNameEn: product?['name_en'] as String?,
       productImageUrl: Env.assetUrl(product?['image'] as String?),
       productBarcode: product?['barcode'] as String?,
     );

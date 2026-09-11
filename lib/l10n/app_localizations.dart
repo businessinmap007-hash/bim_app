@@ -158,6 +158,12 @@ abstract class AppLocalizations {
   /// **'حذف'**
   String get commonDelete;
 
+  /// No description provided for @commonClear.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسح'**
+  String get commonClear;
+
   /// No description provided for @commonNext.
   ///
   /// In ar, this message translates to:
@@ -199,6 +205,18 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تحديد الكل كمقروء'**
   String get notificationsMarkAllRead;
+
+  /// No description provided for @notificationsClearAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسح الكل'**
+  String get notificationsClearAll;
+
+  /// No description provided for @notificationsClearAllConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسح كل الإشعارات؟ لا يمكن التراجع عن هذا.'**
+  String get notificationsClearAllConfirm;
 
   /// No description provided for @authChooseAccountType.
   ///
@@ -2743,6 +2761,78 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لسه مفيش أعضاء. أضف حد برقم موبايله أو إيميله.'**
   String get contactGroupNoMembers;
+
+  /// No description provided for @businessGroupsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مجموعات العروض'**
+  String get businessGroupsTitle;
+
+  /// No description provided for @businessGroupsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد مجموعات بعد. أنشئ مجموعة لاستهداف نفس دائرة الأنشطة بعروضك دفعة واحدة.'**
+  String get businessGroupsEmpty;
+
+  /// No description provided for @businessGroupsCreate.
+  ///
+  /// In ar, this message translates to:
+  /// **'مجموعة جديدة'**
+  String get businessGroupsCreate;
+
+  /// No description provided for @businessGroupNameHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مثال: محلات الخضار، مصانع الأثاث'**
+  String get businessGroupNameHint;
+
+  /// No description provided for @businessGroupRename.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة تسمية المجموعة'**
+  String get businessGroupRename;
+
+  /// No description provided for @businessGroupDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف هذه المجموعة؟ لن يؤثر هذا على أي منتج قيّدته لها بالفعل.'**
+  String get businessGroupDeleteConfirm;
+
+  /// No description provided for @businessGroupNoMembers.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أنشطة بعد. أضف نشاطًا بالبحث.'**
+  String get businessGroupNoMembers;
+
+  /// No description provided for @businessGroupAddToOffersGroup.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة إلى مجموعة عروض'**
+  String get businessGroupAddToOffersGroup;
+
+  /// No description provided for @businessGroupMemberAdded.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت إضافة {business} إلى \"{group}\".'**
+  String businessGroupMemberAdded(String business, String group);
+
+  /// No description provided for @retailListingAddBusinessGroup.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة مجموعة'**
+  String get retailListingAddBusinessGroup;
+
+  /// No description provided for @retailListingBusinessGroupPickerTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر مجموعة أنشطة'**
+  String get retailListingBusinessGroupPickerTitle;
+
+  /// No description provided for @retailListingBusinessGroupPickerEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد مجموعات بعد.'**
+  String get retailListingBusinessGroupPickerEmpty;
 
   /// No description provided for @staffTitle.
   ///
@@ -5909,8 +5999,14 @@ abstract class AppLocalizations {
   /// No description provided for @retailListingUnitHint.
   ///
   /// In ar, this message translates to:
-  /// **'كيلو، كرتونة، طن...'**
+  /// **'اكتب وحدتك الخاصة'**
   String get retailListingUnitHint;
+
+  /// No description provided for @retailListingUnitOther.
+  ///
+  /// In ar, this message translates to:
+  /// **'أخرى...'**
+  String get retailListingUnitOther;
 
   /// No description provided for @retailListingSkuHint.
   ///

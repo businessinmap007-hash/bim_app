@@ -39,6 +39,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get commonDelete => 'حذف';
 
   @override
+  String get commonClear => 'مسح';
+
+  @override
   String get commonNext => 'التالي';
 
   @override
@@ -58,6 +61,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get notificationsMarkAllRead => 'تحديد الكل كمقروء';
+
+  @override
+  String get notificationsClearAll => 'مسح الكل';
+
+  @override
+  String get notificationsClearAllConfirm =>
+      'مسح كل الإشعارات؟ لا يمكن التراجع عن هذا.';
 
   @override
   String get authChooseAccountType => 'اختر نوع الحساب';
@@ -1480,6 +1490,46 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get contactGroupNoMembers =>
       'لسه مفيش أعضاء. أضف حد برقم موبايله أو إيميله.';
+
+  @override
+  String get businessGroupsTitle => 'مجموعات العروض';
+
+  @override
+  String get businessGroupsEmpty =>
+      'لا توجد مجموعات بعد. أنشئ مجموعة لاستهداف نفس دائرة الأنشطة بعروضك دفعة واحدة.';
+
+  @override
+  String get businessGroupsCreate => 'مجموعة جديدة';
+
+  @override
+  String get businessGroupNameHint => 'مثال: محلات الخضار، مصانع الأثاث';
+
+  @override
+  String get businessGroupRename => 'إعادة تسمية المجموعة';
+
+  @override
+  String get businessGroupDeleteConfirm =>
+      'حذف هذه المجموعة؟ لن يؤثر هذا على أي منتج قيّدته لها بالفعل.';
+
+  @override
+  String get businessGroupNoMembers => 'لا توجد أنشطة بعد. أضف نشاطًا بالبحث.';
+
+  @override
+  String get businessGroupAddToOffersGroup => 'إضافة إلى مجموعة عروض';
+
+  @override
+  String businessGroupMemberAdded(String business, String group) {
+    return 'تمت إضافة $business إلى \"$group\".';
+  }
+
+  @override
+  String get retailListingAddBusinessGroup => 'إضافة مجموعة';
+
+  @override
+  String get retailListingBusinessGroupPickerTitle => 'اختر مجموعة أنشطة';
+
+  @override
+  String get retailListingBusinessGroupPickerEmpty => 'لا توجد مجموعات بعد.';
 
   @override
   String get staffTitle => 'الموظفون';
@@ -3127,7 +3177,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get retailListingUnitLabel => 'الوحدة (اختياري)';
 
   @override
-  String get retailListingUnitHint => 'كيلو، كرتونة، طن...';
+  String get retailListingUnitHint => 'اكتب وحدتك الخاصة';
+
+  @override
+  String get retailListingUnitOther => 'أخرى...';
 
   @override
   String get retailListingSkuHint => 'رمز المنتج SKU (اختياري)';

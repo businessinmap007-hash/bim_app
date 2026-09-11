@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/utils/produce_emoji.dart';
 import '../../../../shared/utils/retail_quantity_format.dart';
 import '../../data/models/catalog_product_listing.dart';
 
@@ -42,9 +43,9 @@ class RetailListingCardTile extends StatelessWidget {
                         ? CachedNetworkImage(
                             imageUrl: listing.productImage!,
                             fit: BoxFit.cover,
-                            errorWidget: (context, url, error) => const _ProductPlaceholder(),
+                            errorWidget: (context, url, error) => _ProductPlaceholder(nameEn: listing.productNameEn),
                           )
-                        : const _ProductPlaceholder(),
+                        : _ProductPlaceholder(nameEn: listing.productNameEn),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -121,14 +122,16 @@ class RetailListingCardTile extends StatelessWidget {
 }
 
 class _ProductPlaceholder extends StatelessWidget {
-  const _ProductPlaceholder();
+  final String? nameEn;
+  const _ProductPlaceholder({this.nameEn});
 
   @override
   Widget build(BuildContext context) {
     final onSurface = Theme.of(context).colorScheme.onSurface;
     return Container(
       color: onSurface.withValues(alpha: 0.08),
-      child: Icon(Icons.inventory_2_outlined, color: onSurface),
+      alignment: Alignment.center,
+      child: Text(produceEmoji(nameEn), style: const TextStyle(fontSize: 28)),
     );
   }
 }

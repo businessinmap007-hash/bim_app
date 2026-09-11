@@ -40,4 +40,6 @@ class NotificationsApi {
   Future<void> markAllRead() => _client.post('/notifications/mark-all-read');
 
   Future<void> archive(int id) => _client.post('/notifications/$id/archive');
+
+  Future<void> archiveAll() => _client.post('/notifications/archive-all');
 }

@@ -17,6 +17,29 @@ class NotificationsScreen extends ConsumerStatefulWidget {
 class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
   final _scrollController = ScrollController();
 
+  Future<void> _clearAll() async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Text(l10n.notificationsClearAllConfirm),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l10n.commonCancel)),
+          TextButton(onPressed: () => Navigator.pop(context, true), child: Text(l10n.commonClear)),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+
+    try {
+      await ref.read(notificationsControllerProvider.notifier).archiveAll();
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -54,6 +77,12 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
                 l10n.notificationsMarkAllRead,
                 style: TextStyle(color: Theme.of(context).appBarTheme.foregroundColor),
               ),
+            ),
+          if (state.items.isNotEmpty)
+            IconButton(
+              tooltip: l10n.notificationsClearAll,
+              icon: const Icon(Icons.clear_all),
+              onPressed: _clearAll,
             ),
         ],
       ),

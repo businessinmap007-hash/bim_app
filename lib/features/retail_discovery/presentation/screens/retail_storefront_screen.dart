@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/utils/produce_emoji.dart';
 import '../../../../shared/utils/retail_quantity_format.dart';
 import '../../../../shared/widgets/async_value_view.dart';
 import '../../../cart/application/cart_controller.dart';
@@ -100,7 +101,8 @@ class _StorefrontListingTile extends ConsumerWidget {
                   ? CachedNetworkImage(imageUrl: listing.productImage!, fit: BoxFit.cover)
                   : Container(
                       color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.08),
-                      child: const Icon(Icons.inventory_2_outlined),
+                      alignment: Alignment.center,
+                      child: Text(produceEmoji(listing.productNameEn), style: const TextStyle(fontSize: 20)),
                     ),
             ),
           ),

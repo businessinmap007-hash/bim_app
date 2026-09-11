@@ -140,6 +140,7 @@ class RetailListingCard {
   final String? unit;
   final int productId;
   final String productName;
+  final String? productNameEn;
   final String? productImage;
   final int businessId;
   final String businessName;
@@ -157,6 +158,7 @@ class RetailListingCard {
     this.unit,
     required this.productId,
     required this.productName,
+    this.productNameEn,
     this.productImage,
     required this.businessId,
     required this.businessName,
@@ -178,6 +180,7 @@ class RetailListingCard {
       unit: json['unit'] as String?,
       productId: (product['id'] as num?)?.toInt() ?? 0,
       productName: product['name'] as String? ?? '',
+      productNameEn: product['name_en'] as String?,
       productImage: Env.assetUrl(product['image'] as String?),
       businessId: (business['id'] as num?)?.toInt() ?? 0,
       businessName: business['name'] as String? ?? '',
@@ -200,6 +203,7 @@ class RetailStorefrontListing {
   final String? unit;
   final int productId;
   final String productName;
+  final String? productNameEn;
   final String? productImage;
 
   const RetailStorefrontListing({
@@ -211,6 +215,7 @@ class RetailStorefrontListing {
     this.unit,
     required this.productId,
     required this.productName,
+    this.productNameEn,
     this.productImage,
   });
 
@@ -225,6 +230,7 @@ class RetailStorefrontListing {
       unit: json['unit'] as String?,
       productId: (product['id'] as num?)?.toInt() ?? 0,
       productName: product['name'] as String? ?? '',
+      productNameEn: product['name_en'] as String?,
       productImage: Env.assetUrl(product['image'] as String?),
     );
   }

@@ -39,6 +39,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonDelete => 'Delete';
 
   @override
+  String get commonClear => 'Clear';
+
+  @override
   String get commonNext => 'Next';
 
   @override
@@ -59,6 +62,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notificationsMarkAllRead => 'Mark all read';
+
+  @override
+  String get notificationsClearAll => 'Clear all';
+
+  @override
+  String get notificationsClearAllConfirm =>
+      'Clear all notifications? This can\'t be undone.';
 
   @override
   String get authChooseAccountType => 'Choose account type';
@@ -1462,6 +1472,47 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get contactGroupNoMembers =>
       'No members yet. Add someone by their phone number or email.';
+
+  @override
+  String get businessGroupsTitle => 'Business groups';
+
+  @override
+  String get businessGroupsEmpty =>
+      'No business groups yet. Create one to target the same circle of businesses with your offers at once.';
+
+  @override
+  String get businessGroupsCreate => 'New group';
+
+  @override
+  String get businessGroupNameHint =>
+      'e.g. Vegetable shops, Furniture factories';
+
+  @override
+  String get businessGroupRename => 'Rename group';
+
+  @override
+  String get businessGroupDeleteConfirm =>
+      'Delete this group? This does not affect any listing you\'ve already restricted to it.';
+
+  @override
+  String get businessGroupNoMembers => 'No businesses yet. Add one by search.';
+
+  @override
+  String get businessGroupAddToOffersGroup => 'Add to an offers group';
+
+  @override
+  String businessGroupMemberAdded(String business, String group) {
+    return 'Added $business to \"$group\".';
+  }
+
+  @override
+  String get retailListingAddBusinessGroup => 'Add a group';
+
+  @override
+  String get retailListingBusinessGroupPickerTitle => 'Choose a business group';
+
+  @override
+  String get retailListingBusinessGroupPickerEmpty => 'No business groups yet.';
 
   @override
   String get staffTitle => 'Staff';
@@ -3116,7 +3167,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get retailListingUnitLabel => 'Unit (optional)';
 
   @override
-  String get retailListingUnitHint => 'kg, carton, ton...';
+  String get retailListingUnitHint => 'Type your own unit';
+
+  @override
+  String get retailListingUnitOther => 'Other...';
 
   @override
   String get retailListingSkuHint => 'SKU (optional)';
