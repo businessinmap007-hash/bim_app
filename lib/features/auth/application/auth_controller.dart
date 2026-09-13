@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/core_providers.dart';
+import '../../../core/push/push_notification_service.dart';
 import '../../addresses/application/addresses_providers.dart';
 import '../../business_menu/application/business_menu_providers.dart';
 import '../../business_offers/application/business_offers_providers.dart';
@@ -58,6 +61,10 @@ class AuthController extends StateNotifier<AuthState> {
   }
 
   Future<void> _restoreSession() async {
+    // Best-effort and silent regardless of outcome -- see
+    // PushNotificationService's own docs for why this is a no-op today.
+    unawaited(_ref.read(pushNotificationServiceProvider).init());
+
     try {
       final token = await _ref.read(tokenStorageProvider).read();
       if (token == null || token.isEmpty) {
@@ -66,6 +73,7 @@ class AuthController extends StateNotifier<AuthState> {
       }
       final user = await _authApi.me();
       state = AuthSignedIn(user);
+      unawaited(_ref.read(pushNotificationServiceProvider).registerCurrentToken());
     } catch (_) {
       // Covers both a stale/revoked token (me() 401s) and secure storage
       // being unavailable — either way, fall back to signed-out rather than
@@ -84,6 +92,7 @@ class AuthController extends StateNotifier<AuthState> {
     await _ref.read(tokenStorageProvider).write(result.token);
     state = AuthSignedIn(result.user);
     _resetAccountScopedProviders();
+    unawaited(_ref.read(pushNotificationServiceProvider).registerCurrentToken());
   }
 
   Future<void> register({
@@ -111,6 +120,7 @@ class AuthController extends StateNotifier<AuthState> {
     await _ref.read(tokenStorageProvider).write(result.token);
     state = AuthSignedIn(result.user);
     _resetAccountScopedProviders();
+    unawaited(_ref.read(pushNotificationServiceProvider).registerCurrentToken());
   }
 
   /// Replaces the signed-in user's data in place — called after a profile
@@ -131,9 +141,11 @@ class AuthController extends StateNotifier<AuthState> {
     final user = await _authApi.me();
     state = AuthSignedIn(user);
     _resetAccountScopedProviders();
+    unawaited(_ref.read(pushNotificationServiceProvider).registerCurrentToken());
   }
 
   Future<void> logout() async {
+    await _ref.read(pushNotificationServiceProvider).unregisterCurrentToken();
     try {
       await _authApi.logout();
     } catch (_) {
