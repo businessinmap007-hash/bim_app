@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
@@ -149,7 +150,6 @@ class _QuantitySheet extends StatefulWidget {
 class _QuantitySheetState extends State<_QuantitySheet> {
   late int _qty = widget.listing.minOrderQty ?? 1;
   late final _qtyController = TextEditingController(text: '$_qty');
-  final _qtyFocusNode = FocusNode();
   String? _error;
 
   int get _minQty => widget.listing.minOrderQty ?? 1;
@@ -165,38 +165,50 @@ class _QuantitySheetState extends State<_QuantitySheet> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    // Clamp on blur rather than on every keystroke — rewriting the field
-    // mid-type would stop a user typing "25" the moment they'd typed "2"
-    // and the minimum happened to be above that.
-    _qtyFocusNode.addListener(() {
-      if (!_qtyFocusNode.hasFocus) _commitTypedQty();
-    });
-  }
-
-  @override
   void dispose() {
     _qtyController.dispose();
-    _qtyFocusNode.dispose();
     super.dispose();
   }
 
-  void _commitTypedQty() => _setQty(int.tryParse(_qtyController.text.trim()) ?? _qty);
+  /// Runs on every keystroke, but only ever REWRITES the field when the
+  /// typed value is out of range — a value still climbing toward a valid
+  /// number (typing "2" on the way to "25") is left alone so the field
+  /// never fights the user mid-type. The stray keyboard-not-opening bug
+  /// this replaced came from a FocusNode blur listener rewriting the
+  /// controller's text while focus was still resolving — plain onChanged
+  /// has no such focus-lifecycle interaction.
+  void _onTyped(String text) {
+    final typed = int.tryParse(text.trim());
+    if (typed == null) return;
 
-  void _setQty(int value) {
     final max = _maxQty;
-    var clamped = value < _minQty ? _minQty : value;
-    if (max != null && clamped > max) clamped = max;
+    final tooLow = typed < _minQty;
+    final tooHigh = max != null && typed > max;
     final l10n = AppLocalizations.of(context)!;
 
     setState(() {
-      _qty = clamped;
-      _error = value != clamped
-          ? (max != null
-              ? l10n.retailStorefrontQtyOutOfRange(formatRetailQty(_minQty, widget.listing.unit), formatRetailQty(max, widget.listing.unit))
-              : l10n.retailStorefrontQtyBelowMin(formatRetailQty(_minQty, widget.listing.unit)))
-          : null;
+      _qty = typed;
+      _error = tooHigh
+          ? l10n.retailStorefrontQtyOutOfRange(formatRetailQty(_minQty, widget.listing.unit), formatRetailQty(max, widget.listing.unit))
+          : (tooLow ? l10n.retailStorefrontQtyBelowMin(formatRetailQty(_minQty, widget.listing.unit)) : null);
+    });
+  }
+
+  /// Clamps into range — called on submit and right before "Add to cart"
+  /// so an out-of-range value never actually gets ordered, even though the
+  /// field itself was left visible while the user was still typing.
+  void _commitTypedQty() {
+    final typed = int.tryParse(_qtyController.text.trim()) ?? _qty;
+    final max = _maxQty;
+    var clamped = typed < _minQty ? _minQty : typed;
+    if (max != null && clamped > max) clamped = max;
+    _setQty(clamped);
+  }
+
+  void _setQty(int value) {
+    setState(() {
+      _qty = value;
+      _error = null;
     });
     _qtyController.text = '$_qty';
     _qtyController.selection = TextSelection.collapsed(offset: _qtyController.text.length);
@@ -246,15 +258,18 @@ class _QuantitySheetState extends State<_QuantitySheet> {
                       onPressed: _qty > _minQty ? () => _setQty(_qty - 1) : null,
                     ),
                     SizedBox(
-                      width: 64,
+                      width: 72,
                       child: TextField(
                         controller: _qtyController,
-                        focusNode: _qtyFocusNode,
-                        keyboardType: TextInputType.number,
+                        keyboardType: const TextInputType.numberWithOptions(signed: false, decimal: false),
+                        textInputAction: TextInputAction.done,
+                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                         textAlign: TextAlign.center,
                         style: const TextStyle(fontWeight: FontWeight.w700),
                         decoration: const InputDecoration(isDense: true, contentPadding: EdgeInsets.symmetric(vertical: 8)),
+                        onChanged: _onTyped,
                         onSubmitted: (_) => _commitTypedQty(),
+                        onTapOutside: (_) => _commitTypedQty(),
                       ),
                     ),
                     IconButton(
