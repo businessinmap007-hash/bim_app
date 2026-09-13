@@ -279,6 +279,7 @@
   "cartTitle": "السلة",
   "cartEmpty": "السلة فارغة.",
   "cartAdd": "أضف للسلة",
+  "cartBuyNow": "شراء مباشر",
   "cartAddedToCart": "تمت الإضافة للسلة.",
   "cartQty": "الكمية",
   "cartRemove": "إزالة",

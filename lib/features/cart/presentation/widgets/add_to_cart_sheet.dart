@@ -6,6 +6,7 @@ import '../../../business/data/models/menu_item_summary.dart';
 import '../../../offers/presentation/screens/offer_comparison_screen.dart';
 import '../../application/cart_controller.dart';
 import '../../application/shared_cart_providers.dart';
+import '../screens/checkout_screen.dart';
 
 /// Opens the picker for a menu item (variant + extras + qty) and adds it to
 /// the cart on confirm. A plain item with no variants/extras skips straight
@@ -85,7 +86,7 @@ class _AddToCartSheetState extends ConsumerState<_AddToCartSheet> {
     });
   }
 
-  Future<void> _confirm() async {
+  Future<void> _confirm({required bool buyNow}) async {
     setState(() => _submitting = true);
     try {
       final sharedOrderId = widget.sharedOrderId;
@@ -97,16 +98,32 @@ class _AddToCartSheetState extends ConsumerState<_AddToCartSheet> {
           sizeId: _variantId,
           extras: _extraIds.toList(),
         );
-      } else {
-        await ref.read(cartControllerProvider.notifier).addItem(
-          kind: widget.item.kind,
-          offeringId: widget.item.id,
-          qty: _qty,
-          sizeId: _variantId,
-          extras: _extraIds.toList(),
-        );
+        if (mounted) {
+          final l10n = AppLocalizations.of(context)!;
+          Navigator.of(context).pop();
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.cartAddedToCart)));
+        }
+        return;
       }
-      if (mounted) {
+
+      final cart = await ref.read(cartControllerProvider.notifier).addItem(
+        kind: widget.item.kind,
+        offeringId: widget.item.id,
+        qty: _qty,
+        sizeId: _variantId,
+        extras: _extraIds.toList(),
+      );
+      if (!mounted) return;
+
+      // Adding to cart only ever reserves a spot in line — nothing is
+      // decremented from stock until checkout actually runs (see
+      // CustomerCartService::placeOrder). "Buy now" skips straight to that
+      // checkout instead of leaving this item to wait behind whatever else
+      // is already in the cart.
+      if (buyNow) {
+        Navigator.of(context).pop();
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => CheckoutScreen(cart: cart)));
+      } else {
         final l10n = AppLocalizations.of(context)!;
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.cartAddedToCart)));
@@ -255,12 +272,33 @@ class _AddToCartSheetState extends ConsumerState<_AddToCartSheet> {
                 ],
               ),
               const SizedBox(height: 8),
-              FilledButton(
-                onPressed: _submitting ? null : _confirm,
-                child: _submitting
-                    ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                    : Text('${l10n.cartAdd} · ${(_unitPrice * _qty).toStringAsFixed(0)}'),
-              ),
+              if (_submitting)
+                const Center(child: SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2)))
+              else if (widget.sharedOrderId != null)
+                // A shared cart checks out through its host, all at once —
+                // "buy now" (an immediate solo checkout) doesn't fit that.
+                FilledButton(
+                  onPressed: () => _confirm(buyNow: false),
+                  child: Text('${l10n.cartAdd} · ${(_unitPrice * _qty).toStringAsFixed(0)}'),
+                )
+              else
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => _confirm(buyNow: false),
+                        child: Text(l10n.cartAdd),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: FilledButton(
+                        onPressed: () => _confirm(buyNow: true),
+                        child: Text('${l10n.cartBuyNow} · ${(_unitPrice * _qty).toStringAsFixed(0)}'),
+                      ),
+                    ),
+                  ],
+                ),
             ],
           ),
         ),

@@ -47,7 +47,10 @@ class CartController extends StateNotifier<CartState> {
     }
   }
 
-  Future<void> addItem({
+  /// Returns the fresh cart so a "buy now" caller can jump straight to
+  /// checkout with it, without a second round trip to re-fetch what this
+  /// call just returned anyway.
+  Future<Cart> addItem({
     required String kind,
     required int offeringId,
     int qty = 1,
@@ -56,6 +59,7 @@ class CartController extends StateNotifier<CartState> {
   }) async {
     final updated = await _api.addItem(kind: kind, offeringId: offeringId, qty: qty, sizeId: sizeId, extras: extras);
     _mergeCart(updated);
+    return updated;
   }
 
   Future<void> updateItemQty(int itemId, int qty) async {

@@ -857,6 +857,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get cartAdd => 'أضف للسلة';
 
   @override
+  String get cartBuyNow => 'شراء مباشر';
+
+  @override
   String get cartAddedToCart => 'تمت الإضافة للسلة.';
 
   @override

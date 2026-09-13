@@ -1640,6 +1640,12 @@ abstract class AppLocalizations {
   /// **'أضف للسلة'**
   String get cartAdd;
 
+  /// No description provided for @cartBuyNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'شراء مباشر'**
+  String get cartBuyNow;
+
   /// No description provided for @cartAddedToCart.
   ///
   /// In ar, this message translates to:

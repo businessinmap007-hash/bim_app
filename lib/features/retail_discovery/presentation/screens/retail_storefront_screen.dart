@@ -9,6 +9,7 @@ import '../../../../shared/utils/produce_emoji.dart';
 import '../../../../shared/utils/retail_quantity_format.dart';
 import '../../../../shared/widgets/async_value_view.dart';
 import '../../../cart/application/cart_controller.dart';
+import '../../../cart/presentation/screens/checkout_screen.dart';
 import '../../application/retail_discovery_providers.dart';
 import '../../data/models/catalog_product_listing.dart';
 
@@ -61,17 +62,27 @@ class _StorefrontListingTile extends ConsumerWidget {
   const _StorefrontListingTile({required this.listing});
 
   Future<void> _openQuantitySheet(BuildContext context, WidgetRef ref) async {
-    final qty = await showModalBottomSheet<int>(
+    final result = await showModalBottomSheet<({int qty, bool buyNow})>(
       context: context,
       isScrollControlled: true,
       builder: (_) => _QuantitySheet(listing: listing),
     );
-    if (qty == null || !context.mounted) return;
+    if (result == null || !context.mounted) return;
 
     final l10n = AppLocalizations.of(context)!;
     try {
-      await ref.read(cartControllerProvider.notifier).addItem(kind: 'retail', offeringId: listing.listingId, qty: qty);
-      if (context.mounted) {
+      final cart = await ref
+          .read(cartControllerProvider.notifier)
+          .addItem(kind: 'retail', offeringId: listing.listingId, qty: result.qty);
+      if (!context.mounted) return;
+
+      // Adding to cart only ever reserves a spot in line — checkout is what
+      // actually takes the stock (CustomerCartService::placeOrder). "Buy
+      // now" skips straight there instead of waiting behind the rest of
+      // whatever else is already in the cart.
+      if (result.buyNow) {
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => CheckoutScreen(cart: cart)));
+      } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.cartAddedToCart)));
       }
     } catch (_) {
@@ -288,15 +299,31 @@ class _QuantitySheetState extends State<_QuantitySheet> {
               ),
             ],
             const SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton(
-                onPressed: () {
-                  _commitTypedQty();
-                  Navigator.of(context).pop(_qty);
-                },
-                child: Text(l10n.cartAdd),
-              ),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () {
+                      _commitTypedQty();
+                      Navigator.of(context).pop((qty: _qty, buyNow: false));
+                    },
+                    child: Text(l10n.cartAdd),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: FilledButton(
+                    onPressed: () {
+                      _commitTypedQty();
+                      Navigator.of(context).pop((qty: _qty, buyNow: true));
+                    },
+                    child: Text(
+                      '${l10n.cartBuyNow} · ${(widget.listing.price * _qty).toStringAsFixed(0)}',
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

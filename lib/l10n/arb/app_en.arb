@@ -279,6 +279,7 @@
   "cartTitle": "Cart",
   "cartEmpty": "Your cart is empty.",
   "cartAdd": "Add to cart",
+  "cartBuyNow": "Buy now",
   "cartAddedToCart": "Added to cart.",
   "cartQty": "Quantity",
   "cartRemove": "Remove",
