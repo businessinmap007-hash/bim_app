@@ -10,6 +10,7 @@ import '../../../business_groups/data/models/business_group.dart';
 import '../../../business_groups/presentation/widgets/business_group_picker_sheet.dart';
 import '../../../categories/presentation/widgets/category_picker_field.dart';
 import '../../../discovery/data/models/business_summary.dart';
+import '../../../location/application/location_providers.dart';
 import '../../application/retail_listings_providers.dart';
 import '../../data/models/catalog_product_summary.dart';
 import '../../data/models/retail_listing.dart';
@@ -529,6 +530,7 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
               audienceChildIds: existing.audienceChildren.map((e) => e.id).toList(),
               audienceBusinessIds: existing.audienceBusinesses.map((e) => e.id).toList(),
               audienceCategoryIds: existing.audienceCategoryIds,
+              governorateIds: existing.governorateIds,
             );
       }
       if (mounted) Navigator.of(context).pop(true);
@@ -688,8 +690,23 @@ class _VisibilityEditSheetState extends ConsumerState<_VisibilityEditSheet> {
   late String _visibility = widget.existing.visibility;
   late final List<RetailAudienceEntry> _audienceChildren = List.of(widget.existing.audienceChildren);
   late final List<RetailAudienceEntry> _audienceBusinesses = List.of(widget.existing.audienceBusinesses);
+  late final List<RetailAudienceEntry> _governorates = List.of(widget.existing.governorates);
   bool _saving = false;
   String? _error;
+
+  Future<void> _pickGovernorates() async {
+    final picked = await showModalBottomSheet<List<RetailAudienceEntry>>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => _GovernoratePickerSheet(selected: _governorates),
+    );
+    if (picked == null) return;
+    setState(() {
+      _governorates
+        ..clear()
+        ..addAll(picked);
+    });
+  }
 
   Future<void> _addShopType() async {
     final selection = await showModalBottomSheet<CategorySelection>(
@@ -759,6 +776,7 @@ class _VisibilityEditSheetState extends ConsumerState<_VisibilityEditSheet> {
             audienceChildIds: _audienceChildren.map((e) => e.id).toList(),
             audienceBusinessIds: _audienceBusinesses.map((e) => e.id).toList(),
             audienceCategoryIds: existing.audienceCategoryIds,
+            governorateIds: _governorates.map((e) => e.id).toList(),
           );
       if (mounted) Navigator.of(context).pop(true);
     } catch (e) {
@@ -783,9 +801,35 @@ class _VisibilityEditSheetState extends ConsumerState<_VisibilityEditSheet> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(l10n.retailListingVisibilityLabel, style: Theme.of(context).textTheme.titleMedium),
+              Text(name, style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 16),
+              Text(l10n.retailListingGovernoratesLabel, style: Theme.of(context).textTheme.titleSmall),
               const SizedBox(height: 4),
-              Text(name, style: Theme.of(context).textTheme.bodySmall),
+              Text(
+                _governorates.isEmpty
+                    ? l10n.retailListingGovernoratesAllHint
+                    : l10n.retailListingGovernoratesSelectedHint(_governorates.length),
+                style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12),
+              ),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: [
+                  for (final g in _governorates)
+                    Chip(
+                      label: Text(g.name),
+                      onDeleted: () => setState(() => _governorates.removeWhere((e) => e.id == g.id)),
+                    ),
+                  ActionChip(
+                    avatar: const Icon(Icons.map_outlined, size: 18),
+                    label: Text(l10n.retailListingChooseGovernorates),
+                    onPressed: _pickGovernorates,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Text(l10n.retailListingVisibilityLabel, style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 16),
               RadioListTile<String>(
                 contentPadding: EdgeInsets.zero,
@@ -899,6 +943,117 @@ class _AudienceSection extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+/// Multi-select checklist over every governorate — the merchant picks
+/// all/one/some, mirroring [[RetailListingVisibility]]'s own "empty means
+/// everyone" rule (an empty selection here means no geographic restriction
+/// at all, not "nobody"). Egypt-only today, like the rest of this app's
+/// geography — see LocationGovernorate's own docblock.
+class _GovernoratePickerSheet extends ConsumerStatefulWidget {
+  final List<RetailAudienceEntry> selected;
+  const _GovernoratePickerSheet({required this.selected});
+
+  @override
+  ConsumerState<_GovernoratePickerSheet> createState() => _GovernoratePickerSheetState();
+}
+
+class _GovernoratePickerSheetState extends ConsumerState<_GovernoratePickerSheet> {
+  static const _egyptCountryId = 1;
+  late final Set<int> _selectedIds = widget.selected.map((e) => e.id).toSet();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
+    final governoratesAsync = ref.watch(governoratesProvider(_egyptCountryId));
+
+    return DraggableScrollableSheet(
+      initialChildSize: 0.75,
+      minChildSize: 0.4,
+      maxChildSize: 0.95,
+      expand: false,
+      builder: (context, scrollController) => SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 16, 8, 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(l10n.retailListingGovernoratesPickerTitle, style: Theme.of(context).textTheme.titleMedium),
+                  ),
+                  IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.of(context).pop()),
+                ],
+              ),
+            ),
+            governoratesAsync.when(
+              loading: () => const Expanded(child: Center(child: CircularProgressIndicator())),
+              error: (e, _) => Expanded(child: Center(child: Text(l10n.commonSomethingWentWrong))),
+              data: (governorates) => Expanded(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                            onPressed: () => setState(() => _selectedIds.addAll(governorates.map((g) => g.id))),
+                            child: Text(l10n.retailListingGovernoratesSelectAll),
+                          ),
+                          TextButton(
+                            onPressed: () => setState(_selectedIds.clear),
+                            child: Text(l10n.retailListingGovernoratesClearAll),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        controller: scrollController,
+                        itemCount: governorates.length,
+                        itemBuilder: (context, index) {
+                          final g = governorates[index];
+                          return CheckboxListTile(
+                            value: _selectedIds.contains(g.id),
+                            title: Text(g.localizedName(isEnglish ? 'en' : 'ar')),
+                            onChanged: (checked) => setState(() {
+                              if (checked ?? false) {
+                                _selectedIds.add(g.id);
+                              } else {
+                                _selectedIds.remove(g.id);
+                              }
+                            }),
+                          );
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: FilledButton(
+                          onPressed: () {
+                            final picked = governorates
+                                .where((g) => _selectedIds.contains(g.id))
+                                .map((g) => RetailAudienceEntry(id: g.id, name: g.localizedName(isEnglish ? 'en' : 'ar')))
+                                .toList();
+                            Navigator.of(context).pop(picked);
+                          },
+                          child: Text(l10n.commonSave),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

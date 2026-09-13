@@ -97,6 +97,7 @@ class RetailListingsController extends StateNotifier<RetailListingsState> {
     List<int> audienceBusinessIds = const [],
     List<int> audienceChildIds = const [],
     List<int> audienceCategoryIds = const [],
+    List<int> governorateIds = const [],
   }) async {
     await _api.create(
       catalogProductId: catalogProductId,
@@ -110,6 +111,7 @@ class RetailListingsController extends StateNotifier<RetailListingsState> {
       audienceBusinessIds: audienceBusinessIds,
       audienceChildIds: audienceChildIds,
       audienceCategoryIds: audienceCategoryIds,
+      governorateIds: governorateIds,
     );
     await load();
   }
@@ -127,6 +129,7 @@ class RetailListingsController extends StateNotifier<RetailListingsState> {
     List<int> audienceBusinessIds = const [],
     List<int> audienceChildIds = const [],
     List<int> audienceCategoryIds = const [],
+    List<int> governorateIds = const [],
   }) async {
     await _api.update(
       id,
@@ -141,6 +144,7 @@ class RetailListingsController extends StateNotifier<RetailListingsState> {
       audienceBusinessIds: audienceBusinessIds,
       audienceChildIds: audienceChildIds,
       audienceCategoryIds: audienceCategoryIds,
+      governorateIds: governorateIds,
     );
     await load();
   }

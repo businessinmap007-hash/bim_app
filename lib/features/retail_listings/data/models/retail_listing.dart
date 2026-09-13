@@ -37,6 +37,11 @@ class RetailListing {
   final List<RetailAudienceEntry> audienceBusinesses;
   final List<RetailAudienceEntry> audienceChildren;
   final List<int> audienceCategoryIds;
+  // Sits ABOVE visibility/audience — a geographic narrowing checked against
+  // the VIEWER's own governorate, whoever they are. Empty means every
+  // governorate; see RetailListingVisibility on the backend.
+  final List<int> governorateIds;
+  final List<RetailAudienceEntry> governorates;
   final int productId;
   final String? productName;
   final String? productNameEn;
@@ -57,6 +62,8 @@ class RetailListing {
     this.audienceBusinesses = const [],
     this.audienceChildren = const [],
     this.audienceCategoryIds = const [],
+    this.governorateIds = const [],
+    this.governorates = const [],
     required this.productId,
     this.productName,
     this.productNameEn,
@@ -69,6 +76,7 @@ class RetailListing {
   factory RetailListing.fromJson(Map<String, dynamic> json) {
     final product = json['product'] as Map<String, dynamic>?;
     final audience = json['audience'] as Map<String, dynamic>? ?? const {};
+    final governorates = json['governorates'] as Map<String, dynamic>? ?? const {};
     return RetailListing(
       id: json['id'] as int,
       price: (json['price'] as num).toDouble(),
@@ -88,6 +96,12 @@ class RetailListing {
           .toList(),
       audienceCategoryIds: (audience['category_ids'] as List<dynamic>? ?? [])
           .map((e) => (e as num).toInt())
+          .toList(),
+      governorateIds: (governorates['ids'] as List<dynamic>? ?? [])
+          .map((e) => (e as num).toInt())
+          .toList(),
+      governorates: (governorates['items'] as List<dynamic>? ?? [])
+          .map((e) => RetailAudienceEntry.fromJson(e as Map<String, dynamic>))
           .toList(),
       productId: product?['id'] as int? ?? 0,
       productName: product?['name'] as String?,

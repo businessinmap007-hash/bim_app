@@ -6092,6 +6092,48 @@ abstract class AppLocalizations {
   /// **'أدخل سعرًا صحيحًا.'**
   String get retailPriceRequired;
 
+  /// No description provided for @retailListingGovernoratesLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المحافظات'**
+  String get retailListingGovernoratesLabel;
+
+  /// No description provided for @retailListingGovernoratesAllHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل المحافظات — بلا قيود جغرافية'**
+  String get retailListingGovernoratesAllHint;
+
+  /// No description provided for @retailListingGovernoratesSelectedHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, one {محافظة واحدة مختارة} other {{count} محافظة مختارة}}'**
+  String retailListingGovernoratesSelectedHint(int count);
+
+  /// No description provided for @retailListingChooseGovernorates.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر المحافظات'**
+  String get retailListingChooseGovernorates;
+
+  /// No description provided for @retailListingGovernoratesPickerTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر المحافظات'**
+  String get retailListingGovernoratesPickerTitle;
+
+  /// No description provided for @retailListingGovernoratesSelectAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديد الكل'**
+  String get retailListingGovernoratesSelectAll;
+
+  /// No description provided for @retailListingGovernoratesClearAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسح'**
+  String get retailListingGovernoratesClearAll;
+
   /// No description provided for @retailListingVisibilityLabel.
   ///
   /// In ar, this message translates to:

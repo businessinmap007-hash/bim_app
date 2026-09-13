@@ -1075,6 +1075,16 @@
   "retailListingActiveLabel": "نشط",
   "retailListingDeleteConfirm": "إزالة هذا المنتج من منتجاتك؟",
   "retailPriceRequired": "أدخل سعرًا صحيحًا.",
+  "retailListingGovernoratesLabel": "المحافظات",
+  "retailListingGovernoratesAllHint": "كل المحافظات — بلا قيود جغرافية",
+  "retailListingGovernoratesSelectedHint": "{count, plural, one {محافظة واحدة مختارة} other {{count} محافظة مختارة}}",
+  "@retailListingGovernoratesSelectedHint": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "retailListingChooseGovernorates": "اختر المحافظات",
+  "retailListingGovernoratesPickerTitle": "اختر المحافظات",
+  "retailListingGovernoratesSelectAll": "تحديد الكل",
+  "retailListingGovernoratesClearAll": "مسح",
   "retailListingVisibilityLabel": "من يرى هذا المنتج",
   "retailListingVisibilityPublic": "الجميع",
   "retailListingVisibilityPublicHint": "يظهر لكل عميل، مثل باقي منتجاتك.",

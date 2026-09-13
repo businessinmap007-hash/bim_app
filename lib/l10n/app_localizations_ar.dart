@@ -3232,6 +3232,36 @@ class AppLocalizationsAr extends AppLocalizations {
   String get retailPriceRequired => 'أدخل سعرًا صحيحًا.';
 
   @override
+  String get retailListingGovernoratesLabel => 'المحافظات';
+
+  @override
+  String get retailListingGovernoratesAllHint =>
+      'كل المحافظات — بلا قيود جغرافية';
+
+  @override
+  String retailListingGovernoratesSelectedHint(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count محافظة مختارة',
+      one: 'محافظة واحدة مختارة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get retailListingChooseGovernorates => 'اختر المحافظات';
+
+  @override
+  String get retailListingGovernoratesPickerTitle => 'اختر المحافظات';
+
+  @override
+  String get retailListingGovernoratesSelectAll => 'تحديد الكل';
+
+  @override
+  String get retailListingGovernoratesClearAll => 'مسح';
+
+  @override
   String get retailListingVisibilityLabel => 'من يرى هذا المنتج';
 
   @override

@@ -1075,6 +1075,16 @@
   "retailListingActiveLabel": "Active",
   "retailListingDeleteConfirm": "Remove this product from your listings?",
   "retailPriceRequired": "Enter a valid price.",
+  "retailListingGovernoratesLabel": "Governorates",
+  "retailListingGovernoratesAllHint": "All governorates — no geographic restriction",
+  "retailListingGovernoratesSelectedHint": "{count, plural, one {1 governorate selected} other {{count} governorates selected}}",
+  "@retailListingGovernoratesSelectedHint": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "retailListingChooseGovernorates": "Choose governorates",
+  "retailListingGovernoratesPickerTitle": "Choose governorates",
+  "retailListingGovernoratesSelectAll": "Select all",
+  "retailListingGovernoratesClearAll": "Clear",
   "retailListingVisibilityLabel": "Who can see this",
   "retailListingVisibilityPublic": "Everyone",
   "retailListingVisibilityPublicHint": "Shown to every customer, like the rest of your products.",

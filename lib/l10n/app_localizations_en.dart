@@ -3223,6 +3223,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get retailPriceRequired => 'Enter a valid price.';
 
   @override
+  String get retailListingGovernoratesLabel => 'Governorates';
+
+  @override
+  String get retailListingGovernoratesAllHint =>
+      'All governorates — no geographic restriction';
+
+  @override
+  String retailListingGovernoratesSelectedHint(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count governorates selected',
+      one: '1 governorate selected',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get retailListingChooseGovernorates => 'Choose governorates';
+
+  @override
+  String get retailListingGovernoratesPickerTitle => 'Choose governorates';
+
+  @override
+  String get retailListingGovernoratesSelectAll => 'Select all';
+
+  @override
+  String get retailListingGovernoratesClearAll => 'Clear';
+
+  @override
   String get retailListingVisibilityLabel => 'Who can see this';
 
   @override

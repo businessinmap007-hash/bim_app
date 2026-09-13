@@ -52,6 +52,7 @@ class RetailListingsApi {
     List<int> audienceBusinessIds = const [],
     List<int> audienceChildIds = const [],
     List<int> audienceCategoryIds = const [],
+    List<int> governorateIds = const [],
   }) async {
     final data =
         await _client.post(
@@ -69,6 +70,7 @@ class RetailListingsApi {
                 'audience_business_ids': audienceBusinessIds,
                 'audience_child_ids': audienceChildIds,
                 'audience_category_ids': audienceCategoryIds,
+                'governorate_ids': governorateIds,
               },
             )
             as Map<String, dynamic>;
@@ -88,6 +90,7 @@ class RetailListingsApi {
     List<int> audienceBusinessIds = const [],
     List<int> audienceChildIds = const [],
     List<int> audienceCategoryIds = const [],
+    List<int> governorateIds = const [],
   }) async {
     final data =
         await _client.put(
@@ -104,6 +107,7 @@ class RetailListingsApi {
                 'audience_business_ids': audienceBusinessIds,
                 'audience_child_ids': audienceChildIds,
                 'audience_category_ids': audienceCategoryIds,
+                'governorate_ids': governorateIds,
               },
             )
             as Map<String, dynamic>;
