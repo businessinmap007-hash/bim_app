@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../delivery/presentation/screens/assign_driver_screen.dart';
 import '../../application/business_orders_providers.dart';
 import '../../data/models/placed_order.dart';
 
@@ -331,7 +332,7 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
     }
   }
 
-  Future<void> _advance(BuildContext context, WidgetRef ref, bool toReady) async {
+  Future<void> _advance(BuildContext context, WidgetRef ref, bool toReady, PlacedOrder order) async {
     final l10n = AppLocalizations.of(context)!;
     try {
       final notifier = ref.read(businessOrderDetailControllerProvider(orderId).notifier);
@@ -341,6 +342,18 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
         await notifier.markPreparing();
       }
       ref.read(businessOrdersControllerProvider.notifier).load();
+
+      // A ready DELIVERY order needs someone to carry it — open the
+      // assignment screen right away instead of leaving the merchant to
+      // find it later. Pickup/dine-in orders need no driver at all.
+      if (toReady && order.fulfillmentType == 'delivery' && context.mounted) {
+        await Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => AssignDriverScreen(orderId: orderId)),
+        );
+        // The pushed screen changed delivery_stage server-side without this
+        // screen's own cached order ever hearing about it.
+        if (context.mounted) ref.read(businessOrderDetailControllerProvider(orderId).notifier).load();
+      }
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(
@@ -471,13 +484,32 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                   ),
                 ] else if (order.prepStatus == 'accepted')
                   FilledButton(
-                    onPressed: () => _advance(context, ref, false),
+                    onPressed: () => _advance(context, ref, false, order),
                     child: Text(l10n.businessOrdersMarkPreparing),
                   )
                 else if (order.prepStatus == 'preparing')
                   FilledButton(
-                    onPressed: () => _advance(context, ref, true),
+                    onPressed: () => _advance(context, ref, true, order),
                     child: Text(l10n.businessOrdersMarkReady),
+                  )
+                // Ready, delivery, and still nobody assigned — the merchant
+                // dismissed the auto-opened assignment screen (or it's an
+                // order that was already ready before this build). Give
+                // them a way back in rather than a one-shot-only prompt.
+                else if (order.prepStatus == 'ready' &&
+                    order.fulfillmentType == 'delivery' &&
+                    order.deliveryStage == null)
+                  OutlinedButton.icon(
+                    icon: const Icon(Icons.delivery_dining_outlined),
+                    onPressed: () async {
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => AssignDriverScreen(orderId: orderId)),
+                      );
+                      if (context.mounted) {
+                        ref.read(businessOrderDetailControllerProvider(orderId).notifier).load();
+                      }
+                    },
+                    label: Text(l10n.deliveryAssignDriverTitle),
                   ),
               ],
             ),

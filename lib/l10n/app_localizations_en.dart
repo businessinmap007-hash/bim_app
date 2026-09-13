@@ -1413,6 +1413,108 @@ class AppLocalizationsEn extends AppLocalizations {
       'Camera isn\'t available. Check the app\'s camera permission and try again.';
 
   @override
+  String get deliveryAssignDriverTitle => 'Choose a driver';
+
+  @override
+  String get deliveryNoDriversYet =>
+      'You haven\'t added any delivery drivers yet.';
+
+  @override
+  String get deliveryDriverOnDuty => 'On duty';
+
+  @override
+  String get deliveryDriverOffDuty => 'Off duty';
+
+  @override
+  String deliveryDriverBusy(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'carrying $count orders',
+      one: 'carrying 1 order',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String deliveryDriverDistance(String km) {
+    return '$km km away';
+  }
+
+  @override
+  String get deliveryAssign => 'Assign';
+
+  @override
+  String get deliveryPickupQrTitle => 'Pickup QR';
+
+  @override
+  String deliveryPickupQrHint(String driver) {
+    return 'Show this to $driver when they arrive to pick up the order';
+  }
+
+  @override
+  String get deliveryDeliveryQrTitle => 'Delivery QR';
+
+  @override
+  String get deliveryDeliveryQrHint =>
+      'Show this to the customer so they can confirm they received their order';
+
+  @override
+  String get deliveryDashboardTitle => 'Delivery';
+
+  @override
+  String get deliveryBecomeDriverTitle => 'Become a delivery driver';
+
+  @override
+  String get deliveryBecomeDriverHint =>
+      'Register to see and accept delivery jobs, or be linked by a business.';
+
+  @override
+  String get deliveryBecomeDriver => 'Register as a driver';
+
+  @override
+  String get deliveryOnDutySwitch => 'Available for deliveries';
+
+  @override
+  String get deliveryMyActiveOrders => 'My active deliveries';
+
+  @override
+  String get deliveryNoActiveOrders => 'No active deliveries right now.';
+
+  @override
+  String get deliveryScanPickupTitle => 'Scan pickup QR';
+
+  @override
+  String get deliveryScanPickupHint =>
+      'Point the camera at the restaurant\'s pickup QR code';
+
+  @override
+  String get deliveryPickupConfirmed =>
+      'Pickup confirmed — you\'re carrying this order now.';
+
+  @override
+  String get deliveryShowDeliveryQr => 'Show delivery QR to customer';
+
+  @override
+  String get deliveryCompleted => 'This delivery is complete.';
+
+  @override
+  String get deliveryCustomerSection => 'Customer';
+
+  @override
+  String get deliveryOpenInMaps => 'Open in Maps';
+
+  @override
+  String get deliveryScanReceiptTitle => 'Scan to confirm receipt';
+
+  @override
+  String get deliveryScanReceiptHint =>
+      'Point the camera at the driver\'s delivery QR code';
+
+  @override
+  String get deliveryReceiptConfirmed => 'Delivery confirmed — thank you!';
+
+  @override
   String get sharedCartInviteGroup => 'Invite a group';
 
   @override

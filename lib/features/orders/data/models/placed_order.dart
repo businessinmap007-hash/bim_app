@@ -66,6 +66,12 @@ class PlacedOrder {
   final int itemsCount;
   final List<OrderLineItem> items;
   final String? address;
+  // The connected delivery loop's own stage — assigned → picked_up →
+  // delivered — null for pickup/dine-in orders and for delivery orders no
+  // driver has been assigned to yet. See DeliveryDispatchService.
+  final String? deliveryStage;
+  final double? deliveryLat;
+  final double? deliveryLng;
   final String? notes;
   final String? outOfStockPolicy;
   final bool hasProject;
@@ -103,6 +109,9 @@ class PlacedOrder {
     this.depositAmount,
     this.depositCovered = false,
     this.depositAcceptedWithoutCover = false,
+    this.deliveryStage,
+    this.deliveryLat,
+    this.deliveryLng,
   });
 
   /// Mirrors `OrderController::cancelPendingOrder` — pending and not yet
@@ -120,6 +129,7 @@ class PlacedOrder {
     final totals = json['totals'] as Map<String, dynamic>? ?? const {};
     final deposit = json['deposit'] as Map<String, dynamic>? ?? const {};
     final items = json['items'] as List<dynamic>? ?? const [];
+    final deliveryCoordinates = json['delivery_coordinates'] as Map<String, dynamic>?;
     return PlacedOrder(
       id: json['id'] as int,
       status: json['status'] as String? ?? 'pending',
@@ -148,6 +158,9 @@ class PlacedOrder {
       depositAmount: (deposit['amount'] as num?)?.toDouble(),
       depositCovered: deposit['covered'] as bool? ?? false,
       depositAcceptedWithoutCover: deposit['accepted_without_cover'] as bool? ?? false,
+      deliveryStage: json['delivery_stage'] as String?,
+      deliveryLat: (deliveryCoordinates?['lat'] as num?)?.toDouble(),
+      deliveryLng: (deliveryCoordinates?['lng'] as num?)?.toDouble(),
     );
   }
 }

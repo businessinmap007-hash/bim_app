@@ -12,6 +12,8 @@ import '../../../chat/presentation/screens/operation_chat_screen.dart';
 import '../../../disputes/application/disputes_providers.dart';
 import '../../../disputes/presentation/screens/dispute_detail_screen.dart';
 import '../../../disputes/presentation/widgets/dispute_reason_picker.dart';
+import '../../../delivery/application/delivery_providers.dart';
+import '../../../delivery/presentation/screens/token_scan_screen.dart';
 import '../../../projects/presentation/screens/project_progress_screen.dart';
 import '../../../ratings/presentation/widgets/leave_review_sheet.dart';
 import '../../application/orders_providers.dart';
@@ -244,6 +246,32 @@ class _OrderDetailSheetState extends ConsumerState<_OrderDetailSheet> {
     }
   }
 
+  Future<void> _confirmDelivery(PlacedOrder order) async {
+    final l10n = AppLocalizations.of(context)!;
+    final token = await Navigator.of(context).push<String>(
+      MaterialPageRoute(
+        builder: (_) => TokenScanScreen(title: l10n.deliveryScanReceiptTitle, hint: l10n.deliveryScanReceiptHint),
+      ),
+    );
+    if (token == null || !mounted) return;
+
+    setState(() => _busy = true);
+    try {
+      await ref.read(deliveryApiProvider).confirmDelivery(token);
+      await ref.read(myOrdersControllerProvider.notifier).loadDetail(order.id);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.deliveryReceiptConfirmed)));
+      }
+    } catch (e) {
+      if (mounted) {
+        final message = e is ApiException ? e.message : l10n.commonSomethingWentWrong;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
   Future<void> _reportProblem(PlacedOrder order) async {
     final l10n = AppLocalizations.of(context)!;
     final result = await showDisputeReasonPicker(context, ref);
@@ -363,6 +391,16 @@ class _OrderDetailSheetState extends ConsumerState<_OrderDetailSheet> {
             Text(order.notes!, style: Theme.of(context).textTheme.bodySmall),
           ],
           const SizedBox(height: 20),
+          // The driver has picked it up but hasn't handed it over yet — the
+          // customer's half of the two-QR loop (DeliveryDispatchService).
+          if (order.fulfillmentType == 'delivery' && order.deliveryStage == 'picked_up') ...[
+            FilledButton.icon(
+              onPressed: _busy ? null : () => _confirmDelivery(order),
+              icon: const Icon(Icons.qr_code_scanner),
+              label: Text(l10n.deliveryScanReceiptTitle),
+            ),
+            const SizedBox(height: 8),
+          ],
           if (order.isCancellable)
             OutlinedButton(
               onPressed: _busy ? null : () => _cancel(order),

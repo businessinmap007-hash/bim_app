@@ -1425,6 +1425,106 @@ class AppLocalizationsAr extends AppLocalizations {
       'الكاميرا مش متاحة. اتأكد من إذن الكاميرا للتطبيق وحاول تاني.';
 
   @override
+  String get deliveryAssignDriverTitle => 'اختر الدليفري';
+
+  @override
+  String get deliveryNoDriversYet => 'لم تُضِف أي دليفري إلى نشاطك بعد.';
+
+  @override
+  String get deliveryDriverOnDuty => 'متاح';
+
+  @override
+  String get deliveryDriverOffDuty => 'غير متاح';
+
+  @override
+  String deliveryDriverBusy(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'يحمل $count طلبات',
+      one: 'يحمل طلبًا واحدًا',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String deliveryDriverDistance(String km) {
+    return 'على بعد $km كم';
+  }
+
+  @override
+  String get deliveryAssign => 'إسناد';
+
+  @override
+  String get deliveryPickupQrTitle => 'رمز الاستلام';
+
+  @override
+  String deliveryPickupQrHint(String driver) {
+    return 'أظهر هذا الرمز لـ $driver عند وصوله لاستلام الطلب';
+  }
+
+  @override
+  String get deliveryDeliveryQrTitle => 'رمز التسليم';
+
+  @override
+  String get deliveryDeliveryQrHint =>
+      'أظهر هذا الرمز للعميل ليؤكد استلامه لطلبه';
+
+  @override
+  String get deliveryDashboardTitle => 'التوصيل';
+
+  @override
+  String get deliveryBecomeDriverTitle => 'كن مندوب توصيل';
+
+  @override
+  String get deliveryBecomeDriverHint =>
+      'سجّل لترى طلبات التوصيل المتاحة وتقبلها، أو ينضمّك أحد الأنشطة إليه مباشرة.';
+
+  @override
+  String get deliveryBecomeDriver => 'سجّل كمندوب توصيل';
+
+  @override
+  String get deliveryOnDutySwitch => 'متاح لاستلام طلبات توصيل';
+
+  @override
+  String get deliveryMyActiveOrders => 'طلباتي الحالية';
+
+  @override
+  String get deliveryNoActiveOrders => 'لا توجد طلبات توصيل جارية حاليًا.';
+
+  @override
+  String get deliveryScanPickupTitle => 'امسح رمز الاستلام';
+
+  @override
+  String get deliveryScanPickupHint =>
+      'وجّه الكاميرا نحو رمز الاستلام الخاص بالمحل';
+
+  @override
+  String get deliveryPickupConfirmed => 'تم تأكيد الاستلام — الطلب معك الآن.';
+
+  @override
+  String get deliveryShowDeliveryQr => 'أظهر رمز التسليم للعميل';
+
+  @override
+  String get deliveryCompleted => 'اكتمل هذا الطلب.';
+
+  @override
+  String get deliveryCustomerSection => 'العميل';
+
+  @override
+  String get deliveryOpenInMaps => 'افتح في الخرائط';
+
+  @override
+  String get deliveryScanReceiptTitle => 'امسح لتأكيد الاستلام';
+
+  @override
+  String get deliveryScanReceiptHint =>
+      'وجّه الكاميرا نحو رمز التسليم الخاص بالمندوب';
+
+  @override
+  String get deliveryReceiptConfirmed => 'تم تأكيد الاستلام — شكرًا لك!';
+
+  @override
   String get sharedCartInviteGroup => 'ادعُ مجموعة';
 
   @override

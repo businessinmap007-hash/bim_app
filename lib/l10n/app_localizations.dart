@@ -2684,6 +2684,174 @@ abstract class AppLocalizations {
   /// **'الكاميرا مش متاحة. اتأكد من إذن الكاميرا للتطبيق وحاول تاني.'**
   String get qrScanCameraUnavailable;
 
+  /// No description provided for @deliveryAssignDriverTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الدليفري'**
+  String get deliveryAssignDriverTitle;
+
+  /// No description provided for @deliveryNoDriversYet.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تُضِف أي دليفري إلى نشاطك بعد.'**
+  String get deliveryNoDriversYet;
+
+  /// No description provided for @deliveryDriverOnDuty.
+  ///
+  /// In ar, this message translates to:
+  /// **'متاح'**
+  String get deliveryDriverOnDuty;
+
+  /// No description provided for @deliveryDriverOffDuty.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير متاح'**
+  String get deliveryDriverOffDuty;
+
+  /// No description provided for @deliveryDriverBusy.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, one {يحمل طلبًا واحدًا} other {يحمل {count} طلبات}}'**
+  String deliveryDriverBusy(int count);
+
+  /// No description provided for @deliveryDriverDistance.
+  ///
+  /// In ar, this message translates to:
+  /// **'على بعد {km} كم'**
+  String deliveryDriverDistance(String km);
+
+  /// No description provided for @deliveryAssign.
+  ///
+  /// In ar, this message translates to:
+  /// **'إسناد'**
+  String get deliveryAssign;
+
+  /// No description provided for @deliveryPickupQrTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'رمز الاستلام'**
+  String get deliveryPickupQrTitle;
+
+  /// No description provided for @deliveryPickupQrHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'أظهر هذا الرمز لـ {driver} عند وصوله لاستلام الطلب'**
+  String deliveryPickupQrHint(String driver);
+
+  /// No description provided for @deliveryDeliveryQrTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'رمز التسليم'**
+  String get deliveryDeliveryQrTitle;
+
+  /// No description provided for @deliveryDeliveryQrHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'أظهر هذا الرمز للعميل ليؤكد استلامه لطلبه'**
+  String get deliveryDeliveryQrHint;
+
+  /// No description provided for @deliveryDashboardTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'التوصيل'**
+  String get deliveryDashboardTitle;
+
+  /// No description provided for @deliveryBecomeDriverTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'كن مندوب توصيل'**
+  String get deliveryBecomeDriverTitle;
+
+  /// No description provided for @deliveryBecomeDriverHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجّل لترى طلبات التوصيل المتاحة وتقبلها، أو ينضمّك أحد الأنشطة إليه مباشرة.'**
+  String get deliveryBecomeDriverHint;
+
+  /// No description provided for @deliveryBecomeDriver.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجّل كمندوب توصيل'**
+  String get deliveryBecomeDriver;
+
+  /// No description provided for @deliveryOnDutySwitch.
+  ///
+  /// In ar, this message translates to:
+  /// **'متاح لاستلام طلبات توصيل'**
+  String get deliveryOnDutySwitch;
+
+  /// No description provided for @deliveryMyActiveOrders.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلباتي الحالية'**
+  String get deliveryMyActiveOrders;
+
+  /// No description provided for @deliveryNoActiveOrders.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد طلبات توصيل جارية حاليًا.'**
+  String get deliveryNoActiveOrders;
+
+  /// No description provided for @deliveryScanPickupTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'امسح رمز الاستلام'**
+  String get deliveryScanPickupTitle;
+
+  /// No description provided for @deliveryScanPickupHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'وجّه الكاميرا نحو رمز الاستلام الخاص بالمحل'**
+  String get deliveryScanPickupHint;
+
+  /// No description provided for @deliveryPickupConfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تأكيد الاستلام — الطلب معك الآن.'**
+  String get deliveryPickupConfirmed;
+
+  /// No description provided for @deliveryShowDeliveryQr.
+  ///
+  /// In ar, this message translates to:
+  /// **'أظهر رمز التسليم للعميل'**
+  String get deliveryShowDeliveryQr;
+
+  /// No description provided for @deliveryCompleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتمل هذا الطلب.'**
+  String get deliveryCompleted;
+
+  /// No description provided for @deliveryCustomerSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'العميل'**
+  String get deliveryCustomerSection;
+
+  /// No description provided for @deliveryOpenInMaps.
+  ///
+  /// In ar, this message translates to:
+  /// **'افتح في الخرائط'**
+  String get deliveryOpenInMaps;
+
+  /// No description provided for @deliveryScanReceiptTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'امسح لتأكيد الاستلام'**
+  String get deliveryScanReceiptTitle;
+
+  /// No description provided for @deliveryScanReceiptHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'وجّه الكاميرا نحو رمز التسليم الخاص بالمندوب'**
+  String get deliveryScanReceiptHint;
+
+  /// No description provided for @deliveryReceiptConfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تأكيد الاستلام — شكرًا لك!'**
+  String get deliveryReceiptConfirmed;
+
   /// No description provided for @sharedCartInviteGroup.
   ///
   /// In ar, this message translates to:
