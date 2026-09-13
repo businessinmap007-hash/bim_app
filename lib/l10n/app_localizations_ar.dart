@@ -1212,6 +1212,36 @@ class AppLocalizationsAr extends AppLocalizations {
   String get orderStatusCancelled => 'ملغي';
 
   @override
+  String get orderTrackerPlaced => 'تم استلام الطلب';
+
+  @override
+  String get orderTrackerAccepted => 'تم القبول';
+
+  @override
+  String get orderTrackerPreparing => 'قيد التحضير';
+
+  @override
+  String get orderTrackerReady => 'جاهز';
+
+  @override
+  String get orderTrackerCompletedPickup => 'تم الاستلام';
+
+  @override
+  String get orderTrackerCompletedDineIn => 'تم التقديم';
+
+  @override
+  String get orderTrackerDriverAssigned => 'تم تعيين الموصّل';
+
+  @override
+  String get orderTrackerPickedUpByDriver => 'استلمها الموصّل';
+
+  @override
+  String get orderTrackerDelivered => 'تم التوصيل';
+
+  @override
+  String get orderTrackerCancelledTitle => 'تم إلغاء هذا الطلب';
+
+  @override
   String get bookingStatusPending => 'قيد الانتظار';
 
   @override

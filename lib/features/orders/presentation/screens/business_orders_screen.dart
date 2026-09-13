@@ -7,6 +7,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../delivery/presentation/screens/assign_driver_screen.dart';
 import '../../application/business_orders_providers.dart';
 import '../../data/models/placed_order.dart';
+import '../widgets/order_tracker_timeline.dart';
 
 /// The business's incoming-order queue — Api\V2\OrderController's business*
 /// endpoints. Dine-in/pickup/delivery menu orders only (never bookings,
@@ -332,6 +333,23 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
     }
   }
 
+  /// Pickup/dine-in only -- "the customer picked it up" / "the table was
+  /// served". A delivery order completes through the QR handover instead
+  /// (see AssignDriverScreen / the customer's own confirm-delivery scan).
+  Future<void> _complete(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    try {
+      await ref.read(businessOrderDetailControllerProvider(orderId).notifier).complete();
+      ref.read(businessOrdersControllerProvider.notifier).load();
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(e is ApiException ? e.message : l10n.commonSomethingWentWrong)));
+      }
+    }
+  }
+
   Future<void> _advance(BuildContext context, WidgetRef ref, bool toReady, PlacedOrder order) async {
     final l10n = AppLocalizations.of(context)!;
     try {
@@ -397,6 +415,8 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                     child: Text(order.tableLabel!, style: Theme.of(context).textTheme.bodyMedium),
                   ),
                 const SizedBox(height: 16),
+                OrderTrackerTimeline(order: order),
+                const SizedBox(height: 8),
                 Text(l10n.businessOrdersItemsSection, style: Theme.of(context).textTheme.titleSmall),
                 for (final item in order.items)
                   Padding(
@@ -491,6 +511,15 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                   FilledButton(
                     onPressed: () => _advance(context, ref, true, order),
                     child: Text(l10n.businessOrdersMarkReady),
+                  )
+                else if (order.status == 'pending' && order.prepStatus == 'ready' && order.fulfillmentType != 'delivery')
+                  FilledButton(
+                    onPressed: () => _complete(context, ref),
+                    child: Text(
+                      order.fulfillmentType == 'dine_in'
+                          ? l10n.orderTrackerCompletedDineIn
+                          : l10n.orderTrackerCompletedPickup,
+                    ),
                   )
                 // Ready, delivery, and still nobody assigned — the merchant
                 // dismissed the auto-opened assignment screen (or it's an

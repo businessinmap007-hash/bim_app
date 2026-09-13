@@ -2276,6 +2276,66 @@ abstract class AppLocalizations {
   /// **'ملغي'**
   String get orderStatusCancelled;
 
+  /// No description provided for @orderTrackerPlaced.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم استلام الطلب'**
+  String get orderTrackerPlaced;
+
+  /// No description provided for @orderTrackerAccepted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم القبول'**
+  String get orderTrackerAccepted;
+
+  /// No description provided for @orderTrackerPreparing.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيد التحضير'**
+  String get orderTrackerPreparing;
+
+  /// No description provided for @orderTrackerReady.
+  ///
+  /// In ar, this message translates to:
+  /// **'جاهز'**
+  String get orderTrackerReady;
+
+  /// No description provided for @orderTrackerCompletedPickup.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الاستلام'**
+  String get orderTrackerCompletedPickup;
+
+  /// No description provided for @orderTrackerCompletedDineIn.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التقديم'**
+  String get orderTrackerCompletedDineIn;
+
+  /// No description provided for @orderTrackerDriverAssigned.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تعيين الموصّل'**
+  String get orderTrackerDriverAssigned;
+
+  /// No description provided for @orderTrackerPickedUpByDriver.
+  ///
+  /// In ar, this message translates to:
+  /// **'استلمها الموصّل'**
+  String get orderTrackerPickedUpByDriver;
+
+  /// No description provided for @orderTrackerDelivered.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التوصيل'**
+  String get orderTrackerDelivered;
+
+  /// No description provided for @orderTrackerCancelledTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إلغاء هذا الطلب'**
+  String get orderTrackerCancelledTitle;
+
   /// No description provided for @bookingStatusPending.
   ///
   /// In ar, this message translates to:

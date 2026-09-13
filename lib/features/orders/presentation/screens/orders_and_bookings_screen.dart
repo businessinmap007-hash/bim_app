@@ -18,6 +18,7 @@ import '../../../projects/presentation/screens/project_progress_screen.dart';
 import '../../../ratings/presentation/widgets/leave_review_sheet.dart';
 import '../../application/orders_providers.dart';
 import '../../data/models/placed_order.dart';
+import '../widgets/order_tracker_timeline.dart';
 
 /// "My orders & bookings" — every placed order (menu/retail checkout) and
 /// every booking request the customer has made, each with its own tab.
@@ -362,6 +363,8 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
             ],
           ),
           const SizedBox(height: 16),
+          OrderTrackerTimeline(order: order),
+          const SizedBox(height: 8),
           if (order.items.isEmpty)
             const Center(child: Padding(padding: EdgeInsets.all(16), child: CircularProgressIndicator()))
           else

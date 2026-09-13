@@ -162,6 +162,18 @@ class BusinessOrderDetailController extends StateNotifier<BusinessOrderDetailSta
     }
   }
 
+  /// Pickup/dine-in only -- a delivery order completes through the QR
+  /// handover instead (DeliveryDispatchService.confirmDelivery).
+  Future<void> complete() async {
+    state = state.copyWith(isBusy: true);
+    try {
+      final order = await _api.businessComplete(orderId);
+      state = state.copyWith(order: order, isBusy: false);
+    } finally {
+      if (mounted) state = state.copyWith(isBusy: false);
+    }
+  }
+
   Future<void> markItemUnavailable(int itemId, {String? note}) async {
     state = state.copyWith(isBusy: true);
     try {

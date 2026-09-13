@@ -118,6 +118,13 @@ class OrdersApi {
     return PlacedOrder.fromJson(data);
   }
 
+  /// Pickup/dine-in only -- a delivery order completes through the QR
+  /// handover (DeliveryApi.confirmDelivery) instead.
+  Future<PlacedOrder> businessComplete(int id) async {
+    final data = await _client.post('/business/orders/$id/complete') as Map<String, dynamic>;
+    return PlacedOrder.fromJson(data);
+  }
+
   /// A specific line turned out unavailable while preparing — applies
   /// whatever the customer chose at checkout (Order.out_of_stock_policy).
   /// `note` is required only when that policy is "substitute".

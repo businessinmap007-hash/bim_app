@@ -1199,6 +1199,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get orderStatusCancelled => 'Cancelled';
 
   @override
+  String get orderTrackerPlaced => 'Order placed';
+
+  @override
+  String get orderTrackerAccepted => 'Accepted';
+
+  @override
+  String get orderTrackerPreparing => 'Preparing';
+
+  @override
+  String get orderTrackerReady => 'Ready';
+
+  @override
+  String get orderTrackerCompletedPickup => 'Picked up';
+
+  @override
+  String get orderTrackerCompletedDineIn => 'Served';
+
+  @override
+  String get orderTrackerDriverAssigned => 'Driver assigned';
+
+  @override
+  String get orderTrackerPickedUpByDriver => 'Picked up by driver';
+
+  @override
+  String get orderTrackerDelivered => 'Delivered';
+
+  @override
+  String get orderTrackerCancelledTitle => 'This order was cancelled';
+
+  @override
   String get bookingStatusPending => 'Pending';
 
   @override
