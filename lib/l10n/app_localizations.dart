@@ -218,6 +218,12 @@ abstract class AppLocalizations {
   /// **'مسح كل الإشعارات؟ لا يمكن التراجع عن هذا.'**
   String get notificationsClearAllConfirm;
 
+  /// No description provided for @notificationsFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'من: {name}'**
+  String notificationsFrom(String name);
+
   /// No description provided for @authChooseAccountType.
   ///
   /// In ar, this message translates to:

@@ -7,6 +7,7 @@ import '../../cart/presentation/screens/shared_cart_screen.dart';
 import '../../jobs/presentation/screens/job_detail_screen.dart';
 import '../../offers/presentation/screens/offer_detail_screen.dart';
 import '../../orders/presentation/screens/business_orders_screen.dart';
+import '../../orders/presentation/screens/customer_order_detail_screen.dart';
 import '../../wallet/presentation/screens/wallet_screen.dart';
 import '../data/models/app_notification.dart';
 
@@ -31,6 +32,12 @@ Future<void> openNotificationTarget(BuildContext context, WidgetRef ref, AppNoti
       if (id != null) {
         Navigator.of(context).push(
           MaterialPageRoute(builder: (_) => BusinessOrderDetailScreen(orderId: id)),
+        );
+      }
+    case 'open_customer_order':
+      if (id != null) {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => CustomerOrderDetailScreen(orderId: id)),
         );
       }
     case 'open_job':

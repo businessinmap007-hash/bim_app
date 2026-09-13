@@ -70,6 +70,11 @@ class AppLocalizationsAr extends AppLocalizations {
       'مسح كل الإشعارات؟ لا يمكن التراجع عن هذا.';
 
   @override
+  String notificationsFrom(String name) {
+    return 'من: $name';
+  }
+
+  @override
   String get authChooseAccountType => 'اختر نوع الحساب';
 
   @override

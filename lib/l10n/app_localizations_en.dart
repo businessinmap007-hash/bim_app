@@ -71,6 +71,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Clear all notifications? This can\'t be undone.';
 
   @override
+  String notificationsFrom(String name) {
+    return 'From $name';
+  }
+
+  @override
   String get authChooseAccountType => 'Choose account type';
 
   @override

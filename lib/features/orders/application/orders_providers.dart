@@ -78,10 +78,18 @@ class MyOrdersController extends StateNotifier<MyOrdersState> {
 
   /// Replaces one row with the freshly loaded detail (has `items`, unlike the
   /// list rows) so the detail sheet can show a cancelled/updated order
-  /// without a full reload.
+  /// without a full reload. Appends it instead when the list hasn't been
+  /// loaded yet (e.g. a notification deep-links straight to an order detail
+  /// sheet before the list itself was ever fetched) -- otherwise the detail
+  /// is fetched and silently discarded, leaving the sheet spinning forever.
   Future<PlacedOrder> loadDetail(int id) async {
     final detail = await _api.show(id);
-    state = state.copyWith(items: [for (final o in state.items) o.id == id ? detail : o]);
+    final exists = state.items.any((o) => o.id == id);
+    state = state.copyWith(
+      items: exists
+          ? [for (final o in state.items) o.id == id ? detail : o]
+          : [detail, ...state.items],
+    );
     return detail;
   }
 

@@ -128,7 +128,7 @@ class _OrderTile extends StatelessWidget {
         onTap: () => showModalBottomSheet(
           context: context,
           isScrollControlled: true,
-          builder: (_) => _OrderDetailSheet(orderId: order.id),
+          builder: (_) => OrderDetailSheet(orderId: order.id),
         ),
         leading: CircleAvatar(
           backgroundImage: order.businessLogoUrl != null
@@ -148,18 +148,32 @@ class _OrderTile extends StatelessWidget {
   }
 }
 
-class _OrderDetailSheet extends ConsumerStatefulWidget {
+/// Public so [CustomerOrderDetailScreen] can pop it open directly when a
+/// notification tap targets an order the list itself hasn't been opened yet
+/// to load.
+class OrderDetailSheet extends ConsumerStatefulWidget {
   final int orderId;
-  const _OrderDetailSheet({required this.orderId});
+  const OrderDetailSheet({super.key, required this.orderId});
 
   @override
-  ConsumerState<_OrderDetailSheet> createState() => _OrderDetailSheetState();
+  ConsumerState<OrderDetailSheet> createState() => _OrderDetailSheetState();
 }
 
-class _OrderDetailSheetState extends ConsumerState<_OrderDetailSheet> {
+class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
   bool _busy = false;
 
+  // The list's own refresh (MyOrdersController.load(), fired on first
+  // provider access) can race this sheet's own loadDetail() call -- whichever
+  // API response lands second wins the shared `items` list. When the list
+  // arrives second it always overwrites the detail with an items-less row
+  // (the list endpoint omits them), so the sheet spins forever on
+  // `order.items.isEmpty`. Keeping a local snapshot of the last successful
+  // detail fetch sidesteps that race entirely: it's not subject to a later,
+  // unrelated list refresh clobbering it.
+  PlacedOrder? _detail;
+
   PlacedOrder? _orderFromState() {
+    if (_detail != null) return _detail;
     final items = ref.watch(myOrdersControllerProvider).items;
     for (final o in items) {
       if (o.id == widget.orderId) return o;
@@ -167,12 +181,17 @@ class _OrderDetailSheetState extends ConsumerState<_OrderDetailSheet> {
     return null;
   }
 
+  Future<void> _refreshDetail() async {
+    final detail = await ref.read(myOrdersControllerProvider.notifier).loadDetail(widget.orderId);
+    if (mounted) setState(() => _detail = detail);
+  }
+
   @override
   void initState() {
     super.initState();
     // List rows omit `items` (whenLoaded on the backend) — fetch the detail
     // once so this sheet can show the line breakdown.
-    ref.read(myOrdersControllerProvider.notifier).loadDetail(widget.orderId);
+    _refreshDetail();
   }
 
   Future<void> _cancel(PlacedOrder order) async {
@@ -258,7 +277,7 @@ class _OrderDetailSheetState extends ConsumerState<_OrderDetailSheet> {
     setState(() => _busy = true);
     try {
       await ref.read(deliveryApiProvider).confirmDelivery(token);
-      await ref.read(myOrdersControllerProvider.notifier).loadDetail(order.id);
+      await _refreshDetail();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.deliveryReceiptConfirmed)));
       }

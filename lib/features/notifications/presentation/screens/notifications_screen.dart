@@ -178,10 +178,24 @@ class _NotificationTile extends ConsumerWidget {
               fontWeight: notification.isUnread ? FontWeight.w700 : FontWeight.w500,
             ),
           ),
-          subtitle: Text(
-            notification.body(languageCode),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (actor != null && actor.name.isNotEmpty)
+                Text(
+                  AppLocalizations.of(context)!.notificationsFrom(actor.name),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: AppColors.accentGold,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              Text(
+                notification.body(languageCode),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
           ),
           trailing: Text(
             _timeAgo(notification.createdAt, languageCode),

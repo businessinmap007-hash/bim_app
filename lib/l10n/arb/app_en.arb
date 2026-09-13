@@ -20,6 +20,10 @@
   "notificationsMarkAllRead": "Mark all read",
   "notificationsClearAll": "Clear all",
   "notificationsClearAllConfirm": "Clear all notifications? This can't be undone.",
+  "notificationsFrom": "From {name}",
+  "@notificationsFrom": {
+    "placeholders": { "name": { "type": "String" } }
+  },
   "authChooseAccountType": "Choose account type",
   "authAccountTypeCustomer": "Customer",
   "authAccountTypeBusiness": "Business owner",

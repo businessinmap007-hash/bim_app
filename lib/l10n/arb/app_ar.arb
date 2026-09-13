@@ -20,6 +20,10 @@
   "notificationsMarkAllRead": "تحديد الكل كمقروء",
   "notificationsClearAll": "مسح الكل",
   "notificationsClearAllConfirm": "مسح كل الإشعارات؟ لا يمكن التراجع عن هذا.",
+  "notificationsFrom": "من: {name}",
+  "@notificationsFrom": {
+    "placeholders": { "name": { "type": "String" } }
+  },
   "authChooseAccountType": "اختر نوع الحساب",
   "authAccountTypeCustomer": "عميل",
   "authAccountTypeBusiness": "صاحب نشاط تجاري",
