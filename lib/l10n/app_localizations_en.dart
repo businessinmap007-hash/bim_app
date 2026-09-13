@@ -1045,6 +1045,48 @@ class AppLocalizationsEn extends AppLocalizations {
   String get businessOrdersTitle => 'Incoming orders';
 
   @override
+  String get businessReportsTitle => 'Reports';
+
+  @override
+  String get businessReportsRange7d => '7 days';
+
+  @override
+  String get businessReportsRange30d => '30 days';
+
+  @override
+  String get businessReportsRange90d => '90 days';
+
+  @override
+  String get businessReportsTotalOrders => 'Total orders';
+
+  @override
+  String get businessReportsTotalRevenue => 'Revenue';
+
+  @override
+  String get businessReportsCompleted => 'Completed';
+
+  @override
+  String get businessReportsCancelled => 'Cancelled';
+
+  @override
+  String get businessReportsPending => 'Pending';
+
+  @override
+  String get businessReportsAverageOrderValue => 'Avg. order value';
+
+  @override
+  String get businessReportsDailyOrdersChartTitle => 'Orders per day';
+
+  @override
+  String get businessReportsDailyRevenueChartTitle => 'Revenue per day';
+
+  @override
+  String get businessReportsByFulfillmentType => 'By fulfillment type';
+
+  @override
+  String get businessReportsEmpty => 'No orders in this range yet.';
+
+  @override
   String get businessOrdersFilterAll => 'All';
 
   @override

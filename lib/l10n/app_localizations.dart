@@ -2006,6 +2006,90 @@ abstract class AppLocalizations {
   /// **'الطلبات الواردة'**
   String get businessOrdersTitle;
 
+  /// No description provided for @businessReportsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقارير'**
+  String get businessReportsTitle;
+
+  /// No description provided for @businessReportsRange7d.
+  ///
+  /// In ar, this message translates to:
+  /// **'7 أيام'**
+  String get businessReportsRange7d;
+
+  /// No description provided for @businessReportsRange30d.
+  ///
+  /// In ar, this message translates to:
+  /// **'30 يوم'**
+  String get businessReportsRange30d;
+
+  /// No description provided for @businessReportsRange90d.
+  ///
+  /// In ar, this message translates to:
+  /// **'90 يوم'**
+  String get businessReportsRange90d;
+
+  /// No description provided for @businessReportsTotalOrders.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي الطلبات'**
+  String get businessReportsTotalOrders;
+
+  /// No description provided for @businessReportsTotalRevenue.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإيرادات'**
+  String get businessReportsTotalRevenue;
+
+  /// No description provided for @businessReportsCompleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتملة'**
+  String get businessReportsCompleted;
+
+  /// No description provided for @businessReportsCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغاة'**
+  String get businessReportsCancelled;
+
+  /// No description provided for @businessReportsPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيد الانتظار'**
+  String get businessReportsPending;
+
+  /// No description provided for @businessReportsAverageOrderValue.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوسط قيمة الطلب'**
+  String get businessReportsAverageOrderValue;
+
+  /// No description provided for @businessReportsDailyOrdersChartTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطلبات يوميًا'**
+  String get businessReportsDailyOrdersChartTitle;
+
+  /// No description provided for @businessReportsDailyRevenueChartTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإيرادات يوميًا'**
+  String get businessReportsDailyRevenueChartTitle;
+
+  /// No description provided for @businessReportsByFulfillmentType.
+  ///
+  /// In ar, this message translates to:
+  /// **'حسب طريقة التنفيذ'**
+  String get businessReportsByFulfillmentType;
+
+  /// No description provided for @businessReportsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد طلبات في هذه الفترة.'**
+  String get businessReportsEmpty;
+
   /// No description provided for @businessOrdersFilterAll.
   ///
   /// In ar, this message translates to:

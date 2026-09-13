@@ -1057,6 +1057,48 @@ class AppLocalizationsAr extends AppLocalizations {
   String get businessOrdersTitle => 'الطلبات الواردة';
 
   @override
+  String get businessReportsTitle => 'التقارير';
+
+  @override
+  String get businessReportsRange7d => '7 أيام';
+
+  @override
+  String get businessReportsRange30d => '30 يوم';
+
+  @override
+  String get businessReportsRange90d => '90 يوم';
+
+  @override
+  String get businessReportsTotalOrders => 'إجمالي الطلبات';
+
+  @override
+  String get businessReportsTotalRevenue => 'الإيرادات';
+
+  @override
+  String get businessReportsCompleted => 'مكتملة';
+
+  @override
+  String get businessReportsCancelled => 'ملغاة';
+
+  @override
+  String get businessReportsPending => 'قيد الانتظار';
+
+  @override
+  String get businessReportsAverageOrderValue => 'متوسط قيمة الطلب';
+
+  @override
+  String get businessReportsDailyOrdersChartTitle => 'الطلبات يوميًا';
+
+  @override
+  String get businessReportsDailyRevenueChartTitle => 'الإيرادات يوميًا';
+
+  @override
+  String get businessReportsByFulfillmentType => 'حسب طريقة التنفيذ';
+
+  @override
+  String get businessReportsEmpty => 'لا توجد طلبات في هذه الفترة.';
+
+  @override
   String get businessOrdersFilterAll => 'الكل';
 
   @override

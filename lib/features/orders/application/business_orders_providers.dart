@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../data/models/order_reports.dart';
 import '../data/models/placed_order.dart';
 import '../data/orders_api.dart';
 import 'orders_providers.dart';
@@ -188,4 +189,68 @@ class BusinessOrderDetailController extends StateNotifier<BusinessOrderDetailSta
 final businessOrderDetailControllerProvider =
     StateNotifierProvider.family<BusinessOrderDetailController, BusinessOrderDetailState, int>((ref, orderId) {
       return BusinessOrderDetailController(ref.watch(ordersApiProvider), orderId);
+    });
+
+class BusinessOrderReportsState {
+  final OrderReports? reports;
+  final bool isLoading;
+  final String? error;
+  final DateTime from;
+  final DateTime to;
+
+  BusinessOrderReportsState({this.reports, this.isLoading = false, this.error, DateTime? from, DateTime? to})
+    : to = to ?? DateTime.now(),
+      from = from ?? DateTime.now().subtract(const Duration(days: 29));
+
+  BusinessOrderReportsState copyWith({
+    OrderReports? reports,
+    bool? isLoading,
+    String? error,
+    bool clearError = false,
+    DateTime? from,
+    DateTime? to,
+  }) {
+    return BusinessOrderReportsState(
+      reports: reports ?? this.reports,
+      isLoading: isLoading ?? this.isLoading,
+      error: clearError ? null : (error ?? this.error),
+      from: from ?? this.from,
+      to: to ?? this.to,
+    );
+  }
+}
+
+class BusinessOrderReportsController extends StateNotifier<BusinessOrderReportsState> {
+  final OrdersApi _api;
+
+  BusinessOrderReportsController(this._api) : super(BusinessOrderReportsState()) {
+    load();
+  }
+
+  Future<void> load() async {
+    state = state.copyWith(isLoading: true, clearError: true);
+    try {
+      final reports = await _api.businessReports(from: state.from, to: state.to);
+      state = state.copyWith(reports: reports, isLoading: false);
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+    }
+  }
+
+  /// Presets the merchant picks from -- 7/30/90 days back from today.
+  Future<void> setRangeDays(int days) async {
+    final to = DateTime.now();
+    state = state.copyWith(from: to.subtract(Duration(days: days - 1)), to: to);
+    await load();
+  }
+
+  Future<void> setCustomRange(DateTime from, DateTime to) async {
+    state = state.copyWith(from: from, to: to);
+    await load();
+  }
+}
+
+final businessOrderReportsControllerProvider =
+    StateNotifierProvider<BusinessOrderReportsController, BusinessOrderReportsState>((ref) {
+      return BusinessOrderReportsController(ref.watch(ordersApiProvider));
     });

@@ -9,6 +9,7 @@ import '../../../business_menu/presentation/screens/menu_items_screen.dart';
 import '../../../clinic_management/presentation/screens/clinic_management_screen.dart';
 import '../../../menu_bundles/presentation/screens/menu_bundles_screen.dart';
 import '../../../merchant_account/presentation/screens/merchant_account_screen.dart';
+import '../../../orders/presentation/screens/business_order_reports_screen.dart';
 import '../../../orders/presentation/screens/business_orders_screen.dart';
 import '../../../prescriptions/presentation/screens/issued_prescriptions_screen.dart';
 import '../../../prescriptions/presentation/screens/pharmacy_queue_screen.dart';
@@ -83,6 +84,12 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.receipt_long_outlined,
         title: l10n.businessOrdersTitle,
         builder: (_) => const BusinessOrdersScreen(),
+      ),
+      _Tile(
+        show: _has('orders'),
+        leading: Icons.bar_chart_outlined,
+        title: l10n.businessReportsTitle,
+        builder: (_) => const BusinessOrderReportsScreen(),
       ),
       _Tile(
         show: _has('retail'),

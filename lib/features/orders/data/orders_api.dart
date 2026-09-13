@@ -1,4 +1,5 @@
 import '../../../core/network/api_client.dart';
+import 'models/order_reports.dart';
 import 'models/placed_order.dart';
 
 class OrdersPage {
@@ -86,6 +87,18 @@ class OrdersApi {
   Future<PlacedOrder> businessShow(int id) async {
     final data = await _client.get('/business/orders/$id') as Map<String, dynamic>;
     return PlacedOrder.fromJson(data);
+  }
+
+  /// Date-range order analytics -- not the `{success, data}` envelope
+  /// (`getForBody` returns the raw body), since it's a plain aggregate
+  /// object with no single "the resource" to unwrap.
+  Future<OrderReports> businessReports({DateTime? from, DateTime? to}) async {
+    final query = <String, dynamic>{
+      if (from != null) 'from': from.toIso8601String().split('T').first,
+      if (to != null) 'to': to.toIso8601String().split('T').first,
+    };
+    final data = await _client.getForBody('/business/orders/reports', query: query);
+    return OrderReports.fromJson(data);
   }
 
   Future<PlacedOrder> businessReject(int id, {String? reason}) async {
