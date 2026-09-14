@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../auth/application/auth_controller.dart';
+import '../../booking/presentation/screens/business_bookings_screen.dart';
 import '../../business/presentation/screens/business_detail_screen.dart';
 import '../../cart/application/shared_cart_providers.dart';
 import '../../cart/presentation/screens/shared_cart_screen.dart';
@@ -8,6 +10,7 @@ import '../../jobs/presentation/screens/job_detail_screen.dart';
 import '../../offers/presentation/screens/offer_detail_screen.dart';
 import '../../orders/presentation/screens/business_orders_screen.dart';
 import '../../orders/presentation/screens/customer_order_detail_screen.dart';
+import '../../orders/presentation/screens/orders_and_bookings_screen.dart';
 import '../../wallet/presentation/screens/wallet_screen.dart';
 import '../data/models/app_notification.dart';
 
@@ -51,6 +54,35 @@ Future<void> openNotificationTarget(BuildContext context, WidgetRef ref, AppNoti
     case 'open_business':
       if (id != null) {
         Navigator.of(context).push(MaterialPageRoute(builder: (_) => BusinessDetailScreen(businessId: id)));
+      }
+    // Every booking.* event (see ServiceEventKeys.php) notifies whichever
+    // side isn't the actor, with the booking as the notification's subject —
+    // same routing regardless of which one fired: business lands on its own
+    // incoming-booking screen, client lands on the same detail sheet its own
+    // "My bookings" tab opens.
+    case 'booking.requested':
+    case 'booking.accepted':
+    case 'booking.rejected':
+    case 'booking.cancelled':
+    case 'booking.rescheduled':
+    case 'booking.started':
+    case 'booking.completed':
+    case 'booking.client_confirmed':
+    case 'booking.business_confirmed':
+    case 'booking.reminder_24h':
+    case 'booking.reminder_1h':
+    case 'booking.deposit_frozen':
+    case 'booking.deposit_released':
+    case 'booking.deposit_refunded':
+    case 'booking.dispute_opened':
+      if (id != null) {
+        final authState = ref.read(authControllerProvider);
+        final isBusiness = authState is AuthSignedIn && authState.user.isBusiness;
+        if (isBusiness) {
+          Navigator.of(context).push(MaterialPageRoute(builder: (_) => BusinessBookingDetailScreen(bookingId: id)));
+        } else {
+          await openBookingDetailSheet(context, ref, id);
+        }
       }
     // The recipient isn't a participant yet — unlike `open_shared_cart_member_joined`- ish notifications
     // sent to the host, who already is one. Join on the same token a shared

@@ -605,6 +605,24 @@ class _BookingTile extends StatelessWidget {
   }
 }
 
+/// Opens the customer's booking detail sheet directly from a booking id —
+/// the sheet itself only ever gets a fully-loaded [Booking] from the list
+/// tile above, so a notification tap (which only has an id) fetches it
+/// first. See notification_navigator.dart's booking.* cases.
+Future<void> openBookingDetailSheet(BuildContext context, WidgetRef ref, int bookingId) async {
+  try {
+    final booking = await ref.read(bookingApiProvider).show(bookingId);
+    if (!context.mounted) return;
+    showModalBottomSheet(
+      context: context,
+      builder: (_) => _BookingDetailSheet(booking: booking),
+    );
+  } catch (_) {
+    // A stale/removed booking id from an old notification — nothing useful
+    // to show; fail silently rather than crash the tap.
+  }
+}
+
 class _BookingDetailSheet extends ConsumerStatefulWidget {
   final Booking booking;
   const _BookingDetailSheet({required this.booking});
