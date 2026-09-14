@@ -52,42 +52,31 @@ class _PricesTab extends ConsumerWidget {
 
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: AppColors.primaryNavy,
+        foregroundColor: Colors.white,
         onPressed: () => _showAddPriceSheet(context, ref),
         icon: const Icon(Icons.add),
         label: Text(l10n.bookingSettingsAddPrice),
       ),
       body: state.prices.isEmpty
-          ? Center(child: Text(l10n.bookingSettingsPricesEmpty))
+          ? _EmptyState(icon: Icons.sell_outlined, label: l10n.bookingSettingsPricesEmpty)
           : ListView.separated(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 88),
               itemCount: state.prices.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 8),
+              separatorBuilder: (context, index) => const SizedBox(height: 10),
               itemBuilder: (context, index) {
                 final row = state.prices[index];
-                return Card(
-                  margin: EdgeInsets.zero,
-                  child: ListTile(
-                    title: Text(row.lineOption?.name ?? row.label),
-                    subtitle: Text(row.serviceName),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          '${row.price.toStringAsFixed(0)} ${row.currency}',
-                          style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.delete_outline),
-                          onPressed: () async {
-                            final confirmed = await _confirmDelete(context);
-                            if (confirmed) {
-                              await ref.read(bookingSettingsControllerProvider.notifier).deletePrice(row.id);
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
+                return _SettingsRowCard(
+                  icon: Icons.sell_outlined,
+                  title: row.lineOption?.name ?? row.label,
+                  subtitle: row.serviceName,
+                  trailing: '${row.price.toStringAsFixed(0)} ${row.currency}',
+                  onDelete: () async {
+                    final confirmed = await _confirmDelete(context);
+                    if (confirmed) {
+                      await ref.read(bookingSettingsControllerProvider.notifier).deletePrice(row.id);
+                    }
+                  },
                 );
               },
             ),
@@ -238,33 +227,30 @@ class _UnitsTab extends ConsumerWidget {
 
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: AppColors.primaryNavy,
+        foregroundColor: Colors.white,
         onPressed: () => _showAddUnitSheet(context, ref),
         icon: const Icon(Icons.add),
         label: Text(l10n.bookingSettingsAddUnit),
       ),
       body: state.items.isEmpty
-          ? Center(child: Text(l10n.bookingSettingsUnitsEmpty))
+          ? _EmptyState(icon: Icons.meeting_room_outlined, label: l10n.bookingSettingsUnitsEmpty)
           : ListView.separated(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 88),
               itemCount: state.items.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 8),
+              separatorBuilder: (context, index) => const SizedBox(height: 10),
               itemBuilder: (context, index) {
                 final row = state.items[index];
-                return Card(
-                  margin: EdgeInsets.zero,
-                  child: ListTile(
-                    title: Text(row.label),
-                    subtitle: row.capacity != null ? Text('${l10n.bookingSettingsCapacity}: ${row.capacity}') : null,
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete_outline),
-                      onPressed: () async {
-                        final confirmed = await _confirmDelete(context);
-                        if (confirmed) {
-                          await ref.read(bookingSettingsControllerProvider.notifier).deleteBookableItem(row.id);
-                        }
-                      },
-                    ),
-                  ),
+                return _SettingsRowCard(
+                  icon: Icons.meeting_room_outlined,
+                  title: row.label,
+                  subtitle: row.capacity != null ? '${l10n.bookingSettingsCapacity}: ${row.capacity}' : null,
+                  onDelete: () async {
+                    final confirmed = await _confirmDelete(context);
+                    if (confirmed) {
+                      await ref.read(bookingSettingsControllerProvider.notifier).deleteBookableItem(row.id);
+                    }
+                  },
                 );
               },
             ),
@@ -474,49 +460,73 @@ class _HoursTabState extends ConsumerState<_HoursTab> {
 
     _days ??= [for (final day in _dayOrder) state.hours!.days.firstWhere((d) => d.day == day, orElse: () => WorkingDay(day: day))];
 
+    final openNow = state.hours!.isOpenNow;
+    final statusColor = openNow ? AppColors.success : AppColors.error;
+
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        Row(
-          children: [
-            Icon(Icons.circle, size: 10, color: state.hours!.isOpenNow ? AppColors.success : AppColors.error),
-            const SizedBox(width: 8),
-            Text(state.hours!.isOpenNow ? l10n.bookingSettingsOpenNow : l10n.bookingSettingsClosedNow),
-          ],
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(color: statusColor.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(999)),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.circle, size: 8, color: statusColor),
+              const SizedBox(width: 8),
+              Text(
+                openNow ? l10n.bookingSettingsOpenNow : l10n.bookingSettingsClosedNow,
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(color: statusColor),
+              ),
+            ],
+          ),
         ),
         const SizedBox(height: 16),
-        for (var i = 0; i < _days!.length; i++)
-          Card(
-            margin: const EdgeInsets.only(bottom: 8),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              child: Row(
-                children: [
-                  Expanded(child: Text(_dayName(l10n, _days![i].day))),
-                  if (_days![i].isClosed == true)
-                    Text(l10n.bookingSettingsClosed, style: TextStyle(color: Theme.of(context).hintColor))
-                  else ...[
-                    TextButton(
-                      onPressed: () => _pickTime(i, isOpen: true),
-                      child: Text(_days![i].open ?? l10n.bookingSettingsOpenTime),
-                    ),
-                    Text(' — '),
-                    TextButton(
-                      onPressed: () => _pickTime(i, isOpen: false),
-                      child: Text(_days![i].close ?? l10n.bookingSettingsCloseTime),
-                    ),
-                  ],
-                  Switch(
-                    value: _days![i].isClosed != true,
-                    onChanged: (value) => setState(() {
-                      _days![i] = value ? _days![i].copyWith(isClosed: false) : _days![i].copyWith(isClosed: true, clearTimes: true);
-                    }),
-                  ),
-                ],
-              ),
-            ),
+        Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardTheme.color,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: AppColors.softShadow(),
           ),
-        const SizedBox(height: 8),
+          clipBehavior: Clip.antiAlias,
+          child: Column(
+            children: [
+              for (var i = 0; i < _days!.length; i++) ...[
+                if (i > 0) Divider(height: 1, color: Theme.of(context).dividerColor.withValues(alpha: 0.4)),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(_dayName(l10n, _days![i].day), style: Theme.of(context).textTheme.titleSmall),
+                      ),
+                      if (_days![i].isClosed == true)
+                        Text(l10n.bookingSettingsClosed, style: TextStyle(color: Theme.of(context).hintColor))
+                      else ...[
+                        TextButton(
+                          onPressed: () => _pickTime(i, isOpen: true),
+                          child: Text(_days![i].open ?? l10n.bookingSettingsOpenTime),
+                        ),
+                        Text(' — ', style: TextStyle(color: Theme.of(context).hintColor)),
+                        TextButton(
+                          onPressed: () => _pickTime(i, isOpen: false),
+                          child: Text(_days![i].close ?? l10n.bookingSettingsCloseTime),
+                        ),
+                      ],
+                      Switch(
+                        value: _days![i].isClosed != true,
+                        onChanged: (value) => setState(() {
+                          _days![i] = value ? _days![i].copyWith(isClosed: false) : _days![i].copyWith(isClosed: true, clearTimes: true);
+                        }),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+        const SizedBox(height: 20),
         ElevatedButton(
           onPressed: _saving ? null : _save,
           child: _saving
@@ -524,6 +534,93 @@ class _HoursTabState extends ConsumerState<_HoursTab> {
               : Text(l10n.bookingSettingsSaveHours),
         ),
       ],
+    );
+  }
+}
+
+/// Icon-avatar row card — the shared visual shape behind every settings
+/// list in this screen (prices, units), matching the Booking flow's own
+/// card language (soft navy shadow, 16px radius, gold-tinted icon chip)
+/// instead of a bare `Card(ListTile(...))`.
+class _SettingsRowCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String? subtitle;
+  final String? trailing;
+  final VoidCallback onDelete;
+
+  const _SettingsRowCard({
+    required this.icon,
+    required this.title,
+    this.subtitle,
+    this.trailing,
+    required this.onDelete,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardTheme.color,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: AppColors.softShadow(),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: AppColors.accentGold.withValues(alpha: 0.14),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(icon, color: AppColors.accentGold, size: 22),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: Theme.of(context).textTheme.titleSmall, maxLines: 1, overflow: TextOverflow.ellipsis),
+                if (subtitle != null)
+                  Text(subtitle!, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor)),
+              ],
+            ),
+          ),
+          if (trailing != null) ...[
+            const SizedBox(width: 8),
+            Text(trailing!, style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+          ],
+          IconButton(
+            icon: Icon(Icons.delete_outline, color: Theme.of(context).colorScheme.error, size: 20),
+            onPressed: onDelete,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _EmptyState extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  const _EmptyState({required this.icon, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 40, color: Theme.of(context).hintColor),
+            const SizedBox(height: 12),
+            Text(label, textAlign: TextAlign.center, style: TextStyle(color: Theme.of(context).hintColor)),
+          ],
+        ),
+      ),
     );
   }
 }
