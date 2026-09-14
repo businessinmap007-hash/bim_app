@@ -419,6 +419,8 @@
   "bookingsCancel": "Cancel booking",
   "bookingsCancelled": "Booking cancelled.",
   "bookingsCancelConfirm": "Cancel this booking?",
+  "bookingsConfirmReadiness": "Confirm readiness",
+  "bookingsConfirmed": "Confirmation saved.",
   "orderStatusPending": "Pending",
   "orderStatusCompleted": "Completed",
   "orderStatusCancelled": "Cancelled",

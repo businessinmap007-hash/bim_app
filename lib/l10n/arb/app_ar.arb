@@ -419,6 +419,8 @@
   "bookingsCancel": "إلغاء الحجز",
   "bookingsCancelled": "تم إلغاء الحجز.",
   "bookingsCancelConfirm": "هل تريد إلغاء هذا الحجز؟",
+  "bookingsConfirmReadiness": "تأكيد الاستعداد",
+  "bookingsConfirmed": "تم حفظ التأكيد.",
   "orderStatusPending": "قيد الانتظار",
   "orderStatusCompleted": "مكتمل",
   "orderStatusCancelled": "ملغي",

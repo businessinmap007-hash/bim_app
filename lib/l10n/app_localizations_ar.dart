@@ -1282,6 +1282,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get bookingsCancelConfirm => 'هل تريد إلغاء هذا الحجز؟';
 
   @override
+  String get bookingsConfirmReadiness => 'تأكيد الاستعداد';
+
+  @override
+  String get bookingsConfirmed => 'تم حفظ التأكيد.';
+
+  @override
   String get orderStatusPending => 'قيد الانتظار';
 
   @override

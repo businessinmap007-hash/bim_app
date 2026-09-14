@@ -16,6 +16,7 @@ import '../../../delivery/application/delivery_providers.dart';
 import '../../../delivery/presentation/screens/token_scan_screen.dart';
 import '../../../projects/presentation/screens/project_progress_screen.dart';
 import '../../../ratings/presentation/widgets/leave_review_sheet.dart';
+import '../../../wallet/presentation/widgets/wallet_pin_prompt.dart';
 import '../../application/orders_providers.dart';
 import '../../data/models/placed_order.dart';
 import '../widgets/order_tracker_timeline.dart';
@@ -645,6 +646,56 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
     }
   }
 
+  /// The booking only needs the wallet PIN when it actually holds a
+  /// deposit — try with no PIN first and only prompt for one if the server
+  /// comes back asking for it (Api\V2\BookingController::clientConfirm's
+  /// own gate, `errors.pin` on the 422).
+  Future<void> _confirm() async {
+    final l10n = AppLocalizations.of(context)!;
+    setState(() => _busy = true);
+    try {
+      await ref.read(myBookingsControllerProvider.notifier).confirm(widget.booking.id);
+      if (mounted) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.bookingsConfirmed)));
+      }
+      return;
+    } on ApiException catch (e) {
+      if (e.firstErrorFor('pin') == null) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message)));
+        }
+        setState(() => _busy = false);
+        return;
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+      }
+      setState(() => _busy = false);
+      return;
+    }
+
+    if (!mounted) return;
+    final ok = await promptWalletPin(
+      context,
+      ref,
+      action: (pin) => ref.read(myBookingsControllerProvider.notifier).confirm(widget.booking.id, pin: pin),
+      onError: (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(e is ApiException ? e.message : l10n.commonSomethingWentWrong)));
+        }
+      },
+    );
+    if (ok && mounted) {
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.bookingsConfirmed)));
+    }
+    if (mounted) setState(() => _busy = false);
+  }
+
   Future<void> _leaveReview() async {
     final l10n = AppLocalizations.of(context)!;
     final submitted = await showLeaveReviewSheet(
@@ -743,6 +794,17 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
               ],
             ),
             const SizedBox(height: 20),
+            if (booking.status == 'accepted')
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  onPressed: _busy ? null : _confirm,
+                  child: _busy
+                      ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                      : Text(l10n.bookingsConfirmReadiness),
+                ),
+              ),
+            if (booking.status == 'accepted') const SizedBox(height: 8),
             if (booking.isCancellable)
               SizedBox(
                 width: double.infinity,

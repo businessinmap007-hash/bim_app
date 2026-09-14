@@ -1268,6 +1268,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bookingsCancelConfirm => 'Cancel this booking?';
 
   @override
+  String get bookingsConfirmReadiness => 'Confirm readiness';
+
+  @override
+  String get bookingsConfirmed => 'Confirmation saved.';
+
+  @override
   String get orderStatusPending => 'Pending';
 
   @override

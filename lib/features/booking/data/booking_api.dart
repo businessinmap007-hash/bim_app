@@ -32,6 +32,22 @@ class BookingApi {
     return Booking.fromJson(data['booking'] as Map<String, dynamic>);
   }
 
+  /// The customer's own "I'm ready" -- start() (the business's action) won't
+  /// move a booking to in-progress until both this AND the business's own
+  /// confirmation exist (Api\V2\BookingController::clientConfirm). Only
+  /// needs [pin] when the booking actually holds a wallet deposit; call
+  /// with no pin first and only prompt for one if the server comes back
+  /// asking for it (an `errors.pin` field on the 422).
+  Future<Booking> clientConfirm(int id, {String? pin}) async {
+    final data =
+        await _client.post(
+              '/bookings/$id/client-confirm',
+              data: {'pin': ?pin},
+            )
+            as Map<String, dynamic>;
+    return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+  }
+
   /// The business's own incoming-booking queue — same endpoint as [list],
   /// scoped the other way (Api\V2\BookingController::index reads `scope`).
   Future<Paginated<Booking>> listBusiness({

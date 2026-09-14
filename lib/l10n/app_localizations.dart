@@ -2414,6 +2414,18 @@ abstract class AppLocalizations {
   /// **'هل تريد إلغاء هذا الحجز؟'**
   String get bookingsCancelConfirm;
 
+  /// No description provided for @bookingsConfirmReadiness.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد الاستعداد'**
+  String get bookingsConfirmReadiness;
+
+  /// No description provided for @bookingsConfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ التأكيد.'**
+  String get bookingsConfirmed;
+
   /// No description provided for @orderStatusPending.
   ///
   /// In ar, this message translates to:
