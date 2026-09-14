@@ -5,6 +5,7 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/booking_settings_controller.dart';
 import '../../data/models/booking_settings_models.dart';
+import 'bookable_item_edit_screen.dart';
 
 /// A business's self-service booking configuration — prices (what a room
 /// type costs), bookable units (which specific rooms exist) and weekly
@@ -214,16 +215,40 @@ class _AddPriceFormState extends ConsumerState<_AddPriceForm> {
   }
 }
 
-class _UnitsTab extends ConsumerWidget {
+/// Rooms grouped by their item type ("section", the same shape a menu groups
+/// items under a section) with a grid/list toggle — the merchant's own
+/// vocabulary for the type (from itemsOptions) names each section.
+class _UnitsTab extends ConsumerStatefulWidget {
   const _UnitsTab();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_UnitsTab> createState() => _UnitsTabState();
+}
+
+class _UnitsTabState extends ConsumerState<_UnitsTab> {
+  bool _gridView = false;
+
+  String _sectionLabel(BookableItemsOptionsPayload? options, String itemType) {
+    for (final service in options?.services ?? const <BusinessServiceOption>[]) {
+      for (final type in service.itemTypes) {
+        if (type.key == itemType) return type.label;
+      }
+    }
+    return itemType;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(bookingSettingsControllerProvider);
 
     if (state.isLoading) return const Center(child: CircularProgressIndicator());
     if (state.error != null) return Center(child: Text(l10n.commonSomethingWentWrong));
+
+    final sections = <String, List<BookableItemRow>>{};
+    for (final row in state.items) {
+      sections.putIfAbsent(row.itemType, () => []).add(row);
+    }
 
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
@@ -233,27 +258,65 @@ class _UnitsTab extends ConsumerWidget {
         icon: const Icon(Icons.add),
         label: Text(l10n.bookingSettingsAddUnit),
       ),
-      body: state.items.isEmpty
-          ? _EmptyState(icon: Icons.meeting_room_outlined, label: l10n.bookingSettingsUnitsEmpty)
-          : ListView.separated(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 88),
-              itemCount: state.items.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 10),
-              itemBuilder: (context, index) {
-                final row = state.items[index];
-                return _SettingsRowCard(
-                  icon: Icons.meeting_room_outlined,
-                  title: row.label,
-                  subtitle: row.capacity != null ? '${l10n.bookingSettingsCapacity}: ${row.capacity}' : null,
-                  onDelete: () async {
-                    final confirmed = await _confirmDelete(context);
-                    if (confirmed) {
-                      await ref.read(bookingSettingsControllerProvider.notifier).deleteBookableItem(row.id);
-                    }
-                  },
-                );
-              },
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                  tooltip: l10n.bookingSettingsListView,
+                  icon: Icon(Icons.view_list_outlined, color: _gridView ? Theme.of(context).hintColor : AppColors.primaryNavy),
+                  onPressed: () => setState(() => _gridView = false),
+                ),
+                IconButton(
+                  tooltip: l10n.bookingSettingsGridView,
+                  icon: Icon(Icons.grid_view_outlined, color: _gridView ? AppColors.primaryNavy : Theme.of(context).hintColor),
+                  onPressed: () => setState(() => _gridView = true),
+                ),
+              ],
             ),
+          ),
+          Expanded(
+            child: state.items.isEmpty
+                ? _EmptyState(icon: Icons.meeting_room_outlined, label: l10n.bookingSettingsUnitsEmpty)
+                : ListView(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 88),
+                    children: [
+                      for (final entry in sections.entries) ...[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Text(
+                            _sectionLabel(state.itemsOptions, entry.key),
+                            style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                        if (_gridView)
+                          GridView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 10,
+                              crossAxisSpacing: 10,
+                              childAspectRatio: 0.82,
+                            ),
+                            itemCount: entry.value.length,
+                            itemBuilder: (context, index) => _UnitCard(row: entry.value[index], grid: true),
+                          )
+                        else
+                          for (final row in entry.value) ...[
+                            _UnitCard(row: row, grid: false),
+                            const SizedBox(height: 10),
+                          ],
+                        const SizedBox(height: 8),
+                      ],
+                    ],
+                  ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -267,6 +330,120 @@ class _UnitsTab extends ConsumerWidget {
       builder: (context) => Padding(
         padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: _AddUnitForm(options: options),
+      ),
+    );
+  }
+}
+
+/// One room's card — a thumbnail, its label, and a status chip. Tapping opens
+/// the full edit screen (description, photos, status); the leading delete
+/// affordance stays here since it needs no form of its own.
+class _UnitCard extends ConsumerWidget {
+  final BookableItemRow row;
+  final bool grid;
+  const _UnitCard({required this.row, required this.grid});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final (statusLabel, statusColor) = switch (row) {
+      _ when row.isUnderMaintenance => (l10n.bookingSettingsStatusMaintenance, AppColors.error),
+      _ when row.isCurrentlyBooked => (l10n.bookingSettingsStatusBooked, AppColors.accentGold),
+      _ => (l10n.bookingSettingsStatusAvailable, AppColors.success),
+    };
+
+    void openEdit() {
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => BookableItemEditScreen(itemId: row.id)));
+    }
+
+    final thumbnail = ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: row.images.isNotEmpty
+          ? Image.network(row.images.first.url, fit: BoxFit.cover)
+          : Container(
+              color: AppColors.accentGold.withValues(alpha: 0.14),
+              child: const Icon(Icons.meeting_room_outlined, color: AppColors.accentGold),
+            ),
+    );
+
+    final statusChip = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(color: statusColor.withValues(alpha: 0.14), borderRadius: BorderRadius.circular(999)),
+      child: Text(statusLabel, style: TextStyle(color: statusColor, fontSize: 11, fontWeight: FontWeight.w600)),
+    );
+
+    if (grid) {
+      return InkWell(
+        onTap: openEdit,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardTheme.color,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: AppColors.softShadow(),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: Padding(padding: const EdgeInsets.all(8), child: thumbnail)),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(row.label, style: Theme.of(context).textTheme.titleSmall, maxLines: 1, overflow: TextOverflow.ellipsis),
+                    const SizedBox(height: 6),
+                    statusChip,
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return InkWell(
+      onTap: openEdit,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardTheme.color,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: AppColors.softShadow(),
+        ),
+        child: Row(
+          children: [
+            SizedBox(width: 56, height: 56, child: thumbnail),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(row.label, style: Theme.of(context).textTheme.titleSmall, maxLines: 1, overflow: TextOverflow.ellipsis),
+                  if (row.capacity != null)
+                    Text(
+                      '${l10n.bookingSettingsCapacity}: ${row.capacity}',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),
+                    ),
+                  const SizedBox(height: 4),
+                  statusChip,
+                ],
+              ),
+            ),
+            IconButton(
+              icon: Icon(Icons.delete_outline, color: Theme.of(context).colorScheme.error, size: 20),
+              onPressed: () async {
+                final confirmed = await _confirmDelete(context);
+                if (confirmed) {
+                  await ref.read(bookingSettingsControllerProvider.notifier).deleteBookableItem(row.id);
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -404,6 +581,10 @@ class _HoursTabState extends ConsumerState<_HoursTab> {
   List<WorkingDay>? _days;
   bool _saving = false;
 
+  String? _checkIn;
+  String? _checkOut;
+  bool _checkTimesSaving = false;
+
   static const _dayOrder = [0, 1, 2, 3, 4, 5, 6];
 
   String _dayName(AppLocalizations l10n, int day) {
@@ -450,6 +631,35 @@ class _HoursTabState extends ConsumerState<_HoursTab> {
     }
   }
 
+  Future<void> _pickCheckTime({required bool isCheckIn}) async {
+    final picked = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    if (picked == null) return;
+    final formatted = '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+    setState(() {
+      if (isCheckIn) {
+        _checkIn = formatted;
+      } else {
+        _checkOut = formatted;
+      }
+    });
+  }
+
+  Future<void> _saveCheckTimes() async {
+    setState(() => _checkTimesSaving = true);
+    try {
+      await ref
+          .read(bookingSettingsControllerProvider.notifier)
+          .saveCheckTimes(checkInTime: _checkIn, checkOutTime: _checkOut);
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.bookingSettingsCheckTimesSaved)));
+      }
+    } finally {
+      if (mounted) setState(() => _checkTimesSaving = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -459,6 +669,10 @@ class _HoursTabState extends ConsumerState<_HoursTab> {
     if (state.hours == null) return Center(child: Text(l10n.commonSomethingWentWrong));
 
     _days ??= [for (final day in _dayOrder) state.hours!.days.firstWhere((d) => d.day == day, orElse: () => WorkingDay(day: day))];
+    if (state.checkTimes != null) {
+      _checkIn ??= state.checkTimes!.checkInTime;
+      _checkOut ??= state.checkTimes!.checkOutTime;
+    }
 
     final openNow = state.hours!.isOpenNow;
     final statusColor = openNow ? AppColors.success : AppColors.error;
@@ -532,6 +746,57 @@ class _HoursTabState extends ConsumerState<_HoursTab> {
           child: _saving
               ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
               : Text(l10n.bookingSettingsSaveHours),
+        ),
+        const SizedBox(height: 28),
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardTheme.color,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: AppColors.softShadow(),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(l10n.bookingSettingsCheckInTime, style: Theme.of(context).textTheme.titleSmall),
+                        const SizedBox(height: 4),
+                        TextButton(
+                          onPressed: () => _pickCheckTime(isCheckIn: true),
+                          child: Text(_checkIn ?? l10n.bookingSettingsOpenTime),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(l10n.bookingSettingsCheckOutTime, style: Theme.of(context).textTheme.titleSmall),
+                        const SizedBox(height: 4),
+                        TextButton(
+                          onPressed: () => _pickCheckTime(isCheckIn: false),
+                          child: Text(_checkOut ?? l10n.bookingSettingsCloseTime),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              OutlinedButton(
+                onPressed: _checkTimesSaving ? null : _saveCheckTimes,
+                child: _checkTimesSaving
+                    ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2))
+                    : Text(l10n.bookingSettingsSaveCheckTimes),
+              ),
+            ],
+          ),
         ),
       ],
     );

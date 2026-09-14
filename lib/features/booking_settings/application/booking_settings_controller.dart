@@ -14,6 +14,7 @@ class BookingSettingsState {
   final BookableItemsOptionsPayload? itemsOptions;
   final List<BookableItemRow> items;
   final WorkingHours? hours;
+  final CheckTimes? checkTimes;
   final bool isLoading;
   final String? error;
 
@@ -23,6 +24,7 @@ class BookingSettingsState {
     this.itemsOptions,
     this.items = const [],
     this.hours,
+    this.checkTimes,
     this.isLoading = false,
     this.error,
   });
@@ -33,6 +35,7 @@ class BookingSettingsState {
     BookableItemsOptionsPayload? itemsOptions,
     List<BookableItemRow>? items,
     WorkingHours? hours,
+    CheckTimes? checkTimes,
     bool? isLoading,
     String? error,
     bool clearError = false,
@@ -43,6 +46,7 @@ class BookingSettingsState {
       itemsOptions: itemsOptions ?? this.itemsOptions,
       items: items ?? this.items,
       hours: hours ?? this.hours,
+      checkTimes: checkTimes ?? this.checkTimes,
       isLoading: isLoading ?? this.isLoading,
       error: clearError ? null : (error ?? this.error),
     );
@@ -69,6 +73,7 @@ class BookingSettingsController extends StateNotifier<BookingSettingsState> {
         _api.bookableItemsOptions(),
         _api.bookableItems(),
         _api.hours(),
+        _api.checkTimes(),
       ]);
       state = state.copyWith(
         pricesOptions: results[0] as PricesOptionsPayload,
@@ -76,6 +81,7 @@ class BookingSettingsController extends StateNotifier<BookingSettingsState> {
         itemsOptions: results[2] as BookableItemsOptionsPayload,
         items: results[3] as List<BookableItemRow>,
         hours: results[4] as WorkingHours,
+        checkTimes: results[5] as CheckTimes,
         isLoading: false,
       );
     } catch (e) {
@@ -122,9 +128,59 @@ class BookingSettingsController extends StateNotifier<BookingSettingsState> {
     state = state.copyWith(items: [row, ...state.items]);
   }
 
+  Future<void> updateBookableItem(
+    int id, {
+    required int serviceId,
+    required String itemType,
+    required String code,
+    int? lineOptionId,
+    String? description,
+    int? capacity,
+    int? quantity,
+    String? status,
+  }) async {
+    final row = await _api.updateBookableItem(
+      id,
+      serviceId: serviceId,
+      itemType: itemType,
+      code: code,
+      lineOptionId: lineOptionId,
+      description: description,
+      capacity: capacity,
+      quantity: quantity,
+      status: status,
+    );
+    state = state.copyWith(items: [for (final i in state.items) i.id == id ? row : i]);
+  }
+
   Future<void> deleteBookableItem(int id) async {
     await _api.deleteBookableItem(id);
     state = state.copyWith(items: state.items.where((i) => i.id != id).toList());
+  }
+
+  Future<void> addBookableItemImage(int itemId, String filePath) async {
+    await _api.addBookableItemImage(itemId, filePath);
+    await _refreshOneItem(itemId);
+  }
+
+  Future<void> deleteBookableItemImage(int itemId, int imageId) async {
+    await _api.deleteBookableItemImage(itemId, imageId);
+    await _refreshOneItem(itemId);
+  }
+
+  /// The images/upload doors return no full resource body — re-fetch this
+  /// one item so its gallery reflects what the server now holds.
+  Future<void> _refreshOneItem(int itemId) async {
+    final all = await _api.bookableItems();
+    final matches = all.where((i) => i.id == itemId);
+    if (matches.isEmpty) return;
+    final fresh = matches.first;
+    state = state.copyWith(items: [for (final i in state.items) i.id == itemId ? fresh : i]);
+  }
+
+  Future<void> saveCheckTimes({String? checkInTime, String? checkOutTime}) async {
+    final updated = await _api.updateCheckTimes(checkInTime: checkInTime, checkOutTime: checkOutTime);
+    state = state.copyWith(checkTimes: updated);
   }
 
   Future<void> saveHours(List<WorkingDay> days) async {

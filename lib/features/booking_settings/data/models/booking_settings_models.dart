@@ -1,3 +1,5 @@
+import '../../../../core/env/env.dart';
+
 /// A small id+name pair — a service, a line option, a modifier option.
 class NamedOption {
   final int id;
@@ -142,6 +144,17 @@ class PriceRow {
   }
 }
 
+/// One photo in a bookable unit's gallery — mirrors HasOwnedImages'
+/// imagePayload() shape ({id, image}), `image` a relative path.
+class BookableItemImage {
+  final int id;
+  final String url;
+  const BookableItemImage({required this.id, required this.url});
+
+  factory BookableItemImage.fromJson(Map<String, dynamic> json) =>
+      BookableItemImage(id: json['id'] as int, url: Env.assetUrl(json['image'] as String?) ?? '');
+}
+
 /// One of the business's own bookable units — mirrors BookableItemResource.
 class BookableItemRow {
   final int id;
@@ -150,10 +163,14 @@ class BookableItemRow {
   final NamedOption? lineOption;
   final String code;
   final String? title;
+  final String? description;
   final String label;
+  final List<BookableItemImage> images;
   final int? capacity;
   final int quantity;
   final bool isActive;
+  final String status;
+  final bool isCurrentlyBooked;
 
   const BookableItemRow({
     required this.id,
@@ -162,11 +179,17 @@ class BookableItemRow {
     this.lineOption,
     required this.code,
     this.title,
+    this.description,
     required this.label,
+    this.images = const [],
     this.capacity,
     required this.quantity,
     required this.isActive,
+    this.status = 'available',
+    this.isCurrentlyBooked = false,
   });
+
+  bool get isUnderMaintenance => status == 'maintenance';
 
   factory BookableItemRow.fromJson(Map<String, dynamic> json) {
     final service = json['service'] as Map<String, dynamic>? ?? const {};
@@ -180,10 +203,16 @@ class BookableItemRow {
           : null,
       code: json['code'] as String? ?? '',
       title: json['title'] as String?,
+      description: json['description'] as String?,
       label: json['label'] as String? ?? '',
+      images: (json['images'] as List<dynamic>? ?? [])
+          .map((e) => BookableItemImage.fromJson(e as Map<String, dynamic>))
+          .toList(),
       capacity: (json['capacity'] as num?)?.toInt(),
       quantity: (json['quantity'] as num?)?.toInt() ?? 1,
       isActive: json['is_active'] as bool? ?? true,
+      status: json['status'] as String? ?? 'available',
+      isCurrentlyBooked: json['is_currently_booked'] as bool? ?? false,
     );
   }
 }
@@ -221,5 +250,20 @@ class WorkingHours {
   factory WorkingHours.fromJson(Map<String, dynamic> json) => WorkingHours(
     isOpenNow: json['is_open_now'] as bool? ?? false,
     days: (json['days'] as List<dynamic>? ?? []).map((e) => WorkingDay.fromJson(e as Map<String, dynamic>)).toList(),
+  );
+}
+
+/// A stay's own check-in/check-out clock — "HH:mm" (or null, unset).
+class CheckTimes {
+  final String? checkInTime;
+  final String? checkOutTime;
+  const CheckTimes({this.checkInTime, this.checkOutTime});
+
+  /// The API returns "HH:mm:ss"; the picker only wants "HH:mm".
+  static String? _trimSeconds(String? value) => value?.substring(0, 5);
+
+  factory CheckTimes.fromJson(Map<String, dynamic> json) => CheckTimes(
+    checkInTime: _trimSeconds(json['check_in_time'] as String?),
+    checkOutTime: _trimSeconds(json['check_out_time'] as String?),
   );
 }

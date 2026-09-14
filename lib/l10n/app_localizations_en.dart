@@ -717,6 +717,42 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bookingSettingsClosedNow => 'Closed now';
 
   @override
+  String get bookingSettingsDescription => 'Description';
+
+  @override
+  String get bookingSettingsStatus => 'Status';
+
+  @override
+  String get bookingSettingsStatusAvailable => 'Available';
+
+  @override
+  String get bookingSettingsStatusMaintenance => 'Closed for maintenance';
+
+  @override
+  String get bookingSettingsStatusBooked => 'Booked now';
+
+  @override
+  String get bookingSettingsGridView => 'Grid view';
+
+  @override
+  String get bookingSettingsListView => 'List view';
+
+  @override
+  String get bookingSettingsEditUnit => 'Edit unit';
+
+  @override
+  String get bookingSettingsCheckInTime => 'Check-in time';
+
+  @override
+  String get bookingSettingsCheckOutTime => 'Check-out time';
+
+  @override
+  String get bookingSettingsSaveCheckTimes => 'Save check-in/out times';
+
+  @override
+  String get bookingSettingsCheckTimesSaved => 'Check-in/out times saved.';
+
+  @override
   String get weekdaySunday => 'Sunday';
 
   @override

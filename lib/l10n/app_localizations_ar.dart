@@ -724,6 +724,43 @@ class AppLocalizationsAr extends AppLocalizations {
   String get bookingSettingsClosedNow => 'مغلق الآن';
 
   @override
+  String get bookingSettingsDescription => 'الوصف';
+
+  @override
+  String get bookingSettingsStatus => 'الحالة';
+
+  @override
+  String get bookingSettingsStatusAvailable => 'متاحة';
+
+  @override
+  String get bookingSettingsStatusMaintenance => 'مغلقة للصيانة';
+
+  @override
+  String get bookingSettingsStatusBooked => 'محجوزة الآن';
+
+  @override
+  String get bookingSettingsGridView => 'عرض شبكي';
+
+  @override
+  String get bookingSettingsListView => 'عرض قائمة';
+
+  @override
+  String get bookingSettingsEditUnit => 'تعديل الوحدة';
+
+  @override
+  String get bookingSettingsCheckInTime => 'موعد تسجيل الدخول';
+
+  @override
+  String get bookingSettingsCheckOutTime => 'موعد المغادرة';
+
+  @override
+  String get bookingSettingsSaveCheckTimes => 'حفظ مواعيد الدخول والمغادرة';
+
+  @override
+  String get bookingSettingsCheckTimesSaved =>
+      'تم حفظ مواعيد الدخول والمغادرة.';
+
+  @override
   String get weekdaySunday => 'الأحد';
 
   @override

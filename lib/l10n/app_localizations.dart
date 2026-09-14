@@ -1400,6 +1400,78 @@ abstract class AppLocalizations {
   /// **'مغلق الآن'**
   String get bookingSettingsClosedNow;
 
+  /// No description provided for @bookingSettingsDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوصف'**
+  String get bookingSettingsDescription;
+
+  /// No description provided for @bookingSettingsStatus.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحالة'**
+  String get bookingSettingsStatus;
+
+  /// No description provided for @bookingSettingsStatusAvailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'متاحة'**
+  String get bookingSettingsStatusAvailable;
+
+  /// No description provided for @bookingSettingsStatusMaintenance.
+  ///
+  /// In ar, this message translates to:
+  /// **'مغلقة للصيانة'**
+  String get bookingSettingsStatusMaintenance;
+
+  /// No description provided for @bookingSettingsStatusBooked.
+  ///
+  /// In ar, this message translates to:
+  /// **'محجوزة الآن'**
+  String get bookingSettingsStatusBooked;
+
+  /// No description provided for @bookingSettingsGridView.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض شبكي'**
+  String get bookingSettingsGridView;
+
+  /// No description provided for @bookingSettingsListView.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض قائمة'**
+  String get bookingSettingsListView;
+
+  /// No description provided for @bookingSettingsEditUnit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل الوحدة'**
+  String get bookingSettingsEditUnit;
+
+  /// No description provided for @bookingSettingsCheckInTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'موعد تسجيل الدخول'**
+  String get bookingSettingsCheckInTime;
+
+  /// No description provided for @bookingSettingsCheckOutTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'موعد المغادرة'**
+  String get bookingSettingsCheckOutTime;
+
+  /// No description provided for @bookingSettingsSaveCheckTimes.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ مواعيد الدخول والمغادرة'**
+  String get bookingSettingsSaveCheckTimes;
+
+  /// No description provided for @bookingSettingsCheckTimesSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ مواعيد الدخول والمغادرة.'**
+  String get bookingSettingsCheckTimesSaved;
+
   /// No description provided for @weekdaySunday.
   ///
   /// In ar, this message translates to:

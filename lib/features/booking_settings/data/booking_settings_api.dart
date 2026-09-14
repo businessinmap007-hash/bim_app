@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+
 import '../../../core/network/api_client.dart';
 import 'models/booking_settings_models.dart';
 
@@ -106,8 +108,61 @@ class BookingSettingsApi {
     return BookableItemRow.fromJson(data as Map<String, dynamic>);
   }
 
+  Future<BookableItemRow> updateBookableItem(
+    int id, {
+    required int serviceId,
+    required String itemType,
+    required String code,
+    int? lineOptionId,
+    String? description,
+    int? capacity,
+    int? quantity,
+    String? status,
+  }) async {
+    final data = await _client.put(
+      '/business/bookable-items/$id',
+      data: {
+        'service_id': serviceId,
+        'item_type': itemType,
+        'code': code,
+        'line_option_id': ?lineOptionId,
+        'description': ?description,
+        'capacity': ?capacity,
+        'quantity': ?quantity,
+        'status': ?status,
+      },
+    );
+    return BookableItemRow.fromJson(data as Map<String, dynamic>);
+  }
+
   Future<void> deleteBookableItem(int id) =>
       _client.delete('/business/bookable-items/$id');
+
+  Future<void> addBookableItemImage(int itemId, String filePath) async {
+    await _client.post(
+      '/business/bookable-items/$itemId/images',
+      data: FormData.fromMap({
+        'images[0]': await MultipartFile.fromFile(filePath),
+      }),
+    );
+  }
+
+  Future<void> deleteBookableItemImage(int itemId, int imageId) =>
+      _client.delete('/business/bookable-items/$itemId/images/$imageId');
+
+  Future<CheckTimes> checkTimes() async {
+    final data =
+        await _client.get('/business/booking-settings/check-times') as Map<String, dynamic>;
+    return CheckTimes.fromJson(data);
+  }
+
+  Future<CheckTimes> updateCheckTimes({String? checkInTime, String? checkOutTime}) async {
+    final data = await _client.put(
+      '/business/booking-settings/check-times',
+      data: {'check_in_time': ?checkInTime, 'check_out_time': ?checkOutTime},
+    );
+    return CheckTimes.fromJson(data as Map<String, dynamic>);
+  }
 
   Future<WorkingHours> hours() async {
     final data =
