@@ -1314,6 +1314,29 @@ class AppLocalizationsAr extends AppLocalizations {
   String get bookingsDepositRefunded => 'تم استرجاع المبلغ.';
 
   @override
+  String get pendingSettlementTitle => 'قرار مطلوب';
+
+  @override
+  String get pendingSettlementSubtitle =>
+      'لازم تحدّد قبل ما تكمّل استخدام التطبيق.';
+
+  @override
+  String pendingSettlementQuestion(String name) {
+    return 'هل نجحت المعاملة مع $name؟';
+  }
+
+  @override
+  String pendingSettlementRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'باقي $count قرارات بعد ده',
+      one: 'باقي قرار واحد بعد ده',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get orderStatusPending => 'قيد الانتظار';
 
   @override

@@ -429,6 +429,16 @@
   "bookingsWaitingOtherPartyRefund": "Waiting for the other party to confirm the deposit should be refunded.",
   "bookingsDepositReleased": "Deposit released.",
   "bookingsDepositRefunded": "Deposit refunded.",
+  "pendingSettlementTitle": "Decision needed",
+  "pendingSettlementSubtitle": "You need to decide before continuing to use the app.",
+  "pendingSettlementQuestion": "Did the transaction with {name} succeed?",
+  "@pendingSettlementQuestion": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "pendingSettlementRemaining": "{count, plural, =1{1 more decision after this} other{{count} more decisions after this}}",
+  "@pendingSettlementRemaining": {
+    "placeholders": { "count": { "type": "int" } }
+  },
   "orderStatusPending": "Pending",
   "orderStatusCompleted": "Completed",
   "orderStatusCancelled": "Cancelled",

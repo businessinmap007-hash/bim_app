@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../auth/application/auth_controller.dart';
+import '../../../booking/application/booking_providers.dart';
+import '../../../booking/presentation/screens/pending_settlement_gate.dart';
 import '../../../categories/presentation/screens/all_categories_screen.dart';
 import 'business_home_screen.dart';
 import 'customer_home_screen.dart';
@@ -42,7 +44,7 @@ class HomeShell extends ConsumerStatefulWidget {
   ConsumerState<HomeShell> createState() => _HomeShellState();
 }
 
-class _HomeShellState extends ConsumerState<HomeShell> {
+class _HomeShellState extends ConsumerState<HomeShell> with WidgetsBindingObserver {
   int _index = 1;
   /// One key per tab, so switching tabs can close whichever tab we're
   /// LEAVING own drawer first — each tab's `Scaffold` stays mounted inside
@@ -55,6 +57,41 @@ class _HomeShellState extends ConsumerState<HomeShell> {
   void _selectTab(int value) {
     _scaffoldKeys[_index].currentState?.closeDrawer();
     setState(() => _index = value);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkPendingSettlements());
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _checkPendingSettlements();
+    }
+  }
+
+  /// The mandatory settlement prompt (PendingSettlementGate) — checked right
+  /// when the app opens and every time it comes back to the foreground, so a
+  /// completed booking's frozen deposit never just sits there unresolved.
+  Future<void> _checkPendingSettlements() async {
+    try {
+      final pending = await ref.read(bookingApiProvider).pendingSettlements();
+      if (pending.isNotEmpty && mounted) {
+        await showPendingSettlementGate(context, pending);
+      }
+    } catch (_) {
+      // No connection or a transient error — the gate simply reappears next
+      // time the app opens or resumes; not worth surfacing as an error here.
+    }
   }
 
   @override

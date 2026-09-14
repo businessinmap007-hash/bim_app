@@ -1300,6 +1300,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bookingsDepositRefunded => 'Deposit refunded.';
 
   @override
+  String get pendingSettlementTitle => 'Decision needed';
+
+  @override
+  String get pendingSettlementSubtitle =>
+      'You need to decide before continuing to use the app.';
+
+  @override
+  String pendingSettlementQuestion(String name) {
+    return 'Did the transaction with $name succeed?';
+  }
+
+  @override
+  String pendingSettlementRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count more decisions after this',
+      one: '1 more decision after this',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get orderStatusPending => 'Pending';
 
   @override

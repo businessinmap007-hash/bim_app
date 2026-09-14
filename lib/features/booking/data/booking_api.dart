@@ -130,6 +130,17 @@ class BookingApi {
     return Booking.fromJson(data['booking'] as Map<String, dynamic>);
   }
 
+  /// Bookings this account still owes a deposit-settlement decision on —
+  /// drives the mandatory prompt shown on app open/resume (see
+  /// PendingSettlementGate). Api\V2\BookingController::pendingSettlements.
+  Future<List<Booking>> pendingSettlements() async {
+    final data =
+        await _client.get('/bookings/pending-settlements')
+            as Map<String, dynamic>;
+    final rows = data['bookings'] as List<dynamic>? ?? [];
+    return rows.map((e) => Booking.fromJson(e as Map<String, dynamic>)).toList();
+  }
+
   /// What this business's booking screen must ask (Api\V2\BookingController::form).
   Future<BookingFormPayload> form(int businessId) async {
     final data =

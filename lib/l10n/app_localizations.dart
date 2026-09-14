@@ -2474,6 +2474,30 @@ abstract class AppLocalizations {
   /// **'تم استرجاع المبلغ.'**
   String get bookingsDepositRefunded;
 
+  /// No description provided for @pendingSettlementTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'قرار مطلوب'**
+  String get pendingSettlementTitle;
+
+  /// No description provided for @pendingSettlementSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لازم تحدّد قبل ما تكمّل استخدام التطبيق.'**
+  String get pendingSettlementSubtitle;
+
+  /// No description provided for @pendingSettlementQuestion.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل نجحت المعاملة مع {name}؟'**
+  String pendingSettlementQuestion(String name);
+
+  /// No description provided for @pendingSettlementRemaining.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{باقي قرار واحد بعد ده} other{باقي {count} قرارات بعد ده}}'**
+  String pendingSettlementRemaining(int count);
+
   /// No description provided for @orderStatusPending.
   ///
   /// In ar, this message translates to:

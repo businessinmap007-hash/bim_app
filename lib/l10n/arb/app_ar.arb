@@ -429,6 +429,16 @@
   "bookingsWaitingOtherPartyRefund": "في انتظار تأكيد الطرف الآخر على استرجاع المبلغ.",
   "bookingsDepositReleased": "تم فكّ الضمان.",
   "bookingsDepositRefunded": "تم استرجاع المبلغ.",
+  "pendingSettlementTitle": "قرار مطلوب",
+  "pendingSettlementSubtitle": "لازم تحدّد قبل ما تكمّل استخدام التطبيق.",
+  "pendingSettlementQuestion": "هل نجحت المعاملة مع {name}؟",
+  "@pendingSettlementQuestion": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "pendingSettlementRemaining": "{count, plural, =1{باقي قرار واحد بعد ده} other{باقي {count} قرارات بعد ده}}",
+  "@pendingSettlementRemaining": {
+    "placeholders": { "count": { "type": "int" } }
+  },
   "orderStatusPending": "قيد الانتظار",
   "orderStatusCompleted": "مكتمل",
   "orderStatusCancelled": "ملغي",
