@@ -32,6 +32,69 @@ class BookingApi {
     return Booking.fromJson(data['booking'] as Map<String, dynamic>);
   }
 
+  /// The business's own incoming-booking queue — same endpoint as [list],
+  /// scoped the other way (Api\V2\BookingController::index reads `scope`).
+  Future<Paginated<Booking>> listBusiness({
+    String? status,
+    int page = 1,
+    int perPage = 20,
+  }) async {
+    final data =
+        await _client.get(
+              '/bookings',
+              query: {
+                'scope': 'business',
+                'status': ?status,
+                'page': page,
+                'per_page': perPage,
+              },
+            )
+            as Map<String, dynamic>;
+    return Paginated.fromJson(
+      data['bookings'] as Map<String, dynamic>,
+      Booking.fromJson,
+    );
+  }
+
+  Future<Booking> show(int id) async {
+    final data = await _client.get('/bookings/$id') as Map<String, dynamic>;
+    return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+  }
+
+  Future<Booking> accept(int id) async {
+    final data =
+        await _client.post('/bookings/$id/accept') as Map<String, dynamic>;
+    return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+  }
+
+  Future<Booking> reject(int id) async {
+    final data =
+        await _client.post('/bookings/$id/reject') as Map<String, dynamic>;
+    return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+  }
+
+  /// The business's own commitment that it's ready to execute — start()
+  /// refuses to move a booking to in-progress until both parties have
+  /// confirmed (see ServiceExecutionEngine::moveBookingToInProgress).
+  Future<Booking> businessConfirm(int id) async {
+    final data =
+        await _client.post('/bookings/$id/business-confirm')
+            as Map<String, dynamic>;
+    return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+  }
+
+  Future<Booking> start(int id) async {
+    final data =
+        await _client.post('/bookings/$id/start') as Map<String, dynamic>;
+    return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+  }
+
+  Future<Booking> complete(int id) async {
+    final data =
+        await _client.post('/bookings/$id/complete') as Map<String, dynamic>;
+    return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+  }
+
   /// What this business's booking screen must ask (Api\V2\BookingController::form).
   Future<BookingFormPayload> form(int businessId) async {
     final data =

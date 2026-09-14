@@ -1339,6 +1339,70 @@ class AppLocalizationsAr extends AppLocalizations {
   String get bookingStatusCompleted => 'مكتمل';
 
   @override
+  String get businessBookingsTitle => 'الحجوزات الواردة';
+
+  @override
+  String get businessBookingsFilterAll => 'الكل';
+
+  @override
+  String get businessBookingsFilterPending => 'بانتظار الرد';
+
+  @override
+  String get businessBookingsFilterAccepted => 'مقبول';
+
+  @override
+  String get businessBookingsFilterInProgress => 'جارٍ التنفيذ';
+
+  @override
+  String get businessBookingsFilterCompleted => 'مكتمل';
+
+  @override
+  String get businessBookingsFilterCancelled => 'ملغي';
+
+  @override
+  String get businessBookingsEmpty => 'لا توجد حجوزات بعد.';
+
+  @override
+  String get businessBookingsCustomer => 'العميل';
+
+  @override
+  String get businessBookingsUnit => 'الوحدة';
+
+  @override
+  String get businessBookingsQuantity => 'الكمية';
+
+  @override
+  String get businessBookingsPartySize => 'عدد الأفراد';
+
+  @override
+  String get businessBookingsNotes => 'ملاحظات';
+
+  @override
+  String get businessBookingsDateTime => 'الموعد';
+
+  @override
+  String get businessBookingsPrice => 'السعر';
+
+  @override
+  String get businessBookingsAccept => 'قبول';
+
+  @override
+  String get businessBookingsReject => 'رفض';
+
+  @override
+  String get businessBookingsRejectConfirm =>
+      'رفض هذا الحجز؟ سيتم إخطار العميل.';
+
+  @override
+  String get businessBookingsConfirm => 'تأكيد الاستعداد';
+
+  @override
+  String get businessBookingsStart => 'بدء التنفيذ';
+
+  @override
+  String get businessBookingsComplete => 'إكمال';
+
+  @override
   String get ratingsReviewsTitle => 'التقييمات';
 
   @override

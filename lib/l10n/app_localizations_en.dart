@@ -1325,6 +1325,70 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bookingStatusCompleted => 'Completed';
 
   @override
+  String get businessBookingsTitle => 'Incoming bookings';
+
+  @override
+  String get businessBookingsFilterAll => 'All';
+
+  @override
+  String get businessBookingsFilterPending => 'Pending';
+
+  @override
+  String get businessBookingsFilterAccepted => 'Accepted';
+
+  @override
+  String get businessBookingsFilterInProgress => 'In progress';
+
+  @override
+  String get businessBookingsFilterCompleted => 'Completed';
+
+  @override
+  String get businessBookingsFilterCancelled => 'Cancelled';
+
+  @override
+  String get businessBookingsEmpty => 'No bookings yet.';
+
+  @override
+  String get businessBookingsCustomer => 'Customer';
+
+  @override
+  String get businessBookingsUnit => 'Unit';
+
+  @override
+  String get businessBookingsQuantity => 'Quantity';
+
+  @override
+  String get businessBookingsPartySize => 'Guests';
+
+  @override
+  String get businessBookingsNotes => 'Notes';
+
+  @override
+  String get businessBookingsDateTime => 'Date & time';
+
+  @override
+  String get businessBookingsPrice => 'Price';
+
+  @override
+  String get businessBookingsAccept => 'Accept';
+
+  @override
+  String get businessBookingsReject => 'Reject';
+
+  @override
+  String get businessBookingsRejectConfirm =>
+      'Reject this booking? The customer will be notified.';
+
+  @override
+  String get businessBookingsConfirm => 'Confirm readiness';
+
+  @override
+  String get businessBookingsStart => 'Start';
+
+  @override
+  String get businessBookingsComplete => 'Complete';
+
+  @override
   String get ratingsReviewsTitle => 'Reviews';
 
   @override

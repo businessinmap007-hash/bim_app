@@ -2528,6 +2528,132 @@ abstract class AppLocalizations {
   /// **'مكتمل'**
   String get bookingStatusCompleted;
 
+  /// No description provided for @businessBookingsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحجوزات الواردة'**
+  String get businessBookingsTitle;
+
+  /// No description provided for @businessBookingsFilterAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get businessBookingsFilterAll;
+
+  /// No description provided for @businessBookingsFilterPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار الرد'**
+  String get businessBookingsFilterPending;
+
+  /// No description provided for @businessBookingsFilterAccepted.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقبول'**
+  String get businessBookingsFilterAccepted;
+
+  /// No description provided for @businessBookingsFilterInProgress.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ التنفيذ'**
+  String get businessBookingsFilterInProgress;
+
+  /// No description provided for @businessBookingsFilterCompleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتمل'**
+  String get businessBookingsFilterCompleted;
+
+  /// No description provided for @businessBookingsFilterCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغي'**
+  String get businessBookingsFilterCancelled;
+
+  /// No description provided for @businessBookingsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد حجوزات بعد.'**
+  String get businessBookingsEmpty;
+
+  /// No description provided for @businessBookingsCustomer.
+  ///
+  /// In ar, this message translates to:
+  /// **'العميل'**
+  String get businessBookingsCustomer;
+
+  /// No description provided for @businessBookingsUnit.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوحدة'**
+  String get businessBookingsUnit;
+
+  /// No description provided for @businessBookingsQuantity.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكمية'**
+  String get businessBookingsQuantity;
+
+  /// No description provided for @businessBookingsPartySize.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد الأفراد'**
+  String get businessBookingsPartySize;
+
+  /// No description provided for @businessBookingsNotes.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات'**
+  String get businessBookingsNotes;
+
+  /// No description provided for @businessBookingsDateTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموعد'**
+  String get businessBookingsDateTime;
+
+  /// No description provided for @businessBookingsPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر'**
+  String get businessBookingsPrice;
+
+  /// No description provided for @businessBookingsAccept.
+  ///
+  /// In ar, this message translates to:
+  /// **'قبول'**
+  String get businessBookingsAccept;
+
+  /// No description provided for @businessBookingsReject.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفض'**
+  String get businessBookingsReject;
+
+  /// No description provided for @businessBookingsRejectConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفض هذا الحجز؟ سيتم إخطار العميل.'**
+  String get businessBookingsRejectConfirm;
+
+  /// No description provided for @businessBookingsConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد الاستعداد'**
+  String get businessBookingsConfirm;
+
+  /// No description provided for @businessBookingsStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدء التنفيذ'**
+  String get businessBookingsStart;
+
+  /// No description provided for @businessBookingsComplete.
+  ///
+  /// In ar, this message translates to:
+  /// **'إكمال'**
+  String get businessBookingsComplete;
+
   /// No description provided for @ratingsReviewsTitle.
   ///
   /// In ar, this message translates to:

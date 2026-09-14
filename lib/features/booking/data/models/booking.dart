@@ -23,6 +23,15 @@ class Booking {
   final String? serviceNameAr;
   final String? serviceNameEn;
   final DateTime? createdAt;
+  // Only present on the BUSINESS side's own listing (Api\V2\BookingController
+  // scope=business) — the `user` relation is the client who made the request.
+  final String? customerName;
+  final String? customerPhone;
+  // The named unit this booking is for (BookableItemResource-style label,
+  // e.g. "غرفة مزدوجة — ١٠١"), null for a booking with no specific unit.
+  final String? bookableLabel;
+  final int quantity;
+  final int? partySize;
 
   const Booking({
     required this.id,
@@ -40,6 +49,11 @@ class Booking {
     this.serviceNameAr,
     this.serviceNameEn,
     this.createdAt,
+    this.customerName,
+    this.customerPhone,
+    this.bookableLabel,
+    this.quantity = 1,
+    this.partySize,
   });
 
   bool get isCancellable => status == 'pending' || status == 'accepted';
@@ -53,6 +67,8 @@ class Booking {
   factory Booking.fromJson(Map<String, dynamic> json) {
     final business = json['business'] as Map<String, dynamic>?;
     final service = json['service'] as Map<String, dynamic>?;
+    final customer = json['user'] as Map<String, dynamic>?;
+    final bookable = json['bookable'] as Map<String, dynamic>?;
     return Booking(
       id: json['id'] as int,
       status: json['status'] as String? ?? 'pending',
@@ -69,6 +85,15 @@ class Booking {
       serviceNameAr: service?['name_ar'] as String?,
       serviceNameEn: service?['name_en'] as String?,
       createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
+      customerName: customer?['name'] as String?,
+      customerPhone: customer?['phone'] as String?,
+      bookableLabel: bookable == null
+          ? null
+          : ((bookable['title'] as String?)?.trim().isNotEmpty == true
+                ? bookable['title'] as String?
+                : bookable['code'] as String?),
+      quantity: (json['quantity'] as num?)?.toInt() ?? 1,
+      partySize: (json['party_size'] as num?)?.toInt(),
     );
   }
 }

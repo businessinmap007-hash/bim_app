@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../booking/presentation/screens/business_bookings_screen.dart';
 import '../../../booking_settings/presentation/screens/booking_settings_screen.dart';
 import '../../../business_offers/presentation/screens/business_offers_screen.dart';
 import '../../../business_prices/presentation/screens/business_prices_screen.dart';
@@ -144,6 +145,12 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.event_available_outlined,
         title: l10n.bookingSettingsTitle,
         builder: (_) => const BookingSettingsScreen(),
+      ),
+      _Tile(
+        show: _has('bookings'),
+        leading: Icons.event_note_outlined,
+        title: l10n.businessBookingsTitle,
+        builder: (_) => const BusinessBookingsScreen(),
       ),
       _Tile(
         show: true, // account management — no capability of its own.
