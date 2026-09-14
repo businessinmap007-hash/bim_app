@@ -615,6 +615,57 @@ class _BookingDetailSheet extends ConsumerStatefulWidget {
 
 class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
   bool _busy = false;
+  late Booking _booking = widget.booking;
+
+  @override
+  void initState() {
+    super.initState();
+    // widget.booking may come from the plain list (no deposit info) — fetch
+    // the full detail once so the settlement buttons reflect live state.
+    ref.read(bookingApiProvider).show(widget.booking.id).then((fresh) {
+      if (mounted) setState(() => _booking = fresh);
+    }).catchError((_) {});
+  }
+
+  Future<void> _agreeReleaseDeposit() async {
+    final l10n = AppLocalizations.of(context)!;
+    setState(() => _busy = true);
+    try {
+      await ref.read(myBookingsControllerProvider.notifier).agreeReleaseDeposit(_booking.id);
+      final fresh = await ref.read(bookingApiProvider).show(_booking.id);
+      if (mounted) {
+        setState(() => _booking = fresh);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.bookingsAgreementSaved)));
+      }
+    } catch (e) {
+      if (mounted) {
+        final message = e is ApiException ? e.message : l10n.commonSomethingWentWrong;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _agreeRefundDeposit() async {
+    final l10n = AppLocalizations.of(context)!;
+    setState(() => _busy = true);
+    try {
+      await ref.read(myBookingsControllerProvider.notifier).agreeRefundDeposit(_booking.id);
+      final fresh = await ref.read(bookingApiProvider).show(_booking.id);
+      if (mounted) {
+        setState(() => _booking = fresh);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.bookingsAgreementSaved)));
+      }
+    } catch (e) {
+      if (mounted) {
+        final message = e is ApiException ? e.message : l10n.commonSomethingWentWrong;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
 
   Future<void> _cancel() async {
     final l10n = AppLocalizations.of(context)!;
@@ -632,7 +683,7 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
 
     setState(() => _busy = true);
     try {
-      await ref.read(myBookingsControllerProvider.notifier).cancel(widget.booking.id);
+      await ref.read(myBookingsControllerProvider.notifier).cancel(_booking.id);
       if (mounted) {
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.bookingsCancelled)));
@@ -654,7 +705,7 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
     final l10n = AppLocalizations.of(context)!;
     setState(() => _busy = true);
     try {
-      await ref.read(myBookingsControllerProvider.notifier).confirm(widget.booking.id);
+      await ref.read(myBookingsControllerProvider.notifier).confirm(_booking.id);
       if (mounted) {
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.bookingsConfirmed)));
@@ -680,7 +731,7 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
     final ok = await promptWalletPin(
       context,
       ref,
-      action: (pin) => ref.read(myBookingsControllerProvider.notifier).confirm(widget.booking.id, pin: pin),
+      action: (pin) => ref.read(myBookingsControllerProvider.notifier).confirm(_booking.id, pin: pin),
       onError: (e) {
         if (mounted) {
           ScaffoldMessenger.of(
@@ -701,7 +752,7 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
     final submitted = await showLeaveReviewSheet(
       context,
       operationType: 'booking',
-      operationId: widget.booking.id,
+      operationId: _booking.id,
     );
     if (submitted && mounted) {
       Navigator.of(context).pop();
@@ -718,7 +769,7 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
     try {
       final dispute = await ref
           .read(disputesApiProvider)
-          .openForBooking(widget.booking.id, reasonCode: result.reasonCode, reasonText: result.reasonText);
+          .openForBooking(_booking.id, reasonCode: result.reasonCode, reasonText: result.reasonText);
       if (mounted) {
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.disputeOpened)));
@@ -740,7 +791,7 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final languageCode = Localizations.localeOf(context).languageCode;
-    final booking = widget.booking;
+    final booking = _booking;
 
     return SafeArea(
       child: Padding(
@@ -823,6 +874,44 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
                   child: Text(l10n.ratingsLeaveReview),
                 ),
               ),
+            if (booking.deposit != null && (booking.deposit!.isFrozen || booking.deposit!.isReleased || booking.deposit!.isRefunded)) ...[
+              const Divider(height: 24),
+              Text(l10n.bookingsDepositSettlement, style: Theme.of(context).textTheme.titleSmall),
+              const SizedBox(height: 8),
+              if (booking.deposit!.isReleased)
+                Text(l10n.bookingsDepositReleased)
+              else if (booking.deposit!.isRefunded)
+                Text(l10n.bookingsDepositRefunded)
+              else ...[
+                if (booking.deposit!.releaseAgreedClient)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Text(l10n.bookingsWaitingOtherPartyRelease, style: Theme.of(context).textTheme.bodySmall),
+                  )
+                else if (booking.deposit!.refundAgreedClient)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Text(l10n.bookingsWaitingOtherPartyRefund, style: Theme.of(context).textTheme.bodySmall),
+                  ),
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton(
+                    onPressed: _busy ? null : _agreeReleaseDeposit,
+                    child: _busy
+                        ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                        : Text(l10n.bookingsAgreeRelease),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    onPressed: _busy ? null : _agreeRefundDeposit,
+                    child: Text(l10n.bookingsAgreeRefund),
+                  ),
+                ),
+              ],
+            ],
             const SizedBox(height: 8),
             SizedBox(
               width: double.infinity,

@@ -106,6 +106,16 @@ class MyBookingsController extends StateNotifier<MyBookingsState> {
     final updated = await _api.clientConfirm(id, pin: pin);
     state = state.copyWith(items: [for (final b in state.items) b.id == id ? updated : b]);
   }
+
+  Future<void> agreeReleaseDeposit(int id) async {
+    final updated = await _api.agreeReleaseDeposit(id);
+    state = state.copyWith(items: [for (final b in state.items) b.id == id ? updated : b]);
+  }
+
+  Future<void> agreeRefundDeposit(int id) async {
+    final updated = await _api.agreeRefundDeposit(id);
+    state = state.copyWith(items: [for (final b in state.items) b.id == id ? updated : b]);
+  }
 }
 
 final myBookingsControllerProvider =

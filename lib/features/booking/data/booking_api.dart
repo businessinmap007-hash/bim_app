@@ -111,6 +111,25 @@ class BookingApi {
     return Booking.fromJson(data['booking'] as Map<String, dynamic>);
   }
 
+  /// Either party agreeing the deal succeeded and the deposit should be
+  /// released — once BOTH the client and business have agreed, the backend
+  /// releases it automatically (BookingDepositService::agreeRelease).
+  Future<Booking> agreeReleaseDeposit(int id) async {
+    final data =
+        await _client.post('/bookings/$id/deposit/agree-release')
+            as Map<String, dynamic>;
+    return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+  }
+
+  /// Either party agreeing the deal did NOT go through — once both agree,
+  /// the deposit refunds to the client automatically.
+  Future<Booking> agreeRefundDeposit(int id) async {
+    final data =
+        await _client.post('/bookings/$id/deposit/agree-refund')
+            as Map<String, dynamic>;
+    return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+  }
+
   /// What this business's booking screen must ask (Api\V2\BookingController::form).
   Future<BookingFormPayload> form(int businessId) async {
     final data =

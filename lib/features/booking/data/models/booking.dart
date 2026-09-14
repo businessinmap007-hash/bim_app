@@ -1,5 +1,40 @@
 import '../../../../core/env/env.dart';
 
+/// Mirrors `latest_deposit` on a booking response — a plain `Deposit` row,
+/// present only once the deposit has actually been frozen (i.e. the booking
+/// has been started). The `*_agreed_*` flags back the self-service
+/// release/refund agreement (see `BookingApi.agreeReleaseDeposit`).
+class BookingDeposit {
+  final int id;
+  final String status;
+  final bool releaseAgreedClient;
+  final bool releaseAgreedBusiness;
+  final bool refundAgreedClient;
+  final bool refundAgreedBusiness;
+
+  const BookingDeposit({
+    required this.id,
+    required this.status,
+    required this.releaseAgreedClient,
+    required this.releaseAgreedBusiness,
+    required this.refundAgreedClient,
+    required this.refundAgreedBusiness,
+  });
+
+  bool get isFrozen => status == 'frozen';
+  bool get isReleased => status == 'released';
+  bool get isRefunded => status == 'refunded';
+
+  factory BookingDeposit.fromJson(Map<String, dynamic> json) => BookingDeposit(
+    id: json['id'] as int,
+    status: json['status'] as String? ?? '',
+    releaseAgreedClient: json['release_agreed_client'] as bool? ?? false,
+    releaseAgreedBusiness: json['release_agreed_business'] as bool? ?? false,
+    refundAgreedClient: json['refund_agreed_client'] as bool? ?? false,
+    refundAgreedBusiness: json['refund_agreed_business'] as bool? ?? false,
+  );
+}
+
 /// Mirrors the `bookings` table as returned by `Api\V2\BookingController`
 /// (a plain Eloquent model, not a Resource — every fillable column comes
 /// through as-is, `price` as a decimal-cast string). `service` is loaded on
@@ -32,6 +67,7 @@ class Booking {
   final String? bookableLabel;
   final int quantity;
   final int? partySize;
+  final BookingDeposit? deposit;
 
   const Booking({
     required this.id,
@@ -54,6 +90,7 @@ class Booking {
     this.bookableLabel,
     this.quantity = 1,
     this.partySize,
+    this.deposit,
   });
 
   bool get isCancellable => status == 'pending' || status == 'accepted';
@@ -69,6 +106,7 @@ class Booking {
     final service = json['service'] as Map<String, dynamic>?;
     final customer = json['user'] as Map<String, dynamic>?;
     final bookable = json['bookable'] as Map<String, dynamic>?;
+    final depositJson = json['latest_deposit'] as Map<String, dynamic>?;
     return Booking(
       id: json['id'] as int,
       status: json['status'] as String? ?? 'pending',
@@ -94,6 +132,7 @@ class Booking {
                 : bookable['code'] as String?),
       quantity: (json['quantity'] as num?)?.toInt() ?? 1,
       partySize: (json['party_size'] as num?)?.toInt(),
+      deposit: depositJson != null ? BookingDeposit.fromJson(depositJson) : null,
     );
   }
 }

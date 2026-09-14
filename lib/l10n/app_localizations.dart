@@ -2426,6 +2426,54 @@ abstract class AppLocalizations {
   /// **'تم حفظ التأكيد.'**
   String get bookingsConfirmed;
 
+  /// No description provided for @bookingsDepositSettlement.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسوية الضمان'**
+  String get bookingsDepositSettlement;
+
+  /// No description provided for @bookingsAgreeRelease.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد نجاح المعاملة'**
+  String get bookingsAgreeRelease;
+
+  /// No description provided for @bookingsAgreeRefund.
+  ///
+  /// In ar, this message translates to:
+  /// **'المعاملة لم تتم'**
+  String get bookingsAgreeRefund;
+
+  /// No description provided for @bookingsAgreementSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ إجابتك.'**
+  String get bookingsAgreementSaved;
+
+  /// No description provided for @bookingsWaitingOtherPartyRelease.
+  ///
+  /// In ar, this message translates to:
+  /// **'في انتظار تأكيد الطرف الآخر على فكّ الضمان.'**
+  String get bookingsWaitingOtherPartyRelease;
+
+  /// No description provided for @bookingsWaitingOtherPartyRefund.
+  ///
+  /// In ar, this message translates to:
+  /// **'في انتظار تأكيد الطرف الآخر على استرجاع المبلغ.'**
+  String get bookingsWaitingOtherPartyRefund;
+
+  /// No description provided for @bookingsDepositReleased.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم فكّ الضمان.'**
+  String get bookingsDepositReleased;
+
+  /// No description provided for @bookingsDepositRefunded.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم استرجاع المبلغ.'**
+  String get bookingsDepositRefunded;
+
   /// No description provided for @orderStatusPending.
   ///
   /// In ar, this message translates to:

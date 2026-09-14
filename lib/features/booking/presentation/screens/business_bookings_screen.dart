@@ -337,6 +337,46 @@ class BusinessBookingDetailScreen extends ConsumerWidget {
                     ),
                     child: Text(l10n.businessBookingsComplete),
                   ),
+                if (!state.isBusy &&
+                    booking.deposit != null &&
+                    (booking.deposit!.isFrozen || booking.deposit!.isReleased || booking.deposit!.isRefunded)) ...[
+                  const Divider(height: 32),
+                  Text(l10n.bookingsDepositSettlement, style: Theme.of(context).textTheme.titleSmall),
+                  const SizedBox(height: 8),
+                  if (booking.deposit!.isReleased)
+                    Text(l10n.bookingsDepositReleased)
+                  else if (booking.deposit!.isRefunded)
+                    Text(l10n.bookingsDepositRefunded)
+                  else ...[
+                    if (booking.deposit!.releaseAgreedBusiness)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Text(l10n.bookingsWaitingOtherPartyRelease, style: Theme.of(context).textTheme.bodySmall),
+                      )
+                    else if (booking.deposit!.refundAgreedBusiness)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Text(l10n.bookingsWaitingOtherPartyRefund, style: Theme.of(context).textTheme.bodySmall),
+                      ),
+                    FilledButton(
+                      onPressed: () => _run(
+                        context,
+                        ref,
+                        () => ref.read(businessBookingDetailControllerProvider(bookingId).notifier).agreeReleaseDeposit(),
+                      ),
+                      child: Text(l10n.bookingsAgreeRelease),
+                    ),
+                    const SizedBox(height: 8),
+                    OutlinedButton(
+                      onPressed: () => _run(
+                        context,
+                        ref,
+                        () => ref.read(businessBookingDetailControllerProvider(bookingId).notifier).agreeRefundDeposit(),
+                      ),
+                      child: Text(l10n.bookingsAgreeRefund),
+                    ),
+                  ],
+                ],
               ],
             ),
     );

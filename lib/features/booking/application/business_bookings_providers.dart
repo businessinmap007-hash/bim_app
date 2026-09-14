@@ -173,6 +173,26 @@ class BusinessBookingDetailController extends StateNotifier<BusinessBookingDetai
       if (mounted) state = state.copyWith(isBusy: false);
     }
   }
+
+  Future<void> agreeReleaseDeposit() async {
+    state = state.copyWith(isBusy: true);
+    try {
+      final booking = await _api.agreeReleaseDeposit(bookingId);
+      state = state.copyWith(booking: booking, isBusy: false);
+    } finally {
+      if (mounted) state = state.copyWith(isBusy: false);
+    }
+  }
+
+  Future<void> agreeRefundDeposit() async {
+    state = state.copyWith(isBusy: true);
+    try {
+      final booking = await _api.agreeRefundDeposit(bookingId);
+      state = state.copyWith(booking: booking, isBusy: false);
+    } finally {
+      if (mounted) state = state.copyWith(isBusy: false);
+    }
+  }
 }
 
 final businessBookingDetailControllerProvider =

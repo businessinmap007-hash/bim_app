@@ -1288,6 +1288,32 @@ class AppLocalizationsAr extends AppLocalizations {
   String get bookingsConfirmed => 'تم حفظ التأكيد.';
 
   @override
+  String get bookingsDepositSettlement => 'تسوية الضمان';
+
+  @override
+  String get bookingsAgreeRelease => 'تأكيد نجاح المعاملة';
+
+  @override
+  String get bookingsAgreeRefund => 'المعاملة لم تتم';
+
+  @override
+  String get bookingsAgreementSaved => 'تم حفظ إجابتك.';
+
+  @override
+  String get bookingsWaitingOtherPartyRelease =>
+      'في انتظار تأكيد الطرف الآخر على فكّ الضمان.';
+
+  @override
+  String get bookingsWaitingOtherPartyRefund =>
+      'في انتظار تأكيد الطرف الآخر على استرجاع المبلغ.';
+
+  @override
+  String get bookingsDepositReleased => 'تم فكّ الضمان.';
+
+  @override
+  String get bookingsDepositRefunded => 'تم استرجاع المبلغ.';
+
+  @override
   String get orderStatusPending => 'قيد الانتظار';
 
   @override

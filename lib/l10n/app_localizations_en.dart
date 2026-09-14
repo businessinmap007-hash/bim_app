@@ -1274,6 +1274,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bookingsConfirmed => 'Confirmation saved.';
 
   @override
+  String get bookingsDepositSettlement => 'Deposit settlement';
+
+  @override
+  String get bookingsAgreeRelease => 'Confirm transaction succeeded';
+
+  @override
+  String get bookingsAgreeRefund => 'Transaction didn\'t happen';
+
+  @override
+  String get bookingsAgreementSaved => 'Your answer was saved.';
+
+  @override
+  String get bookingsWaitingOtherPartyRelease =>
+      'Waiting for the other party to confirm the deposit can be released.';
+
+  @override
+  String get bookingsWaitingOtherPartyRefund =>
+      'Waiting for the other party to confirm the deposit should be refunded.';
+
+  @override
+  String get bookingsDepositReleased => 'Deposit released.';
+
+  @override
+  String get bookingsDepositRefunded => 'Deposit refunded.';
+
+  @override
   String get orderStatusPending => 'Pending';
 
   @override
