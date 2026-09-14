@@ -57,6 +57,7 @@ class PlacedOrder {
   final String status;
   final String? prepStatus;
   final String fulfillmentType;
+  final DateTime? pickupAt;
   final double finalTotal;
   final double deliveryFee;
   final double discount;
@@ -89,6 +90,7 @@ class PlacedOrder {
     required this.status,
     this.prepStatus,
     required this.fulfillmentType,
+    this.pickupAt,
     required this.finalTotal,
     required this.deliveryFee,
     required this.discount,
@@ -135,6 +137,7 @@ class PlacedOrder {
       status: json['status'] as String? ?? 'pending',
       prepStatus: json['prep_status'] as String?,
       fulfillmentType: json['fulfillment_type'] as String? ?? 'delivery',
+      pickupAt: json['pickup_at'] != null ? DateTime.tryParse(json['pickup_at'] as String) : null,
       finalTotal: (totals['final_total'] as num?)?.toDouble() ?? 0,
       deliveryFee: (totals['delivery_fee'] as num?)?.toDouble() ?? 0,
       discount: (totals['discount'] as num?)?.toDouble() ?? 0,

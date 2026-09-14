@@ -414,6 +414,14 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                     padding: const EdgeInsets.only(top: 4),
                     child: Text(order.tableLabel!, style: Theme.of(context).textTheme.bodyMedium),
                   ),
+                if (order.fulfillmentType == 'pickup' && order.pickupAt != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      '${l10n.cartPickupTimeLabel}: ${_formatPickupAt(context, order.pickupAt!)}',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ),
                 const SizedBox(height: 16),
                 OrderTrackerTimeline(order: order),
                 const SizedBox(height: 8),
@@ -544,4 +552,9 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
             ),
     );
   }
+}
+
+String _formatPickupAt(BuildContext context, DateTime pickupAt) {
+  final l10n = MaterialLocalizations.of(context);
+  return '${l10n.formatCompactDate(pickupAt)} · ${l10n.formatTimeOfDay(TimeOfDay.fromDateTime(pickupAt))}';
 }

@@ -172,6 +172,7 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
   // detail fetch sidesteps that race entirely: it's not subject to a later,
   // unrelated list refresh clobbering it.
   PlacedOrder? _detail;
+  Object? _detailError;
 
   PlacedOrder? _orderFromState() {
     if (_detail != null) return _detail;
@@ -183,8 +184,17 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
   }
 
   Future<void> _refreshDetail() async {
-    final detail = await ref.read(myOrdersControllerProvider.notifier).loadDetail(widget.orderId);
-    if (mounted) setState(() => _detail = detail);
+    setState(() => _detailError = null);
+    try {
+      final detail = await ref.read(myOrdersControllerProvider.notifier).loadDetail(widget.orderId);
+      if (mounted) setState(() => _detail = detail);
+    } catch (e) {
+      // No catch here previously meant a failed fetch (timeout, transient
+      // network error, expired token) left `_detail` null forever with no
+      // row in `items` to fall back on -- the sheet just spun in place with
+      // no way out except dismissing it.
+      if (mounted) setState(() => _detailError = e);
+    }
   }
 
   @override
@@ -325,6 +335,21 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
     final order = _orderFromState();
 
     if (order == null) {
+      if (_detailError != null) {
+        return SizedBox(
+          height: 200,
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(l10n.commonSomethingWentWrong),
+                const SizedBox(height: 8),
+                OutlinedButton(onPressed: _refreshDetail, child: Text(l10n.commonRetry)),
+              ],
+            ),
+          ),
+        );
+      }
       return const SizedBox(
         height: 200,
         child: Center(child: CircularProgressIndicator()),
@@ -362,6 +387,14 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
               _StatusBadge(label: _orderStatusLabel(order.status, l10n), color: _orderStatusColor(order.status)),
             ],
           ),
+          if (order.fulfillmentType == 'pickup' && order.pickupAt != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Text(
+                '${l10n.cartPickupTimeLabel}: ${_formatPickupAt(context, order.pickupAt!)}',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ),
           const SizedBox(height: 16),
           OrderTrackerTimeline(order: order),
           const SizedBox(height: 8),
@@ -831,3 +864,8 @@ Color _bookingStatusColor(String status) => switch (status) {
   'in_progress' => AppColors.accentGold,
   _ => AppColors.warning,
 };
+
+String _formatPickupAt(BuildContext context, DateTime pickupAt) {
+  final l10n = MaterialLocalizations.of(context);
+  return '${l10n.formatCompactDate(pickupAt)} · ${l10n.formatTimeOfDay(TimeOfDay.fromDateTime(pickupAt))}';
+}
