@@ -492,6 +492,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get businessInfoOpenInMaps => 'فتح في الخرائط';
 
   @override
+  String get businessInfoCheckIn => 'موعد تسجيل الوصول';
+
+  @override
+  String get businessInfoCheckOut => 'موعد تسجيل المغادرة';
+
+  @override
   String get businessInfoAlbums => 'ألبوم الصور';
 
   @override
@@ -701,6 +707,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get bookingSettingsDeleteConfirm => 'هل تريد الحذف؟';
+
+  @override
+  String get bookingSettingsApplyAllLabel => 'كل الأيام';
+
+  @override
+  String get bookingSettingsApplyToWeek => 'طبّق على الأسبوع';
+
+  @override
+  String get bookingSettingsApplyHint =>
+      'يملأ القائمة فقط — عدّل أي يوم بعدها، ثم احفظ.';
 
   @override
   String get bookingSettingsClosed => 'مغلق';
@@ -1914,6 +1930,78 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get staffPhoneRequired => 'أدخل رقم هاتف الموظف.';
+
+  @override
+  String get staffActivityTitle => 'سجل نشاط الموظفين';
+
+  @override
+  String get staffActivityEmpty => 'لا يوجد نشاط في هذه الفترة.';
+
+  @override
+  String get staffActivityFrom => 'من';
+
+  @override
+  String get staffActivityTo => 'إلى';
+
+  @override
+  String get staffActivityToday => 'اليوم';
+
+  @override
+  String get staffActivityFilter => 'فلترة';
+
+  @override
+  String get staffActivityStaffLabel => 'الموظف';
+
+  @override
+  String get staffActivityAllStaff => 'الجميع';
+
+  @override
+  String get staffActivityOwnerBadge => 'صاحب النشاط';
+
+  @override
+  String staffActivityOperationsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count عملية',
+      many: '$count عملية',
+      few: '$count عمليات',
+      two: 'عمليتان',
+      one: 'عملية واحدة',
+      zero: 'لا عمليات في هذه الفترة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get staffActivityActionAccepted => 'قبِل';
+
+  @override
+  String get staffActivityActionRejected => 'رفض';
+
+  @override
+  String get staffActivityActionPreparing => 'بدأ التجهيز';
+
+  @override
+  String get staffActivityActionReady => 'جهّز';
+
+  @override
+  String get staffActivityActionCompleted => 'أكمل';
+
+  @override
+  String get staffActivityActionStarted => 'بدأ التنفيذ';
+
+  @override
+  String get staffActivityActionConfirmed => 'أكّد الاستعداد';
+
+  @override
+  String get staffActivityActionItemUnavailable => 'أبلغ عن نفاد صنف';
+
+  @override
+  String get staffActivitySubjectOrder => 'طلب';
+
+  @override
+  String get staffActivitySubjectBooking => 'حجز';
 
   @override
   String get finesTitle => 'الغرامات';

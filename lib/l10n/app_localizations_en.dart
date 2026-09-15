@@ -483,6 +483,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get businessInfoOpenInMaps => 'Open in maps';
 
   @override
+  String get businessInfoCheckIn => 'Check-in time';
+
+  @override
+  String get businessInfoCheckOut => 'Check-out time';
+
+  @override
   String get businessInfoAlbums => 'Photo album';
 
   @override
@@ -694,6 +700,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bookingSettingsDeleteConfirm => 'Delete this?';
+
+  @override
+  String get bookingSettingsApplyAllLabel => 'All days';
+
+  @override
+  String get bookingSettingsApplyToWeek => 'Apply to week';
+
+  @override
+  String get bookingSettingsApplyHint =>
+      'Fills the list only — adjust any day, then save.';
 
   @override
   String get bookingSettingsClosed => 'Closed';
@@ -1898,6 +1914,75 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get staffPhoneRequired => 'Enter the staff member\'s phone number.';
+
+  @override
+  String get staffActivityTitle => 'Staff activity log';
+
+  @override
+  String get staffActivityEmpty => 'No activity in this period.';
+
+  @override
+  String get staffActivityFrom => 'From';
+
+  @override
+  String get staffActivityTo => 'To';
+
+  @override
+  String get staffActivityToday => 'Today';
+
+  @override
+  String get staffActivityFilter => 'Filter';
+
+  @override
+  String get staffActivityStaffLabel => 'Staff member';
+
+  @override
+  String get staffActivityAllStaff => 'Everyone';
+
+  @override
+  String get staffActivityOwnerBadge => 'Owner';
+
+  @override
+  String staffActivityOperationsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count operations',
+      one: '1 operation',
+      zero: 'No operations in this period',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get staffActivityActionAccepted => 'Accepted';
+
+  @override
+  String get staffActivityActionRejected => 'Rejected';
+
+  @override
+  String get staffActivityActionPreparing => 'Started preparing';
+
+  @override
+  String get staffActivityActionReady => 'Marked ready';
+
+  @override
+  String get staffActivityActionCompleted => 'Completed';
+
+  @override
+  String get staffActivityActionStarted => 'Started';
+
+  @override
+  String get staffActivityActionConfirmed => 'Confirmed';
+
+  @override
+  String get staffActivityActionItemUnavailable => 'Reported item unavailable';
+
+  @override
+  String get staffActivitySubjectOrder => 'Order';
+
+  @override
+  String get staffActivitySubjectBooking => 'Booking';
 
   @override
   String get finesTitle => 'Fines';

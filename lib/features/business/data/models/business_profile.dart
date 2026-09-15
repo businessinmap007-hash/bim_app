@@ -104,6 +104,8 @@ class BusinessProfile {
   final int followersCount;
   final BusinessSections sections;
   final BusinessFulfillment fulfillment;
+  final String? checkInTime;
+  final String? checkOutTime;
 
   const BusinessProfile({
     required this.id,
@@ -131,9 +133,12 @@ class BusinessProfile {
     this.followersCount = 0,
     required this.sections,
     required this.fulfillment,
+    this.checkInTime,
+    this.checkOutTime,
   });
 
   bool get hasLocation => latitude != null && longitude != null;
+  bool get hasCheckTimes => checkInTime != null || checkOutTime != null;
 
   BusinessProfile copyWith({bool? isFollowing, int? followersCount}) => BusinessProfile(
     id: id,
@@ -161,7 +166,13 @@ class BusinessProfile {
     followersCount: followersCount ?? this.followersCount,
     sections: sections,
     fulfillment: fulfillment,
+    checkInTime: checkInTime,
+    checkOutTime: checkOutTime,
   );
+
+  /// The API returns "HH:mm:ss"; only "HH:mm" is worth showing.
+  static String? _trimSeconds(String? value) =>
+      value != null && value.length >= 5 ? value.substring(0, 5) : value;
 
   factory BusinessProfile.fromJson(Map<String, dynamic> json) {
     final category = json['category'] as Map<String, dynamic>? ?? const {};
@@ -204,6 +215,8 @@ class BusinessProfile {
       followersCount: (counts['followers'] as num?)?.toInt() ?? 0,
       sections: BusinessSections.fromJson(json['sections'] as Map<String, dynamic>? ?? const {}),
       fulfillment: BusinessFulfillment.fromJson(json['fulfillment'] as Map<String, dynamic>? ?? const {}),
+      checkInTime: _trimSeconds(json['check_in_time'] as String?),
+      checkOutTime: _trimSeconds(json['check_out_time'] as String?),
     );
   }
 }

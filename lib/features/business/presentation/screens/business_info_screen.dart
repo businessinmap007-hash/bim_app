@@ -117,6 +117,13 @@ class _BusinessInfoBody extends ConsumerWidget {
           label: l10n.profileSpecialty,
           value: profile.categoryChildName!.localizedName(languageCode),
         ),
+      // A stay's own clock (hotels, vacation apartments, chalets — any
+      // booking business that set one) — the business's own booking
+      // settings screen is where it's written; here it's read-only.
+      if (profile.checkInTime != null)
+        _InfoRow(icon: Icons.login_outlined, label: l10n.businessInfoCheckIn, value: profile.checkInTime!),
+      if (profile.checkOutTime != null)
+        _InfoRow(icon: Icons.logout_outlined, label: l10n.businessInfoCheckOut, value: profile.checkOutTime!),
     ];
 
     return ListView(

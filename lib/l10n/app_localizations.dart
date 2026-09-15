@@ -944,6 +944,18 @@ abstract class AppLocalizations {
   /// **'فتح في الخرائط'**
   String get businessInfoOpenInMaps;
 
+  /// No description provided for @businessInfoCheckIn.
+  ///
+  /// In ar, this message translates to:
+  /// **'موعد تسجيل الوصول'**
+  String get businessInfoCheckIn;
+
+  /// No description provided for @businessInfoCheckOut.
+  ///
+  /// In ar, this message translates to:
+  /// **'موعد تسجيل المغادرة'**
+  String get businessInfoCheckOut;
+
   /// No description provided for @businessInfoAlbums.
   ///
   /// In ar, this message translates to:
@@ -1357,6 +1369,24 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'هل تريد الحذف؟'**
   String get bookingSettingsDeleteConfirm;
+
+  /// No description provided for @bookingSettingsApplyAllLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل الأيام'**
+  String get bookingSettingsApplyAllLabel;
+
+  /// No description provided for @bookingSettingsApplyToWeek.
+  ///
+  /// In ar, this message translates to:
+  /// **'طبّق على الأسبوع'**
+  String get bookingSettingsApplyToWeek;
+
+  /// No description provided for @bookingSettingsApplyHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يملأ القائمة فقط — عدّل أي يوم بعدها، ثم احفظ.'**
+  String get bookingSettingsApplyHint;
 
   /// No description provided for @bookingSettingsClosed.
   ///
@@ -3535,6 +3565,126 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'أدخل رقم هاتف الموظف.'**
   String get staffPhoneRequired;
+
+  /// No description provided for @staffActivityTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجل نشاط الموظفين'**
+  String get staffActivityTitle;
+
+  /// No description provided for @staffActivityEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد نشاط في هذه الفترة.'**
+  String get staffActivityEmpty;
+
+  /// No description provided for @staffActivityFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'من'**
+  String get staffActivityFrom;
+
+  /// No description provided for @staffActivityTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلى'**
+  String get staffActivityTo;
+
+  /// No description provided for @staffActivityToday.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم'**
+  String get staffActivityToday;
+
+  /// No description provided for @staffActivityFilter.
+  ///
+  /// In ar, this message translates to:
+  /// **'فلترة'**
+  String get staffActivityFilter;
+
+  /// No description provided for @staffActivityStaffLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموظف'**
+  String get staffActivityStaffLabel;
+
+  /// No description provided for @staffActivityAllStaff.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجميع'**
+  String get staffActivityAllStaff;
+
+  /// No description provided for @staffActivityOwnerBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'صاحب النشاط'**
+  String get staffActivityOwnerBadge;
+
+  /// No description provided for @staffActivityOperationsCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{لا عمليات في هذه الفترة} one{عملية واحدة} two{عمليتان} few{{count} عمليات} many{{count} عملية} other{{count} عملية}}'**
+  String staffActivityOperationsCount(int count);
+
+  /// No description provided for @staffActivityActionAccepted.
+  ///
+  /// In ar, this message translates to:
+  /// **'قبِل'**
+  String get staffActivityActionAccepted;
+
+  /// No description provided for @staffActivityActionRejected.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفض'**
+  String get staffActivityActionRejected;
+
+  /// No description provided for @staffActivityActionPreparing.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدأ التجهيز'**
+  String get staffActivityActionPreparing;
+
+  /// No description provided for @staffActivityActionReady.
+  ///
+  /// In ar, this message translates to:
+  /// **'جهّز'**
+  String get staffActivityActionReady;
+
+  /// No description provided for @staffActivityActionCompleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكمل'**
+  String get staffActivityActionCompleted;
+
+  /// No description provided for @staffActivityActionStarted.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدأ التنفيذ'**
+  String get staffActivityActionStarted;
+
+  /// No description provided for @staffActivityActionConfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكّد الاستعداد'**
+  String get staffActivityActionConfirmed;
+
+  /// No description provided for @staffActivityActionItemUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'أبلغ عن نفاد صنف'**
+  String get staffActivityActionItemUnavailable;
+
+  /// No description provided for @staffActivitySubjectOrder.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب'**
+  String get staffActivitySubjectOrder;
+
+  /// No description provided for @staffActivitySubjectBooking.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجز'**
+  String get staffActivitySubjectBooking;
 
   /// No description provided for @finesTitle.
   ///

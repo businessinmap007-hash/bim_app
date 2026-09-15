@@ -580,6 +580,8 @@ class _HoursTab extends ConsumerStatefulWidget {
 class _HoursTabState extends ConsumerState<_HoursTab> {
   List<WorkingDay>? _days;
   bool _saving = false;
+  String? _bulkOpen;
+  String? _bulkClose;
 
   String? _checkIn;
   String? _checkOut;
@@ -614,6 +616,35 @@ class _HoursTabState extends ConsumerState<_HoursTab> {
     final formatted = '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
     setState(() {
       _days![index] = isOpen ? current.copyWith(open: formatted) : current.copyWith(close: formatted);
+    });
+  }
+
+  Future<void> _pickBulkTime({required bool isOpen}) async {
+    final picked = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    if (picked == null) return;
+    final formatted = '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+    setState(() {
+      if (isOpen) {
+        _bulkOpen = formatted;
+      } else {
+        _bulkClose = formatted;
+      }
+    });
+  }
+
+  /// Fills every day's open/close with the same pair — it doesn't save by
+  /// itself and it doesn't touch a day's closed switch, so a day already
+  /// marked off stays off even after this runs. Mirrors the web business
+  /// panel's "طبّق على الأسبوع" shortcut (resources/views/business/profile/
+  /// edit.blade.php), which most shops need since they open/close at the
+  /// same time every day.
+  void _applyToWeek() {
+    if (_bulkOpen == null && _bulkClose == null) return;
+    setState(() {
+      _days = [
+        for (final day in _days!)
+          day.copyWith(open: _bulkOpen ?? day.open, close: _bulkClose ?? day.close),
+      ];
     });
   }
 
@@ -696,6 +727,49 @@ class _HoursTabState extends ConsumerState<_HoursTab> {
           ),
         ),
         const SizedBox(height: 16),
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardTheme.color,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: AppColors.softShadow(),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(l10n.bookingSettingsApplyAllLabel, style: Theme.of(context).textTheme.titleSmall),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => _pickBulkTime(isOpen: true),
+                      child: Text(_bulkOpen ?? l10n.bookingSettingsOpenTime),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => _pickBulkTime(isOpen: false),
+                      child: Text(_bulkClose ?? l10n.bookingSettingsCloseTime),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  FilledButton(
+                    onPressed: (_bulkOpen == null && _bulkClose == null) ? null : _applyToWeek,
+                    child: Text(l10n.bookingSettingsApplyToWeek),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 6),
+              Text(
+                l10n.bookingSettingsApplyHint,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 12),
         Container(
           decoration: BoxDecoration(
             color: Theme.of(context).cardTheme.color,
