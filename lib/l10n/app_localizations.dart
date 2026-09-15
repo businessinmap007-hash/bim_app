@@ -3686,6 +3686,66 @@ abstract class AppLocalizations {
   /// **'حجز'**
   String get staffActivitySubjectBooking;
 
+  /// No description provided for @staffGroupsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'فرق العمل'**
+  String get staffGroupsTitle;
+
+  /// No description provided for @staffGroupsEmptyGroup.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد أحد فى هذه المجموعة.'**
+  String get staffGroupsEmptyGroup;
+
+  /// No description provided for @staffAssignTask.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلبه لمهمة'**
+  String get staffAssignTask;
+
+  /// No description provided for @staffAttendancePresent.
+  ///
+  /// In ar, this message translates to:
+  /// **'حاضر الآن'**
+  String get staffAttendancePresent;
+
+  /// No description provided for @staffAttendanceCheckedOut.
+  ///
+  /// In ar, this message translates to:
+  /// **'انصرف'**
+  String get staffAttendanceCheckedOut;
+
+  /// No description provided for @staffAttendanceNotCheckedIn.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يسجّل حضوره اليوم'**
+  String get staffAttendanceNotCheckedIn;
+
+  /// No description provided for @myWorkTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أعمالي'**
+  String get myWorkTitle;
+
+  /// No description provided for @myWorkEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا تعمل لدى أى نشاط تجارى حاليًا.'**
+  String get myWorkEmpty;
+
+  /// No description provided for @attendanceCheckIn.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل حضور'**
+  String get attendanceCheckIn;
+
+  /// No description provided for @attendanceCheckOut.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل انصراف'**
+  String get attendanceCheckOut;
+
   /// No description provided for @finesTitle.
   ///
   /// In ar, this message translates to:

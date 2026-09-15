@@ -1985,6 +1985,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get staffActivitySubjectBooking => 'Booking';
 
   @override
+  String get staffGroupsTitle => 'Work teams';
+
+  @override
+  String get staffGroupsEmptyGroup => 'No one in this group yet.';
+
+  @override
+  String get staffAssignTask => 'Assign a task';
+
+  @override
+  String get staffAttendancePresent => 'Present now';
+
+  @override
+  String get staffAttendanceCheckedOut => 'Checked out';
+
+  @override
+  String get staffAttendanceNotCheckedIn => 'Hasn\'t checked in today';
+
+  @override
+  String get myWorkTitle => 'My work';
+
+  @override
+  String get myWorkEmpty => 'You don\'t work for any business yet.';
+
+  @override
+  String get attendanceCheckIn => 'Check in';
+
+  @override
+  String get attendanceCheckOut => 'Check out';
+
+  @override
   String get finesTitle => 'Fines';
 
   @override

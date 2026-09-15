@@ -2004,6 +2004,36 @@ class AppLocalizationsAr extends AppLocalizations {
   String get staffActivitySubjectBooking => 'حجز';
 
   @override
+  String get staffGroupsTitle => 'فرق العمل';
+
+  @override
+  String get staffGroupsEmptyGroup => 'لا يوجد أحد فى هذه المجموعة.';
+
+  @override
+  String get staffAssignTask => 'طلبه لمهمة';
+
+  @override
+  String get staffAttendancePresent => 'حاضر الآن';
+
+  @override
+  String get staffAttendanceCheckedOut => 'انصرف';
+
+  @override
+  String get staffAttendanceNotCheckedIn => 'لم يسجّل حضوره اليوم';
+
+  @override
+  String get myWorkTitle => 'أعمالي';
+
+  @override
+  String get myWorkEmpty => 'لا تعمل لدى أى نشاط تجارى حاليًا.';
+
+  @override
+  String get attendanceCheckIn => 'تسجيل حضور';
+
+  @override
+  String get attendanceCheckOut => 'تسجيل انصراف';
+
+  @override
   String get finesTitle => 'الغرامات';
 
   @override

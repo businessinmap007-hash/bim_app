@@ -77,7 +77,10 @@ class _AssignDriverScreenState extends ConsumerState<AssignDriverScreen> {
             );
           }
 
+          // Who is NOT already on a job comes first — the whole point of
+          // opening this screen is picking someone free, not just nearest.
           final sorted = [...drivers]..sort((a, b) {
+            if (a.busy != b.busy) return a.busy ? 1 : -1;
             if (a.distanceKm == null && b.distanceKm == null) return 0;
             if (a.distanceKm == null) return 1;
             if (b.distanceKm == null) return -1;

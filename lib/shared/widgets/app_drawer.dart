@@ -15,6 +15,7 @@ import '../../features/posts/presentation/screens/my_follows_screen.dart';
 import '../../features/posts/presentation/screens/my_jobs_screen.dart';
 import '../../features/profile/presentation/screens/my_profile_screen.dart';
 import '../../features/settings/presentation/screens/services_settings_screen.dart';
+import '../../features/staff/presentation/screens/my_work_screen.dart';
 import '../../l10n/app_localizations.dart';
 import '../utils/localized_name.dart';
 
@@ -306,6 +307,21 @@ class _AppDrawerContent extends ConsumerWidget {
                     },
                   ),
                 ],
+
+                // Whoever works for a business as delegated staff (see
+                // business_staff) checks their own attendance in here,
+                // whichever businesses that turns out to be.
+                _SectionHeader(l10n.myWorkTitle),
+                ListTile(
+                  leading: const Icon(Icons.badge_outlined),
+                  title: Text(l10n.myWorkTitle),
+                  onTap: () {
+                    close();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const MyWorkScreen()),
+                    );
+                  },
+                ),
               ],
             ),
           ),

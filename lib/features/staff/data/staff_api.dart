@@ -1,10 +1,10 @@
 import '../../../core/network/api_client.dart';
+import 'models/staff_group.dart';
 import 'models/staff_member.dart';
+import 'models/staff_membership.dart';
 
 /// /business/{capabilities,staff} — a business owner delegating page
-/// management to staff. See Api\V2\BusinessStaffController. Owner-only;
-/// `memberships` (the businesses a delegate may act for) isn't wired up
-/// here — this app only builds the owner-side roster management.
+/// management to staff. See Api\V2\BusinessStaffController.
 class StaffApi {
   final ApiClient _client;
   const StaffApi(this._client);
@@ -66,4 +66,23 @@ class StaffApi {
   }
 
   Future<void> remove(int userId) => _client.delete('/business/staff/$userId');
+
+  /// GET /business/staff/groups — the roster grouped by capability, each
+  /// card carrying today's operation count, attendance, and (drivers only)
+  /// live delivery workload. Owner-only.
+  Future<List<StaffGroup>> groups() async {
+    final data = await _client.get('/business/staff/groups') as Map<String, dynamic>;
+    return (data['groups'] as List<dynamic>? ?? [])
+        .map((e) => StaffGroup.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
+  /// GET /business/memberships — the businesses I work for as staff, with
+  /// what I'm allowed to do at each. May be called by any account.
+  Future<List<StaffMembership>> memberships() async {
+    final data = await _client.get('/business/memberships') as Map<String, dynamic>;
+    return (data['memberships'] as List<dynamic>? ?? [])
+        .map((e) => StaffMembership.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
 }
