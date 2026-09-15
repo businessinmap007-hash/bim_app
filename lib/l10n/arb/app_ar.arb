@@ -321,6 +321,8 @@
   "cartFulfillmentType": "طريقة الاستلام",
   "cartFulfillmentDelivery": "توصيل",
   "cartFulfillmentPickup": "استلام من المكان",
+  "cartFulfillmentShipping": "شحن",
+  "cartFulfillmentFactoryPickup": "استلام أرض المصنع",
   "cartFulfillmentDineIn": "تناول في المكان",
   "businessFulfillmentPrompt": "عايز تستلم طلبك إزاي؟",
   "cartOutOfStockPolicyPrompt": "لو حاجة في طلبك نفذت، تحب نعمل إيه؟",

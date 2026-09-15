@@ -321,6 +321,8 @@
   "cartFulfillmentType": "Fulfillment",
   "cartFulfillmentDelivery": "Delivery",
   "cartFulfillmentPickup": "Pickup",
+  "cartFulfillmentShipping": "Shipping",
+  "cartFulfillmentFactoryPickup": "Factory-gate pickup",
   "cartFulfillmentDineIn": "Dine in",
   "businessFulfillmentPrompt": "How would you like to get your order?",
   "cartOutOfStockPolicyPrompt": "If something in your order runs out, what would you like us to do?",

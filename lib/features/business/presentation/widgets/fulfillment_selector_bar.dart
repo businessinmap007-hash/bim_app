@@ -36,9 +36,12 @@ class FulfillmentSelectorBar extends ConsumerWidget {
       return const SizedBox.shrink();
     }
 
+    // A freight business (sells retail goods) reads its pair as شحن/استلام
+    // أرض المصنع instead of the plain توصيل/استلام — decided server-side by
+    // what the business actually sells, never guessed here.
     String labelFor(String method) => switch (method) {
-      'delivery' => l10n.cartFulfillmentDelivery,
-      'pickup' => l10n.cartFulfillmentPickup,
+      'delivery' => fulfillment.isFreight ? l10n.cartFulfillmentShipping : l10n.cartFulfillmentDelivery,
+      'pickup' => fulfillment.isFreight ? l10n.cartFulfillmentFactoryPickup : l10n.cartFulfillmentPickup,
       _ => l10n.cartFulfillmentDineIn,
     };
 

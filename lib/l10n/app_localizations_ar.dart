@@ -981,6 +981,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get cartFulfillmentPickup => 'استلام من المكان';
 
   @override
+  String get cartFulfillmentShipping => 'شحن';
+
+  @override
+  String get cartFulfillmentFactoryPickup => 'استلام أرض المصنع';
+
+  @override
   String get cartFulfillmentDineIn => 'تناول في المكان';
 
   @override

@@ -133,10 +133,13 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     final preferred =
         _fulfillmentTypeOverride ?? (businessId != null ? ref.watch(businessFulfillmentChoiceProvider(businessId)) : null);
     final selected = (preferred != null && available.contains(preferred)) ? preferred : available.first;
+    final isFreight =
+        (businessId != null ? ref.watch(businessProfileProvider(businessId)).valueOrNull?.fulfillment.isFreight : null) ??
+        false;
 
     String labelFor(String method) => switch (method) {
-      'delivery' => l10n.cartFulfillmentDelivery,
-      'pickup' => l10n.cartFulfillmentPickup,
+      'delivery' => isFreight ? l10n.cartFulfillmentShipping : l10n.cartFulfillmentDelivery,
+      'pickup' => isFreight ? l10n.cartFulfillmentFactoryPickup : l10n.cartFulfillmentPickup,
       _ => l10n.cartFulfillmentDineIn,
     };
 

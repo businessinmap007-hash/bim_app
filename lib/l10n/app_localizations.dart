@@ -1856,6 +1856,18 @@ abstract class AppLocalizations {
   /// **'استلام من المكان'**
   String get cartFulfillmentPickup;
 
+  /// No description provided for @cartFulfillmentShipping.
+  ///
+  /// In ar, this message translates to:
+  /// **'شحن'**
+  String get cartFulfillmentShipping;
+
+  /// No description provided for @cartFulfillmentFactoryPickup.
+  ///
+  /// In ar, this message translates to:
+  /// **'استلام أرض المصنع'**
+  String get cartFulfillmentFactoryPickup;
+
   /// No description provided for @cartFulfillmentDineIn.
   ///
   /// In ar, this message translates to:

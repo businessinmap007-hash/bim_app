@@ -33,7 +33,18 @@ class BusinessFulfillment {
   final bool pickup;
   final bool dineIn;
 
-  const BusinessFulfillment({required this.delivery, required this.pickup, required this.dineIn});
+  /// Whether this business's "delivery/pickup" pair should read as freight
+  /// (شحن / استلام أرض المصنع) instead of the plain توصيل/استلام — decided
+  /// server-side by what the business actually sells (retail), not its
+  /// category. See BusinessMenuSetting::labelsFor().
+  final bool isFreight;
+
+  const BusinessFulfillment({
+    required this.delivery,
+    required this.pickup,
+    required this.dineIn,
+    this.isFreight = false,
+  });
 
   bool get any => delivery || pickup || dineIn;
 
@@ -49,6 +60,7 @@ class BusinessFulfillment {
     delivery: json['delivery'] as bool? ?? true,
     pickup: json['pickup'] as bool? ?? true,
     dineIn: json['dine_in'] as bool? ?? false,
+    isFreight: (json['labels'] as Map<String, dynamic>?)?['is_freight'] as bool? ?? false,
   );
 }
 

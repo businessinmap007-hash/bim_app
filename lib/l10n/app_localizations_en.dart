@@ -967,6 +967,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cartFulfillmentPickup => 'Pickup';
 
   @override
+  String get cartFulfillmentShipping => 'Shipping';
+
+  @override
+  String get cartFulfillmentFactoryPickup => 'Factory-gate pickup';
+
+  @override
   String get cartFulfillmentDineIn => 'Dine in';
 
   @override
