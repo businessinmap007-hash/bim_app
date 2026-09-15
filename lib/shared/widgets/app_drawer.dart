@@ -289,20 +289,23 @@ class _AppDrawerContent extends ConsumerWidget {
                   ),
                 ],
 
-                // Any signed-in user may become a driver — freelance or
-                // linked by a business — so this stays outside the
-                // business-only block above.
-                _SectionHeader(l10n.deliveryDashboardTitle),
-                ListTile(
-                  leading: const Icon(Icons.delivery_dining_outlined),
-                  title: Text(l10n.deliveryDashboardTitle),
-                  onTap: () {
-                    close();
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const DriverDashboardScreen()),
-                    );
-                  },
-                ),
+                // Driving is a personal role, not something a business
+                // entity does — a business account never sees this, even
+                // though a freelance individual (any non-business account)
+                // may register regardless of who they end up delivering for.
+                if (!isBusiness) ...[
+                  _SectionHeader(l10n.deliveryDashboardTitle),
+                  ListTile(
+                    leading: const Icon(Icons.delivery_dining_outlined),
+                    title: Text(l10n.deliveryDashboardTitle),
+                    onTap: () {
+                      close();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const DriverDashboardScreen()),
+                      );
+                    },
+                  ),
+                ],
               ],
             ),
           ),
