@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/person_card.dart';
+import '../../../general_chat/application/general_chat_providers.dart';
+import '../../../general_chat/presentation/screens/chat_thread_screen.dart';
 import '../../application/staff_providers.dart';
 import '../../data/models/staff_member.dart';
 
@@ -89,10 +91,48 @@ class _StaffTile extends StatelessWidget {
         ),
         title: Text(member.title?.isNotEmpty == true ? '${member.name} — ${member.title}' : member.name),
         subtitle: Text(names.isEmpty ? (member.phone ?? '') : names),
-        trailing: member.isPending
-            ? _Badge(text: l10n.staffPendingBadge, color: AppColors.warning)
-            : (!member.isActive ? _Badge(text: l10n.staffInactiveBadge, color: AppColors.error) : null),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (member.isPending)
+              _Badge(text: l10n.staffPendingBadge, color: AppColors.warning)
+            else if (!member.isActive)
+              _Badge(text: l10n.staffInactiveBadge, color: AppColors.error),
+            _MessageStaffButton(userId: member.userId),
+          ],
+        ),
       ),
+    );
+  }
+}
+
+/// Opens (or returns to) the owner's DM with this staff member — same
+/// GeneralChatApi.startWith() BusinessDetailScreen's own message button
+/// uses for a business's public page, just always shown here since a staff
+/// card is never the signed-in owner's own row.
+class _MessageStaffButton extends ConsumerWidget {
+  final int userId;
+  const _MessageStaffButton({required this.userId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return IconButton(
+      icon: const Icon(Icons.chat_bubble_outline),
+      onPressed: () async {
+        final l10n = AppLocalizations.of(context)!;
+        try {
+          final thread = await ref.read(generalChatApiProvider).startWith(userId);
+          if (context.mounted) {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => ChatThreadScreen(threadId: thread.id, title: thread.displayTitle())),
+            );
+          }
+        } catch (_) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+          }
+        }
+      },
     );
   }
 }
