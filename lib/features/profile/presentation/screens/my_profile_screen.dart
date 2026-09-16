@@ -477,19 +477,24 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
               decoration: const InputDecoration(prefixIcon: Icon(Icons.business_center_outlined), hintText: 'linkedin.com/...'),
             ),
           ],
-          const SizedBox(height: 16),
-          Card(
-            margin: EdgeInsets.zero,
-            clipBehavior: Clip.antiAlias,
-            child: ListTile(
-              leading: const Icon(Icons.photo_album_outlined),
-              title: Text(l10n.profileAlbumsTitle),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const AlbumsScreen()),
+          // A client account has no photo album at all — only a business
+          // shows one on its public page (AlbumController::store() refuses
+          // a client server-side too).
+          if (isBusiness) ...[
+            const SizedBox(height: 16),
+            Card(
+              margin: EdgeInsets.zero,
+              clipBehavior: Clip.antiAlias,
+              child: ListTile(
+                leading: const Icon(Icons.photo_album_outlined),
+                title: Text(l10n.profileAlbumsTitle),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const AlbumsScreen()),
+                ),
               ),
             ),
-          ),
+          ],
           const SizedBox(height: 32),
           ElevatedButton(
             onPressed: _saving ? null : _save,
