@@ -11,6 +11,7 @@ import '../../offers/presentation/screens/offer_detail_screen.dart';
 import '../../orders/presentation/screens/business_orders_screen.dart';
 import '../../orders/presentation/screens/customer_order_detail_screen.dart';
 import '../../orders/presentation/screens/orders_and_bookings_screen.dart';
+import '../../staff/presentation/screens/staff_invitation_dialog.dart';
 import '../../training/presentation/screens/training_plan_detail_screen.dart';
 import '../../wallet/presentation/screens/wallet_screen.dart';
 import '../data/models/app_notification.dart';
@@ -55,6 +56,18 @@ Future<void> openNotificationTarget(BuildContext context, WidgetRef ref, AppNoti
     case 'open_business':
       if (id != null) {
         Navigator.of(context).push(MaterialPageRoute(builder: (_) => BusinessDetailScreen(businessId: id)));
+      }
+    // Not the business's page — the one thing this tap is for is
+    // accepting/declining, so it opens straight onto that instead.
+    case 'open_staff_invitation':
+      if (id != null) {
+        await showStaffInvitationDialog(
+          context,
+          ref,
+          businessId: id,
+          businessName: notification.actor?.name ?? '',
+          businessLogoUrl: notification.actor?.imageUrl,
+        );
       }
     // The client's own copy of a plan the trainer assigned — the trainer's
     // accept/decline confirmation uses its own `open_training_plan_manage`
