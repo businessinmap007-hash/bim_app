@@ -152,6 +152,8 @@
   "menuCardBestseller": "Bestseller",
   "menuCardPriceFrom": "From {price}",
   "@menuCardPriceFrom": { "placeholders": { "price": { "type": "String" } } },
+  "menuCardPricePerUnit": "{price} EGP / {unit}",
+  "@menuCardPricePerUnit": { "placeholders": { "price": { "type": "String" }, "unit": { "type": "String" } } },
   "menuCardViewOptions": "View options",
   "businessNoContentYet": "Nothing to show yet",
   "businessInfoTitle": "Business info",

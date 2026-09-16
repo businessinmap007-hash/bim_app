@@ -8,8 +8,11 @@ import '../../features/notifications/application/notifications_providers.dart';
 /// Bell icon + unread badge for a home screen's AppBar. Reads
 /// [unreadNotificationCountProvider] rather than the full notifications list
 /// so it costs one lightweight `/notifications/unread-count` call, not the
-/// whole feed. Re-fetched whenever that provider is invalidated (opening the
-/// notifications screen, marking read/archiving) — see notifications_providers.dart.
+/// whole feed. No periodic poll behind it (a fixed interval x every signed-in
+/// device is real server load) — it re-fetches on each tap, right before
+/// navigating in, plus whenever the provider is invalidated elsewhere
+/// (marking read/archiving, the notifications screen's own refresh button) —
+/// see notifications_providers.dart.
 class NotificationBellButton extends ConsumerWidget {
   const NotificationBellButton({super.key});
 
@@ -24,7 +27,10 @@ class NotificationBellButton extends ConsumerWidget {
         backgroundColor: AppColors.accentGold,
         child: const Icon(Icons.notifications_outlined),
       ),
-      onPressed: () => context.push('/notifications'),
+      onPressed: () {
+        ref.invalidate(unreadNotificationCountProvider);
+        context.push('/notifications');
+      },
     );
   }
 }

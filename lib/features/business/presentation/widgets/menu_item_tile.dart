@@ -138,10 +138,11 @@ class MenuItemTile extends StatelessWidget {
     final unit = item.saleUnitLabel;
     final startingPrice = item.startingPrice;
     if (startingPrice != null) {
-      return l10n.menuCardPriceFrom(startingPrice.toStringAsFixed(0));
+      final price = startingPrice.toStringAsFixed(0);
+      return unit != null ? l10n.menuCardPricePerUnit(price, unit) : l10n.menuCardPriceFrom(price);
     }
     final price = item.basePrice.toStringAsFixed(0);
-    return unit != null ? '$price $unit' : price;
+    return unit != null ? l10n.menuCardPricePerUnit(price, unit) : price;
   }
 }
 

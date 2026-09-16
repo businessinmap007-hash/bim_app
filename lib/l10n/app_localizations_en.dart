@@ -459,6 +459,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String menuCardPricePerUnit(String price, String unit) {
+    return '$price EGP / $unit';
+  }
+
+  @override
   String get menuCardViewOptions => 'View options';
 
   @override

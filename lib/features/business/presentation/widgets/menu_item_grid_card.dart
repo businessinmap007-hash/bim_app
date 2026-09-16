@@ -106,7 +106,7 @@ class MenuItemGridCard extends StatelessWidget {
                     if (item.isOutOfStock)
                       Text(l10n.businessOutOfStock, style: TextStyle(fontSize: 11, color: theme.colorScheme.error))
                     else
-                      Text(_priceLabel(item), style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700, color: AppColors.accentGold)),
+                      Text(_priceLabel(item, l10n), style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700, color: AppColors.accentGold)),
                   ],
                 ),
               ),
@@ -117,11 +117,10 @@ class MenuItemGridCard extends StatelessWidget {
     );
   }
 
-  String _priceLabel(MenuItemSummary item) {
+  String _priceLabel(MenuItemSummary item, AppLocalizations l10n) {
     final unit = item.saleUnitLabel;
-    final startingPrice = item.startingPrice;
-    final price = (startingPrice ?? item.basePrice).toStringAsFixed(0);
-    return unit != null ? '$price $unit' : price;
+    final price = (item.startingPrice ?? item.basePrice).toStringAsFixed(0);
+    return unit != null ? l10n.menuCardPricePerUnit(price, unit) : price;
   }
 }
 

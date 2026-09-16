@@ -896,6 +896,12 @@ abstract class AppLocalizations {
   /// **'من {price}'**
   String menuCardPriceFrom(String price);
 
+  /// No description provided for @menuCardPricePerUnit.
+  ///
+  /// In ar, this message translates to:
+  /// **'{price} جنيه / {unit}'**
+  String menuCardPricePerUnit(String price, String unit);
+
   /// No description provided for @menuCardViewOptions.
   ///
   /// In ar, this message translates to:

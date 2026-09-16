@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -57,16 +55,6 @@ class _HomeShellState extends ConsumerState<HomeShell> with WidgetsBindingObserv
   /// first.
   final _scaffoldKeys = List.generate(3, (_) => GlobalKey<ScaffoldState>());
 
-  /// Real push isn't live yet (no Firebase project configured), and neither
-  /// `unreadNotificationCountProvider` nor `notificationsControllerProvider`
-  /// is `autoDispose` — once fetched they never refresh on their own, so a
-  /// notification created while the app sits open (e.g. a staff invitation)
-  /// only ever appeared after a full app-process restart. A light poll here,
-  /// only while the app is actually in the foreground, closes that gap
-  /// without inventing a bigger realtime mechanism.
-  Timer? _notificationPollTimer;
-  static const _notificationPollInterval = Duration(seconds: 30);
-
   void _selectTab(int value) {
     _scaffoldKeys[_index].currentState?.closeDrawer();
     setState(() => _index = value);
@@ -77,13 +65,11 @@ class _HomeShellState extends ConsumerState<HomeShell> with WidgetsBindingObserv
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) => _checkPendingSettlements());
-    _startNotificationPolling();
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _notificationPollTimer?.cancel();
     super.dispose();
   }
 
@@ -91,25 +77,21 @@ class _HomeShellState extends ConsumerState<HomeShell> with WidgetsBindingObserv
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       _checkPendingSettlements();
+      // Real push isn't live yet (no Firebase project configured), and
+      // neither notification provider is `autoDispose` — once fetched they
+      // never refresh on their own. A fixed-interval poll would cost the
+      // server one request per device every cycle regardless of whether
+      // anything changed (100k devices x every 30s is real load), so this
+      // refreshes only on an actual "the app just came back to the
+      // foreground" event instead — proportional to real usage, not a
+      // timer. See NotificationBellButton and NotificationsScreen's own
+      // refresh button for the other two refresh points.
       _refreshNotificationBadge();
-      _startNotificationPolling();
-    } else if (state == AppLifecycleState.paused) {
-      _notificationPollTimer?.cancel();
     }
   }
 
-  void _startNotificationPolling() {
-    _notificationPollTimer?.cancel();
-    _notificationPollTimer = Timer.periodic(_notificationPollInterval, (_) => _refreshNotificationBadge());
-  }
-
   void _refreshNotificationBadge() {
-    if (!mounted) return;
-    ref.invalidate(unreadNotificationCountProvider);
-    // Also refreshes the list screen itself for whenever it's next opened —
-    // same "start over from page 1" behaviour its own pull-to-refresh
-    // already has, just triggered on a timer instead of a manual pull.
-    ref.invalidate(notificationsControllerProvider);
+    if (mounted) ref.invalidate(unreadNotificationCountProvider);
   }
 
   /// The mandatory settlement prompt (PendingSettlementGate) — checked right

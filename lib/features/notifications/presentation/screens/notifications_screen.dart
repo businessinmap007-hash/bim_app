@@ -69,6 +69,19 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
       appBar: AppBar(
         title: Text(l10n.notificationsTitle),
         actions: [
+          // No push yet and no periodic poll (a fixed-interval refresh would
+          // cost the server one request per device every cycle regardless
+          // of whether anything changed — real load at scale) — this is the
+          // deliberate, user-triggered way to check for anything new
+          // without leaving/reopening the app.
+          IconButton(
+            tooltip: l10n.commonRefresh,
+            icon: const Icon(Icons.refresh),
+            onPressed: () {
+              ref.read(notificationsControllerProvider.notifier).load();
+              ref.invalidate(unreadNotificationCountProvider);
+            },
+          ),
           if (hasUnread)
             TextButton(
               onPressed: () =>
