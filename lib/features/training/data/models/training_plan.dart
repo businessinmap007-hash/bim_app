@@ -112,6 +112,7 @@ class TrainingPlan {
   final int trainerId;
   final String? trainerName;
   final String? trainerLogoUrl;
+  final String? trainerPhone;
   // Only present when parsed from the TRAINER's own side (business/training-
   // plans) — that response carries `client`, not `trainer`.
   final int? clientId;
@@ -133,6 +134,7 @@ class TrainingPlan {
     required this.trainerId,
     this.trainerName,
     this.trainerLogoUrl,
+    this.trainerPhone,
     this.clientId,
     this.clientName,
     this.exercisesCount,
@@ -143,6 +145,7 @@ class TrainingPlan {
   });
 
   bool get isActive => status == 'active';
+  bool get isPending => status == 'pending';
 
   factory TrainingPlan.fromJson(Map<String, dynamic> json) {
     final trainer = json['trainer'] as Map<String, dynamic>?;
@@ -158,6 +161,7 @@ class TrainingPlan {
       trainerId: (trainer?['id'] as int?) ?? 0,
       trainerName: trainer?['name'] as String?,
       trainerLogoUrl: Env.assetUrl(trainer?['logo'] as String?),
+      trainerPhone: trainer?['phone'] as String?,
       clientId: (client?['id'] as num?)?.toInt(),
       clientName: client?['name'] as String?,
       exercisesCount: (json['exercises_count'] as num?)?.toInt(),

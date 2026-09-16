@@ -2359,6 +2359,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get trainingTabExercises => 'التمارين';
 
   @override
+  String get trainingPlanPendingPrompt => 'خطة تدريب جديدة بانتظار قبولك';
+
+  @override
+  String get trainingPlanAccepted => 'تم قبول الخطة.';
+
+  @override
+  String get trainingPlanDeclined => 'تم رفض الخطة.';
+
+  @override
   String get trainingTabMeals => 'الوجبات';
 
   @override

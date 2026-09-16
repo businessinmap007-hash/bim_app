@@ -43,6 +43,18 @@ class TrainingApi {
     return TrainingPlan.fromJson(data['plan'] as Map<String, dynamic>);
   }
 
+  /// The trainer's plan is `pending` until I confirm it — the only thing
+  /// that actually activates it (TrainingPlanService::accept()).
+  Future<TrainingPlan> accept(int planId) async {
+    final data = await _client.post('/training-plans/$planId/accept') as Map<String, dynamic>;
+    return TrainingPlan.fromJson(data['plan'] as Map<String, dynamic>);
+  }
+
+  Future<TrainingPlan> decline(int planId) async {
+    final data = await _client.post('/training-plans/$planId/decline') as Map<String, dynamic>;
+    return TrainingPlan.fromJson(data['plan'] as Map<String, dynamic>);
+  }
+
   Future<PlanProgressLog> logProgress(
     int planId, {
     DateTime? loggedOn,

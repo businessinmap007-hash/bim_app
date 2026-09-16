@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
+import '../../../../shared/widgets/person_card.dart';
 import '../../application/training_providers.dart';
 import '../../data/models/body_report.dart';
 import '../../data/models/training_plan.dart';
@@ -36,7 +37,9 @@ class TrainingPlanDetailScreen extends ConsumerWidget {
           ),
         ),
       ),
-      data: (plan) => DefaultTabController(
+      data: (plan) => plan.isPending
+          ? _PendingPlanScreen(planId: planId, plan: plan)
+          : DefaultTabController(
         length: 4,
         child: Scaffold(
           appBar: AppBar(
@@ -69,6 +72,93 @@ class TrainingPlanDetailScreen extends ConsumerWidget {
               _BodyReportsTab(planId: planId),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The trainer's plan is `pending` until I confirm it (see
+/// TrainingPlanService::accept()) — same PersonCard the trainer sees right
+/// after assigning it, populated with the TRAINER's own info here instead.
+class _PendingPlanScreen extends ConsumerStatefulWidget {
+  final int planId;
+  final TrainingPlan plan;
+  const _PendingPlanScreen({required this.planId, required this.plan});
+
+  @override
+  ConsumerState<_PendingPlanScreen> createState() => _PendingPlanScreenState();
+}
+
+class _PendingPlanScreenState extends ConsumerState<_PendingPlanScreen> {
+  bool _submitting = false;
+
+  Future<void> _respond(bool accept) async {
+    final l10n = AppLocalizations.of(context)!;
+    setState(() => _submitting = true);
+    try {
+      if (accept) {
+        await ref.read(trainingApiProvider).accept(widget.planId);
+      } else {
+        await ref.read(trainingApiProvider).decline(widget.planId);
+      }
+      ref.invalidate(trainingPlanDetailProvider(widget.planId));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(accept ? l10n.trainingPlanAccepted : l10n.trainingPlanDeclined)),
+        );
+        if (!accept) Navigator.of(context).pop();
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+      }
+    } finally {
+      if (mounted) setState(() => _submitting = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final plan = widget.plan;
+
+    return Scaffold(
+      appBar: AppBar(title: Text(plan.title)),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(l10n.trainingPlanPendingPrompt, style: Theme.of(context).textTheme.titleSmall),
+            const SizedBox(height: 12),
+            PersonCard.forBusiness(
+              name: plan.trainerName ?? '',
+              phone: plan.trainerPhone,
+              logoUrl: plan.trainerLogoUrl,
+              subtitle: plan.goal,
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: _submitting ? null : () => _respond(false),
+                    child: Text(l10n.staffInvitationDecline),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: FilledButton(
+                    onPressed: _submitting ? null : () => _respond(true),
+                    child: _submitting
+                        ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2))
+                        : Text(l10n.staffInvitationAccept),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

@@ -4394,6 +4394,24 @@ abstract class AppLocalizations {
   /// **'التمارين'**
   String get trainingTabExercises;
 
+  /// No description provided for @trainingPlanPendingPrompt.
+  ///
+  /// In ar, this message translates to:
+  /// **'خطة تدريب جديدة بانتظار قبولك'**
+  String get trainingPlanPendingPrompt;
+
+  /// No description provided for @trainingPlanAccepted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم قبول الخطة.'**
+  String get trainingPlanAccepted;
+
+  /// No description provided for @trainingPlanDeclined.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم رفض الخطة.'**
+  String get trainingPlanDeclined;
+
   /// No description provided for @trainingTabMeals.
   ///
   /// In ar, this message translates to:

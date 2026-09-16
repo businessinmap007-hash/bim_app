@@ -2346,6 +2346,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trainingTabExercises => 'Exercises';
 
   @override
+  String get trainingPlanPendingPrompt =>
+      'New training plan awaiting your acceptance';
+
+  @override
+  String get trainingPlanAccepted => 'Plan accepted.';
+
+  @override
+  String get trainingPlanDeclined => 'Plan declined.';
+
+  @override
   String get trainingTabMeals => 'Meals';
 
   @override

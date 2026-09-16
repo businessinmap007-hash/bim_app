@@ -11,6 +11,7 @@ import '../../offers/presentation/screens/offer_detail_screen.dart';
 import '../../orders/presentation/screens/business_orders_screen.dart';
 import '../../orders/presentation/screens/customer_order_detail_screen.dart';
 import '../../orders/presentation/screens/orders_and_bookings_screen.dart';
+import '../../training/presentation/screens/training_plan_detail_screen.dart';
 import '../../wallet/presentation/screens/wallet_screen.dart';
 import '../data/models/app_notification.dart';
 
@@ -54,6 +55,13 @@ Future<void> openNotificationTarget(BuildContext context, WidgetRef ref, AppNoti
     case 'open_business':
       if (id != null) {
         Navigator.of(context).push(MaterialPageRoute(builder: (_) => BusinessDetailScreen(businessId: id)));
+      }
+    // The client's own copy of a plan the trainer assigned — the trainer's
+    // accept/decline confirmation uses its own `open_training_plan_manage`
+    // (not wired here yet), so this is always the client-facing screen.
+    case 'open_training_plan':
+      if (id != null) {
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => TrainingPlanDetailScreen(planId: id)));
       }
     // Every booking.* event (see ServiceEventKeys.php) notifies whichever
     // side isn't the actor, with the booking as the notification's subject —
