@@ -18,6 +18,7 @@ import '../../../projects/presentation/screens/projects_screen.dart';
 import '../../../retail_listings/presentation/screens/retail_listings_screen.dart';
 import '../../../schedules/presentation/screens/my_trip_schedules_screen.dart';
 import '../../../staff/application/staff_providers.dart';
+import '../../../staff/presentation/screens/attendance_verification_settings_screen.dart';
 import '../../../staff/presentation/screens/staff_activity_screen.dart';
 import '../../../staff/presentation/screens/staff_groups_screen.dart';
 import '../../../staff/presentation/screens/staff_screen.dart';
@@ -171,6 +172,12 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.groups_outlined,
         title: l10n.staffGroupsTitle,
         builder: (_) => const StaffGroupsScreen(),
+      ),
+      _Tile(
+        show: true, // account management — no capability of its own.
+        leading: Icons.qr_code_2_outlined,
+        title: l10n.attendanceVerificationSettingsTitle,
+        builder: (_) => const AttendanceVerificationSettingsScreen(),
       ),
       _Tile(
         show: _has('projects'),

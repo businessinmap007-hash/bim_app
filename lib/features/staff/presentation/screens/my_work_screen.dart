@@ -1,14 +1,82 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/theme/app_colors.dart';
+import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../booking/presentation/screens/business_bookings_screen.dart';
+import '../../../delivery/presentation/screens/token_scan_screen.dart';
 import '../../application/my_work_providers.dart';
 import '../../application/staff_providers.dart';
 import '../../data/models/staff_membership.dart';
 import 'staff_invitations_screen.dart';
+
+/// Runs the plain check-in/out for a membership that never turned on GPS+QR
+/// verification, or — when it did — first gets the phone's own location and
+/// has the employee scan the business's display code (TokenScanScreen,
+/// reused as-is: the code is a bare one-time token, same shape as the
+/// delivery-loop tokens it already reads) before calling the API with both.
+Future<void> _performAttendance(
+  BuildContext context,
+  WidgetRef ref,
+  StaffMembership membership, {
+  required bool isCheckIn,
+}) async {
+  final l10n = AppLocalizations.of(context)!;
+  final notifier = ref.read(myWorkControllerProvider.notifier);
+
+  if (!membership.attendanceVerificationEnabled) {
+    try {
+      if (isCheckIn) {
+        await notifier.checkIn(membership.businessId);
+      } else {
+        await notifier.checkOut(membership.businessId);
+      }
+    } catch (e) {
+      if (context.mounted) _showAttendanceError(context, e);
+    }
+    return;
+  }
+
+  var permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+  }
+  if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.attendanceLocationRequired)));
+    }
+    return;
+  }
+  final position = await Geolocator.getCurrentPosition();
+  if (!context.mounted) return;
+
+  final token = await Navigator.of(context).push<String>(
+    MaterialPageRoute(
+      builder: (_) => TokenScanScreen(title: l10n.attendanceScanQrTitle, hint: l10n.attendanceScanQrHint),
+    ),
+  );
+  if (token == null) return;
+
+  try {
+    if (isCheckIn) {
+      await notifier.checkIn(membership.businessId, qrToken: token, lat: position.latitude, lng: position.longitude);
+    } else {
+      await notifier.checkOut(membership.businessId, qrToken: token, lat: position.latitude, lng: position.longitude);
+    }
+  } catch (e) {
+    if (context.mounted) _showAttendanceError(context, e);
+  }
+}
+
+void _showAttendanceError(BuildContext context, Object e) {
+  final l10n = AppLocalizations.of(context)!;
+  ScaffoldMessenger.of(
+    context,
+  ).showSnackBar(SnackBar(content: Text(e is ApiException ? e.message : l10n.commonSomethingWentWrong)));
+}
 
 /// "أعمالي" — every business I work for as a delegated staff member, with a
 /// check-in/check-out for each. Reachable by any signed-in account; a
@@ -74,8 +142,8 @@ class MyWorkScreen extends ConsumerWidget {
                     membership: membership,
                     status: status,
                     busy: busy,
-                    onCheckIn: () => ref.read(myWorkControllerProvider.notifier).checkIn(membership.businessId),
-                    onCheckOut: () => ref.read(myWorkControllerProvider.notifier).checkOut(membership.businessId),
+                    onCheckIn: () => _performAttendance(context, ref, membership, isCheckIn: true),
+                    onCheckOut: () => _performAttendance(context, ref, membership, isCheckIn: false),
                   );
                 },
               ),

@@ -68,10 +68,10 @@ class MyWorkController extends StateNotifier<MyWorkState> {
     }
   }
 
-  Future<void> checkIn(int businessId) async {
+  Future<void> checkIn(int businessId, {String? qrToken, double? lat, double? lng}) async {
     state = state.copyWith(busyBusinessIds: {...state.busyBusinessIds, businessId});
     try {
-      final status = await _attendanceApi.checkIn(businessId);
+      final status = await _attendanceApi.checkIn(businessId, qrToken: qrToken, lat: lat, lng: lng);
       state = state.copyWith(attendanceByBusiness: {...state.attendanceByBusiness, businessId: status});
     } finally {
       if (mounted) {
@@ -80,10 +80,10 @@ class MyWorkController extends StateNotifier<MyWorkState> {
     }
   }
 
-  Future<void> checkOut(int businessId) async {
+  Future<void> checkOut(int businessId, {String? qrToken, double? lat, double? lng}) async {
     state = state.copyWith(busyBusinessIds: {...state.busyBusinessIds, businessId});
     try {
-      final status = await _attendanceApi.checkOut(businessId);
+      final status = await _attendanceApi.checkOut(businessId, qrToken: qrToken, lat: lat, lng: lng);
       state = state.copyWith(attendanceByBusiness: {...state.attendanceByBusiness, businessId: status});
     } finally {
       if (mounted) {

@@ -2055,6 +2055,38 @@ class AppLocalizationsEn extends AppLocalizations {
   String get attendanceCheckOut => 'Check out';
 
   @override
+  String get attendanceVerificationSettingsTitle => 'Attendance verification';
+
+  @override
+  String get attendanceVerificationToggleLabel => 'Location + QR verification';
+
+  @override
+  String get attendanceVerificationToggleHint =>
+      'When on, staff must scan a code from a display at the business and be nearby to check in or out.';
+
+  @override
+  String get attendanceOpenDisplayScreen =>
+      'Open the attendance display screen';
+
+  @override
+  String get attendanceQrDisplayTitle => 'Attendance display';
+
+  @override
+  String get attendanceQrDisplayHint =>
+      'Have the employee scan this code to check in or out — it refreshes automatically';
+
+  @override
+  String get attendanceScanQrTitle => 'Scan the attendance code';
+
+  @override
+  String get attendanceScanQrHint =>
+      'Point the camera at the attendance code shown at the workplace';
+
+  @override
+  String get attendanceLocationRequired =>
+      'Attendance verification needs access to your location.';
+
+  @override
   String get finesTitle => 'Fines';
 
   @override

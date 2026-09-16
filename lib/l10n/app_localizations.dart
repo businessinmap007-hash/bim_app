@@ -3818,6 +3818,60 @@ abstract class AppLocalizations {
   /// **'تسجيل انصراف'**
   String get attendanceCheckOut;
 
+  /// No description provided for @attendanceVerificationSettingsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'التحقق من الحضور'**
+  String get attendanceVerificationSettingsTitle;
+
+  /// No description provided for @attendanceVerificationToggleLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'التحقق بالموقع وكود QR'**
+  String get attendanceVerificationToggleLabel;
+
+  /// No description provided for @attendanceVerificationToggleHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'عند التفعيل، يحتاج الموظف لمسح كود من شاشة فى مقر النشاط والتواجد بالقرب منه لتسجيل الحضور أو الانصراف.'**
+  String get attendanceVerificationToggleHint;
+
+  /// No description provided for @attendanceOpenDisplayScreen.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح شاشة تسجيل الحضور'**
+  String get attendanceOpenDisplayScreen;
+
+  /// No description provided for @attendanceQrDisplayTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'شاشة تسجيل الحضور'**
+  String get attendanceQrDisplayTitle;
+
+  /// No description provided for @attendanceQrDisplayHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلب من الموظف مسح هذا الكود لتسجيل الحضور أو الانصراف — يتجدد الكود تلقائيًا'**
+  String get attendanceQrDisplayHint;
+
+  /// No description provided for @attendanceScanQrTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'امسح كود الحضور'**
+  String get attendanceScanQrTitle;
+
+  /// No description provided for @attendanceScanQrHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'وجّه الكاميرا على كود الحضور المعروض فى مقر العمل'**
+  String get attendanceScanQrHint;
+
+  /// No description provided for @attendanceLocationRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'التحقق من الحضور يحتاج إذن الوصول لموقعك.'**
+  String get attendanceLocationRequired;
+
   /// No description provided for @finesTitle.
   ///
   /// In ar, this message translates to:

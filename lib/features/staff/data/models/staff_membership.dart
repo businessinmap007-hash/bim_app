@@ -8,6 +8,7 @@ class StaffMembership {
   final String? businessLogoUrl;
   final String? title;
   final List<String> capabilities;
+  final bool attendanceVerificationEnabled;
 
   const StaffMembership({
     required this.businessId,
@@ -15,6 +16,7 @@ class StaffMembership {
     this.businessLogoUrl,
     this.title,
     required this.capabilities,
+    this.attendanceVerificationEnabled = false,
   });
 
   factory StaffMembership.fromJson(Map<String, dynamic> json) {
@@ -25,6 +27,7 @@ class StaffMembership {
       businessLogoUrl: Env.assetUrl(business['logo'] as String?),
       title: json['title'] as String?,
       capabilities: (json['capabilities'] as List<dynamic>? ?? []).map((e) => e as String).toList(),
+      attendanceVerificationEnabled: json['attendance_verification_enabled'] as bool? ?? false,
     );
   }
 }

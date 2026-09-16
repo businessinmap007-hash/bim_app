@@ -2072,6 +2072,37 @@ class AppLocalizationsAr extends AppLocalizations {
   String get attendanceCheckOut => 'تسجيل انصراف';
 
   @override
+  String get attendanceVerificationSettingsTitle => 'التحقق من الحضور';
+
+  @override
+  String get attendanceVerificationToggleLabel => 'التحقق بالموقع وكود QR';
+
+  @override
+  String get attendanceVerificationToggleHint =>
+      'عند التفعيل، يحتاج الموظف لمسح كود من شاشة فى مقر النشاط والتواجد بالقرب منه لتسجيل الحضور أو الانصراف.';
+
+  @override
+  String get attendanceOpenDisplayScreen => 'فتح شاشة تسجيل الحضور';
+
+  @override
+  String get attendanceQrDisplayTitle => 'شاشة تسجيل الحضور';
+
+  @override
+  String get attendanceQrDisplayHint =>
+      'اطلب من الموظف مسح هذا الكود لتسجيل الحضور أو الانصراف — يتجدد الكود تلقائيًا';
+
+  @override
+  String get attendanceScanQrTitle => 'امسح كود الحضور';
+
+  @override
+  String get attendanceScanQrHint =>
+      'وجّه الكاميرا على كود الحضور المعروض فى مقر العمل';
+
+  @override
+  String get attendanceLocationRequired =>
+      'التحقق من الحضور يحتاج إذن الوصول لموقعك.';
+
+  @override
   String get finesTitle => 'الغرامات';
 
   @override
