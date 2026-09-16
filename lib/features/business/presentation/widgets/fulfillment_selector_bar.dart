@@ -8,9 +8,10 @@ import '../../data/models/business_profile.dart';
 /// The one entry point for delivery/pickup/dine-in — shown above the menu,
 /// before the customer browses it, so it's picked once per visit instead of
 /// being asked again at checkout (CheckoutScreen reads the same provider).
-/// Only the methods this business actually offers are shown
-/// (BusinessFulfillment, from BusinessPageController::show); a business
-/// offering just one method never has to be asked at all.
+/// Only the methods this business actually ticked on its own "التسليم
+/// والاستلام" options screen are shown (BusinessFulfillment, from
+/// BusinessPageController::show); a business offering just one method never
+/// has to be asked at all.
 class FulfillmentSelectorBar extends ConsumerWidget {
   final int businessId;
   final BusinessFulfillment fulfillment;
@@ -19,33 +20,33 @@ class FulfillmentSelectorBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final available = fulfillment.available;
-    if (available.isEmpty) return const SizedBox.shrink();
+    final keys = fulfillment.selectionKeys;
+    if (keys.isEmpty) return const SizedBox.shrink();
 
     final l10n = AppLocalizations.of(context)!;
-    final selected = ref.watch(businessFulfillmentChoiceProvider(businessId)) ?? available.first;
+    final locale = Localizations.localeOf(context).languageCode;
+    final selected = ref.watch(businessFulfillmentChoiceProvider(businessId)) ?? keys.first;
 
     // A single-method business has nothing to choose — settle it silently
     // instead of showing a one-chip row with no real decision in it.
-    if (available.length == 1) {
+    if (keys.length == 1) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (ref.read(businessFulfillmentChoiceProvider(businessId)) != available.first) {
-          ref.read(businessFulfillmentChoiceProvider(businessId).notifier).state = available.first;
+        if (ref.read(businessFulfillmentChoiceProvider(businessId)) != keys.first) {
+          ref.read(businessFulfillmentChoiceProvider(businessId).notifier).state = keys.first;
         }
       });
       return const SizedBox.shrink();
     }
 
-    // A freight business (sells retail goods) reads its pair as شحن/استلام
-    // أرض المصنع instead of the plain توصيل/استلام — decided server-side by
-    // what the business actually sells, never guessed here.
-    String labelFor(String method) => switch (method) {
-      'delivery' => fulfillment.isFreight ? l10n.cartFulfillmentShipping : l10n.cartFulfillmentDelivery,
-      'pickup' => fulfillment.isFreight ? l10n.cartFulfillmentFactoryPickup : l10n.cartFulfillmentPickup,
-      _ => l10n.cartFulfillmentDineIn,
-    };
+    String labelFor(String key) {
+      if (key == 'dine_in') return l10n.cartFulfillmentDineIn;
 
-    IconData iconFor(String method) => switch (method) {
+      final method = fulfillment.methods.where((m) => m.id.toString() == key).firstOrNull;
+
+      return method?.label(locale) ?? key;
+    }
+
+    IconData iconFor(String key) => switch (fulfillment.typeOfSelection(key)) {
       'delivery' => Icons.delivery_dining_outlined,
       'pickup' => Icons.storefront_outlined,
       _ => Icons.restaurant_outlined,
@@ -60,13 +61,13 @@ class FulfillmentSelectorBar extends ConsumerWidget {
           const SizedBox(height: 6),
           Wrap(
             spacing: 8,
-            children: available
+            children: keys
                 .map(
-                  (method) => ChoiceChip(
-                    avatar: Icon(iconFor(method), size: 18),
-                    label: Text(labelFor(method)),
-                    selected: selected == method,
-                    onSelected: (_) => ref.read(businessFulfillmentChoiceProvider(businessId).notifier).state = method,
+                  (key) => ChoiceChip(
+                    avatar: Icon(iconFor(key), size: 18),
+                    label: Text(labelFor(key)),
+                    selected: selected == key,
+                    onSelected: (_) => ref.read(businessFulfillmentChoiceProvider(businessId).notifier).state = key,
                   ),
                 )
                 .toList(),

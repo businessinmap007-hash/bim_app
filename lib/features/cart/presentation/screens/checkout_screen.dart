@@ -25,7 +25,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   // `selected`) falls back to the choice already made above the menu, so
   // there is nothing to reconcile between what the segmented button shows
   // and what _placeOrder actually submits.
-  String? _fulfillmentTypeOverride;
+  String? _fulfillmentKeyOverride;
   // "لو الصنف نفذ، تحب نعمل إيه؟" — one policy for the whole order, asked
   // once here rather than per line (see product doc, "منيو ومطاعم"
   // section). Defaults to the lowest-friction choice so an order is never
@@ -118,30 +118,34 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    // The business page already filtered this to what the business actually
-    // offers (BusinessPageController::show → BusinessFulfillment) — reusing
-    // that same cached profile here keeps checkout from ever offering a
-    // method (e.g. dine-in with no table) the business never advertised.
-    // Falls back to all three only if the profile somehow isn't cached yet.
+    // The business page already filtered this to what the business itself
+    // ticked on its own "التسليم والاستلام" options screen
+    // (BusinessPageController::show → BusinessFulfillment) — reusing that
+    // same cached profile here keeps checkout from ever offering a method
+    // (e.g. dine-in with no table) the business never advertised.
     final businessId = widget.cart.business?.id;
-    final available =
-        (businessId != null ? ref.watch(businessProfileProvider(businessId)).valueOrNull?.fulfillment.available : null) ??
-        const ['delivery', 'pickup', 'dine_in'];
+    final fulfillment = businessId != null ? ref.watch(businessProfileProvider(businessId)).valueOrNull?.fulfillment : null;
+    final keys = fulfillment?.selectionKeys ?? const ['delivery', 'pickup', 'dine_in'];
+    final locale = Localizations.localeOf(context).languageCode;
     // Preference order: the user's own tap here > the choice already made
     // above the menu > whatever the business offers first — always clamped
     // to what this business actually supports.
     final preferred =
-        _fulfillmentTypeOverride ?? (businessId != null ? ref.watch(businessFulfillmentChoiceProvider(businessId)) : null);
-    final selected = (preferred != null && available.contains(preferred)) ? preferred : available.first;
-    final isFreight =
-        (businessId != null ? ref.watch(businessProfileProvider(businessId)).valueOrNull?.fulfillment.isFreight : null) ??
-        false;
+        _fulfillmentKeyOverride ?? (businessId != null ? ref.watch(businessFulfillmentChoiceProvider(businessId)) : null);
+    final selectedKey = (preferred != null && keys.contains(preferred)) ? preferred : keys.first;
+    final selected = fulfillment?.typeOfSelection(selectedKey) ?? selectedKey;
 
-    String labelFor(String method) => switch (method) {
-      'delivery' => isFreight ? l10n.cartFulfillmentShipping : l10n.cartFulfillmentDelivery,
-      'pickup' => isFreight ? l10n.cartFulfillmentFactoryPickup : l10n.cartFulfillmentPickup,
-      _ => l10n.cartFulfillmentDineIn,
-    };
+    String labelFor(String key) {
+      if (key == 'dine_in') return l10n.cartFulfillmentDineIn;
+
+      final method = fulfillment?.methods.where((m) => m.id.toString() == key).firstOrNull;
+
+      return method?.label(locale) ?? switch (key) {
+        'delivery' => l10n.cartFulfillmentDelivery,
+        'pickup' => l10n.cartFulfillmentPickup,
+        _ => l10n.cartFulfillmentDineIn,
+      };
+    }
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.cartCheckoutTitle)),
@@ -151,9 +155,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           Text(l10n.cartFulfillmentType, style: Theme.of(context).textTheme.titleSmall),
           const SizedBox(height: 8),
           SegmentedButton<String>(
-            segments: available.map((m) => ButtonSegment(value: m, label: Text(labelFor(m)))).toList(),
-            selected: {selected},
-            onSelectionChanged: (value) => setState(() => _fulfillmentTypeOverride = value.first),
+            segments: keys.map((k) => ButtonSegment(value: k, label: Text(labelFor(k)))).toList(),
+            selected: {selectedKey},
+            onSelectionChanged: (value) => setState(() => _fulfillmentKeyOverride = value.first),
           ),
           if (selected == 'delivery') ...[
             const SizedBox(height: 16),

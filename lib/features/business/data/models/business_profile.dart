@@ -24,43 +24,66 @@ class BusinessSections {
   );
 }
 
+/// One "التسليم والاستلام" option the business ticked on its own profile
+/// screen — `type` is the underlying `fulfillment_type` the checkout API
+/// already accepts (delivery/pickup), `nameAr`/`nameEn` are exactly the
+/// words the merchant sees and picks there. See
+/// BusinessMenuSetting::fulfillmentMethodsFor().
+class FulfillmentMethod {
+  final int id;
+  final String nameAr;
+  final String nameEn;
+  final String type;
+
+  const FulfillmentMethod({required this.id, required this.nameAr, required this.nameEn, required this.type});
+
+  factory FulfillmentMethod.fromJson(Map<String, dynamic> json) => FulfillmentMethod(
+    id: json['id'] as int,
+    nameAr: json['name_ar'] as String? ?? '',
+    nameEn: json['name_en'] as String? ?? '',
+    type: json['type'] as String? ?? 'delivery',
+  );
+
+  String label(String locale) => locale == 'en' ? nameEn : nameAr;
+}
+
 /// Which fulfillment methods the unified entry point above the menu should
-/// offer — decided by the backend (BusinessPageController::show), not
-/// guessed client-side. `dineIn` reflects whether the business has any
-/// active table (BIM-13.3), not a setting the owner toggles directly.
+/// offer — decided by the backend from what the business itself ticked on
+/// its "التسليم والاستلام" options screen (BusinessPageController::show),
+/// never guessed client-side. `dineIn` reflects whether the business has any
+/// active table (BIM-13.3), not something ticked there.
 class BusinessFulfillment {
-  final bool delivery;
-  final bool pickup;
+  final List<FulfillmentMethod> methods;
   final bool dineIn;
 
-  /// Whether this business's "delivery/pickup" pair should read as freight
-  /// (شحن / استلام أرض المصنع) instead of the plain توصيل/استلام — decided
-  /// server-side by what the business actually sells (retail), not its
-  /// category. See BusinessMenuSetting::labelsFor().
-  final bool isFreight;
+  const BusinessFulfillment({this.methods = const [], required this.dineIn});
 
-  const BusinessFulfillment({
-    required this.delivery,
-    required this.pickup,
-    required this.dineIn,
-    this.isFreight = false,
-  });
+  bool get any => methods.isNotEmpty || dineIn;
 
-  bool get any => delivery || pickup || dineIn;
-
-  /// Every method this business offers, as the `fulfillment_type` values the
-  /// checkout API already accepts.
-  List<String> get available => [
-    if (delivery) 'delivery',
-    if (pickup) 'pickup',
+  /// The keys `FulfillmentSelectorBar`/`CheckoutScreen` choose between:
+  /// each method's id (as a string) plus 'dine_in' when the business has an
+  /// active table. Order matches what the merchant sees on its own screen.
+  List<String> get selectionKeys => [
+    ...methods.map((m) => m.id.toString()),
     if (dineIn) 'dine_in',
   ];
 
+  /// The `fulfillment_type` CustomerCartService actually processes, for a
+  /// `selectionKeys` value. Falls back to 'delivery' for an unrecognised or
+  /// null key so checkout is never left without a type to submit.
+  String typeOfSelection(String? key) {
+    if (key == 'dine_in') return 'dine_in';
+
+    final method = methods.where((m) => m.id.toString() == key).firstOrNull;
+
+    return method?.type ?? 'delivery';
+  }
+
   factory BusinessFulfillment.fromJson(Map<String, dynamic> json) => BusinessFulfillment(
-    delivery: json['delivery'] as bool? ?? true,
-    pickup: json['pickup'] as bool? ?? true,
+    methods: (json['methods'] as List<dynamic>? ?? const [])
+        .map((e) => FulfillmentMethod.fromJson(e as Map<String, dynamic>))
+        .toList(),
     dineIn: json['dine_in'] as bool? ?? false,
-    isFreight: (json['labels'] as Map<String, dynamic>?)?['is_freight'] as bool? ?? false,
   );
 }
 
