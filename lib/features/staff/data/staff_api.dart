@@ -85,4 +85,22 @@ class StaffApi {
         .map((e) => StaffMembership.fromJson(e as Map<String, dynamic>))
         .toList();
   }
+
+  /// GET /staff/invitations — grants I haven't answered yet.
+  Future<List<StaffInvitation>> invitations() async {
+    final data = await _client.get('/staff/invitations') as Map<String, dynamic>;
+    return (data['invitations'] as List<dynamic>? ?? [])
+        .map((e) => StaffInvitation.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
+  Future<StaffMember> acceptInvitation(int businessId) async {
+    final data = await _client.post('/staff/invitations/$businessId/accept') as Map<String, dynamic>;
+    return StaffMember.fromJson(data['staff'] as Map<String, dynamic>);
+  }
+
+  Future<StaffMember> declineInvitation(int businessId) async {
+    final data = await _client.post('/staff/invitations/$businessId/decline') as Map<String, dynamic>;
+    return StaffMember.fromJson(data['staff'] as Map<String, dynamic>);
+  }
 }

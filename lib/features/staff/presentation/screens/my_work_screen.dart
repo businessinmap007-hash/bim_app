@@ -5,7 +5,9 @@ import 'package:intl/intl.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/my_work_providers.dart';
+import '../../application/staff_providers.dart';
 import '../../data/models/staff_membership.dart';
+import 'staff_invitations_screen.dart';
 
 /// "أعمالي" — every business I work for as a delegated staff member, with a
 /// check-in/check-out for each. Reachable by any signed-in account; a
@@ -19,8 +21,25 @@ class MyWorkScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(myWorkControllerProvider);
 
+    final invitationsCount = ref.watch(staffInvitationsControllerProvider).valueOrNull?.length ?? 0;
+
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.myWorkTitle)),
+      appBar: AppBar(
+        title: Text(l10n.myWorkTitle),
+        actions: [
+          IconButton(
+            tooltip: l10n.staffInvitationsTitle,
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const StaffInvitationsScreen()),
+            ),
+            icon: Badge(
+              isLabelVisible: invitationsCount > 0,
+              label: Text('$invitationsCount'),
+              child: const Icon(Icons.mail_outline),
+            ),
+          ),
+        ],
+      ),
       body: RefreshIndicator(
         onRefresh: () => ref.read(myWorkControllerProvider.notifier).load(),
         child: state.isLoading

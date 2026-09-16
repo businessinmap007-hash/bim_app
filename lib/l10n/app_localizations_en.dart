@@ -1913,6 +1913,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String get staffInactiveBadge => 'Inactive';
 
   @override
+  String get staffPendingBadge => 'Pending';
+
+  @override
+  String get staffInvitationsTitle => 'Work invitations';
+
+  @override
+  String get staffInvitationsEmpty =>
+      'No invitations waiting for your response.';
+
+  @override
+  String get staffInvitationAccept => 'Accept';
+
+  @override
+  String get staffInvitationDecline => 'Decline';
+
+  @override
+  String get staffInvitationAccepted => 'Invitation accepted.';
+
+  @override
+  String get staffInvitationDeclined => 'Invitation declined.';
+
+  @override
+  String get staffInvitationSentTitle => 'Invitation sent';
+
+  @override
+  String get staffInvitationSentPending =>
+      'Waiting for the employee to accept.';
+
+  @override
   String get staffRemove => 'Remove';
 
   @override

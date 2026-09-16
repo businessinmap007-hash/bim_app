@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/person_card.dart';
 import '../../application/staff_providers.dart';
 import '../../data/models/staff_member.dart';
 
@@ -88,20 +89,25 @@ class _StaffTile extends StatelessWidget {
         ),
         title: Text(member.title?.isNotEmpty == true ? '${member.name} — ${member.title}' : member.name),
         subtitle: Text(names.isEmpty ? (member.phone ?? '') : names),
-        trailing: !member.isActive
-            ? Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.error.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  l10n.staffInactiveBadge,
-                  style: const TextStyle(color: AppColors.error, fontSize: 11, fontWeight: FontWeight.w600),
-                ),
-              )
-            : null,
+        trailing: member.isPending
+            ? _Badge(text: l10n.staffPendingBadge, color: AppColors.warning)
+            : (!member.isActive ? _Badge(text: l10n.staffInactiveBadge, color: AppColors.error) : null),
       ),
+    );
+  }
+}
+
+class _Badge extends StatelessWidget {
+  final String text;
+  final Color color;
+  const _Badge({required this.text, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(color: color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(20)),
+      child: Text(text, style: TextStyle(color: color, fontSize: 11, fontWeight: FontWeight.w600)),
     );
   }
 }
@@ -168,6 +174,7 @@ class _StaffMemberSheetState extends ConsumerState<_StaffMemberSheet> {
     });
     try {
       final notifier = ref.read(staffControllerProvider.notifier);
+      StaffMember? added;
       if (_isEdit) {
         await notifier.update(
           widget.existing!.userId,
@@ -176,19 +183,41 @@ class _StaffMemberSheetState extends ConsumerState<_StaffMemberSheet> {
           isActive: _isActive,
         );
       } else {
-        await notifier.add(
+        added = await notifier.add(
           phone: _phoneController.text.trim(),
           title: _titleController.text.trim(),
           capabilities: _selectedCapabilities.toList(),
           isActive: _isActive,
         );
       }
-      if (mounted) Navigator.of(context).pop();
+      if (mounted) {
+        Navigator.of(context).pop();
+        // Who was just invited — waiting on their own acceptance before it
+        // actually activates (see BusinessAccessService::resolveContext()).
+        if (added != null) _showAddedCard(added);
+      }
     } catch (_) {
       if (mounted) setState(() => _error = l10n.commonSomethingWentWrong);
     } finally {
       if (mounted) setState(() => _submitting = false);
     }
+  }
+
+  void _showAddedCard(StaffMember member) {
+    final l10n = AppLocalizations.of(context)!;
+    showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.staffInvitationSentTitle),
+        content: PersonCard(
+          name: member.name,
+          phone: member.phone,
+          photoUrl: member.logoUrl,
+          subtitle: l10n.staffInvitationSentPending,
+        ),
+        actions: [TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(l10n.commonOk))],
+      ),
+    );
   }
 
   Future<void> _remove() async {

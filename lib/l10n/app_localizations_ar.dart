@@ -1929,6 +1929,33 @@ class AppLocalizationsAr extends AppLocalizations {
   String get staffInactiveBadge => 'غير نشط';
 
   @override
+  String get staffPendingBadge => 'بانتظار القبول';
+
+  @override
+  String get staffInvitationsTitle => 'دعوات العمل';
+
+  @override
+  String get staffInvitationsEmpty => 'لا توجد دعوات بانتظار ردك.';
+
+  @override
+  String get staffInvitationAccept => 'قبول';
+
+  @override
+  String get staffInvitationDecline => 'رفض';
+
+  @override
+  String get staffInvitationAccepted => 'تم قبول الدعوة.';
+
+  @override
+  String get staffInvitationDeclined => 'تم رفض الدعوة.';
+
+  @override
+  String get staffInvitationSentTitle => 'تم إرسال الدعوة';
+
+  @override
+  String get staffInvitationSentPending => 'بانتظار قبول الموظف للانضمام.';
+
+  @override
   String get staffRemove => 'إزالة';
 
   @override

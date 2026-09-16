@@ -3560,6 +3560,60 @@ abstract class AppLocalizations {
   /// **'غير نشط'**
   String get staffInactiveBadge;
 
+  /// No description provided for @staffPendingBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار القبول'**
+  String get staffPendingBadge;
+
+  /// No description provided for @staffInvitationsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'دعوات العمل'**
+  String get staffInvitationsTitle;
+
+  /// No description provided for @staffInvitationsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد دعوات بانتظار ردك.'**
+  String get staffInvitationsEmpty;
+
+  /// No description provided for @staffInvitationAccept.
+  ///
+  /// In ar, this message translates to:
+  /// **'قبول'**
+  String get staffInvitationAccept;
+
+  /// No description provided for @staffInvitationDecline.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفض'**
+  String get staffInvitationDecline;
+
+  /// No description provided for @staffInvitationAccepted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم قبول الدعوة.'**
+  String get staffInvitationAccepted;
+
+  /// No description provided for @staffInvitationDeclined.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم رفض الدعوة.'**
+  String get staffInvitationDeclined;
+
+  /// No description provided for @staffInvitationSentTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال الدعوة'**
+  String get staffInvitationSentTitle;
+
+  /// No description provided for @staffInvitationSentPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار قبول الموظف للانضمام.'**
+  String get staffInvitationSentPending;
+
   /// No description provided for @staffRemove.
   ///
   /// In ar, this message translates to:

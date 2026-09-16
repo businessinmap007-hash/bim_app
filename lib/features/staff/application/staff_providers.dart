@@ -73,7 +73,7 @@ class StaffController extends StateNotifier<StaffState> {
     }
   }
 
-  Future<void> add({
+  Future<StaffMember> add({
     required String phone,
     String? title,
     required List<String> capabilities,
@@ -82,6 +82,7 @@ class StaffController extends StateNotifier<StaffState> {
     final member = await _api.add(phone: phone, title: title, capabilities: capabilities, isActive: isActive);
     final without = state.staff.where((s) => s.userId != member.userId).toList();
     state = state.copyWith(staff: [member, ...without]);
+    return member;
   }
 
   Future<void> update(
@@ -105,3 +106,39 @@ class StaffController extends StateNotifier<StaffState> {
 final staffControllerProvider = StateNotifierProvider<StaffController, StaffState>((ref) {
   return StaffController(ref.watch(staffApiProvider));
 });
+
+/// Staff invitations I (the invited person) haven't answered yet — accepting
+/// or declining removes it from this list, same shape as StaffController.
+class StaffInvitationsController extends StateNotifier<AsyncValue<List<StaffInvitation>>> {
+  final StaffApi _api;
+
+  StaffInvitationsController(this._api) : super(const AsyncValue.loading()) {
+    _load();
+  }
+
+  Future<void> _load() async {
+    state = const AsyncValue.loading();
+    try {
+      state = AsyncValue.data(await _api.invitations());
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
+  }
+
+  Future<void> refresh() => _load();
+
+  Future<void> accept(int businessId) async {
+    await _api.acceptInvitation(businessId);
+    state = state.whenData((items) => items.where((i) => i.businessId != businessId).toList());
+  }
+
+  Future<void> decline(int businessId) async {
+    await _api.declineInvitation(businessId);
+    state = state.whenData((items) => items.where((i) => i.businessId != businessId).toList());
+  }
+}
+
+final staffInvitationsControllerProvider =
+    StateNotifierProvider<StaffInvitationsController, AsyncValue<List<StaffInvitation>>>((ref) {
+      return StaffInvitationsController(ref.watch(staffApiProvider));
+    });
