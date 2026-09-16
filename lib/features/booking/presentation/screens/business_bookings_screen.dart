@@ -24,11 +24,14 @@ Color _statusColor(String status) => switch (status) {
   _ => AppColors.warning,
 };
 
-/// The business's incoming-booking queue — Api\V2\BookingController's
-/// scope=business. Reached from Service settings, mirrors
-/// BusinessOrdersScreen's own shape (filter chips + list + detail screen).
+/// The business's incoming-booking queue — GET /business/bookings. Reached
+/// from Service settings (owner, [businessId] null) or from a delegated
+/// staff member's "أعمالي" membership card ([businessId] set to the
+/// business they act for) — mirrors BusinessOrdersScreen's own shape
+/// (filter chips + list + detail screen).
 class BusinessBookingsScreen extends ConsumerStatefulWidget {
-  const BusinessBookingsScreen({super.key});
+  final int? businessId;
+  const BusinessBookingsScreen({super.key, this.businessId});
 
   @override
   ConsumerState<BusinessBookingsScreen> createState() => _BusinessBookingsScreenState();
@@ -46,7 +49,7 @@ class _BusinessBookingsScreenState extends ConsumerState<BusinessBookingsScreen>
 
   void _onScroll() {
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
-      ref.read(businessBookingsControllerProvider.notifier).loadMore();
+      ref.read(businessBookingsControllerProvider(widget.businessId).notifier).loadMore();
     }
   }
 
@@ -58,13 +61,13 @@ class _BusinessBookingsScreenState extends ConsumerState<BusinessBookingsScreen>
 
   void _setStatus(String? status) {
     setState(() => _status = status);
-    ref.read(businessBookingsControllerProvider.notifier).load(status: status);
+    ref.read(businessBookingsControllerProvider(widget.businessId).notifier).load(status: status);
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final state = ref.watch(businessBookingsControllerProvider);
+    final state = ref.watch(businessBookingsControllerProvider(widget.businessId));
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.businessBookingsTitle)),
@@ -119,7 +122,8 @@ class _BusinessBookingsScreenState extends ConsumerState<BusinessBookingsScreen>
                         Text(l10n.commonSomethingWentWrong),
                         const SizedBox(height: 8),
                         OutlinedButton(
-                          onPressed: () => ref.read(businessBookingsControllerProvider.notifier).load(status: _status),
+                          onPressed: () =>
+                              ref.read(businessBookingsControllerProvider(widget.businessId).notifier).load(status: _status),
                           child: Text(l10n.commonRetry),
                         ),
                       ],
@@ -128,7 +132,8 @@ class _BusinessBookingsScreenState extends ConsumerState<BusinessBookingsScreen>
                 : state.items.isEmpty
                 ? Center(child: Text(l10n.businessBookingsEmpty))
                 : RefreshIndicator(
-                    onRefresh: () => ref.read(businessBookingsControllerProvider.notifier).load(status: _status),
+                    onRefresh: () =>
+                        ref.read(businessBookingsControllerProvider(widget.businessId).notifier).load(status: _status),
                     child: ListView.separated(
                       controller: _scrollController,
                       padding: const EdgeInsets.all(12),
@@ -145,7 +150,10 @@ class _BusinessBookingsScreenState extends ConsumerState<BusinessBookingsScreen>
                         return _BookingTile(
                           booking: booking,
                           onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => BusinessBookingDetailScreen(bookingId: booking.id)),
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  BusinessBookingDetailScreen(bookingId: booking.id, businessId: widget.businessId),
+                            ),
                           ),
                         );
                       },
@@ -202,7 +210,8 @@ class _BookingTile extends StatelessWidget {
 
 class BusinessBookingDetailScreen extends ConsumerWidget {
   final int bookingId;
-  const BusinessBookingDetailScreen({super.key, required this.bookingId});
+  final int? businessId;
+  const BusinessBookingDetailScreen({super.key, required this.bookingId, this.businessId});
 
   Future<void> _reject(BuildContext context, WidgetRef ref) async {
     final l10n = AppLocalizations.of(context)!;
@@ -224,7 +233,7 @@ class BusinessBookingDetailScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     try {
       await action();
-      ref.read(businessBookingsControllerProvider.notifier).load();
+      ref.read(businessBookingsControllerProvider(businessId).notifier).load();
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(

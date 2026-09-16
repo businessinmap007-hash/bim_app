@@ -37,14 +37,17 @@ class BusinessBookingsState {
   }
 }
 
-/// A business's own incoming-booking queue — Api\V2\BookingController's
-/// scope=business, mirrors BusinessOrdersController's own shape.
+/// A business's own incoming-booking queue — GET /business/bookings.
+/// [businessId] is null when the caller is the business account itself
+/// (the default, owner-opened path) and set to a membership's business id
+/// when a delegated staff member opens this for the business they act for.
 class BusinessBookingsController extends StateNotifier<BusinessBookingsState> {
   final BookingApi _api;
+  final int? businessId;
   int _page = 1;
   String? _status;
 
-  BusinessBookingsController(this._api) : super(const BusinessBookingsState()) {
+  BusinessBookingsController(this._api, this.businessId) : super(const BusinessBookingsState()) {
     load();
   }
 
@@ -53,7 +56,7 @@ class BusinessBookingsController extends StateNotifier<BusinessBookingsState> {
     state = state.copyWith(isLoading: true, clearError: true);
     _page = 1;
     try {
-      final result = await _api.listBusiness(status: _status, page: _page);
+      final result = await _api.listBusiness(status: _status, page: _page, businessId: businessId);
       state = state.copyWith(items: result.items, isLoading: false, hasMore: result.hasMore);
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
@@ -64,7 +67,7 @@ class BusinessBookingsController extends StateNotifier<BusinessBookingsState> {
     if (state.isLoadingMore || !state.hasMore) return;
     state = state.copyWith(isLoadingMore: true);
     try {
-      final result = await _api.listBusiness(status: _status, page: _page + 1);
+      final result = await _api.listBusiness(status: _status, page: _page + 1, businessId: businessId);
       _page += 1;
       state = state.copyWith(
         items: [...state.items, ...result.items],
@@ -78,8 +81,8 @@ class BusinessBookingsController extends StateNotifier<BusinessBookingsState> {
 }
 
 final businessBookingsControllerProvider =
-    StateNotifierProvider<BusinessBookingsController, BusinessBookingsState>((ref) {
-      return BusinessBookingsController(ref.watch(bookingApiProvider));
+    StateNotifierProvider.family<BusinessBookingsController, BusinessBookingsState, int?>((ref, businessId) {
+      return BusinessBookingsController(ref.watch(bookingApiProvider), businessId);
     });
 
 class BusinessBookingDetailState {

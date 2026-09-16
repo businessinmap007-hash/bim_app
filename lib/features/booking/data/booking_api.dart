@@ -48,18 +48,22 @@ class BookingApi {
     return Booking.fromJson(data['booking'] as Map<String, dynamic>);
   }
 
-  /// The business's own incoming-booking queue — same endpoint as [list],
-  /// scoped the other way (Api\V2\BookingController::index reads `scope`).
+  /// The business's own incoming-booking queue. Reachable by the owner or a
+  /// delegated staff member with the bookings capability — [businessId]
+  /// disambiguates which membership this is for, same as
+  /// StaffAttendanceApi's own `business_id` field, and is safely omitted
+  /// when the caller is the business account itself.
   Future<Paginated<Booking>> listBusiness({
     String? status,
     int page = 1,
     int perPage = 20,
+    int? businessId,
   }) async {
     final data =
         await _client.get(
-              '/bookings',
+              '/business/bookings',
               query: {
-                'scope': 'business',
+                'business_id': ?businessId,
                 'status': ?status,
                 'page': page,
                 'per_page': perPage,
