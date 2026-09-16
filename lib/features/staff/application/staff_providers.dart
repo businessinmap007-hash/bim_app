@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/core_providers.dart';
+import '../../notifications/application/notifications_providers.dart';
 import '../data/models/staff_member.dart';
 import '../data/staff_api.dart';
 
@@ -111,8 +112,9 @@ final staffControllerProvider = StateNotifierProvider<StaffController, StaffStat
 /// or declining removes it from this list, same shape as StaffController.
 class StaffInvitationsController extends StateNotifier<AsyncValue<List<StaffInvitation>>> {
   final StaffApi _api;
+  final Ref _ref;
 
-  StaffInvitationsController(this._api) : super(const AsyncValue.loading()) {
+  StaffInvitationsController(this._api, this._ref) : super(const AsyncValue.loading()) {
     _load();
   }
 
@@ -130,15 +132,27 @@ class StaffInvitationsController extends StateNotifier<AsyncValue<List<StaffInvi
   Future<void> accept(int businessId) async {
     await _api.acceptInvitation(businessId);
     state = state.whenData((items) => items.where((i) => i.businessId != businessId).toList());
+    _refreshNotifications();
   }
 
   Future<void> decline(int businessId) async {
     await _api.declineInvitation(businessId);
     state = state.whenData((items) => items.where((i) => i.businessId != businessId).toList());
+    _refreshNotifications();
+  }
+
+  /// The backend just rewrote the original "you're invited" notification in
+  /// place (action_type moves off open_staff_invitation so a second tap
+  /// never re-opens the popup) — refresh so the list/badge pick that up
+  /// whether the response came from here (the invitations screen) or from
+  /// the notification's own popup (staff_invitation_dialog.dart).
+  void _refreshNotifications() {
+    _ref.invalidate(notificationsControllerProvider);
+    _ref.invalidate(unreadNotificationCountProvider);
   }
 }
 
 final staffInvitationsControllerProvider =
     StateNotifierProvider<StaffInvitationsController, AsyncValue<List<StaffInvitation>>>((ref) {
-      return StaffInvitationsController(ref.watch(staffApiProvider));
+      return StaffInvitationsController(ref.watch(staffApiProvider), ref);
     });

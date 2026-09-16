@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/person_card.dart';
+import '../../../notifications/application/notifications_providers.dart';
 import '../../application/staff_providers.dart';
 
 /// Tapping the "you've been invited as staff" notification opens this
@@ -57,6 +58,12 @@ class _StaffInvitationDialogState extends ConsumerState<_StaffInvitationDialog> 
       // Refresh the pending list for whenever the user next opens it —
       // safe even if it was never loaded (the provider just (re)fetches).
       ref.invalidate(staffInvitationsControllerProvider);
+      // The backend just rewrote this same notification in place (its
+      // action_type moves off open_staff_invitation so a second tap never
+      // re-opens this dialog) — refresh so the list/badge reflect that
+      // instead of still showing the original "you're invited" text.
+      ref.invalidate(notificationsControllerProvider);
+      ref.invalidate(unreadNotificationCountProvider);
       if (context.mounted) {
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
