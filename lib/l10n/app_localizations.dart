@@ -3326,6 +3326,18 @@ abstract class AppLocalizations {
   /// **'متاح لاستلام طلبات توصيل'**
   String get deliveryOnDutySwitch;
 
+  /// No description provided for @deliveryDeliveredCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلبات تم توصيلها'**
+  String get deliveryDeliveredCount;
+
+  /// No description provided for @deliveryFastDeliveryCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'توصيل سريع ⚡'**
+  String get deliveryFastDeliveryCount;
+
   /// No description provided for @deliveryMyActiveOrders.
   ///
   /// In ar, this message translates to:

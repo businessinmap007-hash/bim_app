@@ -67,7 +67,7 @@ class _DriverDashboardScreenState extends ConsumerState<DriverDashboardScreen> {
                   ),
                 ),
               )
-            else
+            else ...[
               Card(
                 child: SwitchListTile(
                   title: Text(l10n.deliveryOnDutySwitch),
@@ -78,6 +78,27 @@ class _DriverDashboardScreenState extends ConsumerState<DriverDashboardScreen> {
                       : (v) => ref.read(driverAvailabilityControllerProvider.notifier).setActive(v),
                 ),
               ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: _StatCard(
+                      icon: Icons.local_shipping_outlined,
+                      label: l10n.deliveryDeliveredCount,
+                      value: availability.status!.deliveredCount,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: _StatCard(
+                      icon: Icons.bolt_outlined,
+                      label: l10n.deliveryFastDeliveryCount,
+                      value: availability.status!.fastDeliveryCount,
+                    ),
+                  ),
+                ],
+              ),
+            ],
             if (deliveriesAsync != null) ...[
               const SizedBox(height: 16),
               Text(l10n.deliveryMyActiveOrders, style: Theme.of(context).textTheme.titleMedium),
@@ -120,6 +141,33 @@ class _DriverDashboardScreenState extends ConsumerState<DriverDashboardScreen> {
             ],
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _StatCard extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final int value;
+  const _StatCard({required this.icon, required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 18, color: Theme.of(context).hintColor),
+          const SizedBox(height: 4),
+          Text('$value', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
+          Text(label, style: Theme.of(context).textTheme.bodySmall, maxLines: 1, overflow: TextOverflow.ellipsis),
+        ],
       ),
     );
   }

@@ -14,6 +14,7 @@ class RosterDriver {
   final int activeOrderCount;
   final int deliveredToday;
   final int deliveredCount;
+  final int fastDeliveryCount;
   final bool locationAvailable;
   final double? distanceKm;
 
@@ -28,6 +29,7 @@ class RosterDriver {
     required this.activeOrderCount,
     required this.deliveredToday,
     required this.deliveredCount,
+    required this.fastDeliveryCount,
     required this.locationAvailable,
     this.distanceKm,
   });
@@ -43,6 +45,7 @@ class RosterDriver {
     activeOrderCount: (json['active_order_count'] as num?)?.toInt() ?? 0,
     deliveredToday: (json['delivered_today'] as num?)?.toInt() ?? 0,
     deliveredCount: (json['delivered_count'] as num?)?.toInt() ?? 0,
+    fastDeliveryCount: (json['fast_delivery_count'] as num?)?.toInt() ?? 0,
     locationAvailable: json['location_available'] as bool? ?? false,
     distanceKm: (json['distance_km'] as num?)?.toDouble(),
   );
@@ -55,6 +58,7 @@ class DriverStatus {
   final int assignedCount;
   final int pickedUpCount;
   final int deliveredCount;
+  final int fastDeliveryCount;
 
   const DriverStatus({
     required this.driverId,
@@ -62,6 +66,7 @@ class DriverStatus {
     required this.assignedCount,
     required this.pickedUpCount,
     required this.deliveredCount,
+    required this.fastDeliveryCount,
   });
 
   factory DriverStatus.fromJson(Map<String, dynamic> json) => DriverStatus(
@@ -70,5 +75,6 @@ class DriverStatus {
     assignedCount: (json['assigned_count'] as num?)?.toInt() ?? 0,
     pickedUpCount: (json['picked_up_count'] as num?)?.toInt() ?? 0,
     deliveredCount: (json['delivered_count'] as num?)?.toInt() ?? 0,
+    fastDeliveryCount: (json['fast_delivery_count'] as num?)?.toInt() ?? 0,
   );
 }

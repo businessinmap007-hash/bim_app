@@ -1785,6 +1785,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get deliveryOnDutySwitch => 'متاح لاستلام طلبات توصيل';
 
   @override
+  String get deliveryDeliveredCount => 'طلبات تم توصيلها';
+
+  @override
+  String get deliveryFastDeliveryCount => 'توصيل سريع ⚡';
+
+  @override
   String get deliveryMyActiveOrders => 'طلباتي الحالية';
 
   @override

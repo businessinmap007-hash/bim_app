@@ -1773,6 +1773,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deliveryOnDutySwitch => 'Available for deliveries';
 
   @override
+  String get deliveryDeliveredCount => 'Orders delivered';
+
+  @override
+  String get deliveryFastDeliveryCount => 'Fast deliveries ⚡';
+
+  @override
   String get deliveryMyActiveOrders => 'My active deliveries';
 
   @override

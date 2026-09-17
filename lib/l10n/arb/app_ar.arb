@@ -589,6 +589,8 @@
   "deliveryBecomeDriverHint": "سجّل لترى طلبات التوصيل المتاحة وتقبلها، أو ينضمّك أحد الأنشطة إليه مباشرة.",
   "deliveryBecomeDriver": "سجّل كمندوب توصيل",
   "deliveryOnDutySwitch": "متاح لاستلام طلبات توصيل",
+  "deliveryDeliveredCount": "طلبات تم توصيلها",
+  "deliveryFastDeliveryCount": "توصيل سريع ⚡",
   "deliveryMyActiveOrders": "طلباتي الحالية",
   "deliveryNoActiveOrders": "لا توجد طلبات توصيل جارية حاليًا.",
   "deliveryScanPickupTitle": "امسح رمز الاستلام",

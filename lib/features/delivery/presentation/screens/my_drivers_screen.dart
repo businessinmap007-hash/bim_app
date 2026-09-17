@@ -137,6 +137,11 @@ class _DriverCard extends StatelessWidget {
                 ],
               ],
             ),
+            Text(
+              '${l10n.deliveryDeliveredCount}: ${driver.deliveredCount}'
+              '${driver.fastDeliveryCount > 0 ? ' · ${l10n.deliveryFastDeliveryCount}: ${driver.fastDeliveryCount}' : ''}',
+              style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12),
+            ),
           ],
         ),
         trailing: busy

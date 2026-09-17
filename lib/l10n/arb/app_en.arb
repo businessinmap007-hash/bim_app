@@ -589,6 +589,8 @@
   "deliveryBecomeDriverHint": "Register to see and accept delivery jobs, or be linked by a business.",
   "deliveryBecomeDriver": "Register as a driver",
   "deliveryOnDutySwitch": "Available for deliveries",
+  "deliveryDeliveredCount": "Orders delivered",
+  "deliveryFastDeliveryCount": "Fast deliveries ⚡",
   "deliveryMyActiveOrders": "My active deliveries",
   "deliveryNoActiveOrders": "No active deliveries right now.",
   "deliveryScanPickupTitle": "Scan pickup QR",
