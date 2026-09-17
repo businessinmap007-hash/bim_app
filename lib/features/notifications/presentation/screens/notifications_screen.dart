@@ -207,6 +207,11 @@ class _NotificationTile extends ConsumerWidget {
                 notification.body(languageCode),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: theme.colorScheme.onSurface,
+                ),
               ),
             ],
           ),
