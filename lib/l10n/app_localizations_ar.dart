@@ -1044,7 +1044,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get cartPaymentMethod => 'طريقة الدفع';
 
   @override
-  String get cartPaymentCash => 'نقدًا عند الاستلام';
+  String get cartPaymentCash => 'الدفع عند الاستلام';
+
+  @override
+  String get cartPaymentCashInStore => 'الدفع نقدًا فى المحل';
 
   @override
   String get cartPlaceOrder => 'تأكيد الطلب';

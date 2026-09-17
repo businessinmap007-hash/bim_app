@@ -1034,6 +1034,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cartPaymentCash => 'Cash on delivery';
 
   @override
+  String get cartPaymentCashInStore => 'Cash at the store';
+
+  @override
   String get cartPlaceOrder => 'Place order';
 
   @override

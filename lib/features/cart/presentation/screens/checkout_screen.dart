@@ -11,7 +11,9 @@ import '../../data/models/cart_models.dart';
 /// Fulfillment type + address/notes + payment method, then places the
 /// order (POST /cart/{business}/checkout). Payment is cash-only for now —
 /// the backend already accepts a gateway `payment_method`, but wiring an
-/// actual payment sheet is a separate module.
+/// actual payment sheet is a separate module. The label/value sent still
+/// distinguishes cash-on-delivery from cash-at-pickup since that split
+/// matters once payment confirmation is built.
 class CheckoutScreen extends ConsumerStatefulWidget {
   final Cart cart;
   const CheckoutScreen({super.key, required this.cart});
@@ -94,7 +96,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             ? _addressController.text.trim()
             : null,
         notes: _notesController.text.trim(),
-        paymentMethod: 'cash',
+        paymentMethod: fulfillmentType == 'delivery' ? 'cash_on_delivery' : 'cash',
         outOfStockPolicy: _outOfStockPolicy,
         pickupAt: fulfillmentType == 'pickup' ? _pickupAt : null,
       );
@@ -222,7 +224,10 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           const SizedBox(height: 16),
           Text(l10n.cartPaymentMethod, style: Theme.of(context).textTheme.titleSmall),
           const SizedBox(height: 4),
-          Text(l10n.cartPaymentCash, style: Theme.of(context).textTheme.bodyMedium),
+          Text(
+            selected == 'delivery' ? l10n.cartPaymentCash : l10n.cartPaymentCashInStore,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
           const SizedBox(height: 24),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

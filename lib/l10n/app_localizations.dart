@@ -1973,8 +1973,14 @@ abstract class AppLocalizations {
   /// No description provided for @cartPaymentCash.
   ///
   /// In ar, this message translates to:
-  /// **'نقدًا عند الاستلام'**
+  /// **'الدفع عند الاستلام'**
   String get cartPaymentCash;
+
+  /// No description provided for @cartPaymentCashInStore.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدفع نقدًا فى المحل'**
+  String get cartPaymentCashInStore;
 
   /// No description provided for @cartPlaceOrder.
   ///
