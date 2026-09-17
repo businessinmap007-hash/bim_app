@@ -255,13 +255,17 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
       final result = await ref.read(ordersApiProvider).reorder(order.id);
       await ref.read(cartControllerProvider.notifier).load();
       if (mounted) {
+        // Captured before pop(): by the time the SnackBarAction below is
+        // actually tapped, this screen is long gone, so its own `context`
+        // must never be the one still in use for that navigation.
+        final rootContext = Navigator.of(context, rootNavigator: true).context;
         Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
+        ScaffoldMessenger.of(rootContext).showSnackBar(
           SnackBar(
             content: Text(result.skipped.isEmpty ? l10n.ordersReordered : l10n.ordersReorderedWithSkipped),
             action: SnackBarAction(
               label: l10n.cartGoToCart,
-              onPressed: () => Navigator.of(context).push(
+              onPressed: () => Navigator.of(rootContext).push(
                 MaterialPageRoute(builder: (_) => const CartScreen()),
               ),
             ),
