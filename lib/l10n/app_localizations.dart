@@ -1022,6 +1022,12 @@ abstract class AppLocalizations {
   /// **'تحتاج للسماح بالوصول للموقع من إعدادات الجهاز.'**
   String get profileLocationPermissionDenied;
 
+  /// No description provided for @profileLocationNoMatch.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم نتمكن من تحديد المحافظة والمدينة من موقعك، برجاء الاختيار يدويًا.'**
+  String get profileLocationNoMatch;
+
   /// No description provided for @profilePhotoCamera.
   ///
   /// In ar, this message translates to:
@@ -1199,20 +1205,20 @@ abstract class AppLocalizations {
   /// No description provided for @locationFieldLabel.
   ///
   /// In ar, this message translates to:
-  /// **'الدولة / المحافظة / المدينة'**
+  /// **'المحافظة / المدينة'**
   String get locationFieldLabel;
 
   /// No description provided for @locationChooseHint.
   ///
   /// In ar, this message translates to:
-  /// **'اختر الدولة والمحافظة والمدينة'**
+  /// **'اختر المحافظة والمدينة'**
   String get locationChooseHint;
 
-  /// No description provided for @locationChooseCountry.
+  /// No description provided for @locationChooseGovernorate.
   ///
   /// In ar, this message translates to:
-  /// **'اختر الدولة'**
-  String get locationChooseCountry;
+  /// **'اختر المحافظة'**
+  String get locationChooseGovernorate;
 
   /// No description provided for @locationEmpty.
   ///

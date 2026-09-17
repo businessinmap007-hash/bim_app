@@ -525,6 +525,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Location access is needed — allow it from your device settings.';
 
   @override
+  String get profileLocationNoMatch =>
+      'We couldn\'t determine your governorate and city from your location — please choose them manually.';
+
+  @override
   String get profilePhotoCamera => 'Take a photo';
 
   @override
@@ -615,13 +619,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileAdministrativeLocation => 'Administrative area';
 
   @override
-  String get locationFieldLabel => 'Country / Governorate / City';
+  String get locationFieldLabel => 'Governorate / City';
 
   @override
-  String get locationChooseHint => 'Choose country, governorate and city';
+  String get locationChooseHint => 'Choose a governorate and city';
 
   @override
-  String get locationChooseCountry => 'Choose a country';
+  String get locationChooseGovernorate => 'Choose a governorate';
 
   @override
   String get locationEmpty => 'No results';

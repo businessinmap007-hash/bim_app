@@ -64,29 +64,28 @@ class LocationPickerField extends StatelessWidget {
   }
 }
 
-class _LocationPickerSheet extends StatefulWidget {
+/// Country -> governorate -> city, EXCEPT the country step is never actually
+/// shown: the app only operates in Egypt for now (the backend pins
+/// country_id to it too, see ProfileController::update()), so this resolves
+/// Egypt from [countriesProvider] itself (by iso2, matching how the
+/// countries list is already filterable server-side) and starts the picker
+/// straight at governorates. A single wrong tap used to be able to land the
+/// picker on some other country's now-forever-empty governorate list.
+class _LocationPickerSheet extends ConsumerStatefulWidget {
   const _LocationPickerSheet();
 
   @override
-  State<_LocationPickerSheet> createState() => _LocationPickerSheetState();
+  ConsumerState<_LocationPickerSheet> createState() => _LocationPickerSheetState();
 }
 
-class _LocationPickerSheetState extends State<_LocationPickerSheet> {
-  LocationCountry? _selectedCountry;
+class _LocationPickerSheetState extends ConsumerState<_LocationPickerSheet> {
   LocationGovernorate? _selectedGovernorate;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final languageCode = Localizations.localeOf(context).languageCode;
-    final country = _selectedCountry;
-    final governorate = _selectedGovernorate;
-
-    final title = governorate != null
-        ? governorate.localizedName(languageCode)
-        : country != null
-        ? country.localizedName(languageCode)
-        : l10n.locationChooseCountry;
+    final countriesAsync = ref.watch(countriesProvider);
 
     return DraggableScrollableSheet(
       initialChildSize: 0.75,
@@ -94,103 +93,75 @@ class _LocationPickerSheetState extends State<_LocationPickerSheet> {
       maxChildSize: 0.92,
       expand: false,
       builder: (context, scrollController) {
-        return SafeArea(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-                child: Row(
-                  children: [
-                    if (country != null)
-                      IconButton(
-                        icon: const Icon(Icons.arrow_back),
-                        onPressed: () => setState(() {
-                          if (governorate != null) {
-                            _selectedGovernorate = null;
-                          } else {
-                            _selectedCountry = null;
-                          }
-                        }),
-                      )
-                    else
-                      const SizedBox(width: 48),
-                    Expanded(
-                      child: Text(
-                        title,
-                        style: Theme.of(context).textTheme.titleMedium,
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.of(context).pop()),
-                  ],
-                ),
-              ),
-              const Divider(height: 1),
-              Expanded(
-                child: country == null
-                    ? _CountryList(
-                        scrollController: scrollController,
-                        onSelected: (c) => setState(() => _selectedCountry = c),
-                      )
-                    : governorate == null
-                    ? _GovernorateList(
-                        scrollController: scrollController,
-                        countryId: country.id,
-                        onSelected: (g) => setState(() => _selectedGovernorate = g),
-                      )
-                    : _CityList(
-                        scrollController: scrollController,
-                        governorateId: governorate.id,
-                        onSelected: (city) => Navigator.of(context).pop(
-                          LocationSelection(
-                            countryId: country.id,
-                            governorateId: governorate.id,
-                            cityId: city.id,
-                            label:
-                                '${country.localizedName(languageCode)} — '
-                                '${governorate.localizedName(languageCode)} — '
-                                '${city.localizedName(languageCode)}',
+        return countriesAsync.when(
+          loading: () => const SafeArea(child: Center(child: CircularProgressIndicator())),
+          error: (error, stack) => SafeArea(child: Center(child: Text(l10n.commonSomethingWentWrong))),
+          data: (countries) {
+            final egypt = countries.firstWhere(
+              (c) => c.iso2 == 'EG',
+              orElse: () => countries.isNotEmpty
+                  ? countries.first
+                  : const LocationCountry(id: 1, nameAr: 'مصر', nameEn: 'Egypt', iso2: 'EG'),
+            );
+            final governorate = _selectedGovernorate;
+
+            final title = governorate != null ? governorate.localizedName(languageCode) : l10n.locationChooseGovernorate;
+
+            return SafeArea(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                    child: Row(
+                      children: [
+                        if (governorate != null)
+                          IconButton(
+                            icon: const Icon(Icons.arrow_back),
+                            onPressed: () => setState(() => _selectedGovernorate = null),
+                          )
+                        else
+                          const SizedBox(width: 48),
+                        Expanded(
+                          child: Text(
+                            title,
+                            style: Theme.of(context).textTheme.titleMedium,
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                      ),
+                        IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.of(context).pop()),
+                      ],
+                    ),
+                  ),
+                  const Divider(height: 1),
+                  Expanded(
+                    child: governorate == null
+                        ? _GovernorateList(
+                            scrollController: scrollController,
+                            countryId: egypt.id,
+                            onSelected: (g) => setState(() => _selectedGovernorate = g),
+                          )
+                        : _CityList(
+                            scrollController: scrollController,
+                            governorateId: governorate.id,
+                            onSelected: (city) => Navigator.of(context).pop(
+                              LocationSelection(
+                                countryId: egypt.id,
+                                governorateId: governorate.id,
+                                cityId: city.id,
+                                label:
+                                    '${governorate.localizedName(languageCode)} — '
+                                    '${city.localizedName(languageCode)}',
+                              ),
+                            ),
+                          ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         );
       },
-    );
-  }
-}
-
-class _CountryList extends ConsumerWidget {
-  final ScrollController scrollController;
-  final ValueChanged<LocationCountry> onSelected;
-
-  const _CountryList({required this.scrollController, required this.onSelected});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
-    final countries = ref.watch(countriesProvider);
-    final languageCode = Localizations.localeOf(context).languageCode;
-
-    return countries.when(
-      data: (items) => ListView.separated(
-        controller: scrollController,
-        itemCount: items.length,
-        separatorBuilder: (context, index) => const Divider(height: 1),
-        itemBuilder: (context, index) {
-          final country = items[index];
-          return ListTile(
-            title: Text(country.localizedName(languageCode)),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () => onSelected(country),
-          );
-        },
-      ),
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, stack) => Center(child: Text(l10n.commonSomethingWentWrong)),
     );
   }
 }

@@ -534,6 +534,10 @@ class AppLocalizationsAr extends AppLocalizations {
       'تحتاج للسماح بالوصول للموقع من إعدادات الجهاز.';
 
   @override
+  String get profileLocationNoMatch =>
+      'لم نتمكن من تحديد المحافظة والمدينة من موقعك، برجاء الاختيار يدويًا.';
+
+  @override
   String get profilePhotoCamera => 'التقاط بالكاميرا';
 
   @override
@@ -623,13 +627,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profileAdministrativeLocation => 'المنطقة الإدارية';
 
   @override
-  String get locationFieldLabel => 'الدولة / المحافظة / المدينة';
+  String get locationFieldLabel => 'المحافظة / المدينة';
 
   @override
-  String get locationChooseHint => 'اختر الدولة والمحافظة والمدينة';
+  String get locationChooseHint => 'اختر المحافظة والمدينة';
 
   @override
-  String get locationChooseCountry => 'اختر الدولة';
+  String get locationChooseGovernorate => 'اختر المحافظة';
 
   @override
   String get locationEmpty => 'لا توجد نتائج';

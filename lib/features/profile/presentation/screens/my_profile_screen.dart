@@ -87,7 +87,9 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
   /// Only ids are stored (see AuthUser.countryId/governorateId/cityId) —
   /// there's no "one location by id" endpoint, so the saved location's
   /// display label is built the same way _SpecialtyLabel resolves a
-  /// specialty: read the already-cached lists and match locally.
+  /// specialty: read the already-cached lists and match locally. Country is
+  /// never shown — the app only operates in Egypt for now, so it adds
+  /// nothing the governorate/city pair doesn't already say.
   Future<void> _resolveSavedLocation(AuthUser? user) async {
     final countryId = user?.countryId;
     final governorateId = user?.governorateId;
@@ -96,17 +98,9 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
 
     try {
       final languageCode = Localizations.localeOf(context).languageCode;
-      final countries = await ref.read(locationApiProvider).countries();
       final governorates = await ref.read(locationApiProvider).governorates(countryId);
       final cities = await ref.read(locationApiProvider).cities(governorateId);
 
-      LocationCountry? country;
-      for (final c in countries) {
-        if (c.id == countryId) {
-          country = c;
-          break;
-        }
-      }
       LocationGovernorate? governorate;
       for (final g in governorates) {
         if (g.id == governorateId) {
@@ -121,10 +115,9 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
           break;
         }
       }
-      if (country == null || governorate == null || city == null || !mounted) return;
+      if (governorate == null || city == null || !mounted) return;
       // Local non-nullable copies: a mutable local's null-check doesn't
       // stay promoted once captured by the setState closure below.
-      final resolvedCountry = country;
       final resolvedGovernorate = governorate;
       final resolvedCity = city;
 
@@ -133,10 +126,7 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
           countryId: countryId,
           governorateId: governorateId,
           cityId: cityId,
-          label:
-              '${resolvedCountry.localizedName(languageCode)} — '
-              '${resolvedGovernorate.localizedName(languageCode)} — '
-              '${resolvedCity.localizedName(languageCode)}',
+          label: '${resolvedGovernorate.localizedName(languageCode)} — ${resolvedCity.localizedName(languageCode)}',
         );
       });
     } catch (_) {
@@ -181,11 +171,14 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
         _longitude = position.longitude;
       });
 
-      // Best-effort: also resolve the administrative division from the same
-      // GPS point, still overridable via the manual picker below. A miss
-      // (no confident match) just leaves the picker as it was.
+      // Auto-fill the governorate/city from the same GPS point so there's
+      // something to review — still fully overridable via the manual picker
+      // below before saving. A miss (nothing confidently close enough) must
+      // say so out loud: silently leaving the picker unchanged here used to
+      // look exactly like the button did nothing at all.
       final match = await ref.read(locationApiProvider).nearest(latitude: position.latitude, longitude: position.longitude);
-      if (match != null && mounted) {
+      if (!mounted) return;
+      if (match != null) {
         final languageCode = Localizations.localeOf(context).languageCode;
         setState(() {
           _locationSelection = LocationSelection(
@@ -197,6 +190,8 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
                 '${match.cityNameEn != null && languageCode == 'en' ? match.cityNameEn! : match.cityNameAr}',
           );
         });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.profileLocationNoMatch)));
       }
     } catch (_) {
       if (mounted) {
@@ -237,8 +232,14 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
           context,
         ).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.profileSaved)));
       }
-    } on ApiException catch (e) {
-      setState(() => _error = e.message);
+    } catch (e) {
+      // Catches more than ApiException on purpose: a save that silently
+      // failed with no visible feedback is exactly what looked like "I
+      // picked everything and it just didn't save" before this.
+      if (!mounted) return;
+      final message = e is ApiException ? e.message : AppLocalizations.of(context)!.commonSomethingWentWrong;
+      setState(() => _error = message);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
     } finally {
       if (mounted) setState(() => _saving = false);
     }

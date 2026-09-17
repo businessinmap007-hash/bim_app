@@ -5,8 +5,9 @@ class LocationCountry {
   final int id;
   final String nameAr;
   final String? nameEn;
+  final String? iso2;
 
-  const LocationCountry({required this.id, required this.nameAr, this.nameEn});
+  const LocationCountry({required this.id, required this.nameAr, this.nameEn, this.iso2});
 
   String localizedName(String languageCode) {
     if (languageCode == 'en' && (nameEn?.isNotEmpty ?? false)) return nameEn!;
@@ -17,6 +18,7 @@ class LocationCountry {
     id: json['id'] as int,
     nameAr: json['name_ar'] as String? ?? '',
     nameEn: json['name_en'] as String?,
+    iso2: json['iso2'] as String?,
   );
 }
 
