@@ -8,7 +8,7 @@ class StaffActivityEntry {
   final String userName;
   final bool isOwner;
   final String capability;
-  final String action;
+  final List<String> actions;
   final String subjectType; // 'order' | 'booking'
   final int subjectId;
 
@@ -19,7 +19,7 @@ class StaffActivityEntry {
     required this.userName,
     required this.isOwner,
     required this.capability,
-    required this.action,
+    required this.actions,
     required this.subjectType,
     required this.subjectId,
   });
@@ -31,7 +31,7 @@ class StaffActivityEntry {
     userName: json['user_name'] as String? ?? '',
     isOwner: json['is_owner'] as bool? ?? false,
     capability: json['capability'] as String? ?? '',
-    action: json['action'] as String? ?? '',
+    actions: (json['actions'] as List<dynamic>? ?? []).map((e) => e as String).toList(),
     subjectType: json['subject_type'] as String? ?? '',
     subjectId: json['subject_id'] as int? ?? 0,
   );

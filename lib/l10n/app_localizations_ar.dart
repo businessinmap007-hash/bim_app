@@ -1727,6 +1727,13 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get deliveryPickupQrHintGeneric =>
+      'أظهر هذا الرمز للموصّل عند وصوله لاستلام الطلب';
+
+  @override
+  String get deliveryShowPickupQrAgain => 'إظهار كود الاستلام';
+
+  @override
   String get deliveryDeliveryQrTitle => 'رمز التسليم';
 
   @override

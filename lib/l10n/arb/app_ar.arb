@@ -569,6 +569,8 @@
   "deliveryAssign": "إسناد",
   "deliveryPickupQrTitle": "رمز الاستلام",
   "deliveryPickupQrHint": "أظهر هذا الرمز لـ {driver} عند وصوله لاستلام الطلب",
+  "deliveryPickupQrHintGeneric": "أظهر هذا الرمز للموصّل عند وصوله لاستلام الطلب",
+  "deliveryShowPickupQrAgain": "إظهار كود الاستلام",
   "@deliveryPickupQrHint": {
     "placeholders": { "driver": { "type": "String" } }
   },

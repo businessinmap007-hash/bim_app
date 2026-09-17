@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../delivery/application/delivery_providers.dart';
 import '../../../delivery/presentation/screens/assign_driver_screen.dart';
+import '../../../delivery/presentation/screens/token_qr_screen.dart';
 import '../../application/business_orders_providers.dart';
 import '../../data/models/placed_order.dart';
 import '../widgets/order_tracker_timeline.dart';
@@ -547,6 +549,38 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                       }
                     },
                     label: Text(l10n.deliveryAssignDriverTitle),
+                  )
+                // Assigned but not yet picked up — issuePickupToken() is
+                // idempotent while the order stays in this stage (returns
+                // the SAME code), so re-showing it here is always safe: it
+                // never invalidates a code the driver might still scan from
+                // wherever they saw it the first time.
+                else if (order.deliveryStage == 'assigned')
+                  OutlinedButton.icon(
+                    icon: const Icon(Icons.qr_code_2),
+                    onPressed: () async {
+                      final l10n = AppLocalizations.of(context)!;
+                      try {
+                        final token = await ref.read(deliveryApiProvider).issuePickupToken(orderId);
+                        if (context.mounted) {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => TokenQrScreen(
+                                title: l10n.deliveryPickupQrTitle,
+                                subtitle: l10n.deliveryPickupQrHintGeneric,
+                                token: token,
+                              ),
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        if (context.mounted) {
+                          final message = e is ApiException ? e.message : l10n.commonSomethingWentWrong;
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+                        }
+                      }
+                    },
+                    label: Text(l10n.deliveryShowPickupQrAgain),
                   ),
               ],
             ),

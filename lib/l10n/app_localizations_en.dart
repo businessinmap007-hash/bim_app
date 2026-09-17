@@ -1715,6 +1715,13 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get deliveryPickupQrHintGeneric =>
+      'Show this code to the driver when they arrive to pick up the order';
+
+  @override
+  String get deliveryShowPickupQrAgain => 'Show pickup code';
+
+  @override
   String get deliveryDeliveryQrTitle => 'Delivery QR';
 
   @override

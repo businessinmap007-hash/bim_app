@@ -281,7 +281,7 @@ class _ActivityTile extends StatelessWidget {
     'item_unavailable': Icons.remove_shopping_cart_outlined,
   };
 
-  String _actionLabel(AppLocalizations l10n) => switch (entry.action) {
+  String _singleActionLabel(AppLocalizations l10n, String action) => switch (action) {
     'accepted' => l10n.staffActivityActionAccepted,
     'rejected' => l10n.staffActivityActionRejected,
     'preparing' => l10n.staffActivityActionPreparing,
@@ -290,8 +290,14 @@ class _ActivityTile extends StatelessWidget {
     'started' => l10n.staffActivityActionStarted,
     'confirmed' => l10n.staffActivityActionConfirmed,
     'item_unavailable' => l10n.staffActivityActionItemUnavailable,
-    _ => entry.action,
+    _ => action,
   };
+
+  /// Every stage this one order/booking actually went through in the
+  /// filtered window, chained in order — one order worked through
+  /// accept → prepare → ready is one operation, not three separate cards.
+  String _actionLabel(AppLocalizations l10n) =>
+      entry.actions.map((a) => _singleActionLabel(l10n, a)).join(' ← ');
 
   String _subjectLabel(AppLocalizations l10n) =>
       entry.subjectType == 'order' ? l10n.staffActivitySubjectOrder : l10n.staffActivitySubjectBooking;
@@ -304,7 +310,7 @@ class _ActivityTile extends StatelessWidget {
     return Card(
       margin: EdgeInsets.zero,
       child: ListTile(
-        leading: Icon(_actionIcons[entry.action] ?? Icons.history),
+        leading: Icon(_actionIcons[entry.actions.lastOrNull] ?? Icons.history),
         title: Row(
           children: [
             Flexible(child: Text(entry.userName, overflow: TextOverflow.ellipsis)),

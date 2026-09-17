@@ -3224,6 +3224,18 @@ abstract class AppLocalizations {
   /// **'أظهر هذا الرمز لـ {driver} عند وصوله لاستلام الطلب'**
   String deliveryPickupQrHint(String driver);
 
+  /// No description provided for @deliveryPickupQrHintGeneric.
+  ///
+  /// In ar, this message translates to:
+  /// **'أظهر هذا الرمز للموصّل عند وصوله لاستلام الطلب'**
+  String get deliveryPickupQrHintGeneric;
+
+  /// No description provided for @deliveryShowPickupQrAgain.
+  ///
+  /// In ar, this message translates to:
+  /// **'إظهار كود الاستلام'**
+  String get deliveryShowPickupQrAgain;
+
   /// No description provided for @deliveryDeliveryQrTitle.
   ///
   /// In ar, this message translates to:
