@@ -15,6 +15,12 @@ final businessRosterProvider = FutureProvider.autoDispose<List<RosterDriver>>((r
   return ref.watch(deliveryApiProvider).businessRoster();
 });
 
+/// The roster + nearby freelancers, for the standalone "My Drivers"
+/// management screen (distinct lifecycle from the assignment picker above).
+final businessRosterFullProvider = FutureProvider.autoDispose<BusinessRoster>((ref) {
+  return ref.watch(deliveryApiProvider).businessRosterFull();
+});
+
 /// The signed-in driver's own active deliveries.
 final myDeliveriesProvider = FutureProvider.autoDispose<List<PlacedOrder>>((ref) {
   return ref.watch(deliveryApiProvider).myOrders();

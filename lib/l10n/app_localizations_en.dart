@@ -1707,6 +1707,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deliveryAssign => 'Assign';
 
   @override
+  String get deliveryMyDriversTitle => 'My Drivers';
+
+  @override
+  String get deliveryTakeOffDuty => 'Take off duty';
+
+  @override
+  String get deliveryTakeOnDuty => 'Reactivate';
+
+  @override
+  String get deliveryNearbyFreelancersSection => 'Nearby freelance drivers';
+
+  @override
+  String get deliveryNearbyFreelancersHint =>
+      'Visibility only — you can\'t assign them directly; they self-accept from the open job board if you leave an order unassigned by your own team.';
+
+  @override
+  String get deliveryNoNearbyFreelancers =>
+      'No nearby freelance drivers right now.';
+
+  @override
+  String get deliveryLocationNeededForFreelancers =>
+      'Set your business\'s location in Settings to see nearby freelance drivers.';
+
+  @override
   String get deliveryPickupQrTitle => 'Pickup QR';
 
   @override
@@ -1772,6 +1796,29 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deliveryOpenInMaps => 'Open in Maps';
+
+  @override
+  String get deliveryCalculateDistance => 'Calculate distance';
+
+  @override
+  String deliveryDistanceValue(String km) {
+    return 'Distance: $km km';
+  }
+
+  @override
+  String get deliverySendEtaToCustomer => 'Send ETA to customer';
+
+  @override
+  String get deliveryEtaDialogTitle => 'Set the expected delivery time';
+
+  @override
+  String get deliveryEtaInMinutes => 'In (minutes)';
+
+  @override
+  String get deliveryEtaAtTime => 'Pick a specific time';
+
+  @override
+  String get deliveryEtaSent => 'The expected time was sent to the customer.';
 
   @override
   String get deliveryScanReceiptTitle => 'Scan to confirm receipt';

@@ -1,6 +1,9 @@
 import '../../../core/network/api_client.dart';
 import '../../orders/data/models/placed_order.dart';
+import 'models/nearby_freelancer.dart';
 import 'models/roster_driver.dart';
+
+typedef BusinessRoster = ({List<RosterDriver> drivers, List<NearbyFreelancer> nearbyFreelancers});
 
 /// The connected delivery loop — driver identity/availability, a business's
 /// own assignment of one of its roster drivers, and the two-QR pickup/
@@ -54,6 +57,25 @@ class DeliveryApi {
     return drivers.map((e) => RosterDriver.fromJson(e as Map<String, dynamic>)).toList();
   }
 
+  /// Same roster, plus nearby freelance drivers (visibility only — a
+  /// business can never assign one directly) — the "My Drivers" management
+  /// screen, distinct from the plain assignment picker above.
+  Future<BusinessRoster> businessRosterFull() async {
+    final data = await _client.get('/business/delivery-drivers') as Map<String, dynamic>;
+    final drivers = data['drivers'] as List<dynamic>? ?? [];
+    final nearby = data['nearby_freelancers'] as List<dynamic>? ?? [];
+    return (
+      drivers: drivers.map((e) => RosterDriver.fromJson(e as Map<String, dynamic>)).toList(),
+      nearbyFreelancers: nearby.map((e) => NearbyFreelancer.fromJson(e as Map<String, dynamic>)).toList(),
+    );
+  }
+
+  /// Off duty / on duty for one of the business's own linked drivers — never
+  /// a hard delete, so history stays attributable (see the backend's own
+  /// doc comment on this endpoint).
+  Future<void> setDriverActive(int driverId, bool isActive) =>
+      _client.patch('/business/delivery-drivers/$driverId', data: {'is_active': isActive});
+
   /// The merchant hands the order directly to one of its own drivers.
   Future<void> assignDriver({required int orderId, required int driverId}) =>
       _client.post('/business/orders/$orderId/assign-driver', data: {'driver_id': driverId});
@@ -78,6 +100,14 @@ class DeliveryApi {
 
   /// The customer scans the driver's delivery QR.
   Future<void> confirmDelivery(String token) => _client.post('/delivery/deliver/$token/confirm');
+
+  /// The assigned driver tells the customer roughly when to expect the
+  /// order — exactly one of [etaMinutes] (from right now) or [etaAt] (a
+  /// specific clock time), never both.
+  Future<void> notifyEta(int orderId, {int? etaMinutes, DateTime? etaAt}) => _client.post(
+    '/delivery/orders/$orderId/eta',
+    data: {'eta_minutes': ?etaMinutes, 'eta_at': ?etaAt?.toIso8601String()},
+  );
 
   /// A driver accepting an unassigned order from the open pool (existing,
   /// pre-assignment path — kept here so the driver dashboard can offer it

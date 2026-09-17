@@ -1719,6 +1719,30 @@ class AppLocalizationsAr extends AppLocalizations {
   String get deliveryAssign => 'إسناد';
 
   @override
+  String get deliveryMyDriversTitle => 'موصّليّ';
+
+  @override
+  String get deliveryTakeOffDuty => 'إيقاف مؤقت';
+
+  @override
+  String get deliveryTakeOnDuty => 'إعادة تفعيل';
+
+  @override
+  String get deliveryNearbyFreelancersSection => 'موصّلون أحرار قريبون';
+
+  @override
+  String get deliveryNearbyFreelancersHint =>
+      'للعرض فقط — لا يمكنك إسناد طلب لهم مباشرة، يقبلونه بأنفسهم من قائمة الطلبات المتاحة إذا تركت الطلب بلا موصّل من فريقك.';
+
+  @override
+  String get deliveryNoNearbyFreelancers =>
+      'لا يوجد موصّلون أحرار قريبون حاليًا.';
+
+  @override
+  String get deliveryLocationNeededForFreelancers =>
+      'حدّد موقع نشاطك من الإعدادات لرؤية الموصّلين الأحرار القريبين.';
+
+  @override
   String get deliveryPickupQrTitle => 'رمز الاستلام';
 
   @override
@@ -1783,6 +1807,29 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get deliveryOpenInMaps => 'افتح في الخرائط';
+
+  @override
+  String get deliveryCalculateDistance => 'احسب المسافة';
+
+  @override
+  String deliveryDistanceValue(String km) {
+    return 'المسافة: $km كم';
+  }
+
+  @override
+  String get deliverySendEtaToCustomer => 'إرسال الموعد المتوقع للعميل';
+
+  @override
+  String get deliveryEtaDialogTitle => 'تحديد الموعد المتوقع للتسليم';
+
+  @override
+  String get deliveryEtaInMinutes => 'خلال (دقائق)';
+
+  @override
+  String get deliveryEtaAtTime => 'اختر وقتًا محددًا';
+
+  @override
+  String get deliveryEtaSent => 'تم إرسال الموعد المتوقع للعميل.';
 
   @override
   String get deliveryScanReceiptTitle => 'امسح لتأكيد الاستلام';

@@ -390,12 +390,26 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
     final order = state.order;
 
     return Scaffold(
-      appBar: AppBar(title: Text('#$orderId')),
+      appBar: AppBar(
+        title: Text('#$orderId'),
+        actions: [
+          // No push infra behind delivery_stage - a driver's pickup/delivery
+          // scan on a different device never reaches this screen on its
+          // own, see the timeline right below. Manual refresh, not a poll.
+          IconButton(
+            tooltip: l10n.commonRefresh,
+            icon: const Icon(Icons.refresh),
+            onPressed: () => ref.read(businessOrderDetailControllerProvider(orderId).notifier).load(),
+          ),
+        ],
+      ),
       body: state.isLoading && order == null
           ? const Center(child: CircularProgressIndicator())
           : order == null
           ? Center(child: Text(l10n.commonSomethingWentWrong))
-          : ListView(
+          : RefreshIndicator(
+              onRefresh: () => ref.read(businessOrderDetailControllerProvider(orderId).notifier).load(),
+              child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
                 Row(
@@ -583,6 +597,7 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                     label: Text(l10n.deliveryShowPickupQrAgain),
                   ),
               ],
+              ),
             ),
     );
   }

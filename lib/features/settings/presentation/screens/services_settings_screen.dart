@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../booking/presentation/screens/business_bookings_screen.dart';
 import '../../../booking_settings/presentation/screens/booking_settings_screen.dart';
+import '../../../delivery/presentation/screens/my_drivers_screen.dart';
 import '../../../business_offers/presentation/screens/business_offers_screen.dart';
 import '../../../business_prices/presentation/screens/business_prices_screen.dart';
 import '../../../business_menu/presentation/screens/menu_items_screen.dart';
@@ -154,6 +155,12 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.event_note_outlined,
         title: l10n.businessBookingsTitle,
         builder: (_) => const BusinessBookingsScreen(),
+      ),
+      _Tile(
+        show: _has('drivers'),
+        leading: Icons.delivery_dining_outlined,
+        title: l10n.deliveryMyDriversTitle,
+        builder: (_) => const MyDriversScreen(),
       ),
       _Tile(
         show: true, // account management — no capability of its own.

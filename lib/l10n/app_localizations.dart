@@ -3212,6 +3212,48 @@ abstract class AppLocalizations {
   /// **'إسناد'**
   String get deliveryAssign;
 
+  /// No description provided for @deliveryMyDriversTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'موصّليّ'**
+  String get deliveryMyDriversTitle;
+
+  /// No description provided for @deliveryTakeOffDuty.
+  ///
+  /// In ar, this message translates to:
+  /// **'إيقاف مؤقت'**
+  String get deliveryTakeOffDuty;
+
+  /// No description provided for @deliveryTakeOnDuty.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة تفعيل'**
+  String get deliveryTakeOnDuty;
+
+  /// No description provided for @deliveryNearbyFreelancersSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'موصّلون أحرار قريبون'**
+  String get deliveryNearbyFreelancersSection;
+
+  /// No description provided for @deliveryNearbyFreelancersHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'للعرض فقط — لا يمكنك إسناد طلب لهم مباشرة، يقبلونه بأنفسهم من قائمة الطلبات المتاحة إذا تركت الطلب بلا موصّل من فريقك.'**
+  String get deliveryNearbyFreelancersHint;
+
+  /// No description provided for @deliveryNoNearbyFreelancers.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد موصّلون أحرار قريبون حاليًا.'**
+  String get deliveryNoNearbyFreelancers;
+
+  /// No description provided for @deliveryLocationNeededForFreelancers.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدّد موقع نشاطك من الإعدادات لرؤية الموصّلين الأحرار القريبين.'**
+  String get deliveryLocationNeededForFreelancers;
+
   /// No description provided for @deliveryPickupQrTitle.
   ///
   /// In ar, this message translates to:
@@ -3331,6 +3373,48 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'افتح في الخرائط'**
   String get deliveryOpenInMaps;
+
+  /// No description provided for @deliveryCalculateDistance.
+  ///
+  /// In ar, this message translates to:
+  /// **'احسب المسافة'**
+  String get deliveryCalculateDistance;
+
+  /// No description provided for @deliveryDistanceValue.
+  ///
+  /// In ar, this message translates to:
+  /// **'المسافة: {km} كم'**
+  String deliveryDistanceValue(String km);
+
+  /// No description provided for @deliverySendEtaToCustomer.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال الموعد المتوقع للعميل'**
+  String get deliverySendEtaToCustomer;
+
+  /// No description provided for @deliveryEtaDialogTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديد الموعد المتوقع للتسليم'**
+  String get deliveryEtaDialogTitle;
+
+  /// No description provided for @deliveryEtaInMinutes.
+  ///
+  /// In ar, this message translates to:
+  /// **'خلال (دقائق)'**
+  String get deliveryEtaInMinutes;
+
+  /// No description provided for @deliveryEtaAtTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر وقتًا محددًا'**
+  String get deliveryEtaAtTime;
+
+  /// No description provided for @deliveryEtaSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال الموعد المتوقع للعميل.'**
+  String get deliveryEtaSent;
 
   /// No description provided for @deliveryScanReceiptTitle.
   ///
