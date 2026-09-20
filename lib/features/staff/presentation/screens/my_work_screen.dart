@@ -7,6 +7,7 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../booking/presentation/screens/business_bookings_screen.dart';
+import '../../../orders/presentation/screens/business_orders_screen.dart';
 import '../../../delivery/presentation/screens/token_scan_screen.dart';
 import '../../application/my_work_providers.dart';
 import '../../application/staff_providers.dart';
@@ -246,6 +247,19 @@ class _MembershipCard extends StatelessWidget {
                           : Text(l10n.attendanceCheckIn),
                     ),
             ),
+            if (membership.capabilities.contains('orders')) ...[
+              const SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => BusinessOrdersScreen(businessId: membership.businessId)),
+                  ),
+                  icon: const Icon(Icons.receipt_long_outlined, size: 18),
+                  label: Text(l10n.businessOrdersTitle),
+                ),
+              ),
+            ],
             if (membership.capabilities.contains('bookings')) ...[
               const SizedBox(height: 8),
               SizedBox(

@@ -36,7 +36,12 @@ Future<void> openNotificationTarget(BuildContext context, WidgetRef ref, AppNoti
     case 'open_business_order':
       if (id != null) {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => BusinessOrderDetailScreen(orderId: id)),
+          MaterialPageRoute(
+            builder: (_) => BusinessOrderDetailScreen(
+              orderId: id,
+              businessId: (notification.meta['business_id'] as num?)?.toInt(),
+            ),
+          ),
         );
       }
     case 'open_customer_order':

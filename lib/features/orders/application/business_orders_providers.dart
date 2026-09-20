@@ -40,10 +40,11 @@ class BusinessOrdersState {
 
 class BusinessOrdersController extends StateNotifier<BusinessOrdersState> {
   final OrdersApi _api;
+  final int? businessId;
   int _page = 1;
   String? _status;
 
-  BusinessOrdersController(this._api) : super(const BusinessOrdersState()) {
+  BusinessOrdersController(this._api, this.businessId) : super(const BusinessOrdersState()) {
     load();
   }
 
@@ -52,7 +53,7 @@ class BusinessOrdersController extends StateNotifier<BusinessOrdersState> {
     state = state.copyWith(isLoading: true, clearError: true);
     _page = 1;
     try {
-      final result = await _api.businessList(status: _status, page: _page);
+      final result = await _api.businessList(status: _status, page: _page, businessId: businessId);
       state = state.copyWith(items: result.items, isLoading: false, hasMore: result.hasMore);
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
@@ -63,7 +64,7 @@ class BusinessOrdersController extends StateNotifier<BusinessOrdersState> {
     if (state.isLoadingMore || !state.hasMore) return;
     state = state.copyWith(isLoadingMore: true);
     try {
-      final result = await _api.businessList(status: _status, page: _page + 1);
+      final result = await _api.businessList(status: _status, page: _page + 1, businessId: businessId);
       _page += 1;
       state = state.copyWith(
         items: [...state.items, ...result.items],
@@ -76,9 +77,11 @@ class BusinessOrdersController extends StateNotifier<BusinessOrdersState> {
   }
 }
 
+/// Keyed by the business a delegated staff member acts for (null = the
+/// business account itself).
 final businessOrdersControllerProvider =
-    StateNotifierProvider<BusinessOrdersController, BusinessOrdersState>((ref) {
-      return BusinessOrdersController(ref.watch(ordersApiProvider));
+    StateNotifierProvider.family<BusinessOrdersController, BusinessOrdersState, int?>((ref, businessId) {
+      return BusinessOrdersController(ref.watch(ordersApiProvider), businessId);
     });
 
 class BusinessOrderDetailState {
@@ -108,15 +111,16 @@ class BusinessOrderDetailState {
 class BusinessOrderDetailController extends StateNotifier<BusinessOrderDetailState> {
   final OrdersApi _api;
   final int orderId;
+  final int? businessId;
 
-  BusinessOrderDetailController(this._api, this.orderId) : super(const BusinessOrderDetailState()) {
+  BusinessOrderDetailController(this._api, this.orderId, this.businessId) : super(const BusinessOrderDetailState()) {
     load();
   }
 
   Future<void> load() async {
     state = state.copyWith(isLoading: true, clearError: true);
     try {
-      final order = await _api.businessShow(orderId);
+      final order = await _api.businessShow(orderId, businessId: businessId);
       state = state.copyWith(order: order, isLoading: false);
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
@@ -126,7 +130,7 @@ class BusinessOrderDetailController extends StateNotifier<BusinessOrderDetailSta
   Future<void> reject({String? reason}) async {
     state = state.copyWith(isBusy: true);
     try {
-      final order = await _api.businessReject(orderId, reason: reason);
+      final order = await _api.businessReject(orderId, reason: reason, businessId: businessId);
       state = state.copyWith(order: order, isBusy: false);
     } finally {
       if (mounted) state = state.copyWith(isBusy: false);
@@ -136,7 +140,7 @@ class BusinessOrderDetailController extends StateNotifier<BusinessOrderDetailSta
   Future<void> accept({bool acceptWithoutDeposit = false}) async {
     state = state.copyWith(isBusy: true);
     try {
-      final order = await _api.businessAccept(orderId, acceptWithoutDeposit: acceptWithoutDeposit);
+      final order = await _api.businessAccept(orderId, acceptWithoutDeposit: acceptWithoutDeposit, businessId: businessId);
       state = state.copyWith(order: order, isBusy: false);
     } finally {
       if (mounted) state = state.copyWith(isBusy: false);
@@ -146,7 +150,7 @@ class BusinessOrderDetailController extends StateNotifier<BusinessOrderDetailSta
   Future<void> markPreparing() async {
     state = state.copyWith(isBusy: true);
     try {
-      final order = await _api.businessPreparing(orderId);
+      final order = await _api.businessPreparing(orderId, businessId: businessId);
       state = state.copyWith(order: order, isBusy: false);
     } finally {
       if (mounted) state = state.copyWith(isBusy: false);
@@ -156,7 +160,7 @@ class BusinessOrderDetailController extends StateNotifier<BusinessOrderDetailSta
   Future<void> markReady() async {
     state = state.copyWith(isBusy: true);
     try {
-      final order = await _api.businessReady(orderId);
+      final order = await _api.businessReady(orderId, businessId: businessId);
       state = state.copyWith(order: order, isBusy: false);
     } finally {
       if (mounted) state = state.copyWith(isBusy: false);
@@ -168,7 +172,7 @@ class BusinessOrderDetailController extends StateNotifier<BusinessOrderDetailSta
   Future<void> complete() async {
     state = state.copyWith(isBusy: true);
     try {
-      final order = await _api.businessComplete(orderId);
+      final order = await _api.businessComplete(orderId, businessId: businessId);
       state = state.copyWith(order: order, isBusy: false);
     } finally {
       if (mounted) state = state.copyWith(isBusy: false);
@@ -178,7 +182,7 @@ class BusinessOrderDetailController extends StateNotifier<BusinessOrderDetailSta
   Future<void> confirmPayment() async {
     state = state.copyWith(isBusy: true);
     try {
-      final order = await _api.businessConfirmPayment(orderId);
+      final order = await _api.businessConfirmPayment(orderId, businessId: businessId);
       state = state.copyWith(order: order, isBusy: false);
     } finally {
       if (mounted) state = state.copyWith(isBusy: false);
@@ -188,7 +192,7 @@ class BusinessOrderDetailController extends StateNotifier<BusinessOrderDetailSta
   Future<void> markItemUnavailable(int itemId, {String? note}) async {
     state = state.copyWith(isBusy: true);
     try {
-      final order = await _api.businessMarkItemUnavailable(orderId, itemId, note: note);
+      final order = await _api.businessMarkItemUnavailable(orderId, itemId, note: note, businessId: businessId);
       state = state.copyWith(order: order, isBusy: false);
     } finally {
       if (mounted) state = state.copyWith(isBusy: false);
@@ -196,9 +200,11 @@ class BusinessOrderDetailController extends StateNotifier<BusinessOrderDetailSta
   }
 }
 
+typedef BusinessOrderKey = ({int orderId, int? businessId});
+
 final businessOrderDetailControllerProvider =
-    StateNotifierProvider.family<BusinessOrderDetailController, BusinessOrderDetailState, int>((ref, orderId) {
-      return BusinessOrderDetailController(ref.watch(ordersApiProvider), orderId);
+    StateNotifierProvider.family<BusinessOrderDetailController, BusinessOrderDetailState, BusinessOrderKey>((ref, key) {
+      return BusinessOrderDetailController(ref.watch(ordersApiProvider), key.orderId, key.businessId);
     });
 
 class BusinessOrderReportsState {

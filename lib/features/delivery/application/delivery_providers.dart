@@ -11,8 +11,8 @@ final deliveryApiProvider = Provider<DeliveryApi>((ref) {
 
 /// The business's own roster for the "choose who delivers this" screen —
 /// autoDispose since it's only ever open for the duration of an assignment.
-final businessRosterProvider = FutureProvider.autoDispose<List<RosterDriver>>((ref) {
-  return ref.watch(deliveryApiProvider).businessRoster();
+final businessRosterProvider = FutureProvider.autoDispose.family<List<RosterDriver>, int?>((ref, businessId) {
+  return ref.watch(deliveryApiProvider).businessRoster(businessId: businessId);
 });
 
 /// The roster + nearby freelancers, for the standalone "My Drivers"

@@ -17,7 +17,9 @@ import '../widgets/order_trust_section.dart';
 /// endpoints. Dine-in/pickup/delivery menu orders only (never bookings,
 /// which stay on the booking flow). Reached from Service settings.
 class BusinessOrdersScreen extends ConsumerStatefulWidget {
-  const BusinessOrdersScreen({super.key});
+  /// The business a delegated staff member acts for; null for the owner.
+  final int? businessId;
+  const BusinessOrdersScreen({super.key, this.businessId});
 
   @override
   ConsumerState<BusinessOrdersScreen> createState() => _BusinessOrdersScreenState();
@@ -35,7 +37,7 @@ class _BusinessOrdersScreenState extends ConsumerState<BusinessOrdersScreen> {
 
   void _onScroll() {
     if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
-      ref.read(businessOrdersControllerProvider.notifier).loadMore();
+      ref.read(businessOrdersControllerProvider(widget.businessId).notifier).loadMore();
     }
   }
 
@@ -48,7 +50,7 @@ class _BusinessOrdersScreenState extends ConsumerState<BusinessOrdersScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final state = ref.watch(businessOrdersControllerProvider);
+    final state = ref.watch(businessOrdersControllerProvider(widget.businessId));
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.businessOrdersTitle)),
@@ -64,7 +66,7 @@ class _BusinessOrdersScreenState extends ConsumerState<BusinessOrdersScreen> {
                   selected: _status == null,
                   onSelected: (_) {
                     setState(() => _status = null);
-                    ref.read(businessOrdersControllerProvider.notifier).load();
+                    ref.read(businessOrdersControllerProvider(widget.businessId).notifier).load();
                   },
                 ),
                 ChoiceChip(
@@ -72,7 +74,7 @@ class _BusinessOrdersScreenState extends ConsumerState<BusinessOrdersScreen> {
                   selected: _status == 'pending',
                   onSelected: (_) {
                     setState(() => _status = 'pending');
-                    ref.read(businessOrdersControllerProvider.notifier).load(status: 'pending');
+                    ref.read(businessOrdersControllerProvider(widget.businessId).notifier).load(status: 'pending');
                   },
                 ),
                 ChoiceChip(
@@ -80,7 +82,7 @@ class _BusinessOrdersScreenState extends ConsumerState<BusinessOrdersScreen> {
                   selected: _status == 'completed',
                   onSelected: (_) {
                     setState(() => _status = 'completed');
-                    ref.read(businessOrdersControllerProvider.notifier).load(status: 'completed');
+                    ref.read(businessOrdersControllerProvider(widget.businessId).notifier).load(status: 'completed');
                   },
                 ),
                 ChoiceChip(
@@ -88,7 +90,7 @@ class _BusinessOrdersScreenState extends ConsumerState<BusinessOrdersScreen> {
                   selected: _status == 'cancelled',
                   onSelected: (_) {
                     setState(() => _status = 'cancelled');
-                    ref.read(businessOrdersControllerProvider.notifier).load(status: 'cancelled');
+                    ref.read(businessOrdersControllerProvider(widget.businessId).notifier).load(status: 'cancelled');
                   },
                 ),
               ],
@@ -105,7 +107,7 @@ class _BusinessOrdersScreenState extends ConsumerState<BusinessOrdersScreen> {
                         Text(l10n.commonSomethingWentWrong),
                         const SizedBox(height: 8),
                         OutlinedButton(
-                          onPressed: () => ref.read(businessOrdersControllerProvider.notifier).load(status: _status),
+                          onPressed: () => ref.read(businessOrdersControllerProvider(widget.businessId).notifier).load(status: _status),
                           child: Text(l10n.commonRetry),
                         ),
                       ],
@@ -114,7 +116,7 @@ class _BusinessOrdersScreenState extends ConsumerState<BusinessOrdersScreen> {
                 : state.items.isEmpty
                 ? Center(child: Text(l10n.businessOrdersEmpty))
                 : RefreshIndicator(
-                    onRefresh: () => ref.read(businessOrdersControllerProvider.notifier).load(status: _status),
+                    onRefresh: () => ref.read(businessOrdersControllerProvider(widget.businessId).notifier).load(status: _status),
                     child: ListView.separated(
                       controller: _scrollController,
                       padding: const EdgeInsets.all(12),
@@ -131,7 +133,7 @@ class _BusinessOrdersScreenState extends ConsumerState<BusinessOrdersScreen> {
                         return _OrderTile(
                           order: order,
                           onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => BusinessOrderDetailScreen(orderId: order.id)),
+                            MaterialPageRoute(builder: (_) => BusinessOrderDetailScreen(orderId: order.id, businessId: widget.businessId)),
                           ),
                         );
                       },
@@ -205,7 +207,10 @@ class _StatusBadge extends StatelessWidget {
 
 class BusinessOrderDetailScreen extends ConsumerWidget {
   final int orderId;
-  const BusinessOrderDetailScreen({super.key, required this.orderId});
+  final int? businessId;
+  const BusinessOrderDetailScreen({super.key, required this.orderId, this.businessId});
+
+  BusinessOrderKey get _key => (orderId: orderId, businessId: businessId);
 
   Future<void> _reject(BuildContext context, WidgetRef ref) async {
     final l10n = AppLocalizations.of(context)!;
@@ -221,8 +226,8 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
     );
     if (confirmed != true) return;
     try {
-      await ref.read(businessOrderDetailControllerProvider(orderId).notifier).reject();
-      ref.read(businessOrdersControllerProvider.notifier).load();
+      await ref.read(businessOrderDetailControllerProvider(_key).notifier).reject();
+      ref.read(businessOrdersControllerProvider(businessId).notifier).load();
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(
@@ -251,9 +256,9 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
     }
     try {
       await ref
-          .read(businessOrderDetailControllerProvider(orderId).notifier)
+          .read(businessOrderDetailControllerProvider(_key).notifier)
           .accept(acceptWithoutDeposit: acceptWithoutDeposit);
-      ref.read(businessOrdersControllerProvider.notifier).load();
+      ref.read(businessOrdersControllerProvider(businessId).notifier).load();
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(
@@ -323,8 +328,8 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
     }
 
     try {
-      await ref.read(businessOrderDetailControllerProvider(orderId).notifier).markItemUnavailable(item.id, note: note);
-      ref.read(businessOrdersControllerProvider.notifier).load();
+      await ref.read(businessOrderDetailControllerProvider(_key).notifier).markItemUnavailable(item.id, note: note);
+      ref.read(businessOrdersControllerProvider(businessId).notifier).load();
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.businessOrdersItemUnavailableDone)));
       }
@@ -343,8 +348,8 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
   Future<void> _complete(BuildContext context, WidgetRef ref) async {
     final l10n = AppLocalizations.of(context)!;
     try {
-      await ref.read(businessOrderDetailControllerProvider(orderId).notifier).complete();
-      ref.read(businessOrdersControllerProvider.notifier).load();
+      await ref.read(businessOrderDetailControllerProvider(_key).notifier).complete();
+      ref.read(businessOrdersControllerProvider(businessId).notifier).load();
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(
@@ -357,7 +362,7 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
   Future<void> _confirmPayment(BuildContext context, WidgetRef ref) async {
     final l10n = AppLocalizations.of(context)!;
     try {
-      await ref.read(businessOrderDetailControllerProvider(orderId).notifier).confirmPayment();
+      await ref.read(businessOrderDetailControllerProvider(_key).notifier).confirmPayment();
     } catch (e) {
       if (context.mounted) {
         ScaffoldMessenger.of(
@@ -370,24 +375,24 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
   Future<void> _advance(BuildContext context, WidgetRef ref, bool toReady, PlacedOrder order) async {
     final l10n = AppLocalizations.of(context)!;
     try {
-      final notifier = ref.read(businessOrderDetailControllerProvider(orderId).notifier);
+      final notifier = ref.read(businessOrderDetailControllerProvider(_key).notifier);
       if (toReady) {
         await notifier.markReady();
       } else {
         await notifier.markPreparing();
       }
-      ref.read(businessOrdersControllerProvider.notifier).load();
+      ref.read(businessOrdersControllerProvider(businessId).notifier).load();
 
       // A ready DELIVERY order needs someone to carry it — open the
       // assignment screen right away instead of leaving the merchant to
       // find it later. Pickup/dine-in orders need no driver at all.
       if (toReady && order.fulfillmentType == 'delivery' && context.mounted) {
         await Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => AssignDriverScreen(orderId: orderId)),
+          MaterialPageRoute(builder: (_) => AssignDriverScreen(orderId: orderId, businessId: businessId)),
         );
         // The pushed screen changed delivery_stage server-side without this
         // screen's own cached order ever hearing about it.
-        if (context.mounted) ref.read(businessOrderDetailControllerProvider(orderId).notifier).load();
+        if (context.mounted) ref.read(businessOrderDetailControllerProvider(_key).notifier).load();
       }
     } catch (e) {
       if (context.mounted) {
@@ -401,7 +406,7 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final state = ref.watch(businessOrderDetailControllerProvider(orderId));
+    final state = ref.watch(businessOrderDetailControllerProvider(_key));
     final order = state.order;
 
     return Scaffold(
@@ -414,7 +419,7 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
           IconButton(
             tooltip: l10n.commonRefresh,
             icon: const Icon(Icons.refresh),
-            onPressed: () => ref.read(businessOrderDetailControllerProvider(orderId).notifier).load(),
+            onPressed: () => ref.read(businessOrderDetailControllerProvider(_key).notifier).load(),
           ),
         ],
       ),
@@ -423,7 +428,7 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
           : order == null
           ? Center(child: Text(l10n.commonSomethingWentWrong))
           : RefreshIndicator(
-              onRefresh: () => ref.read(businessOrderDetailControllerProvider(orderId).notifier).load(),
+              onRefresh: () => ref.read(businessOrderDetailControllerProvider(_key).notifier).load(),
               child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
@@ -576,7 +581,7 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                   key: ValueKey('trust-$orderId'),
                   order: order,
                   onToggle: (party, trusted) =>
-                      ref.read(ordersApiProvider).setTrust(orderId, party, trusted, asBusiness: true),
+                      ref.read(ordersApiProvider).setTrust(orderId, party, trusted, asBusiness: true, businessId: businessId),
                 ),
                 const SizedBox(height: 24),
                 if (state.isBusy)
@@ -629,10 +634,10 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                     icon: const Icon(Icons.delivery_dining_outlined),
                     onPressed: () async {
                       await Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => AssignDriverScreen(orderId: orderId)),
+                        MaterialPageRoute(builder: (_) => AssignDriverScreen(orderId: orderId, businessId: businessId)),
                       );
                       if (context.mounted) {
-                        ref.read(businessOrderDetailControllerProvider(orderId).notifier).load();
+                        ref.read(businessOrderDetailControllerProvider(_key).notifier).load();
                       }
                     },
                     label: Text(l10n.deliveryAssignDriverTitle),
@@ -648,7 +653,7 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                     onPressed: () async {
                       final l10n = AppLocalizations.of(context)!;
                       try {
-                        final token = await ref.read(deliveryApiProvider).issuePickupToken(orderId);
+                        final token = await ref.read(deliveryApiProvider).issuePickupToken(orderId, businessId: businessId);
                         if (context.mounted) {
                           await Navigator.of(context).push(
                             MaterialPageRoute(

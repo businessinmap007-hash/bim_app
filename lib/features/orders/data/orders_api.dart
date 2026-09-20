@@ -20,6 +20,11 @@ class OrdersApi {
   final ApiClient _client;
   const OrdersApi(this._client);
 
+  /// A delegated staff member names the business they act for via
+  /// `business_id` (BusinessMember middleware); the owner passes null.
+  static String _biz(String path, int? businessId) =>
+      businessId == null ? path : '$path${path.contains('?') ? '&' : '?'}business_id=$businessId';
+
   Future<OrdersPage> list({
     String? status,
     int page = 1,
@@ -63,8 +68,8 @@ class OrdersApi {
   /// Ticks/unticks "I trust" toward another party of the order. The
   /// merchant's calls go through the business-scoped route so a delegated
   /// staff member acts as the business.
-  Future<bool> setTrust(int orderId, String party, bool trusted, {bool asBusiness = false}) async {
-    final path = asBusiness ? '/business/orders/$orderId/trust' : '/orders/$orderId/trust';
+  Future<bool> setTrust(int orderId, String party, bool trusted, {bool asBusiness = false, int? businessId}) async {
+    final path = asBusiness ? _biz('/business/orders/$orderId/trust', businessId) : '/orders/$orderId/trust';
     final data = await _client.post(path, data: {'party': party, 'trusted': trusted}) as Map<String, dynamic>;
     return data['trusted'] as bool? ?? trusted;
   }
@@ -86,10 +91,10 @@ class OrdersApi {
   // business* methods. Dine-in (has a business_table_id) shows the table;
   // delivery/pickup don't.
 
-  Future<OrdersPage> businessList({String? status, int page = 1, int perPage = 20}) async {
+  Future<OrdersPage> businessList({String? status, int page = 1, int perPage = 20, int? businessId}) async {
     final body = await _client.getForBody(
       '/business/orders',
-      query: {'status': ?status, 'page': page, 'per_page': perPage},
+      query: {'status': ?status, 'page': page, 'per_page': perPage, 'business_id': ?businessId},
     );
     final items = (body['data'] as List<dynamic>? ?? [])
         .map((e) => PlacedOrder.fromJson(e as Map<String, dynamic>))
@@ -100,8 +105,8 @@ class OrdersApi {
     return OrdersPage(items: items, hasMore: currentPage < lastPage);
   }
 
-  Future<PlacedOrder> businessShow(int id) async {
-    final data = await _client.get('/business/orders/$id') as Map<String, dynamic>;
+  Future<PlacedOrder> businessShow(int id, {int? businessId}) async {
+    final data = await _client.get('/business/orders/$id', query: {'business_id': ?businessId}) as Map<String, dynamic>;
     return PlacedOrder.fromJson(data);
   }
 
@@ -117,57 +122,57 @@ class OrdersApi {
     return OrderReports.fromJson(data);
   }
 
-  Future<PlacedOrder> businessReject(int id, {String? reason}) async {
+  Future<PlacedOrder> businessReject(int id, {String? reason, int? businessId}) async {
     final data =
         await _client.post(
-              '/business/orders/$id/reject',
+              _biz('/business/orders/$id/reject', businessId),
               data: {if (reason != null && reason.isNotEmpty) 'reason': reason},
             )
             as Map<String, dynamic>;
     return PlacedOrder.fromJson(data);
   }
 
-  Future<PlacedOrder> businessAccept(int id, {bool acceptWithoutDeposit = false}) async {
+  Future<PlacedOrder> businessAccept(int id, {bool acceptWithoutDeposit = false, int? businessId}) async {
     final data =
         await _client.post(
-              '/business/orders/$id/accept',
+              _biz('/business/orders/$id/accept', businessId),
               data: {if (acceptWithoutDeposit) 'accept_without_deposit': true},
             )
             as Map<String, dynamic>;
     return PlacedOrder.fromJson(data);
   }
 
-  Future<PlacedOrder> businessPreparing(int id) async {
-    final data = await _client.post('/business/orders/$id/preparing') as Map<String, dynamic>;
+  Future<PlacedOrder> businessPreparing(int id, {int? businessId}) async {
+    final data = await _client.post(_biz('/business/orders/$id/preparing', businessId)) as Map<String, dynamic>;
     return PlacedOrder.fromJson(data);
   }
 
-  Future<PlacedOrder> businessReady(int id) async {
-    final data = await _client.post('/business/orders/$id/ready') as Map<String, dynamic>;
+  Future<PlacedOrder> businessReady(int id, {int? businessId}) async {
+    final data = await _client.post(_biz('/business/orders/$id/ready', businessId)) as Map<String, dynamic>;
     return PlacedOrder.fromJson(data);
   }
 
   /// Pickup/dine-in only -- a delivery order completes through the QR
   /// handover (DeliveryApi.confirmDelivery) instead.
-  Future<PlacedOrder> businessComplete(int id) async {
-    final data = await _client.post('/business/orders/$id/complete') as Map<String, dynamic>;
+  Future<PlacedOrder> businessComplete(int id, {int? businessId}) async {
+    final data = await _client.post(_biz('/business/orders/$id/complete', businessId)) as Map<String, dynamic>;
     return PlacedOrder.fromJson(data);
   }
 
   /// The merchant confirms they received the order amount in cash (excludes
   /// delivery_fee — see DeliveryApi.confirmPaymentReceived for that leg).
-  Future<PlacedOrder> businessConfirmPayment(int id) async {
-    final data = await _client.post('/business/orders/$id/confirm-payment') as Map<String, dynamic>;
+  Future<PlacedOrder> businessConfirmPayment(int id, {int? businessId}) async {
+    final data = await _client.post(_biz('/business/orders/$id/confirm-payment', businessId)) as Map<String, dynamic>;
     return PlacedOrder.fromJson(data);
   }
 
   /// A specific line turned out unavailable while preparing — applies
   /// whatever the customer chose at checkout (Order.out_of_stock_policy).
   /// `note` is required only when that policy is "substitute".
-  Future<PlacedOrder> businessMarkItemUnavailable(int orderId, int itemId, {String? note}) async {
+  Future<PlacedOrder> businessMarkItemUnavailable(int orderId, int itemId, {String? note, int? businessId}) async {
     final data =
         await _client.post(
-              '/business/orders/$orderId/items/$itemId/unavailable',
+              _biz('/business/orders/$orderId/items/$itemId/unavailable', businessId),
               data: {if (note != null && note.isNotEmpty) 'note': note},
             )
             as Map<String, dynamic>;

@@ -51,8 +51,8 @@ class DeliveryApi {
 
   /// The business's own roster, with live workload and distance — the
   /// "choose who delivers this" screen after marking an order ready.
-  Future<List<RosterDriver>> businessRoster() async {
-    final data = await _client.get('/business/delivery-drivers') as Map<String, dynamic>;
+  Future<List<RosterDriver>> businessRoster({int? businessId}) async {
+    final data = await _client.get('/business/delivery-drivers', query: {'business_id': ?businessId}) as Map<String, dynamic>;
     final drivers = data['drivers'] as List<dynamic>? ?? [];
     return drivers.map((e) => RosterDriver.fromJson(e as Map<String, dynamic>)).toList();
   }
@@ -77,15 +77,16 @@ class DeliveryApi {
       _client.patch('/business/delivery-drivers/$driverId', data: {'is_active': isActive});
 
   /// The merchant hands the order directly to one of its own drivers.
-  Future<void> assignDriver({required int orderId, required int driverId}) =>
-      _client.post('/business/orders/$orderId/assign-driver', data: {'driver_id': driverId});
+  Future<void> assignDriver({required int orderId, required int driverId, int? businessId}) =>
+      _client.post('/business/orders/$orderId/assign-driver', data: {'driver_id': driverId, 'business_id': ?businessId});
 
   // ─────────────────────────── Pickup / delivery QR ────────────────────────
 
   /// The business (or, in principle, the driver — but the assignment screen
   /// is where this is actually called from) issues the pickup QR's token.
-  Future<String> issuePickupToken(int orderId) async {
-    final data = await _client.post('/delivery/orders/$orderId/pickup-token') as Map<String, dynamic>;
+  Future<String> issuePickupToken(int orderId, {int? businessId}) async {
+    final path = '/business/orders/$orderId/pickup-token${businessId == null ? '' : '?business_id=$businessId'}';
+    final data = await _client.post(path) as Map<String, dynamic>;
     return data['pickup_token'] as String;
   }
 

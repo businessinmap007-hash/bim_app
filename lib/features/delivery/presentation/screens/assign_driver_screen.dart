@@ -22,7 +22,8 @@ import 'token_qr_screen.dart';
 /// in a plain list delivers the same practical choice without that cost.
 class AssignDriverScreen extends ConsumerStatefulWidget {
   final int orderId;
-  const AssignDriverScreen({super.key, required this.orderId});
+  final int? businessId;
+  const AssignDriverScreen({super.key, required this.orderId, this.businessId});
 
   @override
   ConsumerState<AssignDriverScreen> createState() => _AssignDriverScreenState();
@@ -35,8 +36,8 @@ class _AssignDriverScreenState extends ConsumerState<AssignDriverScreen> {
     final l10n = AppLocalizations.of(context)!;
     setState(() => _assigningDriverId = driver.id);
     try {
-      await ref.read(deliveryApiProvider).assignDriver(orderId: widget.orderId, driverId: driver.id);
-      final token = await ref.read(deliveryApiProvider).issuePickupToken(widget.orderId);
+      await ref.read(deliveryApiProvider).assignDriver(orderId: widget.orderId, driverId: driver.id, businessId: widget.businessId);
+      final token = await ref.read(deliveryApiProvider).issuePickupToken(widget.orderId, businessId: widget.businessId);
       if (!mounted) return;
       await Navigator.of(context).pushReplacement(
         MaterialPageRoute(
@@ -60,13 +61,13 @@ class _AssignDriverScreenState extends ConsumerState<AssignDriverScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final rosterAsync = ref.watch(businessRosterProvider);
+    final rosterAsync = ref.watch(businessRosterProvider(widget.businessId));
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.deliveryAssignDriverTitle)),
       body: AsyncValueView<List<RosterDriver>>(
         value: rosterAsync,
-        onRetry: () => ref.invalidate(businessRosterProvider),
+        onRetry: () => ref.invalidate(businessRosterProvider(widget.businessId)),
         builder: (context, drivers) {
           if (drivers.isEmpty) {
             return Center(
