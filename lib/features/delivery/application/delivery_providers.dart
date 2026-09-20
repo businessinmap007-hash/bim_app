@@ -21,6 +21,12 @@ final businessRosterFullProvider = FutureProvider.autoDispose<BusinessRoster>((r
   return ref.watch(deliveryApiProvider).businessRosterFull();
 });
 
+/// Ready-to-take delivery orders open to this driver (a freelance driver
+/// sees the whole pool, a business's own driver only that business's).
+final availableDeliveryOrdersProvider = FutureProvider.autoDispose<List<Map<String, dynamic>>>((ref) {
+  return ref.watch(deliveryApiProvider).availableOrders();
+});
+
 /// The signed-in driver's own active deliveries.
 final myDeliveriesProvider = FutureProvider.autoDispose<List<PlacedOrder>>((ref) {
   return ref.watch(deliveryApiProvider).myOrders();

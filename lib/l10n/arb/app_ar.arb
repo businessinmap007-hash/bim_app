@@ -615,6 +615,18 @@
   "deliveryPickupConfirmed": "تم تأكيد الاستلام — الطلب معك الآن.",
   "deliveryShowDeliveryQr": "أظهر رمز التسليم للعميل",
   "deliveryCompleted": "اكتمل هذا الطلب.",
+  "deliveryAvailableOrdersTitle": "الطلبات المتاحة",
+  "deliveryAvailableOrdersEmpty": "لا توجد طلبات متاحة الآن. اسحب للتحديث.",
+  "deliveryAcceptOrder": "قبول التوصيل",
+  "deliveryOrderAccepted": "تم قبول الطلب — ستجده في توصيلاتي.",
+  "deliveryFeeLine": "رسوم التوصيل: {fee}",
+  "@deliveryFeeLine": {
+    "placeholders": { "fee": { "type": "String" } }
+  },
+  "deliveryOrderTotalLine": "إجمالي الطلب: {total}",
+  "@deliveryOrderTotalLine": {
+    "placeholders": { "total": { "type": "String" } }
+  },
   "deliveryFeeSettingsTitle": "رسوم التوصيل",
   "deliveryFeeBusinessHint": "مبلغ ثابت يُضاف تلقائيًا على فاتورة العميل عند اختيار التوصيل. اتركه فارغًا لتوصيل مجاني.",
   "deliveryFeeDriverHint": "مبلغ ثابت تطلبه كموصّل حر. يُطبَّق فقط لو لم يحدد المحل رسومًا للتوصيل، ولا يغيّر رسومًا حددها المحل.",

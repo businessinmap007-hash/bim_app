@@ -142,8 +142,8 @@ class DeliveryApi {
   Future<void> acceptOrder(int orderId) => _client.post('/delivery/orders/$orderId/accept');
 
   Future<List<Map<String, dynamic>>> availableOrders() async {
-    final body = await _client.getForBody('/delivery/available-orders');
-    final orders = body['orders'] as List<dynamic>? ?? [];
+    final data = await _client.get('/delivery/available-orders') as Map<String, dynamic>;
+    final orders = data['orders'] as List<dynamic>? ?? [];
     return orders.cast<Map<String, dynamic>>();
   }
 }

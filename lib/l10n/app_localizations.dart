@@ -3482,6 +3482,42 @@ abstract class AppLocalizations {
   /// **'اكتمل هذا الطلب.'**
   String get deliveryCompleted;
 
+  /// No description provided for @deliveryAvailableOrdersTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطلبات المتاحة'**
+  String get deliveryAvailableOrdersTitle;
+
+  /// No description provided for @deliveryAvailableOrdersEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد طلبات متاحة الآن. اسحب للتحديث.'**
+  String get deliveryAvailableOrdersEmpty;
+
+  /// No description provided for @deliveryAcceptOrder.
+  ///
+  /// In ar, this message translates to:
+  /// **'قبول التوصيل'**
+  String get deliveryAcceptOrder;
+
+  /// No description provided for @deliveryOrderAccepted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم قبول الطلب — ستجده في توصيلاتي.'**
+  String get deliveryOrderAccepted;
+
+  /// No description provided for @deliveryFeeLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسوم التوصيل: {fee}'**
+  String deliveryFeeLine(String fee);
+
+  /// No description provided for @deliveryOrderTotalLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي الطلب: {total}'**
+  String deliveryOrderTotalLine(String total);
+
   /// No description provided for @deliveryFeeSettingsTitle.
   ///
   /// In ar, this message translates to:

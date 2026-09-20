@@ -1865,6 +1865,29 @@ class AppLocalizationsAr extends AppLocalizations {
   String get deliveryCompleted => 'اكتمل هذا الطلب.';
 
   @override
+  String get deliveryAvailableOrdersTitle => 'الطلبات المتاحة';
+
+  @override
+  String get deliveryAvailableOrdersEmpty =>
+      'لا توجد طلبات متاحة الآن. اسحب للتحديث.';
+
+  @override
+  String get deliveryAcceptOrder => 'قبول التوصيل';
+
+  @override
+  String get deliveryOrderAccepted => 'تم قبول الطلب — ستجده في توصيلاتي.';
+
+  @override
+  String deliveryFeeLine(String fee) {
+    return 'رسوم التوصيل: $fee';
+  }
+
+  @override
+  String deliveryOrderTotalLine(String total) {
+    return 'إجمالي الطلب: $total';
+  }
+
+  @override
   String get deliveryFeeSettingsTitle => 'رسوم التوصيل';
 
   @override

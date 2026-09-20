@@ -1858,6 +1858,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deliveryCompleted => 'This delivery is complete.';
 
   @override
+  String get deliveryAvailableOrdersTitle => 'Available orders';
+
+  @override
+  String get deliveryAvailableOrdersEmpty =>
+      'No orders available right now. Pull to refresh.';
+
+  @override
+  String get deliveryAcceptOrder => 'Accept delivery';
+
+  @override
+  String get deliveryOrderAccepted =>
+      'Order accepted — find it under My active deliveries.';
+
+  @override
+  String deliveryFeeLine(String fee) {
+    return 'Delivery fee: $fee';
+  }
+
+  @override
+  String deliveryOrderTotalLine(String total) {
+    return 'Order total: $total';
+  }
+
+  @override
   String get deliveryFeeSettingsTitle => 'Delivery fee';
 
   @override

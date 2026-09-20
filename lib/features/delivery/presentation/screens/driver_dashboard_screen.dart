@@ -5,6 +5,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
 import '../../../orders/data/models/placed_order.dart';
 import '../../application/delivery_providers.dart';
+import 'available_orders_screen.dart';
 import 'delivery_fee_settings_screen.dart';
 import 'driver_order_detail_screen.dart';
 
@@ -77,6 +78,16 @@ class _DriverDashboardScreenState extends ConsumerState<DriverDashboardScreen> {
                   onChanged: availability.isLoading
                       ? null
                       : (v) => ref.read(driverAvailabilityControllerProvider.notifier).setActive(v),
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  leading: const Icon(Icons.inbox_outlined),
+                  title: Text(l10n.deliveryAvailableOrdersTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const AvailableOrdersScreen()),
+                  ),
                 ),
               ),
               Card(

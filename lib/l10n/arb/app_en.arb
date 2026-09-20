@@ -615,6 +615,18 @@
   "deliveryPickupConfirmed": "Pickup confirmed — you're carrying this order now.",
   "deliveryShowDeliveryQr": "Show delivery QR to customer",
   "deliveryCompleted": "This delivery is complete.",
+  "deliveryAvailableOrdersTitle": "Available orders",
+  "deliveryAvailableOrdersEmpty": "No orders available right now. Pull to refresh.",
+  "deliveryAcceptOrder": "Accept delivery",
+  "deliveryOrderAccepted": "Order accepted — find it under My active deliveries.",
+  "deliveryFeeLine": "Delivery fee: {fee}",
+  "@deliveryFeeLine": {
+    "placeholders": { "fee": { "type": "String" } }
+  },
+  "deliveryOrderTotalLine": "Order total: {total}",
+  "@deliveryOrderTotalLine": {
+    "placeholders": { "total": { "type": "String" } }
+  },
   "deliveryFeeSettingsTitle": "Delivery fee",
   "deliveryFeeBusinessHint": "A flat amount added automatically to the customer's invoice when they choose delivery. Leave empty for free delivery.",
   "deliveryFeeDriverHint": "A flat amount you charge as a freelance driver. Only applies when the business never set a delivery fee, and never changes a fee the business already set.",
