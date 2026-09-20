@@ -45,6 +45,9 @@ class _AssignDriverScreenState extends ConsumerState<AssignDriverScreen> {
             title: l10n.deliveryPickupQrTitle,
             subtitle: l10n.deliveryPickupQrHint(driver.name ?? ''),
             token: token,
+            onReset: () => ref
+                .read(deliveryApiProvider)
+                .resetPickupToken(widget.orderId, businessId: widget.businessId),
           ),
         ),
       );

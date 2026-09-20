@@ -372,28 +372,13 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
     }
   }
 
-  /// Shows the pickup QR; with [reset] it first replaces the code with a
-  /// fresh one (the old one stops working) after a confirmation.
-  Future<void> _showPickupCode(BuildContext context, WidgetRef ref, {bool reset = false}) async {
+  /// Shows the pickup QR; the reset-code button lives on that screen, under
+  /// the code itself.
+  Future<void> _showPickupCode(BuildContext context, WidgetRef ref) async {
     final l10n = AppLocalizations.of(context)!;
-    if (reset) {
-      final ok = await showDialog<bool>(
-        context: context,
-        builder: (context) => AlertDialog(
-          content: Text(l10n.deliveryResetPickupCodeConfirm),
-          actions: [
-            TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l10n.commonCancel)),
-            TextButton(onPressed: () => Navigator.pop(context, true), child: Text(l10n.deliveryResetPickupCode)),
-          ],
-        ),
-      );
-      if (ok != true || !context.mounted) return;
-    }
     try {
       final api = ref.read(deliveryApiProvider);
-      final token = reset
-          ? await api.resetPickupToken(orderId, businessId: businessId)
-          : await api.issuePickupToken(orderId, businessId: businessId);
+      final token = await api.issuePickupToken(orderId, businessId: businessId);
       if (context.mounted) {
         await Navigator.of(context).push(
           MaterialPageRoute(
@@ -401,6 +386,7 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
               title: l10n.deliveryPickupQrTitle,
               subtitle: l10n.deliveryPickupQrHintGeneric,
               token: token,
+              onReset: () => api.resetPickupToken(orderId, businessId: businessId),
             ),
           ),
         );
@@ -693,12 +679,6 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                     icon: const Icon(Icons.qr_code_2),
                     onPressed: () => _showPickupCode(context, ref),
                     label: Text(l10n.deliveryShowPickupQrAgain),
-                  ),
-                  const SizedBox(height: 8),
-                  TextButton.icon(
-                    icon: const Icon(Icons.refresh),
-                    onPressed: () => _showPickupCode(context, ref, reset: true),
-                    label: Text(l10n.deliveryResetPickupCode),
                   ),
                 ],
               ],
