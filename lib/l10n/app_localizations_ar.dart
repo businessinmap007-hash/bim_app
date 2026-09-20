@@ -1236,6 +1236,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String get paymentConfirmSectionTitle => 'تأكيد الدفع';
 
   @override
+  String get bookingPaymentBusinessStatusLabel => 'استلام النشاط للمبلغ';
+
+  @override
+  String get bookingPaymentBusinessButton => 'تأكيد استلام المبلغ نقدًا';
+
+  @override
+  String get bookingPaymentBusinessConfirmed => 'تم تأكيد استلام المبلغ';
+
+  @override
+  String get bookingPaymentDepositHint =>
+      'تأكيدك يُعد موافقة على فك التأمين، ويُفك عند تأكيد الطرفين.';
+
+  @override
   String get paymentConfirmCompleteHint =>
       'أكّد استلام مبلغ الطلب أولًا لتتمكن من إكمال الطلب.';
 

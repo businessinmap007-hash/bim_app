@@ -720,6 +720,22 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
     }).catchError((_) {});
   }
 
+  Future<void> _confirmPayment() async {
+    final l10n = AppLocalizations.of(context)!;
+    setState(() => _busy = true);
+    try {
+      final updated = await ref.read(myBookingsControllerProvider.notifier).confirmPayment(_booking.id);
+      if (mounted) setState(() => _booking = updated);
+    } catch (e) {
+      if (mounted) {
+        final message = e is ApiException ? e.message : l10n.commonSomethingWentWrong;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
   Future<void> _agreeReleaseDeposit() async {
     final l10n = AppLocalizations.of(context)!;
     setState(() => _busy = true);
@@ -967,6 +983,52 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
                   child: Text(l10n.ratingsLeaveReview),
                 ),
               ),
+            if (booking.status == 'in_progress' || booking.status == 'completed') ...[
+              const Divider(height: 24),
+              Text(l10n.paymentConfirmSectionTitle, style: Theme.of(context).textTheme.titleSmall),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(l10n.bookingPaymentBusinessStatusLabel, style: Theme.of(context).textTheme.bodySmall),
+                  Text(
+                    booking.businessPaymentConfirmedAt != null
+                        ? l10n.paymentConfirmStatusConfirmed
+                        : l10n.paymentConfirmStatusPending,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: booking.businessPaymentConfirmedAt != null ? AppColors.success : Theme.of(context).hintColor,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              if (booking.clientPaymentConfirmedAt != null)
+                Row(
+                  children: [
+                    const Icon(Icons.check_circle, size: 16, color: AppColors.success),
+                    const SizedBox(width: 6),
+                    Text(l10n.paymentConfirmCustomerConfirmed, style: TextStyle(color: AppColors.success)),
+                  ],
+                )
+              else ...[
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    onPressed: _busy ? null : _confirmPayment,
+                    child: Text(l10n.paymentConfirmCustomerButton),
+                  ),
+                ),
+                if (booking.deposit != null && booking.deposit!.isFrozen)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: Text(
+                      l10n.bookingPaymentDepositHint,
+                      style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12),
+                    ),
+                  ),
+              ],
+            ],
             if (booking.deposit != null && (booking.deposit!.isFrozen || booking.deposit!.isReleased || booking.deposit!.isRefunded)) ...[
               const Divider(height: 24),
               Text(l10n.bookingsDepositSettlement, style: Theme.of(context).textTheme.titleSmall),

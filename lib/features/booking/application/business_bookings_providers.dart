@@ -177,6 +177,16 @@ class BusinessBookingDetailController extends StateNotifier<BusinessBookingDetai
     }
   }
 
+  Future<void> confirmPayment({int? businessId}) async {
+    state = state.copyWith(isBusy: true);
+    try {
+      final booking = await _api.businessConfirmPayment(bookingId, businessId: businessId);
+      state = state.copyWith(booking: booking, isBusy: false);
+    } finally {
+      if (mounted) state = state.copyWith(isBusy: false);
+    }
+  }
+
   Future<void> agreeReleaseDeposit() async {
     state = state.copyWith(isBusy: true);
     try {

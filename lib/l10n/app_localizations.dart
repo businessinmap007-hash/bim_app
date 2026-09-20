@@ -2330,6 +2330,30 @@ abstract class AppLocalizations {
   /// **'تأكيد الدفع'**
   String get paymentConfirmSectionTitle;
 
+  /// No description provided for @bookingPaymentBusinessStatusLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'استلام النشاط للمبلغ'**
+  String get bookingPaymentBusinessStatusLabel;
+
+  /// No description provided for @bookingPaymentBusinessButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد استلام المبلغ نقدًا'**
+  String get bookingPaymentBusinessButton;
+
+  /// No description provided for @bookingPaymentBusinessConfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تأكيد استلام المبلغ'**
+  String get bookingPaymentBusinessConfirmed;
+
+  /// No description provided for @bookingPaymentDepositHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيدك يُعد موافقة على فك التأمين، ويُفك عند تأكيد الطرفين.'**
+  String get bookingPaymentDepositHint;
+
   /// No description provided for @paymentConfirmCompleteHint.
   ///
   /// In ar, this message translates to:

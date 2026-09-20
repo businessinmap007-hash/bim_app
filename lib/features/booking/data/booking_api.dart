@@ -115,6 +115,21 @@ class BookingApi {
     return Booking.fromJson(data['booking'] as Map<String, dynamic>);
   }
 
+  /// The client says they paid the booking in cash - also counts as their
+  /// agreement to release the frozen deposit.
+  Future<Booking> confirmPayment(int id) async {
+    final data = await _client.post('/bookings/$id/confirm-payment') as Map<String, dynamic>;
+    return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+  }
+
+  /// The business (or delegated staff, via [businessId]) says it received
+  /// the cash - same effect on the deposit as the client's confirmation.
+  Future<Booking> businessConfirmPayment(int id, {int? businessId}) async {
+    final path = '/business/bookings/$id/confirm-payment${businessId == null ? '' : '?business_id=$businessId'}';
+    final data = await _client.post(path) as Map<String, dynamic>;
+    return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+  }
+
   /// Either party agreeing the deal succeeded and the deposit should be
   /// released — once BOTH the client and business have agreed, the backend
   /// releases it automatically (BookingDepositService::agreeRelease).

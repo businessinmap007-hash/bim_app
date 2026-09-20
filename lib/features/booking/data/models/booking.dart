@@ -53,6 +53,9 @@ class Booking {
   final bool allDay;
   final String? notes;
   final int? businessId;
+  // Cash confirmation (each also counts as that party's deposit-release agreement).
+  final DateTime? clientPaymentConfirmedAt;
+  final DateTime? businessPaymentConfirmedAt;
   final String? businessName;
   final String? businessLogoUrl;
   final String? serviceNameAr;
@@ -80,6 +83,8 @@ class Booking {
     required this.allDay,
     this.notes,
     this.businessId,
+    this.clientPaymentConfirmedAt,
+    this.businessPaymentConfirmedAt,
     this.businessName,
     this.businessLogoUrl,
     this.serviceNameAr,
@@ -118,6 +123,8 @@ class Booking {
       allDay: json['all_day'] as bool? ?? false,
       notes: json['notes'] as String?,
       businessId: business?['id'] as int?,
+      clientPaymentConfirmedAt: DateTime.tryParse(json['client_payment_confirmed_at'] as String? ?? ''),
+      businessPaymentConfirmedAt: DateTime.tryParse(json['business_payment_confirmed_at'] as String? ?? ''),
       businessName: business?['name'] as String?,
       businessLogoUrl: Env.assetUrl(business?['logo'] as String?),
       serviceNameAr: service?['name_ar'] as String?,

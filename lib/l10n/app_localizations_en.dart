@@ -1220,6 +1220,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paymentConfirmSectionTitle => 'Payment confirmation';
 
   @override
+  String get bookingPaymentBusinessStatusLabel =>
+      'Business receipt of the amount';
+
+  @override
+  String get bookingPaymentBusinessButton => 'Confirm cash received';
+
+  @override
+  String get bookingPaymentBusinessConfirmed => 'Amount confirmed received';
+
+  @override
+  String get bookingPaymentDepositHint =>
+      'Your confirmation counts as agreeing to release the deposit; it releases once both sides confirm.';
+
+  @override
   String get paymentConfirmCompleteHint =>
       'Confirm you received the order amount to be able to complete the order.';
 

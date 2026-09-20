@@ -346,6 +346,55 @@ class BusinessBookingDetailScreen extends ConsumerWidget {
                     ),
                     child: Text(l10n.businessBookingsComplete),
                   ),
+                if (!state.isBusy && (booking.status == 'in_progress' || booking.status == 'completed')) ...[
+                  const Divider(height: 32),
+                  Text(l10n.paymentConfirmSectionTitle, style: Theme.of(context).textTheme.titleSmall),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(l10n.paymentConfirmCustomerStatusLabel, style: Theme.of(context).textTheme.bodySmall),
+                      Text(
+                        booking.clientPaymentConfirmedAt != null
+                            ? l10n.paymentConfirmStatusConfirmed
+                            : l10n.paymentConfirmStatusPending,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: booking.clientPaymentConfirmedAt != null ? AppColors.success : Theme.of(context).hintColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  if (booking.businessPaymentConfirmedAt != null)
+                    Row(
+                      children: [
+                        const Icon(Icons.check_circle, size: 16, color: AppColors.success),
+                        const SizedBox(width: 6),
+                        Text(l10n.bookingPaymentBusinessConfirmed, style: TextStyle(color: AppColors.success)),
+                      ],
+                    )
+                  else ...[
+                    OutlinedButton(
+                      onPressed: () => _run(
+                        context,
+                        ref,
+                        () => ref
+                            .read(businessBookingDetailControllerProvider(bookingId).notifier)
+                            .confirmPayment(businessId: businessId),
+                      ),
+                      child: Text(l10n.bookingPaymentBusinessButton),
+                    ),
+                    if (booking.deposit != null && booking.deposit!.isFrozen)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 6),
+                        child: Text(
+                          l10n.bookingPaymentDepositHint,
+                          style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12),
+                        ),
+                      ),
+                  ],
+                ],
                 if (!state.isBusy &&
                     booking.deposit != null &&
                     (booking.deposit!.isFrozen || booking.deposit!.isReleased || booking.deposit!.isRefunded)) ...[
