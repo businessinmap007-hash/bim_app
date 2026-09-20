@@ -153,8 +153,10 @@ class DeliveryApi {
   /// alongside "my active orders" if the driver isn't privately linked).
   Future<void> acceptOrder(int orderId) => _client.post('/delivery/orders/$orderId/accept');
 
-  Future<List<Map<String, dynamic>>> availableOrders() async {
-    final data = await _client.get('/delivery/available-orders') as Map<String, dynamic>;
+  /// [lat]/[lng] are the driver's own position: with them each order carries
+  /// `distance_km` to its pickup point and the list comes nearest-first.
+  Future<List<Map<String, dynamic>>> availableOrders({double? lat, double? lng}) async {
+    final data = await _client.get('/delivery/available-orders', query: {'lat': ?lat, 'lng': ?lng}) as Map<String, dynamic>;
     final orders = data['orders'] as List<dynamic>? ?? [];
     return orders.cast<Map<String, dynamic>>();
   }

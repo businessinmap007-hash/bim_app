@@ -1886,6 +1886,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get deliveryCompleted => 'اكتمل هذا الطلب.';
 
   @override
+  String get myWorkDriverRole => 'موصّل';
+
+  @override
   String get deliveryResetPickupCode => 'إعادة تعيين الكود';
 
   @override

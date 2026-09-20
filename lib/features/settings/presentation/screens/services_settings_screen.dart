@@ -5,7 +5,9 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../booking/presentation/screens/business_bookings_screen.dart';
 import '../../../booking_settings/presentation/screens/booking_settings_screen.dart';
 import '../../../delivery/application/delivery_providers.dart';
+import '../../../auth/application/auth_controller.dart';
 import '../../../delivery/presentation/screens/delivery_fee_settings_screen.dart';
+import '../../../delivery/presentation/screens/driver_dashboard_screen.dart';
 import '../../../delivery/presentation/screens/my_drivers_screen.dart';
 import '../../../business_offers/presentation/screens/business_offers_screen.dart';
 import '../../../business_prices/presentation/screens/business_prices_screen.dart';
@@ -49,14 +51,16 @@ class ServicesSettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final keysAsync = ref.watch(myServiceKeysProvider);
+    final authState = ref.watch(authControllerProvider);
+    final isCarrier = authState is AuthSignedIn && authState.user.isShippingCarrier;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsServicesSection)),
       body: keysAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         // Fail open: every tile, same as before this screen filtered at all.
-        error: (_, _) => _ServiceList(keys: null),
-        data: (keys) => _ServiceList(keys: keys),
+        error: (_, _) => _ServiceList(keys: null, isCarrier: isCarrier),
+        data: (keys) => _ServiceList(keys: keys, isCarrier: isCarrier),
       ),
     );
   }
@@ -65,7 +69,10 @@ class ServicesSettingsScreen extends ConsumerWidget {
 class _ServiceList extends StatelessWidget {
   /// null means "don't filter — show everything" (loading fallback / error).
   final Set<String>? keys;
-  const _ServiceList({required this.keys});
+
+  /// Shipping & Delivery accounts run deliveries from here (and only they do).
+  final bool isCarrier;
+  const _ServiceList({required this.keys, required this.isCarrier});
 
   bool _has(String key) => keys == null || keys!.contains(key);
 
@@ -163,6 +170,12 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.delivery_dining_outlined,
         title: l10n.deliveryMyDriversTitle,
         builder: (_) => const MyDriversScreen(),
+      ),
+      _Tile(
+        show: isCarrier,
+        leading: Icons.delivery_dining_outlined,
+        title: l10n.deliveryDashboardTitle,
+        builder: (_) => const DriverDashboardScreen(),
       ),
       _Tile(
         show: _has('orders'),

@@ -1880,6 +1880,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deliveryCompleted => 'This delivery is complete.';
 
   @override
+  String get myWorkDriverRole => 'Delivery driver';
+
+  @override
   String get deliveryResetPickupCode => 'Reset code';
 
   @override

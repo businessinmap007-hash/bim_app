@@ -8,6 +8,9 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../booking/presentation/screens/business_bookings_screen.dart';
 import '../../../orders/presentation/screens/business_orders_screen.dart';
+import '../../../delivery/application/delivery_providers.dart';
+import '../../../delivery/data/models/roster_driver.dart';
+import '../../../delivery/presentation/screens/driver_dashboard_screen.dart';
 import '../../../delivery/presentation/screens/token_scan_screen.dart';
 import '../../application/my_work_providers.dart';
 import '../../application/staff_providers.dart';
@@ -92,6 +95,10 @@ class MyWorkScreen extends ConsumerWidget {
     final state = ref.watch(myWorkControllerProvider);
 
     final invitationsCount = ref.watch(staffInvitationsControllerProvider).valueOrNull?.length ?? 0;
+    // A driver a business linked to its team works for it: that job is listed
+    // here (no rating - only a business account earns one).
+    final driver = ref.watch(myLinkedDriverProvider).valueOrNull;
+    final linkedDriver = (driver != null && driver.businessId != null) ? driver : null;
 
     return Scaffold(
       appBar: AppBar(
@@ -128,14 +135,17 @@ class MyWorkScreen extends ConsumerWidget {
                   ],
                 ),
               )
-            : state.memberships.isEmpty
+            : (state.memberships.isEmpty && linkedDriver == null)
             ? Center(child: Text(l10n.myWorkEmpty))
             : ListView.separated(
                 padding: const EdgeInsets.all(16),
-                itemCount: state.memberships.length,
+                itemCount: state.memberships.length + (linkedDriver == null ? 0 : 1),
                 separatorBuilder: (context, index) => const SizedBox(height: 10),
                 itemBuilder: (context, index) {
-                  final membership = state.memberships[index];
+                  if (linkedDriver != null && index == 0) {
+                    return _DriverJobCard(driver: linkedDriver);
+                  }
+                  final membership = state.memberships[index - (linkedDriver == null ? 0 : 1)];
                   final status = state.attendanceByBusiness[membership.businessId] ?? AttendanceStatus.empty;
                   final busy = state.busyBusinessIds.contains(membership.businessId);
 
@@ -148,6 +158,28 @@ class MyWorkScreen extends ConsumerWidget {
                   );
                 },
               ),
+      ),
+    );
+  }
+}
+
+class _DriverJobCard extends StatelessWidget {
+  final DriverStatus driver;
+  const _DriverJobCard({required this.driver});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Card(
+      margin: EdgeInsets.zero,
+      child: ListTile(
+        leading: const Icon(Icons.delivery_dining_outlined),
+        title: Text(driver.businessName ?? ''),
+        subtitle: Text(l10n.myWorkDriverRole),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const DriverDashboardScreen()),
+        ),
       ),
     );
   }

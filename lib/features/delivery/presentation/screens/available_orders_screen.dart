@@ -90,6 +90,11 @@ class _AvailableOrdersScreenState extends ConsumerState<AvailableOrdersScreen> {
                         const SizedBox(height: 4),
                         Text(l10n.deliveryOrderTotalLine(_num(order['final_total']))),
                         Text(l10n.deliveryFeeLine(_num(order['delivery_fee']))),
+                        if (order['distance_km'] != null)
+                          Text(
+                            l10n.deliveryDriverDistance(_num(order['distance_km'])),
+                            style: TextStyle(color: Theme.of(context).hintColor),
+                          ),
                         const SizedBox(height: 8),
                         SizedBox(
                           width: double.infinity,

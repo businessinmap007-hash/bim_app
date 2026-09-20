@@ -621,6 +621,7 @@
   "deliveryPickupConfirmed": "تم تأكيد الاستلام — الطلب معك الآن.",
   "deliveryShowDeliveryQr": "أظهر رمز التسليم للعميل",
   "deliveryCompleted": "اكتمل هذا الطلب.",
+  "myWorkDriverRole": "موصّل",
   "deliveryResetPickupCode": "إعادة تعيين الكود",
   "deliveryResetPickupCodeConfirm": "سيتوقف الكود الحالي عن العمل ويُنشأ كود جديد. متابعة؟",
   "deliveryAvailableOrdersTitle": "الطلبات المتاحة",

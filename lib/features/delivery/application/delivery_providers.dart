@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../../../core/providers/core_providers.dart';
 import '../../orders/data/models/placed_order.dart';
@@ -23,8 +24,28 @@ final businessRosterFullProvider = FutureProvider.autoDispose<BusinessRoster>((r
 
 /// Ready-to-take delivery orders open to this driver (a freelance driver
 /// sees the whole pool, a business's own driver only that business's).
-final availableDeliveryOrdersProvider = FutureProvider.autoDispose<List<Map<String, dynamic>>>((ref) {
-  return ref.watch(deliveryApiProvider).availableOrders();
+final availableDeliveryOrdersProvider = FutureProvider.autoDispose<List<Map<String, dynamic>>>((ref) async {
+  double? lat;
+  double? lng;
+  try {
+    var permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) permission = await Geolocator.requestPermission();
+    if (permission != LocationPermission.denied && permission != LocationPermission.deniedForever) {
+      final position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(timeLimit: Duration(seconds: 8)),
+      );
+      lat = position.latitude;
+      lng = position.longitude;
+    }
+  } catch (_) {
+    // No position -> the list simply comes without distances.
+  }
+  return ref.watch(deliveryApiProvider).availableOrders(lat: lat, lng: lng);
+});
+
+/// A linked (business-team) driver's own status, shown under "أعمالي".
+final myLinkedDriverProvider = FutureProvider.autoDispose<DriverStatus?>((ref) {
+  return ref.watch(deliveryApiProvider).me();
 });
 
 /// The signed-in driver's own active deliveries.

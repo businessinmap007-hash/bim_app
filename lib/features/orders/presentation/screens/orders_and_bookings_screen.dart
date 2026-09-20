@@ -383,8 +383,11 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
       minChildSize: 0.3,
       maxChildSize: 0.9,
       expand: false,
-      builder: (context, scrollController) => ListView(
+      builder: (context, scrollController) => RefreshIndicator(
+        onRefresh: _refreshDetail,
+        child: ListView(
         controller: scrollController,
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.all(20),
         children: [
           Row(
@@ -405,6 +408,11 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
                     ),
                   ),
                 ),
+              ),
+              IconButton(
+                tooltip: l10n.commonRefresh,
+                icon: const Icon(Icons.refresh),
+                onPressed: _refreshDetail,
               ),
               _StatusBadge(label: _orderStatusLabel(order.status, l10n), color: _orderStatusColor(order.status)),
             ],
@@ -571,6 +579,7 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
             child: Text(l10n.disputeOpenTitle),
           ),
         ],
+      ),
       ),
     );
   }

@@ -22,6 +22,7 @@ class AuthUser {
   final int? cityId;
   final int? categoryId;
   final int? categoryChildId;
+  final String? categorySlug;
   final SocialLinks? social;
 
   const AuthUser({
@@ -42,10 +43,15 @@ class AuthUser {
     this.cityId,
     this.categoryId,
     this.categoryChildId,
+    this.categorySlug,
     this.social,
   });
 
   bool get isBusiness => type == 'business';
+
+  /// A "Shipping & Delivery" business account - the only kind that runs
+  /// deliveries on its own account (see DriverDashboardScreen).
+  bool get isShippingCarrier => isBusiness && categorySlug == 'shipping-delivery';
   bool get hasLocation => latitude != null && longitude != null;
 
   factory AuthUser.fromJson(Map<String, dynamic> json) => AuthUser(
@@ -66,6 +72,7 @@ class AuthUser {
     cityId: (json['city_id'] as num?)?.toInt(),
     categoryId: (json['category_id'] as num?)?.toInt(),
     categoryChildId: (json['category_child_id'] as num?)?.toInt(),
+    categorySlug: json['category_slug'] as String?,
     social: SocialLinks.fromJsonOrNull(json['social']),
   );
 }

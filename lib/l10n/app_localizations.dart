@@ -3518,6 +3518,12 @@ abstract class AppLocalizations {
   /// **'اكتمل هذا الطلب.'**
   String get deliveryCompleted;
 
+  /// No description provided for @myWorkDriverRole.
+  ///
+  /// In ar, this message translates to:
+  /// **'موصّل'**
+  String get myWorkDriverRole;
+
   /// No description provided for @deliveryResetPickupCode.
   ///
   /// In ar, this message translates to:

@@ -7,7 +7,6 @@ import '../../app/theme/app_colors.dart';
 import '../../features/auth/application/auth_controller.dart';
 import '../../features/business_groups/presentation/screens/business_groups_screen.dart';
 import '../../features/contact_groups/presentation/screens/contact_groups_screen.dart';
-import '../../features/delivery/presentation/screens/driver_dashboard_screen.dart';
 import '../../features/jobs/presentation/screens/jobs_screen.dart';
 import '../../features/offers/presentation/screens/my_offer_follows_screen.dart';
 import '../../features/offers/presentation/screens/offers_screen.dart';
@@ -285,24 +284,6 @@ class _AppDrawerContent extends ConsumerWidget {
                       close();
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => const MyJobsScreen()),
-                      );
-                    },
-                  ),
-                ],
-
-                // Driving is a personal role, not something a business
-                // entity does — a business account never sees this, even
-                // though a freelance individual (any non-business account)
-                // may register regardless of who they end up delivering for.
-                if (!isBusiness) ...[
-                  _SectionHeader(l10n.deliveryDashboardTitle),
-                  ListTile(
-                    leading: const Icon(Icons.delivery_dining_outlined),
-                    title: Text(l10n.deliveryDashboardTitle),
-                    onTap: () {
-                      close();
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const DriverDashboardScreen()),
                       );
                     },
                   ),

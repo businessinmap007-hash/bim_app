@@ -7,6 +7,7 @@ import '../../business/presentation/screens/business_detail_screen.dart';
 import '../../cart/application/shared_cart_providers.dart';
 import '../../cart/presentation/screens/shared_cart_screen.dart';
 import '../../delivery/presentation/screens/available_orders_screen.dart';
+import '../../delivery/presentation/screens/driver_order_loader_screen.dart';
 import '../../jobs/presentation/screens/job_detail_screen.dart';
 import '../../offers/presentation/screens/offer_detail_screen.dart';
 import '../../orders/presentation/screens/business_orders_screen.dart';
@@ -44,6 +45,10 @@ Future<void> openNotificationTarget(BuildContext context, WidgetRef ref, AppNoti
             ),
           ),
         );
+      }
+    case 'open_driver_order':
+      if (id != null) {
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => DriverOrderLoaderScreen(orderId: id)));
       }
     case 'open_available_orders':
       Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AvailableOrdersScreen()));
