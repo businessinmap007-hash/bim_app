@@ -3482,6 +3482,18 @@ abstract class AppLocalizations {
   /// **'اكتمل هذا الطلب.'**
   String get deliveryCompleted;
 
+  /// No description provided for @deliveryResetPickupCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة تعيين الكود'**
+  String get deliveryResetPickupCode;
+
+  /// No description provided for @deliveryResetPickupCodeConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيتوقف الكود الحالي عن العمل ويُنشأ كود جديد. متابعة؟'**
+  String get deliveryResetPickupCodeConfirm;
+
   /// No description provided for @deliveryAvailableOrdersTitle.
   ///
   /// In ar, this message translates to:

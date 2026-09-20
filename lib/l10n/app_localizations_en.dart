@@ -1858,6 +1858,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deliveryCompleted => 'This delivery is complete.';
 
   @override
+  String get deliveryResetPickupCode => 'Reset code';
+
+  @override
+  String get deliveryResetPickupCodeConfirm =>
+      'The current code will stop working and a new one will be created. Continue?';
+
+  @override
   String get deliveryAvailableOrdersTitle => 'Available orders';
 
   @override

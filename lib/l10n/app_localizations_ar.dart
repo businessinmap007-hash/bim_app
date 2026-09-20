@@ -1865,6 +1865,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get deliveryCompleted => 'اكتمل هذا الطلب.';
 
   @override
+  String get deliveryResetPickupCode => 'إعادة تعيين الكود';
+
+  @override
+  String get deliveryResetPickupCodeConfirm =>
+      'سيتوقف الكود الحالي عن العمل ويُنشأ كود جديد. متابعة؟';
+
+  @override
   String get deliveryAvailableOrdersTitle => 'الطلبات المتاحة';
 
   @override

@@ -372,6 +372,47 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
     }
   }
 
+  /// Shows the pickup QR; with [reset] it first replaces the code with a
+  /// fresh one (the old one stops working) after a confirmation.
+  Future<void> _showPickupCode(BuildContext context, WidgetRef ref, {bool reset = false}) async {
+    final l10n = AppLocalizations.of(context)!;
+    if (reset) {
+      final ok = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Text(l10n.deliveryResetPickupCodeConfirm),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l10n.commonCancel)),
+            TextButton(onPressed: () => Navigator.pop(context, true), child: Text(l10n.deliveryResetPickupCode)),
+          ],
+        ),
+      );
+      if (ok != true || !context.mounted) return;
+    }
+    try {
+      final api = ref.read(deliveryApiProvider);
+      final token = reset
+          ? await api.resetPickupToken(orderId, businessId: businessId)
+          : await api.issuePickupToken(orderId, businessId: businessId);
+      if (context.mounted) {
+        await Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => TokenQrScreen(
+              title: l10n.deliveryPickupQrTitle,
+              subtitle: l10n.deliveryPickupQrHintGeneric,
+              token: token,
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        final message = e is ApiException ? e.message : l10n.commonSomethingWentWrong;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      }
+    }
+  }
+
   Future<void> _advance(BuildContext context, WidgetRef ref, bool toReady, PlacedOrder order) async {
     final l10n = AppLocalizations.of(context)!;
     try {
@@ -647,33 +688,19 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                 // the SAME code), so re-showing it here is always safe: it
                 // never invalidates a code the driver might still scan from
                 // wherever they saw it the first time.
-                else if (order.deliveryStage == 'assigned')
+                else if (order.deliveryStage == 'assigned') ...[
                   OutlinedButton.icon(
                     icon: const Icon(Icons.qr_code_2),
-                    onPressed: () async {
-                      final l10n = AppLocalizations.of(context)!;
-                      try {
-                        final token = await ref.read(deliveryApiProvider).issuePickupToken(orderId, businessId: businessId);
-                        if (context.mounted) {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => TokenQrScreen(
-                                title: l10n.deliveryPickupQrTitle,
-                                subtitle: l10n.deliveryPickupQrHintGeneric,
-                                token: token,
-                              ),
-                            ),
-                          );
-                        }
-                      } catch (e) {
-                        if (context.mounted) {
-                          final message = e is ApiException ? e.message : l10n.commonSomethingWentWrong;
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
-                        }
-                      }
-                    },
+                    onPressed: () => _showPickupCode(context, ref),
                     label: Text(l10n.deliveryShowPickupQrAgain),
                   ),
+                  const SizedBox(height: 8),
+                  TextButton.icon(
+                    icon: const Icon(Icons.refresh),
+                    onPressed: () => _showPickupCode(context, ref, reset: true),
+                    label: Text(l10n.deliveryResetPickupCode),
+                  ),
+                ],
               ],
               ),
             ),

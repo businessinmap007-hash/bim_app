@@ -144,9 +144,11 @@ class ApiClient {
       return const ApiException(message: 'No internet connection.');
     }
 
+    // A non-JSON error response (an HTML 404, a proxy page...) - never
+    // surface Dio's own multi-line explanation to the user.
     return ApiException(
       statusCode: status,
-      message: e.message ?? 'Request failed.',
+      message: status != null ? 'Request failed ($status).' : (e.message ?? 'Request failed.'),
     );
   }
 }

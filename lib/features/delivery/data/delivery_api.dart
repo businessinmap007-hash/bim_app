@@ -12,6 +12,10 @@ class DeliveryApi {
   final ApiClient _client;
   const DeliveryApi(this._client);
 
+  /// Drops whitespace and control characters - a pasted/typed token once
+  /// carried trailing NUL bytes, which turned a valid code into a 404.
+  static String _cleanToken(String token) => token.replaceAll(RegExp(r'[\x00-\x20\x7f]'), '');
+
   // ─────────────────────────── Driver identity ───────────────────────────
 
   /// Read-only: null means "not a registered driver yet". Never
@@ -90,6 +94,14 @@ class DeliveryApi {
     return data['pickup_token'] as String;
   }
 
+  /// The merchant replaces the pickup code with a fresh one (the old code
+  /// stops working) - for when it may have been seen by the wrong person.
+  Future<String> resetPickupToken(int orderId, {int? businessId}) async {
+    final path = '/business/orders/$orderId/pickup-token/reset${businessId == null ? '' : '?business_id=$businessId'}';
+    final data = await _client.post(path) as Map<String, dynamic>;
+    return data['pickup_token'] as String;
+  }
+
   /// The driver issues the delivery QR's token, once they've picked up.
   Future<String> issueDeliveryToken(int orderId) async {
     final data = await _client.post('/delivery/orders/$orderId/delivery-token') as Map<String, dynamic>;
@@ -97,10 +109,10 @@ class DeliveryApi {
   }
 
   /// The driver scans the restaurant's pickup QR.
-  Future<void> confirmPickup(String token) => _client.post('/delivery/pickup/$token/confirm');
+  Future<void> confirmPickup(String token) => _client.post('/delivery/pickup/${_cleanToken(token)}/confirm');
 
   /// The customer scans the driver's delivery QR.
-  Future<void> confirmDelivery(String token) => _client.post('/delivery/deliver/$token/confirm');
+  Future<void> confirmDelivery(String token) => _client.post('/delivery/deliver/${_cleanToken(token)}/confirm');
 
   /// The assigned driver tells the customer roughly when to expect the
   /// order — exactly one of [etaMinutes] (from right now) or [etaAt] (a

@@ -615,6 +615,8 @@
   "deliveryPickupConfirmed": "Pickup confirmed — you're carrying this order now.",
   "deliveryShowDeliveryQr": "Show delivery QR to customer",
   "deliveryCompleted": "This delivery is complete.",
+  "deliveryResetPickupCode": "Reset code",
+  "deliveryResetPickupCodeConfirm": "The current code will stop working and a new one will be created. Continue?",
   "deliveryAvailableOrdersTitle": "Available orders",
   "deliveryAvailableOrdersEmpty": "No orders available right now. Pull to refresh.",
   "deliveryAcceptOrder": "Accept delivery",

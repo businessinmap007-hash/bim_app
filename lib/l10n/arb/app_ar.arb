@@ -615,6 +615,8 @@
   "deliveryPickupConfirmed": "تم تأكيد الاستلام — الطلب معك الآن.",
   "deliveryShowDeliveryQr": "أظهر رمز التسليم للعميل",
   "deliveryCompleted": "اكتمل هذا الطلب.",
+  "deliveryResetPickupCode": "إعادة تعيين الكود",
+  "deliveryResetPickupCodeConfirm": "سيتوقف الكود الحالي عن العمل ويُنشأ كود جديد. متابعة؟",
   "deliveryAvailableOrdersTitle": "الطلبات المتاحة",
   "deliveryAvailableOrdersEmpty": "لا توجد طلبات متاحة الآن. اسحب للتحديث.",
   "deliveryAcceptOrder": "قبول التوصيل",
