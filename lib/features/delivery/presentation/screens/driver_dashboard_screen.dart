@@ -5,6 +5,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
 import '../../../orders/data/models/placed_order.dart';
 import '../../application/delivery_providers.dart';
+import 'delivery_fee_settings_screen.dart';
 import 'driver_order_detail_screen.dart';
 
 /// The driver's own home screen — on/off-duty switch plus their currently
@@ -76,6 +77,25 @@ class _DriverDashboardScreenState extends ConsumerState<DriverDashboardScreen> {
                   onChanged: availability.isLoading
                       ? null
                       : (v) => ref.read(driverAvailabilityControllerProvider.notifier).setActive(v),
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  leading: const Icon(Icons.payments_outlined),
+                  title: Text(l10n.deliveryFeeSettingsTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    final api = ref.read(deliveryApiProvider);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => DeliveryFeeSettingsScreen(
+                          hint: l10n.deliveryFeeDriverHint,
+                          load: () async => (await api.me())?.deliveryFeeAmount,
+                          save: api.setOwnDeliveryFee,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
               const SizedBox(height: 8),

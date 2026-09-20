@@ -59,6 +59,7 @@ class DriverStatus {
   final int pickedUpCount;
   final int deliveredCount;
   final int fastDeliveryCount;
+  final double? deliveryFeeAmount;
 
   const DriverStatus({
     required this.driverId,
@@ -67,6 +68,7 @@ class DriverStatus {
     required this.pickedUpCount,
     required this.deliveredCount,
     required this.fastDeliveryCount,
+    this.deliveryFeeAmount,
   });
 
   factory DriverStatus.fromJson(Map<String, dynamic> json) => DriverStatus(
@@ -76,5 +78,6 @@ class DriverStatus {
     pickedUpCount: (json['picked_up_count'] as num?)?.toInt() ?? 0,
     deliveredCount: (json['delivered_count'] as num?)?.toInt() ?? 0,
     fastDeliveryCount: (json['fast_delivery_count'] as num?)?.toInt() ?? 0,
+    deliveryFeeAmount: (json['delivery_fee_amount'] as num?)?.toDouble(),
   );
 }

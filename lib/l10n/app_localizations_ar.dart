@@ -1846,6 +1846,29 @@ class AppLocalizationsAr extends AppLocalizations {
   String get deliveryCompleted => 'اكتمل هذا الطلب.';
 
   @override
+  String get deliveryFeeSettingsTitle => 'رسوم التوصيل';
+
+  @override
+  String get deliveryFeeBusinessHint =>
+      'مبلغ ثابت يُضاف تلقائيًا على فاتورة العميل عند اختيار التوصيل. اتركه فارغًا لتوصيل مجاني.';
+
+  @override
+  String get deliveryFeeDriverHint =>
+      'مبلغ ثابت تطلبه كموصّل حر. يُطبَّق فقط لو لم يحدد المحل رسومًا للتوصيل، ولا يغيّر رسومًا حددها المحل.';
+
+  @override
+  String get deliveryFeeAmountLabel => 'رسوم التوصيل';
+
+  @override
+  String get deliveryFeeSaved => 'تم حفظ رسوم التوصيل.';
+
+  @override
+  String get deliveryFeeInvalid => 'أدخل مبلغًا صحيحًا.';
+
+  @override
+  String get deliveryFeeClear => 'بلا رسوم';
+
+  @override
   String get paymentConfirmDriverButton => 'تأكيد استلام رسوم التوصيل نقدًا';
 
   @override

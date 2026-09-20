@@ -114,6 +114,27 @@ class DeliveryApi {
   /// actually reaches the delivered stage.
   Future<void> confirmPaymentReceived(int orderId) => _client.post('/delivery/orders/$orderId/confirm-payment');
 
+  /// The business's own flat delivery fee, added to the customer's invoice
+  /// automatically at checkout on delivery orders. Null = free delivery.
+  Future<double?> businessDeliveryFee() async {
+    final data = await _client.get('/business/delivery-settings') as Map<String, dynamic>;
+    return (data['delivery_fee_amount'] as num?)?.toDouble();
+  }
+
+  Future<double?> setBusinessDeliveryFee(double? amount) async {
+    final data =
+        await _client.patch('/business/delivery-settings', data: {'delivery_fee_amount': amount}) as Map<String, dynamic>;
+    return (data['delivery_fee_amount'] as num?)?.toDouble();
+  }
+
+  /// A driver's own flat rate - only a fallback when the business never set
+  /// one, never overrides a fee already charged at checkout.
+  Future<double?> setOwnDeliveryFee(double? amount) async {
+    final data =
+        await _client.patch('/delivery/delivery-fee', data: {'delivery_fee_amount': amount}) as Map<String, dynamic>;
+    return (data['delivery_fee_amount'] as num?)?.toDouble();
+  }
+
   /// A driver accepting an unassigned order from the open pool (existing,
   /// pre-assignment path — kept here so the driver dashboard can offer it
   /// alongside "my active orders" if the driver isn't privately linked).

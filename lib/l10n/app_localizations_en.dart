@@ -1839,6 +1839,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deliveryCompleted => 'This delivery is complete.';
 
   @override
+  String get deliveryFeeSettingsTitle => 'Delivery fee';
+
+  @override
+  String get deliveryFeeBusinessHint =>
+      'A flat amount added automatically to the customer\'s invoice when they choose delivery. Leave empty for free delivery.';
+
+  @override
+  String get deliveryFeeDriverHint =>
+      'A flat amount you charge as a freelance driver. Only applies when the business never set a delivery fee, and never changes a fee the business already set.';
+
+  @override
+  String get deliveryFeeAmountLabel => 'Delivery fee';
+
+  @override
+  String get deliveryFeeSaved => 'Delivery fee saved.';
+
+  @override
+  String get deliveryFeeInvalid => 'Enter a valid amount.';
+
+  @override
+  String get deliveryFeeClear => 'No fee';
+
+  @override
   String get paymentConfirmDriverButton => 'Confirm cash received for delivery';
 
   @override

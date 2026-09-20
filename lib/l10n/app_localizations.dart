@@ -3446,6 +3446,48 @@ abstract class AppLocalizations {
   /// **'اكتمل هذا الطلب.'**
   String get deliveryCompleted;
 
+  /// No description provided for @deliveryFeeSettingsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسوم التوصيل'**
+  String get deliveryFeeSettingsTitle;
+
+  /// No description provided for @deliveryFeeBusinessHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مبلغ ثابت يُضاف تلقائيًا على فاتورة العميل عند اختيار التوصيل. اتركه فارغًا لتوصيل مجاني.'**
+  String get deliveryFeeBusinessHint;
+
+  /// No description provided for @deliveryFeeDriverHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مبلغ ثابت تطلبه كموصّل حر. يُطبَّق فقط لو لم يحدد المحل رسومًا للتوصيل، ولا يغيّر رسومًا حددها المحل.'**
+  String get deliveryFeeDriverHint;
+
+  /// No description provided for @deliveryFeeAmountLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسوم التوصيل'**
+  String get deliveryFeeAmountLabel;
+
+  /// No description provided for @deliveryFeeSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ رسوم التوصيل.'**
+  String get deliveryFeeSaved;
+
+  /// No description provided for @deliveryFeeInvalid.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل مبلغًا صحيحًا.'**
+  String get deliveryFeeInvalid;
+
+  /// No description provided for @deliveryFeeClear.
+  ///
+  /// In ar, this message translates to:
+  /// **'بلا رسوم'**
+  String get deliveryFeeClear;
+
   /// No description provided for @paymentConfirmDriverButton.
   ///
   /// In ar, this message translates to:

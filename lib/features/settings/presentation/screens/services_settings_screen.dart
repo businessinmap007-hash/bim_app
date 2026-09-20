@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../booking/presentation/screens/business_bookings_screen.dart';
 import '../../../booking_settings/presentation/screens/booking_settings_screen.dart';
+import '../../../delivery/application/delivery_providers.dart';
+import '../../../delivery/presentation/screens/delivery_fee_settings_screen.dart';
 import '../../../delivery/presentation/screens/my_drivers_screen.dart';
 import '../../../business_offers/presentation/screens/business_offers_screen.dart';
 import '../../../business_prices/presentation/screens/business_prices_screen.dart';
@@ -161,6 +163,21 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.delivery_dining_outlined,
         title: l10n.deliveryMyDriversTitle,
         builder: (_) => const MyDriversScreen(),
+      ),
+      _Tile(
+        show: _has('orders'),
+        leading: Icons.local_shipping_outlined,
+        title: l10n.deliveryFeeSettingsTitle,
+        builder: (context) => Consumer(
+          builder: (context, ref, _) {
+            final api = ref.read(deliveryApiProvider);
+            return DeliveryFeeSettingsScreen(
+              hint: l10n.deliveryFeeBusinessHint,
+              load: api.businessDeliveryFee,
+              save: api.setBusinessDeliveryFee,
+            );
+          },
+        ),
       ),
       _Tile(
         show: true, // account management — no capability of its own.
