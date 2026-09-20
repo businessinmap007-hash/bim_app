@@ -1236,6 +1236,14 @@ class AppLocalizationsAr extends AppLocalizations {
   String get paymentConfirmSectionTitle => 'تأكيد الدفع';
 
   @override
+  String get paymentConfirmCompleteHint =>
+      'أكّد استلام مبلغ الطلب أولًا لتتمكن من إكمال الطلب.';
+
+  @override
+  String get paymentConfirmReviewHint =>
+      'يفتح التقييم بعد تأكيد الدفع من جميع الأطراف.';
+
+  @override
   String get trustSectionTitle => 'الثقة';
 
   @override

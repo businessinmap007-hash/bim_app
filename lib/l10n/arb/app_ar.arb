@@ -405,6 +405,8 @@
   "businessOrdersDepositCovered": "مغطّى بضمان أو ديبوزيت",
   "businessOrdersDepositUncovered": "بلا ضمان أو ديبوزيت",
   "paymentConfirmSectionTitle": "تأكيد الدفع",
+  "paymentConfirmCompleteHint": "أكّد استلام مبلغ الطلب أولًا لتتمكن من إكمال الطلب.",
+  "paymentConfirmReviewHint": "يفتح التقييم بعد تأكيد الدفع من جميع الأطراف.",
   "trustSectionTitle": "الثقة",
   "trustCustomer": "أثق في العميل",
   "trustBusiness": "أثق في التاجر",

@@ -1220,6 +1220,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paymentConfirmSectionTitle => 'Payment confirmation';
 
   @override
+  String get paymentConfirmCompleteHint =>
+      'Confirm you received the order amount to be able to complete the order.';
+
+  @override
+  String get paymentConfirmReviewHint =>
+      'Reviews open once every party has confirmed the payment.';
+
+  @override
   String get trustSectionTitle => 'Trust';
 
   @override

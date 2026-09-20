@@ -405,6 +405,8 @@
   "businessOrdersDepositCovered": "Covered by a deposit/guarantee",
   "businessOrdersDepositUncovered": "No deposit or guarantee cover",
   "paymentConfirmSectionTitle": "Payment confirmation",
+  "paymentConfirmCompleteHint": "Confirm you received the order amount to be able to complete the order.",
+  "paymentConfirmReviewHint": "Reviews open once every party has confirmed the payment.",
   "trustSectionTitle": "Trust",
   "trustCustomer": "I trust the customer",
   "trustBusiness": "I trust the merchant",

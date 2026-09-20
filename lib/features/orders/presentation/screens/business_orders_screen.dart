@@ -642,13 +642,28 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                     child: Text(l10n.businessOrdersMarkReady),
                   )
                 else if (order.status == 'pending' && order.prepStatus == 'ready' && order.fulfillmentType != 'delivery')
-                  FilledButton(
-                    onPressed: () => _complete(context, ref),
-                    child: Text(
-                      order.fulfillmentType == 'dine_in'
-                          ? l10n.orderTrackerCompletedDineIn
-                          : l10n.orderTrackerCompletedPickup,
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      FilledButton(
+                        onPressed: order.paymentConfirmationRequired && order.merchantPaymentConfirmedAt == null
+                            ? null
+                            : () => _complete(context, ref),
+                        child: Text(
+                          order.fulfillmentType == 'dine_in'
+                              ? l10n.orderTrackerCompletedDineIn
+                              : l10n.orderTrackerCompletedPickup,
+                        ),
+                      ),
+                      if (order.paymentConfirmationRequired && order.merchantPaymentConfirmedAt == null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 6),
+                          child: Text(
+                            l10n.paymentConfirmCompleteHint,
+                            style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12),
+                          ),
+                        ),
+                    ],
                   )
                 // Ready, delivery, and still nobody assigned — the merchant
                 // dismissed the auto-opened assignment screen (or it's an

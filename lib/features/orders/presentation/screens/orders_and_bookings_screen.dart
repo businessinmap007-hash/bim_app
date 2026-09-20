@@ -536,10 +536,13 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
             ),
           if (order.status == 'completed') ...[
             const SizedBox(height: 8),
-            OutlinedButton(
-              onPressed: _busy ? null : () => _leaveReview(order),
-              child: Text(l10n.ratingsLeaveReview),
-            ),
+            if (order.paymentConfirmationRequired && order.paymentSettledAt == null)
+              Text(l10n.paymentConfirmReviewHint, style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12))
+            else
+              OutlinedButton(
+                onPressed: _busy ? null : () => _leaveReview(order),
+                child: Text(l10n.ratingsLeaveReview),
+              ),
           ],
           // Most orders (a coffee, a food delivery) never have a project
           // timeline — only a construction/manufacturing-type business links

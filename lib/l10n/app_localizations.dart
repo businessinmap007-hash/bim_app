@@ -2330,6 +2330,18 @@ abstract class AppLocalizations {
   /// **'تأكيد الدفع'**
   String get paymentConfirmSectionTitle;
 
+  /// No description provided for @paymentConfirmCompleteHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكّد استلام مبلغ الطلب أولًا لتتمكن من إكمال الطلب.'**
+  String get paymentConfirmCompleteHint;
+
+  /// No description provided for @paymentConfirmReviewHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يفتح التقييم بعد تأكيد الدفع من جميع الأطراف.'**
+  String get paymentConfirmReviewHint;
+
   /// No description provided for @trustSectionTitle.
   ///
   /// In ar, this message translates to:

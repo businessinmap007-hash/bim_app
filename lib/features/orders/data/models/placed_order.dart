@@ -93,6 +93,10 @@ class PlacedOrder {
   final DateTime? merchantPaymentConfirmedAt;
   final DateTime? driverPaymentConfirmedAt;
   final bool depositReleased;
+  // Cash orders are held to the three-party confirmation: pickup/dine-in
+  // completion waits on the merchant's confirmation, reviews on settlement.
+  final bool paymentConfirmationRequired;
+  final DateTime? paymentSettledAt;
   // The viewer's "I trust" ticks toward the other parties of the order, keyed
   // by 'customer' / 'business' / 'driver'. Null on list rows.
   final Map<String, ({bool trustedByMe, bool trustsMe})>? trust;
@@ -131,6 +135,8 @@ class PlacedOrder {
     this.merchantPaymentConfirmedAt,
     this.driverPaymentConfirmedAt,
     this.depositReleased = false,
+    this.paymentConfirmationRequired = false,
+    this.paymentSettledAt,
     this.trust,
   });
 
@@ -198,6 +204,8 @@ class PlacedOrder {
       merchantPaymentConfirmedAt: DateTime.tryParse(paymentConfirmations['merchant_confirmed_at'] as String? ?? ''),
       driverPaymentConfirmedAt: DateTime.tryParse(paymentConfirmations['driver_confirmed_at'] as String? ?? ''),
       depositReleased: deposit['released'] as bool? ?? false,
+      paymentConfirmationRequired: json['payment_confirmation_required'] as bool? ?? false,
+      paymentSettledAt: DateTime.tryParse(paymentConfirmations['settled_at'] as String? ?? ''),
       trust: (json['trust'] as Map<String, dynamic>?)?.map(
         (role, v) => MapEntry(role, (
           trustedByMe: (v as Map<String, dynamic>)['trusted_by_me'] as bool? ?? false,
