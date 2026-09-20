@@ -53,6 +53,13 @@ class OrdersApi {
     return PlacedOrder.fromJson(data);
   }
 
+  /// The customer attests they paid the order in cash — protective evidence
+  /// only, independent of the business's/driver's own confirm-payment calls.
+  Future<PlacedOrder> confirmPayment(int id) async {
+    final data = await _client.post('/orders/$id/confirm-payment') as Map<String, dynamic>;
+    return PlacedOrder.fromJson(data);
+  }
+
   Future<ReorderResult> reorder(int id) async {
     final data =
         await _client.post('/orders/$id/reorder') as Map<String, dynamic>;
@@ -135,6 +142,13 @@ class OrdersApi {
   /// handover (DeliveryApi.confirmDelivery) instead.
   Future<PlacedOrder> businessComplete(int id) async {
     final data = await _client.post('/business/orders/$id/complete') as Map<String, dynamic>;
+    return PlacedOrder.fromJson(data);
+  }
+
+  /// The merchant confirms they received the order amount in cash (excludes
+  /// delivery_fee — see DeliveryApi.confirmPaymentReceived for that leg).
+  Future<PlacedOrder> businessConfirmPayment(int id) async {
+    final data = await _client.post('/business/orders/$id/confirm-payment') as Map<String, dynamic>;
     return PlacedOrder.fromJson(data);
   }
 

@@ -84,6 +84,14 @@ class PlacedOrder {
   final double? depositAmount;
   final bool depositCovered;
   final bool depositAcceptedWithoutCover;
+  final String? paymentMethod;
+  // Three independent cash-payment attestations (OrderResource's own
+  // payment_confirmations) - the customer confirms they paid, the merchant
+  // confirms they received the order amount, and (delivery only) the driver
+  // confirms they received the delivery fee. Never a chain.
+  final DateTime? customerPaymentConfirmedAt;
+  final DateTime? merchantPaymentConfirmedAt;
+  final DateTime? driverPaymentConfirmedAt;
 
   const PlacedOrder({
     required this.id,
@@ -114,6 +122,10 @@ class PlacedOrder {
     this.deliveryStage,
     this.deliveryLat,
     this.deliveryLng,
+    this.paymentMethod,
+    this.customerPaymentConfirmedAt,
+    this.merchantPaymentConfirmedAt,
+    this.driverPaymentConfirmedAt,
   });
 
   /// Mirrors `OrderController::cancelPendingOrder` — pending and not yet
@@ -125,6 +137,16 @@ class PlacedOrder {
   /// risk (`accept_without_deposit=true`) rather than being silently taken.
   bool get needsExplicitDepositDecision => depositRequired && !depositCovered;
 
+  /// Cash confirmation only applies while payment is actually cash — a
+  /// future gateway payment_method (see CheckoutScreen's own note) tracks
+  /// its own paid_at instead.
+  bool get isCashPayment =>
+      paymentMethod == null || paymentMethod == 'cash' || paymentMethod == 'cash_on_delivery';
+
+  /// What the merchant is owed — everything except the delivery_fee leg,
+  /// which whoever actually collects it confirms separately.
+  double get orderAmount => finalTotal - deliveryFee;
+
   factory PlacedOrder.fromJson(Map<String, dynamic> json) {
     final business = json['business'] as Map<String, dynamic>?;
     final customer = json['customer'] as Map<String, dynamic>?;
@@ -132,6 +154,7 @@ class PlacedOrder {
     final deposit = json['deposit'] as Map<String, dynamic>? ?? const {};
     final items = json['items'] as List<dynamic>? ?? const [];
     final deliveryCoordinates = json['delivery_coordinates'] as Map<String, dynamic>?;
+    final paymentConfirmations = json['payment_confirmations'] as Map<String, dynamic>? ?? const {};
     return PlacedOrder(
       id: json['id'] as int,
       status: json['status'] as String? ?? 'pending',
@@ -164,6 +187,10 @@ class PlacedOrder {
       deliveryStage: json['delivery_stage'] as String?,
       deliveryLat: (deliveryCoordinates?['lat'] as num?)?.toDouble(),
       deliveryLng: (deliveryCoordinates?['lng'] as num?)?.toDouble(),
+      paymentMethod: json['payment_method'] as String?,
+      customerPaymentConfirmedAt: DateTime.tryParse(paymentConfirmations['customer_confirmed_at'] as String? ?? ''),
+      merchantPaymentConfirmedAt: DateTime.tryParse(paymentConfirmations['merchant_confirmed_at'] as String? ?? ''),
+      driverPaymentConfirmedAt: DateTime.tryParse(paymentConfirmations['driver_confirmed_at'] as String? ?? ''),
     );
   }
 }

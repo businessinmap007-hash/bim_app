@@ -2324,6 +2324,66 @@ abstract class AppLocalizations {
   /// **'بلا ضمان أو ديبوزيت'**
   String get businessOrdersDepositUncovered;
 
+  /// No description provided for @paymentConfirmSectionTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد الدفع'**
+  String get paymentConfirmSectionTitle;
+
+  /// No description provided for @paymentConfirmCustomerStatusLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'دفع العميل'**
+  String get paymentConfirmCustomerStatusLabel;
+
+  /// No description provided for @paymentConfirmMerchantStatusLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'استلام التاجر لمبلغ الطلب'**
+  String get paymentConfirmMerchantStatusLabel;
+
+  /// No description provided for @paymentConfirmDriverStatusLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'استلام الموصّل لرسوم التوصيل'**
+  String get paymentConfirmDriverStatusLabel;
+
+  /// No description provided for @paymentConfirmStatusConfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التأكيد'**
+  String get paymentConfirmStatusConfirmed;
+
+  /// No description provided for @paymentConfirmStatusPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يتم التأكيد بعد'**
+  String get paymentConfirmStatusPending;
+
+  /// No description provided for @paymentConfirmCustomerButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكدت أنني دفعت نقدًا'**
+  String get paymentConfirmCustomerButton;
+
+  /// No description provided for @paymentConfirmCustomerConfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تأكيد دفعك'**
+  String get paymentConfirmCustomerConfirmed;
+
+  /// No description provided for @paymentConfirmMerchantButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد استلام مبلغ الطلب نقدًا'**
+  String get paymentConfirmMerchantButton;
+
+  /// No description provided for @paymentConfirmMerchantConfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تأكيد استلام مبلغ الطلب'**
+  String get paymentConfirmMerchantConfirmed;
+
   /// No description provided for @businessOrdersReject.
   ///
   /// In ar, this message translates to:
@@ -3385,6 +3445,18 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'اكتمل هذا الطلب.'**
   String get deliveryCompleted;
+
+  /// No description provided for @paymentConfirmDriverButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد استلام رسوم التوصيل نقدًا'**
+  String get paymentConfirmDriverButton;
+
+  /// No description provided for @paymentConfirmDriverConfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تأكيد استلام رسوم التوصيل'**
+  String get paymentConfirmDriverConfirmed;
 
   /// No description provided for @deliveryCustomerSection.
   ///

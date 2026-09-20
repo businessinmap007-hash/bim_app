@@ -98,6 +98,12 @@ class MyOrdersController extends StateNotifier<MyOrdersState> {
     state = state.copyWith(items: [for (final o in state.items) o.id == id ? updated : o]);
     return updated;
   }
+
+  Future<PlacedOrder> confirmPayment(int id) async {
+    final updated = await _api.confirmPayment(id);
+    state = state.copyWith(items: [for (final o in state.items) o.id == id ? updated : o]);
+    return updated;
+  }
 }
 
 final myOrdersControllerProvider = StateNotifierProvider<MyOrdersController, MyOrdersState>((ref) {

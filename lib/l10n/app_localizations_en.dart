@@ -1217,6 +1217,40 @@ class AppLocalizationsEn extends AppLocalizations {
   String get businessOrdersDepositUncovered => 'No deposit or guarantee cover';
 
   @override
+  String get paymentConfirmSectionTitle => 'Payment confirmation';
+
+  @override
+  String get paymentConfirmCustomerStatusLabel => 'Customer payment';
+
+  @override
+  String get paymentConfirmMerchantStatusLabel =>
+      'Merchant receipt of the order amount';
+
+  @override
+  String get paymentConfirmDriverStatusLabel =>
+      'Driver receipt of the delivery fee';
+
+  @override
+  String get paymentConfirmStatusConfirmed => 'Confirmed';
+
+  @override
+  String get paymentConfirmStatusPending => 'Not yet confirmed';
+
+  @override
+  String get paymentConfirmCustomerButton => 'I confirm I paid in cash';
+
+  @override
+  String get paymentConfirmCustomerConfirmed => 'Your payment is confirmed';
+
+  @override
+  String get paymentConfirmMerchantButton =>
+      'Confirm cash received for the order';
+
+  @override
+  String get paymentConfirmMerchantConfirmed =>
+      'Order amount confirmed received';
+
+  @override
   String get businessOrdersReject => 'Reject';
 
   @override
@@ -1803,6 +1837,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deliveryCompleted => 'This delivery is complete.';
+
+  @override
+  String get paymentConfirmDriverButton => 'Confirm cash received for delivery';
+
+  @override
+  String get paymentConfirmDriverConfirmed => 'Delivery fee confirmed received';
 
   @override
   String get deliveryCustomerSection => 'Customer';

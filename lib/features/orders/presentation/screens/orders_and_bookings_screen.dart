@@ -248,6 +248,22 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
     }
   }
 
+  Future<void> _confirmPayment(PlacedOrder order) async {
+    final l10n = AppLocalizations.of(context)!;
+    setState(() => _busy = true);
+    try {
+      final updated = await ref.read(myOrdersControllerProvider.notifier).confirmPayment(order.id);
+      if (mounted) setState(() => _detail = updated);
+    } catch (e) {
+      if (mounted) {
+        final message = e is ApiException ? e.message : l10n.commonSomethingWentWrong;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
   Future<void> _reorder(PlacedOrder order) async {
     final l10n = AppLocalizations.of(context)!;
     setState(() => _busy = true);
@@ -449,6 +465,52 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
           if (order.notes != null && order.notes!.isNotEmpty) ...[
             const SizedBox(height: 12),
             Text(order.notes!, style: Theme.of(context).textTheme.bodySmall),
+          ],
+          if (order.status != 'cancelled' && order.isCashPayment) ...[
+            const Divider(height: 24),
+            Text(l10n.paymentConfirmSectionTitle, style: Theme.of(context).textTheme.titleSmall),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(l10n.paymentConfirmMerchantStatusLabel, style: Theme.of(context).textTheme.bodySmall),
+                Text(
+                  order.merchantPaymentConfirmedAt != null ? l10n.paymentConfirmStatusConfirmed : l10n.paymentConfirmStatusPending,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: order.merchantPaymentConfirmedAt != null ? AppColors.success : Theme.of(context).hintColor,
+                  ),
+                ),
+              ],
+            ),
+            if (order.fulfillmentType == 'delivery')
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(l10n.paymentConfirmDriverStatusLabel, style: Theme.of(context).textTheme.bodySmall),
+                  Text(
+                    order.driverPaymentConfirmedAt != null ? l10n.paymentConfirmStatusConfirmed : l10n.paymentConfirmStatusPending,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: order.driverPaymentConfirmedAt != null ? AppColors.success : Theme.of(context).hintColor,
+                    ),
+                  ),
+                ],
+              ),
+            const SizedBox(height: 8),
+            if (order.customerPaymentConfirmedAt != null)
+              Row(
+                children: [
+                  const Icon(Icons.check_circle, size: 16, color: AppColors.success),
+                  const SizedBox(width: 6),
+                  Text(l10n.paymentConfirmCustomerConfirmed, style: TextStyle(color: AppColors.success)),
+                ],
+              )
+            else
+              OutlinedButton(
+                onPressed: _busy ? null : () => _confirmPayment(order),
+                child: Text(l10n.paymentConfirmCustomerButton),
+              ),
           ],
           const SizedBox(height: 20),
           // The driver has picked it up but hasn't handed it over yet — the

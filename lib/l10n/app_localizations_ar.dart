@@ -1233,6 +1233,36 @@ class AppLocalizationsAr extends AppLocalizations {
   String get businessOrdersDepositUncovered => 'بلا ضمان أو ديبوزيت';
 
   @override
+  String get paymentConfirmSectionTitle => 'تأكيد الدفع';
+
+  @override
+  String get paymentConfirmCustomerStatusLabel => 'دفع العميل';
+
+  @override
+  String get paymentConfirmMerchantStatusLabel => 'استلام التاجر لمبلغ الطلب';
+
+  @override
+  String get paymentConfirmDriverStatusLabel => 'استلام الموصّل لرسوم التوصيل';
+
+  @override
+  String get paymentConfirmStatusConfirmed => 'تم التأكيد';
+
+  @override
+  String get paymentConfirmStatusPending => 'لم يتم التأكيد بعد';
+
+  @override
+  String get paymentConfirmCustomerButton => 'أكدت أنني دفعت نقدًا';
+
+  @override
+  String get paymentConfirmCustomerConfirmed => 'تم تأكيد دفعك';
+
+  @override
+  String get paymentConfirmMerchantButton => 'تأكيد استلام مبلغ الطلب نقدًا';
+
+  @override
+  String get paymentConfirmMerchantConfirmed => 'تم تأكيد استلام مبلغ الطلب';
+
+  @override
   String get businessOrdersReject => 'رفض';
 
   @override
@@ -1814,6 +1844,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get deliveryCompleted => 'اكتمل هذا الطلب.';
+
+  @override
+  String get paymentConfirmDriverButton => 'تأكيد استلام رسوم التوصيل نقدًا';
+
+  @override
+  String get paymentConfirmDriverConfirmed => 'تم تأكيد استلام رسوم التوصيل';
 
   @override
   String get deliveryCustomerSection => 'العميل';

@@ -109,6 +109,11 @@ class DeliveryApi {
     data: {'eta_minutes': ?etaMinutes, 'eta_at': ?etaAt?.toIso8601String()},
   );
 
+  /// The assigned driver confirms they collected the delivery_fee in cash
+  /// from the customer — their own leg only, refused before the order
+  /// actually reaches the delivered stage.
+  Future<void> confirmPaymentReceived(int orderId) => _client.post('/delivery/orders/$orderId/confirm-payment');
+
   /// A driver accepting an unassigned order from the open pool (existing,
   /// pre-assignment path — kept here so the driver dashboard can offer it
   /// alongside "my active orders" if the driver isn't privately linked).

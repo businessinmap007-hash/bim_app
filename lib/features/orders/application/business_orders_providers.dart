@@ -175,6 +175,16 @@ class BusinessOrderDetailController extends StateNotifier<BusinessOrderDetailSta
     }
   }
 
+  Future<void> confirmPayment() async {
+    state = state.copyWith(isBusy: true);
+    try {
+      final order = await _api.businessConfirmPayment(orderId);
+      state = state.copyWith(order: order, isBusy: false);
+    } finally {
+      if (mounted) state = state.copyWith(isBusy: false);
+    }
+  }
+
   Future<void> markItemUnavailable(int itemId, {String? note}) async {
     state = state.copyWith(isBusy: true);
     try {

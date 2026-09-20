@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../app/theme/app_colors.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../orders/data/models/placed_order.dart';
@@ -25,6 +26,7 @@ class DriverOrderDetailScreen extends ConsumerStatefulWidget {
 
 class _DriverOrderDetailScreenState extends ConsumerState<DriverOrderDetailScreen> {
   late String? _stage = widget.order.deliveryStage;
+  late bool _paymentConfirmed = widget.order.driverPaymentConfirmedAt != null;
   bool _busy = false;
   double? _distanceKm;
   bool _calculatingDistance = false;
@@ -70,6 +72,22 @@ class _DriverOrderDetailScreenState extends ConsumerState<DriverOrderDetailScree
           ),
         ),
       );
+    } catch (e) {
+      if (mounted) {
+        final message = e is ApiException ? e.message : l10n.commonSomethingWentWrong;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _confirmPayment() async {
+    final l10n = AppLocalizations.of(context)!;
+    setState(() => _busy = true);
+    try {
+      await ref.read(deliveryApiProvider).confirmPaymentReceived(widget.order.id);
+      if (mounted) setState(() => _paymentConfirmed = true);
     } catch (e) {
       if (mounted) {
         final message = e is ApiException ? e.message : l10n.commonSomethingWentWrong;
@@ -227,8 +245,25 @@ class _DriverOrderDetailScreenState extends ConsumerState<DriverOrderDetailScree
               icon: const Icon(Icons.qr_code_2),
               label: Text(l10n.deliveryShowDeliveryQr),
             )
-          else
+          else ...[
             Text(l10n.deliveryCompleted, style: TextStyle(color: Theme.of(context).hintColor)),
+            if (order.deliveryFee > 0) ...[
+              const SizedBox(height: 12),
+              if (_paymentConfirmed)
+                Row(
+                  children: [
+                    const Icon(Icons.check_circle, size: 16, color: AppColors.success),
+                    const SizedBox(width: 6),
+                    Text(l10n.paymentConfirmDriverConfirmed, style: TextStyle(color: AppColors.success)),
+                  ],
+                )
+              else
+                OutlinedButton(
+                  onPressed: _busy ? null : _confirmPayment,
+                  child: Text(l10n.paymentConfirmDriverButton),
+                ),
+            ],
+          ],
         ],
       ),
     );
