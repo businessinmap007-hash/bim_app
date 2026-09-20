@@ -60,6 +60,15 @@ class OrdersApi {
     return PlacedOrder.fromJson(data);
   }
 
+  /// Ticks/unticks "I trust" toward another party of the order. The
+  /// merchant's calls go through the business-scoped route so a delegated
+  /// staff member acts as the business.
+  Future<bool> setTrust(int orderId, String party, bool trusted, {bool asBusiness = false}) async {
+    final path = asBusiness ? '/business/orders/$orderId/trust' : '/orders/$orderId/trust';
+    final data = await _client.post(path, data: {'party': party, 'trusted': trusted}) as Map<String, dynamic>;
+    return data['trusted'] as bool? ?? trusted;
+  }
+
   Future<ReorderResult> reorder(int id) async {
     final data =
         await _client.post('/orders/$id/reorder') as Map<String, dynamic>;

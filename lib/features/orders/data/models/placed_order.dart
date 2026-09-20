@@ -93,6 +93,9 @@ class PlacedOrder {
   final DateTime? merchantPaymentConfirmedAt;
   final DateTime? driverPaymentConfirmedAt;
   final bool depositReleased;
+  // The viewer's "I trust" ticks toward the other parties of the order, keyed
+  // by 'customer' / 'business' / 'driver'. Null on list rows.
+  final Map<String, ({bool trustedByMe, bool trustsMe})>? trust;
 
   const PlacedOrder({
     required this.id,
@@ -128,6 +131,7 @@ class PlacedOrder {
     this.merchantPaymentConfirmedAt,
     this.driverPaymentConfirmedAt,
     this.depositReleased = false,
+    this.trust,
   });
 
   /// Mirrors `OrderController::cancelPendingOrder` — pending and not yet
@@ -194,6 +198,12 @@ class PlacedOrder {
       merchantPaymentConfirmedAt: DateTime.tryParse(paymentConfirmations['merchant_confirmed_at'] as String? ?? ''),
       driverPaymentConfirmedAt: DateTime.tryParse(paymentConfirmations['driver_confirmed_at'] as String? ?? ''),
       depositReleased: deposit['released'] as bool? ?? false,
+      trust: (json['trust'] as Map<String, dynamic>?)?.map(
+        (role, v) => MapEntry(role, (
+          trustedByMe: (v as Map<String, dynamic>)['trusted_by_me'] as bool? ?? false,
+          trustsMe: v['trusts_me'] as bool? ?? false,
+        )),
+      ),
     );
   }
 }

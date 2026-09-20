@@ -7,6 +7,8 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../orders/data/models/placed_order.dart';
+import '../../../orders/application/orders_providers.dart';
+import '../../../orders/presentation/widgets/order_trust_section.dart';
 import '../../application/delivery_providers.dart';
 import 'token_qr_screen.dart';
 import 'token_scan_screen.dart';
@@ -224,6 +226,10 @@ class _DriverOrderDetailScreenState extends ConsumerState<DriverOrderDetailScree
               Text(l10n.businessOrdersTotal, style: Theme.of(context).textTheme.titleSmall),
               Text(order.finalTotal.toStringAsFixed(0), style: Theme.of(context).textTheme.titleSmall),
             ],
+          ),
+          OrderTrustSection(
+            order: order,
+            onToggle: (party, trusted) => ref.read(ordersApiProvider).setTrust(order.id, party, trusted),
           ),
           if (_stage == 'assigned' || _stage == 'picked_up') ...[
             OutlinedButton.icon(

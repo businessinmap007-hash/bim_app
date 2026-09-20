@@ -9,7 +9,9 @@ import '../../../delivery/presentation/screens/assign_driver_screen.dart';
 import '../../../delivery/presentation/screens/token_qr_screen.dart';
 import '../../application/business_orders_providers.dart';
 import '../../data/models/placed_order.dart';
+import '../../application/orders_providers.dart';
 import '../widgets/order_tracker_timeline.dart';
+import '../widgets/order_trust_section.dart';
 
 /// The business's incoming-order queue — Api\V2\OrderController's business*
 /// endpoints. Dine-in/pickup/delivery menu orders only (never bookings,
@@ -570,6 +572,12 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                       child: Text(l10n.paymentConfirmMerchantButton),
                     ),
                 ],
+                OrderTrustSection(
+                  key: ValueKey('trust-$orderId'),
+                  order: order,
+                  onToggle: (party, trusted) =>
+                      ref.read(ordersApiProvider).setTrust(orderId, party, trusted, asBusiness: true),
+                ),
                 const SizedBox(height: 24),
                 if (state.isBusy)
                   const Center(child: CircularProgressIndicator())

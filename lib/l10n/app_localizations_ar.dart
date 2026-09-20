@@ -1236,6 +1236,21 @@ class AppLocalizationsAr extends AppLocalizations {
   String get paymentConfirmSectionTitle => 'تأكيد الدفع';
 
   @override
+  String get trustSectionTitle => 'الثقة';
+
+  @override
+  String get trustCustomer => 'أثق في العميل';
+
+  @override
+  String get trustBusiness => 'أثق في التاجر';
+
+  @override
+  String get trustDriver => 'أثق في الموصّل';
+
+  @override
+  String get trustsYouNote => 'يثق بك';
+
+  @override
   String get businessOrdersDepositReleased =>
       'تم فك التأمين بعد تأكيد جميع الأطراف';
 

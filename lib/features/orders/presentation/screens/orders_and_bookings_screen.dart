@@ -20,6 +20,7 @@ import '../../../wallet/presentation/widgets/wallet_pin_prompt.dart';
 import '../../application/orders_providers.dart';
 import '../../data/models/placed_order.dart';
 import '../widgets/order_tracker_timeline.dart';
+import '../widgets/order_trust_section.dart';
 
 /// "My orders & bookings" — every placed order (menu/retail checkout) and
 /// every booking request the customer has made, each with its own tab.
@@ -512,6 +513,11 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
                 child: Text(l10n.paymentConfirmCustomerButton),
               ),
           ],
+          OrderTrustSection(
+            key: ValueKey('trust-${order.id}'),
+            order: order,
+            onToggle: (party, trusted) => ref.read(ordersApiProvider).setTrust(order.id, party, trusted),
+          ),
           const SizedBox(height: 20),
           // The driver has picked it up but hasn't handed it over yet — the
           // customer's half of the two-QR loop (DeliveryDispatchService).

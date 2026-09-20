@@ -1220,6 +1220,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paymentConfirmSectionTitle => 'Payment confirmation';
 
   @override
+  String get trustSectionTitle => 'Trust';
+
+  @override
+  String get trustCustomer => 'I trust the customer';
+
+  @override
+  String get trustBusiness => 'I trust the merchant';
+
+  @override
+  String get trustDriver => 'I trust the driver';
+
+  @override
+  String get trustsYouNote => 'Trusts you';
+
+  @override
   String get businessOrdersDepositReleased =>
       'Deposit released after all parties confirmed';
 

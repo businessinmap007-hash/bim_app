@@ -2330,6 +2330,36 @@ abstract class AppLocalizations {
   /// **'تأكيد الدفع'**
   String get paymentConfirmSectionTitle;
 
+  /// No description provided for @trustSectionTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الثقة'**
+  String get trustSectionTitle;
+
+  /// No description provided for @trustCustomer.
+  ///
+  /// In ar, this message translates to:
+  /// **'أثق في العميل'**
+  String get trustCustomer;
+
+  /// No description provided for @trustBusiness.
+  ///
+  /// In ar, this message translates to:
+  /// **'أثق في التاجر'**
+  String get trustBusiness;
+
+  /// No description provided for @trustDriver.
+  ///
+  /// In ar, this message translates to:
+  /// **'أثق في الموصّل'**
+  String get trustDriver;
+
+  /// No description provided for @trustsYouNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'يثق بك'**
+  String get trustsYouNote;
+
   /// No description provided for @businessOrdersDepositReleased.
   ///
   /// In ar, this message translates to:
