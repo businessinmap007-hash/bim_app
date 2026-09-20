@@ -405,6 +405,7 @@
   "businessOrdersDepositCovered": "مغطّى بضمان أو ديبوزيت",
   "businessOrdersDepositUncovered": "بلا ضمان أو ديبوزيت",
   "paymentConfirmSectionTitle": "تأكيد الدفع",
+  "businessOrdersDepositReleased": "تم فك التأمين بعد تأكيد جميع الأطراف",
   "paymentConfirmCustomerStatusLabel": "دفع العميل",
   "paymentConfirmMerchantStatusLabel": "استلام التاجر لمبلغ الطلب",
   "paymentConfirmDriverStatusLabel": "استلام الموصّل لرسوم التوصيل",

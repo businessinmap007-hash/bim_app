@@ -1220,6 +1220,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paymentConfirmSectionTitle => 'Payment confirmation';
 
   @override
+  String get businessOrdersDepositReleased =>
+      'Deposit released after all parties confirmed';
+
+  @override
   String get paymentConfirmCustomerStatusLabel => 'Customer payment';
 
   @override

@@ -92,6 +92,7 @@ class PlacedOrder {
   final DateTime? customerPaymentConfirmedAt;
   final DateTime? merchantPaymentConfirmedAt;
   final DateTime? driverPaymentConfirmedAt;
+  final bool depositReleased;
 
   const PlacedOrder({
     required this.id,
@@ -126,6 +127,7 @@ class PlacedOrder {
     this.customerPaymentConfirmedAt,
     this.merchantPaymentConfirmedAt,
     this.driverPaymentConfirmedAt,
+    this.depositReleased = false,
   });
 
   /// Mirrors `OrderController::cancelPendingOrder` — pending and not yet
@@ -191,6 +193,7 @@ class PlacedOrder {
       customerPaymentConfirmedAt: DateTime.tryParse(paymentConfirmations['customer_confirmed_at'] as String? ?? ''),
       merchantPaymentConfirmedAt: DateTime.tryParse(paymentConfirmations['merchant_confirmed_at'] as String? ?? ''),
       driverPaymentConfirmedAt: DateTime.tryParse(paymentConfirmations['driver_confirmed_at'] as String? ?? ''),
+      depositReleased: deposit['released'] as bool? ?? false,
     );
   }
 }

@@ -517,6 +517,8 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                     order.depositCovered ? l10n.businessOrdersDepositCovered : l10n.businessOrdersDepositUncovered,
                     style: TextStyle(color: order.depositCovered ? AppColors.success : AppColors.error),
                   ),
+                  if (order.depositReleased)
+                    Text(l10n.businessOrdersDepositReleased, style: TextStyle(color: AppColors.success)),
                 ],
                 if (order.status != 'cancelled' && order.isCashPayment) ...[
                   const Divider(height: 24),

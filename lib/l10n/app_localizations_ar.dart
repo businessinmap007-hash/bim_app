@@ -1236,6 +1236,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get paymentConfirmSectionTitle => 'تأكيد الدفع';
 
   @override
+  String get businessOrdersDepositReleased =>
+      'تم فك التأمين بعد تأكيد جميع الأطراف';
+
+  @override
   String get paymentConfirmCustomerStatusLabel => 'دفع العميل';
 
   @override

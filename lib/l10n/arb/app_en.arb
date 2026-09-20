@@ -405,6 +405,7 @@
   "businessOrdersDepositCovered": "Covered by a deposit/guarantee",
   "businessOrdersDepositUncovered": "No deposit or guarantee cover",
   "paymentConfirmSectionTitle": "Payment confirmation",
+  "businessOrdersDepositReleased": "Deposit released after all parties confirmed",
   "paymentConfirmCustomerStatusLabel": "Customer payment",
   "paymentConfirmMerchantStatusLabel": "Merchant receipt of the order amount",
   "paymentConfirmDriverStatusLabel": "Driver receipt of the delivery fee",

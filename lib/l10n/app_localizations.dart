@@ -2330,6 +2330,12 @@ abstract class AppLocalizations {
   /// **'تأكيد الدفع'**
   String get paymentConfirmSectionTitle;
 
+  /// No description provided for @businessOrdersDepositReleased.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم فك التأمين بعد تأكيد جميع الأطراف'**
+  String get businessOrdersDepositReleased;
+
   /// No description provided for @paymentConfirmCustomerStatusLabel.
   ///
   /// In ar, this message translates to:
