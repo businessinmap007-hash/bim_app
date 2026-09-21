@@ -362,6 +362,36 @@ abstract class AppLocalizations {
   /// **'تسجيل الخروج'**
   String get authLogout;
 
+  /// No description provided for @authChangePassword.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغيير كلمة المرور'**
+  String get authChangePassword;
+
+  /// No description provided for @authCurrentPassword.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمة المرور الحالية'**
+  String get authCurrentPassword;
+
+  /// No description provided for @authChangePasswordSuccess.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تغيير كلمة المرور، وتم تسجيل الخروج من باقي الأجهزة.'**
+  String get authChangePasswordSuccess;
+
+  /// No description provided for @authLogoutAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل الخروج من كل الأجهزة'**
+  String get authLogoutAll;
+
+  /// No description provided for @authLogoutAllBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيتم تسجيل خروجك من هذا الجهاز ومن كل الأجهزة الأخرى المسجّل دخولك عليها. هل تريد المتابعة؟'**
+  String get authLogoutAllBody;
+
   /// No description provided for @authName.
   ///
   /// In ar, this message translates to:

@@ -148,6 +148,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authLogout => 'Log out';
 
   @override
+  String get authChangePassword => 'Change password';
+
+  @override
+  String get authCurrentPassword => 'Current password';
+
+  @override
+  String get authChangePasswordSuccess =>
+      'Password changed. Your other devices were signed out.';
+
+  @override
+  String get authLogoutAll => 'Sign out of all devices';
+
+  @override
+  String get authLogoutAllBody =>
+      'You will be signed out of this device and every other device where you are signed in. Continue?';
+
+  @override
   String get authName => 'Name';
 
   @override

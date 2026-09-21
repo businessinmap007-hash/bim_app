@@ -6,6 +6,8 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/application/auth_controller.dart';
 import '../../../auth/presentation/screens/account_deletion_screen.dart';
+import '../../../auth/presentation/screens/change_password_screen.dart';
+import '../../../../core/network/api_exception.dart';
 import '../../../media/presentation/widgets/watermark_repeat_selector.dart';
 import '../../../ratings/presentation/screens/my_rating_screen.dart';
 import '../../application/layout_style_controller.dart';
@@ -137,6 +139,21 @@ class SettingsScreen extends ConsumerWidget {
               ),
               const Divider(height: 1),
               ListTile(
+                leading: const Icon(Icons.lock_outline),
+                title: Text(l10n.authChangePassword),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const ChangePasswordScreen()),
+                ),
+              ),
+              const Divider(height: 1),
+              ListTile(
+                leading: const Icon(Icons.devices_outlined),
+                title: Text(l10n.authLogoutAll),
+                onTap: () => _logoutAll(context, ref),
+              ),
+              const Divider(height: 1),
+              ListTile(
                 leading: Icon(
                   Icons.delete_forever_outlined,
                   color: Theme.of(context).colorScheme.error,
@@ -213,6 +230,30 @@ class SettingsScreen extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+Future<void> _logoutAll(BuildContext context, WidgetRef ref) async {
+  final l10n = AppLocalizations.of(context)!;
+  final messenger = ScaffoldMessenger.of(context);
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text(l10n.authLogoutAll),
+      content: Text(l10n.authLogoutAllBody),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l10n.commonCancel)),
+        TextButton(onPressed: () => Navigator.pop(context, true), child: Text(l10n.authLogout)),
+      ],
+    ),
+  );
+  if (confirmed != true) return;
+  try {
+    await ref.read(authControllerProvider.notifier).logoutAll();
+  } catch (e) {
+    messenger.showSnackBar(
+      SnackBar(content: Text(e is ApiException ? e.message : l10n.commonSomethingWentWrong)),
     );
   }
 }

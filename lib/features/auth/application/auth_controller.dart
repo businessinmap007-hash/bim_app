@@ -167,6 +167,17 @@ class AuthController extends StateNotifier<AuthState> {
     _resetAccountScopedProviders();
   }
 
+  /// Sign out of every device. Unlike [logout], a server failure is NOT
+  /// swallowed: the user asked to revoke all sessions, so pretending it
+  /// worked would leave other devices signed in.
+  Future<void> logoutAll() async {
+    await _ref.read(pushNotificationServiceProvider).unregisterCurrentToken();
+    await _authApi.logoutAll();
+    await _ref.read(tokenStorageProvider).clear();
+    state = const AuthSignedOut();
+    _resetAccountScopedProviders();
+  }
+
   /// Every plain (non-autoDispose) provider that holds one account's own
   /// data — posts, orders, cart, and so on. None of these are `.family`ed
   /// by user id, so left alone they outlive a logout/login cycle: the next

@@ -73,6 +73,23 @@ class AuthApi {
 
   Future<void> logout() => _client.post('/auth/logout');
 
+  /// Revokes every session of this account, this device included.
+  Future<void> logoutAll() => _client.post('/auth/logout-all');
+
+  /// POST /profile/password — the server also revokes every OTHER session.
+  Future<void> changePassword({
+    required String currentPassword,
+    required String password,
+    required String passwordConfirmation,
+  }) => _client.post(
+    '/profile/password',
+    data: {
+      'current_password': currentPassword,
+      'password': password,
+      'password_confirmation': passwordConfirmation,
+    },
+  );
+
   Future<void> forgotPassword(String email) =>
       _client.post('/auth/password/forgot', data: {'email': email});
 

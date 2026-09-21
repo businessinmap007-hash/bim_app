@@ -146,6 +146,23 @@ class AppLocalizationsAr extends AppLocalizations {
   String get authLogout => 'تسجيل الخروج';
 
   @override
+  String get authChangePassword => 'تغيير كلمة المرور';
+
+  @override
+  String get authCurrentPassword => 'كلمة المرور الحالية';
+
+  @override
+  String get authChangePasswordSuccess =>
+      'تم تغيير كلمة المرور، وتم تسجيل الخروج من باقي الأجهزة.';
+
+  @override
+  String get authLogoutAll => 'تسجيل الخروج من كل الأجهزة';
+
+  @override
+  String get authLogoutAllBody =>
+      'سيتم تسجيل خروجك من هذا الجهاز ومن كل الأجهزة الأخرى المسجّل دخولك عليها. هل تريد المتابعة؟';
+
+  @override
   String get authName => 'الاسم';
 
   @override
