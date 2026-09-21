@@ -12,7 +12,9 @@ import '../../../orders/presentation/widgets/order_trust_section.dart';
 import '../../application/delivery_providers.dart';
 import '../widgets/fee_amount_dialog.dart';
 import 'token_qr_screen.dart';
-import 'token_scan_screen.dart';
+// TEMPORARY: unused while the camera scan below is bypassed for emulator
+// testing — restore this import alongside the revert in _scanPickup().
+// import 'token_scan_screen.dart';
 
 /// Everything the driver needs for one delivery, in one place — the full
 /// invoice, the customer's address/phone/location, and whichever of the two
@@ -38,11 +40,15 @@ class _DriverOrderDetailScreenState extends ConsumerState<DriverOrderDetailScree
 
   Future<void> _scanPickup() async {
     final l10n = AppLocalizations.of(context)!;
-    final token = await Navigator.of(context).push<String>(
-      MaterialPageRoute(
-        builder: (_) => TokenScanScreen(title: l10n.deliveryScanPickupTitle, hint: l10n.deliveryScanPickupHint),
-      ),
-    );
+    // TEMPORARY: camera scanning swapped for manual entry while testing on
+    // an emulator with no usable camera. Revert to the commented-out
+    // TokenScanScreen push below once testing is done.
+    // final token = await Navigator.of(context).push<String>(
+    //   MaterialPageRoute(
+    //     builder: (_) => TokenScanScreen(title: l10n.deliveryScanPickupTitle, hint: l10n.deliveryScanPickupHint),
+    //   ),
+    // );
+    final token = await _promptForTokenManually(l10n.deliveryScanPickupTitle);
     if (token == null || !mounted) return;
 
     setState(() => _busy = true);
@@ -60,6 +66,31 @@ class _DriverOrderDetailScreenState extends ConsumerState<DriverOrderDetailScree
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+  }
+
+  /// TEMPORARY dev helper for the emulator-camera bypass above — paste the
+  /// pickup token in by hand instead of scanning it. Remove alongside the
+  /// revert of _scanPickup()'s camera step.
+  Future<String?> _promptForTokenManually(String title) async {
+    final controller = TextEditingController();
+    return showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          decoration: const InputDecoration(labelText: 'Token (dev only)'),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancel')),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(controller.text.trim()),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _showDeliveryQr() async {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../../../core/network/api_exception.dart';
@@ -74,6 +75,16 @@ class _TokenQrScreenState extends State<TokenQrScreen> {
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
                 child: QrImageView(data: _token, size: 240, backgroundColor: Colors.white),
+              ),
+              // TEMPORARY (emulator testing, no camera): show the code as text so it
+              // can be copied to the other emulator and pasted into the manual
+              // entry dialog. Remove with the other QR bypasses.
+              const SizedBox(height: 12),
+              SelectableText(_token, textAlign: TextAlign.center, style: const TextStyle(fontFamily: 'monospace', fontSize: 12)),
+              TextButton.icon(
+                onPressed: () => Clipboard.setData(ClipboardData(text: _token)),
+                icon: const Icon(Icons.copy, size: 16),
+                label: const Text('Copy code (dev only)'),
               ),
               if (widget.onReset != null) ...[
                 const SizedBox(height: 16),

@@ -13,7 +13,9 @@ import '../../../disputes/application/disputes_providers.dart';
 import '../../../disputes/presentation/screens/dispute_detail_screen.dart';
 import '../../../disputes/presentation/widgets/dispute_reason_picker.dart';
 import '../../../delivery/application/delivery_providers.dart';
-import '../../../delivery/presentation/screens/token_scan_screen.dart';
+// TEMPORARY: unused while the camera scan below is bypassed for emulator
+// testing — restore this import alongside the revert in _confirmDelivery().
+// import '../../../delivery/presentation/screens/token_scan_screen.dart';
 import '../../../projects/presentation/screens/project_progress_screen.dart';
 import '../../../ratings/presentation/widgets/leave_review_sheet.dart';
 import '../../../wallet/presentation/widgets/wallet_pin_prompt.dart';
@@ -333,11 +335,15 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
 
   Future<void> _confirmDelivery(PlacedOrder order) async {
     final l10n = AppLocalizations.of(context)!;
-    final token = await Navigator.of(context).push<String>(
-      MaterialPageRoute(
-        builder: (_) => TokenScanScreen(title: l10n.deliveryScanReceiptTitle, hint: l10n.deliveryScanReceiptHint),
-      ),
-    );
+    // TEMPORARY: camera scanning swapped for manual entry while testing on
+    // an emulator with no usable camera. Revert to the commented-out
+    // TokenScanScreen push below once testing is done.
+    // final token = await Navigator.of(context).push<String>(
+    //   MaterialPageRoute(
+    //     builder: (_) => TokenScanScreen(title: l10n.deliveryScanReceiptTitle, hint: l10n.deliveryScanReceiptHint),
+    //   ),
+    // );
+    final token = await _promptForTokenManually(l10n.deliveryScanReceiptTitle);
     if (token == null || !mounted) return;
 
     setState(() => _busy = true);
@@ -355,6 +361,31 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+  }
+
+  /// TEMPORARY dev helper for the emulator-camera bypass above — paste the
+  /// delivery token in by hand instead of scanning it. Remove alongside the
+  /// revert of _confirmDelivery()'s camera step.
+  Future<String?> _promptForTokenManually(String title) async {
+    final controller = TextEditingController();
+    return showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          decoration: const InputDecoration(labelText: 'Token (dev only)'),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancel')),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(controller.text.trim()),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _reportProblem(PlacedOrder order) async {
@@ -608,7 +639,7 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
                 ),
               ],
             ),
-            if (order.fulfillmentType == 'delivery')
+            if (order.fulfillmentType == 'delivery' && order.shipping == null)
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
