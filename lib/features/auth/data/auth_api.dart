@@ -37,6 +37,8 @@ class AuthApi {
     required int governorateId,
     required int cityId,
     required String addressLine,
+    double? latitude,
+    double? longitude,
   }) async {
     final body = await _client.postForBody(
       '/auth/register',
@@ -53,6 +55,8 @@ class AuthApi {
         'governorate_id': governorateId,
         'city_id': cityId,
         'address_line': addressLine,
+        'latitude': ?latitude,
+        'longitude': ?longitude,
         'terms_accepted': true,
       },
     );

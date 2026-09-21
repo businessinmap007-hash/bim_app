@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -6,6 +7,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../categories/presentation/widgets/category_picker_field.dart';
+import '../../../location/application/location_providers.dart';
 import '../../../location/presentation/widgets/location_picker_field.dart';
 import '../../application/auth_controller.dart';
 
@@ -27,8 +29,51 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   bool _categoryTouched = false;
   LocationSelection? _location;
   bool _locationTouched = false;
+  bool _locating = false;
+  double? _latitude;
+  double? _longitude;
 
   bool get _isBusiness => widget.accountType == 'business';
+
+  /// GPS -> our own governorate/city (server-side nearest-city lookup), still
+  /// overridable through the picker below.
+  Future<void> _useCurrentLocation() async {
+    final l10n = AppLocalizations.of(context)!;
+    setState(() => _locating = true);
+    try {
+      var permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+        if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.profileLocationPermissionDenied)));
+        return;
+      }
+      final position = await Geolocator.getCurrentPosition();
+      final match = await ref.read(locationApiProvider).nearest(latitude: position.latitude, longitude: position.longitude);
+      if (!mounted) return;
+      if (match == null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.profileLocationNoMatch)));
+        return;
+      }
+      final en = Localizations.localeOf(context).languageCode == 'en';
+      setState(() {
+        _latitude = position.latitude;
+        _longitude = position.longitude;
+        _location = LocationSelection(
+          countryId: match.countryId,
+          governorateId: match.governorateId,
+          cityId: match.cityId,
+          label:
+              '${en && match.governorateNameEn != null ? match.governorateNameEn! : match.governorateNameAr} — '
+              '${en && match.cityNameEn != null ? match.cityNameEn! : match.cityNameAr}',
+        );
+        _locationTouched = true;
+      });
+    } catch (_) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+    } finally {
+      if (mounted) setState(() => _locating = false);
+    }
+  }
 
   Future<void> _submit() async {
     final formOk = _formKey.currentState?.saveAndValidate() ?? false;
@@ -61,6 +106,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             governorateId: _location!.governorateId,
             cityId: _location!.cityId,
             addressLine: (v['address_line'] as String).trim(),
+            latitude: _latitude,
+            longitude: _longitude,
           );
     } on ApiException catch (e) {
       setState(() => _error = e.message);
@@ -150,12 +197,23 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       ),
                     ],
                     const SizedBox(height: 16),
+                    OutlinedButton.icon(
+                      onPressed: _locating ? null : _useCurrentLocation,
+                      icon: _locating
+                          ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                          : const Icon(Icons.my_location, size: 18),
+                      label: Text(l10n.profileUseCurrentLocation),
+                    ),
+                    const SizedBox(height: 12),
                     LocationPickerField(
                       value: _location,
                       errorText: _locationTouched && _location == null ? l10n.validationRequired : null,
                       onChanged: (selection) => setState(() {
                         _location = selection;
                         _locationTouched = true;
+                        // A hand-picked place no longer matches the GPS point.
+                        _latitude = null;
+                        _longitude = null;
                       }),
                     ),
                     const SizedBox(height: 16),

@@ -108,6 +108,8 @@ class AuthController extends StateNotifier<AuthState> {
     required int governorateId,
     required int cityId,
     required String addressLine,
+    double? latitude,
+    double? longitude,
   }) async {
     final result = await _authApi.register(
       name: name,
@@ -122,6 +124,8 @@ class AuthController extends StateNotifier<AuthState> {
       governorateId: governorateId,
       cityId: cityId,
       addressLine: addressLine,
+      latitude: latitude,
+      longitude: longitude,
     );
     await _ref.read(tokenStorageProvider).write(result.token);
     state = AuthSignedIn(result.user);
