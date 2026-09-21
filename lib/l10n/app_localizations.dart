@@ -3578,6 +3578,24 @@ abstract class AppLocalizations {
   /// **'أدخل عنوان المهمة.'**
   String get agendaTitleRequired;
 
+  /// No description provided for @agendaWeekView.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض الأسبوع'**
+  String get agendaWeekView;
+
+  /// No description provided for @agendaDayView.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض اليوم'**
+  String get agendaDayView;
+
+  /// No description provided for @agendaNothing.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا شيء'**
+  String get agendaNothing;
+
   /// No description provided for @agendaRepeat.
   ///
   /// In ar, this message translates to:

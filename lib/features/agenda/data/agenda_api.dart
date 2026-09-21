@@ -3,8 +3,8 @@ import 'models/agenda_item.dart';
 import 'models/agenda_settings.dart';
 
 /// /agenda — see Api\V2\AgendaController. Day view, personal tasks (single
-/// and recurring) and the calendar-subscription URL are wired up; the week
-/// grid and the one-off .ics download are not (the subscription covers it).
+/// and recurring), the week grid and the calendar-subscription URL are wired
+/// up; the one-off .ics download is not (the subscription covers it).
 class AgendaApi {
   final ApiClient _client;
   const AgendaApi(this._client);
@@ -17,6 +17,12 @@ class AgendaApi {
     return (data['items'] as List<dynamic>? ?? [])
         .map((e) => AgendaItem.fromJson(e as Map<String, dynamic>))
         .toList();
+  }
+
+  /// The seven days around [date] (Saturday to Friday), empty days included.
+  Future<AgendaWeek> week(DateTime date) async {
+    final data = await _client.get('/agenda/week', query: {'date': _dateOnly(date)}) as Map<String, dynamic>;
+    return AgendaWeek.fromJson(data);
   }
 
   Future<AgendaItem> addTask({

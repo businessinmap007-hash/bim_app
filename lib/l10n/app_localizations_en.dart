@@ -1911,6 +1911,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get agendaTitleRequired => 'Enter a title for the task.';
 
   @override
+  String get agendaWeekView => 'Week view';
+
+  @override
+  String get agendaDayView => 'Day view';
+
+  @override
+  String get agendaNothing => 'Nothing';
+
+  @override
   String get agendaRepeat => 'Repeat';
 
   @override

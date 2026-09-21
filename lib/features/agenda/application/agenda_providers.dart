@@ -9,6 +9,11 @@ final agendaApiProvider = Provider<AgendaApi>((ref) {
   return AgendaApi(ref.watch(apiClientProvider));
 });
 
+/// The week containing the given (date-only) day.
+final agendaWeekProvider = FutureProvider.autoDispose.family<AgendaWeek, DateTime>((ref, date) {
+  return ref.watch(agendaApiProvider).week(date);
+});
+
 final agendaFeedUrlProvider = FutureProvider.autoDispose<String>((ref) {
   return ref.watch(agendaApiProvider).feedUrl();
 });

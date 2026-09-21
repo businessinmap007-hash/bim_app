@@ -30,9 +30,10 @@ class AgendaScreen extends ConsumerStatefulWidget {
 
 class _AgendaScreenState extends ConsumerState<AgendaScreen> {
   DateTime _date = _dateOnly(DateTime.now());
+  bool _week = false;
 
   void _shiftDay(int delta) {
-    setState(() => _date = _date.add(Duration(days: delta)));
+    setState(() => _date = _date.add(Duration(days: _week ? delta * 7 : delta)));
   }
 
   Future<void> _addTask() async {
@@ -303,6 +304,7 @@ class _AgendaScreenState extends ConsumerState<AgendaScreen> {
             remind: remind,
           );
       ref.invalidate(agendaDayControllerProvider);
+      ref.invalidate(agendaWeekProvider);
       messenger.showSnackBar(
         SnackBar(
           content: Text(
@@ -326,6 +328,7 @@ class _AgendaScreenState extends ConsumerState<AgendaScreen> {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(agendaDayControllerProvider(_date));
     final isToday = _date == _dateOnly(DateTime.now());
+    final weekData = _week ? ref.watch(agendaWeekProvider(_date)).asData?.value : null;
 
     return Scaffold(
       appBar: AppBar(
@@ -342,6 +345,11 @@ class _AgendaScreenState extends ConsumerState<AgendaScreen> {
                 ),
               ),
             ),
+          IconButton(
+            icon: Icon(_week ? Icons.calendar_view_day_outlined : Icons.calendar_view_week_outlined),
+            tooltip: _week ? l10n.agendaDayView : l10n.agendaWeekView,
+            onPressed: () => setState(() => _week = !_week),
+          ),
           IconButton(
             icon: const Icon(Icons.settings_outlined),
             tooltip: l10n.agendaSettingsTitle,
@@ -363,7 +371,9 @@ class _AgendaScreenState extends ConsumerState<AgendaScreen> {
                   icon: const Icon(Icons.chevron_left_rounded),
                 ),
                 Text(
-                  _formatDate(_date),
+                  weekData != null && _week
+                      ? '${_formatDate(weekData.from)}  →  ${_formatDate(weekData.to)}'
+                      : _formatDate(_date),
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
                 IconButton(
@@ -375,7 +385,15 @@ class _AgendaScreenState extends ConsumerState<AgendaScreen> {
           ),
           const Divider(height: 1),
           Expanded(
-            child: state.isLoading
+            child: _week
+                ? _WeekGrid(
+                    date: _date,
+                    onOpenDay: (day) => setState(() {
+                      _date = day;
+                      _week = false;
+                    }),
+                  )
+                : state.isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : state.error != null
                 ? Center(
@@ -409,6 +427,85 @@ class _AgendaScreenState extends ConsumerState<AgendaScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: _addTask,
         child: const Icon(Icons.add_rounded),
+      ),
+    );
+  }
+}
+
+/// Seven days at a glance. Tapping a day opens it in the day view, where a
+/// task can be added or deleted.
+class _WeekGrid extends ConsumerWidget {
+  final DateTime date;
+  final ValueChanged<DateTime> onOpenDay;
+  const _WeekGrid({required this.date, required this.onOpenDay});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final week = ref.watch(agendaWeekProvider(date));
+    final today = _dateOnly(DateTime.now());
+
+    return week.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (_, _) => Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(l10n.commonSomethingWentWrong),
+            const SizedBox(height: 8),
+            OutlinedButton(onPressed: () => ref.invalidate(agendaWeekProvider(date)), child: Text(l10n.commonRetry)),
+          ],
+        ),
+      ),
+      data: (w) => RefreshIndicator(
+        onRefresh: () async => ref.invalidate(agendaWeekProvider(date)),
+        child: ListView(
+          padding: const EdgeInsets.all(12),
+          children: [
+            for (final day in w.days)
+              Card(
+                margin: const EdgeInsets.only(bottom: 8),
+                shape: _dateOnly(day.date) == today
+                    ? RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: BorderSide(color: theme.colorScheme.primary, width: 1.5),
+                      )
+                    : null,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: () => onOpenDay(_dateOnly(day.date)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${_weekdayLabel(l10n, day.date.weekday % 7)} · ${_formatDate(day.date)}',
+                          style: theme.textTheme.titleSmall,
+                        ),
+                        const SizedBox(height: 6),
+                        if (day.items.isEmpty)
+                          Text(l10n.agendaNothing, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor))
+                        else
+                          for (final item in day.items)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 2),
+                              child: Text(
+                                item.startsAt != null
+                                    ? '${_formatTimeRange(item.startsAt!, item.endsAt)}  ${item.title}'
+                                    : item.title,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

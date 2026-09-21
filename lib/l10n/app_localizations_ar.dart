@@ -1915,6 +1915,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get agendaTitleRequired => 'أدخل عنوان المهمة.';
 
   @override
+  String get agendaWeekView => 'عرض الأسبوع';
+
+  @override
+  String get agendaDayView => 'عرض اليوم';
+
+  @override
+  String get agendaNothing => 'لا شيء';
+
+  @override
   String get agendaRepeat => 'التكرار';
 
   @override
