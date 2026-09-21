@@ -5252,6 +5252,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trainingClientsEmpty => 'No client plans yet.';
 
   @override
+  String get trainingPickFromLibrary => 'Pick from the exercise library';
+
+  @override
+  String get trainingLibrarySearch => 'Search exercises';
+
+  @override
+  String get trainingLibraryAll => 'All';
+
+  @override
+  String get trainingLibraryEmpty => 'No matching exercises.';
+
+  @override
   String trainingWeeklyAverage(int percent) {
     return 'Your clients\' average adherence this week: $percent%';
   }

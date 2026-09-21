@@ -5243,6 +5243,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get trainingClientsEmpty => 'لا توجد خطط عملاء بعد.';
 
   @override
+  String get trainingPickFromLibrary => 'اختيار من مكتبة التمارين';
+
+  @override
+  String get trainingLibrarySearch => 'ابحث عن تمرين';
+
+  @override
+  String get trainingLibraryAll => 'الكل';
+
+  @override
+  String get trainingLibraryEmpty => 'لا توجد تمارين مطابقة.';
+
+  @override
   String trainingWeeklyAverage(int percent) {
     return 'متوسط التزام عملائك هذا الأسبوع: $percent%';
   }

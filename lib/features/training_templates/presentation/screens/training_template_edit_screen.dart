@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/training_templates_providers.dart';
+import '../../../training/presentation/widgets/exercise_picker_sheet.dart';
 import '../../data/models/template_item.dart';
 import '../../data/models/training_template.dart';
 
@@ -158,6 +159,7 @@ class _ExercisesSection extends ConsumerWidget {
     final repsController = TextEditingController();
     final restController = TextEditingController();
     int? day;
+    int? libraryId;
     String? error;
 
     await showModalBottomSheet<void>(
@@ -174,6 +176,21 @@ class _ExercisesSection extends ConsumerWidget {
                 children: [
                   Text(l10n.trainingTemplateAddExercise, style: Theme.of(sheetContext).textTheme.titleMedium),
                   const SizedBox(height: 16),
+                  OutlinedButton.icon(
+                    onPressed: () async {
+                      final picked = await pickLibraryExercise(sheetContext);
+                      if (picked == null) return;
+                      setSheetState(() {
+                        libraryId = picked.id;
+                        nameController.text = picked.name;
+                        if (picked.defaultSets != null) setsController.text = '${picked.defaultSets}';
+                        if (picked.defaultReps != null) repsController.text = picked.defaultReps!;
+                      });
+                    },
+                    icon: const Icon(Icons.fitness_center),
+                    label: Text(l10n.trainingPickFromLibrary),
+                  ),
+                  const SizedBox(height: 12),
                   TextField(
                     controller: nameController,
                     decoration: InputDecoration(labelText: l10n.trainingExerciseNameHint),
@@ -222,6 +239,7 @@ class _ExercisesSection extends ConsumerWidget {
                             .addExercise(
                               dayOfWeek: day,
                               name: nameController.text.trim(),
+                              libraryExerciseId: libraryId,
                               sets: int.tryParse(setsController.text.trim()),
                               reps: repsController.text.trim(),
                               restSeconds: int.tryParse(restController.text.trim()),

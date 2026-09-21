@@ -5,6 +5,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/business_training_providers.dart';
 import '../../data/models/body_report.dart';
+import '../widgets/exercise_picker_sheet.dart';
 
 const _statuses = ['active', 'paused', 'completed', 'cancelled'];
 const _mealTypes = ['breakfast', 'lunch', 'dinner', 'snack'];
@@ -63,6 +64,7 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
     final setsCtrl = TextEditingController();
     final repsCtrl = TextEditingController();
     int? dayOfWeek;
+    int? libraryId;
 
     final confirmed = await showModalBottomSheet<bool>(
       context: context,
@@ -77,6 +79,21 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
               children: [
                 Text(l10n.trainingAddExercise, style: Theme.of(sheetContext).textTheme.titleMedium),
                 const SizedBox(height: 12),
+                OutlinedButton.icon(
+                  onPressed: () async {
+                    final picked = await pickLibraryExercise(sheetContext);
+                    if (picked == null) return;
+                    setSheetState(() {
+                      libraryId = picked.id;
+                      nameCtrl.text = picked.name;
+                      if (picked.defaultSets != null) setsCtrl.text = '${picked.defaultSets}';
+                      if (picked.defaultReps != null) repsCtrl.text = picked.defaultReps!;
+                    });
+                  },
+                  icon: const Icon(Icons.fitness_center),
+                  label: Text(l10n.trainingPickFromLibrary),
+                ),
+                const SizedBox(height: 8),
                 TextField(controller: nameCtrl, decoration: InputDecoration(labelText: l10n.trainingExerciseName)),
                 const SizedBox(height: 8),
                 DropdownButtonFormField<int?>(
@@ -126,6 +143,7 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
           .read(trainingPlanManageControllerProvider(widget.planId).notifier)
           .addExercise(
             name: nameCtrl.text.trim(),
+            libraryExerciseId: libraryId,
             dayOfWeek: dayOfWeek,
             sets: int.tryParse(setsCtrl.text.trim()),
             reps: repsCtrl.text.trim().isEmpty ? null : repsCtrl.text.trim(),

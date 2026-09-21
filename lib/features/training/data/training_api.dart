@@ -3,6 +3,7 @@ import '../../../core/network/paginated.dart';
 import '../../chat/data/models/thread_message.dart';
 import 'models/body_report.dart';
 import 'models/training_plan.dart';
+import 'models/exercise_library.dart';
 import 'models/trainer_weekly_summary.dart';
 import 'models/weekly_summary.dart';
 
@@ -167,6 +168,12 @@ class TrainingApi {
     return Paginated.fromJson(data, TrainingPlan.fromJson);
   }
 
+  /// GET /business/training/exercise-library — the catalogue a trainer picks from.
+  Future<ExerciseLibrary> exerciseLibrary() async {
+    final data = await _client.get('/business/training/exercise-library') as Map<String, dynamic>;
+    return ExerciseLibrary.fromJson(data);
+  }
+
   /// GET /business/training-plans/weekly-summary — adherence for every
   /// active client at once (one query pass server-side).
   Future<TrainerWeeklySummary> trainerWeeklySummary() async {
@@ -196,6 +203,7 @@ class TrainingApi {
   Future<PlanExercise> addExercise(
     int planId, {
     required String name,
+    int? libraryExerciseId,
     int? dayOfWeek,
     int? sets,
     String? reps,
@@ -207,6 +215,7 @@ class TrainingApi {
               '/business/training-plans/$planId/exercises',
               data: {
                 'name': name,
+                'library_exercise_id': ?libraryExerciseId,
                 'day_of_week': ?dayOfWeek,
                 'sets': ?sets,
                 if (reps != null && reps.isNotEmpty) 'reps': reps,

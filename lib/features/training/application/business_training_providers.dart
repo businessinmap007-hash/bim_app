@@ -1,10 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/models/body_report.dart';
+import '../data/models/exercise_library.dart';
 import '../data/models/trainer_weekly_summary.dart';
 import '../data/models/training_plan.dart';
 import '../data/training_api.dart';
 import 'training_providers.dart';
+
+final exerciseLibraryProvider = FutureProvider.autoDispose<ExerciseLibrary>((ref) {
+  return ref.watch(trainingApiProvider).exerciseLibrary();
+});
 
 final trainerWeeklySummaryProvider = FutureProvider.autoDispose<TrainerWeeklySummary>((ref) {
   return ref.watch(trainingApiProvider).trainerWeeklySummary();
@@ -152,6 +157,7 @@ class TrainingPlanManageController extends StateNotifier<TrainingPlanManageState
 
   Future<void> addExercise({
     required String name,
+    int? libraryExerciseId,
     int? dayOfWeek,
     int? sets,
     String? reps,
@@ -161,6 +167,7 @@ class TrainingPlanManageController extends StateNotifier<TrainingPlanManageState
     await _api.addExercise(
       planId,
       name: name,
+      libraryExerciseId: libraryExerciseId,
       dayOfWeek: dayOfWeek,
       sets: sets,
       reps: reps,

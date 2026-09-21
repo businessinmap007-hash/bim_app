@@ -70,6 +70,7 @@ class TrainingTemplatesApi {
     int templateId, {
     int? dayOfWeek,
     required String name,
+    int? libraryExerciseId,
     int? sets,
     String? reps,
     int? restSeconds,
@@ -80,6 +81,7 @@ class TrainingTemplatesApi {
       data: {
         'day_of_week': ?dayOfWeek,
         'name': name,
+        'library_exercise_id': ?libraryExerciseId,
         'sets': ?sets,
         if (reps != null && reps.isNotEmpty) 'reps': reps,
         'rest_seconds': ?restSeconds,

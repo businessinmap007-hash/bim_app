@@ -121,6 +121,7 @@ class TrainingTemplateEditController extends StateNotifier<AsyncValue<TrainingTe
   Future<void> addExercise({
     int? dayOfWeek,
     required String name,
+    int? libraryExerciseId,
     int? sets,
     String? reps,
     int? restSeconds,
@@ -130,6 +131,7 @@ class TrainingTemplateEditController extends StateNotifier<AsyncValue<TrainingTe
       templateId,
       dayOfWeek: dayOfWeek,
       name: name,
+      libraryExerciseId: libraryExerciseId,
       sets: sets,
       reps: reps,
       restSeconds: restSeconds,

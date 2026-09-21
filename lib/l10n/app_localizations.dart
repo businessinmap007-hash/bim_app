@@ -9800,6 +9800,30 @@ abstract class AppLocalizations {
   /// **'لا توجد خطط عملاء بعد.'**
   String get trainingClientsEmpty;
 
+  /// No description provided for @trainingPickFromLibrary.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيار من مكتبة التمارين'**
+  String get trainingPickFromLibrary;
+
+  /// No description provided for @trainingLibrarySearch.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث عن تمرين'**
+  String get trainingLibrarySearch;
+
+  /// No description provided for @trainingLibraryAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get trainingLibraryAll;
+
+  /// No description provided for @trainingLibraryEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد تمارين مطابقة.'**
+  String get trainingLibraryEmpty;
+
   /// No description provided for @trainingWeeklyAverage.
   ///
   /// In ar, this message translates to:
