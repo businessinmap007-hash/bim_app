@@ -1295,6 +1295,24 @@ class AppLocalizationsAr extends AppLocalizations {
   String get shippingStatusDelivered => 'تم تسليم الطلب';
 
   @override
+  String get shippingAppointmentSuitable => 'الموعد مناسب';
+
+  @override
+  String get shippingAppointmentConfirmed => 'وافقت على الموعد';
+
+  @override
+  String get businessMyLocation => 'مدينتي';
+
+  @override
+  String get registerAddressLabel => 'العنوان (الشارع، المبنى...)';
+
+  @override
+  String get checkoutNeedAddress => 'اختر عنوان التوصيل أولًا.';
+
+  @override
+  String get addressSaveAndUse => 'حفظ العنوان واستخدامه';
+
+  @override
   String get shippingAppointmentNotSuitable =>
       'الموعد غير مناسب — تواصل مع الشركة';
 

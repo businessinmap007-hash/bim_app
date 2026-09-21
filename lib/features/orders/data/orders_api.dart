@@ -65,6 +65,12 @@ class OrdersApi {
     return PlacedOrder.fromJson(data);
   }
 
+  /// The customer says the scheduled shipping appointment suits them.
+  Future<PlacedOrder> confirmShippingAppointment(int id) async {
+    final data = await _client.post('/orders/$id/shipping/appointment-ok') as Map<String, dynamic>;
+    return PlacedOrder.fromJson(data);
+  }
+
   /// Ticks/unticks "I trust" toward another party of the order. The
   /// merchant's calls go through the business-scoped route so a delegated
   /// staff member acts as the business.

@@ -269,6 +269,22 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
     }
   }
 
+  Future<void> _confirmShippingAppointment(PlacedOrder order) async {
+    final l10n = AppLocalizations.of(context)!;
+    setState(() => _busy = true);
+    try {
+      final updated = await ref.read(myOrdersControllerProvider.notifier).confirmShippingAppointment(order.id);
+      if (mounted) setState(() => _detail = updated);
+    } catch (e) {
+      if (mounted) {
+        final message = e is ApiException ? e.message : l10n.commonSomethingWentWrong;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
   Future<void> _answerFee(PlacedOrder order, {required bool accept}) async {
     final l10n = AppLocalizations.of(context)!;
     setState(() => _busy = true);
@@ -571,11 +587,30 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
             if (order.shipping!.status == 'scheduled' && order.shipping!.companyId != null)
               Padding(
                 padding: const EdgeInsets.only(top: 8),
-                child: OutlinedButton.icon(
-                  icon: const Icon(Icons.chat_bubble_outline),
-                  onPressed: () => _chatWithShippingCompany(order.shipping!.companyId!),
-                  label: Text(l10n.shippingAppointmentNotSuitable),
-                ),
+                child: order.shipping!.appointmentConfirmedAt != null
+                    ? Row(
+                        children: [
+                          const Icon(Icons.check_circle, size: 16, color: AppColors.success),
+                          const SizedBox(width: 6),
+                          Text(l10n.shippingAppointmentConfirmed, style: TextStyle(color: AppColors.success)),
+                        ],
+                      )
+                    : Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          FilledButton.icon(
+                            icon: const Icon(Icons.check),
+                            onPressed: _busy ? null : () => _confirmShippingAppointment(order),
+                            label: Text(l10n.shippingAppointmentSuitable),
+                          ),
+                          OutlinedButton.icon(
+                            icon: const Icon(Icons.chat_bubble_outline),
+                            onPressed: () => _chatWithShippingCompany(order.shipping!.companyId!),
+                            label: Text(l10n.shippingAppointmentNotSuitable),
+                          ),
+                        ],
+                      ),
               ),
           ],
           if (order.deliveryFeeQuote != null && order.deliveryFeeQuote!.isUnsettled) ...[

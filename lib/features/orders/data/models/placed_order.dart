@@ -78,11 +78,12 @@ class ShippingInfo {
   final String status; // awaiting_company | awaiting_appointment | scheduled | shipped | delivered
   final double? fee;
   final DateTime? appointmentAt;
+  final DateTime? appointmentConfirmedAt;
   final String? appointmentNote;
   final int? companyId;
   final String? companyName;
 
-  const ShippingInfo({required this.status, this.fee, this.appointmentAt, this.appointmentNote, this.companyId, this.companyName});
+  const ShippingInfo({required this.status, this.fee, this.appointmentAt, this.appointmentConfirmedAt, this.appointmentNote, this.companyId, this.companyName});
 
   bool get needsCompany => status == 'awaiting_company';
   bool get canChangeCompany => status == 'awaiting_company' || status == 'awaiting_appointment';
@@ -93,6 +94,7 @@ class ShippingInfo {
       status: json['status'] as String? ?? '',
       fee: (json['fee'] as num?)?.toDouble(),
       appointmentAt: DateTime.tryParse(json['appointment_at'] as String? ?? '')?.toLocal(),
+      appointmentConfirmedAt: DateTime.tryParse(json['appointment_confirmed_at'] as String? ?? '')?.toLocal(),
       appointmentNote: json['appointment_note'] as String?,
       companyId: (company?['id'] as num?)?.toInt(),
       companyName: company?['name'] as String?,

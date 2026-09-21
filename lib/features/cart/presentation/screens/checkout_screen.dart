@@ -37,6 +37,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   final _addressController = TextEditingController();
   final _notesController = TextEditingController();
   int? _selectedAddressId;
+  bool _addressPreselected = false;
   DateTime? _pickupAt;
   bool _submitting = false;
 
@@ -87,15 +88,17 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       return;
     }
 
+    if (fulfillmentType == 'delivery' && _selectedAddressId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.checkoutNeedAddress)));
+      return;
+    }
+
     setState(() => _submitting = true);
     try {
       await ref.read(cartControllerProvider.notifier).checkout(
         widget.cart.business!.id,
         fulfillmentType: fulfillmentType,
         addressId: fulfillmentType == 'delivery' ? _selectedAddressId : null,
-        address: fulfillmentType == 'delivery' && _selectedAddressId == null
-            ? _addressController.text.trim()
-            : null,
         notes: _notesController.text.trim(),
         paymentMethod: fulfillmentType == 'delivery' ? 'cash_on_delivery' : 'cash',
         outOfStockPolicy: _outOfStockPolicy,
@@ -143,6 +146,17 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     // A saved address in another city than the business: the fee is not fixed,
     // the courier proposes one per order and the customer approves it.
     final addresses = ref.watch(addressesControllerProvider).items;
+    if (_selectedAddressId == null && !_addressPreselected && addresses.isNotEmpty) {
+      _addressPreselected = true;
+      final primary = addresses.firstWhere((a) => a.isPrimary, orElse: () => addresses.first);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        setState(() {
+          _selectedAddressId = primary.id;
+          _addressController.text = primary.summary(Localizations.localeOf(context).languageCode);
+        });
+      });
+    }
     final chosen = _selectedAddressId == null ? null : addresses.where((a) => a.id == _selectedAddressId).firstOrNull;
     // Another governorate: not delivered but shipped, by a company the merchant
     // picks - its price is added to the invoice afterwards.
@@ -196,9 +210,10 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                 ),
               ),
               maxLines: 2,
-              onChanged: (_) {
-                if (_selectedAddressId != null) setState(() => _selectedAddressId = null);
-              },
+              // The address is always a saved one (it carries the governorate and
+              // city that decide delivery vs shipping) - tap to pick or add one.
+              readOnly: true,
+              onTap: _pickAddress,
             ),
           ],
           if (selected == 'pickup') ...[

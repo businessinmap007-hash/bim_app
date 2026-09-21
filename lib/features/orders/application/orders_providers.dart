@@ -99,6 +99,12 @@ class MyOrdersController extends StateNotifier<MyOrdersState> {
     return updated;
   }
 
+  Future<PlacedOrder> confirmShippingAppointment(int id) async {
+    final updated = await _api.confirmShippingAppointment(id);
+    state = state.copyWith(items: [for (final o in state.items) o.id == id ? updated : o]);
+    return updated;
+  }
+
   Future<PlacedOrder> confirmPayment(int id) async {
     final updated = await _api.confirmPayment(id);
     state = state.copyWith(items: [for (final o in state.items) o.id == id ? updated : o]);

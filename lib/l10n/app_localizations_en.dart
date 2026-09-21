@@ -1282,6 +1282,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get shippingStatusDelivered => 'The order was delivered';
 
   @override
+  String get shippingAppointmentSuitable => 'The appointment suits me';
+
+  @override
+  String get shippingAppointmentConfirmed => 'You accepted the appointment';
+
+  @override
+  String get businessMyLocation => 'My city';
+
+  @override
+  String get registerAddressLabel => 'Address (street, building...)';
+
+  @override
+  String get checkoutNeedAddress => 'Choose a delivery address first.';
+
+  @override
+  String get addressSaveAndUse => 'Save address and use it';
+
+  @override
   String get shippingAppointmentNotSuitable =>
       'The appointment doesn\'t suit me - chat with the company';
 

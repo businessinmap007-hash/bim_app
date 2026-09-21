@@ -105,6 +105,9 @@ class AuthController extends StateNotifier<AuthState> {
     required String type,
     int? categoryId,
     int? categoryChildId,
+    required int governorateId,
+    required int cityId,
+    required String addressLine,
   }) async {
     final result = await _authApi.register(
       name: name,
@@ -116,6 +119,9 @@ class AuthController extends StateNotifier<AuthState> {
       type: type,
       categoryId: categoryId,
       categoryChildId: categoryChildId,
+      governorateId: governorateId,
+      cityId: cityId,
+      addressLine: addressLine,
     );
     await _ref.read(tokenStorageProvider).write(result.token);
     state = AuthSignedIn(result.user);

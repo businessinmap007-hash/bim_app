@@ -2444,6 +2444,42 @@ abstract class AppLocalizations {
   /// **'تم تسليم الطلب'**
   String get shippingStatusDelivered;
 
+  /// No description provided for @shippingAppointmentSuitable.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموعد مناسب'**
+  String get shippingAppointmentSuitable;
+
+  /// No description provided for @shippingAppointmentConfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'وافقت على الموعد'**
+  String get shippingAppointmentConfirmed;
+
+  /// No description provided for @businessMyLocation.
+  ///
+  /// In ar, this message translates to:
+  /// **'مدينتي'**
+  String get businessMyLocation;
+
+  /// No description provided for @registerAddressLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'العنوان (الشارع، المبنى...)'**
+  String get registerAddressLabel;
+
+  /// No description provided for @checkoutNeedAddress.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر عنوان التوصيل أولًا.'**
+  String get checkoutNeedAddress;
+
+  /// No description provided for @addressSaveAndUse.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ العنوان واستخدامه'**
+  String get addressSaveAndUse;
+
   /// No description provided for @shippingAppointmentNotSuitable.
   ///
   /// In ar, this message translates to:

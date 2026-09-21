@@ -6,6 +6,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../categories/presentation/widgets/category_picker_field.dart';
+import '../../../location/presentation/widgets/location_picker_field.dart';
 import '../../application/auth_controller.dart';
 
 class RegisterScreen extends ConsumerStatefulWidget {
@@ -24,13 +25,19 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   String? _error;
   CategorySelection? _category;
   bool _categoryTouched = false;
+  LocationSelection? _location;
+  bool _locationTouched = false;
 
   bool get _isBusiness => widget.accountType == 'business';
 
   Future<void> _submit() async {
     final formOk = _formKey.currentState?.saveAndValidate() ?? false;
-    setState(() => _categoryTouched = true);
+    setState(() {
+      _categoryTouched = true;
+      _locationTouched = true;
+    });
     if (_isBusiness && _category == null) return;
+    if (_location == null) return;
     if (!formOk) return;
     final v = _formKey.currentState!.value;
 
@@ -51,6 +58,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
             passwordConfirmation: v['password_confirmation'] as String,
             type: widget.accountType,
             categoryChildId: _isBusiness ? _category?.childId : null,
+            governorateId: _location!.governorateId,
+            cityId: _location!.cityId,
+            addressLine: (v['address_line'] as String).trim(),
           );
     } on ApiException catch (e) {
       setState(() => _error = e.message);
@@ -139,6 +149,25 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         }),
                       ),
                     ],
+                    const SizedBox(height: 16),
+                    LocationPickerField(
+                      value: _location,
+                      errorText: _locationTouched && _location == null ? l10n.validationRequired : null,
+                      onChanged: (selection) => setState(() {
+                        _location = selection;
+                        _locationTouched = true;
+                      }),
+                    ),
+                    const SizedBox(height: 16),
+                    FormBuilderTextField(
+                      name: 'address_line',
+                      decoration: InputDecoration(labelText: l10n.registerAddressLabel),
+                      textInputAction: TextInputAction.next,
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(errorText: l10n.validationRequired),
+                        FormBuilderValidators.minLength(5),
+                      ]),
+                    ),
                     const SizedBox(height: 16),
                     FormBuilderTextField(
                       name: 'password',

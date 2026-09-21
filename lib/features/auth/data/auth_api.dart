@@ -34,6 +34,9 @@ class AuthApi {
     required String type, // 'client' | 'business'
     int? categoryId,
     int? categoryChildId,
+    required int governorateId,
+    required int cityId,
+    required String addressLine,
   }) async {
     final body = await _client.postForBody(
       '/auth/register',
@@ -47,6 +50,9 @@ class AuthApi {
         'type': type,
         'category_id': ?categoryId,
         'category_child_id': ?categoryChildId,
+        'governorate_id': governorateId,
+        'city_id': cityId,
+        'address_line': addressLine,
         'terms_accepted': true,
       },
     );

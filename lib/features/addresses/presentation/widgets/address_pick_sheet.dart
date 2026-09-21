@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../location/presentation/widgets/location_picker_field.dart';
 import '../../application/addresses_providers.dart';
 
 typedef AddressPickResult = ({int? addressId, String? freeText, String label});
@@ -27,6 +28,8 @@ class _AddressPickSheet extends ConsumerStatefulWidget {
 class _AddressPickSheetState extends ConsumerState<_AddressPickSheet> {
   final _freeTextController = TextEditingController();
   bool _typingNew = false;
+  bool _saving = false;
+  LocationSelection? _location;
 
   @override
   void dispose() {
@@ -86,21 +89,42 @@ class _AddressPickSheetState extends ConsumerState<_AddressPickSheet> {
                   onTap: () => setState(() => _typingNew = true),
                 )
               else ...[
+                LocationPickerField(value: _location, onChanged: (v) => setState(() => _location = v)),
+                const SizedBox(height: 12),
                 TextField(
                   controller: _freeTextController,
-                  autofocus: true,
                   minLines: 2,
                   maxLines: 3,
                   decoration: InputDecoration(hintText: l10n.addressLineHint),
                 ),
                 const SizedBox(height: 12),
                 FilledButton(
-                  onPressed: () {
-                    final text = _freeTextController.text.trim();
-                    if (text.isEmpty) return;
-                    Navigator.of(context).pop((addressId: null, freeText: text, label: text));
-                  },
-                  child: Text(l10n.commonSave),
+                  onPressed: _saving
+                      ? null
+                      : () async {
+                          final text = _freeTextController.text.trim();
+                          final location = _location;
+                          if (text.length < 5 || location == null) return;
+                          setState(() => _saving = true);
+                          try {
+                            final saved = await ref.read(addressesApiProvider).create(
+                              governorateId: location.governorateId,
+                              cityId: location.cityId,
+                              addressLine: text,
+                            );
+                            await ref.read(addressesControllerProvider.notifier).load();
+                            if (context.mounted) {
+                              Navigator.of(context).pop((
+                                addressId: saved.id,
+                                freeText: null,
+                                label: '$text (${location.label})',
+                              ));
+                            }
+                          } catch (_) {
+                            if (mounted) setState(() => _saving = false);
+                          }
+                        },
+                  child: Text(l10n.addressSaveAndUse),
                 ),
               ],
             ],

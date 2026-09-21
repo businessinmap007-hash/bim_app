@@ -745,7 +745,9 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                       ),
                     ],
                   ),
-                ] else if (order.prepStatus == 'accepted')
+                ] else if (order.status != 'pending')
+                  const SizedBox.shrink()
+                else if (order.prepStatus == 'accepted')
                   FilledButton(
                     onPressed: () => _advance(context, ref, false, order),
                     child: Text(l10n.businessOrdersMarkPreparing),

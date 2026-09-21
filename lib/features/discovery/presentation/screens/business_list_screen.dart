@@ -120,7 +120,11 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
                 children: [
                   InputChip(
                     avatar: const Icon(Icons.place_outlined, size: 18),
-                    label: Text(state.locationLabel ?? l10n.businessFilterByLocation),
+                    label: Text(
+                      state.locationLabel == kMyLocationLabel
+                          ? l10n.businessMyLocation
+                          : (state.locationLabel ?? l10n.businessFilterByLocation),
+                    ),
                     onPressed: () => _openLocationPicker(context),
                     onDeleted: state.locationLabel != null
                         ? () => ref.read(businessListControllerProvider(widget.childId).notifier).clearLocation()

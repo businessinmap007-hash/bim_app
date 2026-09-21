@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/core_providers.dart';
+import '../../auth/application/auth_controller.dart';
 import '../data/discovery_api.dart';
 import '../data/models/attribute_group.dart';
 import '../data/models/business_summary.dart';
@@ -125,6 +126,9 @@ final searchControllerProvider =
       return SearchController(ref.watch(searchApiProvider));
     });
 
+/// Marks the location filter that was applied automatically from the account's own city.
+const kMyLocationLabel = '\u0000my-location';
+
 class BusinessListState {
   final List<BusinessSummary> items;
   final bool isLoading;
@@ -188,8 +192,14 @@ class BusinessListController extends StateNotifier<BusinessListState> {
   final int childId;
   int _page = 1;
 
-  BusinessListController(this._api, this.childId)
-    : super(const BusinessListState()) {
+  BusinessListController(this._api, this.childId, {int? governorateId, int? cityId})
+    : super(
+        BusinessListState(
+          governorateId: governorateId,
+          cityId: cityId,
+          locationLabel: governorateId != null ? kMyLocationLabel : null,
+        ),
+      ) {
     load();
   }
 
@@ -284,6 +294,15 @@ final businessListControllerProvider =
     >(
       (ref, childId) {
         ref.watch(localeEpochProvider);
-        return BusinessListController(ref.watch(discoveryApiProvider), childId);
+        // Start from where the customer is: someone in Ras El Bar looking for
+        // a fish restaurant should not be shown ones in Alexandria.
+        final auth = ref.read(authControllerProvider);
+        final user = auth is AuthSignedIn ? auth.user : null;
+        return BusinessListController(
+          ref.watch(discoveryApiProvider),
+          childId,
+          governorateId: user?.governorateId,
+          cityId: user?.cityId,
+        );
       },
     );
