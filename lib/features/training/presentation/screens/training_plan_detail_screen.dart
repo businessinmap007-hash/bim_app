@@ -294,6 +294,36 @@ class _ExerciseCard extends StatelessWidget {
                 ),
               ),
             ],
+            if (exercise.images.isEmpty && exercise.libraryImageUrls.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 96,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: exercise.libraryImageUrls.length,
+                  separatorBuilder: (context, index) => const SizedBox(width: 6),
+                  itemBuilder: (context, index) => GestureDetector(
+                    onTap: () => showDialog<void>(
+                      context: context,
+                      builder: (_) => Dialog(
+                        child: InteractiveViewer(child: Image.network(exercise.libraryImageUrls[index])),
+                      ),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.network(
+                        exercise.libraryImageUrls[index],
+                        width: 144,
+                        height: 96,
+                        fit: BoxFit.cover,
+                        cacheWidth: 432,
+                        errorBuilder: (_, _, _) => const SizedBox(width: 144, height: 96),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
             const SizedBox(height: 10),
             Row(
               children: [

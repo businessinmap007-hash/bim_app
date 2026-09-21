@@ -146,6 +146,19 @@ class _ExercisePickerSheetState extends ConsumerState<_ExercisePickerSheet> {
                             if (e.defaultSets != null && e.defaultReps != null) '${e.defaultSets} × ${e.defaultReps}',
                           ].whereType<String>().join(' · ');
                           return ListTile(
+                            leading: e.imageUrls.isEmpty
+                                ? const SizedBox(width: 56, height: 40, child: Icon(Icons.fitness_center, size: 20))
+                                : ClipRRect(
+                                    borderRadius: BorderRadius.circular(6),
+                                    child: Image.network(
+                                      e.imageUrls.first,
+                                      width: 56,
+                                      height: 40,
+                                      fit: BoxFit.cover,
+                                      cacheWidth: 168,
+                                      errorBuilder: (_, _, _) => const SizedBox(width: 56, height: 40),
+                                    ),
+                                  ),
                             title: Text(e.name),
                             subtitle: Text(parts, style: theme.textTheme.bodySmall),
                             onTap: () => Navigator.of(context).pop(e),

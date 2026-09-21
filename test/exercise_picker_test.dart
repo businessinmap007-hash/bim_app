@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:bim_app/features/training/application/training_providers.dart';
 import 'package:bim_app/features/training/data/models/exercise_library.dart';
+import 'package:bim_app/features/training/data/models/training_plan.dart';
 import 'package:bim_app/features/training/data/training_api.dart';
 import 'package:bim_app/features/training/presentation/widgets/exercise_picker_sheet.dart';
 import 'package:bim_app/l10n/app_localizations.dart';
@@ -33,6 +34,7 @@ class _FakeTrainingApi implements TrainingApi {
         'equipment': 'dumbbell',
         'default_sets': 4,
         'default_reps': '8-10',
+        'images': ['files/uploads/exercise-library/10-0.jpg', 'files/uploads/exercise-library/10-1.jpg'],
       },
       {'id': 11, 'category_id': 1, 'name': 'Push-up', 'kind': 'strength', 'equipment': null},
       {'id': 20, 'category_id': 2, 'name': 'Treadmill run', 'kind': 'cardio', 'equipment': 'machine'},
@@ -82,6 +84,9 @@ void main() {
     expect(find.text('Push-up'), findsOneWidget);
     expect(find.text('Treadmill run'), findsOneWidget);
     expect(find.text('Chest · Dumbbell · 4 × 8-10'), findsOneWidget);
+    // Only the exercise that has photos shows a thumbnail; the rest keep the icon.
+    expect(find.byType(Image), findsOneWidget);
+    expect(find.byIcon(Icons.fitness_center), findsNWidgets(2));
   });
 
   testWidgets('section, kind, equipment and search all narrow the list', (tester) async {
@@ -109,6 +114,34 @@ void main() {
     await tester.enterText(find.byType(TextField), 'zzz');
     await tester.pump();
     expect(find.text('No matching exercises.'), findsOneWidget);
+  });
+
+  test('an exercise reads its demonstration photos as absolute urls', () {
+    final lib = ExerciseLibrary.fromJson({
+      'exercises': [
+        {
+          'id': 1,
+          'category_id': 1,
+          'name': 'Plank',
+          'kind': 'strength',
+          'images': ['files/uploads/exercise-library/1-0.jpg'],
+        },
+      ],
+    });
+    expect(lib.exercises.single.imageUrls.single, endsWith('files/uploads/exercise-library/1-0.jpg'));
+    expect(lib.exercises.single.imageUrls.single, startsWith('http'));
+  });
+
+  test('a plan exercise keeps library photos apart from its own photos', () {
+    final e = PlanExercise.fromJson({
+      'id': 5,
+      'name': 'Plank',
+      'images': [],
+      'library_images': ['files/uploads/exercise-library/1-0.jpg'],
+    });
+    expect(e.images, isEmpty);
+    expect(e.libraryImageUrls, hasLength(1));
+    expect(PlanExercise.fromJson({'id': 6, 'name': 'Free'}).libraryImageUrls, isEmpty);
   });
 
   testWidgets('tapping an exercise returns it', (tester) async {

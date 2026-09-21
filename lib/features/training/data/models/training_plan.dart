@@ -24,6 +24,10 @@ class PlanExercise {
   final int? restSeconds;
   final String? notes;
   final List<PlanImage> images;
+
+  /// The catalogue's demonstration photos, for an exercise picked from the
+  /// library. The trainer's own [images] take precedence when there are any.
+  final List<String> libraryImageUrls;
   final int completedRoundsToday;
 
   const PlanExercise({
@@ -35,6 +39,7 @@ class PlanExercise {
     this.restSeconds,
     this.notes,
     this.images = const [],
+    this.libraryImageUrls = const [],
     this.completedRoundsToday = 0,
   });
 
@@ -52,6 +57,10 @@ class PlanExercise {
         .map((e) => PlanImage.fromJson(e as Map<String, dynamic>))
         .toList(),
     completedRoundsToday: (json['completed_rounds_today'] as num?)?.toInt() ?? 0,
+    libraryImageUrls: (json['library_images'] as List<dynamic>? ?? [])
+        .map((e) => Env.assetUrl(e as String?))
+        .whereType<String>()
+        .toList(),
   );
 }
 

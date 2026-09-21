@@ -1,3 +1,5 @@
+import '../../../../core/env/env.dart';
+
 /// A key + label pair — an exercise kind (strength, cardio…) or a piece of
 /// equipment, labelled by the server in the request locale.
 class LibraryOption {
@@ -31,6 +33,9 @@ class LibraryExercise {
   final int? defaultSets;
   final String? defaultReps;
 
+  /// Demonstration photos (start / end position), absolute URLs.
+  final List<String> imageUrls;
+
   const LibraryExercise({
     required this.id,
     required this.categoryId,
@@ -39,6 +44,7 @@ class LibraryExercise {
     this.equipment,
     this.defaultSets,
     this.defaultReps,
+    this.imageUrls = const [],
   });
 
   factory LibraryExercise.fromJson(Map<String, dynamic> json) => LibraryExercise(
@@ -49,6 +55,10 @@ class LibraryExercise {
     equipment: json['equipment'] as String?,
     defaultSets: (json['default_sets'] as num?)?.toInt(),
     defaultReps: json['default_reps'] as String?,
+    imageUrls: (json['images'] as List<dynamic>? ?? [])
+        .map((e) => Env.assetUrl(e as String?))
+        .whereType<String>()
+        .toList(),
   );
 }
 
