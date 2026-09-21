@@ -151,7 +151,15 @@ class DeliveryApi {
   /// A driver accepting an unassigned order from the open pool (existing,
   /// pre-assignment path — kept here so the driver dashboard can offer it
   /// alongside "my active orders" if the driver isn't privately linked).
-  Future<void> acceptOrder(int orderId) => _client.post('/delivery/orders/$orderId/accept');
+  ///
+  /// An out-of-city order has no fixed fee: the courier writes one with the
+  /// acceptance ([feeAmount]), which the customer then accepts or declines.
+  Future<void> acceptOrder(int orderId, {double? feeAmount}) =>
+      _client.post('/delivery/orders/$orderId/accept', data: {'fee_amount': ?feeAmount});
+
+  /// The assigned courier prices (or re-prices) an out-of-city order.
+  Future<void> proposeFee(int orderId, double amount) =>
+      _client.post('/delivery/orders/$orderId/fee-proposal', data: {'amount': amount});
 
   /// [lat]/[lng] are the driver's own position: with them each order carries
   /// `distance_km` to its pickup point and the list comes nearest-first.

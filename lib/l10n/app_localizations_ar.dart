@@ -1236,6 +1236,70 @@ class AppLocalizationsAr extends AppLocalizations {
   String get paymentConfirmSectionTitle => 'تأكيد الدفع';
 
   @override
+  String get deliveryQuoteEnterAmountTitle => 'رسوم التوصيل لهذا الطلب';
+
+  @override
+  String get deliveryQuoteAmountLabel => 'المبلغ';
+
+  @override
+  String get deliveryQuoteProposeButton => 'اقترح رسوم التوصيل';
+
+  @override
+  String get deliveryQuoteSend => 'إرسال';
+
+  @override
+  String get deliveryQuoteFeeLocked =>
+      'رسوم التوصيل لم تُعتمد بعد — لا يمكن بدء الاستلام.';
+
+  @override
+  String get deliveryQuoteAwaitingCourier =>
+      'الطلب خارج مدينة النشاط — بانتظار موصّل يحدد رسوم التوصيل.';
+
+  @override
+  String get deliveryQuoteAccept => 'قبول الرسوم';
+
+  @override
+  String get deliveryQuoteDecline => 'رفض';
+
+  @override
+  String get deliveryQuoteMerchantSuitable => 'التاجر يرى أن الرسوم مناسبة';
+
+  @override
+  String get deliveryQuoteMerchantNotSuitable =>
+      'التاجر يرى أن الرسوم غير مناسبة';
+
+  @override
+  String get deliveryQuoteRecommendSuitable => 'مناسبة';
+
+  @override
+  String get deliveryQuoteRecommendNotSuitable => 'غير مناسبة';
+
+  @override
+  String get deliveryQuoteNoteLabel => 'ملاحظة للعميل (اختياري)';
+
+  @override
+  String get deliveryQuoteCheckoutLater =>
+      'رسوم التوصيل: يحددها الموصّل بعد قبول طلبك، وتوافق عليها أنت.';
+
+  @override
+  String get deliveryQuoteSaved => 'تم إرسال ردّك.';
+
+  @override
+  String deliveryQuoteWaitingCustomer(String amount) {
+    return 'بانتظار رد العميل على $amount';
+  }
+
+  @override
+  String deliveryQuoteProposedTitle(String amount) {
+    return 'اقترح الموصّل رسوم توصيل $amount';
+  }
+
+  @override
+  String deliveryQuoteRecommendTitle(String amount) {
+    return 'الموصّل اقترح $amount — هل هي مناسبة؟';
+  }
+
+  @override
   String get orderDeliveryFeeRow => 'رسوم التوصيل';
 
   @override

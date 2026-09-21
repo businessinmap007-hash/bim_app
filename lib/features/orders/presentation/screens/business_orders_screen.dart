@@ -372,6 +372,35 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
     }
   }
 
+  /// The merchant knows the going rate: tell the customer whether the courier's
+  /// delivery fee is fair (with an optional note).
+  Future<void> _recommendFee(BuildContext context, WidgetRef ref, String recommendation) async {
+    final l10n = AppLocalizations.of(context)!;
+    final controller = TextEditingController();
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: TextField(controller: controller, decoration: InputDecoration(labelText: l10n.deliveryQuoteNoteLabel)),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l10n.commonCancel)),
+          TextButton(onPressed: () => Navigator.pop(context, true), child: Text(l10n.deliveryQuoteSend)),
+        ],
+      ),
+    );
+    if (ok != true) return;
+    try {
+      await ref.read(ordersApiProvider).recommendDeliveryFee(orderId, recommendation, note: controller.text, businessId: businessId);
+      await ref.read(businessOrderDetailControllerProvider(_key).notifier).load();
+      if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.deliveryQuoteSaved)));
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e is ApiException ? e.message : l10n.commonSomethingWentWrong)),
+        );
+      }
+    }
+  }
+
   /// Shows the pickup QR; the reset-code button lives on that screen, under
   /// the code itself.
   Future<void> _showPickupCode(BuildContext context, WidgetRef ref) async {
@@ -564,6 +593,45 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                   ),
                   if (order.depositReleased)
                     Text(l10n.businessOrdersDepositReleased, style: TextStyle(color: AppColors.success)),
+                ],
+                if (order.deliveryFeeQuote != null && order.deliveryFeeQuote!.isUnsettled) ...[
+                  const Divider(height: 24),
+                  if (order.deliveryFeeQuote!.isAwaitingQuote)
+                    Text(l10n.deliveryQuoteAwaitingCourier, style: Theme.of(context).textTheme.bodyMedium)
+                  else ...[
+                    Text(
+                      l10n.deliveryQuoteRecommendTitle(order.deliveryFeeQuote!.proposedAmount?.toStringAsFixed(0) ?? ''),
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () => _recommendFee(context, ref, 'suitable'),
+                            child: Text(l10n.deliveryQuoteRecommendSuitable),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () => _recommendFee(context, ref, 'not_suitable'),
+                            child: Text(l10n.deliveryQuoteRecommendNotSuitable),
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (order.deliveryFeeQuote!.recommendation != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 6),
+                        child: Text(
+                          order.deliveryFeeQuote!.recommendation == 'suitable'
+                              ? l10n.deliveryQuoteMerchantSuitable
+                              : l10n.deliveryQuoteMerchantNotSuitable,
+                          style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12),
+                        ),
+                      ),
+                  ],
                 ],
                 if (order.status != 'cancelled' && order.isCashPayment) ...[
                   const Divider(height: 24),

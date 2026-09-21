@@ -5,6 +5,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
 import '../../application/delivery_providers.dart';
+import '../widgets/fee_amount_dialog.dart';
 
 /// "الطلبات المتاحة" - ready delivery orders a driver can take from the open
 /// pool (DeliveryController::available / accept). Accepting hands the order
@@ -19,11 +20,16 @@ class AvailableOrdersScreen extends ConsumerStatefulWidget {
 class _AvailableOrdersScreenState extends ConsumerState<AvailableOrdersScreen> {
   int? _acceptingId;
 
-  Future<void> _accept(int orderId) async {
+  Future<void> _accept(int orderId, {bool needsQuote = false}) async {
     final l10n = AppLocalizations.of(context)!;
+    double? fee;
+    if (needsQuote) {
+      fee = await askDeliveryFeeAmount(context);
+      if (fee == null || !mounted) return;
+    }
     setState(() => _acceptingId = orderId);
     try {
-      await ref.read(deliveryApiProvider).acceptOrder(orderId);
+      await ref.read(deliveryApiProvider).acceptOrder(orderId, feeAmount: fee);
       ref.invalidate(myDeliveriesProvider);
       if (!mounted) return;
       final messenger = ScaffoldMessenger.of(context);
@@ -99,7 +105,7 @@ class _AvailableOrdersScreenState extends ConsumerState<AvailableOrdersScreen> {
                         SizedBox(
                           width: double.infinity,
                           child: FilledButton(
-                            onPressed: _acceptingId != null ? null : () => _accept(id),
+                            onPressed: _acceptingId != null ? null : () => _accept(id, needsQuote: order['needs_quote'] == true),
                             child: _acceptingId == id
                                 ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2))
                                 : Text(l10n.deliveryAcceptOrder),

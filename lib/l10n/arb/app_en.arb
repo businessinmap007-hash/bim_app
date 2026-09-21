@@ -405,6 +405,33 @@
   "businessOrdersDepositCovered": "Covered by a deposit/guarantee",
   "businessOrdersDepositUncovered": "No deposit or guarantee cover",
   "paymentConfirmSectionTitle": "Payment confirmation",
+  "deliveryQuoteEnterAmountTitle": "Delivery fee for this order",
+  "deliveryQuoteAmountLabel": "Amount",
+  "deliveryQuoteProposeButton": "Propose the delivery fee",
+  "deliveryQuoteSend": "Send",
+  "deliveryQuoteFeeLocked": "The delivery fee isn't agreed yet - pickup can't start.",
+  "deliveryQuoteAwaitingCourier": "This order is outside the business's city - waiting for a courier to set the delivery fee.",
+  "deliveryQuoteAccept": "Accept the fee",
+  "deliveryQuoteDecline": "Decline",
+  "deliveryQuoteMerchantSuitable": "The merchant considers this fee suitable",
+  "deliveryQuoteMerchantNotSuitable": "The merchant considers this fee not suitable",
+  "deliveryQuoteRecommendSuitable": "Suitable",
+  "deliveryQuoteRecommendNotSuitable": "Not suitable",
+  "deliveryQuoteNoteLabel": "Note for the customer (optional)",
+  "deliveryQuoteCheckoutLater": "Delivery fee: set by the courier after they take your order, and you approve it.",
+  "deliveryQuoteSaved": "Your answer was sent.",
+  "deliveryQuoteWaitingCustomer": "Waiting for the customer to answer {amount}",
+  "@deliveryQuoteWaitingCustomer": {
+    "placeholders": { "amount": { "type": "String" } }
+  },
+  "deliveryQuoteProposedTitle": "The driver proposed a delivery fee of {amount}",
+  "@deliveryQuoteProposedTitle": {
+    "placeholders": { "amount": { "type": "String" } }
+  },
+  "deliveryQuoteRecommendTitle": "The driver proposed {amount} - is it suitable?",
+  "@deliveryQuoteRecommendTitle": {
+    "placeholders": { "amount": { "type": "String" } }
+  },
   "orderDeliveryFeeRow": "Delivery fee",
   "bookingPaymentBusinessStatusLabel": "Business receipt of the amount",
   "bookingPaymentBusinessButton": "Confirm cash received",

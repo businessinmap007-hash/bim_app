@@ -405,6 +405,33 @@
   "businessOrdersDepositCovered": "مغطّى بضمان أو ديبوزيت",
   "businessOrdersDepositUncovered": "بلا ضمان أو ديبوزيت",
   "paymentConfirmSectionTitle": "تأكيد الدفع",
+  "deliveryQuoteEnterAmountTitle": "رسوم التوصيل لهذا الطلب",
+  "deliveryQuoteAmountLabel": "المبلغ",
+  "deliveryQuoteProposeButton": "اقترح رسوم التوصيل",
+  "deliveryQuoteSend": "إرسال",
+  "deliveryQuoteFeeLocked": "رسوم التوصيل لم تُعتمد بعد — لا يمكن بدء الاستلام.",
+  "deliveryQuoteAwaitingCourier": "الطلب خارج مدينة النشاط — بانتظار موصّل يحدد رسوم التوصيل.",
+  "deliveryQuoteAccept": "قبول الرسوم",
+  "deliveryQuoteDecline": "رفض",
+  "deliveryQuoteMerchantSuitable": "التاجر يرى أن الرسوم مناسبة",
+  "deliveryQuoteMerchantNotSuitable": "التاجر يرى أن الرسوم غير مناسبة",
+  "deliveryQuoteRecommendSuitable": "مناسبة",
+  "deliveryQuoteRecommendNotSuitable": "غير مناسبة",
+  "deliveryQuoteNoteLabel": "ملاحظة للعميل (اختياري)",
+  "deliveryQuoteCheckoutLater": "رسوم التوصيل: يحددها الموصّل بعد قبول طلبك، وتوافق عليها أنت.",
+  "deliveryQuoteSaved": "تم إرسال ردّك.",
+  "deliveryQuoteWaitingCustomer": "بانتظار رد العميل على {amount}",
+  "@deliveryQuoteWaitingCustomer": {
+    "placeholders": { "amount": { "type": "String" } }
+  },
+  "deliveryQuoteProposedTitle": "اقترح الموصّل رسوم توصيل {amount}",
+  "@deliveryQuoteProposedTitle": {
+    "placeholders": { "amount": { "type": "String" } }
+  },
+  "deliveryQuoteRecommendTitle": "الموصّل اقترح {amount} — هل هي مناسبة؟",
+  "@deliveryQuoteRecommendTitle": {
+    "placeholders": { "amount": { "type": "String" } }
+  },
   "orderDeliveryFeeRow": "رسوم التوصيل",
   "bookingPaymentBusinessStatusLabel": "استلام النشاط للمبلغ",
   "bookingPaymentBusinessButton": "تأكيد استلام المبلغ نقدًا",

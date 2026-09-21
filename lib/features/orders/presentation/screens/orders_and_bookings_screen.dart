@@ -265,6 +265,23 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
     }
   }
 
+  Future<void> _answerFee(PlacedOrder order, {required bool accept}) async {
+    final l10n = AppLocalizations.of(context)!;
+    setState(() => _busy = true);
+    try {
+      await ref.read(ordersApiProvider).answerDeliveryFee(order.id, accept: accept);
+      await _refreshDetail();
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.deliveryQuoteSaved)));
+    } catch (e) {
+      if (mounted) {
+        final message = e is ApiException ? e.message : l10n.commonSomethingWentWrong;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
   Future<void> _reorder(PlacedOrder order) async {
     final l10n = AppLocalizations.of(context)!;
     setState(() => _busy = true);
@@ -485,6 +502,50 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
           if (order.notes != null && order.notes!.isNotEmpty) ...[
             const SizedBox(height: 12),
             Text(order.notes!, style: Theme.of(context).textTheme.bodySmall),
+          ],
+          if (order.deliveryFeeQuote != null && order.deliveryFeeQuote!.isUnsettled) ...[
+            const Divider(height: 24),
+            if (order.deliveryFeeQuote!.isAwaitingQuote)
+              Text(l10n.deliveryQuoteAwaitingCourier, style: Theme.of(context).textTheme.bodyMedium)
+            else ...[
+              Text(
+                l10n.deliveryQuoteProposedTitle(order.deliveryFeeQuote!.proposedAmount?.toStringAsFixed(0) ?? ''),
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              if (order.deliveryFeeQuote!.recommendation != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text(
+                    order.deliveryFeeQuote!.recommendation == 'suitable'
+                        ? l10n.deliveryQuoteMerchantSuitable
+                        : l10n.deliveryQuoteMerchantNotSuitable,
+                    style: TextStyle(
+                      color: order.deliveryFeeQuote!.recommendation == 'suitable' ? AppColors.success : AppColors.error,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+              if ((order.deliveryFeeQuote!.recommendationNote ?? '').isNotEmpty)
+                Text(order.deliveryFeeQuote!.recommendationNote!, style: Theme.of(context).textTheme.bodySmall),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: _busy ? null : () => _answerFee(order, accept: false),
+                      child: Text(l10n.deliveryQuoteDecline),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: FilledButton(
+                      onPressed: _busy ? null : () => _answerFee(order, accept: true),
+                      child: Text(l10n.deliveryQuoteAccept),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ],
           if (order.status != 'cancelled' && order.isCashPayment) ...[
             const Divider(height: 24),

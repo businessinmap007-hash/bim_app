@@ -1220,6 +1220,71 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paymentConfirmSectionTitle => 'Payment confirmation';
 
   @override
+  String get deliveryQuoteEnterAmountTitle => 'Delivery fee for this order';
+
+  @override
+  String get deliveryQuoteAmountLabel => 'Amount';
+
+  @override
+  String get deliveryQuoteProposeButton => 'Propose the delivery fee';
+
+  @override
+  String get deliveryQuoteSend => 'Send';
+
+  @override
+  String get deliveryQuoteFeeLocked =>
+      'The delivery fee isn\'t agreed yet - pickup can\'t start.';
+
+  @override
+  String get deliveryQuoteAwaitingCourier =>
+      'This order is outside the business\'s city - waiting for a courier to set the delivery fee.';
+
+  @override
+  String get deliveryQuoteAccept => 'Accept the fee';
+
+  @override
+  String get deliveryQuoteDecline => 'Decline';
+
+  @override
+  String get deliveryQuoteMerchantSuitable =>
+      'The merchant considers this fee suitable';
+
+  @override
+  String get deliveryQuoteMerchantNotSuitable =>
+      'The merchant considers this fee not suitable';
+
+  @override
+  String get deliveryQuoteRecommendSuitable => 'Suitable';
+
+  @override
+  String get deliveryQuoteRecommendNotSuitable => 'Not suitable';
+
+  @override
+  String get deliveryQuoteNoteLabel => 'Note for the customer (optional)';
+
+  @override
+  String get deliveryQuoteCheckoutLater =>
+      'Delivery fee: set by the courier after they take your order, and you approve it.';
+
+  @override
+  String get deliveryQuoteSaved => 'Your answer was sent.';
+
+  @override
+  String deliveryQuoteWaitingCustomer(String amount) {
+    return 'Waiting for the customer to answer $amount';
+  }
+
+  @override
+  String deliveryQuoteProposedTitle(String amount) {
+    return 'The driver proposed a delivery fee of $amount';
+  }
+
+  @override
+  String deliveryQuoteRecommendTitle(String amount) {
+    return 'The driver proposed $amount - is it suitable?';
+  }
+
+  @override
   String get orderDeliveryFeeRow => 'Delivery fee';
 
   @override

@@ -2330,6 +2330,114 @@ abstract class AppLocalizations {
   /// **'تأكيد الدفع'**
   String get paymentConfirmSectionTitle;
 
+  /// No description provided for @deliveryQuoteEnterAmountTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسوم التوصيل لهذا الطلب'**
+  String get deliveryQuoteEnterAmountTitle;
+
+  /// No description provided for @deliveryQuoteAmountLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ'**
+  String get deliveryQuoteAmountLabel;
+
+  /// No description provided for @deliveryQuoteProposeButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'اقترح رسوم التوصيل'**
+  String get deliveryQuoteProposeButton;
+
+  /// No description provided for @deliveryQuoteSend.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال'**
+  String get deliveryQuoteSend;
+
+  /// No description provided for @deliveryQuoteFeeLocked.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسوم التوصيل لم تُعتمد بعد — لا يمكن بدء الاستلام.'**
+  String get deliveryQuoteFeeLocked;
+
+  /// No description provided for @deliveryQuoteAwaitingCourier.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطلب خارج مدينة النشاط — بانتظار موصّل يحدد رسوم التوصيل.'**
+  String get deliveryQuoteAwaitingCourier;
+
+  /// No description provided for @deliveryQuoteAccept.
+  ///
+  /// In ar, this message translates to:
+  /// **'قبول الرسوم'**
+  String get deliveryQuoteAccept;
+
+  /// No description provided for @deliveryQuoteDecline.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفض'**
+  String get deliveryQuoteDecline;
+
+  /// No description provided for @deliveryQuoteMerchantSuitable.
+  ///
+  /// In ar, this message translates to:
+  /// **'التاجر يرى أن الرسوم مناسبة'**
+  String get deliveryQuoteMerchantSuitable;
+
+  /// No description provided for @deliveryQuoteMerchantNotSuitable.
+  ///
+  /// In ar, this message translates to:
+  /// **'التاجر يرى أن الرسوم غير مناسبة'**
+  String get deliveryQuoteMerchantNotSuitable;
+
+  /// No description provided for @deliveryQuoteRecommendSuitable.
+  ///
+  /// In ar, this message translates to:
+  /// **'مناسبة'**
+  String get deliveryQuoteRecommendSuitable;
+
+  /// No description provided for @deliveryQuoteRecommendNotSuitable.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير مناسبة'**
+  String get deliveryQuoteRecommendNotSuitable;
+
+  /// No description provided for @deliveryQuoteNoteLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظة للعميل (اختياري)'**
+  String get deliveryQuoteNoteLabel;
+
+  /// No description provided for @deliveryQuoteCheckoutLater.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسوم التوصيل: يحددها الموصّل بعد قبول طلبك، وتوافق عليها أنت.'**
+  String get deliveryQuoteCheckoutLater;
+
+  /// No description provided for @deliveryQuoteSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال ردّك.'**
+  String get deliveryQuoteSaved;
+
+  /// No description provided for @deliveryQuoteWaitingCustomer.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار رد العميل على {amount}'**
+  String deliveryQuoteWaitingCustomer(String amount);
+
+  /// No description provided for @deliveryQuoteProposedTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اقترح الموصّل رسوم توصيل {amount}'**
+  String deliveryQuoteProposedTitle(String amount);
+
+  /// No description provided for @deliveryQuoteRecommendTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموصّل اقترح {amount} — هل هي مناسبة؟'**
+  String deliveryQuoteRecommendTitle(String amount);
+
   /// No description provided for @orderDeliveryFeeRow.
   ///
   /// In ar, this message translates to:

@@ -48,6 +48,30 @@ class OrderLineItem {
   }
 }
 
+/// The out-of-city delivery fee being agreed (OrderResource.delivery_fee_quote):
+/// `awaiting_quote` (no courier price yet) -> `proposed` -> `accepted`.
+class DeliveryFeeQuote {
+  final String status;
+  final double? proposedAmount;
+  final String? recommendation; // 'suitable' | 'not_suitable'
+  final String? recommendationNote;
+
+  const DeliveryFeeQuote({required this.status, this.proposedAmount, this.recommendation, this.recommendationNote});
+
+  bool get isProposed => status == 'proposed';
+  bool get isAwaitingQuote => status == 'awaiting_quote';
+
+  /// The delivery loop can't start until the customer has agreed.
+  bool get isUnsettled => isProposed || isAwaitingQuote;
+
+  factory DeliveryFeeQuote.fromJson(Map<String, dynamic> json) => DeliveryFeeQuote(
+    status: json['status'] as String? ?? '',
+    proposedAmount: (json['proposed_amount'] as num?)?.toDouble(),
+    recommendation: json['recommendation'] as String?,
+    recommendationNote: json['recommendation_note'] as String?,
+  );
+}
+
 /// Mirrors `OrderResource` — used for the customer's order history list and
 /// detail AND the business's incoming-order queue and detail (list
 /// responses omit `items`, matching `whenLoaded('items')` on the backend;
@@ -96,6 +120,7 @@ class PlacedOrder {
   // Cash orders are held to the three-party confirmation: pickup/dine-in
   // completion waits on the merchant's confirmation, reviews on settlement.
   final bool paymentConfirmationRequired;
+  final DeliveryFeeQuote? deliveryFeeQuote;
   final DateTime? paymentSettledAt;
   // The viewer's "I trust" ticks toward the other parties of the order, keyed
   // by 'customer' / 'business' / 'driver'. Null on list rows.
@@ -136,6 +161,7 @@ class PlacedOrder {
     this.driverPaymentConfirmedAt,
     this.depositReleased = false,
     this.paymentConfirmationRequired = false,
+    this.deliveryFeeQuote,
     this.paymentSettledAt,
     this.trust,
   });
@@ -205,6 +231,9 @@ class PlacedOrder {
       driverPaymentConfirmedAt: DateTime.tryParse(paymentConfirmations['driver_confirmed_at'] as String? ?? ''),
       depositReleased: deposit['released'] as bool? ?? false,
       paymentConfirmationRequired: json['payment_confirmation_required'] as bool? ?? false,
+      deliveryFeeQuote: json['delivery_fee_quote'] != null
+          ? DeliveryFeeQuote.fromJson(json['delivery_fee_quote'] as Map<String, dynamic>)
+          : null,
       paymentSettledAt: DateTime.tryParse(paymentConfirmations['settled_at'] as String? ?? ''),
       trust: (json['trust'] as Map<String, dynamic>?)?.map(
         (role, v) => MapEntry(role, (

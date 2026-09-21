@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../addresses/application/addresses_providers.dart';
 import '../../../addresses/presentation/widgets/address_pick_sheet.dart';
 import '../../../business/application/business_page_providers.dart';
 import '../../application/cart_controller.dart';
@@ -139,7 +140,16 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
     // Only a delivery order carries it, and only while the cart itself hasn't
     // already priced one in.
-    final deliveryFee = (selected == 'delivery' && widget.cart.deliveryFee <= 0) ? (fulfillment?.deliveryFee ?? 0.0) : 0.0;
+    // A saved address in another city than the business: the fee is not fixed,
+    // the courier proposes one per order and the customer approves it.
+    final addresses = ref.watch(addressesControllerProvider).items;
+    final chosen = _selectedAddressId == null ? null : addresses.where((a) => a.id == _selectedAddressId).firstOrNull;
+    final outOfCity = selected == 'delivery' &&
+        chosen?.cityId != null &&
+        fulfillment?.cityId != null &&
+        chosen!.cityId != fulfillment!.cityId;
+    final deliveryFee =
+        (selected == 'delivery' && !outOfCity && widget.cart.deliveryFee <= 0) ? (fulfillment?.deliveryFee ?? 0.0) : 0.0;
 
     String labelFor(String key) {
       if (key == 'dine_in') return l10n.cartFulfillmentDineIn;
@@ -236,6 +246,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           // The business's flat delivery charge is added when the order is
           // placed; show it here, before the total, so the customer isn't
           // surprised by it afterwards.
+          if (outOfCity)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Text(l10n.deliveryQuoteCheckoutLater, style: Theme.of(context).textTheme.bodySmall),
+            ),
           if (deliveryFee > 0)
             Padding(
               padding: const EdgeInsets.only(bottom: 8),

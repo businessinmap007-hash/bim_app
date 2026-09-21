@@ -74,6 +74,10 @@ class OrdersApi {
     return data['trusted'] as bool? ?? trusted;
   }
 
+  /// The customer answers the courier's proposed delivery fee.
+  Future<void> answerDeliveryFee(int id, {required bool accept}) =>
+      _client.post('/orders/$id/delivery-fee/${accept ? 'accept' : 'decline'}');
+
   Future<ReorderResult> reorder(int id) async {
     final data =
         await _client.post('/orders/$id/reorder') as Map<String, dynamic>;
@@ -165,6 +169,12 @@ class OrdersApi {
     final data = await _client.post(_biz('/business/orders/$id/confirm-payment', businessId)) as Map<String, dynamic>;
     return PlacedOrder.fromJson(data);
   }
+
+  /// The merchant tells the customer whether the courier's fee is fair.
+  Future<void> recommendDeliveryFee(int id, String recommendation, {String? note, int? businessId}) => _client.post(
+    _biz('/business/orders/$id/delivery-fee/recommendation', businessId),
+    data: {'recommendation': recommendation, if (note != null && note.trim().isNotEmpty) 'note': note.trim()},
+  );
 
   /// A specific line turned out unavailable while preparing — applies
   /// whatever the customer chose at checkout (Order.out_of_stock_policy).

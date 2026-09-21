@@ -10,6 +10,7 @@ import '../../../orders/data/models/placed_order.dart';
 import '../../../orders/application/orders_providers.dart';
 import '../../../orders/presentation/widgets/order_trust_section.dart';
 import '../../application/delivery_providers.dart';
+import '../widgets/fee_amount_dialog.dart';
 import 'token_qr_screen.dart';
 import 'token_scan_screen.dart';
 
@@ -29,6 +30,8 @@ class DriverOrderDetailScreen extends ConsumerStatefulWidget {
 class _DriverOrderDetailScreenState extends ConsumerState<DriverOrderDetailScreen> {
   late String? _stage = widget.order.deliveryStage;
   late bool _paymentConfirmed = widget.order.driverPaymentConfirmedAt != null;
+  late String? _feeStatus = widget.order.deliveryFeeQuote?.status;
+  double? _proposedFee;
   bool _busy = false;
   double? _distanceKm;
   bool _calculatingDistance = false;
@@ -74,6 +77,31 @@ class _DriverOrderDetailScreenState extends ConsumerState<DriverOrderDetailScree
           ),
         ),
       );
+    } catch (e) {
+      if (mounted) {
+        final message = e is ApiException ? e.message : l10n.commonSomethingWentWrong;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _proposeFee() async {
+    final l10n = AppLocalizations.of(context)!;
+    final amount = await askDeliveryFeeAmount(context);
+    if (amount == null || !mounted) return;
+
+    setState(() => _busy = true);
+    try {
+      await ref.read(deliveryApiProvider).proposeFee(widget.order.id, amount);
+      if (mounted) {
+        setState(() {
+          _feeStatus = 'proposed';
+          _proposedFee = amount;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.deliveryQuoteSaved)));
+      }
     } catch (e) {
       if (mounted) {
         final message = e is ApiException ? e.message : l10n.commonSomethingWentWrong;
@@ -238,6 +266,23 @@ class _DriverOrderDetailScreenState extends ConsumerState<DriverOrderDetailScree
               Text(order.finalTotal.toStringAsFixed(0), style: Theme.of(context).textTheme.titleSmall),
             ],
           ),
+          if (_feeStatus == 'awaiting_quote' || _feeStatus == 'proposed') ...[
+            if (_feeStatus == 'awaiting_quote')
+              OutlinedButton.icon(
+                onPressed: _busy ? null : _proposeFee,
+                icon: const Icon(Icons.payments_outlined),
+                label: Text(l10n.deliveryQuoteProposeButton),
+              )
+            else
+              Text(
+                l10n.deliveryQuoteWaitingCustomer(
+                  (_proposedFee ?? order.deliveryFeeQuote?.proposedAmount ?? 0).toStringAsFixed(0),
+                ),
+                style: TextStyle(color: Theme.of(context).hintColor),
+              ),
+            Text(l10n.deliveryQuoteFeeLocked, style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12)),
+            const SizedBox(height: 8),
+          ],
           OrderTrustSection(
             order: order,
             onToggle: (party, trusted) => ref.read(ordersApiProvider).setTrust(order.id, party, trusted),
@@ -252,7 +297,7 @@ class _DriverOrderDetailScreenState extends ConsumerState<DriverOrderDetailScree
           ],
           if (_stage == 'assigned')
             FilledButton.icon(
-              onPressed: _busy ? null : _scanPickup,
+              onPressed: (_busy || _feeStatus == 'awaiting_quote' || _feeStatus == 'proposed') ? null : _scanPickup,
               icon: const Icon(Icons.qr_code_scanner),
               label: Text(l10n.deliveryScanPickupTitle),
             )
