@@ -15,6 +15,7 @@ import '../../orders/presentation/screens/business_orders_screen.dart';
 import '../../orders/presentation/screens/customer_order_detail_screen.dart';
 import '../../orders/presentation/screens/orders_and_bookings_screen.dart';
 import '../../staff/presentation/screens/staff_invitation_dialog.dart';
+import '../../table/presentation/screens/table_calls_screen.dart';
 import '../../training/presentation/screens/training_plan_detail_screen.dart';
 import '../../training/presentation/screens/training_plan_manage_screen.dart';
 import '../../wallet/presentation/screens/wallet_screen.dart';
@@ -30,7 +31,7 @@ import '../data/models/app_notification.dart';
 /// an unhandled one is a silent no-op (the tap still marks the notification
 /// read) rather than a dead link — `open_business_products`,
 /// `open_shared_cart` (needs a share token, not an id) and
-/// `open_table_calls` (no dedicated screen yet) aren't wired up.
+/// aren't wired up.
 Future<void> openNotificationTarget(BuildContext context, WidgetRef ref, AppNotification notification) async {
   final id = notification.notifiableId;
 
@@ -48,6 +49,8 @@ Future<void> openNotificationTarget(BuildContext context, WidgetRef ref, AppNoti
           ),
         );
       }
+    case 'open_table_calls':
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const TableCallsScreen()));
     case 'open_shipping_order':
       Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ShippingOrdersScreen()));
     case 'open_driver_order':

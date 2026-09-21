@@ -5067,6 +5067,20 @@ class AppLocalizationsAr extends AppLocalizations {
   String get tableCallAssistance => 'طلب مساعدة';
 
   @override
+  String get tableCallsTitle => 'نداءات الطاولات';
+
+  @override
+  String get tableCallsEmpty => 'لا توجد طاولة تنادي الآن.';
+
+  @override
+  String tableCallTable(String label) {
+    return 'طاولة $label';
+  }
+
+  @override
+  String get tableCallResolve => 'تمت الخدمة';
+
+  @override
   String get tableCallSent => 'تم الإرسال إلى الطاقم.';
 
   @override

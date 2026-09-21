@@ -29,6 +29,7 @@ import '../../../staff/presentation/screens/attendance_verification_settings_scr
 import '../../../staff/presentation/screens/staff_activity_screen.dart';
 import '../../../staff/presentation/screens/staff_groups_screen.dart';
 import '../../../staff/presentation/screens/staff_screen.dart';
+import '../../../table/presentation/screens/table_calls_screen.dart';
 import '../../../training/presentation/screens/my_training_clients_screen.dart';
 import '../../../training_templates/presentation/screens/training_templates_screen.dart';
 
@@ -229,6 +230,12 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.qr_code_2_outlined,
         title: l10n.attendanceVerificationSettingsTitle,
         builder: (_) => const AttendanceVerificationSettingsScreen(),
+      ),
+      _Tile(
+        show: _has('orders'),
+        leading: Icons.room_service_outlined,
+        title: l10n.tableCallsTitle,
+        builder: (_) => const TableCallsScreen(),
       ),
       _Tile(
         show: _has('projects'),

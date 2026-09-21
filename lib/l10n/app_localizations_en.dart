@@ -5073,6 +5073,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tableCallAssistance => 'Ask for assistance';
 
   @override
+  String get tableCallsTitle => 'Table calls';
+
+  @override
+  String get tableCallsEmpty => 'No table is calling right now.';
+
+  @override
+  String tableCallTable(String label) {
+    return 'Table $label';
+  }
+
+  @override
+  String get tableCallResolve => 'Handled';
+
+  @override
   String get tableCallSent => 'Sent to staff.';
 
   @override

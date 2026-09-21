@@ -9470,6 +9470,30 @@ abstract class AppLocalizations {
   /// **'طلب مساعدة'**
   String get tableCallAssistance;
 
+  /// No description provided for @tableCallsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'نداءات الطاولات'**
+  String get tableCallsTitle;
+
+  /// No description provided for @tableCallsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد طاولة تنادي الآن.'**
+  String get tableCallsEmpty;
+
+  /// No description provided for @tableCallTable.
+  ///
+  /// In ar, this message translates to:
+  /// **'طاولة {label}'**
+  String tableCallTable(String label);
+
+  /// No description provided for @tableCallResolve.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت الخدمة'**
+  String get tableCallResolve;
+
   /// No description provided for @tableCallSent.
   ///
   /// In ar, this message translates to:
