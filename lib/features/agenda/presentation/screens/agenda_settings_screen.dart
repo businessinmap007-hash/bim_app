@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
@@ -20,8 +21,90 @@ class AgendaSettingsScreen extends StatelessWidget {
       appBar: AppBar(title: Text(l10n.agendaSettingsTitle)),
       body: ListView(
         padding: const EdgeInsets.all(16),
-        children: const [_MealTimesSection(), SizedBox(height: 24), _ReminderPreferencesSection()],
+        children: const [
+          _MealTimesSection(),
+          SizedBox(height: 24),
+          _ReminderPreferencesSection(),
+          SizedBox(height: 24),
+          _CalendarFeedSection(),
+        ],
       ),
+    );
+  }
+}
+
+/// The calendar-subscription URL: a public, unguessable ICS feed a phone
+/// calendar polls. Rotating it kills the old link everywhere.
+class _CalendarFeedSection extends ConsumerWidget {
+  const _CalendarFeedSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final url = ref.watch(agendaFeedUrlProvider);
+
+    Future<void> rotate() async {
+      final messenger = ScaffoldMessenger.of(context);
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Text(l10n.agendaFeedRotateConfirm),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l10n.commonCancel)),
+            TextButton(onPressed: () => Navigator.pop(context, true), child: Text(l10n.agendaFeedRotate)),
+          ],
+        ),
+      );
+      if (confirmed != true) return;
+      try {
+        await ref.read(agendaApiProvider).rotateFeedUrl();
+        ref.invalidate(agendaFeedUrlProvider);
+      } catch (_) {
+        messenger.showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+      }
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(l10n.agendaFeedTitle, style: theme.textTheme.titleSmall),
+        const SizedBox(height: 4),
+        Text(l10n.agendaFeedHint, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+        const SizedBox(height: 12),
+        url.when(
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (_, _) => Text(l10n.commonSomethingWentWrong),
+          data: (value) => Card(
+            margin: EdgeInsets.zero,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SelectableText(value, textDirection: TextDirection.ltr, style: theme.textTheme.bodySmall),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    children: [
+                      FilledButton.icon(
+                        onPressed: () async {
+                          final messenger = ScaffoldMessenger.of(context);
+                          await Clipboard.setData(ClipboardData(text: value));
+                          messenger.showSnackBar(SnackBar(content: Text(l10n.agendaFeedCopied)));
+                        },
+                        icon: const Icon(Icons.copy, size: 18),
+                        label: Text(l10n.agendaFeedCopy),
+                      ),
+                      OutlinedButton(onPressed: rotate, child: Text(l10n.agendaFeedRotate)),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

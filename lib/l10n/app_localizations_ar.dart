@@ -1915,6 +1915,55 @@ class AppLocalizationsAr extends AppLocalizations {
   String get agendaTitleRequired => 'أدخل عنوان المهمة.';
 
   @override
+  String get agendaRepeat => 'التكرار';
+
+  @override
+  String get agendaRepeatNone => 'بلا تكرار';
+
+  @override
+  String get agendaRepeatDaily => 'يومياً';
+
+  @override
+  String get agendaRepeatWeekly => 'أسبوعياً';
+
+  @override
+  String get agendaRepeatWeeks => 'عدد الأسابيع';
+
+  @override
+  String get agendaRepeatFromToday => 'يبدأ التكرار من اليوم.';
+
+  @override
+  String get agendaRemindMe => 'ذكّرني';
+
+  @override
+  String get agendaWeekdaysRequired => 'اختر يوماً واحداً على الأقل.';
+
+  @override
+  String agendaRecurringResult(int created, int skipped) {
+    return 'أُضيفت $created مهمة، وتم تخطي $skipped لتعارضها مع مواعيد أخرى.';
+  }
+
+  @override
+  String get agendaFeedTitle => 'مزامنة مع تقويم الهاتف';
+
+  @override
+  String get agendaFeedHint =>
+      'انسخ الرابط واشترك به في تقويم جوجل أو أبل ليظهر جدولك هناك تلقائياً.';
+
+  @override
+  String get agendaFeedCopy => 'نسخ الرابط';
+
+  @override
+  String get agendaFeedCopied => 'تم نسخ الرابط.';
+
+  @override
+  String get agendaFeedRotate => 'إنشاء رابط جديد';
+
+  @override
+  String get agendaFeedRotateConfirm =>
+      'الرابط القديم سيتوقف عن العمل في كل التقاويم المشتركة به. هل تريد المتابعة؟';
+
+  @override
   String get cartShareCart => 'مشاركة السلة';
 
   @override

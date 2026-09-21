@@ -3578,6 +3578,96 @@ abstract class AppLocalizations {
   /// **'أدخل عنوان المهمة.'**
   String get agendaTitleRequired;
 
+  /// No description provided for @agendaRepeat.
+  ///
+  /// In ar, this message translates to:
+  /// **'التكرار'**
+  String get agendaRepeat;
+
+  /// No description provided for @agendaRepeatNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'بلا تكرار'**
+  String get agendaRepeatNone;
+
+  /// No description provided for @agendaRepeatDaily.
+  ///
+  /// In ar, this message translates to:
+  /// **'يومياً'**
+  String get agendaRepeatDaily;
+
+  /// No description provided for @agendaRepeatWeekly.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسبوعياً'**
+  String get agendaRepeatWeekly;
+
+  /// No description provided for @agendaRepeatWeeks.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد الأسابيع'**
+  String get agendaRepeatWeeks;
+
+  /// No description provided for @agendaRepeatFromToday.
+  ///
+  /// In ar, this message translates to:
+  /// **'يبدأ التكرار من اليوم.'**
+  String get agendaRepeatFromToday;
+
+  /// No description provided for @agendaRemindMe.
+  ///
+  /// In ar, this message translates to:
+  /// **'ذكّرني'**
+  String get agendaRemindMe;
+
+  /// No description provided for @agendaWeekdaysRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر يوماً واحداً على الأقل.'**
+  String get agendaWeekdaysRequired;
+
+  /// No description provided for @agendaRecurringResult.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُضيفت {created} مهمة، وتم تخطي {skipped} لتعارضها مع مواعيد أخرى.'**
+  String agendaRecurringResult(int created, int skipped);
+
+  /// No description provided for @agendaFeedTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مزامنة مع تقويم الهاتف'**
+  String get agendaFeedTitle;
+
+  /// No description provided for @agendaFeedHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'انسخ الرابط واشترك به في تقويم جوجل أو أبل ليظهر جدولك هناك تلقائياً.'**
+  String get agendaFeedHint;
+
+  /// No description provided for @agendaFeedCopy.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسخ الرابط'**
+  String get agendaFeedCopy;
+
+  /// No description provided for @agendaFeedCopied.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم نسخ الرابط.'**
+  String get agendaFeedCopied;
+
+  /// No description provided for @agendaFeedRotate.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء رابط جديد'**
+  String get agendaFeedRotate;
+
+  /// No description provided for @agendaFeedRotateConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرابط القديم سيتوقف عن العمل في كل التقاويم المشتركة به. هل تريد المتابعة؟'**
+  String get agendaFeedRotateConfirm;
+
   /// No description provided for @cartShareCart.
   ///
   /// In ar, this message translates to:

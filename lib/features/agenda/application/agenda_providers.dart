@@ -9,6 +9,10 @@ final agendaApiProvider = Provider<AgendaApi>((ref) {
   return AgendaApi(ref.watch(apiClientProvider));
 });
 
+final agendaFeedUrlProvider = FutureProvider.autoDispose<String>((ref) {
+  return ref.watch(agendaApiProvider).feedUrl();
+});
+
 final mealTimesProvider = FutureProvider.autoDispose<MealTimes>((ref) {
   return ref.watch(agendaApiProvider).mealTimes();
 });
@@ -60,8 +64,9 @@ class AgendaDayController extends StateNotifier<AgendaDayState> {
     required DateTime startsAt,
     DateTime? endsAt,
     String? notes,
+    bool remind = false,
   }) async {
-    await _api.addTask(title: title, startsAt: startsAt, endsAt: endsAt, notes: notes);
+    await _api.addTask(title: title, startsAt: startsAt, endsAt: endsAt, notes: notes, remind: remind);
     await load();
   }
 

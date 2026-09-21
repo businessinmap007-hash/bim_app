@@ -1911,6 +1911,55 @@ class AppLocalizationsEn extends AppLocalizations {
   String get agendaTitleRequired => 'Enter a title for the task.';
 
   @override
+  String get agendaRepeat => 'Repeat';
+
+  @override
+  String get agendaRepeatNone => 'Does not repeat';
+
+  @override
+  String get agendaRepeatDaily => 'Daily';
+
+  @override
+  String get agendaRepeatWeekly => 'Weekly';
+
+  @override
+  String get agendaRepeatWeeks => 'Number of weeks';
+
+  @override
+  String get agendaRepeatFromToday => 'Repeating starts from today.';
+
+  @override
+  String get agendaRemindMe => 'Remind me';
+
+  @override
+  String get agendaWeekdaysRequired => 'Pick at least one day.';
+
+  @override
+  String agendaRecurringResult(int created, int skipped) {
+    return 'Added $created tasks; skipped $skipped that clashed with other commitments.';
+  }
+
+  @override
+  String get agendaFeedTitle => 'Sync with your phone calendar';
+
+  @override
+  String get agendaFeedHint =>
+      'Copy the link and subscribe to it in Google or Apple Calendar so your schedule appears there automatically.';
+
+  @override
+  String get agendaFeedCopy => 'Copy link';
+
+  @override
+  String get agendaFeedCopied => 'Link copied.';
+
+  @override
+  String get agendaFeedRotate => 'Create a new link';
+
+  @override
+  String get agendaFeedRotateConfirm =>
+      'The old link will stop working in every calendar subscribed to it. Continue?';
+
+  @override
   String get cartShareCart => 'Share cart';
 
   @override
