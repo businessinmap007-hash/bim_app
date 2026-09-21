@@ -622,6 +622,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get locationFieldLabel => 'Governorate / City';
 
   @override
+  String get locationGovernorateLabel => 'Governorate';
+
+  @override
+  String get locationCityLabel => 'City / village / district';
+
+  @override
+  String get locationChooseCityHint => 'Choose the city';
+
+  @override
   String get locationChooseHint => 'Choose a governorate and city';
 
   @override

@@ -38,28 +38,80 @@ class LocationPickerField extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return InkWell(
-      borderRadius: BorderRadius.circular(12),
-      onTap: () async {
-        final selection = await showModalBottomSheet<LocationSelection>(
-          context: context,
-          isScrollControlled: true,
-          builder: (context) => const _LocationPickerSheet(),
-        );
-        if (selection != null) onChanged(selection);
-      },
-      child: InputDecorator(
-        decoration: InputDecoration(
-          labelText: l10n.locationFieldLabel,
-          errorText: errorText,
-          suffixIcon: const Icon(Icons.arrow_drop_down),
+    final (governorateName, cityName) = _parts();
+    final hint = TextStyle(color: Theme.of(context).hintColor);
+
+    // Two separate fields: a wrong city inside the right governorate is fixed by
+    // touching the city field only; touching the governorate restarts the choice.
+    return Column(
+      children: [
+        InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () => _pickGovernorate(context),
+          child: InputDecorator(
+            decoration: InputDecoration(
+              labelText: l10n.locationGovernorateLabel,
+              errorText: errorText,
+              suffixIcon: const Icon(Icons.arrow_drop_down),
+            ),
+            child: Text(
+              governorateName.isEmpty ? l10n.locationChooseGovernorate : governorateName,
+              style: governorateName.isEmpty ? hint : null,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
         ),
-        child: Text(
-          value?.label ?? l10n.locationChooseHint,
-          style: value == null ? TextStyle(color: Theme.of(context).hintColor) : null,
-          overflow: TextOverflow.ellipsis,
+        const SizedBox(height: 12),
+        InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () => _pickCity(context),
+          child: InputDecorator(
+            decoration: InputDecoration(labelText: l10n.locationCityLabel, suffixIcon: const Icon(Icons.arrow_drop_down)),
+            child: Text(
+              cityName.isEmpty ? l10n.locationChooseCityHint : cityName,
+              style: cityName.isEmpty ? hint : null,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
         ),
-      ),
+      ],
+    );
+  }
+
+  /// "governorate — city", the label every producer of a [LocationSelection] builds.
+  (String, String) _parts() {
+    final label = value?.label;
+    if (label == null) return ('', '');
+    final i = label.indexOf(' — ');
+    return i < 0 ? (label, '') : (label.substring(0, i), label.substring(i + 3));
+  }
+
+  Future<void> _pickGovernorate(BuildContext context) async {
+    final governorate = await showModalBottomSheet<LocationGovernorate>(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => const _LocationPickerSheet(governorateOnly: true),
+    );
+    if (governorate == null || !context.mounted) return;
+    await _pickCityIn(context, governorate);
+  }
+
+  Future<void> _pickCityIn(BuildContext context, LocationGovernorate governorate) async {
+    final selection = await showModalBottomSheet<LocationSelection>(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => _LocationPickerSheet(presetGovernorate: governorate),
+    );
+    if (selection != null) onChanged(selection);
+  }
+
+  Future<void> _pickCity(BuildContext context) async {
+    final current = value;
+    if (current == null) return _pickGovernorate(context);
+    final (governorateName, _) = _parts();
+    await _pickCityIn(
+      context,
+      LocationGovernorate(id: current.governorateId, countryId: current.countryId, nameAr: governorateName),
     );
   }
 }
@@ -72,14 +124,20 @@ class LocationPickerField extends StatelessWidget {
 /// straight at governorates. A single wrong tap used to be able to land the
 /// picker on some other country's now-forever-empty governorate list.
 class _LocationPickerSheet extends ConsumerStatefulWidget {
-  const _LocationPickerSheet();
+  /// Only choose the governorate and hand it back (the city is then picked separately).
+  final bool governorateOnly;
+
+  /// Start on this governorate's cities (city-only change).
+  final LocationGovernorate? presetGovernorate;
+
+  const _LocationPickerSheet({this.governorateOnly = false, this.presetGovernorate});
 
   @override
   ConsumerState<_LocationPickerSheet> createState() => _LocationPickerSheetState();
 }
 
 class _LocationPickerSheetState extends ConsumerState<_LocationPickerSheet> {
-  LocationGovernorate? _selectedGovernorate;
+  late LocationGovernorate? _selectedGovernorate = widget.presetGovernorate;
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +172,7 @@ class _LocationPickerSheetState extends ConsumerState<_LocationPickerSheet> {
                     padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
                     child: Row(
                       children: [
-                        if (governorate != null)
+                        if (governorate != null && widget.presetGovernorate == null)
                           IconButton(
                             icon: const Icon(Icons.arrow_back),
                             onPressed: () => setState(() => _selectedGovernorate = null),
@@ -139,7 +197,13 @@ class _LocationPickerSheetState extends ConsumerState<_LocationPickerSheet> {
                         ? _GovernorateList(
                             scrollController: scrollController,
                             countryId: egypt.id,
-                            onSelected: (g) => setState(() => _selectedGovernorate = g),
+                            onSelected: (g) {
+                              if (widget.governorateOnly) {
+                                Navigator.of(context).pop(g);
+                              } else {
+                                setState(() => _selectedGovernorate = g);
+                              }
+                            },
                           )
                         : _CityList(
                             scrollController: scrollController,
@@ -221,7 +285,7 @@ class _CityListState extends ConsumerState<_CityList> {
   void _onChanged(String value) {
     _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 300), () {
-      if (mounted) setState(() => _query = value.trim().toLowerCase());
+      if (mounted) setState(() => _query = value.trim());
     });
   }
 
@@ -235,7 +299,10 @@ class _CityListState extends ConsumerState<_CityList> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final cities = ref.watch(citiesProvider(widget.governorateId));
+    // Typing searches the server (the plain list is capped); empty shows the default list.
+    final cities = _query.isEmpty
+        ? ref.watch(citiesProvider(widget.governorateId))
+        : ref.watch(citySearchProvider((governorateId: widget.governorateId, q: _query)));
     final languageCode = Localizations.localeOf(context).languageCode;
 
     return Column(
@@ -251,9 +318,7 @@ class _CityListState extends ConsumerState<_CityList> {
         Expanded(
           child: cities.when(
             data: (items) {
-              final filtered = _query.isEmpty
-                  ? items
-                  : items.where((c) => c.localizedName(languageCode).toLowerCase().contains(_query)).toList();
+              final filtered = items;
               if (filtered.isEmpty) return Center(child: Text(l10n.locationEmpty));
               return ListView.separated(
                 controller: widget.scrollController,

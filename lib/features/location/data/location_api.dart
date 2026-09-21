@@ -20,8 +20,12 @@ class LocationApi {
     return governorates.map((e) => LocationGovernorate.fromJson(e as Map<String, dynamic>)).toList();
   }
 
-  Future<List<LocationCity>> cities(int governorateId) async {
-    final data = await _client.get('/locations/cities', query: {'governorate_id': governorateId}) as Map<String, dynamic>;
+  Future<List<LocationCity>> cities(int governorateId, {String? q}) async {
+    final data = await _client.get(
+          '/locations/cities',
+          query: {'governorate_id': governorateId, if (q != null && q.isNotEmpty) 'q': q},
+        )
+        as Map<String, dynamic>;
     final cities = data['cities'] as List<dynamic>? ?? [];
     return cities.map((e) => LocationCity.fromJson(e as Map<String, dynamic>)).toList();
   }

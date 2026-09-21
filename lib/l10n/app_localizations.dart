@@ -1208,6 +1208,24 @@ abstract class AppLocalizations {
   /// **'المحافظة / المدينة'**
   String get locationFieldLabel;
 
+  /// No description provided for @locationGovernorateLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المحافظة'**
+  String get locationGovernorateLabel;
+
+  /// No description provided for @locationCityLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المدينة / القرية / الحي'**
+  String get locationCityLabel;
+
+  /// No description provided for @locationChooseCityHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر المدينة'**
+  String get locationChooseCityHint;
+
   /// No description provided for @locationChooseHint.
   ///
   /// In ar, this message translates to:

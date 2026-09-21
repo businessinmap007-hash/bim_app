@@ -630,6 +630,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get locationFieldLabel => 'المحافظة / المدينة';
 
   @override
+  String get locationGovernorateLabel => 'المحافظة';
+
+  @override
+  String get locationCityLabel => 'المدينة / القرية / الحي';
+
+  @override
+  String get locationChooseCityHint => 'اختر المدينة';
+
+  @override
   String get locationChooseHint => 'اختر المحافظة والمدينة';
 
   @override
