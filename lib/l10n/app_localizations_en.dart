@@ -3122,6 +3122,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get offersEmpty => 'No offers right now.';
 
   @override
+  String get offersAllCategories => 'All';
+
+  @override
+  String get offersOpenNow => 'Open now';
+
+  @override
   String get offersSearchHint => 'Search offers...';
 
   @override

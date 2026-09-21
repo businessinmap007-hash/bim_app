@@ -4,6 +4,25 @@ import 'models/commercial_offer.dart';
 import 'models/offer_comparison_row.dart';
 import 'models/offer_follow.dart';
 
+/// One root category with live offers — the tab's own top-level navigation.
+class OfferCategory {
+  final int id;
+  final String nameAr;
+  final String? nameEn;
+  final int offersCount;
+
+  const OfferCategory({required this.id, required this.nameAr, this.nameEn, required this.offersCount});
+
+  String localizedName(String languageCode) => languageCode == 'en' && (nameEn?.isNotEmpty ?? false) ? nameEn! : nameAr;
+
+  factory OfferCategory.fromJson(Map<String, dynamic> json) => OfferCategory(
+    id: (json['id'] as num).toInt(),
+    nameAr: json['name_ar'] as String? ?? '',
+    nameEn: json['name_en'] as String?,
+    offersCount: (json['offers_count'] as num?)?.toInt() ?? 0,
+  );
+}
+
 /// /offers, /offer-follows, /offers/compare — public deal discovery, "follow
 /// a business for future offers", and price comparison across sellers for
 /// one specific item (see OfferDiscoveryController, OfferTrackingController,
@@ -16,6 +35,8 @@ class OffersApi {
   Future<Paginated<CommercialOffer>> browse({
     String? q,
     String? sort,
+    int? categoryId,
+    bool openNow = false,
     int page = 1,
   }) async {
     final body =
@@ -24,12 +45,20 @@ class OffersApi {
               query: {
                 if (q != null && q.isNotEmpty) 'q': q,
                 'sort': ?sort,
+                'category_id': ?categoryId,
+                if (openNow) 'open_now': 1,
                 'page': page,
               },
             )
             as Map<String, dynamic>;
     final offers = body['offers'] as Map<String, dynamic>;
     return Paginated.fromJson(offers, CommercialOffer.fromJson);
+  }
+
+  /// Root categories that currently have at least one live public offer.
+  Future<List<OfferCategory>> categories() async {
+    final data = await _client.get('/offers/categories') as Map<String, dynamic>;
+    return (data['categories'] as List<dynamic>? ?? []).map((e) => OfferCategory.fromJson(e as Map<String, dynamic>)).toList();
   }
 
   Future<CommercialOffer> show(int id) async {

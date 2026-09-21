@@ -3123,6 +3123,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get offersEmpty => 'لا توجد عروض الآن.';
 
   @override
+  String get offersAllCategories => 'الكل';
+
+  @override
+  String get offersOpenNow => 'مفتوح الآن';
+
+  @override
   String get offersSearchHint => 'ابحث عن عرض...';
 
   @override

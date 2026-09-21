@@ -1041,6 +1041,8 @@
   "prescriptionRemovePhotoConfirm": "حذف هذه الصورة؟",
   "offersTitle": "العروض",
   "offersEmpty": "لا توجد عروض الآن.",
+  "offersAllCategories": "الكل",
+  "offersOpenNow": "مفتوح الآن",
   "offersSearchHint": "ابحث عن عرض...",
   "offerSortBoosted": "مميز",
   "offerSortLatest": "الأحدث",

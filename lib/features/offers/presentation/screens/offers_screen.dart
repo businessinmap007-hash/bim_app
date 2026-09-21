@@ -78,6 +78,47 @@ class _OffersScreenState extends ConsumerState<OffersScreen> {
               ],
             ),
           ),
+          SizedBox(
+            height: 44,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              children: [
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(end: 8),
+                  child: FilterChip(
+                    label: Text(l10n.offersOpenNow),
+                    selected: state.openNow,
+                    onSelected: (on) => ref.read(offersControllerProvider.notifier).setOpenNow(on),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(end: 8),
+                  child: ChoiceChip(
+                    label: Text(l10n.offersAllCategories),
+                    selected: state.categoryId == null,
+                    onSelected: (_) => ref.read(offersControllerProvider.notifier).setCategory(null),
+                  ),
+                ),
+                ...ref
+                    .watch(offerCategoriesProvider)
+                    .maybeWhen(
+                      data: (cats) => [
+                        for (final c in cats)
+                          Padding(
+                            padding: const EdgeInsetsDirectional.only(end: 8),
+                            child: ChoiceChip(
+                              label: Text('${c.localizedName(languageCode)} (${c.offersCount})'),
+                              selected: state.categoryId == c.id,
+                              onSelected: (_) => ref.read(offersControllerProvider.notifier).setCategory(c.id),
+                            ),
+                          ),
+                      ],
+                      orElse: () => const <Widget>[],
+                    ),
+              ],
+            ),
+          ),
           Expanded(
             child: state.isLoading
                 ? const Center(child: CircularProgressIndicator())

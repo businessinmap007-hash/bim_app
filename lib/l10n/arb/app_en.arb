@@ -1041,6 +1041,8 @@
   "prescriptionRemovePhotoConfirm": "Remove this photo?",
   "offersTitle": "Offers",
   "offersEmpty": "No offers right now.",
+  "offersAllCategories": "All",
+  "offersOpenNow": "Open now",
   "offersSearchHint": "Search offers...",
   "offerSortBoosted": "Featured",
   "offerSortLatest": "Latest",

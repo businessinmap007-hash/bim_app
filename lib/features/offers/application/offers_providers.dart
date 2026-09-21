@@ -20,6 +20,8 @@ class OffersState {
   final String? error;
   final String query;
   final String sort;
+  final int? categoryId;
+  final bool openNow;
 
   const OffersState({
     this.items = const [],
@@ -29,6 +31,8 @@ class OffersState {
     this.error,
     this.query = '',
     this.sort = 'boosted',
+    this.categoryId,
+    this.openNow = false,
   });
 
   OffersState copyWith({
@@ -40,6 +44,9 @@ class OffersState {
     bool clearError = false,
     String? query,
     String? sort,
+    int? categoryId,
+    bool clearCategory = false,
+    bool? openNow,
   }) {
     return OffersState(
       items: items ?? this.items,
@@ -49,6 +56,8 @@ class OffersState {
       error: clearError ? null : (error ?? this.error),
       query: query ?? this.query,
       sort: sort ?? this.sort,
+      categoryId: clearCategory ? null : (categoryId ?? this.categoryId),
+      openNow: openNow ?? this.openNow,
     );
   }
 }
@@ -65,7 +74,7 @@ class OffersController extends StateNotifier<OffersState> {
     state = state.copyWith(isLoading: true, clearError: true);
     _page = 1;
     try {
-      final result = await _api.browse(q: state.query, sort: state.sort, page: _page);
+      final result = await _api.browse(q: state.query, sort: state.sort, categoryId: state.categoryId, openNow: state.openNow, page: _page);
       state = state.copyWith(items: result.items, isLoading: false, hasMore: result.hasMore);
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
@@ -76,7 +85,7 @@ class OffersController extends StateNotifier<OffersState> {
     if (state.isLoadingMore || !state.hasMore) return;
     state = state.copyWith(isLoadingMore: true);
     try {
-      final result = await _api.browse(q: state.query, sort: state.sort, page: _page + 1);
+      final result = await _api.browse(q: state.query, sort: state.sort, categoryId: state.categoryId, openNow: state.openNow, page: _page + 1);
       _page += 1;
       state = state.copyWith(
         items: [...state.items, ...result.items],
@@ -93,6 +102,16 @@ class OffersController extends StateNotifier<OffersState> {
     await load();
   }
 
+  Future<void> setCategory(int? id) async {
+    state = id == null ? state.copyWith(clearCategory: true) : state.copyWith(categoryId: id);
+    await load();
+  }
+
+  Future<void> setOpenNow(bool on) async {
+    state = state.copyWith(openNow: on);
+    await load();
+  }
+
   Future<void> setSort(String sort) async {
     state = state.copyWith(sort: sort);
     await load();
@@ -101,6 +120,10 @@ class OffersController extends StateNotifier<OffersState> {
 
 final offersControllerProvider = StateNotifierProvider<OffersController, OffersState>((ref) {
   return OffersController(ref.watch(offersApiProvider));
+});
+
+final offerCategoriesProvider = FutureProvider.autoDispose<List<OfferCategory>>((ref) {
+  return ref.watch(offersApiProvider).categories();
 });
 
 final offerDetailProvider = FutureProvider.family<CommercialOffer, int>((ref, id) async {

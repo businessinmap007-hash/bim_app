@@ -5816,6 +5816,18 @@ abstract class AppLocalizations {
   /// **'لا توجد عروض الآن.'**
   String get offersEmpty;
 
+  /// No description provided for @offersAllCategories.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get offersAllCategories;
+
+  /// No description provided for @offersOpenNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفتوح الآن'**
+  String get offersOpenNow;
+
   /// No description provided for @offersSearchHint.
   ///
   /// In ar, this message translates to:
