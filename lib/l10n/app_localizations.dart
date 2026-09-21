@@ -9800,6 +9800,30 @@ abstract class AppLocalizations {
   /// **'لا توجد خطط عملاء بعد.'**
   String get trainingClientsEmpty;
 
+  /// No description provided for @trainingWeeklyAverage.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوسط التزام عملائك هذا الأسبوع: {percent}%'**
+  String trainingWeeklyAverage(int percent);
+
+  /// No description provided for @trainingWeeklyRange.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأسبوع من {from} إلى {to}'**
+  String trainingWeeklyRange(String from, String to);
+
+  /// No description provided for @trainingClientWeek.
+  ///
+  /// In ar, this message translates to:
+  /// **'{done} من {target} جولة · {days} أيام نشطة · {checkins} متابعات'**
+  String trainingClientWeek(int done, int target, int days, int checkins);
+
+  /// No description provided for @trainingClientNoSchedule.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد تمارين مجدولة بعد'**
+  String get trainingClientNoSchedule;
+
   /// No description provided for @trainingPlanStatusActive.
   ///
   /// In ar, this message translates to:

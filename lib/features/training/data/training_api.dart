@@ -3,6 +3,7 @@ import '../../../core/network/paginated.dart';
 import '../../chat/data/models/thread_message.dart';
 import 'models/body_report.dart';
 import 'models/training_plan.dart';
+import 'models/trainer_weekly_summary.dart';
 import 'models/weekly_summary.dart';
 
 typedef TrainingChatPage = ({List<ThreadMessage> messages, ChatThread thread});
@@ -164,6 +165,15 @@ class TrainingApi {
             )
             as Map<String, dynamic>;
     return Paginated.fromJson(data, TrainingPlan.fromJson);
+  }
+
+  /// GET /business/training-plans/weekly-summary — adherence for every
+  /// active client at once (one query pass server-side).
+  Future<TrainerWeeklySummary> trainerWeeklySummary() async {
+    final data =
+        await _client.get('/business/training-plans/weekly-summary')
+            as Map<String, dynamic>;
+    return TrainerWeeklySummary.fromJson(data['summary'] as Map<String, dynamic>);
   }
 
   Future<TrainingPlan> businessPlan(int id) async {

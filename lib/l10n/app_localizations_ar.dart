@@ -5243,6 +5243,24 @@ class AppLocalizationsAr extends AppLocalizations {
   String get trainingClientsEmpty => 'لا توجد خطط عملاء بعد.';
 
   @override
+  String trainingWeeklyAverage(int percent) {
+    return 'متوسط التزام عملائك هذا الأسبوع: $percent%';
+  }
+
+  @override
+  String trainingWeeklyRange(String from, String to) {
+    return 'الأسبوع من $from إلى $to';
+  }
+
+  @override
+  String trainingClientWeek(int done, int target, int days, int checkins) {
+    return '$done من $target جولة · $days أيام نشطة · $checkins متابعات';
+  }
+
+  @override
+  String get trainingClientNoSchedule => 'لا توجد تمارين مجدولة بعد';
+
+  @override
   String get trainingPlanStatusActive => 'نشطة';
 
   @override

@@ -1,9 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/models/body_report.dart';
+import '../data/models/trainer_weekly_summary.dart';
 import '../data/models/training_plan.dart';
 import '../data/training_api.dart';
 import 'training_providers.dart';
+
+final trainerWeeklySummaryProvider = FutureProvider.autoDispose<TrainerWeeklySummary>((ref) {
+  return ref.watch(trainingApiProvider).trainerWeeklySummary();
+});
 
 class MyTrainingClientsState {
   final List<TrainingPlan> items;

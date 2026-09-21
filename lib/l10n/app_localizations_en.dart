@@ -5252,6 +5252,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trainingClientsEmpty => 'No client plans yet.';
 
   @override
+  String trainingWeeklyAverage(int percent) {
+    return 'Your clients\' average adherence this week: $percent%';
+  }
+
+  @override
+  String trainingWeeklyRange(String from, String to) {
+    return 'Week of $from to $to';
+  }
+
+  @override
+  String trainingClientWeek(int done, int target, int days, int checkins) {
+    return '$done of $target rounds · $days active days · $checkins check-ins';
+  }
+
+  @override
+  String get trainingClientNoSchedule => 'No exercises scheduled yet';
+
+  @override
   String get trainingPlanStatusActive => 'Active';
 
   @override
