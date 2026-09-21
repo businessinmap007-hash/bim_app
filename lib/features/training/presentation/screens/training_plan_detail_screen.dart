@@ -208,8 +208,7 @@ class _ExercisesTab extends ConsumerWidget {
       context,
       title: l10n.trainingLogSetTitle(exercise.completedRoundsToday + 1),
       initialReps: firstNumber(exercise.reps),
-      // Same weight as the last set today, else what the trainer prescribed.
-      initialWeight: exercise.todayRounds.isNotEmpty ? exercise.todayRounds.last.weight : exercise.targetWeight,
+      initialWeight: _plannedWeight(exercise),
     );
     if (entry == null) return;
     try {
@@ -224,6 +223,16 @@ class _ExercisesTab extends ConsumerWidget {
     } catch (_) {
       messenger.showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
     }
+  }
+
+  /// The weight to start the next set at: this week's target for THAT set
+  /// (the programme's climb applied), else the last set's weight, else the
+  /// flat prescription.
+  double? _plannedWeight(PlanExercise exercise) {
+    final targets = exercise.currentTargets;
+    final next = exercise.completedRoundsToday;
+    if (targets.isNotEmpty) return next < targets.length ? targets[next] : targets.last;
+    return exercise.todayRounds.isNotEmpty ? exercise.todayRounds.last.weight : exercise.targetWeight;
   }
 
   /// Correct the reps/weight of a set already confirmed today.
@@ -261,14 +270,32 @@ class _ExercisesTab extends ConsumerWidget {
     }
     final dayKeys = byDay.keys.toList()..sort((a, b) => (a ?? -1).compareTo(b ?? -1));
 
+    // «Push» / «Pull» / «Legs» for a day, when the trainer named it.
+    String dayTitle(int day) {
+      final label = byDay[day]!.map((e) => e.dayLabel).firstWhere((l) => l != null && l.isNotEmpty, orElse: () => null);
+      return label == null ? _weekdayName(l10n, day) : '${_weekdayName(l10n, day)} · $label';
+    }
+
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
+        if (plan.weekNumber != null)
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: Chip(
+              avatar: const Icon(Icons.calendar_month_outlined, size: 18),
+              label: Text(
+                plan.totalWeeks != null
+                    ? l10n.trainingWeekOf(plan.weekNumber! > plan.totalWeeks! ? plan.totalWeeks! : plan.weekNumber!, plan.totalWeeks!)
+                    : l10n.trainingWeekNumber(plan.weekNumber!),
+              ),
+            ),
+          ),
         for (final day in dayKeys) ...[
           if (day != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 8, top: 8),
-              child: Text(_weekdayName(l10n, day), style: Theme.of(context).textTheme.titleSmall),
+              child: Text(dayTitle(day), style: Theme.of(context).textTheme.titleSmall),
             ),
           for (final e in byDay[day]!) ...[
             _ExerciseCard(
@@ -307,12 +334,24 @@ class _ExerciseCard extends StatelessWidget {
               children: [
                 if (exercise.sets != null) Text('${l10n.trainingSetsLabel}: ${exercise.sets}'),
                 if (exercise.reps != null) Text('${l10n.trainingRepsLabel}: ${exercise.reps}'),
-                if (exercise.targetWeight != null)
+                if (exercise.currentTargets.isEmpty && exercise.targetWeight != null)
                   Text('${l10n.trainingWeightLabel}: ${formatWeight(exercise.targetWeight)} ${l10n.trainingKgUnit}'),
                 if (exercise.restSeconds != null)
                   Text('${l10n.trainingRestLabel}: ${exercise.restSeconds}s'),
               ],
             ),
+            if (exercise.currentTargets.isNotEmpty) ...[
+              const SizedBox(height: 4),
+              Text(
+                l10n.trainingWeightsThisWeek(formatWeightList(exercise.currentTargets)),
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              if (exercise.nextTargets.isNotEmpty)
+                Text(
+                  l10n.trainingWeightsNextWeek(formatWeightList(exercise.nextTargets)),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),
+                ),
+            ],
             if (exercise.notes != null && exercise.notes!.isNotEmpty) ...[
               const SizedBox(height: 4),
               Text(exercise.notes!, style: Theme.of(context).textTheme.bodySmall),

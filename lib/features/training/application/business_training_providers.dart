@@ -170,6 +170,9 @@ class TrainingPlanManageController extends StateNotifier<TrainingPlanManageState
     int? sets,
     String? reps,
     double? targetWeight,
+    List<double>? setWeights,
+    int? progressEveryWeeks,
+    double? progressIncrementKg,
     int? restSeconds,
     String? notes,
   }) async {
@@ -181,6 +184,9 @@ class TrainingPlanManageController extends StateNotifier<TrainingPlanManageState
       sets: sets,
       reps: reps,
       targetWeight: targetWeight,
+      setWeights: setWeights,
+      progressEveryWeeks: progressEveryWeeks,
+      progressIncrementKg: progressIncrementKg,
       restSeconds: restSeconds,
       notes: notes,
     );
@@ -199,6 +205,11 @@ class TrainingPlanManageController extends StateNotifier<TrainingPlanManageState
 
   Future<void> addPhotos(String kind, int itemId, List<Uint8List> photos) async {
     await _api.addPlanPhotos(planId, kind, itemId, photos);
+    await load();
+  }
+
+  Future<void> updateProgram({int? weeks, int? everyWeeks, double? incrementKg}) async {
+    await _api.updateProgram(planId, weeks: weeks, everyWeeks: everyWeeks, incrementKg: incrementKg);
     await load();
   }
 

@@ -5,6 +5,8 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/business_training_providers.dart';
 import '../../data/models/body_report.dart';
+import '../../data/models/set_log.dart';
+import '../../data/models/training_plan.dart';
 import '../widgets/exercise_picker_sheet.dart';
 import '../widgets/plan_photo_strip.dart';
 import 'training_monthly_summary_screen.dart';
@@ -66,6 +68,9 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
     final setsCtrl = TextEditingController();
     final repsCtrl = TextEditingController();
     final weightCtrl = TextEditingController();
+    final weightsCtrl = TextEditingController();
+    final everyCtrl = TextEditingController();
+    final incrementCtrl = TextEditingController();
     int? dayOfWeek;
     int? libraryId;
 
@@ -136,6 +141,31 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
                     ),
                   ],
                 ),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: weightsCtrl,
+                  decoration: InputDecoration(labelText: l10n.trainingSetWeightsHint),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: everyCtrl,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(labelText: l10n.trainingProgramEvery),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: TextField(
+                        controller: incrementCtrl,
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        decoration: InputDecoration(labelText: l10n.trainingProgramIncrement),
+                      ),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 16),
                 FilledButton(
                   onPressed: () => Navigator.of(sheetContext).pop(true),
@@ -159,6 +189,9 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
             sets: int.tryParse(setsCtrl.text.trim()),
             reps: repsCtrl.text.trim().isEmpty ? null : repsCtrl.text.trim(),
             targetWeight: double.tryParse(weightCtrl.text.trim().replaceAll(',', '.')),
+            setWeights: parseWeightList(weightsCtrl.text),
+            progressEveryWeeks: int.tryParse(everyCtrl.text.trim()),
+            progressIncrementKg: double.tryParse(incrementCtrl.text.trim().replaceAll(',', '.')),
           );
     } catch (e) {
       if (mounted) {
@@ -329,6 +362,84 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
     }
   }
 
+  /// Length and weight climb for the whole plan at once.
+  Future<void> _editProgram(TrainingPlan plan) async {
+    final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+    final weeksCtrl = TextEditingController(text: plan.totalWeeks?.toString() ?? '');
+    final everyCtrl = TextEditingController();
+    final incrementCtrl = TextEditingController();
+
+    final ok = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      builder: (sheetContext) => Padding(
+        padding: EdgeInsets.fromLTRB(20, 20, 20, 20 + MediaQuery.of(sheetContext).viewInsets.bottom),
+        child: SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(l10n.trainingProgramTitle, style: Theme.of(sheetContext).textTheme.titleMedium),
+              const SizedBox(height: 4),
+              Text(
+                l10n.trainingProgramHint,
+                style: Theme.of(sheetContext).textTheme.bodySmall?.copyWith(color: Theme.of(sheetContext).hintColor),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: weeksCtrl,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(labelText: l10n.trainingProgramWeeks),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: everyCtrl,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(labelText: l10n.trainingProgramEvery),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: TextField(
+                      controller: incrementCtrl,
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      decoration: InputDecoration(labelText: l10n.trainingProgramIncrement),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              FilledButton(
+                onPressed: () => Navigator.of(sheetContext).pop(true),
+                child: Text(l10n.trainingProgramApply),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    if (ok != true || !mounted) return;
+    try {
+      await ref
+          .read(trainingPlanManageControllerProvider(widget.planId).notifier)
+          .updateProgram(
+            weeks: int.tryParse(weeksCtrl.text.trim()),
+            everyWeeks: int.tryParse(everyCtrl.text.trim()),
+            incrementKg: double.tryParse(incrementCtrl.text.trim().replaceAll(',', '.')),
+          );
+      messenger.showSnackBar(SnackBar(content: Text(l10n.trainingProgramSaved)));
+    } catch (e) {
+      messenger.showSnackBar(
+        SnackBar(content: Text(e is ApiException ? e.message : l10n.commonSomethingWentWrong)),
+      );
+    }
+  }
+
   String _dayLabel(AppLocalizations l10n, int day) => switch (day) {
     0 => l10n.weekdaySunday,
     1 => l10n.weekdayMonday,
@@ -395,6 +506,23 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
                       ),
                   ],
                 ),
+                const SizedBox(height: 12),
+                Card(
+                  margin: EdgeInsets.zero,
+                  child: ListTile(
+                    leading: const Icon(Icons.calendar_month_outlined),
+                    title: Text(l10n.trainingProgramTitle),
+                    subtitle: plan.weekNumber == null
+                        ? null
+                        : Text(
+                            plan.totalWeeks != null
+                                ? l10n.trainingWeekOf(plan.weekNumber! > plan.totalWeeks! ? plan.totalWeeks! : plan.weekNumber!, plan.totalWeeks!)
+                                : l10n.trainingWeekNumber(plan.weekNumber!),
+                          ),
+                    trailing: const Icon(Icons.edit_outlined),
+                    onTap: () => _editProgram(plan),
+                  ),
+                ),
                 const SizedBox(height: 20),
                 Row(
                   children: [
@@ -416,7 +544,9 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
                       subtitle: Text(
                         [
                           if (exercise.dayOfWeek != null) _dayLabel(l10n, exercise.dayOfWeek!),
+                          if (exercise.dayLabel != null && exercise.dayLabel!.isNotEmpty) exercise.dayLabel!,
                           if (exercise.sets != null) '${exercise.sets} × ${exercise.reps ?? '-'}',
+                          if (exercise.currentTargets.isNotEmpty) '${formatWeightList(exercise.currentTargets)} ${l10n.trainingKgUnit}',
                         ].join(' · '),
                       ),
                       trailing: IconButton(

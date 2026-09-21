@@ -5292,6 +5292,51 @@ class AppLocalizationsAr extends AppLocalizations {
   String get trainingClientsEmpty => 'لا توجد خطط عملاء بعد.';
 
   @override
+  String trainingWeekOf(int w, int t) {
+    return 'الأسبوع $w من $t';
+  }
+
+  @override
+  String trainingWeekNumber(int w) {
+    return 'الأسبوع $w';
+  }
+
+  @override
+  String trainingWeightsThisWeek(String w) {
+    return 'أوزان هذا الأسبوع: $w كجم';
+  }
+
+  @override
+  String trainingWeightsNextWeek(String w) {
+    return 'الأسبوع القادم: $w كجم';
+  }
+
+  @override
+  String get trainingProgramTitle => 'البرنامج';
+
+  @override
+  String get trainingProgramWeeks => 'عدد الأسابيع';
+
+  @override
+  String get trainingProgramEvery => 'زيادة الوزن كل (أسبوع)';
+
+  @override
+  String get trainingProgramIncrement => 'مقدار الزيادة (كجم)';
+
+  @override
+  String get trainingProgramApply => 'تطبيق على كل التمارين';
+
+  @override
+  String get trainingProgramHint =>
+      'تُحسب أوزان كل أسبوع تلقائياً من القاعدة، وتنطبق على كل تمرين له وزن.';
+
+  @override
+  String get trainingProgramSaved => 'تم تحديث البرنامج.';
+
+  @override
+  String get trainingSetWeightsHint => 'الأوزان لكل مجموعة (20-25-30)';
+
+  @override
   String trainingLogSetTitle(int n) {
     return 'تسجيل المجموعة $n';
   }

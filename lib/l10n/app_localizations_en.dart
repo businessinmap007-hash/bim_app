@@ -5301,6 +5301,51 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trainingClientsEmpty => 'No client plans yet.';
 
   @override
+  String trainingWeekOf(int w, int t) {
+    return 'Week $w of $t';
+  }
+
+  @override
+  String trainingWeekNumber(int w) {
+    return 'Week $w';
+  }
+
+  @override
+  String trainingWeightsThisWeek(String w) {
+    return 'This week: $w kg';
+  }
+
+  @override
+  String trainingWeightsNextWeek(String w) {
+    return 'Next week: $w kg';
+  }
+
+  @override
+  String get trainingProgramTitle => 'Programme';
+
+  @override
+  String get trainingProgramWeeks => 'Number of weeks';
+
+  @override
+  String get trainingProgramEvery => 'Add weight every (weeks)';
+
+  @override
+  String get trainingProgramIncrement => 'Increase by (kg)';
+
+  @override
+  String get trainingProgramApply => 'Apply to every exercise';
+
+  @override
+  String get trainingProgramHint =>
+      'Each week\'s weights are worked out from the rule and apply to every exercise that has a weight.';
+
+  @override
+  String get trainingProgramSaved => 'Programme updated.';
+
+  @override
+  String get trainingSetWeightsHint => 'Weights per set (20-25-30)';
+
+  @override
   String trainingLogSetTitle(int n) {
     return 'Log set $n';
   }

@@ -205,6 +205,19 @@ class TrainingApi {
     return Paginated.fromJson(data, TrainingPlan.fromJson);
   }
 
+  /// Sets the programme's length and how the weights climb, for every exercise
+  /// at once (later weeks follow: targets are computed from the rule).
+  Future<void> updateProgram(int planId, {int? weeks, int? everyWeeks, double? incrementKg}) async {
+    await _client.put(
+      '/business/training-plans/$planId/program',
+      data: {
+        'duration_weeks': ?weeks,
+        if (everyWeeks != null || incrementKg != null)
+          'progression': {'every_weeks': ?everyWeeks, 'increment_kg': ?incrementKg},
+      },
+    );
+  }
+
   /// GET /business/training/exercise-library — the catalogue a trainer picks from.
   Future<ExerciseLibrary> exerciseLibrary() async {
     final data = await _client.get('/business/training/exercise-library') as Map<String, dynamic>;
@@ -245,6 +258,9 @@ class TrainingApi {
     int? sets,
     String? reps,
     double? targetWeight,
+    List<double>? setWeights,
+    int? progressEveryWeeks,
+    double? progressIncrementKg,
     int? restSeconds,
     String? notes,
   }) async {
@@ -258,6 +274,9 @@ class TrainingApi {
                 'sets': ?sets,
                 if (reps != null && reps.isNotEmpty) 'reps': reps,
                 'target_weight': ?targetWeight,
+                if (setWeights != null && setWeights.isNotEmpty) 'set_weights': setWeights,
+                'progress_every_weeks': ?progressEveryWeeks,
+                'progress_increment_kg': ?progressIncrementKg,
                 'rest_seconds': ?restSeconds,
                 if (notes != null && notes.isNotEmpty) 'notes': notes,
               },

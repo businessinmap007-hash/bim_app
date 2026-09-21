@@ -9890,6 +9890,78 @@ abstract class AppLocalizations {
   /// **'لا توجد خطط عملاء بعد.'**
   String get trainingClientsEmpty;
 
+  /// No description provided for @trainingWeekOf.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأسبوع {w} من {t}'**
+  String trainingWeekOf(int w, int t);
+
+  /// No description provided for @trainingWeekNumber.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأسبوع {w}'**
+  String trainingWeekNumber(int w);
+
+  /// No description provided for @trainingWeightsThisWeek.
+  ///
+  /// In ar, this message translates to:
+  /// **'أوزان هذا الأسبوع: {w} كجم'**
+  String trainingWeightsThisWeek(String w);
+
+  /// No description provided for @trainingWeightsNextWeek.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأسبوع القادم: {w} كجم'**
+  String trainingWeightsNextWeek(String w);
+
+  /// No description provided for @trainingProgramTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'البرنامج'**
+  String get trainingProgramTitle;
+
+  /// No description provided for @trainingProgramWeeks.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد الأسابيع'**
+  String get trainingProgramWeeks;
+
+  /// No description provided for @trainingProgramEvery.
+  ///
+  /// In ar, this message translates to:
+  /// **'زيادة الوزن كل (أسبوع)'**
+  String get trainingProgramEvery;
+
+  /// No description provided for @trainingProgramIncrement.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقدار الزيادة (كجم)'**
+  String get trainingProgramIncrement;
+
+  /// No description provided for @trainingProgramApply.
+  ///
+  /// In ar, this message translates to:
+  /// **'تطبيق على كل التمارين'**
+  String get trainingProgramApply;
+
+  /// No description provided for @trainingProgramHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'تُحسب أوزان كل أسبوع تلقائياً من القاعدة، وتنطبق على كل تمرين له وزن.'**
+  String get trainingProgramHint;
+
+  /// No description provided for @trainingProgramSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تحديث البرنامج.'**
+  String get trainingProgramSaved;
+
+  /// No description provided for @trainingSetWeightsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأوزان لكل مجموعة (20-25-30)'**
+  String get trainingSetWeightsHint;
+
   /// No description provided for @trainingLogSetTitle.
   ///
   /// In ar, this message translates to:

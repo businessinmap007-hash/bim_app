@@ -25,6 +25,13 @@ String? formatWeight(double? w) {
   return w == w.roundToDouble() ? w.toStringAsFixed(0) : w.toString();
 }
 
+/// «20 · 25 · 30» — per-set weights for one week.
+String formatWeightList(List<double> weights) => weights.map((w) => formatWeight(w) ?? '').join(' · ');
+
+/// Reads «20-25-30» / «20,25,30» / «20 25 30» into numbers; only a dot is a decimal point.
+List<double> parseWeightList(String text) =>
+    RegExp(r'\d+(?:\.\d+)?').allMatches(text).map((m) => double.parse(m.group(0)!)).toList();
+
 /// The result of confirming a set.
 class SetConfirmation {
   final LoggedSet round;

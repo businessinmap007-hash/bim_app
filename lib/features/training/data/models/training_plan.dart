@@ -27,6 +27,14 @@ class PlanExercise {
   final double? targetWeight;
   final int? restSeconds;
   final String? notes;
+
+  /// «Push» / «Pull» / «Legs» — what the trainer calls this training day.
+  final String? dayLabel;
+
+  /// Per-set weights for THIS week (the climb applied), and next week's when
+  /// they change.
+  final List<double> currentTargets;
+  final List<double> nextTargets;
   final List<PlanImage> images;
 
   /// The catalogue's demonstration photos, for an exercise picked from the
@@ -46,6 +54,9 @@ class PlanExercise {
     this.targetWeight,
     this.restSeconds,
     this.notes,
+    this.dayLabel,
+    this.currentTargets = const [],
+    this.nextTargets = const [],
     this.images = const [],
     this.libraryImageUrls = const [],
     this.completedRoundsToday = 0,
@@ -63,6 +74,9 @@ class PlanExercise {
     targetWeight: (json['target_weight'] as num?)?.toDouble(),
     restSeconds: (json['rest_seconds'] as num?)?.toInt(),
     notes: json['notes'] as String?,
+    dayLabel: json['day_label'] as String?,
+    currentTargets: _weights(json['current_targets']),
+    nextTargets: _weights(json['next_targets']),
     images: (json['images'] as List<dynamic>? ?? [])
         .map((e) => PlanImage.fromJson(e as Map<String, dynamic>))
         .toList(),
@@ -76,6 +90,9 @@ class PlanExercise {
         .toList(),
   );
 }
+
+List<double> _weights(Object? raw) =>
+    (raw as List<dynamic>? ?? const []).map((e) => (e as num).toDouble()).toList();
 
 /// meal_type is one of PlanMeal::TYPES on the backend: breakfast/lunch/dinner/snack.
 class PlanMeal {
@@ -145,6 +162,10 @@ class TrainingPlan {
   final List<PlanMeal>? meals;
   final List<PlanProgressLog>? progress;
 
+  /// Programme position: which week it is today, out of how many (null = open-ended).
+  final int? weekNumber;
+  final int? totalWeeks;
+
   const TrainingPlan({
     required this.id,
     required this.title,
@@ -164,6 +185,8 @@ class TrainingPlan {
     this.exercises,
     this.meals,
     this.progress,
+    this.weekNumber,
+    this.totalWeeks,
   });
 
   bool get isActive => status == 'active';
@@ -197,6 +220,8 @@ class TrainingPlan {
       progress: (json['progress'] as List<dynamic>?)
           ?.map((e) => PlanProgressLog.fromJson(e as Map<String, dynamic>))
           .toList(),
+      weekNumber: (json['week_number'] as num?)?.toInt(),
+      totalWeeks: (json['total_weeks'] as num?)?.toInt(),
     );
   }
 }
