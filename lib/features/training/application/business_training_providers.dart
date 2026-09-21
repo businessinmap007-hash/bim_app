@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/models/body_report.dart';
@@ -184,6 +186,16 @@ class TrainingPlanManageController extends StateNotifier<TrainingPlanManageState
 
   Future<void> addMeal({required String mealType, required String name, int? calories, String? notes}) async {
     await _api.addMeal(planId, mealType: mealType, name: name, calories: calories, notes: notes);
+    await load();
+  }
+
+  Future<void> addPhotos(String kind, int itemId, List<Uint8List> photos) async {
+    await _api.addPlanPhotos(planId, kind, itemId, photos);
+    await load();
+  }
+
+  Future<void> removePhoto(String kind, int itemId, int imageId) async {
+    await _api.removePlanPhoto(planId, kind, itemId, imageId);
     await load();
   }
 

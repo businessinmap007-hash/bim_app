@@ -1,3 +1,7 @@
+import 'dart:typed_data';
+
+import 'package:dio/dio.dart';
+
 import '../../../core/network/api_client.dart';
 import '../../../core/network/paginated.dart';
 import '../../chat/data/models/thread_message.dart';
@@ -226,6 +230,22 @@ class TrainingApi {
             as Map<String, dynamic>;
     return PlanExercise.fromJson(data['exercise'] as Map<String, dynamic>);
   }
+
+  /// Trainer-only, private photos for one exercise (`kind` = 'exercises') or
+  /// meal (`'meals'`). The server stores them outside the public web root; only
+  /// the plan's trainee is ever handed a link.
+  Future<void> addPlanPhotos(int planId, String kind, int itemId, List<Uint8List> photos) async {
+    await _client.post(
+      '/business/training-plans/$planId/$kind/$itemId/images',
+      data: FormData.fromMap({
+        for (var i = 0; i < photos.length; i++)
+          'images[$i]': MultipartFile.fromBytes(photos[i], filename: 'photo_$i.jpg'),
+      }),
+    );
+  }
+
+  Future<void> removePlanPhoto(int planId, String kind, int itemId, int imageId) =>
+      _client.delete('/business/training-plans/$planId/$kind/$itemId/images/$imageId');
 
   Future<void> removeExercise(int planId, int exerciseId) =>
       _client.delete('/business/training-plans/$planId/exercises/$exerciseId');

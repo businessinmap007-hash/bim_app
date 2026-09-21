@@ -1813,6 +1813,8 @@
   "tripReservationRejectAction": "رفض",
   "myTrainingClientsTitle": "عملاء تدريبي",
   "trainingClientsEmpty": "لا توجد خطط عملاء بعد.",
+  "trainingAddPhoto": "إضافة صورة",
+  "trainingPhotoPrivateHint": "الصور تظهر لك ولعميلك فقط.",
   "trainingPickFromLibrary": "اختيار من مكتبة التمارين",
   "trainingLibrarySearch": "ابحث عن تمرين",
   "trainingLibraryAll": "الكل",

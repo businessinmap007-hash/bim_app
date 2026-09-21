@@ -9890,6 +9890,18 @@ abstract class AppLocalizations {
   /// **'لا توجد خطط عملاء بعد.'**
   String get trainingClientsEmpty;
 
+  /// No description provided for @trainingAddPhoto.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة صورة'**
+  String get trainingAddPhoto;
+
+  /// No description provided for @trainingPhotoPrivateHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصور تظهر لك ولعميلك فقط.'**
+  String get trainingPhotoPrivateHint;
+
   /// No description provided for @trainingPickFromLibrary.
   ///
   /// In ar, this message translates to:

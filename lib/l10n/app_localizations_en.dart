@@ -5301,6 +5301,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trainingClientsEmpty => 'No client plans yet.';
 
   @override
+  String get trainingAddPhoto => 'Add photo';
+
+  @override
+  String get trainingPhotoPrivateHint =>
+      'Photos are visible only to you and your client.';
+
+  @override
   String get trainingPickFromLibrary => 'Pick from the exercise library';
 
   @override

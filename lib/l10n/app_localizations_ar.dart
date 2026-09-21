@@ -5292,6 +5292,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get trainingClientsEmpty => 'لا توجد خطط عملاء بعد.';
 
   @override
+  String get trainingAddPhoto => 'إضافة صورة';
+
+  @override
+  String get trainingPhotoPrivateHint => 'الصور تظهر لك ولعميلك فقط.';
+
+  @override
   String get trainingPickFromLibrary => 'اختيار من مكتبة التمارين';
 
   @override

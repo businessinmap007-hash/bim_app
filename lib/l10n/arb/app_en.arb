@@ -1813,6 +1813,8 @@
   "tripReservationRejectAction": "Reject",
   "myTrainingClientsTitle": "My Training Clients",
   "trainingClientsEmpty": "No client plans yet.",
+  "trainingAddPhoto": "Add photo",
+  "trainingPhotoPrivateHint": "Photos are visible only to you and your client.",
   "trainingPickFromLibrary": "Pick from the exercise library",
   "trainingLibrarySearch": "Search exercises",
   "trainingLibraryAll": "All",

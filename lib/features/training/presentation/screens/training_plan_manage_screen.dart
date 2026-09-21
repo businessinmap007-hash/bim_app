@@ -6,6 +6,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../application/business_training_providers.dart';
 import '../../data/models/body_report.dart';
 import '../widgets/exercise_picker_sheet.dart';
+import '../widgets/plan_photo_strip.dart';
 
 const _statuses = ['active', 'paused', 'completed', 'cancelled'];
 const _mealTypes = ['breakfast', 'lunch', 'dinner', 'snack'];
@@ -382,7 +383,9 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
                 for (final exercise in plan.exercises ?? [])
                   Card(
                     margin: const EdgeInsets.only(bottom: 6),
-                    child: ListTile(
+                    child: Column(
+                      children: [
+                        ListTile(
                       dense: true,
                       title: Text(exercise.name),
                       subtitle: Text(
@@ -398,6 +401,17 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
                             .removeExercise(exercise.id),
                       ),
                     ),
+                        PlanPhotoStrip(
+                          images: exercise.images,
+                          onAdd: (photos) => ref
+                              .read(trainingPlanManageControllerProvider(widget.planId).notifier)
+                              .addPhotos('exercises', exercise.id, photos),
+                          onRemove: (imageId) => ref
+                              .read(trainingPlanManageControllerProvider(widget.planId).notifier)
+                              .removePhoto('exercises', exercise.id, imageId),
+                        ),
+                      ],
+                    ),
                   ),
                 const SizedBox(height: 16),
                 Row(
@@ -412,7 +426,9 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
                 for (final meal in plan.meals ?? [])
                   Card(
                     margin: const EdgeInsets.only(bottom: 6),
-                    child: ListTile(
+                    child: Column(
+                      children: [
+                        ListTile(
                       dense: true,
                       title: Text(meal.name),
                       subtitle: Text(
@@ -424,6 +440,17 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
                             .read(trainingPlanManageControllerProvider(widget.planId).notifier)
                             .removeMeal(meal.id),
                       ),
+                    ),
+                        PlanPhotoStrip(
+                          images: meal.images,
+                          onAdd: (photos) => ref
+                              .read(trainingPlanManageControllerProvider(widget.planId).notifier)
+                              .addPhotos('meals', meal.id, photos),
+                          onRemove: (imageId) => ref
+                              .read(trainingPlanManageControllerProvider(widget.planId).notifier)
+                              .removePhoto('meals', meal.id, imageId),
+                        ),
+                      ],
                     ),
                   ),
                 const SizedBox(height: 16),
