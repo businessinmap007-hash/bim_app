@@ -8,15 +8,12 @@ import '../../chat/data/models/thread_message.dart';
 import 'models/body_report.dart';
 import 'models/training_plan.dart';
 import 'models/exercise_library.dart';
+import 'models/set_log.dart';
 import 'models/trainer_weekly_summary.dart';
 import 'models/weekly_summary.dart';
 
 typedef TrainingChatPage = ({List<ThreadMessage> messages, ChatThread thread});
-typedef CompleteRoundResult = ({
-  int roundNumber,
-  int completedRounds,
-  int? totalSets,
-});
+
 
 String _isoDate(DateTime d) => d.toIso8601String().split('T').first;
 
@@ -80,22 +77,58 @@ class TrainingApi {
     return PlanProgressLog.fromJson(data['progress'] as Map<String, dynamic>);
   }
 
-  Future<CompleteRoundResult> completeRound(
+  /// Confirms one set. [reps] and [weight] are what was actually done —
+  /// both optional; a set can be confirmed without numbers.
+  Future<SetConfirmation> completeRound(
     int planId,
     int exerciseId, {
     DateTime? forDate,
+    int? reps,
+    double? weight,
   }) async {
     final data =
         await _client.post(
               '/training-plans/$planId/exercises/$exerciseId/complete-round',
-              data: {if (forDate != null) 'for_date': _isoDate(forDate)},
+              data: {
+                if (forDate != null) 'for_date': _isoDate(forDate),
+                'reps': ?reps,
+                'weight': ?weight,
+              },
             )
             as Map<String, dynamic>;
-    return (
-      roundNumber: data['round_number'] as int,
+    return SetConfirmation(
+      round: LoggedSet.fromJson(data['round'] as Map<String, dynamic>),
       completedRounds: data['completed_rounds'] as int,
       totalSets: data['total_sets'] as int?,
+      sessionCompleted: data['session_completed'] as bool? ?? false,
     );
+  }
+
+  /// Corrects the reps/weight of a set already confirmed.
+  Future<LoggedSet> updateRound(int planId, int exerciseId, int roundId, {int? reps, double? weight}) async {
+    final data =
+        await _client.put(
+              '/training-plans/$planId/exercises/$exerciseId/rounds/$roundId',
+              data: {'reps': reps, 'weight': weight},
+            )
+            as Map<String, dynamic>;
+    return LoggedSet.fromJson(data['round'] as Map<String, dynamic>);
+  }
+
+  /// The month rolled up from the confirmed sets, for either side of a plan.
+  Future<TrainingMonthlySummary> monthlySummary(int planId, {required String month, bool trainer = false}) async {
+    final path = trainer ? '/business/training-plans/$planId/monthly-summary' : '/training-plans/$planId/monthly-summary';
+    final data = await _client.get(path, query: {'month': month}) as Map<String, dynamic>;
+    return TrainingMonthlySummary.fromJson(data['summary'] as Map<String, dynamic>);
+  }
+
+  /// Trainer: one day's sets per exercise, next to the prescription.
+  Future<List<DayLogExercise>> dayLog(int planId, DateTime date) async {
+    final data = await _client.get('/business/training-plans/$planId/log', query: {'date': _isoDate(date)}) as Map<String, dynamic>;
+    final log = data['log'] as Map<String, dynamic>;
+    return (log['exercises'] as List<dynamic>? ?? [])
+        .map((e) => DayLogExercise.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   Future<TrainingWeeklySummary> weeklySummary(
@@ -211,6 +244,7 @@ class TrainingApi {
     int? dayOfWeek,
     int? sets,
     String? reps,
+    double? targetWeight,
     int? restSeconds,
     String? notes,
   }) async {
@@ -223,12 +257,43 @@ class TrainingApi {
                 'day_of_week': ?dayOfWeek,
                 'sets': ?sets,
                 if (reps != null && reps.isNotEmpty) 'reps': reps,
+                'target_weight': ?targetWeight,
                 'rest_seconds': ?restSeconds,
                 if (notes != null && notes.isNotEmpty) 'notes': notes,
               },
             )
             as Map<String, dynamic>;
     return PlanExercise.fromJson(data['exercise'] as Map<String, dynamic>);
+  }
+
+  /// The trainer's private photo library, reusable across clients.
+  Future<List<LibraryPhoto>> trainerPhotos() async {
+    final data = await _client.get('/business/training/photos') as Map<String, dynamic>;
+    return (data['photos'] as List<dynamic>? ?? []).map((e) {
+      final m = e as Map<String, dynamic>;
+      return LibraryPhoto(id: m['id'] as int, caption: m['caption'] as String?, url: m['image'] as String? ?? '');
+    }).toList();
+  }
+
+  Future<void> addTrainerPhotos(List<Uint8List> photos) async {
+    await _client.post(
+      '/business/training/photos',
+      data: FormData.fromMap({
+        for (var i = 0; i < photos.length; i++)
+          'images[$i]': MultipartFile.fromBytes(photos[i], filename: 'photo_$i.jpg'),
+      }),
+    );
+  }
+
+  Future<void> deleteTrainerPhoto(int id) => _client.delete('/business/training/photos/$id');
+
+  /// Attach library photos to an exercise or meal. Each is copied into the
+  /// plan, so one photo can serve any number of clients.
+  Future<void> attachLibraryPhotos(int planId, String kind, int itemId, List<int> photoIds) async {
+    await _client.post(
+      '/business/training-plans/$planId/$kind/$itemId/images/from-library',
+      data: {'photo_ids': photoIds},
+    );
   }
 
   /// Trainer-only, private photos for one exercise (`kind` = 'exercises') or

@@ -4,10 +4,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/models/body_report.dart';
 import '../data/models/exercise_library.dart';
+import '../data/models/set_log.dart';
 import '../data/models/trainer_weekly_summary.dart';
 import '../data/models/training_plan.dart';
 import '../data/training_api.dart';
 import 'training_providers.dart';
+
+/// The trainer's private photo library.
+final trainerPhotosProvider = FutureProvider.autoDispose<List<LibraryPhoto>>((ref) {
+  return ref.watch(trainingApiProvider).trainerPhotos();
+});
 
 final exerciseLibraryProvider = FutureProvider.autoDispose<ExerciseLibrary>((ref) {
   return ref.watch(trainingApiProvider).exerciseLibrary();
@@ -163,6 +169,7 @@ class TrainingPlanManageController extends StateNotifier<TrainingPlanManageState
     int? dayOfWeek,
     int? sets,
     String? reps,
+    double? targetWeight,
     int? restSeconds,
     String? notes,
   }) async {
@@ -173,6 +180,7 @@ class TrainingPlanManageController extends StateNotifier<TrainingPlanManageState
       dayOfWeek: dayOfWeek,
       sets: sets,
       reps: reps,
+      targetWeight: targetWeight,
       restSeconds: restSeconds,
       notes: notes,
     );
@@ -191,6 +199,11 @@ class TrainingPlanManageController extends StateNotifier<TrainingPlanManageState
 
   Future<void> addPhotos(String kind, int itemId, List<Uint8List> photos) async {
     await _api.addPlanPhotos(planId, kind, itemId, photos);
+    await load();
+  }
+
+  Future<void> attachLibraryPhotos(String kind, int itemId, List<int> photoIds) async {
+    await _api.attachLibraryPhotos(planId, kind, itemId, photoIds);
     await load();
   }
 

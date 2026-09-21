@@ -7,6 +7,7 @@ import '../../application/business_training_providers.dart';
 import '../../data/models/body_report.dart';
 import '../widgets/exercise_picker_sheet.dart';
 import '../widgets/plan_photo_strip.dart';
+import 'training_monthly_summary_screen.dart';
 
 const _statuses = ['active', 'paused', 'completed', 'cancelled'];
 const _mealTypes = ['breakfast', 'lunch', 'dinner', 'snack'];
@@ -64,6 +65,7 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
     final nameCtrl = TextEditingController();
     final setsCtrl = TextEditingController();
     final repsCtrl = TextEditingController();
+    final weightCtrl = TextEditingController();
     int? dayOfWeek;
     int? libraryId;
 
@@ -124,6 +126,14 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
                         decoration: InputDecoration(labelText: l10n.trainingReps, hintText: '10-12'),
                       ),
                     ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: TextField(
+                        controller: weightCtrl,
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        decoration: InputDecoration(labelText: l10n.trainingTargetWeight),
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -148,6 +158,7 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
             dayOfWeek: dayOfWeek,
             sets: int.tryParse(setsCtrl.text.trim()),
             reps: repsCtrl.text.trim().isEmpty ? null : repsCtrl.text.trim(),
+            targetWeight: double.tryParse(weightCtrl.text.trim().replaceAll(',', '.')),
           );
     } catch (e) {
       if (mounted) {
@@ -335,7 +346,21 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
     final plan = state.plan;
 
     return Scaffold(
-      appBar: AppBar(title: Text(plan?.title ?? l10n.trainingPlansTitle)),
+      appBar: AppBar(
+        title: Text(plan?.title ?? l10n.trainingPlansTitle),
+        actions: [
+          if (plan != null)
+            IconButton(
+              icon: const Icon(Icons.insights_outlined),
+              tooltip: l10n.trainingMonthlySummary,
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => TrainingMonthlySummaryScreen(planId: widget.planId, trainer: true),
+                ),
+              ),
+            ),
+        ],
+      ),
       body: state.isLoading && plan == null
           ? const Center(child: CircularProgressIndicator())
           : state.error != null && plan == null
@@ -406,6 +431,9 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
                           onAdd: (photos) => ref
                               .read(trainingPlanManageControllerProvider(widget.planId).notifier)
                               .addPhotos('exercises', exercise.id, photos),
+                          onAttachLibrary: (ids) => ref
+                              .read(trainingPlanManageControllerProvider(widget.planId).notifier)
+                              .attachLibraryPhotos('exercises', exercise.id, ids),
                           onRemove: (imageId) => ref
                               .read(trainingPlanManageControllerProvider(widget.planId).notifier)
                               .removePhoto('exercises', exercise.id, imageId),
@@ -446,6 +474,9 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
                           onAdd: (photos) => ref
                               .read(trainingPlanManageControllerProvider(widget.planId).notifier)
                               .addPhotos('meals', meal.id, photos),
+                          onAttachLibrary: (ids) => ref
+                              .read(trainingPlanManageControllerProvider(widget.planId).notifier)
+                              .attachLibraryPhotos('meals', meal.id, ids),
                           onRemove: (imageId) => ref
                               .read(trainingPlanManageControllerProvider(widget.planId).notifier)
                               .removePhoto('meals', meal.id, imageId),

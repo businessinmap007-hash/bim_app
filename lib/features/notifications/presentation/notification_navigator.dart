@@ -16,6 +16,7 @@ import '../../orders/presentation/screens/customer_order_detail_screen.dart';
 import '../../orders/presentation/screens/orders_and_bookings_screen.dart';
 import '../../staff/presentation/screens/staff_invitation_dialog.dart';
 import '../../training/presentation/screens/training_plan_detail_screen.dart';
+import '../../training/presentation/screens/training_plan_manage_screen.dart';
 import '../../wallet/presentation/screens/wallet_screen.dart';
 import '../data/models/app_notification.dart';
 
@@ -60,6 +61,12 @@ Future<void> openNotificationTarget(BuildContext context, WidgetRef ref, AppNoti
         Navigator.of(context).push(
           MaterialPageRoute(builder: (_) => CustomerOrderDetailScreen(orderId: id)),
         );
+      }
+    // The trainer's side of a plan: a client accepted/declined it or finished
+    // a day's workout.
+    case 'open_training_plan_manage':
+      if (id != null) {
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => TrainingPlanManageScreen(planId: id)));
       }
     case 'open_job':
       if (id != null) {

@@ -5301,6 +5301,97 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trainingClientsEmpty => 'No client plans yet.';
 
   @override
+  String trainingLogSetTitle(int n) {
+    return 'Log set $n';
+  }
+
+  @override
+  String get trainingSetReps => 'Reps';
+
+  @override
+  String get trainingSetWeight => 'Weight (kg)';
+
+  @override
+  String get trainingSetSkipDetails => 'Confirm without details';
+
+  @override
+  String get trainingTargetWeight => 'Target weight (kg)';
+
+  @override
+  String get trainingWeightLabel => 'Weight';
+
+  @override
+  String get trainingKgUnit => 'kg';
+
+  @override
+  String get trainingSessionDone =>
+      'Well done! You finished today\'s workout and your trainer was told.';
+
+  @override
+  String get trainingMonthlySummary => 'Monthly summary';
+
+  @override
+  String get trainingMonthSessions => 'Days finished';
+
+  @override
+  String get trainingMonthSets => 'Sets';
+
+  @override
+  String get trainingMonthReps => 'Reps';
+
+  @override
+  String get trainingMonthVolume => 'Volume (kg)';
+
+  @override
+  String get trainingMonthExercises => 'Exercises';
+
+  @override
+  String trainingMonthSetsDone(int n) {
+    return '$n sets';
+  }
+
+  @override
+  String get trainingMonthMaxWeight => 'Top weight';
+
+  @override
+  String get trainingMonthNoData => 'Nothing recorded this month.';
+
+  @override
+  String trainingMonthWeight(String from, String to) {
+    return 'Weight: $from to $to kg';
+  }
+
+  @override
+  String get trainingSessionsSection => 'Finished days';
+
+  @override
+  String trainingDayLogTitle(String date) {
+    return 'Sets on $date';
+  }
+
+  @override
+  String get trainingPhotoLibrary => 'My photo library';
+
+  @override
+  String get trainingPhotoLibraryEmpty =>
+      'No photos in your library yet. Add photos to reuse them with several clients.';
+
+  @override
+  String get trainingPhotoLibraryDeleteConfirm =>
+      'Delete this photo from your library? Copies already attached to clients\' plans are not affected.';
+
+  @override
+  String get trainingPhotoFromLibrary => 'From my library';
+
+  @override
+  String get trainingPhotoPickTitle => 'Pick photos from your library';
+
+  @override
+  String trainingPhotoAttach(int n) {
+    return 'Attach ($n)';
+  }
+
+  @override
   String get trainingAddPhoto => 'Add photo';
 
   @override

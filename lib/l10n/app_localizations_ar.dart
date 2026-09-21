@@ -5292,6 +5292,97 @@ class AppLocalizationsAr extends AppLocalizations {
   String get trainingClientsEmpty => 'لا توجد خطط عملاء بعد.';
 
   @override
+  String trainingLogSetTitle(int n) {
+    return 'تسجيل المجموعة $n';
+  }
+
+  @override
+  String get trainingSetReps => 'التكرارات';
+
+  @override
+  String get trainingSetWeight => 'الوزن (كجم)';
+
+  @override
+  String get trainingSetSkipDetails => 'تأكيد بدون تفاصيل';
+
+  @override
+  String get trainingTargetWeight => 'الوزن المستهدف (كجم)';
+
+  @override
+  String get trainingWeightLabel => 'الوزن';
+
+  @override
+  String get trainingKgUnit => 'كجم';
+
+  @override
+  String get trainingSessionDone =>
+      'أحسنت! أنهيت تمارين اليوم وتم إبلاغ مدربك.';
+
+  @override
+  String get trainingMonthlySummary => 'الملخص الشهري';
+
+  @override
+  String get trainingMonthSessions => 'أيام مكتملة';
+
+  @override
+  String get trainingMonthSets => 'مجموعات';
+
+  @override
+  String get trainingMonthReps => 'تكرارات';
+
+  @override
+  String get trainingMonthVolume => 'الحجم (كجم)';
+
+  @override
+  String get trainingMonthExercises => 'التمارين';
+
+  @override
+  String trainingMonthSetsDone(int n) {
+    return '$n مجموعة';
+  }
+
+  @override
+  String get trainingMonthMaxWeight => 'أعلى وزن';
+
+  @override
+  String get trainingMonthNoData => 'لا توجد بيانات لهذا الشهر.';
+
+  @override
+  String trainingMonthWeight(String from, String to) {
+    return 'الوزن: من $from إلى $to كجم';
+  }
+
+  @override
+  String get trainingSessionsSection => 'الأيام المكتملة';
+
+  @override
+  String trainingDayLogTitle(String date) {
+    return 'تفاصيل يوم $date';
+  }
+
+  @override
+  String get trainingPhotoLibrary => 'مكتبة صوري';
+
+  @override
+  String get trainingPhotoLibraryEmpty =>
+      'لا توجد صور في مكتبتك بعد. أضف صوراً لتستخدمها مع أكثر من متدرب.';
+
+  @override
+  String get trainingPhotoLibraryDeleteConfirm =>
+      'حذف الصورة من مكتبتك؟ النسخ المرفقة بخطط المتدربين لن تتأثر.';
+
+  @override
+  String get trainingPhotoFromLibrary => 'من مكتبتي';
+
+  @override
+  String get trainingPhotoPickTitle => 'اختر صوراً من مكتبتك';
+
+  @override
+  String trainingPhotoAttach(int n) {
+    return 'إرفاق ($n)';
+  }
+
+  @override
   String get trainingAddPhoto => 'إضافة صورة';
 
   @override

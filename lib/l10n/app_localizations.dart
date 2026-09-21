@@ -9890,6 +9890,162 @@ abstract class AppLocalizations {
   /// **'لا توجد خطط عملاء بعد.'**
   String get trainingClientsEmpty;
 
+  /// No description provided for @trainingLogSetTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل المجموعة {n}'**
+  String trainingLogSetTitle(int n);
+
+  /// No description provided for @trainingSetReps.
+  ///
+  /// In ar, this message translates to:
+  /// **'التكرارات'**
+  String get trainingSetReps;
+
+  /// No description provided for @trainingSetWeight.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوزن (كجم)'**
+  String get trainingSetWeight;
+
+  /// No description provided for @trainingSetSkipDetails.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد بدون تفاصيل'**
+  String get trainingSetSkipDetails;
+
+  /// No description provided for @trainingTargetWeight.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوزن المستهدف (كجم)'**
+  String get trainingTargetWeight;
+
+  /// No description provided for @trainingWeightLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوزن'**
+  String get trainingWeightLabel;
+
+  /// No description provided for @trainingKgUnit.
+  ///
+  /// In ar, this message translates to:
+  /// **'كجم'**
+  String get trainingKgUnit;
+
+  /// No description provided for @trainingSessionDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'أحسنت! أنهيت تمارين اليوم وتم إبلاغ مدربك.'**
+  String get trainingSessionDone;
+
+  /// No description provided for @trainingMonthlySummary.
+  ///
+  /// In ar, this message translates to:
+  /// **'الملخص الشهري'**
+  String get trainingMonthlySummary;
+
+  /// No description provided for @trainingMonthSessions.
+  ///
+  /// In ar, this message translates to:
+  /// **'أيام مكتملة'**
+  String get trainingMonthSessions;
+
+  /// No description provided for @trainingMonthSets.
+  ///
+  /// In ar, this message translates to:
+  /// **'مجموعات'**
+  String get trainingMonthSets;
+
+  /// No description provided for @trainingMonthReps.
+  ///
+  /// In ar, this message translates to:
+  /// **'تكرارات'**
+  String get trainingMonthReps;
+
+  /// No description provided for @trainingMonthVolume.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحجم (كجم)'**
+  String get trainingMonthVolume;
+
+  /// No description provided for @trainingMonthExercises.
+  ///
+  /// In ar, this message translates to:
+  /// **'التمارين'**
+  String get trainingMonthExercises;
+
+  /// No description provided for @trainingMonthSetsDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'{n} مجموعة'**
+  String trainingMonthSetsDone(int n);
+
+  /// No description provided for @trainingMonthMaxWeight.
+  ///
+  /// In ar, this message translates to:
+  /// **'أعلى وزن'**
+  String get trainingMonthMaxWeight;
+
+  /// No description provided for @trainingMonthNoData.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد بيانات لهذا الشهر.'**
+  String get trainingMonthNoData;
+
+  /// No description provided for @trainingMonthWeight.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوزن: من {from} إلى {to} كجم'**
+  String trainingMonthWeight(String from, String to);
+
+  /// No description provided for @trainingSessionsSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأيام المكتملة'**
+  String get trainingSessionsSection;
+
+  /// No description provided for @trainingDayLogTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل يوم {date}'**
+  String trainingDayLogTitle(String date);
+
+  /// No description provided for @trainingPhotoLibrary.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتبة صوري'**
+  String get trainingPhotoLibrary;
+
+  /// No description provided for @trainingPhotoLibraryEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد صور في مكتبتك بعد. أضف صوراً لتستخدمها مع أكثر من متدرب.'**
+  String get trainingPhotoLibraryEmpty;
+
+  /// No description provided for @trainingPhotoLibraryDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف الصورة من مكتبتك؟ النسخ المرفقة بخطط المتدربين لن تتأثر.'**
+  String get trainingPhotoLibraryDeleteConfirm;
+
+  /// No description provided for @trainingPhotoFromLibrary.
+  ///
+  /// In ar, this message translates to:
+  /// **'من مكتبتي'**
+  String get trainingPhotoFromLibrary;
+
+  /// No description provided for @trainingPhotoPickTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر صوراً من مكتبتك'**
+  String get trainingPhotoPickTitle;
+
+  /// No description provided for @trainingPhotoAttach.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرفاق ({n})'**
+  String trainingPhotoAttach(int n);
+
   /// No description provided for @trainingAddPhoto.
   ///
   /// In ar, this message translates to:

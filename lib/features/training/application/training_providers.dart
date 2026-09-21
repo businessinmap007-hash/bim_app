@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers/core_providers.dart';
 import '../../chat/data/models/thread_message.dart';
 import '../data/models/body_report.dart';
+import '../data/models/set_log.dart';
 import '../data/models/training_plan.dart';
 import '../data/models/weekly_summary.dart';
 import '../data/training_api.dart';
@@ -90,6 +91,12 @@ final myTrainingPlansControllerProvider =
 final trainingPlanDetailProvider = FutureProvider.family<TrainingPlan, int>((ref, planId) async {
   return ref.watch(trainingApiProvider).plan(planId);
 });
+
+/// The month rolled up from the confirmed sets, for either side of a plan.
+final trainingMonthlySummaryProvider = FutureProvider.autoDispose
+    .family<TrainingMonthlySummary, ({int planId, String month, bool trainer})>((ref, key) {
+      return ref.watch(trainingApiProvider).monthlySummary(key.planId, month: key.month, trainer: key.trainer);
+    });
 
 final trainingWeeklySummaryProvider = FutureProvider.family<TrainingWeeklySummary, int>((ref, planId) async {
   return ref.watch(trainingApiProvider).weeklySummary(planId);

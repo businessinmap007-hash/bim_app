@@ -6,9 +6,12 @@ import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../../shared/widgets/person_card.dart';
 import '../../application/training_providers.dart';
 import '../../data/models/body_report.dart';
+import '../../data/models/set_log.dart';
 import '../../data/models/training_plan.dart';
 import '../../data/models/weekly_summary.dart';
+import '../widgets/set_log_sheet.dart';
 import 'training_chat_screen.dart';
+import 'training_monthly_summary_screen.dart';
 
 class TrainingPlanDetailScreen extends ConsumerWidget {
   final int planId;
@@ -45,6 +48,13 @@ class TrainingPlanDetailScreen extends ConsumerWidget {
           appBar: AppBar(
             title: Text(plan.title),
             actions: [
+              IconButton(
+                icon: const Icon(Icons.insights_outlined),
+                tooltip: l10n.trainingMonthlySummary,
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => TrainingMonthlySummaryScreen(planId: planId)),
+                ),
+              ),
               IconButton(
                 icon: const Icon(Icons.chat_bubble_outline),
                 onPressed: () => Navigator.of(context).push(
@@ -193,17 +203,46 @@ class _ExercisesTab extends ConsumerWidget {
 
   Future<void> _completeRound(BuildContext context, WidgetRef ref, PlanExercise exercise) async {
     final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+    final entry = await showSetLogSheet(
+      context,
+      title: l10n.trainingLogSetTitle(exercise.completedRoundsToday + 1),
+      initialReps: firstNumber(exercise.reps),
+      // Same weight as the last set today, else what the trainer prescribed.
+      initialWeight: exercise.todayRounds.isNotEmpty ? exercise.todayRounds.last.weight : exercise.targetWeight,
+    );
+    if (entry == null) return;
     try {
-      await ref.read(trainingApiProvider).completeRound(planId, exercise.id);
+      final result = await ref
+          .read(trainingApiProvider)
+          .completeRound(planId, exercise.id, reps: entry.reps, weight: entry.weight);
       ref.invalidate(trainingPlanDetailProvider(planId));
       ref.invalidate(trainingWeeklySummaryProvider(planId));
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.trainingRoundCompleted)));
-      }
+      messenger.showSnackBar(
+        SnackBar(content: Text(result.sessionCompleted ? l10n.trainingSessionDone : l10n.trainingRoundCompleted)),
+      );
     } catch (_) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
-      }
+      messenger.showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+    }
+  }
+
+  /// Correct the reps/weight of a set already confirmed today.
+  Future<void> _editSet(BuildContext context, WidgetRef ref, PlanExercise exercise, LoggedSet set) async {
+    final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+    final entry = await showSetLogSheet(
+      context,
+      title: l10n.trainingLogSetTitle(set.roundNumber),
+      initialReps: set.reps,
+      initialWeight: set.weight,
+      allowSkip: false,
+    );
+    if (entry == null) return;
+    try {
+      await ref.read(trainingApiProvider).updateRound(planId, exercise.id, set.id, reps: entry.reps, weight: entry.weight);
+      ref.invalidate(trainingPlanDetailProvider(planId));
+    } catch (_) {
+      messenger.showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
     }
   }
 
@@ -232,7 +271,11 @@ class _ExercisesTab extends ConsumerWidget {
               child: Text(_weekdayName(l10n, day), style: Theme.of(context).textTheme.titleSmall),
             ),
           for (final e in byDay[day]!) ...[
-            _ExerciseCard(exercise: e, onCompleteRound: () => _completeRound(context, ref, e)),
+            _ExerciseCard(
+              exercise: e,
+              onCompleteRound: () => _completeRound(context, ref, e),
+              onEditSet: (set) => _editSet(context, ref, e, set),
+            ),
             const SizedBox(height: 8),
           ],
         ],
@@ -244,7 +287,8 @@ class _ExercisesTab extends ConsumerWidget {
 class _ExerciseCard extends StatelessWidget {
   final PlanExercise exercise;
   final VoidCallback onCompleteRound;
-  const _ExerciseCard({required this.exercise, required this.onCompleteRound});
+  final ValueChanged<LoggedSet> onEditSet;
+  const _ExerciseCard({required this.exercise, required this.onCompleteRound, required this.onEditSet});
 
   @override
   Widget build(BuildContext context) {
@@ -263,6 +307,8 @@ class _ExerciseCard extends StatelessWidget {
               children: [
                 if (exercise.sets != null) Text('${l10n.trainingSetsLabel}: ${exercise.sets}'),
                 if (exercise.reps != null) Text('${l10n.trainingRepsLabel}: ${exercise.reps}'),
+                if (exercise.targetWeight != null)
+                  Text('${l10n.trainingWeightLabel}: ${formatWeight(exercise.targetWeight)} ${l10n.trainingKgUnit}'),
                 if (exercise.restSeconds != null)
                   Text('${l10n.trainingRestLabel}: ${exercise.restSeconds}s'),
               ],
@@ -322,6 +368,21 @@ class _ExerciseCard extends StatelessWidget {
                     ),
                   ),
                 ),
+              ),
+            ],
+            if (exercise.todayRounds.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 6,
+                runSpacing: 4,
+                children: [
+                  for (final set in exercise.todayRounds)
+                    ActionChip(
+                      visualDensity: VisualDensity.compact,
+                      label: Text('${set.roundNumber}: ${set.label}'),
+                      onPressed: () => onEditSet(set),
+                    ),
+                ],
               ),
             ],
             const SizedBox(height: 10),

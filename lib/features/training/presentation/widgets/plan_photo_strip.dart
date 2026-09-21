@@ -6,6 +6,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../media/application/media_picker_service.dart';
 import '../../../media/data/picked_media.dart';
 import '../../data/models/training_plan.dart';
+import '../screens/trainer_photo_library_screen.dart';
 
 /// The trainer's photos for one exercise or meal: thumbnails with a delete
 /// button, plus an "add photo" tile (camera or gallery).
@@ -19,6 +20,10 @@ class PlanPhotoStrip extends StatefulWidget {
   final Future<void> Function(List<Uint8List> photos) onAdd;
   final Future<void> Function(int imageId) onRemove;
 
+  /// Attach photos the trainer already keeps in his library (copied into this
+  /// plan). Null hides the option.
+  final Future<void> Function(List<int> photoIds)? onAttachLibrary;
+
   /// Mirrors the server's per-item limit (TrainingPlanController::MAX_IMAGES).
   static const maxPhotos = 6;
 
@@ -27,6 +32,7 @@ class PlanPhotoStrip extends StatefulWidget {
     required this.images,
     required this.onAdd,
     required this.onRemove,
+    this.onAttachLibrary,
   });
 
   @override
@@ -52,7 +58,7 @@ class _PlanPhotoStripState extends State<PlanPhotoStrip> {
 
   Future<void> _add() async {
     final l10n = AppLocalizations.of(context)!;
-    final source = await showModalBottomSheet<bool>(
+    final source = await showModalBottomSheet<String>(
       context: context,
       builder: (sheetContext) => SafeArea(
         child: Column(
@@ -61,22 +67,36 @@ class _PlanPhotoStripState extends State<PlanPhotoStrip> {
             ListTile(
               leading: const Icon(Icons.photo_camera_outlined),
               title: Text(l10n.mediaAddFromCamera),
-              onTap: () => Navigator.pop(sheetContext, true),
+              onTap: () => Navigator.pop(sheetContext, 'camera'),
             ),
             ListTile(
               leading: const Icon(Icons.photo_library_outlined),
               title: Text(l10n.mediaAddFromGallery),
-              onTap: () => Navigator.pop(sheetContext, false),
+              onTap: () => Navigator.pop(sheetContext, 'gallery'),
             ),
+            if (widget.onAttachLibrary != null)
+              ListTile(
+                leading: const Icon(Icons.collections_outlined),
+                title: Text(l10n.trainingPhotoFromLibrary),
+                onTap: () => Navigator.pop(sheetContext, 'library'),
+              ),
           ],
         ),
       ),
     );
-    if (source == null) return;
+    if (source == null || !mounted) return;
 
     final room = PlanPhotoStrip.maxPhotos - widget.images.length;
+
+    if (source == 'library') {
+      final ids = await pickLibraryPhotos(context, maxCount: room);
+      if (ids == null || ids.isEmpty || !mounted) return;
+      await _run(() => widget.onAttachLibrary!(ids));
+      return;
+    }
+
     final List<PickedMedia> picked;
-    if (source) {
+    if (source == 'camera') {
       final shot = await _picker.pickFromCamera();
       picked = shot == null ? const [] : [shot];
     } else {

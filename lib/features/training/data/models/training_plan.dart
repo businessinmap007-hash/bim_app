@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import 'set_log.dart';
 
 /// One image owned by an exercise or a meal — the trainer's illustration,
 /// read-only from the client's side.
@@ -21,6 +22,9 @@ class PlanExercise {
   final String name;
   final int? sets;
   final String? reps;
+
+  /// The weight the trainer prescribed, kg.
+  final double? targetWeight;
   final int? restSeconds;
   final String? notes;
   final List<PlanImage> images;
@@ -30,17 +34,22 @@ class PlanExercise {
   final List<String> libraryImageUrls;
   final int completedRoundsToday;
 
+  /// Today's confirmed sets with what was done in each.
+  final List<LoggedSet> todayRounds;
+
   const PlanExercise({
     required this.id,
     this.dayOfWeek,
     required this.name,
     this.sets,
     this.reps,
+    this.targetWeight,
     this.restSeconds,
     this.notes,
     this.images = const [],
     this.libraryImageUrls = const [],
     this.completedRoundsToday = 0,
+    this.todayRounds = const [],
   });
 
   bool get isDoneToday => sets != null && completedRoundsToday >= sets!;
@@ -51,12 +60,16 @@ class PlanExercise {
     name: json['name'] as String? ?? '',
     sets: (json['sets'] as num?)?.toInt(),
     reps: json['reps'] as String?,
+    targetWeight: (json['target_weight'] as num?)?.toDouble(),
     restSeconds: (json['rest_seconds'] as num?)?.toInt(),
     notes: json['notes'] as String?,
     images: (json['images'] as List<dynamic>? ?? [])
         .map((e) => PlanImage.fromJson(e as Map<String, dynamic>))
         .toList(),
     completedRoundsToday: (json['completed_rounds_today'] as num?)?.toInt() ?? 0,
+    todayRounds: (json['today_rounds'] as List<dynamic>? ?? [])
+        .map((e) => LoggedSet.fromJson(e as Map<String, dynamic>))
+        .toList(),
     libraryImageUrls: (json['library_images'] as List<dynamic>? ?? [])
         .map((e) => Env.assetUrl(e as String?))
         .whereType<String>()

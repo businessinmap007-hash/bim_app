@@ -5,6 +5,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../application/business_training_providers.dart';
 import '../../data/models/trainer_weekly_summary.dart';
 import '../../data/models/training_plan.dart';
+import 'trainer_photo_library_screen.dart';
 import 'training_plan_manage_screen.dart';
 
 /// Api\V2\TrainingPlanController::index — plans a trainer has already
@@ -23,7 +24,18 @@ class MyTrainingClientsScreen extends ConsumerWidget {
     final week = ref.watch(trainerWeeklySummaryProvider).asData?.value;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.myTrainingClientsTitle)),
+      appBar: AppBar(
+        title: Text(l10n.myTrainingClientsTitle),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.collections_outlined),
+            tooltip: l10n.trainingPhotoLibrary,
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const TrainerPhotoLibraryScreen()),
+            ),
+          ),
+        ],
+      ),
       body: state.isLoading
           ? const Center(child: CircularProgressIndicator())
           : state.error != null
