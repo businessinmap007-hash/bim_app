@@ -70,6 +70,9 @@ class TripSchedule {
   final String? vehicleLabel;
   final String? originGovernorate;
   final String? destinationGovernorate;
+  final String? originCountry;
+  final String? destinationCountry;
+  final String scope;
   final String schedulePattern;
   final int? dayOfWeek;
   final DateTime? tripDate;
@@ -87,6 +90,9 @@ class TripSchedule {
     this.vehicleLabel,
     this.originGovernorate,
     this.destinationGovernorate,
+    this.originCountry,
+    this.destinationCountry,
+    this.scope = 'domestic',
     required this.schedulePattern,
     this.dayOfWeek,
     this.tripDate,
@@ -109,6 +115,9 @@ class TripSchedule {
       vehicleLabel: json['vehicle_label'] as String? ?? (json['vehicle_type'] as Map<String, dynamic>?)?['name'] as String?,
       originGovernorate: origin['governorate'] as String?,
       destinationGovernorate: destination['governorate'] as String?,
+      originCountry: origin['country'] as String?,
+      destinationCountry: destination['country'] as String?,
+      scope: json['scope'] as String? ?? 'domestic',
       schedulePattern: json['schedule_pattern'] as String? ?? 'weekly',
       dayOfWeek: json['day_of_week'] as int?,
       tripDate: json['trip_date'] != null ? DateTime.tryParse(json['trip_date'] as String) : null,
@@ -119,6 +128,13 @@ class TripSchedule {
       stops: (json['stops'] as List<dynamic>? ?? []).map((e) => TripStop.fromJson(e as Map<String, dynamic>)).toList(),
     );
   }
+
+  bool get isInternational => scope == 'international';
+
+  /// origin -> destination on whichever axis anchors the leg.
+  String get routeLabel => isInternational
+      ? '${originCountry ?? '—'} → ${destinationCountry ?? '—'}'
+      : '${originGovernorate ?? '—'} → ${destinationGovernorate ?? '—'}';
 
   bool get isPassengerMode => mode == 'passenger' || mode == 'limousine';
   bool get isFreightMode => mode == 'freight' || mode == 'distribution';
@@ -137,5 +153,23 @@ class TripScheduleResult {
     schedule: TripSchedule.fromJson(json['schedule'] as Map<String, dynamic>),
     trust: TripTrust.fromJson(json['trust'] as Map<String, dynamic>? ?? const {}),
     remainingCapacity: json['remaining_capacity'] as int?,
+  );
+}
+
+/// One entry of `GET /schedules/vehicle-types` — the platform-standard vehicle
+/// or cargo class a carrier picks when publishing a leg.
+class VehicleTypeOption {
+  final int id;
+  final String name;
+  final String? mode;
+  final String? groupName;
+
+  const VehicleTypeOption({required this.id, required this.name, this.mode, this.groupName});
+
+  factory VehicleTypeOption.fromJson(Map<String, dynamic> json) => VehicleTypeOption(
+    id: json['id'] as int,
+    name: json['name'] as String? ?? '',
+    mode: json['mode'] as String?,
+    groupName: (json['group'] as Map<String, dynamic>?)?['name'] as String?,
   );
 }

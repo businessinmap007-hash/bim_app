@@ -5097,6 +5097,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tripScheduleModeLabel => 'Trip type';
 
   @override
+  String get tripScheduleVehicleLabel => 'Vehicle type';
+
+  @override
+  String get tripScheduleInternational =>
+      'International trip (between two countries)';
+
+  @override
+  String get tripChooseCountry => 'Choose a country';
+
+  @override
   String get tripSchedulePatternLabel => 'This trip runs...';
 
   @override

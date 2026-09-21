@@ -1,0 +1,38 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "bim-serve",
+      "runtimeExecutable": "php",
+      "runtimeArgs": ["artisan", "serve", "--host=0.0.0.0"],
+      "port": 8000,
+      "autoPort": true
+    },
+    {
+      "name": "bim-app-web",
+      "runtimeExecutable": "flutter",
+      "runtimeArgs": [
+        "run",
+        "-d",
+        "web-server",
+        "--web-port=8765",
+        "--web-hostname=127.0.0.1",
+        "--dart-define=API_BASE_URL=http://localhost/testing/public/api/v2"
+      ],
+      "port": 8765
+    },
+    {
+      "name": "bim-app-web-8766",
+      "runtimeExecutable": "flutter",
+      "runtimeArgs": [
+        "run",
+        "-d",
+        "web-server",
+        "--web-port=8766",
+        "--web-hostname=127.0.0.1",
+        "--dart-define=API_BASE_URL=http://localhost/testing/public/api/v2"
+      ],
+      "port": 8766
+    }
+  ]
+}

@@ -23,9 +23,8 @@ String _modeLabel(String mode, AppLocalizations l10n) => switch (mode) {
 };
 
 /// Api\V2\TripScheduleController — a carrier's own published trip legs.
-/// Domestic (governorate-pair) routes only, matching the app's existing
-/// customer-side search; international (country-pair) legs aren't wired up
-/// here. Create + delete only — no edit form, since a leg's own reservations
+/// Legs are domestic (governorate pair) or international (country pair) and
+/// carry a vehicle type. Create + delete only — no edit form, since a leg's own reservations
 /// reference it directly and a "correct a mistake" case is just as well
 /// served by deleting and republishing.
 class MyTripSchedulesScreen extends ConsumerWidget {
@@ -83,7 +82,7 @@ class MyTripSchedulesScreen extends ConsumerWidget {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           final created = await Navigator.of(context).push<bool>(
-            MaterialPageRoute(builder: (_) => const _TripScheduleFormScreen()),
+            MaterialPageRoute(builder: (_) => const TripScheduleFormScreen()),
           );
           if (created == true) {
             ref.read(myTripSchedulesControllerProvider.notifier).load();
@@ -122,7 +121,7 @@ class MyTripSchedulesScreen extends ConsumerWidget {
                     margin: EdgeInsets.zero,
                     child: ListTile(
                       title: Text(
-                        '${schedule.originGovernorate ?? '—'} → ${schedule.destinationGovernorate ?? '—'}',
+                        schedule.routeLabel,
                       ),
                       subtitle: Text(
                         '${_modeLabel(schedule.mode, l10n)}'
@@ -155,11 +154,11 @@ class MyTripSchedulesScreen extends ConsumerWidget {
   }
 }
 
-class _TripScheduleFormScreen extends ConsumerStatefulWidget {
-  const _TripScheduleFormScreen();
+class TripScheduleFormScreen extends ConsumerStatefulWidget {
+  const TripScheduleFormScreen({super.key});
 
   @override
-  ConsumerState<_TripScheduleFormScreen> createState() => _TripScheduleFormScreenState();
+  ConsumerState<TripScheduleFormScreen> createState() => TripScheduleFormScreenState();
 }
 
 const _modes = ['freight', 'passenger', 'limousine', 'distribution'];
@@ -179,11 +178,15 @@ class _StopRow {
   }
 }
 
-class _TripScheduleFormScreenState extends ConsumerState<_TripScheduleFormScreen> {
+class TripScheduleFormScreenState extends ConsumerState<TripScheduleFormScreen> {
   String _mode = 'passenger';
   String _pattern = _patternWeekly;
   LocationGovernorate? _origin;
   LocationGovernorate? _destination;
+  bool _international = false;
+  LocationCountry? _originCountry;
+  LocationCountry? _destinationCountry;
+  int? _vehicleTypeId;
   int _dayOfWeek = 0;
   DateTime? _tripDate;
   final _departureTimeCtrl = TextEditingController();
@@ -248,6 +251,41 @@ class _TripScheduleFormScreenState extends ConsumerState<_TripScheduleFormScreen
     });
   }
 
+  Future<void> _pickCountry(bool isOrigin) async {
+    final countries = await ref.read(countriesProvider.future);
+    if (countries.isEmpty || !mounted) return;
+    final l10n = AppLocalizations.of(context)!;
+    final languageCode = Localizations.localeOf(context).languageCode;
+
+    final selected = await showModalBottomSheet<LocationCountry>(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        expand: false,
+        builder: (context, scrollController) => ListView(
+          controller: scrollController,
+          padding: const EdgeInsets.all(16),
+          children: [
+            Text(l10n.tripChooseCountry, style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 12),
+            for (final country in countries)
+              ListTile(title: Text(country.localizedName(languageCode)), onTap: () => Navigator.of(context).pop(country)),
+          ],
+        ),
+      ),
+    );
+
+    if (selected == null) return;
+    setState(() {
+      if (isOrigin) {
+        _originCountry = selected;
+      } else {
+        _destinationCountry = selected;
+      }
+    });
+  }
+
   Future<void> _pickStopBusiness(_StopRow row) async {
     final l10n = AppLocalizations.of(context)!;
     final picked = await showModalBottomSheet<StopBusinessOption>(
@@ -272,7 +310,8 @@ class _TripScheduleFormScreenState extends ConsumerState<_TripScheduleFormScreen
 
   Future<void> _save() async {
     final l10n = AppLocalizations.of(context)!;
-    if (_origin == null || _destination == null) {
+    final missingRoute = _international ? (_originCountry == null || _destinationCountry == null) : (_origin == null || _destination == null);
+    if (missingRoute) {
       setState(() => _error = l10n.tripSearchFieldsRequired);
       return;
     }
@@ -288,9 +327,15 @@ class _TripScheduleFormScreenState extends ConsumerState<_TripScheduleFormScreen
 
     final payload = <String, dynamic>{
       'mode': _mode,
-      'scope': 'domestic',
-      'origin_governorate_id': _origin!.id,
-      'destination_governorate_id': _destination!.id,
+      'scope': _international ? 'international' : 'domestic',
+      if (_international) ...{
+        'origin_country_id': _originCountry!.id,
+        'destination_country_id': _destinationCountry!.id,
+      } else ...{
+        'origin_governorate_id': _origin!.id,
+        'destination_governorate_id': _destination!.id,
+      },
+      'vehicle_type_id': ?_vehicleTypeId,
       'schedule_pattern': _pattern,
       if (_pattern == _patternWeekly) 'day_of_week': _dayOfWeek,
       if (_pattern == _patternOneOff) 'trip_date': _isoDate(_tripDate!),
@@ -354,17 +399,46 @@ class _TripScheduleFormScreenState extends ConsumerState<_TripScheduleFormScreen
                   ChoiceChip(
                     label: Text(_modeLabel(mode, l10n)),
                     selected: _mode == mode,
-                    onSelected: (_) => setState(() => _mode = mode),
+                    onSelected: (_) => setState(() {
+                      _mode = mode;
+                      _vehicleTypeId = null;
+                    }),
                   ),
               ],
             ),
             const SizedBox(height: 16),
+            Text(l10n.tripScheduleVehicleLabel, style: Theme.of(context).textTheme.labelLarge),
+            const SizedBox(height: 8),
+            ref
+                .watch(vehicleTypesProvider(_mode))
+                .maybeWhen(
+                  data: (types) => Wrap(
+                    spacing: 8,
+                    children: [
+                      for (final type in types)
+                        ChoiceChip(
+                          label: Text(type.name),
+                          selected: _vehicleTypeId == type.id,
+                          onSelected: (on) => setState(() => _vehicleTypeId = on ? type.id : null),
+                        ),
+                    ],
+                  ),
+                  orElse: () => const SizedBox.shrink(),
+                ),
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(l10n.tripScheduleInternational),
+              value: _international,
+              onChanged: (v) => setState(() => _international = v),
+            ),
             Row(
               children: [
                 Expanded(
                   child: OutlinedButton(
-                    onPressed: () => _pickGovernorate(true),
-                    child: Text(_origin?.localizedName(languageCode) ?? l10n.tripOrigin),
+                    onPressed: () => _international ? _pickCountry(true) : _pickGovernorate(true),
+                    child: Text(
+                      (_international ? _originCountry?.localizedName(languageCode) : _origin?.localizedName(languageCode)) ?? l10n.tripOrigin,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -372,8 +446,11 @@ class _TripScheduleFormScreenState extends ConsumerState<_TripScheduleFormScreen
                 const SizedBox(width: 8),
                 Expanded(
                   child: OutlinedButton(
-                    onPressed: () => _pickGovernorate(false),
-                    child: Text(_destination?.localizedName(languageCode) ?? l10n.tripDestination),
+                    onPressed: () => _international ? _pickCountry(false) : _pickGovernorate(false),
+                    child: Text(
+                      (_international ? _destinationCountry?.localizedName(languageCode) : _destination?.localizedName(languageCode)) ??
+                          l10n.tripDestination,
+                    ),
                   ),
                 ),
               ],

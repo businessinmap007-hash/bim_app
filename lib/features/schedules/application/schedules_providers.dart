@@ -9,6 +9,11 @@ final schedulesApiProvider = Provider<SchedulesApi>((ref) {
   return SchedulesApi(ref.watch(apiClientProvider));
 });
 
+/// Vehicle classes for one trip mode (the carrier form's picker).
+final vehicleTypesProvider = FutureProvider.autoDispose.family<List<VehicleTypeOption>, String>((ref, mode) {
+  return ref.watch(schedulesApiProvider).vehicleTypes(mode: mode);
+});
+
 class TripSearchState {
   final List<TripScheduleResult> results;
   final bool isLoading;

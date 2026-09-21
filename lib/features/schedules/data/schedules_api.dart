@@ -24,8 +24,8 @@ class StopBusinessOption {
 /// Trip-leg search (GET /search/schedules) + reservation (POST/GET under
 /// /schedules — a different prefix, not a typo). See
 /// Api\V2\TripScheduleController::search + Api\V2\TripReservationController.
-/// Domestic (governorate-pair) search only; international routes and the
-/// vehicle-type/day-of-week filters aren't wired up in this app yet.
+/// Customer search is domestic (governorate-pair) only; the carrier form also
+/// publishes international (country-pair) legs and picks a vehicle type.
 class SchedulesApi {
   final ApiClient _client;
   const SchedulesApi(this._client);
@@ -86,6 +86,12 @@ class SchedulesApi {
         await _client.get('/business/schedules', query: {'page': page})
             as Map<String, dynamic>;
     return Paginated.fromJson(data, TripSchedule.fromJson);
+  }
+
+  /// The scheduling service's vehicle/cargo classes, optionally for one mode.
+  Future<List<VehicleTypeOption>> vehicleTypes({String? mode}) async {
+    final data = await _client.get('/schedules/vehicle-types', query: {'mode': ?mode}) as Map<String, dynamic>;
+    return (data['vehicle_types'] as List<dynamic>? ?? []).map((e) => VehicleTypeOption.fromJson(e as Map<String, dynamic>)).toList();
   }
 
   Future<TripSchedule> createTripSchedule(Map<String, dynamic> payload) async {

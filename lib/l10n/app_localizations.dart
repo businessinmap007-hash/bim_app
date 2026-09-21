@@ -9518,6 +9518,24 @@ abstract class AppLocalizations {
   /// **'نوع الرحلة'**
   String get tripScheduleModeLabel;
 
+  /// No description provided for @tripScheduleVehicleLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع المركبة'**
+  String get tripScheduleVehicleLabel;
+
+  /// No description provided for @tripScheduleInternational.
+  ///
+  /// In ar, this message translates to:
+  /// **'رحلة دولية (بين دولتين)'**
+  String get tripScheduleInternational;
+
+  /// No description provided for @tripChooseCountry.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الدولة'**
+  String get tripChooseCountry;
+
   /// No description provided for @tripSchedulePatternLabel.
   ///
   /// In ar, this message translates to:

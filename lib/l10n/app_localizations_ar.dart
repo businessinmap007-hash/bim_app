@@ -5091,6 +5091,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get tripScheduleModeLabel => 'نوع الرحلة';
 
   @override
+  String get tripScheduleVehicleLabel => 'نوع المركبة';
+
+  @override
+  String get tripScheduleInternational => 'رحلة دولية (بين دولتين)';
+
+  @override
+  String get tripChooseCountry => 'اختر الدولة';
+
+  @override
   String get tripSchedulePatternLabel => 'تعمل هذه الرحلة...';
 
   @override
