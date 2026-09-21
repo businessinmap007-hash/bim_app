@@ -2330,6 +2330,138 @@ abstract class AppLocalizations {
   /// **'تأكيد الدفع'**
   String get paymentConfirmSectionTitle;
 
+  /// No description provided for @shippingRatesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسعار الشحن'**
+  String get shippingRatesTitle;
+
+  /// No description provided for @shippingRatesHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر الشحن من محافظتك إلى كل محافظة. اترك الحقل فارغًا لو لا تشحن إليها.'**
+  String get shippingRatesHint;
+
+  /// No description provided for @shippingOrdersTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلبات الشحن'**
+  String get shippingOrdersTitle;
+
+  /// No description provided for @shippingOrdersEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد طلبات شحن.'**
+  String get shippingOrdersEmpty;
+
+  /// No description provided for @shippingPickCompany.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر شركة الشحن'**
+  String get shippingPickCompany;
+
+  /// No description provided for @shippingChangeCompany.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغيير شركة الشحن'**
+  String get shippingChangeCompany;
+
+  /// No description provided for @shippingPickerTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'شركات الشحن المتاحة'**
+  String get shippingPickerTitle;
+
+  /// No description provided for @shippingNoCompanies.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد شركة شحن تخدم محافظة العميل بعد.'**
+  String get shippingNoCompanies;
+
+  /// No description provided for @shippingSetAppointment.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدد موعد الشحن'**
+  String get shippingSetAppointment;
+
+  /// No description provided for @shippingChangeAppointment.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل الموعد'**
+  String get shippingChangeAppointment;
+
+  /// No description provided for @shippingMarkShipped.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الشحن'**
+  String get shippingMarkShipped;
+
+  /// No description provided for @shippingMarkDelivered.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التسليم'**
+  String get shippingMarkDelivered;
+
+  /// No description provided for @shippingStatusAwaitingCompany.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار اختيار شركة الشحن'**
+  String get shippingStatusAwaitingCompany;
+
+  /// No description provided for @shippingStatusAwaitingAppointment.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار تحديد موعد الشحن'**
+  String get shippingStatusAwaitingAppointment;
+
+  /// No description provided for @shippingStatusShipped.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم شحن الطلب'**
+  String get shippingStatusShipped;
+
+  /// No description provided for @shippingStatusDelivered.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تسليم الطلب'**
+  String get shippingStatusDelivered;
+
+  /// No description provided for @shippingAppointmentNotSuitable.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموعد غير مناسب — تواصل مع الشركة'**
+  String get shippingAppointmentNotSuitable;
+
+  /// No description provided for @shippingCheckoutNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلبك لمحافظة أخرى: يُشحن عبر شركة شحن يختارها التاجر، ويُضاف سعر الشحن لفاتورتك.'**
+  String get shippingCheckoutNote;
+
+  /// No description provided for @shippingSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الحفظ.'**
+  String get shippingSaved;
+
+  /// No description provided for @shippingStatusScheduled.
+  ///
+  /// In ar, this message translates to:
+  /// **'موعد الشحن: {when}'**
+  String shippingStatusScheduled(String when);
+
+  /// No description provided for @shippingCompanyLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'شركة الشحن: {name}'**
+  String shippingCompanyLine(String name);
+
+  /// No description provided for @shippingFeeLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسوم الشحن: {fee}'**
+  String shippingFeeLine(String fee);
+
   /// No description provided for @deliveryQuoteEnterAmountTitle.
   ///
   /// In ar, this message translates to:

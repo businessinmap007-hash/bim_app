@@ -72,6 +72,34 @@ class DeliveryFeeQuote {
   );
 }
 
+/// Governorate shipping (OrderResource.shipping): the merchant picks a company,
+/// the company sets the appointment and moves it to shipped / delivered.
+class ShippingInfo {
+  final String status; // awaiting_company | awaiting_appointment | scheduled | shipped | delivered
+  final double? fee;
+  final DateTime? appointmentAt;
+  final String? appointmentNote;
+  final int? companyId;
+  final String? companyName;
+
+  const ShippingInfo({required this.status, this.fee, this.appointmentAt, this.appointmentNote, this.companyId, this.companyName});
+
+  bool get needsCompany => status == 'awaiting_company';
+  bool get canChangeCompany => status == 'awaiting_company' || status == 'awaiting_appointment';
+
+  factory ShippingInfo.fromJson(Map<String, dynamic> json) {
+    final company = json['company'] as Map<String, dynamic>?;
+    return ShippingInfo(
+      status: json['status'] as String? ?? '',
+      fee: (json['fee'] as num?)?.toDouble(),
+      appointmentAt: DateTime.tryParse(json['appointment_at'] as String? ?? '')?.toLocal(),
+      appointmentNote: json['appointment_note'] as String?,
+      companyId: (company?['id'] as num?)?.toInt(),
+      companyName: company?['name'] as String?,
+    );
+  }
+}
+
 /// Mirrors `OrderResource` — used for the customer's order history list and
 /// detail AND the business's incoming-order queue and detail (list
 /// responses omit `items`, matching `whenLoaded('items')` on the backend;
@@ -121,6 +149,7 @@ class PlacedOrder {
   // completion waits on the merchant's confirmation, reviews on settlement.
   final bool paymentConfirmationRequired;
   final DeliveryFeeQuote? deliveryFeeQuote;
+  final ShippingInfo? shipping;
   final DateTime? paymentSettledAt;
   // The viewer's "I trust" ticks toward the other parties of the order, keyed
   // by 'customer' / 'business' / 'driver'. Null on list rows.
@@ -162,6 +191,7 @@ class PlacedOrder {
     this.depositReleased = false,
     this.paymentConfirmationRequired = false,
     this.deliveryFeeQuote,
+    this.shipping,
     this.paymentSettledAt,
     this.trust,
   });
@@ -231,6 +261,7 @@ class PlacedOrder {
       driverPaymentConfirmedAt: DateTime.tryParse(paymentConfirmations['driver_confirmed_at'] as String? ?? ''),
       depositReleased: deposit['released'] as bool? ?? false,
       paymentConfirmationRequired: json['payment_confirmation_required'] as bool? ?? false,
+      shipping: json['shipping'] != null ? ShippingInfo.fromJson(json['shipping'] as Map<String, dynamic>) : null,
       deliveryFeeQuote: json['delivery_fee_quote'] != null
           ? DeliveryFeeQuote.fromJson(json['delivery_fee_quote'] as Map<String, dynamic>)
           : null,

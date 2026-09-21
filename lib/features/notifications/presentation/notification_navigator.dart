@@ -8,6 +8,7 @@ import '../../cart/application/shared_cart_providers.dart';
 import '../../cart/presentation/screens/shared_cart_screen.dart';
 import '../../delivery/presentation/screens/available_orders_screen.dart';
 import '../../delivery/presentation/screens/driver_order_loader_screen.dart';
+import '../../shipping/presentation/screens/shipping_orders_screen.dart';
 import '../../jobs/presentation/screens/job_detail_screen.dart';
 import '../../offers/presentation/screens/offer_detail_screen.dart';
 import '../../orders/presentation/screens/business_orders_screen.dart';
@@ -46,6 +47,8 @@ Future<void> openNotificationTarget(BuildContext context, WidgetRef ref, AppNoti
           ),
         );
       }
+    case 'open_shipping_order':
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ShippingOrdersScreen()));
     case 'open_driver_order':
       if (id != null) {
         Navigator.of(context).push(MaterialPageRoute(builder: (_) => DriverOrderLoaderScreen(orderId: id)));

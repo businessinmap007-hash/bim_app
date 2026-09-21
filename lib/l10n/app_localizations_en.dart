@@ -1220,6 +1220,84 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paymentConfirmSectionTitle => 'Payment confirmation';
 
   @override
+  String get shippingRatesTitle => 'Shipping prices';
+
+  @override
+  String get shippingRatesHint =>
+      'Your shipping price from your governorate to each one. Leave a field empty if you don\'t ship there.';
+
+  @override
+  String get shippingOrdersTitle => 'Shipping orders';
+
+  @override
+  String get shippingOrdersEmpty => 'No shipping orders.';
+
+  @override
+  String get shippingPickCompany => 'Choose a shipping company';
+
+  @override
+  String get shippingChangeCompany => 'Change the shipping company';
+
+  @override
+  String get shippingPickerTitle => 'Available shipping companies';
+
+  @override
+  String get shippingNoCompanies =>
+      'No shipping company serves the customer\'s governorate yet.';
+
+  @override
+  String get shippingSetAppointment => 'Set the shipping appointment';
+
+  @override
+  String get shippingChangeAppointment => 'Change the appointment';
+
+  @override
+  String get shippingMarkShipped => 'Mark shipped';
+
+  @override
+  String get shippingMarkDelivered => 'Mark delivered';
+
+  @override
+  String get shippingStatusAwaitingCompany =>
+      'Waiting for a shipping company to be chosen';
+
+  @override
+  String get shippingStatusAwaitingAppointment =>
+      'Waiting for the shipping appointment';
+
+  @override
+  String get shippingStatusShipped => 'The order has been shipped';
+
+  @override
+  String get shippingStatusDelivered => 'The order was delivered';
+
+  @override
+  String get shippingAppointmentNotSuitable =>
+      'The appointment doesn\'t suit me - chat with the company';
+
+  @override
+  String get shippingCheckoutNote =>
+      'Your order goes to another governorate: it is shipped by a company the merchant chooses, and its price is added to your invoice.';
+
+  @override
+  String get shippingSaved => 'Saved.';
+
+  @override
+  String shippingStatusScheduled(String when) {
+    return 'Shipping appointment: $when';
+  }
+
+  @override
+  String shippingCompanyLine(String name) {
+    return 'Shipping company: $name';
+  }
+
+  @override
+  String shippingFeeLine(String fee) {
+    return 'Shipping fee: $fee';
+  }
+
+  @override
   String get deliveryQuoteEnterAmountTitle => 'Delivery fee for this order';
 
   @override

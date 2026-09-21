@@ -144,12 +144,20 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     // the courier proposes one per order and the customer approves it.
     final addresses = ref.watch(addressesControllerProvider).items;
     final chosen = _selectedAddressId == null ? null : addresses.where((a) => a.id == _selectedAddressId).firstOrNull;
-    final outOfCity = selected == 'delivery' &&
+    // Another governorate: not delivered but shipped, by a company the merchant
+    // picks - its price is added to the invoice afterwards.
+    final shipping = selected == 'delivery' &&
+        chosen?.governorateId != null &&
+        fulfillment?.governorateId != null &&
+        chosen!.governorateId != fulfillment!.governorateId;
+    final outOfCity = !shipping &&
+        selected == 'delivery' &&
         chosen?.cityId != null &&
         fulfillment?.cityId != null &&
         chosen!.cityId != fulfillment!.cityId;
-    final deliveryFee =
-        (selected == 'delivery' && !outOfCity && widget.cart.deliveryFee <= 0) ? (fulfillment?.deliveryFee ?? 0.0) : 0.0;
+    final deliveryFee = (selected == 'delivery' && !shipping && !outOfCity && widget.cart.deliveryFee <= 0)
+        ? (fulfillment?.deliveryFee ?? 0.0)
+        : 0.0;
 
     String labelFor(String key) {
       if (key == 'dine_in') return l10n.cartFulfillmentDineIn;
@@ -246,6 +254,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           // The business's flat delivery charge is added when the order is
           // placed; show it here, before the total, so the customer isn't
           // surprised by it afterwards.
+          if (shipping)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Text(l10n.shippingCheckoutNote, style: Theme.of(context).textTheme.bodySmall),
+            ),
           if (outOfCity)
             Padding(
               padding: const EdgeInsets.only(bottom: 8),

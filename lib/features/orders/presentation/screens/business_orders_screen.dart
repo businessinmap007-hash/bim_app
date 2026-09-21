@@ -10,6 +10,7 @@ import '../../../delivery/presentation/screens/token_qr_screen.dart';
 import '../../application/business_orders_providers.dart';
 import '../../data/models/placed_order.dart';
 import '../../application/orders_providers.dart';
+import '../../../shipping/presentation/screens/shipping_company_picker_screen.dart';
 import '../widgets/order_tracker_timeline.dart';
 import '../widgets/order_trust_section.dart';
 
@@ -442,7 +443,7 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
       // A ready DELIVERY order needs someone to carry it — open the
       // assignment screen right away instead of leaving the merchant to
       // find it later. Pickup/dine-in orders need no driver at all.
-      if (toReady && order.fulfillmentType == 'delivery' && context.mounted) {
+      if (toReady && order.fulfillmentType == 'delivery' && order.shipping == null && context.mounted) {
         await Navigator.of(context).push(
           MaterialPageRoute(builder: (_) => AssignDriverScreen(orderId: orderId, businessId: businessId)),
         );
@@ -593,6 +594,40 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                   ),
                   if (order.depositReleased)
                     Text(l10n.businessOrdersDepositReleased, style: TextStyle(color: AppColors.success)),
+                ],
+                if (order.shipping != null) ...[
+                  const Divider(height: 24),
+                  Text(
+                    switch (order.shipping!.status) {
+                      'awaiting_appointment' => l10n.shippingStatusAwaitingAppointment,
+                      'scheduled' => l10n.shippingStatusScheduled(
+                        order.shipping!.appointmentAt == null ? '' : order.shipping!.appointmentAt!.toString().substring(0, 16),
+                      ),
+                      'shipped' => l10n.shippingStatusShipped,
+                      'delivered' => l10n.shippingStatusDelivered,
+                      _ => l10n.shippingStatusAwaitingCompany,
+                    },
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                  if (order.shipping!.companyName != null) Text(l10n.shippingCompanyLine(order.shipping!.companyName!)),
+                  if (order.shipping!.canChangeCompany)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: OutlinedButton.icon(
+                        icon: const Icon(Icons.local_shipping_outlined),
+                        onPressed: () async {
+                          final chosen = await Navigator.of(context).push<bool>(
+                            MaterialPageRoute(
+                              builder: (_) => ShippingCompanyPickerScreen(orderId: orderId, businessId: businessId),
+                            ),
+                          );
+                          if (chosen == true && context.mounted) {
+                            ref.read(businessOrderDetailControllerProvider(_key).notifier).load();
+                          }
+                        },
+                        label: Text(order.shipping!.needsCompany ? l10n.shippingPickCompany : l10n.shippingChangeCompany),
+                      ),
+                    ),
                 ],
                 if (order.deliveryFeeQuote != null && order.deliveryFeeQuote!.isUnsettled) ...[
                   const Divider(height: 24),
@@ -750,6 +785,7 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                 // them a way back in rather than a one-shot-only prompt.
                 else if (order.prepStatus == 'ready' &&
                     order.fulfillmentType == 'delivery' &&
+                    order.shipping == null &&
                     order.deliveryStage == null)
                   OutlinedButton.icon(
                     icon: const Icon(Icons.delivery_dining_outlined),

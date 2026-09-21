@@ -1236,6 +1236,81 @@ class AppLocalizationsAr extends AppLocalizations {
   String get paymentConfirmSectionTitle => 'تأكيد الدفع';
 
   @override
+  String get shippingRatesTitle => 'أسعار الشحن';
+
+  @override
+  String get shippingRatesHint =>
+      'سعر الشحن من محافظتك إلى كل محافظة. اترك الحقل فارغًا لو لا تشحن إليها.';
+
+  @override
+  String get shippingOrdersTitle => 'طلبات الشحن';
+
+  @override
+  String get shippingOrdersEmpty => 'لا توجد طلبات شحن.';
+
+  @override
+  String get shippingPickCompany => 'اختر شركة الشحن';
+
+  @override
+  String get shippingChangeCompany => 'تغيير شركة الشحن';
+
+  @override
+  String get shippingPickerTitle => 'شركات الشحن المتاحة';
+
+  @override
+  String get shippingNoCompanies => 'لا توجد شركة شحن تخدم محافظة العميل بعد.';
+
+  @override
+  String get shippingSetAppointment => 'حدد موعد الشحن';
+
+  @override
+  String get shippingChangeAppointment => 'تعديل الموعد';
+
+  @override
+  String get shippingMarkShipped => 'تم الشحن';
+
+  @override
+  String get shippingMarkDelivered => 'تم التسليم';
+
+  @override
+  String get shippingStatusAwaitingCompany => 'بانتظار اختيار شركة الشحن';
+
+  @override
+  String get shippingStatusAwaitingAppointment => 'بانتظار تحديد موعد الشحن';
+
+  @override
+  String get shippingStatusShipped => 'تم شحن الطلب';
+
+  @override
+  String get shippingStatusDelivered => 'تم تسليم الطلب';
+
+  @override
+  String get shippingAppointmentNotSuitable =>
+      'الموعد غير مناسب — تواصل مع الشركة';
+
+  @override
+  String get shippingCheckoutNote =>
+      'طلبك لمحافظة أخرى: يُشحن عبر شركة شحن يختارها التاجر، ويُضاف سعر الشحن لفاتورتك.';
+
+  @override
+  String get shippingSaved => 'تم الحفظ.';
+
+  @override
+  String shippingStatusScheduled(String when) {
+    return 'موعد الشحن: $when';
+  }
+
+  @override
+  String shippingCompanyLine(String name) {
+    return 'شركة الشحن: $name';
+  }
+
+  @override
+  String shippingFeeLine(String fee) {
+    return 'رسوم الشحن: $fee';
+  }
+
+  @override
   String get deliveryQuoteEnterAmountTitle => 'رسوم التوصيل لهذا الطلب';
 
   @override

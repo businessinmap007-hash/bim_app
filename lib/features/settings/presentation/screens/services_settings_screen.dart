@@ -9,6 +9,8 @@ import '../../../auth/application/auth_controller.dart';
 import '../../../delivery/presentation/screens/delivery_fee_settings_screen.dart';
 import '../../../delivery/presentation/screens/driver_dashboard_screen.dart';
 import '../../../delivery/presentation/screens/my_drivers_screen.dart';
+import '../../../shipping/presentation/screens/shipping_orders_screen.dart';
+import '../../../shipping/presentation/screens/shipping_rates_screen.dart';
 import '../../../business_offers/presentation/screens/business_offers_screen.dart';
 import '../../../business_prices/presentation/screens/business_prices_screen.dart';
 import '../../../business_menu/presentation/screens/menu_items_screen.dart';
@@ -170,6 +172,18 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.delivery_dining_outlined,
         title: l10n.deliveryMyDriversTitle,
         builder: (_) => const MyDriversScreen(),
+      ),
+      _Tile(
+        show: isCarrier,
+        leading: Icons.local_shipping_outlined,
+        title: l10n.shippingOrdersTitle,
+        builder: (_) => const ShippingOrdersScreen(),
+      ),
+      _Tile(
+        show: isCarrier,
+        leading: Icons.price_change_outlined,
+        title: l10n.shippingRatesTitle,
+        builder: (_) => const ShippingRatesScreen(),
       ),
       _Tile(
         show: isCarrier,

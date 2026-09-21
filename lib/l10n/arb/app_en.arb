@@ -405,6 +405,37 @@
   "businessOrdersDepositCovered": "Covered by a deposit/guarantee",
   "businessOrdersDepositUncovered": "No deposit or guarantee cover",
   "paymentConfirmSectionTitle": "Payment confirmation",
+  "shippingRatesTitle": "Shipping prices",
+  "shippingRatesHint": "Your shipping price from your governorate to each one. Leave a field empty if you don't ship there.",
+  "shippingOrdersTitle": "Shipping orders",
+  "shippingOrdersEmpty": "No shipping orders.",
+  "shippingPickCompany": "Choose a shipping company",
+  "shippingChangeCompany": "Change the shipping company",
+  "shippingPickerTitle": "Available shipping companies",
+  "shippingNoCompanies": "No shipping company serves the customer's governorate yet.",
+  "shippingSetAppointment": "Set the shipping appointment",
+  "shippingChangeAppointment": "Change the appointment",
+  "shippingMarkShipped": "Mark shipped",
+  "shippingMarkDelivered": "Mark delivered",
+  "shippingStatusAwaitingCompany": "Waiting for a shipping company to be chosen",
+  "shippingStatusAwaitingAppointment": "Waiting for the shipping appointment",
+  "shippingStatusShipped": "The order has been shipped",
+  "shippingStatusDelivered": "The order was delivered",
+  "shippingAppointmentNotSuitable": "The appointment doesn't suit me - chat with the company",
+  "shippingCheckoutNote": "Your order goes to another governorate: it is shipped by a company the merchant chooses, and its price is added to your invoice.",
+  "shippingSaved": "Saved.",
+  "shippingStatusScheduled": "Shipping appointment: {when}",
+  "@shippingStatusScheduled": {
+    "placeholders": { "when": { "type": "String" } }
+  },
+  "shippingCompanyLine": "Shipping company: {name}",
+  "@shippingCompanyLine": {
+    "placeholders": { "name": { "type": "String" } }
+  },
+  "shippingFeeLine": "Shipping fee: {fee}",
+  "@shippingFeeLine": {
+    "placeholders": { "fee": { "type": "String" } }
+  },
   "deliveryQuoteEnterAmountTitle": "Delivery fee for this order",
   "deliveryQuoteAmountLabel": "Amount",
   "deliveryQuoteProposeButton": "Propose the delivery fee",

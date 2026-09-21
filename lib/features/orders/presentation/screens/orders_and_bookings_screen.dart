@@ -17,6 +17,8 @@ import '../../../delivery/presentation/screens/token_scan_screen.dart';
 import '../../../projects/presentation/screens/project_progress_screen.dart';
 import '../../../ratings/presentation/widgets/leave_review_sheet.dart';
 import '../../../wallet/presentation/widgets/wallet_pin_prompt.dart';
+import '../../../general_chat/application/general_chat_providers.dart';
+import '../../../general_chat/presentation/screens/chat_thread_screen.dart';
 import '../../application/orders_providers.dart';
 import '../../data/models/placed_order.dart';
 import '../widgets/order_tracker_timeline.dart';
@@ -282,6 +284,20 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
     }
   }
 
+  Future<void> _chatWithShippingCompany(int companyId) async {
+    final l10n = AppLocalizations.of(context)!;
+    try {
+      final thread = await ref.read(generalChatApiProvider).startWith(companyId);
+      if (mounted) {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => ChatThreadScreen(threadId: thread.id, title: thread.displayTitle())),
+        );
+      }
+    } catch (_) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+    }
+  }
+
   Future<void> _reorder(PlacedOrder order) async {
     final l10n = AppLocalizations.of(context)!;
     setState(() => _busy = true);
@@ -502,6 +518,34 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
           if (order.notes != null && order.notes!.isNotEmpty) ...[
             const SizedBox(height: 12),
             Text(order.notes!, style: Theme.of(context).textTheme.bodySmall),
+          ],
+          if (order.shipping != null) ...[
+            const Divider(height: 24),
+            Text(
+              switch (order.shipping!.status) {
+                'awaiting_appointment' => l10n.shippingStatusAwaitingAppointment,
+                'scheduled' => l10n.shippingStatusScheduled(
+                  order.shipping!.appointmentAt == null ? '' : order.shipping!.appointmentAt!.toString().substring(0, 16),
+                ),
+                'shipped' => l10n.shippingStatusShipped,
+                'delivered' => l10n.shippingStatusDelivered,
+                _ => l10n.shippingStatusAwaitingCompany,
+              },
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            if (order.shipping!.companyName != null) Text(l10n.shippingCompanyLine(order.shipping!.companyName!)),
+            if (order.shipping!.fee != null) Text(l10n.shippingFeeLine(order.shipping!.fee!.toStringAsFixed(0))),
+            if (order.shipping!.appointmentNote != null && order.shipping!.appointmentNote!.isNotEmpty)
+              Text(order.shipping!.appointmentNote!, style: Theme.of(context).textTheme.bodySmall),
+            if (order.shipping!.status == 'scheduled' && order.shipping!.companyId != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: OutlinedButton.icon(
+                  icon: const Icon(Icons.chat_bubble_outline),
+                  onPressed: () => _chatWithShippingCompany(order.shipping!.companyId!),
+                  label: Text(l10n.shippingAppointmentNotSuitable),
+                ),
+              ),
           ],
           if (order.deliveryFeeQuote != null && order.deliveryFeeQuote!.isUnsettled) ...[
             const Divider(height: 24),

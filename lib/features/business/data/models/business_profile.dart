@@ -61,8 +61,9 @@ class BusinessFulfillment {
 
   /// The business's city - a delivery to another city is priced per order.
   final int? cityId;
+  final int? governorateId;
 
-  const BusinessFulfillment({this.methods = const [], required this.dineIn, this.deliveryFee, this.cityId});
+  const BusinessFulfillment({this.methods = const [], required this.dineIn, this.deliveryFee, this.cityId, this.governorateId});
 
   bool get any => methods.isNotEmpty || dineIn;
 
@@ -92,6 +93,7 @@ class BusinessFulfillment {
     dineIn: json['dine_in'] as bool? ?? false,
     deliveryFee: (json['delivery_fee'] as num?)?.toDouble(),
     cityId: (json['city_id'] as num?)?.toInt(),
+    governorateId: (json['governorate_id'] as num?)?.toInt(),
   );
 }
 
