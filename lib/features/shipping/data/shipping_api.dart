@@ -1,8 +1,8 @@
 import '../../../core/network/api_client.dart';
 import '../../orders/data/models/placed_order.dart';
 
-typedef ShippingRateRow = ({int governorateId, String nameAr, String nameEn, double? price});
-typedef ShippingCompany = ({int id, String name, double price});
+typedef ShippingRateRow = ({int governorateId, String nameAr, String nameEn, double? price, List<int>? days});
+typedef ShippingCompany = ({int id, String name, double price, bool runsToday, bool runsTomorrow});
 
 /// Governorate shipping - Api\V2\ShippingController. A Shipping & Delivery
 /// company keeps its price list and runs the orders; a merchant picks a company.
@@ -24,14 +24,18 @@ class ShippingApi {
         nameAr: m['name_ar'] as String? ?? '',
         nameEn: m['name_en'] as String? ?? '',
         price: (m['price'] as num?)?.toDouble(),
+        days: (m['days'] as List<dynamic>?)?.map((d) => (d as num).toInt()).toList(),
       );
     }).toList();
   }
 
-  Future<void> saveRates(Map<int, double?> prices) => _client.put(
+  /// Weekdays are 0 = Sunday ... 6 = Saturday; null/empty = every day.
+  Future<void> saveRates(Map<int, ({double? price, List<int>? days})> rates) => _client.put(
     '/business/shipping/rates',
     data: {
-      'rates': [for (final e in prices.entries) {'governorate_id': e.key, 'price': e.value}],
+      'rates': [
+        for (final e in rates.entries) {'governorate_id': e.key, 'price': e.value.price, 'days': e.value.days},
+      ],
     },
   );
 
@@ -41,7 +45,13 @@ class ShippingApi {
     final data = await _client.get('/business/orders/$orderId/shipping-companies', query: {'business_id': ?businessId}) as Map<String, dynamic>;
     return (data['companies'] as List<dynamic>? ?? []).map((e) {
       final m = e as Map<String, dynamic>;
-      return (id: (m['id'] as num).toInt(), name: m['name'] as String? ?? '', price: (m['price'] as num?)?.toDouble() ?? 0.0);
+      return (
+        id: (m['id'] as num).toInt(),
+        name: m['name'] as String? ?? '',
+        price: (m['price'] as num?)?.toDouble() ?? 0.0,
+        runsToday: m['runs_today'] as bool? ?? true,
+        runsTomorrow: m['runs_tomorrow'] as bool? ?? true,
+      );
     }).toList();
   }
 

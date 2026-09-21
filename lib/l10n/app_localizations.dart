@@ -2336,6 +2336,24 @@ abstract class AppLocalizations {
   /// **'أسعار الشحن'**
   String get shippingRatesTitle;
 
+  /// No description provided for @shippingDaysHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'أيام الشحن لهذه الوجهة (بدون تحديد = كل الأيام)'**
+  String get shippingDaysHint;
+
+  /// No description provided for @shippingRunsToday.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم'**
+  String get shippingRunsToday;
+
+  /// No description provided for @shippingRunsTomorrow.
+  ///
+  /// In ar, this message translates to:
+  /// **'غدًا'**
+  String get shippingRunsTomorrow;
+
   /// No description provided for @shippingRatesHint.
   ///
   /// In ar, this message translates to:

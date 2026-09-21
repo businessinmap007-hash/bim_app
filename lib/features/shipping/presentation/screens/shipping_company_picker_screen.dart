@@ -63,7 +63,16 @@ class _ShippingCompanyPickerScreenState extends ConsumerState<ShippingCompanyPic
                 child: ListTile(
                   leading: const Icon(Icons.local_shipping_outlined),
                   title: Text(c.name),
-                  subtitle: Text(l10n.shippingFeeLine(c.price.toStringAsFixed(0))),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(l10n.shippingFeeLine(c.price.toStringAsFixed(0))),
+                      Text(
+                        [if (c.runsToday) l10n.shippingRunsToday, if (c.runsTomorrow) l10n.shippingRunsTomorrow].join(' · '),
+                        style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12),
+                      ),
+                    ],
+                  ),
                   trailing: _choosing == c.id
                       ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
                       : const Icon(Icons.chevron_right),

@@ -1239,6 +1239,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get shippingRatesTitle => 'أسعار الشحن';
 
   @override
+  String get shippingDaysHint =>
+      'أيام الشحن لهذه الوجهة (بدون تحديد = كل الأيام)';
+
+  @override
+  String get shippingRunsToday => 'اليوم';
+
+  @override
+  String get shippingRunsTomorrow => 'غدًا';
+
+  @override
   String get shippingRatesHint =>
       'سعر الشحن من محافظتك إلى كل محافظة. اترك الحقل فارغًا لو لا تشحن إليها.';
 

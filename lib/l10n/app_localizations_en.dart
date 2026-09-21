@@ -1223,6 +1223,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get shippingRatesTitle => 'Shipping prices';
 
   @override
+  String get shippingDaysHint =>
+      'Shipping days for this destination (none = every day)';
+
+  @override
+  String get shippingRunsToday => 'Today';
+
+  @override
+  String get shippingRunsTomorrow => 'Tomorrow';
+
+  @override
   String get shippingRatesHint =>
       'Your shipping price from your governorate to each one. Leave a field empty if you don\'t ship there.';
 

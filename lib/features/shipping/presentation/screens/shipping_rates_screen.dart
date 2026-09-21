@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -7,8 +8,10 @@ import '../../../../shared/widgets/async_value_view.dart';
 import '../../application/shipping_providers.dart';
 import '../../data/shipping_api.dart';
 
-/// A Shipping & Delivery company's fixed price from its own governorate to
-/// every other one. A blank field means "we don't ship there".
+/// A Shipping & Delivery company's fixed price - and the weekdays it runs - from
+/// its own governorate to every other one. A blank price means "we don't ship
+/// there"; no day picked means every day. A merchant only sees a company
+/// running the route today or tomorrow.
 class ShippingRatesScreen extends ConsumerStatefulWidget {
   const ShippingRatesScreen({super.key});
 
@@ -17,19 +20,22 @@ class ShippingRatesScreen extends ConsumerStatefulWidget {
 }
 
 class _ShippingRatesScreenState extends ConsumerState<ShippingRatesScreen> {
-  final Map<int, TextEditingController> _controllers = {};
+  final Map<int, TextEditingController> _prices = {};
+  final Map<int, Set<int>> _days = {};
   bool _saving = false;
 
-  TextEditingController _controllerFor(ShippingRateRow row) {
-    return _controllers.putIfAbsent(
+  TextEditingController _priceFor(ShippingRateRow row) {
+    return _prices.putIfAbsent(
       row.governorateId,
       () => TextEditingController(text: row.price == null ? '' : (row.price! == row.price!.roundToDouble() ? row.price!.toStringAsFixed(0) : '${row.price}')),
     );
   }
 
+  Set<int> _daysFor(ShippingRateRow row) => _days.putIfAbsent(row.governorateId, () => {...?row.days});
+
   @override
   void dispose() {
-    for (final c in _controllers.values) {
+    for (final c in _prices.values) {
       c.dispose();
     }
     super.dispose();
@@ -37,12 +43,16 @@ class _ShippingRatesScreenState extends ConsumerState<ShippingRatesScreen> {
 
   Future<void> _save() async {
     final l10n = AppLocalizations.of(context)!;
-    final prices = <int, double?>{
-      for (final e in _controllers.entries) e.key: e.value.text.trim().isEmpty ? null : double.tryParse(e.value.text.trim()),
+    final rates = <int, ({double? price, List<int>? days})>{
+      for (final e in _prices.entries)
+        e.key: (
+          price: e.value.text.trim().isEmpty ? null : double.tryParse(e.value.text.trim()),
+          days: (_days[e.key] ?? const <int>{}).isEmpty ? null : (_days[e.key]!.toList()..sort()),
+        ),
     };
     setState(() => _saving = true);
     try {
-      await ref.read(shippingApiProvider).saveRates(prices);
+      await ref.read(shippingApiProvider).saveRates(rates);
       ref.invalidate(shippingRatesProvider);
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.shippingSaved)));
     } catch (e) {
@@ -59,8 +69,11 @@ class _ShippingRatesScreenState extends ConsumerState<ShippingRatesScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
+    final locale = Localizations.localeOf(context);
+    final isEnglish = locale.languageCode == 'en';
     final async = ref.watch(shippingRatesProvider);
+    // 2024-01-07 was a Sunday, so day 0 = Sunday ... 6 = Saturday.
+    String dayName(int d) => DateFormat.E(locale.toString()).format(DateTime(2024, 1, 7 + d));
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.shippingRatesTitle)),
@@ -74,21 +87,40 @@ class _ShippingRatesScreenState extends ConsumerState<ShippingRatesScreen> {
             const SizedBox(height: 12),
             for (final row in rows)
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Row(
+                padding: const EdgeInsets.symmetric(vertical: 6),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(child: Text(isEnglish && row.nameEn.isNotEmpty ? row.nameEn : row.nameAr)),
-                    SizedBox(
-                      width: 110,
-                      child: TextField(
-                        controller: _controllerFor(row),
-                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                        decoration: const InputDecoration(isDense: true),
-                      ),
+                    Row(
+                      children: [
+                        Expanded(child: Text(isEnglish && row.nameEn.isNotEmpty ? row.nameEn : row.nameAr, style: Theme.of(context).textTheme.titleSmall)),
+                        SizedBox(
+                          width: 110,
+                          child: TextField(
+                            controller: _priceFor(row),
+                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                            decoration: const InputDecoration(isDense: true),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Wrap(
+                      spacing: 6,
+                      children: [
+                        for (final d in const [6, 0, 1, 2, 3, 4, 5])
+                          FilterChip(
+                            label: Text(dayName(d), style: const TextStyle(fontSize: 11)),
+                            visualDensity: VisualDensity.compact,
+                            selected: _daysFor(row).contains(d),
+                            onSelected: (on) => setState(() => on ? _daysFor(row).add(d) : _daysFor(row).remove(d)),
+                          ),
+                      ],
                     ),
                   ],
                 ),
               ),
+            const SizedBox(height: 4),
+            Text(l10n.shippingDaysHint, style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12)),
             const SizedBox(height: 16),
             FilledButton(
               onPressed: _saving ? null : _save,
