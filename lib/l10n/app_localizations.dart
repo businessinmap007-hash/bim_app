@@ -2330,6 +2330,12 @@ abstract class AppLocalizations {
   /// **'تأكيد الدفع'**
   String get paymentConfirmSectionTitle;
 
+  /// No description provided for @orderDeliveryFeeRow.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسوم التوصيل'**
+  String get orderDeliveryFeeRow;
+
   /// No description provided for @bookingPaymentBusinessStatusLabel.
   ///
   /// In ar, this message translates to:

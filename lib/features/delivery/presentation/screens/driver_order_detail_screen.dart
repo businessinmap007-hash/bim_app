@@ -220,6 +220,17 @@ class _DriverOrderDetailScreenState extends ConsumerState<DriverOrderDetailScree
               ),
             ),
           const Divider(height: 24),
+          if (order.deliveryFee > 0)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 6),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(l10n.orderDeliveryFeeRow),
+                  Text(order.deliveryFee.toStringAsFixed(0)),
+                ],
+              ),
+            ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

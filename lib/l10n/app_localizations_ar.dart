@@ -1236,6 +1236,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get paymentConfirmSectionTitle => 'تأكيد الدفع';
 
   @override
+  String get orderDeliveryFeeRow => 'رسوم التوصيل';
+
+  @override
   String get bookingPaymentBusinessStatusLabel => 'استلام النشاط للمبلغ';
 
   @override

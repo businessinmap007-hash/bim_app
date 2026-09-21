@@ -1220,6 +1220,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paymentConfirmSectionTitle => 'Payment confirmation';
 
   @override
+  String get orderDeliveryFeeRow => 'Delivery fee';
+
+  @override
   String get bookingPaymentBusinessStatusLabel =>
       'Business receipt of the amount';
 

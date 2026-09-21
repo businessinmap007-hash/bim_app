@@ -137,6 +137,10 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     final selectedKey = (preferred != null && keys.contains(preferred)) ? preferred : keys.first;
     final selected = fulfillment?.typeOfSelection(selectedKey) ?? selectedKey;
 
+    // Only a delivery order carries it, and only while the cart itself hasn't
+    // already priced one in.
+    final deliveryFee = (selected == 'delivery' && widget.cart.deliveryFee <= 0) ? (fulfillment?.deliveryFee ?? 0.0) : 0.0;
+
     String labelFor(String key) {
       if (key == 'dine_in') return l10n.cartFulfillmentDineIn;
 
@@ -229,11 +233,25 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: 24),
+          // The business's flat delivery charge is added when the order is
+          // placed; show it here, before the total, so the customer isn't
+          // surprised by it afterwards.
+          if (deliveryFee > 0)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(l10n.orderDeliveryFeeRow, style: Theme.of(context).textTheme.bodyMedium),
+                  Text(deliveryFee.toStringAsFixed(0), style: Theme.of(context).textTheme.bodyMedium),
+                ],
+              ),
+            ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(l10n.cartFinalTotal, style: Theme.of(context).textTheme.titleMedium),
-              Text(widget.cart.finalTotal.toStringAsFixed(0), style: Theme.of(context).textTheme.titleMedium),
+              Text((widget.cart.finalTotal + deliveryFee).toStringAsFixed(0), style: Theme.of(context).textTheme.titleMedium),
             ],
           ),
           const SizedBox(height: 16),

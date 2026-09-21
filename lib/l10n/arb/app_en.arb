@@ -405,6 +405,7 @@
   "businessOrdersDepositCovered": "Covered by a deposit/guarantee",
   "businessOrdersDepositUncovered": "No deposit or guarantee cover",
   "paymentConfirmSectionTitle": "Payment confirmation",
+  "orderDeliveryFeeRow": "Delivery fee",
   "bookingPaymentBusinessStatusLabel": "Business receipt of the amount",
   "bookingPaymentBusinessButton": "Confirm cash received",
   "bookingPaymentBusinessConfirmed": "Amount confirmed received",

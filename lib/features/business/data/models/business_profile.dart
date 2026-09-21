@@ -56,7 +56,10 @@ class BusinessFulfillment {
   final List<FulfillmentMethod> methods;
   final bool dineIn;
 
-  const BusinessFulfillment({this.methods = const [], required this.dineIn});
+  /// The flat charge added to a delivery order (null = free delivery).
+  final double? deliveryFee;
+
+  const BusinessFulfillment({this.methods = const [], required this.dineIn, this.deliveryFee});
 
   bool get any => methods.isNotEmpty || dineIn;
 
@@ -84,6 +87,7 @@ class BusinessFulfillment {
         .map((e) => FulfillmentMethod.fromJson(e as Map<String, dynamic>))
         .toList(),
     dineIn: json['dine_in'] as bool? ?? false,
+    deliveryFee: (json['delivery_fee'] as num?)?.toDouble(),
   );
 }
 

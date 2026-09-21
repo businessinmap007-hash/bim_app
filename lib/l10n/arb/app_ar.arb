@@ -405,6 +405,7 @@
   "businessOrdersDepositCovered": "مغطّى بضمان أو ديبوزيت",
   "businessOrdersDepositUncovered": "بلا ضمان أو ديبوزيت",
   "paymentConfirmSectionTitle": "تأكيد الدفع",
+  "orderDeliveryFeeRow": "رسوم التوصيل",
   "bookingPaymentBusinessStatusLabel": "استلام النشاط للمبلغ",
   "bookingPaymentBusinessButton": "تأكيد استلام المبلغ نقدًا",
   "bookingPaymentBusinessConfirmed": "تم تأكيد استلام المبلغ",
