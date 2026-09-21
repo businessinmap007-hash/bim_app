@@ -5292,6 +5292,38 @@ class AppLocalizationsAr extends AppLocalizations {
   String get trainingClientsEmpty => 'لا توجد خطط عملاء بعد.';
 
   @override
+  String get trainingTemplateApply => 'تطبيق على عميل';
+
+  @override
+  String get trainingApplyClientLabel => 'هاتف العميل أو بريده الإلكتروني';
+
+  @override
+  String get trainingApplyClientHint =>
+      'اكتب الهاتف أو البريد كما هو مسجّل بالضبط، ثم اضغط بحث.';
+
+  @override
+  String get trainingApplyFind => 'بحث';
+
+  @override
+  String get trainingApplyClientNotFound =>
+      'لا يوجد عميل بهذا الهاتف أو البريد بالضبط.';
+
+  @override
+  String get trainingApplyStart => 'تاريخ البداية';
+
+  @override
+  String get trainingApplyCreate => 'إنشاء الخطة وإرسالها للعميل';
+
+  @override
+  String get trainingApplyDone => 'تم إنشاء الخطة وأُرسلت للعميل ليقبلها.';
+
+  @override
+  String get trainingTemplateWeeks => 'مدة القالب (أسابيع)';
+
+  @override
+  String get trainingDayLabelHint => 'اسم اليوم (Push / Pull / Legs)';
+
+  @override
   String trainingWeekOf(int w, int t) {
     return 'الأسبوع $w من $t';
   }

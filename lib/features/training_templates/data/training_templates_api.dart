@@ -4,10 +4,8 @@ import 'models/training_template.dart';
 
 /// /business/training-templates — see Api\V2\TrainingTemplateController.
 /// Gated server-side on the "training" business capability (owner, or a
-/// delegate granted it). `apply` (instantiate a plan for a client) is
-/// deliberately not wired up here — it needs a client_id, and this app has
-/// no way to search/pick a person by phone or name yet (same gap noted for
-/// the friend co-guarantor feature and direct clinic booking).
+/// delegate granted it). `apply` instantiates a plan for a client the
+/// trainer found by exact phone/e-mail (see TrainingApi.lookupClient).
 class TrainingTemplatesApi {
   final ApiClient _client;
   const TrainingTemplatesApi(this._client);
@@ -49,6 +47,7 @@ class TrainingTemplatesApi {
     required String title,
     String? goal,
     String? notes,
+    int? durationWeeks,
   }) async {
     final data =
         await _client.put(
@@ -57,10 +56,28 @@ class TrainingTemplatesApi {
                 'title': title,
                 if (goal != null && goal.isNotEmpty) 'goal': goal,
                 if (notes != null && notes.isNotEmpty) 'notes': notes,
+                'duration_weeks': durationWeeks,
               },
             )
             as Map<String, dynamic>;
     return TrainingTemplate.fromJson(data['template'] as Map<String, dynamic>);
+  }
+
+  /// POST /business/training-templates/{id}/apply — a plan for [clientId], from a
+  /// COPY of the template. [weeks] overrides the template's own length.
+  /// Returns the new plan's id; the client gets it to accept.
+  Future<int> apply(int id, {required int clientId, DateTime? startsOn, int? weeks}) async {
+    final data =
+        await _client.post(
+              '/business/training-templates/$id/apply',
+              data: {
+                'client_id': clientId,
+                if (startsOn != null) 'starts_on': '${startsOn.year}-${startsOn.month.toString().padLeft(2, '0')}-${startsOn.day.toString().padLeft(2, '0')}',
+                'duration_weeks': ?weeks,
+              },
+            )
+            as Map<String, dynamic>;
+    return data['plan_id'] as int;
   }
 
   Future<void> delete(int id) =>
@@ -73,6 +90,10 @@ class TrainingTemplatesApi {
     int? libraryExerciseId,
     int? sets,
     String? reps,
+    String? dayLabel,
+    List<double>? setWeights,
+    int? progressEveryWeeks,
+    double? progressIncrementKg,
     int? restSeconds,
     String? notes,
   }) async {
@@ -82,6 +103,10 @@ class TrainingTemplatesApi {
         'day_of_week': ?dayOfWeek,
         'name': name,
         'library_exercise_id': ?libraryExerciseId,
+        if (dayLabel != null && dayLabel.isNotEmpty) 'day_label': dayLabel,
+        if (setWeights != null && setWeights.isNotEmpty) 'set_weights': setWeights,
+        'progress_every_weeks': ?progressEveryWeeks,
+        'progress_increment_kg': ?progressIncrementKg,
         'sets': ?sets,
         if (reps != null && reps.isNotEmpty) 'reps': reps,
         'rest_seconds': ?restSeconds,

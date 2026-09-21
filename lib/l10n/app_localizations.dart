@@ -9890,6 +9890,66 @@ abstract class AppLocalizations {
   /// **'لا توجد خطط عملاء بعد.'**
   String get trainingClientsEmpty;
 
+  /// No description provided for @trainingTemplateApply.
+  ///
+  /// In ar, this message translates to:
+  /// **'تطبيق على عميل'**
+  String get trainingTemplateApply;
+
+  /// No description provided for @trainingApplyClientLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'هاتف العميل أو بريده الإلكتروني'**
+  String get trainingApplyClientLabel;
+
+  /// No description provided for @trainingApplyClientHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب الهاتف أو البريد كما هو مسجّل بالضبط، ثم اضغط بحث.'**
+  String get trainingApplyClientHint;
+
+  /// No description provided for @trainingApplyFind.
+  ///
+  /// In ar, this message translates to:
+  /// **'بحث'**
+  String get trainingApplyFind;
+
+  /// No description provided for @trainingApplyClientNotFound.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد عميل بهذا الهاتف أو البريد بالضبط.'**
+  String get trainingApplyClientNotFound;
+
+  /// No description provided for @trainingApplyStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'تاريخ البداية'**
+  String get trainingApplyStart;
+
+  /// No description provided for @trainingApplyCreate.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء الخطة وإرسالها للعميل'**
+  String get trainingApplyCreate;
+
+  /// No description provided for @trainingApplyDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إنشاء الخطة وأُرسلت للعميل ليقبلها.'**
+  String get trainingApplyDone;
+
+  /// No description provided for @trainingTemplateWeeks.
+  ///
+  /// In ar, this message translates to:
+  /// **'مدة القالب (أسابيع)'**
+  String get trainingTemplateWeeks;
+
+  /// No description provided for @trainingDayLabelHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم اليوم (Push / Pull / Legs)'**
+  String get trainingDayLabelHint;
+
   /// No description provided for @trainingWeekOf.
   ///
   /// In ar, this message translates to:

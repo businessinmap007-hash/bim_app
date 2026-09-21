@@ -5301,6 +5301,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trainingClientsEmpty => 'No client plans yet.';
 
   @override
+  String get trainingTemplateApply => 'Apply to a client';
+
+  @override
+  String get trainingApplyClientLabel => 'Client phone or e-mail';
+
+  @override
+  String get trainingApplyClientHint =>
+      'Type the phone or e-mail exactly as registered, then tap Search.';
+
+  @override
+  String get trainingApplyFind => 'Search';
+
+  @override
+  String get trainingApplyClientNotFound =>
+      'No client has exactly this phone or e-mail.';
+
+  @override
+  String get trainingApplyStart => 'Start date';
+
+  @override
+  String get trainingApplyCreate => 'Create the plan and send it to the client';
+
+  @override
+  String get trainingApplyDone =>
+      'Plan created and sent to the client to accept.';
+
+  @override
+  String get trainingTemplateWeeks => 'Template length (weeks)';
+
+  @override
+  String get trainingDayLabelHint => 'Day name (Push / Pull / Legs)';
+
+  @override
   String trainingWeekOf(int w, int t) {
     return 'Week $w of $t';
   }

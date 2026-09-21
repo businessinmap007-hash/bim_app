@@ -218,6 +218,16 @@ class TrainingApi {
     );
   }
 
+  /// The client a plan is for, found by their EXACT phone or e-mail — never a
+  /// search. Null when nobody matches.
+  Future<({int id, String name, String phone})?> lookupClient(String query) async {
+    final data =
+        await _client.get('/business/training/clients/lookup', query: {'q': query}) as Map<String, dynamic>;
+    if (data['found'] != true) return null;
+    final c = data['client'] as Map<String, dynamic>;
+    return (id: c['id'] as int, name: c['name'] as String? ?? '', phone: c['phone'] as String? ?? '');
+  }
+
   /// GET /business/training/exercise-library — the catalogue a trainer picks from.
   Future<ExerciseLibrary> exerciseLibrary() async {
     final data = await _client.get('/business/training/exercise-library') as Map<String, dynamic>;

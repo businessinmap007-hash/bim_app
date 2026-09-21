@@ -10,6 +10,12 @@ class TemplateExercise {
   final String? notes;
   final int sortOrder;
 
+  /// «Push» / «Pull» / «Legs», per-set base weights, and how they climb.
+  final String? dayLabel;
+  final List<double> setWeights;
+  final int? progressEveryWeeks;
+  final double? progressIncrementKg;
+
   const TemplateExercise({
     required this.id,
     this.dayOfWeek,
@@ -19,6 +25,10 @@ class TemplateExercise {
     this.restSeconds,
     this.notes,
     required this.sortOrder,
+    this.dayLabel,
+    this.setWeights = const [],
+    this.progressEveryWeeks,
+    this.progressIncrementKg,
   });
 
   factory TemplateExercise.fromJson(Map<String, dynamic> json) => TemplateExercise(
@@ -30,6 +40,10 @@ class TemplateExercise {
     restSeconds: json['rest_seconds'] as int?,
     notes: json['notes'] as String?,
     sortOrder: json['sort_order'] as int,
+    dayLabel: json['day_label'] as String?,
+    setWeights: (json['set_weights'] as List<dynamic>? ?? const []).map((e) => (e as num).toDouble()).toList(),
+    progressEveryWeeks: (json['progress_every_weeks'] as num?)?.toInt(),
+    progressIncrementKg: (json['progress_increment_kg'] as num?)?.toDouble(),
   );
 }
 

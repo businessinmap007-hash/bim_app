@@ -9,6 +9,9 @@ class TrainingTemplate {
   final String title;
   final String? goal;
   final String? notes;
+
+  /// How many weeks the programme runs by default (chosen again when applying).
+  final int? durationWeeks;
   final int? exercisesCount;
   final int? mealsCount;
   final List<TemplateExercise> exercises;
@@ -19,6 +22,7 @@ class TrainingTemplate {
     required this.title,
     this.goal,
     this.notes,
+    this.durationWeeks,
     this.exercisesCount,
     this.mealsCount,
     this.exercises = const [],
@@ -30,6 +34,7 @@ class TrainingTemplate {
     title: json['title'] as String,
     goal: json['goal'] as String?,
     notes: json['notes'] as String?,
+    durationWeeks: (json['duration_weeks'] as num?)?.toInt(),
     exercisesCount: json['exercises_count'] as int?,
     mealsCount: json['meals_count'] as int?,
     exercises: (json['exercises'] as List<dynamic>?)

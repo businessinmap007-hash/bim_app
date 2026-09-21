@@ -5,12 +5,13 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/training_templates_providers.dart';
 import '../../data/models/training_template.dart';
+import '../../../training/presentation/screens/training_plan_manage_screen.dart';
+import '../widgets/apply_template_sheet.dart';
 import 'training_template_edit_screen.dart';
 
 /// Api\V2\TrainingTemplateController — a trainer's reusable plan library:
-/// build once, edit anytime. Applying a template to a client isn't wired up
-/// (needs a client_id with no picker anywhere in the app) — this is purely
-/// build-and-maintain.
+/// build once, edit anytime, and apply to a client (found by exact phone or
+/// e-mail) for however many weeks — the new plan opens for the trainer to review.
 class TrainingTemplatesScreen extends ConsumerStatefulWidget {
   const TrainingTemplatesScreen({super.key});
 
@@ -114,6 +115,15 @@ class _TrainingTemplatesScreenState extends ConsumerState<TrainingTemplatesScree
     }
   }
 
+  Future<void> _apply(TrainingTemplate template) async {
+    final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+    final planId = await showApplyTemplateSheet(context, template);
+    if (planId == null || !mounted) return;
+    messenger.showSnackBar(SnackBar(content: Text(l10n.trainingApplyDone)));
+    await Navigator.of(context).push(MaterialPageRoute(builder: (_) => TrainingPlanManageScreen(planId: planId)));
+  }
+
   Future<void> _delete(TrainingTemplate template) async {
     final l10n = AppLocalizations.of(context)!;
     final confirmed = await showDialog<bool>(
@@ -193,9 +203,16 @@ class _TrainingTemplatesScreenState extends ConsumerState<TrainingTemplatesScree
                         );
                         ref.read(trainingTemplatesControllerProvider.notifier).load();
                       },
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete_outline),
-                        onPressed: () => _delete(template),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.person_add_alt_1_outlined),
+                            tooltip: l10n.trainingTemplateApply,
+                            onPressed: () => _apply(template),
+                          ),
+                          IconButton(icon: const Icon(Icons.delete_outline), onPressed: () => _delete(template)),
+                        ],
                       ),
                     ),
                   );

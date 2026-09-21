@@ -3,8 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../training/presentation/screens/training_plan_manage_screen.dart';
 import '../../application/training_templates_providers.dart';
+import '../widgets/apply_template_sheet.dart';
 import '../../../training/presentation/widgets/exercise_picker_sheet.dart';
+import '../../../training/data/models/set_log.dart';
 import '../../data/models/template_item.dart';
 import '../../data/models/training_template.dart';
 
@@ -20,6 +23,7 @@ class _TrainingTemplateEditScreenState extends ConsumerState<TrainingTemplateEdi
   final _titleController = TextEditingController();
   final _goalController = TextEditingController();
   final _notesController = TextEditingController();
+  final _weeksController = TextEditingController();
   bool _initialized = false;
   bool _saving = false;
   String? _error;
@@ -30,6 +34,7 @@ class _TrainingTemplateEditScreenState extends ConsumerState<TrainingTemplateEdi
     _titleController.text = t.title;
     _goalController.text = t.goal ?? '';
     _notesController.text = t.notes ?? '';
+    _weeksController.text = t.durationWeeks?.toString() ?? '';
   }
 
   @override
@@ -37,6 +42,7 @@ class _TrainingTemplateEditScreenState extends ConsumerState<TrainingTemplateEdi
     _titleController.dispose();
     _goalController.dispose();
     _notesController.dispose();
+    _weeksController.dispose();
     super.dispose();
   }
 
@@ -57,6 +63,7 @@ class _TrainingTemplateEditScreenState extends ConsumerState<TrainingTemplateEdi
             title: _titleController.text.trim(),
             goal: _goalController.text.trim(),
             notes: _notesController.text.trim(),
+            durationWeeks: int.tryParse(_weeksController.text.trim()),
           );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSave)));
@@ -70,13 +77,32 @@ class _TrainingTemplateEditScreenState extends ConsumerState<TrainingTemplateEdi
     }
   }
 
+  Future<void> _apply(TrainingTemplate template) async {
+    final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+    final planId = await showApplyTemplateSheet(context, template);
+    if (planId == null || !mounted) return;
+    messenger.showSnackBar(SnackBar(content: Text(l10n.trainingApplyDone)));
+    await Navigator.of(context).push(MaterialPageRoute(builder: (_) => TrainingPlanManageScreen(planId: planId)));
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final async = ref.watch(trainingTemplateEditControllerProvider(widget.templateId));
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.trainingTemplateEditTitle)),
+      appBar: AppBar(
+        title: Text(l10n.trainingTemplateEditTitle),
+        actions: [
+          if (async.asData != null)
+            IconButton(
+              icon: const Icon(Icons.person_add_alt_1_outlined),
+              tooltip: l10n.trainingTemplateApply,
+              onPressed: () => _apply(async.asData!.value),
+            ),
+        ],
+      ),
       body: async.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (_, _) => Center(
@@ -105,6 +131,12 @@ class _TrainingTemplateEditScreenState extends ConsumerState<TrainingTemplateEdi
               TextField(
                 controller: _goalController,
                 decoration: InputDecoration(labelText: l10n.trainingTemplateGoalHint),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: _weeksController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(labelText: l10n.trainingTemplateWeeks),
               ),
               const SizedBox(height: 12),
               TextField(
@@ -158,6 +190,10 @@ class _ExercisesSection extends ConsumerWidget {
     final setsController = TextEditingController();
     final repsController = TextEditingController();
     final restController = TextEditingController();
+    final labelController = TextEditingController();
+    final weightsController = TextEditingController();
+    final everyController = TextEditingController();
+    final incrementController = TextEditingController();
     int? day;
     int? libraryId;
     String? error;
@@ -218,6 +254,36 @@ class _ExercisesSection extends ConsumerWidget {
                   ),
                   const SizedBox(height: 12),
                   TextField(
+                    controller: labelController,
+                    decoration: InputDecoration(labelText: l10n.trainingDayLabelHint),
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: weightsController,
+                    decoration: InputDecoration(labelText: l10n.trainingSetWeightsHint),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: everyController,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(labelText: l10n.trainingProgramEvery),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: TextField(
+                          controller: incrementController,
+                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                          decoration: InputDecoration(labelText: l10n.trainingProgramIncrement),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(
                     controller: restController,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(labelText: l10n.trainingExerciseRestHint),
@@ -243,6 +309,10 @@ class _ExercisesSection extends ConsumerWidget {
                               sets: int.tryParse(setsController.text.trim()),
                               reps: repsController.text.trim(),
                               restSeconds: int.tryParse(restController.text.trim()),
+                              dayLabel: labelController.text.trim(),
+                              setWeights: parseWeightList(weightsController.text),
+                              progressEveryWeeks: int.tryParse(everyController.text.trim()),
+                              progressIncrementKg: double.tryParse(incrementController.text.trim().replaceAll(',', '.')),
                             );
                         if (sheetContext.mounted) Navigator.of(sheetContext).pop();
                       } catch (e) {
@@ -302,7 +372,11 @@ class _ExercisesSection extends ConsumerWidget {
               subtitle: Text(
                 [
                   if (e.dayOfWeek != null) _dayLabel(l10n, e.dayOfWeek!),
+                  if (e.dayLabel != null && e.dayLabel!.isNotEmpty) e.dayLabel!,
                   if (e.sets != null) '${e.sets}×${e.reps ?? ''}',
+                  if (e.setWeights.isNotEmpty) '${formatWeightList(e.setWeights)} ${l10n.trainingKgUnit}',
+                  if (e.progressEveryWeeks != null && e.progressIncrementKg != null)
+                    '+${formatWeight(e.progressIncrementKg)} / ${e.progressEveryWeeks}w',
                 ].join(' · '),
               ),
               trailing: IconButton(icon: const Icon(Icons.delete_outline), onPressed: () => _delete(context, ref, e)),

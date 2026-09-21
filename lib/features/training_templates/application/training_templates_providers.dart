@@ -113,8 +113,8 @@ class TrainingTemplateEditController extends StateNotifier<AsyncValue<TrainingTe
     }
   }
 
-  Future<void> updateBase({required String title, String? goal, String? notes}) async {
-    await _api.update(templateId, title: title, goal: goal, notes: notes);
+  Future<void> updateBase({required String title, String? goal, String? notes, int? durationWeeks}) async {
+    await _api.update(templateId, title: title, goal: goal, notes: notes, durationWeeks: durationWeeks);
     await load();
   }
 
@@ -124,6 +124,10 @@ class TrainingTemplateEditController extends StateNotifier<AsyncValue<TrainingTe
     int? libraryExerciseId,
     int? sets,
     String? reps,
+    String? dayLabel,
+    List<double>? setWeights,
+    int? progressEveryWeeks,
+    double? progressIncrementKg,
     int? restSeconds,
     String? notes,
   }) async {
@@ -134,6 +138,10 @@ class TrainingTemplateEditController extends StateNotifier<AsyncValue<TrainingTe
       libraryExerciseId: libraryExerciseId,
       sets: sets,
       reps: reps,
+      dayLabel: dayLabel,
+      setWeights: setWeights,
+      progressEveryWeeks: progressEveryWeeks,
+      progressIncrementKg: progressIncrementKg,
       restSeconds: restSeconds,
       notes: notes,
     );
