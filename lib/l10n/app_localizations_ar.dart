@@ -926,6 +926,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get jobsCreateTitle => 'وظيفة جديدة';
 
   @override
+  String get postsLinkItem => 'ربط بعنصر من عندك (اختياري)';
+
+  @override
+  String get postsLinkItemSheetTitle => 'اختر عنصراً للإعلان عنه';
+
+  @override
   String get jobsTitleLabel => 'المسمى الوظيفي';
 
   @override

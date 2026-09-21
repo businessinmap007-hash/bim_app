@@ -11,6 +11,7 @@ import '../../../media/data/picked_media.dart';
 import '../../../media/presentation/widgets/picked_media_tile.dart';
 import '../../../settings/application/watermark_settings_controller.dart';
 import '../../application/posts_controller.dart';
+import '../../data/models/post_subject_options.dart';
 
 /// A new post — title/body plus photos, each auto-watermarked from the
 /// same saved settings the media composer uses (Settings ->
@@ -32,6 +33,9 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
   final _bodyController = TextEditingController();
   final List<PickedMedia> _items = [];
   bool _busy = false;
+  String? _subjectType;
+  int? _subjectId;
+  String? _subjectName;
 
   @override
   void dispose() {
@@ -84,14 +88,27 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
 
   void _remove(int index) => setState(() => _items.removeAt(index));
 
+  Future<void> _pickSubject(List<PostSubjectType> types) async {
+    final picked = await showModalBottomSheet<(String, PostSubjectItem)>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => _SubjectSheet(types: types),
+    );
+    if (picked == null || !mounted) return;
+    setState(() {
+      _subjectType = picked.$1;
+      _subjectId = picked.$2.id;
+      _subjectName = picked.$2.name;
+    });
+  }
+
   Future<void> _publish() async {
     final l10n = AppLocalizations.of(context)!;
     final title = _titleController.text.trim();
     final body = _bodyController.text.trim();
-    // The server requires a title whenever the post links no subject — which
-    // this screen never sends — so title is effectively always required here
-    // too, even though nothing in the UI used to say so.
-    if (title.isEmpty || body.isEmpty) {
+    // The server requires a title only when the post links no subject; a
+    // linked post takes the item's name.
+    if ((title.isEmpty && _subjectId == null) || body.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.validationRequired)));
       return;
     }
@@ -102,7 +119,13 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
       for (final item in _items) {
         images.add(item.processedBytes ?? await item.file.readAsBytes());
       }
-      await ref.read(postsApiProvider).createPost(title: title, body: body, images: images);
+      await ref.read(postsApiProvider).createPost(
+            title: title,
+            body: body,
+            subjectType: _subjectType,
+            subjectId: _subjectId,
+            images: images,
+          );
       if (mounted) Navigator.of(context).pop(true);
     } catch (e) {
       if (mounted) {
@@ -147,12 +170,42 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          TextField(controller: _titleController, decoration: InputDecoration(labelText: '${l10n.postsTitleLabel} *')),
+          TextField(
+            controller: _titleController,
+            decoration: InputDecoration(labelText: _subjectId == null ? '${l10n.postsTitleLabel} *' : l10n.postsTitleLabel),
+          ),
           const SizedBox(height: 12),
           TextField(
             controller: _bodyController,
             maxLines: 5,
             decoration: InputDecoration(labelText: '${l10n.postsBodyLabel} *'),
+          ),
+          ref.watch(postSubjectOptionsProvider).maybeWhen(
+            data: (types) => types.isEmpty
+                ? const SizedBox.shrink()
+                : Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: _subjectId == null
+                        ? OutlinedButton.icon(
+                            onPressed: _busy ? null : () => _pickSubject(types),
+                            icon: const Icon(Icons.link),
+                            label: Text(l10n.postsLinkItem),
+                          )
+                        : Align(
+                            alignment: AlignmentDirectional.centerStart,
+                            child: InputChip(
+                              avatar: const Icon(Icons.link, size: 18),
+                              label: Text(_subjectName ?? ''),
+                              onPressed: _busy ? null : () => _pickSubject(types),
+                              onDeleted: () => setState(() {
+                                _subjectType = null;
+                                _subjectId = null;
+                                _subjectName = null;
+                              }),
+                            ),
+                          ),
+                  ),
+            orElse: () => const SizedBox.shrink(),
           ),
           const SizedBox(height: 16),
           Wrap(
@@ -192,6 +245,48 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+/// Bottom sheet listing every linkable item, grouped by kind then section.
+class _SubjectSheet extends StatelessWidget {
+  final List<PostSubjectType> types;
+  const _SubjectSheet({required this.types});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    return DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: 0.7,
+      maxChildSize: 0.95,
+      builder: (context, controller) => ListView(
+        controller: controller,
+        padding: const EdgeInsets.all(16),
+        children: [
+          Text(l10n.postsLinkItemSheetTitle, style: theme.textTheme.titleMedium),
+          for (final type in types) ...[
+            const SizedBox(height: 16),
+            Text(type.label, style: theme.textTheme.titleSmall?.copyWith(color: theme.colorScheme.primary)),
+            for (final group in type.groups) ...[
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(group.label, style: theme.textTheme.labelLarge),
+              ),
+              for (final item in group.items)
+                ListTile(
+                  dense: true,
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(item.name),
+                  trailing: item.price != null ? Text(item.price!.toStringAsFixed(item.price! % 1 == 0 ? 0 : 2)) : null,
+                  onTap: () => Navigator.of(context).pop((type.type, item)),
+                ),
+            ],
           ],
         ],
       ),

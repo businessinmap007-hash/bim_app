@@ -153,6 +153,21 @@ class PostCard extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
               child: _ExpandableCaption(title: post.title, body: post.body),
             ),
+          if (post.subject != null)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+              child: Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: ActionChip(
+                  avatar: Icon(
+                    post.subject!.type == 'menu_item' ? Icons.restaurant_menu : Icons.event_available_outlined,
+                    size: 18,
+                  ),
+                  label: Text(post.subject!.name, maxLines: 1, overflow: TextOverflow.ellipsis),
+                  onPressed: canOpenAuthor ? onOpenAuthor : null,
+                ),
+              ),
+            ),
           // Edge-to-edge, square corners — an Instagram photo isn't boxed
           // inside a card, it IS the card. A swipeable gallery once there's
           // more than one. Edit/delete floats on the photo itself rather than

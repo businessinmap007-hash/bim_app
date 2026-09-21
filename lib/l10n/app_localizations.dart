@@ -1760,6 +1760,18 @@ abstract class AppLocalizations {
   /// **'وظيفة جديدة'**
   String get jobsCreateTitle;
 
+  /// No description provided for @postsLinkItem.
+  ///
+  /// In ar, this message translates to:
+  /// **'ربط بعنصر من عندك (اختياري)'**
+  String get postsLinkItem;
+
+  /// No description provided for @postsLinkItemSheetTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر عنصراً للإعلان عنه'**
+  String get postsLinkItemSheetTitle;
+
   /// No description provided for @jobsTitleLabel.
   ///
   /// In ar, this message translates to:

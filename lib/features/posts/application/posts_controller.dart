@@ -2,9 +2,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/core_providers.dart';
 import '../../business/data/models/business_post.dart';
+import '../data/models/post_subject_options.dart';
 import '../data/models/followed_account.dart';
 import '../data/models/job_post.dart';
 import '../data/posts_api.dart';
+
+final postSubjectOptionsProvider = FutureProvider.autoDispose<List<PostSubjectType>>((ref) {
+  return ref.watch(postsApiProvider).subjectOptions();
+});
 
 final postsApiProvider = Provider<PostsApi>((ref) {
   return PostsApi(ref.watch(apiClientProvider));

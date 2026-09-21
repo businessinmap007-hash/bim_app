@@ -303,6 +303,8 @@
     "placeholders": { "count": { "type": "int" } }
   },
   "jobsCreateTitle": "وظيفة جديدة",
+  "postsLinkItem": "ربط بعنصر من عندك (اختياري)",
+  "postsLinkItemSheetTitle": "اختر عنصراً للإعلان عنه",
   "jobsTitleLabel": "المسمى الوظيفي",
   "jobsStatsPosted": "وظائف معلنة",
   "jobsStatsOpen": "مفتوحة الآن",

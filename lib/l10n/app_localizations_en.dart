@@ -915,6 +915,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get jobsCreateTitle => 'New job';
 
   @override
+  String get postsLinkItem => 'Link to one of your items (optional)';
+
+  @override
+  String get postsLinkItemSheetTitle => 'Pick an item to advertise';
+
+  @override
   String get jobsTitleLabel => 'Job title';
 
   @override

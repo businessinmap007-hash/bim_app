@@ -13,6 +13,21 @@ class PostImage {
   );
 }
 
+/// What a post advertises (`subject` on PostResource) — null when unlinked.
+class PostSubject {
+  final String type;
+  final int id;
+  final String name;
+
+  const PostSubject({required this.type, required this.id, required this.name});
+
+  factory PostSubject.fromJson(Map<String, dynamic> json) => PostSubject(
+    type: json['type'] as String? ?? '',
+    id: json['id'] as int,
+    name: json['name'] as String? ?? '',
+  );
+}
+
 /// The author of a post — present on every PostResource payload (business
 /// wall, personal feed, and "my posts") since all three eager-load `user`.
 class PostAuthor {
@@ -42,6 +57,7 @@ class BusinessPost {
   final String? imageUrl;
   final List<PostImage> images;
   final PostAuthor? author;
+  final PostSubject? subject;
   final int? myReaction;
   final bool isMine;
   final int likesCount;
@@ -57,6 +73,7 @@ class BusinessPost {
     this.imageUrl,
     required this.images,
     this.author,
+    this.subject,
     this.myReaction,
     this.isMine = false,
     required this.likesCount,
@@ -75,6 +92,7 @@ class BusinessPost {
         .map((e) => PostImage.fromJson(e as Map<String, dynamic>))
         .toList(),
     author: json['author'] is Map<String, dynamic> ? PostAuthor.fromJson(json['author'] as Map<String, dynamic>) : null,
+    subject: json['subject'] is Map<String, dynamic> ? PostSubject.fromJson(json['subject'] as Map<String, dynamic>) : null,
     myReaction: (json['my_reaction'] as num?)?.toInt(),
     isMine: json['is_mine'] as bool? ?? false,
     likesCount: (json['likes_count'] as num?)?.toInt() ?? 0,

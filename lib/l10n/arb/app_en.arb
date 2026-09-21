@@ -303,6 +303,8 @@
     "placeholders": { "count": { "type": "int" } }
   },
   "jobsCreateTitle": "New job",
+  "postsLinkItem": "Link to one of your items (optional)",
+  "postsLinkItemSheetTitle": "Pick an item to advertise",
   "jobsTitleLabel": "Job title",
   "jobsStatsPosted": "Jobs posted",
   "jobsStatsOpen": "Open now",

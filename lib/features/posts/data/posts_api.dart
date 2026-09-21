@@ -6,6 +6,7 @@ import '../../../core/network/api_client.dart';
 import '../../business/data/models/business_post.dart';
 import 'models/followed_account.dart';
 import 'models/job_post.dart';
+import 'models/post_subject_options.dart';
 
 class PostsPage {
   final List<BusinessPost> items;
@@ -89,9 +90,20 @@ class PostsApi {
     await _client.post('/posts/$postId/share');
   }
 
+  /// GET /posts/subject-options — what this business may link a post to.
+  /// Empty is normal (a business with no menu/bookable items).
+  Future<List<PostSubjectType>> subjectOptions() async {
+    final data = await _client.get('/posts/subject-options') as Map<String, dynamic>;
+    return (data['options'] as List<dynamic>? ?? [])
+        .map((e) => PostSubjectType.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
   Future<void> createPost({
     String? title,
     required String body,
+    String? subjectType,
+    int? subjectId,
     List<Uint8List> images = const [],
   }) async {
     await _client.post(
@@ -99,6 +111,8 @@ class PostsApi {
       data: FormData.fromMap({
         if (title != null && title.isNotEmpty) 'title': title,
         'body': body,
+        'subject_type': ?subjectType,
+        'subject_id': ?subjectId,
         for (var i = 0; i < images.length; i++)
           'images[$i]': MultipartFile.fromBytes(
             images[i],
