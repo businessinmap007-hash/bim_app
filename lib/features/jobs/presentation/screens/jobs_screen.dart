@@ -113,6 +113,43 @@ class _JobsScreenState extends ConsumerState<JobsScreen> {
               ),
             ),
           ),
+          if (state.categoryId != null)
+            ref.watch(jobTitlesProvider((state.categoryId, state.categoryChildId))).maybeWhen(
+              data: (titles) {
+                final open = titles.where((t) => t.jobsCount > 0).toList();
+                if (open.isEmpty) return const SizedBox.shrink();
+                return SizedBox(
+                  height: 44,
+                  child: MouseWheelHorizontalScroll(
+                    builder: (context, controller) => ListView(
+                      controller: controller,
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: ChoiceChip(
+                            label: Text(l10n.jobsAllTitles),
+                            selected: state.jobTitleId == null,
+                            onSelected: (_) => ref.read(jobsControllerProvider.notifier).filterByTitle(null),
+                          ),
+                        ),
+                        for (final t in open)
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: ChoiceChip(
+                              label: Text('${t.name} (${t.jobsCount})'),
+                              selected: state.jobTitleId == t.id,
+                              onSelected: (_) => ref.read(jobsControllerProvider.notifier).filterByTitle(t.id),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+              orElse: () => const SizedBox.shrink(),
+            ),
           const SizedBox(height: 8),
           Expanded(
             child: state.isLoading

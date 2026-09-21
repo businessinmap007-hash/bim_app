@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/application/auth_controller.dart';
+import '../../../jobs/application/jobs_providers.dart';
 import '../../application/posts_controller.dart';
 
 /// A business advertises a vacancy — title, body, plus optional
@@ -29,6 +30,7 @@ class _CreateJobScreenState extends ConsumerState<CreateJobScreen> {
   final _requirementsController = TextEditingController();
   final _salaryController = TextEditingController();
   bool _busy = false;
+  int? _titleId;
 
   @override
   void dispose() {
@@ -65,6 +67,7 @@ class _CreateJobScreenState extends ConsumerState<CreateJobScreen> {
           .createJob(
             categoryId: categoryId,
             categoryChildId: me?.categoryChildId,
+            jobTitleId: _titleId,
             title: title,
             body: body,
             requirements: _requirementsController.text.trim(),
@@ -84,6 +87,9 @@ class _CreateJobScreenState extends ConsumerState<CreateJobScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final authState = ref.watch(authControllerProvider);
+    final me = authState is AuthSignedIn ? authState.user : null;
+    final titlesAsync = ref.watch(jobTitlesProvider((me?.categoryId, me?.categoryChildId)));
 
     return Scaffold(
       appBar: AppBar(
@@ -113,6 +119,44 @@ class _CreateJobScreenState extends ConsumerState<CreateJobScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          titlesAsync.maybeWhen(
+            data: (titles) => titles.isEmpty
+                ? const SizedBox.shrink()
+                : Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(l10n.jobsPickTitleHint, style: Theme.of(context).textTheme.labelLarge),
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 4,
+                          children: [
+                            for (final t in titles)
+                              ChoiceChip(
+                                label: Text(t.name),
+                                selected: _titleId == t.id,
+                                onSelected: (_) => setState(() {
+                                  _titleId = t.id;
+                                  _titleController.text = t.name;
+                                }),
+                              ),
+                            ChoiceChip(
+                              label: Text(l10n.jobsTitleOther),
+                              selected: _titleId == null,
+                              onSelected: (_) => setState(() {
+                                _titleId = null;
+                                _titleController.clear();
+                              }),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+            orElse: () => const SizedBox.shrink(),
+          ),
           TextField(controller: _titleController, decoration: InputDecoration(labelText: l10n.jobsTitleLabel)),
           const SizedBox(height: 12),
           TextField(

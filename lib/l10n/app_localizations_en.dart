@@ -901,6 +901,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get jobsTitleLabel => 'Job title';
 
   @override
+  String get jobsPickTitleHint => 'Pick the job title';
+
+  @override
+  String get jobsTitleOther => 'Other title';
+
+  @override
+  String get jobsAllTitles => 'All titles';
+
+  @override
   String get jobsBodyLabel => 'Job description';
 
   @override

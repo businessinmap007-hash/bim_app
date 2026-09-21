@@ -1736,6 +1736,24 @@ abstract class AppLocalizations {
   /// **'المسمى الوظيفي'**
   String get jobsTitleLabel;
 
+  /// No description provided for @jobsPickTitleHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر المسمى الوظيفي'**
+  String get jobsPickTitleHint;
+
+  /// No description provided for @jobsTitleOther.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسمى آخر'**
+  String get jobsTitleOther;
+
+  /// No description provided for @jobsAllTitles.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل المسميات'**
+  String get jobsAllTitles;
+
   /// No description provided for @jobsBodyLabel.
   ///
   /// In ar, this message translates to:

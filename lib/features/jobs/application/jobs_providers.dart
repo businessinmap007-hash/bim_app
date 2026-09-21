@@ -5,6 +5,7 @@ import '../../posts/data/models/job_post.dart';
 import '../data/jobs_api.dart';
 import '../data/models/job_category.dart';
 import '../data/models/job_follow.dart';
+import '../data/models/job_title.dart';
 
 final jobsApiProvider = Provider<JobsApi>((ref) {
   return JobsApi(ref.watch(apiClientProvider));
@@ -12,6 +13,11 @@ final jobsApiProvider = Provider<JobsApi>((ref) {
 
 final jobCategoriesProvider = FutureProvider<List<JobCategoryGroup>>((ref) {
   return ref.watch(jobsApiProvider).categories();
+});
+
+/// The title list for a field — `(categoryId, categoryChildId)`.
+final jobTitlesProvider = FutureProvider.family<List<JobTitle>, (int?, int?)>((ref, field) {
+  return ref.watch(jobsApiProvider).titles(categoryId: field.$1, categoryChildId: field.$2);
 });
 
 class JobsState {
@@ -23,6 +29,7 @@ class JobsState {
   final String query;
   final int? categoryId;
   final int? categoryChildId;
+  final int? jobTitleId;
 
   const JobsState({
     this.items = const [],
@@ -33,6 +40,7 @@ class JobsState {
     this.query = '',
     this.categoryId,
     this.categoryChildId,
+    this.jobTitleId,
   });
 
   JobsState copyWith({
@@ -45,6 +53,8 @@ class JobsState {
     String? query,
     int? categoryId,
     int? categoryChildId,
+    int? jobTitleId,
+    bool clearJobTitle = false,
     bool clearCategory = false,
   }) {
     return JobsState(
@@ -56,6 +66,7 @@ class JobsState {
       query: query ?? this.query,
       categoryId: clearCategory ? null : (categoryId ?? this.categoryId),
       categoryChildId: clearCategory ? null : (categoryChildId ?? this.categoryChildId),
+      jobTitleId: (clearCategory || clearJobTitle) ? null : (jobTitleId ?? this.jobTitleId),
     );
   }
 }
@@ -76,6 +87,7 @@ class JobsController extends StateNotifier<JobsState> {
         q: state.query,
         categoryId: state.categoryId,
         categoryChildId: state.categoryChildId,
+        jobTitleId: state.jobTitleId,
         page: _page,
       );
       state = state.copyWith(items: result.items, isLoading: false, hasMore: result.hasMore);
@@ -92,6 +104,7 @@ class JobsController extends StateNotifier<JobsState> {
         q: state.query,
         categoryId: state.categoryId,
         categoryChildId: state.categoryChildId,
+        jobTitleId: state.jobTitleId,
         page: _page + 1,
       );
       _page += 1;
@@ -114,8 +127,14 @@ class JobsController extends StateNotifier<JobsState> {
     if (categoryId == null && categoryChildId == null) {
       state = state.copyWith(clearCategory: true);
     } else {
-      state = state.copyWith(categoryId: categoryId, categoryChildId: categoryChildId);
+      // A title belongs to one field, so switching field drops it.
+      state = state.copyWith(categoryId: categoryId, categoryChildId: categoryChildId, clearJobTitle: true);
     }
+    await load();
+  }
+
+  Future<void> filterByTitle(int? jobTitleId) async {
+    state = jobTitleId == null ? state.copyWith(clearJobTitle: true) : state.copyWith(jobTitleId: jobTitleId);
     await load();
   }
 }

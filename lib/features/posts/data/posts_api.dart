@@ -149,6 +149,7 @@ class PostsApi {
   Future<void> createJob({
     required int categoryId,
     int? categoryChildId,
+    int? jobTitleId,
     required String title,
     required String body,
     String? requirements,
@@ -159,6 +160,7 @@ class PostsApi {
       data: {
         'category_id': categoryId,
         'category_child_id': ?categoryChildId,
+        'job_title_id': ?jobTitleId,
         'title': title,
         'body': body,
         if (requirements != null && requirements.isNotEmpty)

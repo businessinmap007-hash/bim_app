@@ -25,6 +25,7 @@ class JobPost {
   final String? salary;
   final JobRef? category;
   final JobRef? categoryChild;
+  final JobRef? jobTitle;
   final JobRef? business;
   final int applicantsCount;
   final bool isActive;
@@ -40,6 +41,7 @@ class JobPost {
     this.salary,
     this.category,
     this.categoryChild,
+    this.jobTitle,
     this.business,
     required this.applicantsCount,
     this.isActive = true,
@@ -58,6 +60,7 @@ class JobPost {
     categoryChild: json['category_child'] is Map<String, dynamic>
         ? JobRef.fromJson(json['category_child'] as Map<String, dynamic>)
         : null,
+    jobTitle: json['job_title'] is Map<String, dynamic> ? JobRef.fromJson(json['job_title'] as Map<String, dynamic>) : null,
     business: json['business'] is Map<String, dynamic> ? JobRef.fromJson(json['business'] as Map<String, dynamic>) : null,
     applicantsCount: (json['applicants_count'] as num?)?.toInt() ?? 0,
     isActive: json['is_active'] as bool? ?? true,

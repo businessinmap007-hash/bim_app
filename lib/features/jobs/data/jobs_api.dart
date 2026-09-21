@@ -3,6 +3,7 @@ import '../../../core/network/paginated.dart';
 import '../../posts/data/models/job_post.dart';
 import 'models/job_category.dart';
 import 'models/job_follow.dart';
+import 'models/job_title.dart';
 
 /// /jobs, /jobs/follows — the job-seeker's side of Api\V2\JobController +
 /// JobFollowController. Posting a vacancy (store), seeing who applied
@@ -18,6 +19,7 @@ class JobsApi {
     String? q,
     int? categoryId,
     int? categoryChildId,
+    int? jobTitleId,
     int page = 1,
   }) async {
     final data =
@@ -27,6 +29,7 @@ class JobsApi {
                 if (q != null && q.isNotEmpty) 'q': q,
                 'category_id': ?categoryId,
                 'category_child_id': ?categoryChildId,
+                'job_title_id': ?jobTitleId,
                 'page': page,
               },
             )
@@ -44,6 +47,17 @@ class JobsApi {
     return data
         .map((e) => JobCategoryGroup.fromJson(e as Map<String, dynamic>))
         .toList();
+  }
+
+  /// The closed title list for a field: its own + its root's + the general ones.
+  Future<List<JobTitle>> titles({int? categoryId, int? categoryChildId}) async {
+    final data =
+        await _client.get(
+              '/jobs/titles',
+              query: {'category_id': ?categoryId, 'category_child_id': ?categoryChildId},
+            )
+            as List<dynamic>;
+    return data.map((e) => JobTitle.fromJson(e as Map<String, dynamic>)).toList();
   }
 
   /// Returns the application's created-at timestamp on success.

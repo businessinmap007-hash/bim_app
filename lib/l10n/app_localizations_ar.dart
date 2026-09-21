@@ -912,6 +912,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get jobsTitleLabel => 'المسمى الوظيفي';
 
   @override
+  String get jobsPickTitleHint => 'اختر المسمى الوظيفي';
+
+  @override
+  String get jobsTitleOther => 'مسمى آخر';
+
+  @override
+  String get jobsAllTitles => 'كل المسميات';
+
+  @override
   String get jobsBodyLabel => 'وصف الوظيفة';
 
   @override
