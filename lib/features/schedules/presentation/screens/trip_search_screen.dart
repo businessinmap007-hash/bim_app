@@ -361,7 +361,14 @@ class _TripResultTile extends ConsumerWidget {
               '${_modeLabel(schedule.mode, l10n)}${schedule.vehicleLabel != null ? ' · ${schedule.vehicleLabel}' : ''}'
               '${schedule.isInternational ? ' · ${schedule.routeLabel}' : ''}',
             ),
-            if (schedule.departureTime != null) Text(schedule.departureTime!),
+            if (schedule.departureTime != null)
+              Text(
+                schedule.returnTime != null
+                    ? '${_hhmm(schedule.departureTime!)} · ${l10n.tripReturnAt(_hhmm(schedule.returnTime!))}'
+                    : _hhmm(schedule.departureTime!),
+              ),
+            if (schedule.notes != null && schedule.notes!.isNotEmpty)
+              Text(schedule.notes!, maxLines: 2, overflow: TextOverflow.ellipsis),
             if (result.trust.reviewCount > 0)
               Row(
                 children: [
@@ -378,6 +385,9 @@ class _TripResultTile extends ConsumerWidget {
     );
   }
 }
+
+/// «08:00:00» -> «08:00».
+String _hhmm(String t) => t.length >= 5 ? t.substring(0, 5) : t;
 
 String _modeLabel(String mode, AppLocalizations l10n) => switch (mode) {
   'freight' => l10n.tripModeFreight,

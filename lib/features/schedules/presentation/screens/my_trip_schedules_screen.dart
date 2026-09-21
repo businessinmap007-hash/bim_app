@@ -190,6 +190,8 @@ class TripScheduleFormScreenState extends ConsumerState<TripScheduleFormScreen> 
   int _dayOfWeek = 0;
   DateTime? _tripDate;
   final _departureTimeCtrl = TextEditingController();
+  final _returnTimeCtrl = TextEditingController();
+  final _notesCtrl = TextEditingController();
   final _capacityCtrl = TextEditingController();
   final _priceCtrl = TextEditingController();
   final _depositCtrl = TextEditingController();
@@ -200,6 +202,8 @@ class TripScheduleFormScreenState extends ConsumerState<TripScheduleFormScreen> 
   @override
   void dispose() {
     _departureTimeCtrl.dispose();
+    _returnTimeCtrl.dispose();
+    _notesCtrl.dispose();
     _capacityCtrl.dispose();
     _priceCtrl.dispose();
     _depositCtrl.dispose();
@@ -340,6 +344,8 @@ class TripScheduleFormScreenState extends ConsumerState<TripScheduleFormScreen> 
       if (_pattern == _patternWeekly) 'day_of_week': _dayOfWeek,
       if (_pattern == _patternOneOff) 'trip_date': _isoDate(_tripDate!),
       if (_departureTimeCtrl.text.trim().isNotEmpty) 'departure_time': _departureTimeCtrl.text.trim(),
+      if (_returnTimeCtrl.text.trim().isNotEmpty) 'return_time': _returnTimeCtrl.text.trim(),
+      if (_notesCtrl.text.trim().isNotEmpty) 'notes': _notesCtrl.text.trim(),
       if (_capacityCtrl.text.trim().isNotEmpty) 'capacity': int.tryParse(_capacityCtrl.text.trim()),
       if (_priceCtrl.text.trim().isNotEmpty) 'price': double.tryParse(_priceCtrl.text.trim()),
       if (_depositCtrl.text.trim().isNotEmpty) 'deposit_per_unit': double.tryParse(_depositCtrl.text.trim()),
@@ -510,6 +516,11 @@ class TripScheduleFormScreenState extends ConsumerState<TripScheduleFormScreen> 
               decoration: InputDecoration(labelText: l10n.tripScheduleDepartureTimeLabel, hintText: '08:00'),
             ),
             const SizedBox(height: 12),
+            TextField(
+              controller: _returnTimeCtrl,
+              decoration: InputDecoration(labelText: l10n.tripScheduleReturnTimeLabel, hintText: '18:00'),
+            ),
+            const SizedBox(height: 12),
             Row(
               children: [
                 Expanded(
@@ -534,6 +545,12 @@ class TripScheduleFormScreenState extends ConsumerState<TripScheduleFormScreen> 
               controller: _depositCtrl,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(labelText: l10n.tripScheduleDepositLabel),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _notesCtrl,
+              maxLines: 2,
+              decoration: InputDecoration(labelText: l10n.tripScheduleNotesLabel),
             ),
             const SizedBox(height: 20),
             Text(l10n.tripScheduleStopsTitle, style: Theme.of(context).textTheme.labelLarge),

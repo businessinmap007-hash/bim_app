@@ -5160,6 +5160,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tripScheduleDepartureTimeLabel => 'Departure time';
 
   @override
+  String get tripScheduleReturnTimeLabel => 'Return time';
+
+  @override
+  String get tripScheduleNotesLabel => 'Notes';
+
+  @override
+  String tripReturnAt(String time) {
+    return 'Return $time';
+  }
+
+  @override
   String get tripScheduleCapacityLabel => 'Capacity';
 
   @override

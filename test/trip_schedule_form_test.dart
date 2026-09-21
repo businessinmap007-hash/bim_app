@@ -73,6 +73,9 @@ void main() {
   });
 
   testWidgets('an international leg is published with a country pair', (tester) async {
+    tester.view.physicalSize = const Size(800, 2400);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
     final api = _FakeSchedulesApi();
     await tester.pumpWidget(_app(api));
     await tester.pumpAndSettle();
@@ -90,6 +93,10 @@ void main() {
     await tester.tap(find.text('Libya'));
     await tester.pumpAndSettle();
 
+    await tester.ensureVisible(find.widgetWithText(TextField, 'Return time'));
+    await tester.enterText(find.widgetWithText(TextField, 'Return time'), '18:00');
+    await tester.ensureVisible(find.widgetWithText(TextField, 'Notes'));
+    await tester.enterText(find.widgetWithText(TextField, 'Notes'), 'No pets');
     await tester.ensureVisible(find.text('Save'));
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
@@ -99,6 +106,8 @@ void main() {
     expect(api.created!['origin_country_id'], 1);
     expect(api.created!['destination_country_id'], 2);
     expect(api.created!['vehicle_type_id'], 10);
+    expect(api.created!['return_time'], '18:00');
+    expect(api.created!['notes'], 'No pets');
     expect(api.created!.containsKey('origin_governorate_id'), isFalse);
   });
 

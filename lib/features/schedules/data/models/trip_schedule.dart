@@ -77,6 +77,9 @@ class TripSchedule {
   final int? dayOfWeek;
   final DateTime? tripDate;
   final String? departureTime;
+  final String? returnTime;
+  final String? notes;
+  final String? capacityUnit;
   final int? capacity;
   final double? price;
   final String currency;
@@ -97,6 +100,9 @@ class TripSchedule {
     this.dayOfWeek,
     this.tripDate,
     this.departureTime,
+    this.returnTime,
+    this.notes,
+    this.capacityUnit,
     this.capacity,
     this.price,
     required this.currency,
@@ -122,6 +128,9 @@ class TripSchedule {
       dayOfWeek: json['day_of_week'] as int?,
       tripDate: json['trip_date'] != null ? DateTime.tryParse(json['trip_date'] as String) : null,
       departureTime: json['departure_time'] as String?,
+      returnTime: json['return_time'] as String?,
+      notes: json['notes'] as String?,
+      capacityUnit: json['capacity_unit'] as String?,
       capacity: json['capacity'] as int?,
       price: (json['price'] as num?)?.toDouble(),
       currency: json['currency'] as String? ?? 'EGP',

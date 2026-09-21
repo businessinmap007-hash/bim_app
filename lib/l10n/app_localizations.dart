@@ -9638,6 +9638,24 @@ abstract class AppLocalizations {
   /// **'وقت الانطلاق'**
   String get tripScheduleDepartureTimeLabel;
 
+  /// No description provided for @tripScheduleReturnTimeLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقت العودة'**
+  String get tripScheduleReturnTimeLabel;
+
+  /// No description provided for @tripScheduleNotesLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات'**
+  String get tripScheduleNotesLabel;
+
+  /// No description provided for @tripReturnAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'العودة {time}'**
+  String tripReturnAt(String time);
+
   /// No description provided for @tripScheduleCapacityLabel.
   ///
   /// In ar, this message translates to:

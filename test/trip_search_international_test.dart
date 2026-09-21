@@ -42,6 +42,9 @@ class _FakeSchedulesApi implements SchedulesApi {
           'business': {'name': 'Nile Bus'},
           'origin': {'country': 'Egypt'},
           'destination': {'country': 'Libya'},
+          'departure_time': '08:00:00',
+          'return_time': '18:30:00',
+          'notes': 'Bring your passport',
         }),
         trust: const TripTrust(starsAverage: 0, reviewCount: 0, successRate: 0),
       ),
@@ -99,5 +102,7 @@ void main() {
     expect(api.asked, {'og': null, 'oc': 1, 'dc': 18, 'v': 10});
     expect(find.text('Nile Bus'), findsOneWidget);
     expect(find.textContaining('Egypt → Libya'), findsOneWidget);
+    expect(find.text('08:00 · Return 18:30'), findsOneWidget);
+    expect(find.text('Bring your passport'), findsOneWidget);
   });
 }
