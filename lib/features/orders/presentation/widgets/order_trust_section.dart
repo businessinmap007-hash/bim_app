@@ -55,7 +55,7 @@ class _OrderTrustSectionState extends State<OrderTrustSection> {
       children: [
         const Divider(height: 24),
         Text(l10n.trustSectionTitle, style: Theme.of(context).textTheme.titleSmall),
-        for (final entry in trust.entries)
+        for (final entry in trust.entries.where((e) => e.key != 'driver' || widget.order.shipping == null))
           CheckboxListTile(
             contentPadding: EdgeInsets.zero,
             controlAffinity: ListTileControlAffinity.leading,

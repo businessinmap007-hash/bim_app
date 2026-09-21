@@ -81,7 +81,7 @@ class _ShippingRatesScreenState extends ConsumerState<ShippingRatesScreen> {
         value: async,
         onRetry: () => ref.invalidate(shippingRatesProvider),
         builder: (context, rows) => ListView(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.symmetric(horizontal: (MediaQuery.of(context).size.width - 560).clamp(16.0, 4000.0) / 2, vertical: 16),
           children: [
             Text(l10n.shippingRatesHint, style: Theme.of(context).textTheme.bodyMedium),
             const SizedBox(height: 12),

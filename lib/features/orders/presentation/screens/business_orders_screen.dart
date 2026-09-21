@@ -687,7 +687,7 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                       ),
                     ],
                   ),
-                  if (order.fulfillmentType == 'delivery')
+                  if (order.fulfillmentType == 'delivery' && order.shipping == null)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
