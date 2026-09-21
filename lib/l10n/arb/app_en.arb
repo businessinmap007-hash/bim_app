@@ -304,6 +304,14 @@
   },
   "jobsCreateTitle": "New job",
   "jobsTitleLabel": "Job title",
+  "jobsStatsPosted": "Jobs posted",
+  "jobsStatsOpen": "Open now",
+  "jobsStatsApplicants": "Applicants",
+  "jobsStatsApproved": "Accepted",
+  "jobsPlatformSummary": "{open} open jobs from {hiring} hiring businesses",
+  "@jobsPlatformSummary": {
+    "placeholders": { "open": { "type": "int" }, "hiring": { "type": "int" } }
+  },
   "jobsPickTitleHint": "Pick the job title",
   "jobsTitleOther": "Other title",
   "jobsAllTitles": "All titles",

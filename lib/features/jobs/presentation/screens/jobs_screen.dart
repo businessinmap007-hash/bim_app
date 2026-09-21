@@ -79,6 +79,21 @@ class _JobsScreenState extends ConsumerState<JobsScreen> {
               onSubmitted: (q) => ref.read(jobsControllerProvider.notifier).setQuery(q),
             ),
           ),
+          ref.watch(platformJobStatsProvider).maybeWhen(
+            data: (s) => s.jobsOpen > 0
+                ? Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                    child: Align(
+                      alignment: AlignmentDirectional.centerStart,
+                      child: Text(
+                        l10n.jobsPlatformSummary(s.jobsOpen, s.businessesHiring),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),
+                      ),
+                    ),
+                  )
+                : const SizedBox.shrink(),
+            orElse: () => const SizedBox.shrink(),
+          ),
           categoriesAsync.when(
             loading: () => const SizedBox.shrink(),
             error: (_, _) => const SizedBox.shrink(),

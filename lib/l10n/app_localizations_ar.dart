@@ -929,6 +929,23 @@ class AppLocalizationsAr extends AppLocalizations {
   String get jobsTitleLabel => 'المسمى الوظيفي';
 
   @override
+  String get jobsStatsPosted => 'وظائف معلنة';
+
+  @override
+  String get jobsStatsOpen => 'مفتوحة الآن';
+
+  @override
+  String get jobsStatsApplicants => 'المتقدّمون';
+
+  @override
+  String get jobsStatsApproved => 'تم قبولهم';
+
+  @override
+  String jobsPlatformSummary(int open, int hiring) {
+    return '$open وظيفة مفتوحة من $hiring جهة توظّف';
+  }
+
+  @override
   String get jobsPickTitleHint => 'اختر المسمى الوظيفي';
 
   @override

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/post_share.dart';
+import '../../../jobs/application/jobs_providers.dart';
 import '../../../business/data/models/business_post.dart';
 import '../../../business/presentation/screens/business_detail_screen.dart';
 import '../../../business/presentation/widgets/post_card.dart';
@@ -259,7 +260,10 @@ class MyJobsTab extends ConsumerWidget {
         return false;
       },
       child: RefreshIndicator(
-        onRefresh: () => ref.read(myJobsControllerProvider.notifier).load(),
+        onRefresh: () async {
+          ref.invalidate(myJobStatsProvider);
+          await ref.read(myJobsControllerProvider.notifier).load();
+        },
         child: ResponsiveCenter(
           maxWidth: 800,
           child: Builder(
@@ -267,8 +271,9 @@ class MyJobsTab extends ConsumerWidget {
               key: const PageStorageKey('my_jobs'),
               slivers: [
                 SliverOverlapInjector(handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
+                const SliverToBoxAdapter(child: _MyJobStats()),
                 SliverPadding(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                   sliver: SliverList.separated(
                     itemCount: state.items.length + (state.isLoadingMore ? 1 : 0),
                     separatorBuilder: (context, index) => const SizedBox(height: 12),
@@ -295,6 +300,49 @@ class MyJobsTab extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// The business's four counters (jobs posted / open / applicants / accepted).
+/// Silent while loading or on error — the list below is the screen, this is
+/// only a summary of it.
+class _MyJobStats extends ConsumerWidget {
+  const _MyJobStats();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    return ref.watch(myJobStatsProvider).maybeWhen(
+      data: (s) => Padding(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+        child: Row(
+          children: [
+            for (final (label, value) in [
+              (l10n.jobsStatsPosted, s.jobsPosted),
+              (l10n.jobsStatsOpen, s.jobsOpen),
+              (l10n.jobsStatsApplicants, s.applicantsTotal),
+              (l10n.jobsStatsApproved, s.approvedTotal),
+            ])
+              Expanded(
+                child: Card(
+                  margin: const EdgeInsets.symmetric(horizontal: 3),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+                    child: Column(
+                      children: [
+                        Text('$value', style: Theme.of(context).textTheme.titleLarge),
+                        const SizedBox(height: 2),
+                        Text(label, textAlign: TextAlign.center, style: Theme.of(context).textTheme.labelSmall),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+      orElse: () => const SizedBox.shrink(),
     );
   }
 }

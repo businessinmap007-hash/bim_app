@@ -5,6 +5,7 @@ import '../../posts/data/models/job_post.dart';
 import '../data/jobs_api.dart';
 import '../data/models/job_category.dart';
 import '../data/models/job_follow.dart';
+import '../data/models/job_stats.dart';
 import '../data/models/job_title.dart';
 
 final jobsApiProvider = Provider<JobsApi>((ref) {
@@ -13,6 +14,14 @@ final jobsApiProvider = Provider<JobsApi>((ref) {
 
 final jobCategoriesProvider = FutureProvider<List<JobCategoryGroup>>((ref) {
   return ref.watch(jobsApiProvider).categories();
+});
+
+final myJobStatsProvider = FutureProvider.autoDispose<JobStats>((ref) {
+  return ref.watch(jobsApiProvider).myStats();
+});
+
+final platformJobStatsProvider = FutureProvider.autoDispose<JobStats>((ref) {
+  return ref.watch(jobsApiProvider).platformStats();
 });
 
 /// The title list for a field — `(categoryId, categoryChildId)`.

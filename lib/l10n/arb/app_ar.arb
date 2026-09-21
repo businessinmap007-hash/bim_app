@@ -304,6 +304,14 @@
   },
   "jobsCreateTitle": "وظيفة جديدة",
   "jobsTitleLabel": "المسمى الوظيفي",
+  "jobsStatsPosted": "وظائف معلنة",
+  "jobsStatsOpen": "مفتوحة الآن",
+  "jobsStatsApplicants": "المتقدّمون",
+  "jobsStatsApproved": "تم قبولهم",
+  "jobsPlatformSummary": "{open} وظيفة مفتوحة من {hiring} جهة توظّف",
+  "@jobsPlatformSummary": {
+    "placeholders": { "open": { "type": "int" }, "hiring": { "type": "int" } }
+  },
   "jobsPickTitleHint": "اختر المسمى الوظيفي",
   "jobsTitleOther": "مسمى آخر",
   "jobsAllTitles": "كل المسميات",

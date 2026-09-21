@@ -1766,6 +1766,36 @@ abstract class AppLocalizations {
   /// **'المسمى الوظيفي'**
   String get jobsTitleLabel;
 
+  /// No description provided for @jobsStatsPosted.
+  ///
+  /// In ar, this message translates to:
+  /// **'وظائف معلنة'**
+  String get jobsStatsPosted;
+
+  /// No description provided for @jobsStatsOpen.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفتوحة الآن'**
+  String get jobsStatsOpen;
+
+  /// No description provided for @jobsStatsApplicants.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتقدّمون'**
+  String get jobsStatsApplicants;
+
+  /// No description provided for @jobsStatsApproved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم قبولهم'**
+  String get jobsStatsApproved;
+
+  /// No description provided for @jobsPlatformSummary.
+  ///
+  /// In ar, this message translates to:
+  /// **'{open} وظيفة مفتوحة من {hiring} جهة توظّف'**
+  String jobsPlatformSummary(int open, int hiring);
+
   /// No description provided for @jobsPickTitleHint.
   ///
   /// In ar, this message translates to:

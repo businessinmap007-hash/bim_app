@@ -36,7 +36,14 @@ class MyJobsScreen extends ConsumerWidget {
         label: Text(l10n.jobsCreateTitle),
       ),
       body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) => const [],
+        // An absorber, even an empty one: MyJobsTab's SliverOverlapInjector
+        // asserts when no absorber precedes it in the same viewport.
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          SliverOverlapAbsorber(
+            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+            sliver: const SliverToBoxAdapter(child: SizedBox.shrink()),
+          ),
+        ],
         body: const MyJobsTab(),
       ),
     );

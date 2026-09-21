@@ -918,6 +918,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get jobsTitleLabel => 'Job title';
 
   @override
+  String get jobsStatsPosted => 'Jobs posted';
+
+  @override
+  String get jobsStatsOpen => 'Open now';
+
+  @override
+  String get jobsStatsApplicants => 'Applicants';
+
+  @override
+  String get jobsStatsApproved => 'Accepted';
+
+  @override
+  String jobsPlatformSummary(int open, int hiring) {
+    return '$open open jobs from $hiring hiring businesses';
+  }
+
+  @override
   String get jobsPickTitleHint => 'Pick the job title';
 
   @override

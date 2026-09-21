@@ -3,6 +3,7 @@ import '../../../core/network/paginated.dart';
 import '../../posts/data/models/job_post.dart';
 import 'models/job_category.dart';
 import 'models/job_follow.dart';
+import 'models/job_stats.dart';
 import 'models/job_title.dart';
 
 /// /jobs, /jobs/follows — the job-seeker's side of Api\V2\JobController +
@@ -48,6 +49,14 @@ class JobsApi {
         .map((e) => JobCategoryGroup.fromJson(e as Map<String, dynamic>))
         .toList();
   }
+
+  /// GET /jobs/mine/stats — the signed-in business's own counters.
+  Future<JobStats> myStats() async =>
+      JobStats.fromJson(await _client.get('/jobs/mine/stats') as Map<String, dynamic>);
+
+  /// GET /jobs/stats — public platform-wide counters (aggregates only).
+  Future<JobStats> platformStats() async =>
+      JobStats.fromJson(await _client.get('/jobs/stats') as Map<String, dynamic>);
 
   /// The closed title list for a field: its own + its root's + the general ones.
   Future<List<JobTitle>> titles({int? categoryId, int? categoryChildId}) async {
