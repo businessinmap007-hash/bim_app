@@ -431,7 +431,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get businessTabPosts => 'المنشورات';
 
   @override
-  String get businessTabMenu => 'القائمة';
+  String get businessTabMenu => 'منيو';
 
   @override
   String get businessTabServices => 'الخدمات';

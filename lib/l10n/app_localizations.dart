@@ -833,7 +833,7 @@ abstract class AppLocalizations {
   /// No description provided for @businessTabMenu.
   ///
   /// In ar, this message translates to:
-  /// **'القائمة'**
+  /// **'منيو'**
   String get businessTabMenu;
 
   /// No description provided for @businessTabServices.
