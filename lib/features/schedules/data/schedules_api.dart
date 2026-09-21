@@ -24,23 +24,34 @@ class StopBusinessOption {
 /// Trip-leg search (GET /search/schedules) + reservation (POST/GET under
 /// /schedules — a different prefix, not a typo). See
 /// Api\V2\TripScheduleController::search + Api\V2\TripReservationController.
-/// Customer search is domestic (governorate-pair) only; the carrier form also
-/// publishes international (country-pair) legs and picks a vehicle type.
+/// Search covers domestic (governorate pair) and international (country pair)
+/// routes, optionally by vehicle type; the carrier form publishes both kinds.
 class SchedulesApi {
   final ApiClient _client;
   const SchedulesApi(this._client);
 
+  /// Domestic: a governorate pair. International: a country pair. [vehicleTypeId]
+  /// narrows either.
   Future<List<TripScheduleResult>> search({
-    required int originGovernorateId,
-    required int destinationGovernorateId,
+    int? originGovernorateId,
+    int? destinationGovernorateId,
+    int? originCountryId,
+    int? destinationCountryId,
+    int? vehicleTypeId,
     DateTime? date,
   }) async {
     final data =
         await _client.get(
               '/search/schedules',
               query: {
-                'origin_governorate_id': originGovernorateId,
-                'destination_governorate_id': destinationGovernorateId,
+                'origin_governorate_id': ?originGovernorateId,
+                'destination_governorate_id': ?destinationGovernorateId,
+                if (originCountryId != null) ...{
+                  'scope': 'international',
+                  'origin_country_id': originCountryId,
+                  'destination_country_id': ?destinationCountryId,
+                },
+                'vehicle_type_id': ?vehicleTypeId,
                 if (date != null) 'date': _dateOnly(date),
               },
             )
@@ -90,7 +101,7 @@ class SchedulesApi {
 
   /// The scheduling service's vehicle/cargo classes, optionally for one mode.
   Future<List<VehicleTypeOption>> vehicleTypes({String? mode}) async {
-    final data = await _client.get('/schedules/vehicle-types', query: {'mode': ?mode}) as Map<String, dynamic>;
+    final data = await _client.get('/schedules/vehicle-types', query: {'mode': ?(mode == null || mode.isEmpty ? null : mode)}) as Map<String, dynamic>;
     return (data['vehicle_types'] as List<dynamic>? ?? []).map((e) => VehicleTypeOption.fromJson(e as Map<String, dynamic>)).toList();
   }
 

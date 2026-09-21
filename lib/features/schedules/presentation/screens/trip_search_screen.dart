@@ -9,8 +9,8 @@ import '../../application/schedules_providers.dart';
 import '../../data/models/trip_schedule.dart';
 import 'my_reservations_screen.dart';
 
-/// Domestic trip-leg search (BIM-x scheduling service): pick an origin and
-/// destination governorate, see published legs ranked by carrier trust, and
+/// Trip-leg search (BIM-x scheduling service): pick an origin and destination
+/// (governorates, or countries for an international trip), optionally a vehicle type, see published legs ranked by carrier trust, and
 /// reserve a seat/unit. See Api\V2\TripScheduleController::search.
 class TripSearchScreen extends ConsumerStatefulWidget {
   const TripSearchScreen({super.key});
@@ -22,6 +22,10 @@ class TripSearchScreen extends ConsumerStatefulWidget {
 class _TripSearchScreenState extends ConsumerState<TripSearchScreen> {
   LocationGovernorate? _origin;
   LocationGovernorate? _destination;
+  bool _international = false;
+  LocationCountry? _originCountry;
+  LocationCountry? _destinationCountry;
+  int? _vehicleTypeId;
   DateTime? _date;
   String? _error;
 
@@ -71,16 +75,55 @@ class _TripSearchScreenState extends ConsumerState<TripSearchScreen> {
     });
   }
 
+  Future<void> _pickCountry(bool isOrigin) async {
+    final countries = await ref.read(countriesProvider.future);
+    if (countries.isEmpty || !mounted) return;
+    final l10n = AppLocalizations.of(context)!;
+    final languageCode = Localizations.localeOf(context).languageCode;
+
+    final selected = await showModalBottomSheet<LocationCountry>(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        expand: false,
+        builder: (context, scrollController) => ListView(
+          controller: scrollController,
+          padding: const EdgeInsets.all(16),
+          children: [
+            Text(l10n.tripChooseCountry, style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 12),
+            for (final country in countries)
+              ListTile(title: Text(country.localizedName(languageCode)), onTap: () => Navigator.of(context).pop(country)),
+          ],
+        ),
+      ),
+    );
+
+    if (selected == null) return;
+    setState(() {
+      if (isOrigin) {
+        _originCountry = selected;
+      } else {
+        _destinationCountry = selected;
+      }
+    });
+  }
+
   Future<void> _search() async {
     final l10n = AppLocalizations.of(context)!;
-    if (_origin == null || _destination == null) {
+    final missing = _international ? (_originCountry == null || _destinationCountry == null) : (_origin == null || _destination == null);
+    if (missing) {
       setState(() => _error = l10n.tripSearchFieldsRequired);
       return;
     }
     setState(() => _error = null);
     await ref.read(tripSearchControllerProvider.notifier).search(
-      originGovernorateId: _origin!.id,
-      destinationGovernorateId: _destination!.id,
+      originGovernorateId: _international ? null : _origin!.id,
+      destinationGovernorateId: _international ? null : _destination!.id,
+      originCountryId: _international ? _originCountry!.id : null,
+      destinationCountryId: _international ? _destinationCountry!.id : null,
+      vehicleTypeId: _vehicleTypeId,
       date: _date,
     );
   }
@@ -114,8 +157,10 @@ class _TripSearchScreenState extends ConsumerState<TripSearchScreen> {
                   children: [
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: () => _pickGovernorate(true),
-                        child: Text(_origin?.localizedName(languageCode) ?? l10n.tripOrigin),
+                        onPressed: () => _international ? _pickCountry(true) : _pickGovernorate(true),
+                        child: Text(
+                          (_international ? _originCountry?.localizedName(languageCode) : _origin?.localizedName(languageCode)) ?? l10n.tripOrigin,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -123,13 +168,44 @@ class _TripSearchScreenState extends ConsumerState<TripSearchScreen> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: () => _pickGovernorate(false),
-                        child: Text(_destination?.localizedName(languageCode) ?? l10n.tripDestination),
+                        onPressed: () => _international ? _pickCountry(false) : _pickGovernorate(false),
+                        child: Text(
+                          (_international ? _destinationCountry?.localizedName(languageCode) : _destination?.localizedName(languageCode)) ??
+                              l10n.tripDestination,
+                        ),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 8),
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(l10n.tripScheduleInternational),
+                  value: _international,
+                  onChanged: (v) => setState(() => _international = v),
+                ),
+                SizedBox(
+                  height: 44,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: ref
+                        .watch(vehicleTypesProvider(''))
+                        .maybeWhen(
+                          data: (types) => [
+                            for (final type in types)
+                              Padding(
+                                padding: const EdgeInsetsDirectional.only(end: 8),
+                                child: ChoiceChip(
+                                  label: Text(type.name),
+                                  selected: _vehicleTypeId == type.id,
+                                  onSelected: (on) => setState(() => _vehicleTypeId = on ? type.id : null),
+                                ),
+                              ),
+                          ],
+                          orElse: () => const <Widget>[],
+                        ),
+                  ),
+                ),
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   title: Text(l10n.tripDateOptional),
@@ -281,7 +357,10 @@ class _TripResultTile extends ConsumerWidget {
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('${_modeLabel(schedule.mode, l10n)}${schedule.vehicleLabel != null ? ' · ${schedule.vehicleLabel}' : ''}'),
+            Text(
+              '${_modeLabel(schedule.mode, l10n)}${schedule.vehicleLabel != null ? ' · ${schedule.vehicleLabel}' : ''}'
+              '${schedule.isInternational ? ' · ${schedule.routeLabel}' : ''}',
+            ),
             if (schedule.departureTime != null) Text(schedule.departureTime!),
             if (result.trust.reviewCount > 0)
               Row(

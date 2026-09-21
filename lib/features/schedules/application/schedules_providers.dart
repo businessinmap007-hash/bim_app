@@ -43,8 +43,11 @@ class TripSearchController extends StateNotifier<TripSearchState> {
   TripSearchController(this._api) : super(const TripSearchState());
 
   Future<void> search({
-    required int originGovernorateId,
-    required int destinationGovernorateId,
+    int? originGovernorateId,
+    int? destinationGovernorateId,
+    int? originCountryId,
+    int? destinationCountryId,
+    int? vehicleTypeId,
     DateTime? date,
   }) async {
     state = state.copyWith(isLoading: true, clearError: true);
@@ -52,6 +55,9 @@ class TripSearchController extends StateNotifier<TripSearchState> {
       final results = await _api.search(
         originGovernorateId: originGovernorateId,
         destinationGovernorateId: destinationGovernorateId,
+        originCountryId: originCountryId,
+        destinationCountryId: destinationCountryId,
+        vehicleTypeId: vehicleTypeId,
         date: date,
       );
       state = state.copyWith(results: results, isLoading: false, searched: true);
