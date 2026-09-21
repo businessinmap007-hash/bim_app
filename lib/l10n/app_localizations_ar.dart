@@ -212,6 +212,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get businessListEmpty => 'لا توجد أنشطة مطابقة.';
 
   @override
+  String get childOfferingsTitle => 'الأصناف والأسعار';
+
+  @override
+  String get childOfferingsAll => 'الكل';
+
+  @override
+  String get childOfferingsEmpty => 'لا توجد أصناف مطابقة.';
+
+  @override
   String get businessFilterByLocation => 'فلترة حسب الموقع';
 
   @override

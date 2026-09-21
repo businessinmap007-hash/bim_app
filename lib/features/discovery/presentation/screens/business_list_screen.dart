@@ -10,6 +10,7 @@ import '../../../location/application/location_providers.dart';
 import '../../../location/data/models/location_models.dart';
 import '../../application/discovery_providers.dart';
 import '../widgets/business_card.dart';
+import 'child_offerings_screen.dart';
 
 /// Egypt's id in the countries table — the location filter skips the
 /// country step entirely (unlike [LocationPickerField], built for a user's
@@ -96,7 +97,18 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
     final state = ref.watch(businessListControllerProvider(widget.childId));
 
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
+      appBar: AppBar(
+        title: Text(widget.title),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.sell_outlined),
+            tooltip: l10n.childOfferingsTitle,
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => ChildOfferingsScreen(childId: widget.childId, title: widget.title)),
+            ),
+          ),
+        ],
+      ),
       body: ResponsiveCenter(
         maxWidth: 800,
         child: Column(

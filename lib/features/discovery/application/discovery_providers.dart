@@ -5,6 +5,7 @@ import '../../auth/application/auth_controller.dart';
 import '../data/discovery_api.dart';
 import '../data/models/attribute_group.dart';
 import '../data/models/business_summary.dart';
+import '../data/models/child_offering.dart';
 import '../data/models/platform_service_type.dart';
 import '../data/search_api.dart';
 
@@ -37,6 +38,22 @@ final recommendedBusinessesProvider =
           .recommended(categoryId: filter.categoryId, serviceId: filter.serviceId, perPage: 12);
       return result.items;
     });
+
+/// The «line — modifiers» combinations one specialty sells.
+final offeringLinesProvider = FutureProvider.autoDispose.family<List<OfferingLine>, int>((ref, childId) {
+  ref.watch(localeEpochProvider);
+  return ref.watch(discoveryApiProvider).offeringLines(childId: childId);
+});
+
+typedef ChildOfferingsQuery = ({int childId, String optionKey});
+
+/// Priced rows of a specialty; [ChildOfferingsQuery.optionKey] is the comma-joined
+/// option ids of the chosen line ('' = every row).
+final childOfferingsProvider = FutureProvider.autoDispose.family<List<ChildOffering>, ChildOfferingsQuery>((ref, q) {
+  ref.watch(localeEpochProvider);
+  final ids = q.optionKey.isEmpty ? <int>[] : q.optionKey.split(',').map(int.parse).toList();
+  return ref.watch(discoveryApiProvider).offerings(childId: q.childId, optionIds: ids);
+});
 
 /// The platform's own service vocabulary (see DiscoveryApi.serviceTypes) —
 /// powers the discovery screen's "what kind of service?" chip row.

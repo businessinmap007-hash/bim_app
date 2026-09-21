@@ -488,6 +488,24 @@ abstract class AppLocalizations {
   /// **'لا توجد أنشطة مطابقة.'**
   String get businessListEmpty;
 
+  /// No description provided for @childOfferingsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأصناف والأسعار'**
+  String get childOfferingsTitle;
+
+  /// No description provided for @childOfferingsAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get childOfferingsAll;
+
+  /// No description provided for @childOfferingsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أصناف مطابقة.'**
+  String get childOfferingsEmpty;
+
   /// No description provided for @businessFilterByLocation.
   ///
   /// In ar, this message translates to:

@@ -214,6 +214,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get businessListEmpty => 'No matching businesses.';
 
   @override
+  String get childOfferingsTitle => 'Items & prices';
+
+  @override
+  String get childOfferingsAll => 'All';
+
+  @override
+  String get childOfferingsEmpty => 'No matching items.';
+
+  @override
   String get businessFilterByLocation => 'Filter by location';
 
   @override

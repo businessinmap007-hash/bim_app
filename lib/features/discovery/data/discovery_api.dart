@@ -4,6 +4,7 @@ import '../../../core/network/api_client.dart';
 import '../../../core/network/paginated.dart';
 import 'models/attribute_group.dart';
 import 'models/business_summary.dart';
+import 'models/child_offering.dart';
 import 'models/platform_service_type.dart';
 
 /// GET /discovery/businesses — public, no auth required. See
@@ -102,5 +103,28 @@ class DiscoveryApi {
     return (data['groups'] as List<dynamic>? ?? [])
         .map((e) => AttributeGroup.fromJson(e as Map<String, dynamic>))
         .toList();
+  }
+
+  /// GET /discovery/offering-lines — the «line — modifiers» combinations a
+  /// specialty sells, each with its priced-row count.
+  Future<List<OfferingLine>> offeringLines({required int childId}) async {
+    final data = await _client.get('/discovery/offering-lines', query: {'child_id': childId}) as Map<String, dynamic>;
+    return (data['lines'] as List<dynamic>? ?? []).map((e) => OfferingLine.fromJson(e as Map<String, dynamic>)).toList();
+  }
+
+  /// GET /discovery/offerings — the priced rows themselves, across shops.
+  Future<List<ChildOffering>> offerings({required int childId, List<int> optionIds = const [], int perPage = 50}) async {
+    final data =
+        await _client.get(
+              '/discovery/offerings',
+              query: {
+                'child_id': childId,
+                if (optionIds.isNotEmpty) 'option_ids': ListParam(optionIds, ListFormat.multiCompatible),
+                'per_page': perPage,
+              },
+            )
+            as Map<String, dynamic>;
+    final page = data['offerings'] as Map<String, dynamic>? ?? const {};
+    return (page['data'] as List<dynamic>? ?? []).map((e) => ChildOffering.fromJson(e as Map<String, dynamic>)).toList();
   }
 }
