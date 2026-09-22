@@ -22,6 +22,29 @@ class PricedItemInput {
   };
 }
 
+/// One line the pharmacy names and prices itself, replying to a direct
+/// customer request (no doctor line to price against — see [quote]).
+class MedicineQuoteLineInput {
+  final int medicineId;
+  final int quantity;
+  final double unitPrice;
+  final String? note;
+
+  const MedicineQuoteLineInput({
+    required this.medicineId,
+    required this.quantity,
+    required this.unitPrice,
+    this.note,
+  });
+
+  Map<String, dynamic> toJson() => {
+    'medicine_id': medicineId,
+    'quantity': quantity,
+    'unit_price': unitPrice,
+    if (note != null && note!.trim().isNotEmpty) 'note': note!.trim(),
+  };
+}
+
 /// /pharmacy/prescriptions — the pharmacy's own queue of prescriptions sent
 /// to it: price, prepare, mark ready, dispense, or reject back to the
 /// patient. See Api\V2\PharmacyPrescriptionController. Detail/single-fetch
@@ -64,6 +87,24 @@ class PharmacyPrescriptionsApi {
 
   Future<Prescription> reject(int id) async {
     final data = await _client.post('/pharmacy/prescriptions/$id/reject') as Map<String, dynamic>;
+    return Prescription.fromJson(data['prescription'] as Map<String, dynamic>);
+  }
+
+  /// Reply to a direct customer request with real, priced items.
+  Future<Prescription> quote(int id, List<MedicineQuoteLineInput> items) async {
+    final data = await _client.post(
+      '/pharmacy/prescriptions/$id/quote',
+      data: {'items': items.map((i) => i.toJson()).toList()},
+    ) as Map<String, dynamic>;
+    return Prescription.fromJson(data['prescription'] as Map<String, dynamic>);
+  }
+
+  /// Cannot fulfil a direct customer request (unreadable photo, out of stock...).
+  Future<Prescription> decline(int id, {String? note}) async {
+    final data = await _client.post(
+      '/pharmacy/prescriptions/$id/decline',
+      data: {if (note != null && note.trim().isNotEmpty) 'note': note.trim()},
+    ) as Map<String, dynamic>;
     return Prescription.fromJson(data['prescription'] as Map<String, dynamic>);
   }
 }

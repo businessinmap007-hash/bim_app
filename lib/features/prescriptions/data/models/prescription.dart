@@ -89,12 +89,14 @@ class Prescription {
   final String? diagnosis;
   final String? patientCondition;
   final String? notes;
+  final String origin;
+  final String? requestNote;
   final String? deliveryAddress;
   final int? deliveryAddressId;
   final double? medicineTotal;
   final DateTime? pricedAt;
   final List<PrescriptionImage> images;
-  final PrescriptionParty doctor;
+  final PrescriptionParty? doctor;
   final PrescriptionParty patient;
   final PrescriptionParty? pharmacy;
   final List<PrescriptionParty> sharedWith;
@@ -112,12 +114,14 @@ class Prescription {
     this.diagnosis,
     this.patientCondition,
     this.notes,
+    this.origin = 'doctor',
+    this.requestNote,
     this.deliveryAddress,
     this.deliveryAddressId,
     this.medicineTotal,
     this.pricedAt,
     this.images = const [],
-    required this.doctor,
+    this.doctor,
     required this.patient,
     this.pharmacy,
     this.sharedWith = const [],
@@ -128,6 +132,13 @@ class Prescription {
 
   bool get canSend => status == 'issued';
   bool get canCancel => status != 'dispensed' && status != 'cancelled';
+  bool get isCustomerRequest => origin == 'customer';
+  /// Pharmacy: this direct request has no items yet and needs a price.
+  bool get needsQuote => isCustomerRequest && status == 'requested';
+  /// Pharmacy: still allowed to walk away from a direct request.
+  bool get canDeclineRequest => isCustomerRequest && (status == 'requested' || status == 'quoted');
+  /// Customer: the pharmacy replied — accept or decline (decline reuses cancel).
+  bool get canConfirmQuote => isCustomerRequest && status == 'quoted';
 
   factory Prescription.fromJson(Map<String, dynamic> json) => Prescription(
     id: json['id'] as int,
@@ -139,6 +150,8 @@ class Prescription {
     diagnosis: json['diagnosis'] as String?,
     patientCondition: json['patient_condition'] as String?,
     notes: json['notes'] as String?,
+    origin: json['origin'] as String? ?? 'doctor',
+    requestNote: json['request_note'] as String?,
     deliveryAddress: json['delivery_address'] as String?,
     deliveryAddressId: (json['delivery_address_id'] as num?)?.toInt(),
     medicineTotal: (json['medicine_total'] as num?)?.toDouble(),
@@ -146,7 +159,7 @@ class Prescription {
     images: (json['images'] as List<dynamic>? ?? [])
         .map((e) => PrescriptionImage.fromJson(e as Map<String, dynamic>))
         .toList(),
-    doctor: PrescriptionParty.fromJson(json['doctor'] as Map<String, dynamic>),
+    doctor: json['doctor'] != null ? PrescriptionParty.fromJson(json['doctor'] as Map<String, dynamic>) : null,
     patient: PrescriptionParty.fromJson(json['patient'] as Map<String, dynamic>),
     pharmacy: json['pharmacy'] != null
         ? PrescriptionParty.fromJson(json['pharmacy'] as Map<String, dynamic>)

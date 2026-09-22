@@ -120,6 +120,35 @@ class PrescriptionsApi {
     return Prescription.fromJson(data['prescription'] as Map<String, dynamic>);
   }
 
+  /// A customer asks a pharmacy for medicine directly — no doctor, no
+  /// dictionary drug required on their side. [hasPhoto] tells the backend a
+  /// photo is coming right after via [addImage], so a photo-only request
+  /// (no [note]) is not rejected for a missing note.
+  Future<Prescription> requestFromPharmacy({
+    required int pharmacyId,
+    String? note,
+    bool hasPhoto = false,
+  }) async {
+    final data =
+        await _client.post(
+              '/prescriptions/request',
+              data: {
+                'pharmacy_id': pharmacyId,
+                if (note != null && note.trim().isNotEmpty) 'note': note.trim(),
+                if (hasPhoto) 'has_photo': true,
+              },
+            )
+            as Map<String, dynamic>;
+    return Prescription.fromJson(data['prescription'] as Map<String, dynamic>);
+  }
+
+  /// The customer accepts the pharmacy's quote on a direct request.
+  Future<Prescription> confirmQuote(int id) async {
+    final data =
+        await _client.post('/prescriptions/$id/confirm-quote') as Map<String, dynamic>;
+    return Prescription.fromJson(data['prescription'] as Map<String, dynamic>);
+  }
+
   Future<Prescription> prescription(int id) async {
     final data =
         await _client.get('/prescriptions/$id') as Map<String, dynamic>;

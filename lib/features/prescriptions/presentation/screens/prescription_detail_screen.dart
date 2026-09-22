@@ -10,6 +10,7 @@ import '../../../discovery/data/models/business_summary.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../application/pharmacy_prescriptions_providers.dart';
 import '../../application/prescriptions_providers.dart';
+import '../../data/models/medicine.dart';
 import '../../data/models/prescription.dart';
 import '../../data/pharmacy_prescriptions_api.dart';
 import '../widgets/business_picker_sheet.dart';
@@ -295,6 +296,213 @@ class PrescriptionDetailScreen extends ConsumerWidget {
     await _pharmacyAction(context, ref, (api) => api.reject(prescriptionId), l10n.pharmacyRejected, popAfter: true);
   }
 
+  Future<void> _declineRequest(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    final noteController = TextEditingController();
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.medicineRequestDeclineTitle),
+        content: TextField(
+          controller: noteController,
+          decoration: InputDecoration(labelText: l10n.medicineRequestDeclineNoteHint),
+          maxLines: 2,
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l10n.commonCancel)),
+          TextButton(onPressed: () => Navigator.pop(context, true), child: Text(l10n.medicineRequestDeclineAction)),
+        ],
+      ),
+    );
+    if (confirmed != true || !context.mounted) return;
+    await _pharmacyAction(
+      context, ref,
+      (api) => api.decline(prescriptionId, note: noteController.text),
+      l10n.medicineRequestDeclined,
+      popAfter: true,
+    );
+  }
+
+  /// The pharmacy names and prices its own lines in one shot, replying to a
+  /// direct customer request - no existing item rows to price against, so
+  /// this builds the lines from scratch (unlike [_priceItems]).
+  Future<void> _quoteRequest(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    final lines = <_QuoteLine>[];
+    String? error;
+
+    Future<Medicine?> pickMedicine(BuildContext sheetContext, WidgetRef ref) async {
+      final searchController = TextEditingController();
+      List<Medicine> results = [];
+      bool loading = false;
+      return showModalBottomSheet<Medicine>(
+        context: sheetContext,
+        isScrollControlled: true,
+        builder: (pickContext) => StatefulBuilder(
+          builder: (pickContext, setPickState) {
+            Future<void> runSearch(String q) async {
+              if (q.trim().isEmpty) {
+                setPickState(() => results = []);
+                return;
+              }
+              setPickState(() => loading = true);
+              try {
+                final found = await ref.read(medicinesApiProvider).search(q.trim());
+                setPickState(() {
+                  results = found;
+                  loading = false;
+                });
+              } catch (_) {
+                setPickState(() => loading = false);
+              }
+            }
+
+            return Padding(
+              padding: EdgeInsets.fromLTRB(20, 20, 20, 20 + MediaQuery.of(pickContext).viewInsets.bottom),
+              child: SafeArea(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxHeight: MediaQuery.of(pickContext).size.height * 0.7),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(l10n.medicineSearchTitle, style: Theme.of(pickContext).textTheme.titleMedium),
+                      const SizedBox(height: 12),
+                      TextField(
+                        controller: searchController,
+                        autofocus: true,
+                        decoration: InputDecoration(hintText: l10n.medicineSearchHint, prefixIcon: const Icon(Icons.search)),
+                        onChanged: runSearch,
+                      ),
+                      const SizedBox(height: 8),
+                      if (loading) const Padding(padding: EdgeInsets.all(16), child: Center(child: CircularProgressIndicator())),
+                      if (!loading)
+                        Flexible(
+                          child: ListView(
+                            shrinkWrap: true,
+                            children: [
+                              for (final m in results)
+                                ListTile(title: Text(m.displayName), onTap: () => Navigator.of(pickContext).pop(m)),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    }
+
+    final saved = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      builder: (sheetContext) => StatefulBuilder(
+        builder: (sheetContext, setSheetState) => Padding(
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 20 + MediaQuery.of(sheetContext).viewInsets.bottom),
+          child: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(l10n.medicineRequestQuoteTitle, style: Theme.of(sheetContext).textTheme.titleMedium),
+                  const SizedBox(height: 16),
+                  for (final line in lines) ...[
+                    Row(
+                      children: [
+                        Expanded(child: Text(line.medicine.displayName, style: Theme.of(sheetContext).textTheme.titleSmall)),
+                        IconButton(
+                          icon: const Icon(Icons.close, size: 18),
+                          onPressed: () => setSheetState(() => lines.remove(line)),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: line.priceController,
+                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                            decoration: InputDecoration(labelText: l10n.pharmacyUnitPriceLabel),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: TextField(
+                            controller: line.qtyController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(labelText: l10n.pharmacyBilledQuantityLabel),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                  ],
+                  OutlinedButton.icon(
+                    icon: const Icon(Icons.add),
+                    label: Text(l10n.medicineRequestAddLine),
+                    onPressed: () async {
+                      final picked = await pickMedicine(sheetContext, ref);
+                      if (picked != null) setSheetState(() => lines.add(_QuoteLine(picked)));
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  if (error != null) ...[
+                    Text(error!, style: TextStyle(color: Theme.of(sheetContext).colorScheme.error)),
+                    const SizedBox(height: 8),
+                  ],
+                  FilledButton(
+                    onPressed: () {
+                      if (lines.isEmpty) {
+                        setSheetState(() => error = l10n.medicineRequestNeedsOneLine);
+                        return;
+                      }
+                      final items = <MedicineQuoteLineInput>[];
+                      for (final line in lines) {
+                        final price = double.tryParse(line.priceController.text.trim());
+                        final qty = int.tryParse(line.qtyController.text.trim());
+                        if (price == null || price < 0 || qty == null || qty < 1) {
+                          setSheetState(() => error = l10n.validationRequired);
+                          return;
+                        }
+                        items.add(MedicineQuoteLineInput(medicineId: line.medicine.id, quantity: qty, unitPrice: price));
+                      }
+                      Navigator.of(sheetContext).pop(true);
+                      _submitQuote(context, ref, items);
+                    },
+                    child: Text(l10n.commonSave),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    if (saved != true) return;
+  }
+
+  Future<void> _submitQuote(BuildContext context, WidgetRef ref, List<MedicineQuoteLineInput> items) async {
+    final l10n = AppLocalizations.of(context)!;
+    await _pharmacyAction(context, ref, (api) => api.quote(prescriptionId, items), l10n.medicineRequestQuoted);
+  }
+
+  Future<void> _confirmQuote(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    try {
+      await ref.read(prescriptionsApiProvider).confirmQuote(prescriptionId);
+      ref.invalidate(prescriptionDetailProvider(prescriptionId));
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.medicineRequestConfirmed)));
+      }
+    } catch (e) {
+      if (context.mounted) _showError(context, e);
+    }
+  }
+
   Future<void> _priceItems(BuildContext context, WidgetRef ref, Prescription p) async {
     final l10n = AppLocalizations.of(context)!;
     final priceControllers = <int, TextEditingController>{};
@@ -429,8 +637,11 @@ class PrescriptionDetailScreen extends ConsumerWidget {
         // unconditionally, which only ever worked because only the patient
         // ever opened it before a doctor could too (see IssuePrescriptionScreen).
         final isPatientViewer = currentUserId != null && currentUserId == p.patient.id;
-        final canRevise = currentUserId != null && currentUserId == p.doctor.id && p.canCancel;
+        final canRevise = currentUserId != null && currentUserId == p.doctor?.id && p.canCancel;
         final isPharmacyViewer = currentUserId != null && p.pharmacy != null && currentUserId == p.pharmacy!.id;
+        final canQuoteRequest = isPharmacyViewer && p.needsQuote;
+        final canDeclineRequest = isPharmacyViewer && p.canDeclineRequest;
+        final canConfirmQuoteAction = isPatientViewer && p.canConfirmQuote;
         const openStatuses = ['sent_to_pharmacy', 'preparing', 'ready'];
         final canPrice = isPharmacyViewer && openStatuses.contains(p.status);
         final canPrepare = isPharmacyViewer && p.status == 'sent_to_pharmacy';
@@ -438,7 +649,7 @@ class PrescriptionDetailScreen extends ConsumerWidget {
         final canDispense = isPharmacyViewer && (p.status == 'ready' || p.status == 'preparing');
         final canReject = isPharmacyViewer && (p.status == 'sent_to_pharmacy' || p.status == 'preparing');
         return Scaffold(
-        appBar: AppBar(title: Text(p.doctor.name ?? l10n.prescriptionsTitle)),
+        appBar: AppBar(title: Text(p.doctor?.name ?? p.pharmacy?.name ?? l10n.prescriptionsTitle)),
         body: ListView(
           padding: const EdgeInsets.all(16),
           children: [
@@ -465,6 +676,11 @@ class PrescriptionDetailScreen extends ConsumerWidget {
                       const SizedBox(height: 6),
                       Text(l10n.prescriptionNotesLabel, style: Theme.of(context).textTheme.labelMedium),
                       Text(p.notes!),
+                    ],
+                    if (p.requestNote != null && p.requestNote!.isNotEmpty) ...[
+                      const SizedBox(height: 6),
+                      Text(l10n.medicineRequestCustomerNoteLabel, style: Theme.of(context).textTheme.labelMedium),
+                      Text(p.requestNote!),
                     ],
                     if (p.pharmacy != null) ...[
                       const SizedBox(height: 6),
@@ -571,6 +787,21 @@ class PrescriptionDetailScreen extends ConsumerWidget {
                     onPressed: () => _reject(context, ref),
                     child: Text(l10n.pharmacyRejectAction),
                   ),
+                if (canQuoteRequest)
+                  FilledButton(
+                    onPressed: () => _quoteRequest(context, ref),
+                    child: Text(l10n.medicineRequestQuoteAction),
+                  ),
+                if (canDeclineRequest)
+                  OutlinedButton(
+                    onPressed: () => _declineRequest(context, ref),
+                    child: Text(l10n.medicineRequestDeclineAction),
+                  ),
+                if (canConfirmQuoteAction)
+                  FilledButton(
+                    onPressed: () => _confirmQuote(context, ref),
+                    child: Text(l10n.medicineRequestConfirmAction),
+                  ),
                 if (p.canCancel)
                   OutlinedButton(
                     onPressed: () => _cancel(context, ref),
@@ -584,6 +815,13 @@ class PrescriptionDetailScreen extends ConsumerWidget {
       },
     );
   }
+}
+
+class _QuoteLine {
+  final Medicine medicine;
+  final TextEditingController priceController = TextEditingController();
+  final TextEditingController qtyController = TextEditingController(text: '1');
+  _QuoteLine(this.medicine);
 }
 
 class _FulfillmentChoice {

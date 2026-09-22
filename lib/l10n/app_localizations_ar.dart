@@ -3043,6 +3043,89 @@ class AppLocalizationsAr extends AppLocalizations {
   String get prescriptionsEmpty => 'لا توجد روشتات بعد.';
 
   @override
+  String get prescriptionStatusRequested => 'بانتظار رد الصيدلية';
+
+  @override
+  String get prescriptionStatusQuoted => 'عرض سعر جاهز';
+
+  @override
+  String get medicineRequestTitle => 'طلب دواء بدون روشتة';
+
+  @override
+  String get medicineRequestDirectLabel => 'طلب دواء مباشر';
+
+  @override
+  String get medicineRequestExplainer =>
+      'لو مش قادر تقرأ اسم الدواء بالظبط، ابعت صورة الروشتة أو اكتب اللي محتاجه، والصيدلية هترد عليك بالأصناف والسعر.';
+
+  @override
+  String get medicineRequestPharmacyLabel => 'الصيدلية';
+
+  @override
+  String get medicineRequestPickPharmacyTitle => 'اختر صيدلية';
+
+  @override
+  String get medicineRequestNoteLabel => 'ملاحظة (اختياري لو أرفقت صورة)';
+
+  @override
+  String get medicineRequestNoteHint => 'مثال: محتاج حاجة للصداع والكحة';
+
+  @override
+  String get medicineRequestAttachPhoto => 'إرفاق صورة الروشتة';
+
+  @override
+  String get medicineRequestChangePhoto => 'تغيير الصورة';
+
+  @override
+  String get medicineRequestTakePhoto => 'التقاط صورة';
+
+  @override
+  String get medicineRequestChooseFromGallery => 'اختيار من المعرض';
+
+  @override
+  String get medicineRequestSubmit => 'إرسال الطلب';
+
+  @override
+  String get medicineRequestNeedsNoteOrPhoto =>
+      'اكتب ملاحظة أو أرفق صورة الروشتة.';
+
+  @override
+  String get medicineRequestCustomerNoteLabel => 'ملاحظة العميل';
+
+  @override
+  String get medicineRequestQuoteTitle => 'تسعير الطلب';
+
+  @override
+  String get medicineRequestQuoteAction => 'تسعير الطلب';
+
+  @override
+  String get medicineRequestAddLine => 'إضافة صنف';
+
+  @override
+  String get medicineRequestNeedsOneLine => 'أضف صنفًا واحدًا على الأقل.';
+
+  @override
+  String get medicineRequestQuoted => 'تم إرسال السعر.';
+
+  @override
+  String get medicineRequestDeclineTitle => 'رفض الطلب';
+
+  @override
+  String get medicineRequestDeclineNoteHint => 'سبب الرفض (اختياري)';
+
+  @override
+  String get medicineRequestDeclineAction => 'رفض الطلب';
+
+  @override
+  String get medicineRequestDeclined => 'تم رفض الطلب.';
+
+  @override
+  String get medicineRequestConfirmAction => 'تأكيد السعر والموافقة';
+
+  @override
+  String get medicineRequestConfirmed => 'تم تأكيد الطلب — جارٍ تجهيزه.';
+
+  @override
   String get prescriptionStatusIssued => 'صدرت';
 
   @override

@@ -3043,6 +3043,92 @@ class AppLocalizationsEn extends AppLocalizations {
   String get prescriptionsEmpty => 'No prescriptions yet.';
 
   @override
+  String get prescriptionStatusRequested => 'Awaiting pharmacy reply';
+
+  @override
+  String get prescriptionStatusQuoted => 'Quote ready';
+
+  @override
+  String get medicineRequestTitle => 'Request medicine (no prescription)';
+
+  @override
+  String get medicineRequestDirectLabel => 'Direct medicine request';
+
+  @override
+  String get medicineRequestExplainer =>
+      'Not sure of the exact drug name? Send a photo of the paper prescription or describe what you need, and the pharmacy will reply with the items and price.';
+
+  @override
+  String get medicineRequestPharmacyLabel => 'Pharmacy';
+
+  @override
+  String get medicineRequestPickPharmacyTitle => 'Choose a pharmacy';
+
+  @override
+  String get medicineRequestNoteLabel =>
+      'Note (optional if you attach a photo)';
+
+  @override
+  String get medicineRequestNoteHint =>
+      'e.g. I need something for a headache and a cough';
+
+  @override
+  String get medicineRequestAttachPhoto => 'Attach the prescription photo';
+
+  @override
+  String get medicineRequestChangePhoto => 'Change photo';
+
+  @override
+  String get medicineRequestTakePhoto => 'Take a photo';
+
+  @override
+  String get medicineRequestChooseFromGallery => 'Choose from gallery';
+
+  @override
+  String get medicineRequestSubmit => 'Send request';
+
+  @override
+  String get medicineRequestNeedsNoteOrPhoto =>
+      'Write a note or attach a photo of the prescription.';
+
+  @override
+  String get medicineRequestCustomerNoteLabel => 'Customer\'s note';
+
+  @override
+  String get medicineRequestQuoteTitle => 'Quote this request';
+
+  @override
+  String get medicineRequestQuoteAction => 'Quote this request';
+
+  @override
+  String get medicineRequestAddLine => 'Add item';
+
+  @override
+  String get medicineRequestNeedsOneLine => 'Add at least one item.';
+
+  @override
+  String get medicineRequestQuoted => 'The quote was sent.';
+
+  @override
+  String get medicineRequestDeclineTitle => 'Decline request';
+
+  @override
+  String get medicineRequestDeclineNoteHint => 'Reason (optional)';
+
+  @override
+  String get medicineRequestDeclineAction => 'Decline request';
+
+  @override
+  String get medicineRequestDeclined => 'The request was declined.';
+
+  @override
+  String get medicineRequestConfirmAction => 'Confirm price and proceed';
+
+  @override
+  String get medicineRequestConfirmed =>
+      'Request confirmed — now being prepared.';
+
+  @override
   String get prescriptionStatusIssued => 'Issued';
 
   @override

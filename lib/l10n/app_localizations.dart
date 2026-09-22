@@ -5654,6 +5654,168 @@ abstract class AppLocalizations {
   /// **'لا توجد روشتات بعد.'**
   String get prescriptionsEmpty;
 
+  /// No description provided for @prescriptionStatusRequested.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار رد الصيدلية'**
+  String get prescriptionStatusRequested;
+
+  /// No description provided for @prescriptionStatusQuoted.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض سعر جاهز'**
+  String get prescriptionStatusQuoted;
+
+  /// No description provided for @medicineRequestTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب دواء بدون روشتة'**
+  String get medicineRequestTitle;
+
+  /// No description provided for @medicineRequestDirectLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب دواء مباشر'**
+  String get medicineRequestDirectLabel;
+
+  /// No description provided for @medicineRequestExplainer.
+  ///
+  /// In ar, this message translates to:
+  /// **'لو مش قادر تقرأ اسم الدواء بالظبط، ابعت صورة الروشتة أو اكتب اللي محتاجه، والصيدلية هترد عليك بالأصناف والسعر.'**
+  String get medicineRequestExplainer;
+
+  /// No description provided for @medicineRequestPharmacyLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصيدلية'**
+  String get medicineRequestPharmacyLabel;
+
+  /// No description provided for @medicineRequestPickPharmacyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر صيدلية'**
+  String get medicineRequestPickPharmacyTitle;
+
+  /// No description provided for @medicineRequestNoteLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظة (اختياري لو أرفقت صورة)'**
+  String get medicineRequestNoteLabel;
+
+  /// No description provided for @medicineRequestNoteHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مثال: محتاج حاجة للصداع والكحة'**
+  String get medicineRequestNoteHint;
+
+  /// No description provided for @medicineRequestAttachPhoto.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرفاق صورة الروشتة'**
+  String get medicineRequestAttachPhoto;
+
+  /// No description provided for @medicineRequestChangePhoto.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغيير الصورة'**
+  String get medicineRequestChangePhoto;
+
+  /// No description provided for @medicineRequestTakePhoto.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقاط صورة'**
+  String get medicineRequestTakePhoto;
+
+  /// No description provided for @medicineRequestChooseFromGallery.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيار من المعرض'**
+  String get medicineRequestChooseFromGallery;
+
+  /// No description provided for @medicineRequestSubmit.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال الطلب'**
+  String get medicineRequestSubmit;
+
+  /// No description provided for @medicineRequestNeedsNoteOrPhoto.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب ملاحظة أو أرفق صورة الروشتة.'**
+  String get medicineRequestNeedsNoteOrPhoto;
+
+  /// No description provided for @medicineRequestCustomerNoteLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظة العميل'**
+  String get medicineRequestCustomerNoteLabel;
+
+  /// No description provided for @medicineRequestQuoteTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسعير الطلب'**
+  String get medicineRequestQuoteTitle;
+
+  /// No description provided for @medicineRequestQuoteAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسعير الطلب'**
+  String get medicineRequestQuoteAction;
+
+  /// No description provided for @medicineRequestAddLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة صنف'**
+  String get medicineRequestAddLine;
+
+  /// No description provided for @medicineRequestNeedsOneLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف صنفًا واحدًا على الأقل.'**
+  String get medicineRequestNeedsOneLine;
+
+  /// No description provided for @medicineRequestQuoted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال السعر.'**
+  String get medicineRequestQuoted;
+
+  /// No description provided for @medicineRequestDeclineTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفض الطلب'**
+  String get medicineRequestDeclineTitle;
+
+  /// No description provided for @medicineRequestDeclineNoteHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'سبب الرفض (اختياري)'**
+  String get medicineRequestDeclineNoteHint;
+
+  /// No description provided for @medicineRequestDeclineAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفض الطلب'**
+  String get medicineRequestDeclineAction;
+
+  /// No description provided for @medicineRequestDeclined.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم رفض الطلب.'**
+  String get medicineRequestDeclined;
+
+  /// No description provided for @medicineRequestConfirmAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد السعر والموافقة'**
+  String get medicineRequestConfirmAction;
+
+  /// No description provided for @medicineRequestConfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تأكيد الطلب — جارٍ تجهيزه.'**
+  String get medicineRequestConfirmed;
+
   /// No description provided for @prescriptionStatusIssued.
   ///
   /// In ar, this message translates to:

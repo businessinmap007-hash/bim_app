@@ -40,7 +40,7 @@ class _PharmacyQueueScreenState extends ConsumerState<PharmacyQueueScreen> {
     super.dispose();
   }
 
-  static const _statuses = [null, 'sent_to_pharmacy', 'preparing', 'ready', 'dispensed'];
+  static const _statuses = [null, 'requested', 'quoted', 'sent_to_pharmacy', 'preparing', 'ready', 'dispensed'];
 
   String _filterLabel(AppLocalizations l10n, String? status) =>
       status == null ? l10n.pharmacyQueueFilterAll : statusLabel(status, l10n);
@@ -136,11 +136,12 @@ class _QueueTile extends ConsumerWidget {
           );
           ref.read(pharmacyQueueControllerProvider.notifier).load();
         },
+        leading: prescription.needsQuote ? const Icon(Icons.priority_high, color: Colors.orange) : null,
         title: Text(prescription.patient.name ?? '#${prescription.patient.id}'),
         subtitle: Text(
           [
             statusLabel(prescription.status, l10n),
-            prescription.doctor.name,
+            prescription.isCustomerRequest ? l10n.medicineRequestDirectLabel : prescription.doctor?.name,
             if (prescription.medicineTotal != null) '${prescription.medicineTotal} EGP',
           ].whereType<String>().join(' · '),
         ),

@@ -5,6 +5,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../application/prescriptions_providers.dart';
 import '../../data/models/prescription.dart';
 import 'prescription_detail_screen.dart';
+import 'request_medicine_screen.dart';
 
 class PrescriptionsScreen extends ConsumerStatefulWidget {
   const PrescriptionsScreen({super.key});
@@ -40,7 +41,21 @@ class _PrescriptionsScreenState extends ConsumerState<PrescriptionsScreen> {
     final state = ref.watch(myPrescriptionsControllerProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.prescriptionsTitle)),
+      appBar: AppBar(
+        title: Text(l10n.prescriptionsTitle),
+        actions: [
+          IconButton(
+            tooltip: l10n.medicineRequestTitle,
+            icon: const Icon(Icons.local_pharmacy_outlined),
+            onPressed: () async {
+              final created = await Navigator.of(context).push<bool>(
+                MaterialPageRoute(builder: (_) => const RequestMedicineScreen()),
+              );
+              if (created == true) ref.read(myPrescriptionsControllerProvider.notifier).load();
+            },
+          ),
+        ],
+      ),
       body: state.isLoading
           ? const Center(child: CircularProgressIndicator())
           : state.error != null
@@ -100,7 +115,11 @@ class _PrescriptionTile extends StatelessWidget {
       child: ListTile(
         onTap: onTap,
         leading: const CircleAvatar(child: Icon(Icons.receipt_long_outlined)),
-        title: Text(prescription.doctor.name ?? ''),
+        title: Text(
+          prescription.isCustomerRequest
+              ? l10n.medicineRequestDirectLabel
+              : prescription.doctor?.name ?? '',
+        ),
         subtitle: Text(
           '${prescription.diagnosis ?? ''}\n'
           '${statusLabel(prescription.status, l10n)}',
@@ -113,6 +132,8 @@ class _PrescriptionTile extends StatelessWidget {
 }
 
 String statusLabel(String status, AppLocalizations l10n) => switch (status) {
+  'requested' => l10n.prescriptionStatusRequested,
+  'quoted' => l10n.prescriptionStatusQuoted,
   'issued' => l10n.prescriptionStatusIssued,
   'sent_to_pharmacy' => l10n.prescriptionStatusSent,
   'preparing' => l10n.prescriptionStatusPreparing,
