@@ -45,8 +45,10 @@ class AttendanceStatus {
   factory AttendanceStatus.fromJson(Map<String, dynamic>? json) {
     if (json == null) return empty;
     return AttendanceStatus(
-      checkedInAt: json['checked_in_at'] != null ? DateTime.tryParse(json['checked_in_at'] as String) : null,
-      checkedOutAt: json['checked_out_at'] != null ? DateTime.tryParse(json['checked_out_at'] as String) : null,
+      // A genuine UTC instant (Carbon's own toIso8601String(), app.timezone is
+      // UTC) -- .toLocal() here is correct, not the wall-clock-field trap.
+      checkedInAt: json['checked_in_at'] != null ? DateTime.tryParse(json['checked_in_at'] as String)?.toLocal() : null,
+      checkedOutAt: json['checked_out_at'] != null ? DateTime.tryParse(json['checked_out_at'] as String)?.toLocal() : null,
       isPresent: json['is_present'] as bool? ?? false,
     );
   }

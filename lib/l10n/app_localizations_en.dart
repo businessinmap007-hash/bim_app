@@ -2585,6 +2585,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get staffAttendanceNotCheckedIn => 'Hasn\'t checked in today';
 
   @override
+  String staffAttendancePresentSince(String time) {
+    return 'Present since $time';
+  }
+
+  @override
+  String staffAttendanceCheckedOutAt(String time) {
+    return 'Checked out at $time';
+  }
+
+  @override
   String get myWorkTitle => 'My work';
 
   @override

@@ -2591,6 +2591,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get staffAttendanceNotCheckedIn => 'لم يسجّل حضوره اليوم';
 
   @override
+  String staffAttendancePresentSince(String time) {
+    return 'حاضر منذ $time';
+  }
+
+  @override
+  String staffAttendanceCheckedOutAt(String time) {
+    return 'انصرف في $time';
+  }
+
+  @override
   String get myWorkTitle => 'أعمالي';
 
   @override

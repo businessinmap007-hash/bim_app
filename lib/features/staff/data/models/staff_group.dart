@@ -46,11 +46,13 @@ class StaffGroupMember {
       isActive: json['is_active'] as bool? ?? true,
       operationsToday: json['operations_today'] as int? ?? 0,
       isPresent: attendance['is_present'] as bool? ?? false,
+      // A genuine UTC instant (Carbon's own toIso8601String(), app.timezone is
+      // UTC) -- .toLocal() here is correct, not the wall-clock-field trap.
       checkedInAt: attendance['checked_in_at'] != null
-          ? DateTime.tryParse(attendance['checked_in_at'] as String)
+          ? DateTime.tryParse(attendance['checked_in_at'] as String)?.toLocal()
           : null,
       checkedOutAt: attendance['checked_out_at'] != null
-          ? DateTime.tryParse(attendance['checked_out_at'] as String)
+          ? DateTime.tryParse(attendance['checked_out_at'] as String)?.toLocal()
           : null,
       isDriver: deliveryStatus != null,
       driverBusy: deliveryStatus?['busy'] as bool? ?? false,

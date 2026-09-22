@@ -4760,6 +4760,18 @@ abstract class AppLocalizations {
   /// **'لم يسجّل حضوره اليوم'**
   String get staffAttendanceNotCheckedIn;
 
+  /// No description provided for @staffAttendancePresentSince.
+  ///
+  /// In ar, this message translates to:
+  /// **'حاضر منذ {time}'**
+  String staffAttendancePresentSince(String time);
+
+  /// No description provided for @staffAttendanceCheckedOutAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'انصرف في {time}'**
+  String staffAttendanceCheckedOutAt(String time);
+
   /// No description provided for @myWorkTitle.
   ///
   /// In ar, this message translates to:

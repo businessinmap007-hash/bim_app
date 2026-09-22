@@ -100,6 +100,8 @@ class _GroupSectionState extends State<_GroupSection> {
   }
 }
 
+String _hhmm(DateTime dt) => '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+
 class _MemberCard extends StatelessWidget {
   final StaffGroupMember member;
   const _MemberCard({required this.member});
@@ -111,10 +113,12 @@ class _MemberCard extends StatelessWidget {
     final String attendanceLabel;
     final Color attendanceColor;
     if (member.isPresent) {
-      attendanceLabel = l10n.staffAttendancePresent;
+      attendanceLabel = member.checkedInAt != null
+          ? l10n.staffAttendancePresentSince(_hhmm(member.checkedInAt!))
+          : l10n.staffAttendancePresent;
       attendanceColor = AppColors.success;
     } else if (member.checkedOutAt != null) {
-      attendanceLabel = l10n.staffAttendanceCheckedOut;
+      attendanceLabel = l10n.staffAttendanceCheckedOutAt(_hhmm(member.checkedOutAt!));
       attendanceColor = Theme.of(context).hintColor;
     } else {
       attendanceLabel = l10n.staffAttendanceNotCheckedIn;
