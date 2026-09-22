@@ -102,6 +102,21 @@ class ShippingInfo {
   }
 }
 
+/// The driver assigned to a delivery order (`OrderResource.delivery_driver`).
+class OrderDriver {
+  final String name;
+  final String? phone;
+  final String? vehicleLabel;
+
+  const OrderDriver({required this.name, this.phone, this.vehicleLabel});
+
+  factory OrderDriver.fromJson(Map<String, dynamic> json) => OrderDriver(
+    name: json['name'] as String? ?? '',
+    phone: json['phone'] as String?,
+    vehicleLabel: json['vehicle_label'] as String?,
+  );
+}
+
 /// Mirrors `OrderResource` — used for the customer's order history list and
 /// detail AND the business's incoming-order queue and detail (list
 /// responses omit `items`, matching `whenLoaded('items')` on the backend;
@@ -152,6 +167,7 @@ class PlacedOrder {
   final bool paymentConfirmationRequired;
   final DeliveryFeeQuote? deliveryFeeQuote;
   final ShippingInfo? shipping;
+  final OrderDriver? driver;
   final DateTime? paymentSettledAt;
   // The viewer's "I trust" ticks toward the other parties of the order, keyed
   // by 'customer' / 'business' / 'driver'. Null on list rows.
@@ -194,6 +210,7 @@ class PlacedOrder {
     this.paymentConfirmationRequired = false,
     this.deliveryFeeQuote,
     this.shipping,
+    this.driver,
     this.paymentSettledAt,
     this.trust,
   });
@@ -263,6 +280,9 @@ class PlacedOrder {
       driverPaymentConfirmedAt: DateTime.tryParse(paymentConfirmations['driver_confirmed_at'] as String? ?? ''),
       depositReleased: deposit['released'] as bool? ?? false,
       paymentConfirmationRequired: json['payment_confirmation_required'] as bool? ?? false,
+      driver: json['delivery_driver'] is Map<String, dynamic>
+          ? OrderDriver.fromJson(json['delivery_driver'] as Map<String, dynamic>)
+          : null,
       shipping: json['shipping'] != null ? ShippingInfo.fromJson(json['shipping'] as Map<String, dynamic>) : null,
       deliveryFeeQuote: json['delivery_fee_quote'] != null
           ? DeliveryFeeQuote.fromJson(json['delivery_fee_quote'] as Map<String, dynamic>)

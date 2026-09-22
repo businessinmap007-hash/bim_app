@@ -1593,6 +1593,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ordersCancel => 'Cancel order';
 
   @override
+  String get orderDriverTitle => 'Your delivery driver';
+
+  @override
+  String get orderDriverCall => 'Call the driver';
+
+  @override
   String get ordersReorder => 'Order again';
 
   @override

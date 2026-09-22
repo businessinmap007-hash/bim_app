@@ -2984,6 +2984,18 @@ abstract class AppLocalizations {
   /// **'إلغاء الطلب'**
   String get ordersCancel;
 
+  /// No description provided for @orderDriverTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المندوب الذي يوصّل طلبك'**
+  String get orderDriverTitle;
+
+  /// No description provided for @orderDriverCall.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتصال بالمندوب'**
+  String get orderDriverCall;
+
   /// No description provided for @ordersReorder.
   ///
   /// In ar, this message translates to:

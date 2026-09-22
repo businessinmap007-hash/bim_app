@@ -23,6 +23,7 @@ import '../../../general_chat/application/general_chat_providers.dart';
 import '../../../general_chat/presentation/screens/chat_thread_screen.dart';
 import '../../application/orders_providers.dart';
 import '../../data/models/placed_order.dart';
+import '../widgets/order_driver_card.dart';
 import '../widgets/order_tracker_timeline.dart';
 import '../widgets/order_trust_section.dart';
 
@@ -703,6 +704,7 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
                 child: Text(l10n.paymentConfirmCustomerButton),
               ),
           ],
+          if (order.driver != null) OrderDriverCard(driver: order.driver!),
           OrderTrustSection(
             key: ValueKey('trust-${order.id}'),
             order: order,

@@ -536,6 +536,8 @@
   "ordersEmpty": "لا توجد طلبات بعد.",
   "bookingsEmpty": "لا توجد حجوزات بعد.",
   "ordersCancel": "إلغاء الطلب",
+  "orderDriverTitle": "المندوب الذي يوصّل طلبك",
+  "orderDriverCall": "اتصال بالمندوب",
   "ordersReorder": "اطلب مرة أخرى",
   "ordersReordered": "تمت إضافة العناصر إلى السلة.",
   "ordersReorderedWithSkipped": "تمت إضافة العناصر المتاحة إلى السلة، وتعذّر توفير بعضها.",

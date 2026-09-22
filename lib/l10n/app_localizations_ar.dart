@@ -1598,6 +1598,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get ordersCancel => 'إلغاء الطلب';
 
   @override
+  String get orderDriverTitle => 'المندوب الذي يوصّل طلبك';
+
+  @override
+  String get orderDriverCall => 'اتصال بالمندوب';
+
+  @override
   String get ordersReorder => 'اطلب مرة أخرى';
 
   @override

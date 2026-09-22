@@ -536,6 +536,8 @@
   "ordersEmpty": "No orders yet.",
   "bookingsEmpty": "No bookings yet.",
   "ordersCancel": "Cancel order",
+  "orderDriverTitle": "Your delivery driver",
+  "orderDriverCall": "Call the driver",
   "ordersReorder": "Order again",
   "ordersReordered": "The items were added to your cart.",
   "ordersReorderedWithSkipped": "The available items were added to your cart; some could not be found.",
