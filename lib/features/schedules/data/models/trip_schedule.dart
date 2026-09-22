@@ -60,8 +60,7 @@ class TripStop {
 }
 
 /// One trip leg a carrier publishes — mirrors `TripScheduleController`'s
-/// `serialize()`. Domestic (governorate pair) search only; international
-/// (country pair) isn't wired up in this app yet.
+/// `serialize()`. Domestic (governorate pair) or international (country pair).
 class TripSchedule {
   final int id;
   final String? businessName;

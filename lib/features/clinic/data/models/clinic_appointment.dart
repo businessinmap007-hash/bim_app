@@ -11,6 +11,7 @@ class ClinicAppointment {
   final int? clinicId;
   final String? clinicName;
   final String? clinicLogoUrl;
+  final int? prescriptionId;
 
   const ClinicAppointment({
     required this.id,
@@ -21,6 +22,7 @@ class ClinicAppointment {
     this.clinicId,
     this.clinicName,
     this.clinicLogoUrl,
+    this.prescriptionId,
   });
 
   bool get isCancellable => status == 'requested' || status == 'confirmed';
@@ -43,6 +45,7 @@ class ClinicAppointment {
       clinicId: clinicId,
       clinicName: clinicName,
       clinicLogoUrl: clinicLogoUrl,
+      prescriptionId: prescriptionId,
     );
   }
 
@@ -57,6 +60,7 @@ class ClinicAppointment {
       clinicId: clinic?['id'] as int?,
       clinicName: clinic?['name'] as String?,
       clinicLogoUrl: Env.assetUrl(clinic?['logo'] as String?),
+      prescriptionId: json['prescription_id'] as int?,
     );
   }
 }

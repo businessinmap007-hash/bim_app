@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/clinic_providers.dart';
 import '../../data/models/clinic_appointment.dart';
+import '../../../prescriptions/presentation/screens/prescription_detail_screen.dart';
 
 class MyClinicAppointmentsScreen extends ConsumerStatefulWidget {
   const MyClinicAppointmentsScreen({super.key});
@@ -128,9 +129,20 @@ class _AppointmentTile extends StatelessWidget {
           '${_statusLabel(appointment.status, l10n)}'
           '${appointment.scheduledAt != null ? ' · ${_formatDateTime(appointment.scheduledAt!)}' : ''}',
         ),
-        trailing: appointment.isCancellable
-            ? TextButton(onPressed: onCancel, child: Text(l10n.clinicAppointmentCancel))
-            : null,
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (appointment.prescriptionId != null)
+              TextButton(
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => PrescriptionDetailScreen(prescriptionId: appointment.prescriptionId!)),
+                ),
+                child: Text(l10n.clinicViewPrescription),
+              ),
+            if (appointment.isCancellable)
+              TextButton(onPressed: onCancel, child: Text(l10n.clinicAppointmentCancel)),
+          ],
+        ),
         isThreeLine: false,
       ),
     );
