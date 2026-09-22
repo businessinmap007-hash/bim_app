@@ -40,8 +40,8 @@ class BookingDeposit {
 /// through as-is, `price` as a decimal-cast string). `service` is loaded on
 /// every response (see `relations()` on the backend), so `serviceNameAr`/`En`
 /// are always available as the display fallback when there's no `offering`
-/// to name the booking more specifically (Booking::title()'s full fallback
-/// chain isn't replicated client-side — a service name is enough for a list).
+/// to name the booking more specifically. `title` is Booking::title() from the
+/// server — the offering's own name when it has one, else the service.
 class Booking {
   final int id;
   final String status;
@@ -59,6 +59,9 @@ class Booking {
   final String? businessName;
   final String? businessLogoUrl;
   final String? serviceNameAr;
+  /// The server's own name for the booking («كشف — عظام»), in the request
+  /// language; null from an older server.
+  final String? title;
   final String? serviceNameEn;
   final DateTime? createdAt;
   // Only present on the BUSINESS side's own listing (Api\V2\BookingController
@@ -88,6 +91,7 @@ class Booking {
     this.businessName,
     this.businessLogoUrl,
     this.serviceNameAr,
+    this.title,
     this.serviceNameEn,
     this.createdAt,
     this.customerName,
@@ -101,6 +105,7 @@ class Booking {
   bool get isCancellable => status == 'pending' || status == 'accepted';
 
   String serviceName(String languageCode) {
+    if (title != null && title!.trim().isNotEmpty) return title!;
     final primary = languageCode == 'ar' ? serviceNameAr : serviceNameEn;
     if (primary != null && primary.isNotEmpty) return primary;
     return serviceNameAr ?? serviceNameEn ?? '';
@@ -128,6 +133,7 @@ class Booking {
       businessName: business?['name'] as String?,
       businessLogoUrl: Env.assetUrl(business?['logo'] as String?),
       serviceNameAr: service?['name_ar'] as String?,
+      title: json['title'] as String?,
       serviceNameEn: service?['name_en'] as String?,
       createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
       customerName: customer?['name'] as String?,
