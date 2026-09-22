@@ -4,10 +4,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../../shared/widgets/async_value_view.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../application/categories_providers.dart';
-import '../../data/models/category_root.dart';
 import 'category_root_tile.dart';
 
 /// The root-category row — every root as one compact, horizontally
@@ -26,10 +24,33 @@ class CategoryRootsGrid extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final roots = ref.watch(categoryRootsProvider);
 
-    return AsyncValueView<List<CategoryRoot>>(
-      value: roots,
-      onRetry: () => ref.invalidate(categoryRootsProvider),
-      builder: (context, items) {
+    return roots.when(
+      // A plain AsyncValueView's error state (icon + message + button, sized
+      // for a full-screen area) doesn't fit the fixed _rowHeight strip this
+      // lives in — it used to overflow the moment this, the very first
+      // network call after login, lost the race and came back an error. Kept
+      // to that height and horizontal, matching the sibling chip rows below.
+      loading: () => SizedBox(height: _rowHeight, child: const Center(child: CircularProgressIndicator())),
+      error: (_, _) => SizedBox(
+        height: _rowHeight,
+        child: Center(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.error_outline, size: 20, color: Theme.of(context).colorScheme.error),
+              const SizedBox(width: 8),
+              Text(l10n.commonSomethingWentWrong, style: Theme.of(context).textTheme.bodySmall),
+              const SizedBox(width: 4),
+              IconButton(
+                icon: const Icon(Icons.refresh, size: 20),
+                tooltip: l10n.commonRetry,
+                onPressed: () => ref.invalidate(categoryRootsProvider),
+              ),
+            ],
+          ),
+        ),
+      ),
+      data: (items) {
         if (items.isEmpty) {
           return SizedBox(
             height: _rowHeight,
