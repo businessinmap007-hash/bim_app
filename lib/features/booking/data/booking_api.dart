@@ -1,6 +1,7 @@
 import '../../../core/network/api_client.dart';
 import '../../../core/network/paginated.dart';
 import 'models/booking.dart';
+import 'models/booking_financial_preview.dart';
 import 'models/booking_form.dart';
 import 'models/unit_discovery.dart';
 
@@ -79,6 +80,12 @@ class BookingApi {
   Future<Booking> show(int id) async {
     final data = await _client.get('/bookings/$id') as Map<String, dynamic>;
     return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+  }
+
+  /// This party's own side of what the booking needs up front.
+  Future<BookingFinancialPreview> financialPreview(int id) async {
+    final data = await _client.get('/bookings/$id/financial-preview') as Map<String, dynamic>;
+    return BookingFinancialPreview.fromJson(data);
   }
 
   Future<Booking> accept(int id) async {

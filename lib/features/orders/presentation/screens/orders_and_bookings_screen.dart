@@ -6,6 +6,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../booking/application/booking_providers.dart';
 import '../../../booking/data/models/booking.dart';
+import '../../../booking/presentation/widgets/booking_money_card.dart';
 import '../../../cart/application/cart_controller.dart';
 import '../../../cart/presentation/screens/cart_screen.dart';
 import '../../../chat/presentation/screens/operation_chat_screen.dart';
@@ -1146,6 +1147,7 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
                 Text(booking.price.toStringAsFixed(0), style: Theme.of(context).textTheme.titleSmall),
               ],
             ),
+            if (booking.status == 'pending' || booking.status == 'accepted') BookingMoneyCard(bookingId: booking.id),
             const SizedBox(height: 20),
             if (booking.status == 'accepted')
               SizedBox(

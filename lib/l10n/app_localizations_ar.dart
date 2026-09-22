@@ -1598,6 +1598,37 @@ class AppLocalizationsAr extends AppLocalizations {
   String get ordersCancel => 'إلغاء الطلب';
 
   @override
+  String get bookingMoneyTitle => 'ما يلزمك مقدّماً لهذا الحجز';
+
+  @override
+  String get bookingMoneyDeposit => 'تأمين يُحجز من محفظتك';
+
+  @override
+  String get bookingMoneyGuarantee => 'مغطّى بضمانك';
+
+  @override
+  String get bookingMoneyFee => 'رسوم الخدمة';
+
+  @override
+  String get bookingMoneyTotal => 'المطلوب من محفظتك';
+
+  @override
+  String get bookingMoneyBalance => 'رصيد محفظتك';
+
+  @override
+  String get bookingMoneyReady => 'رصيدك يكفي';
+
+  @override
+  String get bookingMoneyShort => 'رصيدك لا يكفي';
+
+  @override
+  String get bookingMoneyFeeNonRefundable =>
+      'رسوم الخدمة لا تُسترد بعد بدء تنفيذ الحجز.';
+
+  @override
+  String get bookingMoneyOtherPending => 'الطرف الآخر لم يستوفِ ما عليه بعد.';
+
+  @override
   String get orderDriverTitle => 'المندوب الذي يوصّل طلبك';
 
   @override

@@ -3,11 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers/core_providers.dart';
 import '../data/booking_api.dart';
 import '../data/models/booking.dart';
+import '../data/models/booking_financial_preview.dart';
 import '../data/models/booking_form.dart';
 import '../data/models/unit_discovery.dart';
 
 final bookingApiProvider = Provider<BookingApi>((ref) {
   return BookingApi(ref.watch(apiClientProvider));
+});
+
+final bookingFinancialPreviewProvider = FutureProvider.autoDispose.family<BookingFinancialPreview, int>((ref, bookingId) {
+  return ref.watch(bookingApiProvider).financialPreview(bookingId);
 });
 
 final bookingFormProvider = FutureProvider.family<BookingFormPayload, int>((ref, businessId) {

@@ -5,6 +5,7 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/business_bookings_providers.dart';
+import '../widgets/booking_money_card.dart';
 import '../../data/models/booking.dart';
 
 String _statusLabel(String status, AppLocalizations l10n) => switch (status) {
@@ -294,6 +295,8 @@ class BusinessBookingDetailScreen extends ConsumerWidget {
                     Text(booking.price.toStringAsFixed(2), style: Theme.of(context).textTheme.titleSmall),
                   ],
                 ),
+                if (booking.status == 'pending' || booking.status == 'accepted')
+                  BookingMoneyCard(bookingId: bookingId),
                 const SizedBox(height: 24),
                 if (state.isBusy)
                   const Center(child: CircularProgressIndicator())

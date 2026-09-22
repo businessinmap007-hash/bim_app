@@ -2984,6 +2984,66 @@ abstract class AppLocalizations {
   /// **'إلغاء الطلب'**
   String get ordersCancel;
 
+  /// No description provided for @bookingMoneyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما يلزمك مقدّماً لهذا الحجز'**
+  String get bookingMoneyTitle;
+
+  /// No description provided for @bookingMoneyDeposit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأمين يُحجز من محفظتك'**
+  String get bookingMoneyDeposit;
+
+  /// No description provided for @bookingMoneyGuarantee.
+  ///
+  /// In ar, this message translates to:
+  /// **'مغطّى بضمانك'**
+  String get bookingMoneyGuarantee;
+
+  /// No description provided for @bookingMoneyFee.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسوم الخدمة'**
+  String get bookingMoneyFee;
+
+  /// No description provided for @bookingMoneyTotal.
+  ///
+  /// In ar, this message translates to:
+  /// **'المطلوب من محفظتك'**
+  String get bookingMoneyTotal;
+
+  /// No description provided for @bookingMoneyBalance.
+  ///
+  /// In ar, this message translates to:
+  /// **'رصيد محفظتك'**
+  String get bookingMoneyBalance;
+
+  /// No description provided for @bookingMoneyReady.
+  ///
+  /// In ar, this message translates to:
+  /// **'رصيدك يكفي'**
+  String get bookingMoneyReady;
+
+  /// No description provided for @bookingMoneyShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'رصيدك لا يكفي'**
+  String get bookingMoneyShort;
+
+  /// No description provided for @bookingMoneyFeeNonRefundable.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسوم الخدمة لا تُسترد بعد بدء تنفيذ الحجز.'**
+  String get bookingMoneyFeeNonRefundable;
+
+  /// No description provided for @bookingMoneyOtherPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطرف الآخر لم يستوفِ ما عليه بعد.'**
+  String get bookingMoneyOtherPending;
+
   /// No description provided for @orderDriverTitle.
   ///
   /// In ar, this message translates to:

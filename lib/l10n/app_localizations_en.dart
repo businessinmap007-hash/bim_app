@@ -1593,6 +1593,38 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ordersCancel => 'Cancel order';
 
   @override
+  String get bookingMoneyTitle => 'What you need up front for this booking';
+
+  @override
+  String get bookingMoneyDeposit => 'Deposit held from your wallet';
+
+  @override
+  String get bookingMoneyGuarantee => 'Covered by your guarantee';
+
+  @override
+  String get bookingMoneyFee => 'Service fee';
+
+  @override
+  String get bookingMoneyTotal => 'Needed from your wallet';
+
+  @override
+  String get bookingMoneyBalance => 'Your wallet balance';
+
+  @override
+  String get bookingMoneyReady => 'Your balance is enough';
+
+  @override
+  String get bookingMoneyShort => 'Your balance is not enough';
+
+  @override
+  String get bookingMoneyFeeNonRefundable =>
+      'The service fee is not refundable once the booking is in progress.';
+
+  @override
+  String get bookingMoneyOtherPending =>
+      'The other side has not met its part yet.';
+
+  @override
   String get orderDriverTitle => 'Your delivery driver';
 
   @override
