@@ -242,17 +242,98 @@ class RetailStorefrontListing {
   }
 }
 
+/// One color/size choice inside a [RetailVariantGroupCard] — its own real
+/// listing id, price and stock; picking it adds THAT listing to the cart
+/// exactly like any other [RetailStorefrontListing].
+class RetailVariantOptionCard {
+  final int listingId;
+  final String label;
+  final double price;
+  final String currency;
+  final int? stock;
+  final int? minOrderQty;
+  final int? maxOrderQty;
+  final String? unit;
+
+  const RetailVariantOptionCard({
+    required this.listingId,
+    required this.label,
+    required this.price,
+    required this.currency,
+    this.stock,
+    this.minOrderQty,
+    this.maxOrderQty,
+    this.unit,
+  });
+
+  factory RetailVariantOptionCard.fromJson(Map<String, dynamic> json) => RetailVariantOptionCard(
+    listingId: (json['listing_id'] as num).toInt(),
+    label: json['label'] as String? ?? '',
+    price: (json['price'] as num?)?.toDouble() ?? 0,
+    currency: json['currency'] as String? ?? 'EGP',
+    stock: (json['stock'] as num?)?.toInt(),
+    minOrderQty: (json['min_order_qty'] as num?)?.toInt(),
+    maxOrderQty: (json['max_order_qty'] as num?)?.toInt(),
+    unit: json['unit'] as String?,
+  );
+
+  /// The [_QuantitySheet]/add-to-cart flow only ever needs a
+  /// [RetailStorefrontListing] shape — reuse it rather than a second sheet.
+  RetailStorefrontListing toStorefrontListing(String productName, String? productImage) => RetailStorefrontListing(
+    listingId: listingId,
+    price: price,
+    currency: currency,
+    stock: stock,
+    minOrderQty: minOrderQty,
+    maxOrderQty: maxOrderQty,
+    unit: unit,
+    productId: 0,
+    productName: '$productName · $label',
+    productImage: productImage,
+  );
+}
+
+/// One of a business's own product families — several listings (color/size)
+/// under one card. See RetailDiscoveryController::business()'s variant_groups.
+class RetailVariantGroupCard {
+  final int groupId;
+  final String name;
+  final String? image;
+  final double priceFrom;
+  final List<RetailVariantOptionCard> options;
+
+  const RetailVariantGroupCard({
+    required this.groupId,
+    required this.name,
+    this.image,
+    required this.priceFrom,
+    this.options = const [],
+  });
+
+  factory RetailVariantGroupCard.fromJson(Map<String, dynamic> json) => RetailVariantGroupCard(
+    groupId: (json['group_id'] as num).toInt(),
+    name: json['name'] as String? ?? '',
+    image: Env.assetUrl(json['image'] as String?),
+    priceFrom: (json['price_from'] as num?)?.toDouble() ?? 0,
+    options: (json['options'] as List<dynamic>? ?? [])
+        .map((e) => RetailVariantOptionCard.fromJson(e as Map<String, dynamic>))
+        .toList(),
+  );
+}
+
 class RetailStorefront {
   final int businessId;
   final String businessName;
   final String? businessLogo;
   final List<RetailStorefrontListing> listings;
+  final List<RetailVariantGroupCard> variantGroups;
 
   const RetailStorefront({
     required this.businessId,
     required this.businessName,
     this.businessLogo,
     this.listings = const [],
+    this.variantGroups = const [],
   });
 
   factory RetailStorefront.fromJson(Map<String, dynamic> json) {
@@ -263,6 +344,9 @@ class RetailStorefront {
       businessLogo: Env.assetUrl(business['logo'] as String?),
       listings: (json['listings'] as List<dynamic>? ?? [])
           .map((e) => RetailStorefrontListing.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      variantGroups: (json['variant_groups'] as List<dynamic>? ?? [])
+          .map((e) => RetailVariantGroupCard.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
   }

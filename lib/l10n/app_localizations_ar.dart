@@ -4302,6 +4302,48 @@ class AppLocalizationsAr extends AppLocalizations {
   String get menuPriceRequired => 'أدخل سعرًا صحيحًا.';
 
   @override
+  String get retailVariantGroupsTitle => 'تنويعات المنتج';
+
+  @override
+  String get retailVariantGroupsEmpty =>
+      'لا توجد تنويعات بعد. أنشئ منتجًا واحدًا بألوان أو مقاسات مختلفة بدل عرضها منفصلة.';
+
+  @override
+  String get retailVariantGroupsDeleteConfirm =>
+      'حذف هذا المنتج؟ التنويعات نفسها (المنتجات) تبقى في قائمتك منفصلة.';
+
+  @override
+  String get retailVariantGroupsNewTitle => 'منتج جديد بتنويعات';
+
+  @override
+  String get retailVariantGroupsEditTitle => 'تعديل التنويعات';
+
+  @override
+  String get retailVariantGroupsNameLabel => 'اسم المنتج (مثال: قميص كلاسيك)';
+
+  @override
+  String get retailVariantGroupsOptionsTitle => 'التنويعات';
+
+  @override
+  String get retailVariantGroupsLabelHint => 'التنويعة (مثال: أزرق - M)';
+
+  @override
+  String get retailVariantGroupsAddOption => 'إضافة تنويعة من منتجاتي';
+
+  @override
+  String get retailVariantGroupsNeedTwo =>
+      'أدخل اسمًا واختر تنويعتين على الأقل.';
+
+  @override
+  String get retailVariantGroupsPickListingTitle => 'اختر منتجًا من منتجاتك';
+
+  @override
+  String get retailVariantGroupsSearchHint => 'ابحث بالاسم';
+
+  @override
+  String get retailStorefrontChooseVariantTitle => 'اختر التنويعة';
+
+  @override
   String get retailListingsTitle => 'منتجاتي';
 
   @override

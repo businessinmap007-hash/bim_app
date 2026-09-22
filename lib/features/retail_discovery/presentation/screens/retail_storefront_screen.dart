@@ -38,16 +38,22 @@ class RetailStorefrontScreen extends ConsumerWidget {
         value: storefrontAsync,
         onRetry: () => ref.invalidate(retailStorefrontProvider(businessId)),
         builder: (context, storefront) {
-          if (storefront.listings.isEmpty) {
+          if (storefront.listings.isEmpty && storefront.variantGroups.isEmpty) {
             return Center(child: Text(l10n.retailStorefrontEmpty));
           }
 
+          final groupCount = storefront.variantGroups.length;
+          final total = groupCount + storefront.listings.length;
+
           return ListView.separated(
             padding: const EdgeInsets.all(16),
-            itemCount: storefront.listings.length,
+            itemCount: total,
             separatorBuilder: (context, index) => const SizedBox(height: 8),
             itemBuilder: (context, index) {
-              final listing = storefront.listings[index];
+              if (index < groupCount) {
+                return _VariantGroupTile(group: storefront.variantGroups[index]);
+              }
+              final listing = storefront.listings[index - groupCount];
               return _StorefrontListingTile(listing: listing);
             },
           );
@@ -57,40 +63,109 @@ class RetailStorefrontScreen extends ConsumerWidget {
   }
 }
 
+/// Shared by a plain listing tile and a variant tile (once a variant is
+/// picked, it is just a listing like any other) — quantity, then cart or
+/// straight to checkout.
+Future<void> _openQuantitySheet(BuildContext context, WidgetRef ref, RetailStorefrontListing listing) async {
+  final result = await showModalBottomSheet<({int qty, bool buyNow})>(
+    context: context,
+    isScrollControlled: true,
+    builder: (_) => _QuantitySheet(listing: listing),
+  );
+  if (result == null || !context.mounted) return;
+
+  final l10n = AppLocalizations.of(context)!;
+  try {
+    final cart = await ref
+        .read(cartControllerProvider.notifier)
+        .addItem(kind: 'retail', offeringId: listing.listingId, qty: result.qty);
+    if (!context.mounted) return;
+
+    // Adding to cart only ever reserves a spot in line — checkout is what
+    // actually takes the stock (CustomerCartService::placeOrder). "Buy
+    // now" skips straight there instead of waiting behind the rest of
+    // whatever else is already in the cart.
+    if (result.buyNow) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => CheckoutScreen(cart: cart)));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.cartAddedToCart)));
+    }
+  } catch (_) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+    }
+  }
+}
+
+class _VariantGroupTile extends ConsumerWidget {
+  final RetailVariantGroupCard group;
+  const _VariantGroupTile({required this.group});
+
+  Future<void> _pickVariant(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    final chosen = await showModalBottomSheet<RetailVariantOptionCard>(
+      context: context,
+      isScrollControlled: true,
+      builder: (sheetContext) => Padding(
+        padding: const EdgeInsets.all(20),
+        child: SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(group.name, style: Theme.of(sheetContext).textTheme.titleMedium),
+              const SizedBox(height: 4),
+              Text(l10n.retailStorefrontChooseVariantTitle, style: TextStyle(color: Theme.of(sheetContext).hintColor)),
+              const SizedBox(height: 12),
+              for (final o in group.options)
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(o.label),
+                  trailing: Text('${o.price.toStringAsFixed(0)} ${o.currency}'),
+                  enabled: o.stock == null || o.stock! > 0,
+                  onTap: () => Navigator.of(sheetContext).pop(o),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+    if (chosen == null || !context.mounted) return;
+    await _openQuantitySheet(context, ref, chosen.toStorefrontListing(group.name, group.image));
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Card(
+      margin: EdgeInsets.zero,
+      clipBehavior: Clip.antiAlias,
+      child: ListTile(
+        onTap: () => _pickVariant(context, ref),
+        leading: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: SizedBox(
+            width: 48,
+            height: 48,
+            child: group.image != null
+                ? CachedNetworkImage(imageUrl: group.image!, fit: BoxFit.cover)
+                : Container(
+                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.08),
+                    alignment: Alignment.center,
+                    child: Text(produceEmoji(group.name), style: const TextStyle(fontSize: 20)),
+                  ),
+          ),
+        ),
+        title: Text(group.name),
+        subtitle: Text('${group.options.length} · ${group.priceFrom.toStringAsFixed(0)}+'),
+        trailing: const Icon(Icons.chevron_right),
+      ),
+    );
+  }
+}
+
 class _StorefrontListingTile extends ConsumerWidget {
   final RetailStorefrontListing listing;
   const _StorefrontListingTile({required this.listing});
-
-  Future<void> _openQuantitySheet(BuildContext context, WidgetRef ref) async {
-    final result = await showModalBottomSheet<({int qty, bool buyNow})>(
-      context: context,
-      isScrollControlled: true,
-      builder: (_) => _QuantitySheet(listing: listing),
-    );
-    if (result == null || !context.mounted) return;
-
-    final l10n = AppLocalizations.of(context)!;
-    try {
-      final cart = await ref
-          .read(cartControllerProvider.notifier)
-          .addItem(kind: 'retail', offeringId: listing.listingId, qty: result.qty);
-      if (!context.mounted) return;
-
-      // Adding to cart only ever reserves a spot in line — checkout is what
-      // actually takes the stock (CustomerCartService::placeOrder). "Buy
-      // now" skips straight there instead of waiting behind the rest of
-      // whatever else is already in the cart.
-      if (result.buyNow) {
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) => CheckoutScreen(cart: cart)));
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.cartAddedToCart)));
-      }
-    } catch (_) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -103,7 +178,7 @@ class _StorefrontListingTile extends ConsumerWidget {
       child: Opacity(
         opacity: outOfStock ? 0.6 : 1,
         child: ListTile(
-          onTap: outOfStock ? null : () => _openQuantitySheet(context, ref),
+          onTap: outOfStock ? null : () => _openQuantitySheet(context, ref, listing),
           leading: ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: SizedBox(

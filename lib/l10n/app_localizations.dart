@@ -8042,6 +8042,84 @@ abstract class AppLocalizations {
   /// **'أدخل سعرًا صحيحًا.'**
   String get menuPriceRequired;
 
+  /// No description provided for @retailVariantGroupsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنويعات المنتج'**
+  String get retailVariantGroupsTitle;
+
+  /// No description provided for @retailVariantGroupsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد تنويعات بعد. أنشئ منتجًا واحدًا بألوان أو مقاسات مختلفة بدل عرضها منفصلة.'**
+  String get retailVariantGroupsEmpty;
+
+  /// No description provided for @retailVariantGroupsDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف هذا المنتج؟ التنويعات نفسها (المنتجات) تبقى في قائمتك منفصلة.'**
+  String get retailVariantGroupsDeleteConfirm;
+
+  /// No description provided for @retailVariantGroupsNewTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'منتج جديد بتنويعات'**
+  String get retailVariantGroupsNewTitle;
+
+  /// No description provided for @retailVariantGroupsEditTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل التنويعات'**
+  String get retailVariantGroupsEditTitle;
+
+  /// No description provided for @retailVariantGroupsNameLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم المنتج (مثال: قميص كلاسيك)'**
+  String get retailVariantGroupsNameLabel;
+
+  /// No description provided for @retailVariantGroupsOptionsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'التنويعات'**
+  String get retailVariantGroupsOptionsTitle;
+
+  /// No description provided for @retailVariantGroupsLabelHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'التنويعة (مثال: أزرق - M)'**
+  String get retailVariantGroupsLabelHint;
+
+  /// No description provided for @retailVariantGroupsAddOption.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة تنويعة من منتجاتي'**
+  String get retailVariantGroupsAddOption;
+
+  /// No description provided for @retailVariantGroupsNeedTwo.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل اسمًا واختر تنويعتين على الأقل.'**
+  String get retailVariantGroupsNeedTwo;
+
+  /// No description provided for @retailVariantGroupsPickListingTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر منتجًا من منتجاتك'**
+  String get retailVariantGroupsPickListingTitle;
+
+  /// No description provided for @retailVariantGroupsSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث بالاسم'**
+  String get retailVariantGroupsSearchHint;
+
+  /// No description provided for @retailStorefrontChooseVariantTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر التنويعة'**
+  String get retailStorefrontChooseVariantTitle;
+
   /// No description provided for @retailListingsTitle.
   ///
   /// In ar, this message translates to:

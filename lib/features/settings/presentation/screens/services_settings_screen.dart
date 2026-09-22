@@ -23,6 +23,7 @@ import '../../../prescriptions/presentation/screens/issued_prescriptions_screen.
 import '../../../prescriptions/presentation/screens/pharmacy_queue_screen.dart';
 import '../../../projects/presentation/screens/projects_screen.dart';
 import '../../../retail_listings/presentation/screens/retail_listings_screen.dart';
+import '../../../retail_variant_groups/presentation/screens/retail_variant_groups_screen.dart';
 import '../../../schedules/presentation/screens/my_trip_schedules_screen.dart';
 import '../../../staff/application/staff_providers.dart';
 import '../../../staff/presentation/screens/attendance_verification_settings_screen.dart';
@@ -113,6 +114,12 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.inventory_2_outlined,
         title: l10n.retailListingsTitle,
         builder: (_) => const RetailListingsScreen(),
+      ),
+      _Tile(
+        show: _has('retail'),
+        leading: Icons.checkroom_outlined,
+        title: l10n.retailVariantGroupsTitle,
+        builder: (_) => const RetailVariantGroupsScreen(),
       ),
       _Tile(
         show: _has('clinic'),

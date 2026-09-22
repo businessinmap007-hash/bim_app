@@ -4308,6 +4308,50 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuPriceRequired => 'Enter a valid price.';
 
   @override
+  String get retailVariantGroupsTitle => 'Product variants';
+
+  @override
+  String get retailVariantGroupsEmpty =>
+      'No variant groups yet. Group one product\'s colors or sizes instead of listing them separately.';
+
+  @override
+  String get retailVariantGroupsDeleteConfirm =>
+      'Delete this product? The variants themselves (listings) stay on your shelf, ungrouped.';
+
+  @override
+  String get retailVariantGroupsNewTitle => 'New product with variants';
+
+  @override
+  String get retailVariantGroupsEditTitle => 'Edit variants';
+
+  @override
+  String get retailVariantGroupsNameLabel =>
+      'Product name (e.g. Classic Shirt)';
+
+  @override
+  String get retailVariantGroupsOptionsTitle => 'Variants';
+
+  @override
+  String get retailVariantGroupsLabelHint => 'Variant (e.g. Blue - M)';
+
+  @override
+  String get retailVariantGroupsAddOption => 'Add a variant from my products';
+
+  @override
+  String get retailVariantGroupsNeedTwo =>
+      'Enter a name and pick at least two variants.';
+
+  @override
+  String get retailVariantGroupsPickListingTitle =>
+      'Choose one of your products';
+
+  @override
+  String get retailVariantGroupsSearchHint => 'Search by name';
+
+  @override
+  String get retailStorefrontChooseVariantTitle => 'Choose a variant';
+
+  @override
   String get retailListingsTitle => 'My Products';
 
   @override
