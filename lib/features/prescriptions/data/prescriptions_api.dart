@@ -46,7 +46,8 @@ class PrescriptionItemInput {
 /// /prescriptions — both the patient's side and, since this app's doctor
 /// accounts (clinic/hospital/medical-center businesses) can issue and revise
 /// too, the doctor's side. Pharmacy-side dispensing actions live on
-/// PharmacyPrescriptionController, still out of scope.
+/// PharmacyPrescriptionController — see PharmacyPrescriptionsApi
+/// (pharmacy_prescriptions_api.dart), wired up separately.
 class PrescriptionsApi {
   final ApiClient _client;
   const PrescriptionsApi(this._client);
