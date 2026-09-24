@@ -41,10 +41,8 @@ class RetailCategoryRef {
   final String name;
   const RetailCategoryRef({this.id, required this.name});
 
-  factory RetailCategoryRef.fromJson(Map<String, dynamic> json) => RetailCategoryRef(
-    id: (json['id'] as num?)?.toInt(),
-    name: json['name'] as String? ?? '',
-  );
+  factory RetailCategoryRef.fromJson(Map<String, dynamic> json) =>
+      RetailCategoryRef(id: (json['id'] as num?)?.toInt(), name: json['name'] as String? ?? '');
 }
 
 /// One row on the cross-business "shop products" list — a catalog master
@@ -149,6 +147,9 @@ class RetailListingCard {
   final int? businessCategoryId;
   final int? businessCategoryChildId;
   final bool isOpenNow;
+  final String? conditionName;
+  final String? paymentName;
+  final String? description;
 
   const RetailListingCard({
     required this.listingId,
@@ -168,6 +169,9 @@ class RetailListingCard {
     this.businessCategoryId,
     this.businessCategoryChildId,
     required this.isOpenNow,
+    this.conditionName,
+    this.paymentName,
+    this.description,
   });
 
   factory RetailListingCard.fromJson(Map<String, dynamic> json) {
@@ -191,6 +195,9 @@ class RetailListingCard {
       businessCategoryId: (business['category_id'] as num?)?.toInt(),
       businessCategoryChildId: (business['category_child_id'] as num?)?.toInt(),
       isOpenNow: business['is_open_now'] as bool? ?? true,
+      conditionName: (json['condition'] as Map<String, dynamic>?)?['name'] as String?,
+      paymentName: (json['payment'] as Map<String, dynamic>?)?['name'] as String?,
+      description: json['description'] as String?,
     );
   }
 }
@@ -209,6 +216,9 @@ class RetailStorefrontListing {
   final String productName;
   final String? productNameEn;
   final String? productImage;
+  final RetailFilterFacet? condition;
+  final RetailFilterFacet? payment;
+  final String? description;
 
   const RetailStorefrontListing({
     required this.listingId,
@@ -222,7 +232,14 @@ class RetailStorefrontListing {
     required this.productName,
     this.productNameEn,
     this.productImage,
+    this.condition,
+    this.payment,
+    this.description,
   });
+
+  static RetailFilterFacet? _facet(dynamic j) => j is Map<String, dynamic>
+      ? RetailFilterFacet(id: (j['id'] as num).toInt(), name: j['name'] as String? ?? '', products: 0)
+      : null;
 
   factory RetailStorefrontListing.fromJson(Map<String, dynamic> json) {
     final product = json['product'] as Map<String, dynamic>? ?? const {};
@@ -238,6 +255,9 @@ class RetailStorefrontListing {
       productName: product['name'] as String? ?? '',
       productNameEn: product['name_en'] as String?,
       productImage: Env.assetUrl(product['image'] as String?),
+      condition: _facet(json['condition']),
+      payment: _facet(json['payment']),
+      description: json['description'] as String?,
     );
   }
 }

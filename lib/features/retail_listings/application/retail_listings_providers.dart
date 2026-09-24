@@ -70,11 +70,7 @@ class RetailListingsController extends StateNotifier<RetailListingsState> {
     try {
       final result = await _api.list(q: state.query, page: _page + 1);
       _page += 1;
-      state = state.copyWith(
-        items: [...state.items, ...result.items],
-        isLoadingMore: false,
-        hasMore: result.hasMore,
-      );
+      state = state.copyWith(items: [...state.items, ...result.items], isLoadingMore: false, hasMore: result.hasMore);
     } catch (e) {
       state = state.copyWith(isLoadingMore: false, error: e.toString());
     }
@@ -98,6 +94,9 @@ class RetailListingsController extends StateNotifier<RetailListingsState> {
     List<int> audienceChildIds = const [],
     List<int> audienceCategoryIds = const [],
     List<int> governorateIds = const [],
+    int conditionOptionId = 0,
+    int paymentOptionId = 0,
+    String? description,
   }) async {
     await _api.create(
       catalogProductId: catalogProductId,
@@ -112,6 +111,9 @@ class RetailListingsController extends StateNotifier<RetailListingsState> {
       audienceChildIds: audienceChildIds,
       audienceCategoryIds: audienceCategoryIds,
       governorateIds: governorateIds,
+      conditionOptionId: conditionOptionId,
+      paymentOptionId: paymentOptionId,
+      description: description,
     );
     await load();
   }
@@ -130,6 +132,9 @@ class RetailListingsController extends StateNotifier<RetailListingsState> {
     List<int> audienceChildIds = const [],
     List<int> audienceCategoryIds = const [],
     List<int> governorateIds = const [],
+    int conditionOptionId = 0,
+    int paymentOptionId = 0,
+    String? description,
   }) async {
     await _api.update(
       id,
@@ -145,6 +150,9 @@ class RetailListingsController extends StateNotifier<RetailListingsState> {
       audienceChildIds: audienceChildIds,
       audienceCategoryIds: audienceCategoryIds,
       governorateIds: governorateIds,
+      conditionOptionId: conditionOptionId,
+      paymentOptionId: paymentOptionId,
+      description: description,
     );
     await load();
   }
@@ -164,4 +172,8 @@ class RetailListingsController extends StateNotifier<RetailListingsState> {
 final retailListingsControllerProvider = StateNotifierProvider<RetailListingsController, RetailListingsState>((ref) {
   ref.watch(localeEpochProvider);
   return RetailListingsController(ref.watch(retailListingsApiProvider));
+});
+
+final retailVariantOptionsProvider = FutureProvider.autoDispose((ref) {
+  return ref.watch(retailListingsApiProvider).variantOptions();
 });

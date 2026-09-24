@@ -23,6 +23,17 @@ class RetailAudienceEntry {
 /// unedited on save so a root-category audience set some other way (the
 /// admin panel, historically) is never silently dropped by an app save
 /// that never mentions it.
+/// A condition (جديد/مستعمل/…) or payment (كاش/تقسيط) choice on a priced row.
+class RetailVariantOption {
+  final int id;
+  final String name;
+  const RetailVariantOption({required this.id, required this.name});
+
+  static RetailVariantOption? maybe(dynamic json) => json is Map<String, dynamic>
+      ? RetailVariantOption(id: (json['id'] as num).toInt(), name: json['name'] as String? ?? '')
+      : null;
+}
+
 class RetailListing {
   final int id;
   final double price;
@@ -47,6 +58,9 @@ class RetailListing {
   final String? productNameEn;
   final String? productImageUrl;
   final String? productBarcode;
+  final RetailVariantOption? condition;
+  final RetailVariantOption? payment;
+  final String? description;
 
   const RetailListing({
     required this.id,
@@ -69,6 +83,9 @@ class RetailListing {
     this.productNameEn,
     this.productImageUrl,
     this.productBarcode,
+    this.condition,
+    this.payment,
+    this.description,
   });
 
   bool get isRestricted => visibility == 'restricted';
@@ -94,12 +111,8 @@ class RetailListing {
       audienceChildren: (audience['children'] as List<dynamic>? ?? [])
           .map((e) => RetailAudienceEntry.fromJson(e as Map<String, dynamic>))
           .toList(),
-      audienceCategoryIds: (audience['category_ids'] as List<dynamic>? ?? [])
-          .map((e) => (e as num).toInt())
-          .toList(),
-      governorateIds: (governorates['ids'] as List<dynamic>? ?? [])
-          .map((e) => (e as num).toInt())
-          .toList(),
+      audienceCategoryIds: (audience['category_ids'] as List<dynamic>? ?? []).map((e) => (e as num).toInt()).toList(),
+      governorateIds: (governorates['ids'] as List<dynamic>? ?? []).map((e) => (e as num).toInt()).toList(),
       governorates: (governorates['items'] as List<dynamic>? ?? [])
           .map((e) => RetailAudienceEntry.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -108,6 +121,9 @@ class RetailListing {
       productNameEn: product?['name_en'] as String?,
       productImageUrl: Env.assetUrl(product?['image'] as String?),
       productBarcode: product?['barcode'] as String?,
+      condition: RetailVariantOption.maybe(json['condition']),
+      payment: RetailVariantOption.maybe(json['payment']),
+      description: json['description'] as String?,
     );
   }
 }

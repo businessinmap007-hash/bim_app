@@ -4432,6 +4432,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get retailListingUnitOther => 'Other...';
 
   @override
+  String get retailVariantConditionLabel => 'Condition';
+
+  @override
+  String get retailVariantPaymentLabel => 'Payment';
+
+  @override
+  String get retailVariantNone => 'None';
+
+  @override
+  String get retailVariantDescriptionHint =>
+      'Description of this price (optional)';
+
+  @override
+  String get retailVariantAddAnotherPrice =>
+      'Add another price for this product';
+
+  @override
+  String get retailVariantFilterTitle => 'Filter prices';
+
+  @override
+  String get retailVariantFilterClear => 'Show all';
+
+  @override
   String get retailListingSkuHint => 'SKU (optional)';
 
   @override

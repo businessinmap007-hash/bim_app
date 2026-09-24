@@ -26,8 +26,7 @@ class RetailListingsScreen extends ConsumerStatefulWidget {
   ConsumerState<RetailListingsScreen> createState() => _RetailListingsScreenState();
 }
 
-class _RetailListingsScreenState extends ConsumerState<RetailListingsScreen>
-    with SingleTickerProviderStateMixin {
+class _RetailListingsScreenState extends ConsumerState<RetailListingsScreen> with SingleTickerProviderStateMixin {
   final _scrollController = ScrollController();
   final _searchController = TextEditingController();
   late final _tabController = TabController(length: 2, vsync: this)..addListener(() => setState(() {}));
@@ -76,6 +75,16 @@ class _RetailListingsScreenState extends ConsumerState<RetailListingsScreen>
     if (created == true && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSave)));
     }
+  }
+
+  Future<void> _addAnotherPrice(RetailListing listing) async {
+    await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => _ListingFormSheet(
+        product: CatalogProductSummary(id: listing.productId, name: listing.productName ?? ''),
+      ),
+    );
   }
 
   Future<void> _editListing(RetailListing listing) async {
@@ -207,48 +216,92 @@ class _RetailListingsScreenState extends ConsumerState<RetailListingsScreen>
                                   listing.productName ?? '#${listing.productId}',
                                   style: TextStyle(color: listing.isActive ? null : Theme.of(context).hintColor),
                                 ),
-                                subtitle: Row(
-                                  mainAxisSize: MainAxisSize.min,
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    if (listing.stock != null)
-                                      Text(
-                                        l10n.retailListingAvailableQtyBadge(
-                                          formatRetailQty(listing.stock!, listing.unit),
-                                        ),
+                                    if (listing.condition != null || listing.payment != null)
+                                      Wrap(
+                                        spacing: 4,
+                                        children: [
+                                          if (listing.condition != null)
+                                            Chip(
+                                              label: Text(listing.condition!.name),
+                                              visualDensity: VisualDensity.compact,
+                                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                              padding: EdgeInsets.zero,
+                                              labelPadding: const EdgeInsets.symmetric(horizontal: 6),
+                                              labelStyle: const TextStyle(fontSize: 11),
+                                            ),
+                                          if (listing.payment != null)
+                                            Chip(
+                                              label: Text(listing.payment!.name),
+                                              visualDensity: VisualDensity.compact,
+                                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                              padding: EdgeInsets.zero,
+                                              labelPadding: const EdgeInsets.symmetric(horizontal: 6),
+                                              labelStyle: const TextStyle(fontSize: 11),
+                                            ),
+                                        ],
                                       ),
-                                    if (listing.minOrderQty != null) ...[
-                                      if (listing.stock != null) const SizedBox(width: 6),
-                                      Text(
-                                        l10n.retailListingMinOrderQtyBadge(
-                                          formatRetailQty(listing.minOrderQty!, listing.unit),
-                                        ),
-                                        style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12),
-                                      ),
-                                    ],
-                                    if (listing.maxOrderQty != null) ...[
-                                      if (listing.stock != null || listing.minOrderQty != null) const SizedBox(width: 6),
-                                      Text(
-                                        l10n.retailListingMaxOrderQtyBadge(
-                                          formatRetailQty(listing.maxOrderQty!, listing.unit),
-                                        ),
-                                        style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12),
-                                      ),
-                                    ],
-                                    if (listing.isRestricted) ...[
-                                      if (listing.stock != null) const SizedBox(width: 6),
-                                      Icon(Icons.lock_outline, size: 14, color: Theme.of(context).colorScheme.primary),
-                                      const SizedBox(width: 2),
-                                      Text(
-                                        l10n.retailListingRestrictedBadge,
-                                        style: TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 12),
-                                      ),
-                                    ],
+                                    if (listing.description != null)
+                                      Text(listing.description!, maxLines: 2, overflow: TextOverflow.ellipsis),
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        if (listing.stock != null)
+                                          Text(
+                                            l10n.retailListingAvailableQtyBadge(
+                                              formatRetailQty(listing.stock!, listing.unit),
+                                            ),
+                                          ),
+                                        if (listing.minOrderQty != null) ...[
+                                          if (listing.stock != null) const SizedBox(width: 6),
+                                          Text(
+                                            l10n.retailListingMinOrderQtyBadge(
+                                              formatRetailQty(listing.minOrderQty!, listing.unit),
+                                            ),
+                                            style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12),
+                                          ),
+                                        ],
+                                        if (listing.maxOrderQty != null) ...[
+                                          if (listing.stock != null || listing.minOrderQty != null)
+                                            const SizedBox(width: 6),
+                                          Text(
+                                            l10n.retailListingMaxOrderQtyBadge(
+                                              formatRetailQty(listing.maxOrderQty!, listing.unit),
+                                            ),
+                                            style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12),
+                                          ),
+                                        ],
+                                        if (listing.isRestricted) ...[
+                                          if (listing.stock != null) const SizedBox(width: 6),
+                                          Icon(
+                                            Icons.lock_outline,
+                                            size: 14,
+                                            color: Theme.of(context).colorScheme.primary,
+                                          ),
+                                          const SizedBox(width: 2),
+                                          Text(
+                                            l10n.retailListingRestrictedBadge,
+                                            style: TextStyle(
+                                              color: Theme.of(context).colorScheme.primary,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ],
+                                    ),
                                   ],
                                 ),
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text('${listing.price.toStringAsFixed(2)} ${listing.currency}'),
+                                    IconButton(
+                                      tooltip: l10n.retailVariantAddAnotherPrice,
+                                      icon: const Icon(Icons.add_circle_outline),
+                                      onPressed: () => _addAnotherPrice(listing),
+                                    ),
                                     IconButton(
                                       icon: const Icon(Icons.delete_outline),
                                       onPressed: () => _delete(listing),
@@ -430,7 +483,6 @@ class _ProductPickerSheetState extends ConsumerState<_ProductPickerSheet> {
   }
 }
 
-
 class _ListingFormSheet extends ConsumerStatefulWidget {
   final CatalogProductSummary? product;
   final RetailListing? existing;
@@ -458,11 +510,15 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
   bool _unitPresetInitialized = false;
   late final _skuController = TextEditingController(text: widget.existing?.sku ?? '');
   late bool _isActive = widget.existing?.isActive ?? true;
+  late int _conditionId = widget.existing?.condition?.id ?? 0;
+  late int _paymentId = widget.existing?.payment?.id ?? 0;
+  late final _descriptionController = TextEditingController(text: widget.existing?.description ?? '');
   bool _saving = false;
   String? _error;
 
   @override
   void dispose() {
+    _descriptionController.dispose();
     _priceController.dispose();
     _stockController.dispose();
     _minOrderQtyController.dispose();
@@ -509,6 +565,9 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
               maxOrderQty: maxOrderQty,
               unit: unit,
               sku: sku,
+              conditionOptionId: _conditionId,
+              paymentOptionId: _paymentId,
+              description: _descriptionController.text.trim(),
             );
       } else {
         // Who-sees-this is edited from the "Visibility" tab instead (see
@@ -531,18 +590,55 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
               audienceBusinessIds: existing.audienceBusinesses.map((e) => e.id).toList(),
               audienceCategoryIds: existing.audienceCategoryIds,
               governorateIds: existing.governorateIds,
+              conditionOptionId: _conditionId,
+              paymentOptionId: _paymentId,
+              description: _descriptionController.text.trim(),
             );
       }
       if (mounted) Navigator.of(context).pop(true);
     } catch (e) {
       if (mounted) {
         setState(() {
-          _error = e is ApiException ? (e.firstErrorFor('max_order_qty') ?? e.message) : l10n.commonSomethingWentWrong;
+          _error = e is ApiException
+              ? (e.firstErrorFor('max_order_qty') ?? e.firstErrorFor('condition_option_id') ?? e.message)
+              : l10n.commonSomethingWentWrong;
         });
       }
     } finally {
       if (mounted) setState(() => _saving = false);
     }
+  }
+
+  List<Widget> _variantFields(AppLocalizations l10n) {
+    final options = ref.watch(retailVariantOptionsProvider).valueOrNull;
+    if (options == null) return const [];
+    Widget picker(String label, List<RetailVariantOption> list, int value, ValueChanged<int> onChanged) {
+      if (list.isEmpty) return const SizedBox.shrink();
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: DropdownButtonFormField<int>(
+          initialValue: list.any((o) => o.id == value) ? value : 0,
+          isExpanded: true,
+          decoration: InputDecoration(labelText: label),
+          items: [
+            DropdownMenuItem(value: 0, child: Text(l10n.retailVariantNone)),
+            for (final o in list) DropdownMenuItem(value: o.id, child: Text(o.name)),
+          ],
+          onChanged: (v) => onChanged(v ?? 0),
+        ),
+      );
+    }
+
+    return [
+      picker(l10n.retailVariantConditionLabel, options.conditions, _conditionId, (v) => _conditionId = v),
+      picker(l10n.retailVariantPaymentLabel, options.payments, _paymentId, (v) => _paymentId = v),
+      TextField(
+        controller: _descriptionController,
+        maxLines: 2,
+        decoration: InputDecoration(labelText: l10n.retailVariantDescriptionHint),
+      ),
+      const SizedBox(height: 12),
+    ];
   }
 
   @override
@@ -582,6 +678,7 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
                 Text(name, style: Theme.of(context).textTheme.bodySmall),
               ],
               const SizedBox(height: 16),
+              ..._variantFields(l10n),
               TextField(
                 controller: _priceController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
@@ -772,6 +869,9 @@ class _VisibilityEditSheetState extends ConsumerState<_VisibilityEditSheet> {
             unit: existing.unit,
             sku: existing.sku,
             isActive: existing.isActive,
+            conditionOptionId: existing.condition?.id ?? 0,
+            paymentOptionId: existing.payment?.id ?? 0,
+            description: existing.description,
             visibility: _visibility,
             audienceChildIds: _audienceChildren.map((e) => e.id).toList(),
             audienceBusinessIds: _audienceBusinesses.map((e) => e.id).toList(),
@@ -927,13 +1027,8 @@ class _AudienceSection extends StatelessWidget {
             if (entries.isEmpty)
               Text(emptyLabel, style: TextStyle(color: Theme.of(context).hintColor))
             else
-              for (var i = 0; i < entries.length; i++)
-                Chip(label: Text(entries[i].name), onDeleted: () => onRemove(i)),
-            ActionChip(
-              avatar: const Icon(Icons.add, size: 18),
-              label: Text(addLabel),
-              onPressed: onAdd,
-            ),
+              for (var i = 0; i < entries.length; i++) Chip(label: Text(entries[i].name), onDeleted: () => onRemove(i)),
+            ActionChip(avatar: const Icon(Icons.add, size: 18), label: Text(addLabel), onPressed: onAdd),
             if (onAddGroup != null)
               ActionChip(
                 avatar: const Icon(Icons.groups_outlined, size: 18),
@@ -983,7 +1078,10 @@ class _GovernoratePickerSheetState extends ConsumerState<_GovernoratePickerSheet
               child: Row(
                 children: [
                   Expanded(
-                    child: Text(l10n.retailListingGovernoratesPickerTitle, style: Theme.of(context).textTheme.titleMedium),
+                    child: Text(
+                      l10n.retailListingGovernoratesPickerTitle,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                   ),
                   IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.of(context).pop()),
                 ],
@@ -1039,7 +1137,9 @@ class _GovernoratePickerSheetState extends ConsumerState<_GovernoratePickerSheet
                           onPressed: () {
                             final picked = governorates
                                 .where((g) => _selectedIds.contains(g.id))
-                                .map((g) => RetailAudienceEntry(id: g.id, name: g.localizedName(isEnglish ? 'en' : 'ar')))
+                                .map(
+                                  (g) => RetailAudienceEntry(id: g.id, name: g.localizedName(isEnglish ? 'en' : 'ar')),
+                                )
                                 .toList();
                             Navigator.of(context).pop(picked);
                           },

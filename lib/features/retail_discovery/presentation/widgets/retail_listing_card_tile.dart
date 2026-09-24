@@ -82,6 +82,22 @@ class RetailListingCardTile extends StatelessWidget {
                           ),
                         ],
                       ),
+                      if (listing.conditionName != null || listing.paymentName != null) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          [listing.conditionName, listing.paymentName].whereType<String>().join(' · '),
+                          style: theme.textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600),
+                        ),
+                      ],
+                      if (listing.description != null) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          listing.description!,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor, fontSize: 11),
+                        ),
+                      ],
                       if (listing.minOrderQty != null) ...[
                         const SizedBox(height: 2),
                         Text(

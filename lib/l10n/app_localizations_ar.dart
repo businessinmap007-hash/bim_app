@@ -4424,6 +4424,27 @@ class AppLocalizationsAr extends AppLocalizations {
   String get retailListingUnitOther => 'أخرى...';
 
   @override
+  String get retailVariantConditionLabel => 'حالة المنتج';
+
+  @override
+  String get retailVariantPaymentLabel => 'الدفع والسداد';
+
+  @override
+  String get retailVariantNone => 'بدون';
+
+  @override
+  String get retailVariantDescriptionHint => 'وصف هذا السعر (اختياري)';
+
+  @override
+  String get retailVariantAddAnotherPrice => 'إضافة سعر آخر لنفس المنتج';
+
+  @override
+  String get retailVariantFilterTitle => 'تصفية الأسعار';
+
+  @override
+  String get retailVariantFilterClear => 'عرض الكل';
+
+  @override
   String get retailListingSkuHint => 'رمز المنتج SKU (اختياري)';
 
   @override

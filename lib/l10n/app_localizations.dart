@@ -8258,6 +8258,48 @@ abstract class AppLocalizations {
   /// **'أخرى...'**
   String get retailListingUnitOther;
 
+  /// No description provided for @retailVariantConditionLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'حالة المنتج'**
+  String get retailVariantConditionLabel;
+
+  /// No description provided for @retailVariantPaymentLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدفع والسداد'**
+  String get retailVariantPaymentLabel;
+
+  /// No description provided for @retailVariantNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون'**
+  String get retailVariantNone;
+
+  /// No description provided for @retailVariantDescriptionHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصف هذا السعر (اختياري)'**
+  String get retailVariantDescriptionHint;
+
+  /// No description provided for @retailVariantAddAnotherPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة سعر آخر لنفس المنتج'**
+  String get retailVariantAddAnotherPrice;
+
+  /// No description provided for @retailVariantFilterTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصفية الأسعار'**
+  String get retailVariantFilterTitle;
+
+  /// No description provided for @retailVariantFilterClear.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض الكل'**
+  String get retailVariantFilterClear;
+
   /// No description provided for @retailListingSkuHint.
   ///
   /// In ar, this message translates to:

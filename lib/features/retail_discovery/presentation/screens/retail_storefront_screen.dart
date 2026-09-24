@@ -18,21 +18,72 @@ import '../../data/models/catalog_product_listing.dart';
 /// (not just the one tapped) plus the seller's own minimum order amount up
 /// front, since that's a fact about the WHOLE cart, not one line in it — see
 /// CustomerCartService::assertMeetsRetailMinimum().
-class RetailStorefrontScreen extends ConsumerWidget {
+class RetailStorefrontScreen extends ConsumerStatefulWidget {
   final int businessId;
   const RetailStorefrontScreen({super.key, required this.businessId});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<RetailStorefrontScreen> createState() => _RetailStorefrontScreenState();
+}
+
+class _RetailStorefrontScreenState extends ConsumerState<RetailStorefrontScreen> {
+  // Nothing chosen means every row, each with its own price and description.
+  final Set<int> _conditions = {};
+  final Set<int> _payments = {};
+
+  int get businessId => widget.businessId;
+
+  Widget _filterBar(AppLocalizations l10n, List<RetailStorefrontListing> all) {
+    final conditions = {
+      for (final l in all)
+        if (l.condition != null) l.condition!.id: l.condition!.name,
+    };
+    final payments = {
+      for (final l in all)
+        if (l.payment != null) l.payment!.id: l.payment!.name,
+    };
+    if (conditions.isEmpty && payments.isEmpty) return const SizedBox.shrink();
+
+    Widget chips(Map<int, String> options, Set<int> selected) => Wrap(
+      spacing: 6,
+      children: [
+        for (final e in options.entries)
+          FilterChip(
+            label: Text(e.value),
+            selected: selected.contains(e.key),
+            onSelected: (on) => setState(() => on ? selected.add(e.key) : selected.remove(e.key)),
+          ),
+      ],
+    );
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (conditions.isNotEmpty) chips(conditions, _conditions),
+          if (payments.isNotEmpty) chips(payments, _payments),
+          if (_conditions.isNotEmpty || _payments.isNotEmpty)
+            TextButton(
+              onPressed: () => setState(() {
+                _conditions.clear();
+                _payments.clear();
+              }),
+              child: Text(l10n.retailVariantFilterClear),
+            ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final storefrontAsync = ref.watch(retailStorefrontProvider(businessId));
 
     return Scaffold(
       appBar: AppBar(
-        title: storefrontAsync.maybeWhen(
-          data: (s) => Text(s.businessName),
-          orElse: () => const SizedBox.shrink(),
-        ),
+        title: storefrontAsync.maybeWhen(data: (s) => Text(s.businessName), orElse: () => const SizedBox.shrink()),
       ),
       body: AsyncValueView<RetailStorefront>(
         value: storefrontAsync,
@@ -42,20 +93,33 @@ class RetailStorefrontScreen extends ConsumerWidget {
             return Center(child: Text(l10n.retailStorefrontEmpty));
           }
 
-          final groupCount = storefront.variantGroups.length;
-          final total = groupCount + storefront.listings.length;
+          final listings = storefront.listings
+              .where((l) => _conditions.isEmpty || (l.condition != null && _conditions.contains(l.condition!.id)))
+              .where((l) => _payments.isEmpty || (l.payment != null && _payments.contains(l.payment!.id)))
+              .toList();
+          final filtering = _conditions.isNotEmpty || _payments.isNotEmpty;
+          final groups = filtering ? const <RetailVariantGroupCard>[] : storefront.variantGroups;
+          final groupCount = groups.length;
+          final total = groupCount + listings.length;
 
-          return ListView.separated(
-            padding: const EdgeInsets.all(16),
-            itemCount: total,
-            separatorBuilder: (context, index) => const SizedBox(height: 8),
-            itemBuilder: (context, index) {
-              if (index < groupCount) {
-                return _VariantGroupTile(group: storefront.variantGroups[index]);
-              }
-              final listing = storefront.listings[index - groupCount];
-              return _StorefrontListingTile(listing: listing);
-            },
+          return Column(
+            children: [
+              _filterBar(l10n, storefront.listings),
+              Expanded(
+                child: ListView.separated(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: total,
+                  separatorBuilder: (context, index) => const SizedBox(height: 8),
+                  itemBuilder: (context, index) {
+                    if (index < groupCount) {
+                      return _VariantGroupTile(group: groups[index]);
+                    }
+                    final listing = listings[index - groupCount];
+                    return _StorefrontListingTile(listing: listing);
+                  },
+                ),
+              ),
+            ],
           );
         },
       ),
@@ -198,6 +262,18 @@ class _StorefrontListingTile extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
+              if (listing.condition != null || listing.payment != null)
+                Text(
+                  [listing.condition?.name, listing.payment?.name].whereType<String>().join(' · '),
+                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+                ),
+              if (listing.description != null)
+                Text(
+                  listing.description!,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 12),
+                ),
               Text(
                 listing.minOrderQty != null
                     ? '${listing.price.toStringAsFixed(0)} ${listing.currency} · ${l10n.retailStorefrontMinQtyLabel(formatRetailQty(listing.minOrderQty!, listing.unit))}'
@@ -211,7 +287,10 @@ class _StorefrontListingTile extends ConsumerWidget {
             ],
           ),
           trailing: outOfStock
-              ? Text(l10n.businessOutOfStock, style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.error))
+              ? Text(
+                  l10n.businessOutOfStock,
+                  style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.error),
+                )
               : CircleAvatar(
                   radius: 16,
                   backgroundColor: AppColors.accentGold.withValues(alpha: 0.15),
@@ -275,7 +354,10 @@ class _QuantitySheetState extends State<_QuantitySheet> {
     setState(() {
       _qty = typed;
       _error = tooHigh
-          ? l10n.retailStorefrontQtyOutOfRange(formatRetailQty(_minQty, widget.listing.unit), formatRetailQty(max, widget.listing.unit))
+          ? l10n.retailStorefrontQtyOutOfRange(
+              formatRetailQty(_minQty, widget.listing.unit),
+              formatRetailQty(max, widget.listing.unit),
+            )
           : (tooLow ? l10n.retailStorefrontQtyBelowMin(formatRetailQty(_minQty, widget.listing.unit)) : null);
     });
   }
@@ -352,7 +434,10 @@ class _QuantitySheetState extends State<_QuantitySheet> {
                         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                         textAlign: TextAlign.center,
                         style: const TextStyle(fontWeight: FontWeight.w700),
-                        decoration: const InputDecoration(isDense: true, contentPadding: EdgeInsets.symmetric(vertical: 8)),
+                        decoration: const InputDecoration(
+                          isDense: true,
+                          contentPadding: EdgeInsets.symmetric(vertical: 8),
+                        ),
                         onChanged: _onTyped,
                         onSubmitted: (_) => _commitTypedQty(),
                         onTapOutside: (_) => _commitTypedQty(),
