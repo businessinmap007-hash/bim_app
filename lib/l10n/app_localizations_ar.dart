@@ -4424,6 +4424,27 @@ class AppLocalizationsAr extends AppLocalizations {
   String get retailListingUnitOther => 'أخرى...';
 
   @override
+  String get retailExtrasTitle => 'إضافات المنتج';
+
+  @override
+  String get retailExtrasHint => 'مثل: ضمان سنة، ضمان سنتين، تركيب';
+
+  @override
+  String get retailExtrasName => 'اسم الإضافة';
+
+  @override
+  String get retailExtrasPrice => 'السعر';
+
+  @override
+  String get retailExtrasGroup => 'المجموعة (اختياري، مثل: الضمان)';
+
+  @override
+  String get retailExtrasSingle => 'اختيار واحد فقط من المجموعة';
+
+  @override
+  String get retailExtrasAdd => 'إضافة بند';
+
+  @override
   String get retailVariantConditionLabel => 'حالة المنتج';
 
   @override

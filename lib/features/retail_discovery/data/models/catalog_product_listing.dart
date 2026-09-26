@@ -51,6 +51,29 @@ class ProductSpec {
       .toList();
 }
 
+/// A merchant-defined priced add-on on a listing (warranty, installation…).
+/// [group] is null for a lone tick box; rows sharing a group name are a
+/// pick-one ([isSingle]) or pick-many group.
+class RetailExtra {
+  final int id;
+  final String name;
+  final double price;
+  final String? group;
+  final bool isSingle;
+  const RetailExtra({required this.id, required this.name, required this.price, this.group, this.isSingle = false});
+
+  static List<RetailExtra> listFrom(dynamic json) => (json as List<dynamic>? ?? []).map((e) {
+    final m = e as Map<String, dynamic>;
+    return RetailExtra(
+      id: (m['id'] as num).toInt(),
+      name: m['name'] as String? ?? '',
+      price: (m['price'] as num?)?.toDouble() ?? 0,
+      group: m['group'] as String?,
+      isSingle: m['selection'] == 'single',
+    );
+  }).toList();
+}
+
 class RetailCategoryRef {
   final int? id;
   final String name;
@@ -235,6 +258,7 @@ class RetailStorefrontListing {
   final RetailFilterFacet? payment;
   final String? description;
   final List<ProductSpec> specs;
+  final List<RetailExtra> extras;
 
   const RetailStorefrontListing({
     required this.listingId,
@@ -252,6 +276,7 @@ class RetailStorefrontListing {
     this.payment,
     this.description,
     this.specs = const [],
+    this.extras = const [],
   });
 
   static RetailFilterFacet? _facet(dynamic j) => j is Map<String, dynamic>
@@ -276,6 +301,7 @@ class RetailStorefrontListing {
       payment: _facet(json['payment']),
       description: json['description'] as String?,
       specs: ProductSpec.listFrom(product['specs']),
+      extras: RetailExtra.listFrom(json['extras']),
     );
   }
 }

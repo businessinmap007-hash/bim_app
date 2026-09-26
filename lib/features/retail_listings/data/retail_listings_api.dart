@@ -131,5 +131,15 @@ class RetailListingsApi {
     return (conditions: read('conditions'), payments: read('payments'));
   }
 
+  Future<List<ListingExtraDraft>> extras(int id) async {
+    final data = await _client.get('/business/retail-listings/$id/extras') as Map<String, dynamic>;
+    return (data['extras'] as List<dynamic>? ?? [])
+        .map((e) => ListingExtraDraft.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
+  Future<void> saveExtras(int id, List<ListingExtraDraft> rows) =>
+      _client.put('/business/retail-listings/$id/extras', data: {'extras': rows.map((r) => r.toJson()).toList()});
+
   Future<void> delete(int id) => _client.delete('/business/retail-listings/$id');
 }

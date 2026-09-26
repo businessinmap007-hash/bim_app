@@ -8258,6 +8258,48 @@ abstract class AppLocalizations {
   /// **'أخرى...'**
   String get retailListingUnitOther;
 
+  /// No description provided for @retailExtrasTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافات المنتج'**
+  String get retailExtrasTitle;
+
+  /// No description provided for @retailExtrasHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مثل: ضمان سنة، ضمان سنتين، تركيب'**
+  String get retailExtrasHint;
+
+  /// No description provided for @retailExtrasName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الإضافة'**
+  String get retailExtrasName;
+
+  /// No description provided for @retailExtrasPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر'**
+  String get retailExtrasPrice;
+
+  /// No description provided for @retailExtrasGroup.
+  ///
+  /// In ar, this message translates to:
+  /// **'المجموعة (اختياري، مثل: الضمان)'**
+  String get retailExtrasGroup;
+
+  /// No description provided for @retailExtrasSingle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيار واحد فقط من المجموعة'**
+  String get retailExtrasSingle;
+
+  /// No description provided for @retailExtrasAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة بند'**
+  String get retailExtrasAdd;
+
   /// No description provided for @retailVariantConditionLabel.
   ///
   /// In ar, this message translates to:

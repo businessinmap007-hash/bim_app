@@ -23,6 +23,32 @@ class RetailAudienceEntry {
 /// unedited on save so a root-category audience set some other way (the
 /// admin panel, historically) is never silently dropped by an app save
 /// that never mentions it.
+/// One editable add-on row of a listing (warranty, installation…).
+class ListingExtraDraft {
+  int id;
+  String name;
+  String price;
+  String group;
+  bool single;
+  ListingExtraDraft({this.id = 0, this.name = '', this.price = '', this.group = '', this.single = false});
+
+  factory ListingExtraDraft.fromJson(Map<String, dynamic> j) => ListingExtraDraft(
+    id: (j['id'] as num).toInt(),
+    name: j['name_ar'] as String? ?? '',
+    price: ((j['price'] as num?) ?? 0).toString(),
+    group: j['group_name_ar'] as String? ?? '',
+    single: j['selection_type'] == 'single',
+  );
+
+  Map<String, dynamic> toJson() => {
+    if (id > 0) 'id': id,
+    'name_ar': name.trim(),
+    'price': double.tryParse(price.trim()) ?? 0,
+    'group_name_ar': group.trim(),
+    'selection_type': single ? 'single' : 'multiple',
+  };
+}
+
 /// A condition (جديد/مستعمل/…) or payment (كاش/تقسيط) choice on a priced row.
 class RetailVariantOption {
   final int id;

@@ -746,6 +746,15 @@ class _ListingFormSheetState extends ConsumerState<_ListingFormSheet> {
               ),
               if (widget.existing != null) ...[
                 const SizedBox(height: 8),
+                OutlinedButton.icon(
+                  icon: const Icon(Icons.add_circle_outline),
+                  label: Text(l10n.retailExtrasTitle),
+                  onPressed: () => showModalBottomSheet<void>(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (_) => _ExtrasEditSheet(listingId: widget.existing!.id),
+                  ),
+                ),
                 SwitchListTile(
                   contentPadding: EdgeInsets.zero,
                   title: Text(l10n.retailListingActiveLabel),
@@ -1152,6 +1161,139 @@ class _GovernoratePickerSheetState extends ConsumerState<_GovernoratePickerSheet
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Priced add-ons of one listing (warranty as a pick-one group, installation
+/// as a tick box...). Edited as a whole list and saved in one call.
+class _ExtrasEditSheet extends ConsumerStatefulWidget {
+  final int listingId;
+  const _ExtrasEditSheet({required this.listingId});
+
+  @override
+  ConsumerState<_ExtrasEditSheet> createState() => _ExtrasEditSheetState();
+}
+
+class _ExtrasEditSheetState extends ConsumerState<_ExtrasEditSheet> {
+  List<ListingExtraDraft>? _rows;
+  bool _saving = false;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    ref.read(retailListingsApiProvider).extras(widget.listingId).then((rows) {
+      if (mounted) setState(() => _rows = rows);
+    });
+  }
+
+  Future<void> _save() async {
+    final l10n = AppLocalizations.of(context)!;
+    final rows = _rows!.where((r) => r.name.trim().isNotEmpty).toList();
+    setState(() {
+      _saving = true;
+      _error = null;
+    });
+    try {
+      await ref.read(retailListingsApiProvider).saveExtras(widget.listingId, rows);
+      if (mounted) Navigator.of(context).pop();
+    } catch (e) {
+      if (mounted) setState(() => _error = e is ApiException ? e.message : l10n.commonSomethingWentWrong);
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final rows = _rows;
+
+    return Padding(
+      padding: EdgeInsets.fromLTRB(20, 20, 20, 20 + MediaQuery.of(context).viewInsets.bottom),
+      child: SafeArea(
+        child: SizedBox(
+          width: double.infinity,
+          child: rows == null
+              ? const SizedBox(height: 120, child: Center(child: CircularProgressIndicator()))
+              : SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(l10n.retailExtrasTitle, style: Theme.of(context).textTheme.titleMedium),
+                      const SizedBox(height: 4),
+                      Text(l10n.retailExtrasHint, style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12)),
+                      const SizedBox(height: 12),
+                      for (final row in rows)
+                        Card(
+                          key: ObjectKey(row),
+                          margin: const EdgeInsets.only(bottom: 8),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 3,
+                                      child: TextFormField(
+                                        initialValue: row.name,
+                                        decoration: InputDecoration(labelText: l10n.retailExtrasName),
+                                        onChanged: (v) => row.name = v,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      flex: 2,
+                                      child: TextFormField(
+                                        initialValue: row.price,
+                                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                        decoration: InputDecoration(labelText: l10n.retailExtrasPrice),
+                                        onChanged: (v) => row.price = v,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.delete_outline),
+                                      onPressed: () => setState(() => rows.remove(row)),
+                                    ),
+                                  ],
+                                ),
+                                TextFormField(
+                                  initialValue: row.group,
+                                  decoration: InputDecoration(labelText: l10n.retailExtrasGroup),
+                                  onChanged: (v) => setState(() => row.group = v),
+                                ),
+                                if (row.group.trim().isNotEmpty)
+                                  SwitchListTile(
+                                    contentPadding: EdgeInsets.zero,
+                                    title: Text(l10n.retailExtrasSingle, style: const TextStyle(fontSize: 13)),
+                                    value: row.single,
+                                    onChanged: (v) => setState(() => row.single = v),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      TextButton.icon(
+                        icon: const Icon(Icons.add),
+                        label: Text(l10n.retailExtrasAdd),
+                        onPressed: () => setState(() => rows.add(ListingExtraDraft())),
+                      ),
+                      if (_error != null) Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+                      const SizedBox(height: 8),
+                      FilledButton(
+                        onPressed: _saving ? null : _save,
+                        child: _saving
+                            ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                            : Text(l10n.commonSave),
+                      ),
+                    ],
+                  ),
+                ),
         ),
       ),
     );

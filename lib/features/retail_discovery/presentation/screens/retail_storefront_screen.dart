@@ -131,7 +131,7 @@ class _RetailStorefrontScreenState extends ConsumerState<RetailStorefrontScreen>
 /// picked, it is just a listing like any other) — quantity, then cart or
 /// straight to checkout.
 Future<void> _openQuantitySheet(BuildContext context, WidgetRef ref, RetailStorefrontListing listing) async {
-  final result = await showModalBottomSheet<({int qty, bool buyNow})>(
+  final result = await showModalBottomSheet<({int qty, bool buyNow, List<int> extras})>(
     context: context,
     isScrollControlled: true,
     builder: (_) => _QuantitySheet(listing: listing),
@@ -142,7 +142,7 @@ Future<void> _openQuantitySheet(BuildContext context, WidgetRef ref, RetailStore
   try {
     final cart = await ref
         .read(cartControllerProvider.notifier)
-        .addItem(kind: 'retail', offeringId: listing.listingId, qty: result.qty);
+        .addItem(kind: 'retail', offeringId: listing.listingId, qty: result.qty, extras: result.extras);
     if (!context.mounted) return;
 
     // Adding to cart only ever reserves a spot in line — checkout is what
@@ -323,6 +323,71 @@ class _QuantitySheetState extends State<_QuantitySheet> {
   late int _qty = widget.listing.minOrderQty ?? 1;
   late final _qtyController = TextEditingController(text: '$_qty');
   String? _error;
+  final Set<int> _picked = {};
+
+  double get _unitPrice =>
+      widget.listing.price +
+      widget.listing.extras.where((e) => _picked.contains(e.id)).fold(0.0, (a, e) => a + e.price);
+
+  void _toggleExtra(RetailExtra e) {
+    setState(() {
+      if (_picked.contains(e.id)) {
+        _picked.remove(e.id);
+        return;
+      }
+      if (e.isSingle && e.group != null) {
+        _picked.removeAll(widget.listing.extras.where((x) => x.group == e.group).map((x) => x.id));
+      }
+      _picked.add(e.id);
+    });
+  }
+
+  Widget _extrasSection(BuildContext context) {
+    final theme = Theme.of(context);
+    final groups = <String?, List<RetailExtra>>{};
+    for (final e in widget.listing.extras) {
+      groups.putIfAbsent(e.group, () => []).add(e);
+    }
+
+    Widget tile(RetailExtra e) {
+      final on = _picked.contains(e.id);
+      final single = e.isSingle && e.group != null;
+      return InkWell(
+        onTap: () => _toggleExtra(e),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          child: Row(
+            children: [
+              Icon(
+                single
+                    ? (on ? Icons.radio_button_checked : Icons.radio_button_unchecked)
+                    : (on ? Icons.check_box : Icons.check_box_outline_blank),
+                size: 22,
+                color: on ? AppColors.accentGold : theme.hintColor,
+              ),
+              const SizedBox(width: 10),
+              Expanded(child: Text(e.name)),
+              Text('+${e.price.toStringAsFixed(0)}', style: TextStyle(color: theme.hintColor)),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (final entry in groups.entries) ...[
+          if (entry.key != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(entry.key!, style: theme.textTheme.titleSmall),
+            ),
+          for (final e in entry.value) tile(e),
+        ],
+      ],
+    );
+  }
 
   int get _minQty => widget.listing.minOrderQty ?? 1;
 
@@ -397,134 +462,137 @@ class _QuantitySheetState extends State<_QuantitySheet> {
     return Padding(
       padding: EdgeInsets.fromLTRB(20, 20, 20, 20 + MediaQuery.of(context).viewInsets.bottom),
       child: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(widget.listing.productName, style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 4),
-            Text(
-              '${widget.listing.price.toStringAsFixed(0)} ${widget.listing.currency}',
-              style: const TextStyle(fontWeight: FontWeight.w700, color: AppColors.accentGold),
-            ),
-            if (widget.listing.specs.isNotEmpty) ...[
-              const SizedBox(height: 12),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Theme.of(context).dividerColor),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  children: [
-                    for (var i = 0; i < widget.listing.specs.length; i++)
-                      Container(
-                        color: i.isEven ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.04) : null,
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                widget.listing.specs[i].name,
-                                style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(widget.listing.productName, style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 4),
+              Text(
+                '${_unitPrice.toStringAsFixed(0)} ${widget.listing.currency}',
+                style: const TextStyle(fontWeight: FontWeight.w700, color: AppColors.accentGold),
+              ),
+              if (widget.listing.specs.isNotEmpty) ...[
+                const SizedBox(height: 12),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Theme.of(context).dividerColor),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    children: [
+                      for (var i = 0; i < widget.listing.specs.length; i++)
+                        Container(
+                          color: i.isEven ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.04) : null,
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  widget.listing.specs[i].name,
+                                  style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12),
+                                ),
                               ),
-                            ),
-                            Text(
-                              widget.listing.specs[i].value,
-                              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
-                            ),
-                          ],
+                              Text(
+                                widget.listing.specs[i].value,
+                                style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                  ],
-                ),
-              ),
-            ],
-            if (widget.listing.minOrderQty != null) ...[
-              const SizedBox(height: 4),
-              Text(
-                l10n.retailStorefrontMinQtyLabel(formatRetailQty(widget.listing.minOrderQty!, widget.listing.unit)),
-                style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12),
-              ),
-            ],
-            if (widget.listing.maxOrderQty != null) ...[
-              const SizedBox(height: 2),
-              Text(
-                l10n.retailStorefrontMaxQtyLabel(formatRetailQty(widget.listing.maxOrderQty!, widget.listing.unit)),
-                style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12),
-              ),
-            ],
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(l10n.retailStorefrontQuantityLabel),
-                Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.remove_circle_outline),
-                      onPressed: _qty > _minQty ? () => _setQty(_qty - 1) : null,
-                    ),
-                    SizedBox(
-                      width: 72,
-                      child: TextField(
-                        controller: _qtyController,
-                        keyboardType: const TextInputType.numberWithOptions(signed: false, decimal: false),
-                        textInputAction: TextInputAction.done,
-                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontWeight: FontWeight.w700),
-                        decoration: const InputDecoration(
-                          isDense: true,
-                          contentPadding: EdgeInsets.symmetric(vertical: 8),
-                        ),
-                        onChanged: _onTyped,
-                        onSubmitted: (_) => _commitTypedQty(),
-                        onTapOutside: (_) => _commitTypedQty(),
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.add_circle_outline),
-                      onPressed: (maxQty == null || _qty < maxQty) ? () => _setQty(_qty + 1) : null,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            if (_error != null) ...[
-              const SizedBox(height: 4),
-              Align(
-                alignment: AlignmentDirectional.centerEnd,
-                child: Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error, fontSize: 12)),
-              ),
-            ],
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () {
-                      _commitTypedQty();
-                      Navigator.of(context).pop((qty: _qty, buyNow: false));
-                    },
-                    child: Text(l10n.cartAdd),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: FilledButton(
-                    onPressed: () {
-                      _commitTypedQty();
-                      Navigator.of(context).pop((qty: _qty, buyNow: true));
-                    },
-                    child: Text(
-                      '${l10n.cartBuyNow} · ${(widget.listing.price * _qty).toStringAsFixed(0)}',
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    ],
                   ),
                 ),
               ],
-            ),
-          ],
+              if (widget.listing.minOrderQty != null) ...[
+                const SizedBox(height: 4),
+                Text(
+                  l10n.retailStorefrontMinQtyLabel(formatRetailQty(widget.listing.minOrderQty!, widget.listing.unit)),
+                  style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12),
+                ),
+              ],
+              if (widget.listing.maxOrderQty != null) ...[
+                const SizedBox(height: 2),
+                Text(
+                  l10n.retailStorefrontMaxQtyLabel(formatRetailQty(widget.listing.maxOrderQty!, widget.listing.unit)),
+                  style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12),
+                ),
+              ],
+              if (widget.listing.extras.isNotEmpty) ...[const SizedBox(height: 8), _extrasSection(context)],
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(l10n.retailStorefrontQuantityLabel),
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.remove_circle_outline),
+                        onPressed: _qty > _minQty ? () => _setQty(_qty - 1) : null,
+                      ),
+                      SizedBox(
+                        width: 72,
+                        child: TextField(
+                          controller: _qtyController,
+                          keyboardType: const TextInputType.numberWithOptions(signed: false, decimal: false),
+                          textInputAction: TextInputAction.done,
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontWeight: FontWeight.w700),
+                          decoration: const InputDecoration(
+                            isDense: true,
+                            contentPadding: EdgeInsets.symmetric(vertical: 8),
+                          ),
+                          onChanged: _onTyped,
+                          onSubmitted: (_) => _commitTypedQty(),
+                          onTapOutside: (_) => _commitTypedQty(),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.add_circle_outline),
+                        onPressed: (maxQty == null || _qty < maxQty) ? () => _setQty(_qty + 1) : null,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              if (_error != null) ...[
+                const SizedBox(height: 4),
+                Align(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error, fontSize: 12)),
+                ),
+              ],
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () {
+                        _commitTypedQty();
+                        Navigator.of(context).pop((qty: _qty, buyNow: false, extras: _picked.toList()));
+                      },
+                      child: Text(l10n.cartAdd),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: FilledButton(
+                      onPressed: () {
+                        _commitTypedQty();
+                        Navigator.of(context).pop((qty: _qty, buyNow: true, extras: _picked.toList()));
+                      },
+                      child: Text(
+                        '${l10n.cartBuyNow} · ${(_unitPrice * _qty).toStringAsFixed(0)}',
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

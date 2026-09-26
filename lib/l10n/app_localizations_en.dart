@@ -4432,6 +4432,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get retailListingUnitOther => 'Other...';
 
   @override
+  String get retailExtrasTitle => 'Product add-ons';
+
+  @override
+  String get retailExtrasHint =>
+      'e.g. 1-year warranty, 2-year warranty, installation';
+
+  @override
+  String get retailExtrasName => 'Add-on name';
+
+  @override
+  String get retailExtrasPrice => 'Price';
+
+  @override
+  String get retailExtrasGroup => 'Group (optional, e.g. Warranty)';
+
+  @override
+  String get retailExtrasSingle => 'Pick only one from the group';
+
+  @override
+  String get retailExtrasAdd => 'Add item';
+
+  @override
   String get retailVariantConditionLabel => 'Condition';
 
   @override
