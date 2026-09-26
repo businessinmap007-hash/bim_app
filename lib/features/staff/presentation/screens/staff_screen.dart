@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
+import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/person_card.dart';
 import '../../../general_chat/application/general_chat_providers.dart';
@@ -236,8 +237,10 @@ class _StaffMemberSheetState extends ConsumerState<_StaffMemberSheet> {
         // actually activates (see BusinessAccessService::resolveContext()).
         if (added != null) _showAddedCard(added);
       }
-    } catch (_) {
-      if (mounted) setState(() => _error = l10n.commonSomethingWentWrong);
+    } catch (e) {
+      if (mounted) {
+        setState(() => _error = e is ApiException && e.isValidationError ? e.message : l10n.commonSomethingWentWrong);
+      }
     } finally {
       if (mounted) setState(() => _submitting = false);
     }
