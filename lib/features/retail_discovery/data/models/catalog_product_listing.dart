@@ -36,6 +36,21 @@ class RetailFilters {
   );
 }
 
+/// One row of a product's spec table (brand, type, capacity…), already
+/// localized and unit-formatted by the server.
+class ProductSpec {
+  final String name;
+  final String value;
+  const ProductSpec({required this.name, required this.value});
+
+  static List<ProductSpec> listFrom(dynamic json) => (json as List<dynamic>? ?? [])
+      .map(
+        (e) =>
+            ProductSpec(name: (e as Map<String, dynamic>)['name'] as String? ?? '', value: e['value'] as String? ?? ''),
+      )
+      .toList();
+}
+
 class RetailCategoryRef {
   final int? id;
   final String name;
@@ -219,6 +234,7 @@ class RetailStorefrontListing {
   final RetailFilterFacet? condition;
   final RetailFilterFacet? payment;
   final String? description;
+  final List<ProductSpec> specs;
 
   const RetailStorefrontListing({
     required this.listingId,
@@ -235,6 +251,7 @@ class RetailStorefrontListing {
     this.condition,
     this.payment,
     this.description,
+    this.specs = const [],
   });
 
   static RetailFilterFacet? _facet(dynamic j) => j is Map<String, dynamic>
@@ -258,6 +275,7 @@ class RetailStorefrontListing {
       condition: _facet(json['condition']),
       payment: _facet(json['payment']),
       description: json['description'] as String?,
+      specs: ProductSpec.listFrom(product['specs']),
     );
   }
 }

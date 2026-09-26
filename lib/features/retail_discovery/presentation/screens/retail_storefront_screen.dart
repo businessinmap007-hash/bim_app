@@ -267,6 +267,13 @@ class _StorefrontListingTile extends ConsumerWidget {
                   [listing.condition?.name, listing.payment?.name].whereType<String>().join(' · '),
                   style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
                 ),
+              if (listing.specs.length > 1)
+                Text(
+                  listing.specs.skip(1).take(3).map((s) => s.value).join(' · '),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: Theme.of(context).hintColor, fontSize: 11),
+                ),
               if (listing.description != null)
                 Text(
                   listing.description!,
@@ -400,6 +407,38 @@ class _QuantitySheetState extends State<_QuantitySheet> {
               '${widget.listing.price.toStringAsFixed(0)} ${widget.listing.currency}',
               style: const TextStyle(fontWeight: FontWeight.w700, color: AppColors.accentGold),
             ),
+            if (widget.listing.specs.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Theme.of(context).dividerColor),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  children: [
+                    for (var i = 0; i < widget.listing.specs.length; i++)
+                      Container(
+                        color: i.isEven ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.04) : null,
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                widget.listing.specs[i].name,
+                                style: TextStyle(color: Theme.of(context).hintColor, fontSize: 12),
+                              ),
+                            ),
+                            Text(
+                              widget.listing.specs[i].value,
+                              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ],
             if (widget.listing.minOrderQty != null) ...[
               const SizedBox(height: 4),
               Text(
