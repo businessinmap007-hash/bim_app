@@ -4424,6 +4424,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get retailListingUnitOther => 'أخرى...';
 
   @override
+  String get categoriesMenuKindFood => 'مطاعم';
+
+  @override
+  String get categoriesMenuKindMarket => 'ماركت';
+
+  @override
   String get retailExtrasTitle => 'إضافات المنتج';
 
   @override
@@ -4518,14 +4524,14 @@ class AppLocalizationsAr extends AppLocalizations {
       'يظهر لكل عميل، مثل باقي منتجاتك.';
 
   @override
-  String get retailListingVisibilityRestricted => 'جهات محددة فقط';
+  String get retailListingVisibilityRestricted => 'بيع الجملة';
 
   @override
   String get retailListingVisibilityRestrictedHint =>
-      'مخفي عن الجميع إلا أنواع المحلات أو الشركات التي تحددها بالأسفل — سعر جملة لا يراه سواهم.';
+      'بيع الجملة: مخفي عن الجميع إلا أنواع المحلات أو الشركات التي تحددها بالأسفل — سعر جملة لا يراه سواهم.';
 
   @override
-  String get retailListingRestrictedBadge => 'مقيّد';
+  String get retailListingRestrictedBadge => 'بيع الجملة';
 
   @override
   String get retailListingAudienceShopTypesLabel => 'أنواع المحلات';

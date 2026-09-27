@@ -57,6 +57,7 @@ class DiscoveryApi {
   Future<Paginated<BusinessSummary>> recommended({
     int? categoryId,
     int? serviceId,
+    String? menuKind,
     String? q,
     int page = 1,
     int perPage = 20,
@@ -66,6 +67,7 @@ class DiscoveryApi {
       query: {
         'category_id': ?categoryId,
         'service_id': ?serviceId,
+        if (menuKind != null && menuKind.isNotEmpty) 'menu_kind': menuKind,
         if (q != null && q.isNotEmpty) 'q': q,
         'page': page,
         'per_page': perPage,

@@ -44,7 +44,8 @@ class RecommendedBusinessesList extends ConsumerWidget {
       if (isRetail) return const _RetailListingsFeed();
     }
 
-    final filter = (categoryId: categoryId, serviceId: serviceId);
+    final menuKind = ref.watch(selectedMenuKindProvider);
+    final filter = (categoryId: categoryId, serviceId: serviceId, menuKind: menuKind);
     final items = ref.watch(recommendedBusinessesProvider(filter));
 
     return AsyncValueView<List<BusinessSummary>>(

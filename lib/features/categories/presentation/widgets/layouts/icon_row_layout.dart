@@ -5,6 +5,7 @@ import '../../../../../l10n/app_localizations.dart';
 import '../../../../discovery/application/discovery_providers.dart';
 import '../category_root_chips_row.dart';
 import '../category_roots_grid.dart';
+import '../menu_kind_chips_row.dart';
 import '../recommended_businesses_list.dart';
 import '../service_type_chips_row.dart';
 
@@ -27,6 +28,7 @@ class IconRowCategoriesLayout extends ConsumerWidget {
         const SizedBox(height: 96, child: CategoryRootsGrid()),
         const SizedBox(height: 8),
         const ServiceTypeChipsRow(),
+        const MenuKindChipsRow(),
         const CategoryRootChipsRow(),
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),

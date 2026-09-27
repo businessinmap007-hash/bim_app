@@ -4432,6 +4432,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get retailListingUnitOther => 'Other...';
 
   @override
+  String get categoriesMenuKindFood => 'Restaurants';
+
+  @override
+  String get categoriesMenuKindMarket => 'Market';
+
+  @override
   String get retailExtrasTitle => 'Product add-ons';
 
   @override
@@ -4530,14 +4536,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'Shown to every customer, like the rest of your products.';
 
   @override
-  String get retailListingVisibilityRestricted => 'Chosen buyers only';
+  String get retailListingVisibilityRestricted => 'Wholesale sale';
 
   @override
   String get retailListingVisibilityRestrictedHint =>
-      'Hidden from everyone except the shop types or businesses you pick below — a wholesale price only they can even see exists.';
+      'Wholesale sale: hidden from everyone except the shop types or businesses you pick below — a price only they can even see exists.';
 
   @override
-  String get retailListingRestrictedBadge => 'Restricted';
+  String get retailListingRestrictedBadge => 'Wholesale';
 
   @override
   String get retailListingAudienceShopTypesLabel => 'Shop types';

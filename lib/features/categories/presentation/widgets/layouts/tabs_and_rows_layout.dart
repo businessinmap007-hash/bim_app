@@ -175,7 +175,7 @@ class _TopRatedRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final filter = (categoryId: categoryId, serviceId: serviceId);
+    final filter = (categoryId: categoryId, serviceId: serviceId, menuKind: null);
     final items = ref.watch(recommendedBusinessesProvider(filter));
 
     return AsyncValueView<List<BusinessSummary>>(

@@ -8258,6 +8258,18 @@ abstract class AppLocalizations {
   /// **'أخرى...'**
   String get retailListingUnitOther;
 
+  /// No description provided for @categoriesMenuKindFood.
+  ///
+  /// In ar, this message translates to:
+  /// **'مطاعم'**
+  String get categoriesMenuKindFood;
+
+  /// No description provided for @categoriesMenuKindMarket.
+  ///
+  /// In ar, this message translates to:
+  /// **'ماركت'**
+  String get categoriesMenuKindMarket;
+
   /// No description provided for @retailExtrasTitle.
   ///
   /// In ar, this message translates to:
@@ -8429,19 +8441,19 @@ abstract class AppLocalizations {
   /// No description provided for @retailListingVisibilityRestricted.
   ///
   /// In ar, this message translates to:
-  /// **'جهات محددة فقط'**
+  /// **'بيع الجملة'**
   String get retailListingVisibilityRestricted;
 
   /// No description provided for @retailListingVisibilityRestrictedHint.
   ///
   /// In ar, this message translates to:
-  /// **'مخفي عن الجميع إلا أنواع المحلات أو الشركات التي تحددها بالأسفل — سعر جملة لا يراه سواهم.'**
+  /// **'بيع الجملة: مخفي عن الجميع إلا أنواع المحلات أو الشركات التي تحددها بالأسفل — سعر جملة لا يراه سواهم.'**
   String get retailListingVisibilityRestrictedHint;
 
   /// No description provided for @retailListingRestrictedBadge.
   ///
   /// In ar, this message translates to:
-  /// **'مقيّد'**
+  /// **'بيع الجملة'**
   String get retailListingRestrictedBadge;
 
   /// No description provided for @retailListingAudienceShopTypesLabel.
