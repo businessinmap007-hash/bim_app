@@ -185,6 +185,12 @@ class _AddToCartSheetState extends ConsumerState<_AddToCartSheet> {
                     label: Text(l10n.offerCompareButton),
                   ),
                 ),
+              if (item.specs.isNotEmpty) ...[
+                const SizedBox(height: 12),
+                Text(l10n.menuCardSpecsTitle, style: Theme.of(context).textTheme.titleSmall),
+                const SizedBox(height: 4),
+                _SpecTable(specs: item.specs),
+              ],
               const SizedBox(height: 16),
               if (item.variants.isNotEmpty) ...[
                 Text(l10n.cartVariantChoose, style: Theme.of(context).textTheme.titleSmall),
@@ -302,6 +308,48 @@ class _AddToCartSheetState extends ConsumerState<_AddToCartSheet> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// The linked catalog master's spec table (processor, RAM…), label/value
+/// rows same as [[three-catalog-shapes]]'s TechProductDetail canvas board —
+/// only present when the merchant pointed this item at a real device model.
+class _SpecTable extends StatelessWidget {
+  final List<MenuItemSpec> specs;
+  const _SpecTable({required this.specs});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: theme.dividerColor),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        children: [
+          for (var i = 0; i < specs.length; i++)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: i == specs.length - 1
+                  ? null
+                  : BoxDecoration(border: Border(bottom: BorderSide(color: theme.dividerColor))),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(specs[i].name, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+                  ),
+                  Text(
+                    specs[i].value,
+                    style: theme.textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600),
+                    textAlign: TextAlign.end,
+                  ),
+                ],
+              ),
+            ),
+        ],
       ),
     );
   }

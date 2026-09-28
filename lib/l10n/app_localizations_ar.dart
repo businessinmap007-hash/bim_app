@@ -502,6 +502,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get menuCardViewOptions => 'اختر';
 
   @override
+  String get menuCardAddShort => 'أضف';
+
+  @override
+  String get menuCardSpecsTitle => 'المواصفات';
+
+  @override
   String get businessNoContentYet => 'لا يوجد محتوى لعرضه بعد';
 
   @override

@@ -530,6 +530,31 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
     }
   }
 
+  /// The stepper card's own add — same call `_AddToCartSheet._confirm` makes
+  /// for a plain item (no variant/extras to send), just without opening a
+  /// sheet first. Routed through the shared cart when this tab is one, same
+  /// as every other add-to-cart path in this screen.
+  Future<void> _directAdd(BuildContext context, MenuItemSummary item, int qty) async {
+    final l10n = AppLocalizations.of(context)!;
+    try {
+      final sharedOrderId = widget.sharedOrderId;
+      if (sharedOrderId != null) {
+        await ref
+            .read(sharedCartControllerProvider(sharedOrderId).notifier)
+            .addItem(kind: item.kind, offeringId: item.id, qty: qty);
+      } else {
+        await ref.read(cartControllerProvider.notifier).addItem(kind: item.kind, offeringId: item.id, qty: qty);
+      }
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.cartAddedToCart)));
+      }
+    } catch (_) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -644,6 +669,7 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
                                       child: MenuItemTile(
                                         item: item,
                                         onTap: () => showAddToCartSheet(context, item, sharedOrderId: widget.sharedOrderId),
+                                        onDirectAdd: (qty) => _directAdd(context, item, qty),
                                       ),
                                     ),
                                   ),

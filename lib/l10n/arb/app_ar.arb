@@ -163,6 +163,8 @@
   "menuCardPricePerUnit": "{price} جنيه / {unit}",
   "@menuCardPricePerUnit": { "placeholders": { "price": { "type": "String" }, "unit": { "type": "String" } } },
   "menuCardViewOptions": "اختر",
+  "menuCardAddShort": "أضف",
+  "menuCardSpecsTitle": "المواصفات",
   "businessNoContentYet": "لا يوجد محتوى لعرضه بعد",
   "businessInfoTitle": "معلومات النشاط",
   "businessInfoPhone": "رقم الهاتف",

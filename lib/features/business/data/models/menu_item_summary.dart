@@ -65,6 +65,24 @@ class MenuItemBranch {
   }
 }
 
+/// One row of a linked catalog master's spec table (processor, RAM…) — see
+/// MenuDiscoveryController::itemPayload()'s `specs`, populated only when the
+/// merchant pointed this item at a real `catalog_products` row (a device
+/// model, a laptop…). Empty for every item that wasn't.
+class MenuItemSpec {
+  final String code;
+  final String name;
+  final String value;
+
+  const MenuItemSpec({required this.code, required this.name, required this.value});
+
+  factory MenuItemSpec.fromJson(Map<String, dynamic> json) => MenuItemSpec(
+    code: json['code'] as String? ?? '',
+    name: json['name'] as String? ?? '',
+    value: json['value'] as String? ?? '',
+  );
+}
+
 class MenuItemExtra {
   final int id;
   final String name;
@@ -102,6 +120,7 @@ class MenuItemSummary {
   final List<MenuItemVariant> variants;
   final List<MenuItemExtraGroup> extraGroups;
   final List<MenuItemExtra> extras;
+  final List<MenuItemSpec> specs;
 
   const MenuItemSummary({
     required this.id,
@@ -119,7 +138,17 @@ class MenuItemSummary {
     required this.variants,
     this.extraGroups = const [],
     required this.extras,
+    this.specs = const [],
   });
+
+  /// The card's compact spec line — "Core i5 · 8GB RAM · 256GB SSD" — the
+  /// first three specs joined, matching the Tech Catalog Setup canvas's
+  /// storefront card. Brand is already shown via [MenuItemSummary]'s own
+  /// name/branding elsewhere, so it's skipped here to avoid repeating it.
+  String? get specSummary {
+    final rows = specs.where((s) => s.code != 'brand').take(3).map((s) => s.value).where((v) => v.isNotEmpty);
+    return rows.isEmpty ? null : rows.join(' · ');
+  }
 
   /// `null` = not tracked (always orderable); `0` = tracked and out of stock.
   bool get isOutOfStock => availableQuantity == 0;
@@ -159,6 +188,9 @@ class MenuItemSummary {
         .toList(),
     extras: (json['extras'] as List<dynamic>? ?? [])
         .map((e) => MenuItemExtra.fromJson(e as Map<String, dynamic>))
+        .toList(),
+    specs: (json['specs'] as List<dynamic>? ?? [])
+        .map((e) => MenuItemSpec.fromJson(e as Map<String, dynamic>))
         .toList(),
   );
 }

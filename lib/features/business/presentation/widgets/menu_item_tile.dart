@@ -13,11 +13,56 @@ import '../../data/models/menu_item_summary.dart';
 /// item has more than one size, and a contextual trailing action (a plain
 /// add glyph for a fixed-price item vs. a "view options" chevron for one
 /// that needs a choice first) instead of one generic tap target.
-class MenuItemTile extends StatelessWidget {
+///
+/// A goods-catalog item sold by a measured unit (كجم، لتر…) and carrying no
+/// variant/extra choice gets an inline +/- stepper and its own "أضف" button
+/// instead — per the owner's Tech Catalog Setup canvas ("عطارة الدقي" board):
+/// a quick market list is a few taps of quantity then one add, not a sheet
+/// open for every single item. [onDirectAdd] is how the caller wires that
+/// add — routed through the caller's own cart (solo or shared), same as
+/// [onTap] already is. A restaurant dish or anything WITH a choice keeps the
+/// existing tap-opens-a-sheet flow untouched: [onDirectAdd] simply isn't
+/// offered for those (`sale_unit_label` is null — see MenuDiscoveryController).
+class MenuItemTile extends StatefulWidget {
   final MenuItemSummary item;
   final VoidCallback? onTap;
+  final Future<void> Function(int qty)? onDirectAdd;
 
-  const MenuItemTile({super.key, required this.item, this.onTap});
+  const MenuItemTile({super.key, required this.item, this.onTap, this.onDirectAdd});
+
+  bool get _offersStepper => onDirectAdd != null && !item.hasChoices && item.saleUnitLabel != null;
+
+  @override
+  State<MenuItemTile> createState() => _MenuItemTileState();
+}
+
+class _MenuItemTileState extends State<MenuItemTile> {
+  int _qty = 1;
+  bool _adding = false;
+
+  MenuItemSummary get item => widget.item;
+
+  void _inc() => setState(() => _qty++);
+
+  /// Clamped at 1 for now — a real fraction-of-a-unit ("نص كيلو") needs the
+  /// cart to carry a non-integer qty end to end (backend `qty` is `integer`
+  /// everywhere: validation, pricing, orders, invoices), which this screen
+  /// alone can't safely add. Tracked as a follow-up, not guessed at here.
+  void _dec() {
+    if (_qty <= 1) return;
+    setState(() => _qty--);
+  }
+
+  Future<void> _add() async {
+    if (_adding) return;
+    setState(() => _adding = true);
+    try {
+      await widget.onDirectAdd!(_qty);
+      if (mounted) setState(() => _qty = 1);
+    } finally {
+      if (mounted) setState(() => _adding = false);
+    }
+  }
 
   /// See MenuItemGridCard's identical getter — only a goods item (sold under
   /// a vocabulary branch) gets a produce emoji.
@@ -45,13 +90,17 @@ class MenuItemTile extends StatelessWidget {
     final theme = Theme.of(context);
     final imageUrl = item.imageUrl ?? (item.imageUrls.isNotEmpty ? item.imageUrls.first : null);
 
+    final offersStepper = widget._offersStepper;
+
     return Opacity(
       opacity: item.isOutOfStock ? 0.5 : 1,
       child: Card(
         margin: EdgeInsets.zero,
         clipBehavior: Clip.antiAlias,
         child: InkWell(
-          onTap: item.isOutOfStock ? null : onTap,
+          // The stepper row below is its own tap targets; the card itself
+          // has nothing left to open for a quick-add item.
+          onTap: item.isOutOfStock || offersStepper ? null : widget.onTap,
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: Row(
@@ -107,6 +156,16 @@ class MenuItemTile extends StatelessWidget {
                             style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
                           ),
                         ),
+                      if (item.specSummary != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2),
+                          child: Text(
+                            item.specSummary!,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor, fontSize: 11),
+                          ),
+                        ),
                       const SizedBox(height: 8),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -119,10 +178,23 @@ class MenuItemTile extends StatelessWidget {
                           ),
                           if (item.isOutOfStock)
                             Text(l10n.businessOutOfStock, style: TextStyle(fontSize: 10, color: theme.colorScheme.error))
-                          else
+                          else if (!offersStepper)
                             _ContextAction(hasChoices: item.hasChoices, label: l10n.menuCardViewOptions),
                         ],
                       ),
+                      if (offersStepper && !item.isOutOfStock) ...[
+                        const SizedBox(height: 8),
+                        Divider(height: 1, color: theme.dividerColor),
+                        const SizedBox(height: 8),
+                        _StepperRow(
+                          qty: _qty,
+                          adding: _adding,
+                          onInc: _inc,
+                          onDec: _qty > 1 ? _dec : null,
+                          onAdd: _add,
+                          addLabel: l10n.menuCardAddShort,
+                        ),
+                      ],
                     ],
                   ),
                 ),
@@ -190,6 +262,110 @@ class _ContextAction extends StatelessWidget {
         Text(label, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.primary)),
         Icon(Icons.chevron_right, size: 16, color: theme.colorScheme.primary),
       ],
+    );
+  }
+}
+
+/// The quick-add row for a goods-catalog item: a +/- stepper on one side, a
+/// standalone "أضف" (add) pill on the other — one line, one glance, matching
+/// the Tech Catalog Setup canvas's "بلا تفاصيل" storefront card exactly.
+class _StepperRow extends StatelessWidget {
+  final int qty;
+  final bool adding;
+  final VoidCallback onInc;
+  final VoidCallback? onDec;
+  final VoidCallback onAdd;
+  final String addLabel;
+
+  const _StepperRow({
+    required this.qty,
+    required this.adding,
+    required this.onInc,
+    required this.onDec,
+    required this.onAdd,
+    required this.addLabel,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            _StepperButton(icon: Icons.remove, filled: false, onTap: onDec),
+            SizedBox(
+              width: 32,
+              child: Text('$qty', textAlign: TextAlign.center, style: theme.textTheme.titleSmall),
+            ),
+            _StepperButton(icon: Icons.add, filled: true, onTap: onInc),
+          ],
+        ),
+        InkWell(
+          onTap: adding ? null : onAdd,
+          borderRadius: BorderRadius.circular(10),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            decoration: BoxDecoration(
+              color: AppColors.accentGold.withValues(alpha: 0.14),
+              border: Border.all(color: AppColors.accentGold.withValues(alpha: 0.4)),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: adding
+                ? const SizedBox(
+                    width: 14,
+                    height: 14,
+                    child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.accentGold),
+                  )
+                : Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.shopping_cart_outlined, size: 15, color: AppColors.accentGold),
+                      const SizedBox(width: 6),
+                      Text(
+                        addLabel,
+                        style: theme.textTheme.bodySmall
+                            ?.copyWith(color: AppColors.accentGold, fontWeight: FontWeight.w700),
+                      ),
+                    ],
+                  ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _StepperButton extends StatelessWidget {
+  final IconData icon;
+  final bool filled;
+  final VoidCallback? onTap;
+
+  const _StepperButton({required this.icon, required this.filled, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(15),
+      child: Container(
+        width: 30,
+        height: 30,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: filled ? AppColors.accentGold : null,
+          border: filled ? null : Border.all(color: Theme.of(context).dividerColor),
+        ),
+        child: Icon(
+          icon,
+          size: 16,
+          color: filled
+              ? AppColors.primaryNavy
+              : (onTap == null ? Theme.of(context).disabledColor : Theme.of(context).iconTheme.color),
+        ),
+      ),
     );
   }
 }

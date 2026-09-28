@@ -956,6 +956,18 @@ abstract class AppLocalizations {
   /// **'اختر'**
   String get menuCardViewOptions;
 
+  /// No description provided for @menuCardAddShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف'**
+  String get menuCardAddShort;
+
+  /// No description provided for @menuCardSpecsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المواصفات'**
+  String get menuCardSpecsTitle;
+
   /// No description provided for @businessNoContentYet.
   ///
   /// In ar, this message translates to:
