@@ -245,8 +245,8 @@ class _RetailListingsScreenState extends ConsumerState<RetailListingsScreen> wit
                                       ),
                                     if (listing.description != null)
                                       Text(listing.description!, maxLines: 2, overflow: TextOverflow.ellipsis),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
+                                    Wrap(
+                                      crossAxisAlignment: WrapCrossAlignment.center,
                                       children: [
                                         if (listing.stock != null)
                                           Text(
