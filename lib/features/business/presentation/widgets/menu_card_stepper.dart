@@ -29,6 +29,13 @@ class MenuCardStepperRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    // «RenderFlex overflowed by 5.2 pixels on the right» — المالك،
+    // 2026-09-29, hit inside a narrow grid card (2-3 to a row) where this
+    // row shares the widget verbatim with the much wider list tile.
+    // Trimmed every fixed dimension a little rather than special-casing
+    // grid vs. list — keeps this ONE shared component, per the owner's own
+    // "نفس المكونات قائمة او كارت" requirement, with real margin left over
+    // for a longer localized label or a larger system font size.
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -36,7 +43,7 @@ class MenuCardStepperRow extends StatelessWidget {
           children: [
             _StepperButton(icon: Icons.remove, filled: false, onTap: onDec),
             SizedBox(
-              width: 32,
+              width: 26,
               child: Text(
                 '$qty',
                 textAlign: TextAlign.center,
@@ -46,45 +53,51 @@ class MenuCardStepperRow extends StatelessWidget {
             _StepperButton(icon: Icons.add, filled: true, onTap: onInc),
           ],
         ),
-        InkWell(
-          onTap: adding ? null : onAdd,
-          borderRadius: BorderRadius.circular(10),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-            decoration: BoxDecoration(
-              color: AppColors.accentGold.withValues(alpha: 0.14),
-              border: Border.all(
-                color: AppColors.accentGold.withValues(alpha: 0.4),
+        Flexible(
+          child: InkWell(
+            onTap: adding ? null : onAdd,
+            borderRadius: BorderRadius.circular(10),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              decoration: BoxDecoration(
+                color: AppColors.accentGold.withValues(alpha: 0.14),
+                border: Border.all(
+                  color: AppColors.accentGold.withValues(alpha: 0.4),
+                ),
+                borderRadius: BorderRadius.circular(10),
               ),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: adding
-                ? const SizedBox(
-                    width: 14,
-                    height: 14,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: AppColors.accentGold,
-                    ),
-                  )
-                : Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(
-                        Icons.shopping_cart_outlined,
-                        size: 15,
+              child: adding
+                  ? const SizedBox(
+                      width: 14,
+                      height: 14,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
                         color: AppColors.accentGold,
                       ),
-                      const SizedBox(width: 6),
-                      Text(
-                        addLabel,
-                        style: theme.textTheme.bodySmall?.copyWith(
+                    )
+                  : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.shopping_cart_outlined,
+                          size: 13,
                           color: AppColors.accentGold,
-                          fontWeight: FontWeight.w700,
                         ),
-                      ),
-                    ],
-                  ),
+                        const SizedBox(width: 4),
+                        Flexible(
+                          child: Text(
+                            addLabel,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: AppColors.accentGold,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+            ),
           ),
         ),
       ],
@@ -107,10 +120,10 @@ class _StepperButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(15),
+      borderRadius: BorderRadius.circular(14),
       child: Container(
-        width: 30,
-        height: 30,
+        width: 28,
+        height: 28,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
@@ -121,7 +134,7 @@ class _StepperButton extends StatelessWidget {
         ),
         child: Icon(
           icon,
-          size: 16,
+          size: 15,
           color: filled
               ? AppColors.primaryNavy
               : (onTap == null
