@@ -13,9 +13,12 @@ final staffApiProvider = Provider<StaffApi>((ref) {
 /// offers (BusinessCapability::forBusiness on the backend) — reused from the
 /// staff-delegation picker to gate which tiles Service Settings shows, so a
 /// hotel stops seeing "Training & Nutrition Plans" just because the field
-/// existed for everyone. `ORDERS`/`OFFERS`/`PRICES`/`WORKING_HOURS` (account
+/// existed for everyone. `ORDERS`/`OFFERS`/`WORKING_HOURS` (account
 /// management, not a sellable service) always come back regardless of
-/// category — see the backend's own doc comment on BusinessCapability.
+/// category. `PRICES` is the one exception since 2026-09-29 — it only comes
+/// back for a business with a genuinely priceable service (booking/clinic/
+/// training/schedules/projects), not a pure menu/retail one — see the
+/// backend's own doc comment on BusinessCapability::PRICEABLE_SERVICES.
 final myServiceKeysProvider = FutureProvider<Set<String>>((ref) async {
   final options = await ref.watch(staffApiProvider).capabilities();
   return options.map((o) => o.key).toSet();
