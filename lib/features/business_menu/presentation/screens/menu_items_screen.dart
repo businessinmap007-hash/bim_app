@@ -919,12 +919,34 @@ class _ItemGridTile extends ConsumerWidget {
   }
 }
 
+/// One choice in [_NewCustomItemDialog]'s section picker — EITHER an
+/// existing `menu_sections` row (hand-typed by the owner, or already grown
+/// from a vocabulary group earlier) or a vocabulary group that has not
+/// grown a section yet. Exactly one of [sectionId]/[groupId] is set; which
+/// one decides whether `createItem` is called with `menuSectionId` or
+/// `optionGroupId`.
+class _SectionChoice {
+  final String key;
+  final String label;
+  final int? sectionId;
+  final int? groupId;
+  final List<String>? saleUnitCodes;
+  const _SectionChoice({required this.key, required this.label, this.sectionId, this.groupId, this.saleUnitCodes});
+}
+
 /// The FAB's "اضافة صنف" flow for a business WITH a vocabulary — a NEW
 /// item name (not one of the fixed line options) that still has to belong
 /// to one of the merchant's own sections, with the same required shape as
 /// every other product there: bilingual name, the section's own sale-unit
 /// restriction if it has one, price/supply/quantity, and a photo. See
 /// [MenuItemsScreenState._openCreate]'s doc for the owner quote this answers.
+///
+/// «قمت باضافة قسم جديد وعند اضافة صنف جديد لم يظهر القسم الجديد فى
+/// الاختيارات» — المالك، 2026-09-29: the picker used to list ONLY
+/// vocabulary groups, so a section the owner typed by hand (no backing
+/// group) never appeared. It now merges every EXISTING section (hand-typed
+/// or already grown) with whichever vocabulary groups have not grown one
+/// yet — see [_buildChoices].
 class _NewCustomItemDialog extends ConsumerStatefulWidget {
   final List<VocabularyGroup> groups;
   const _NewCustomItemDialog({required this.groups});
@@ -941,7 +963,7 @@ class _NewCustomItemDialogState extends ConsumerState<_NewCustomItemDialog> {
   final _quantityController = TextEditingController();
   final _picker = MediaPickerService();
 
-  int? _groupId;
+  String? _choiceKey;
   String? _selectedUnit;
   String? _imagePath;
   bool _saving = false;
@@ -956,11 +978,28 @@ class _NewCustomItemDialogState extends ConsumerState<_NewCustomItemDialog> {
     super.dispose();
   }
 
-  VocabularyGroup? get _group => widget.groups.where((g) => g.groupId == _groupId).firstOrNull;
+  List<_SectionChoice> _buildChoices(bool isEnglish) {
+    final sections = ref.watch(menuSectionsControllerProvider).items;
+    final groupSaleUnits = {for (final g in widget.groups) g.groupId: g.saleUnitCodes};
+    final grownGroupIds = sections.map((s) => s.optionGroupId).whereType<int>().toSet();
+
+    return [
+      for (final s in sections)
+        _SectionChoice(
+          key: 's:${s.id}',
+          label: localizedName(s.nameAr, s.nameEn, isEnglish),
+          sectionId: s.id,
+          saleUnitCodes: s.optionGroupId != null ? groupSaleUnits[s.optionGroupId] : null,
+        ),
+      for (final g in widget.groups)
+        if (!grownGroupIds.contains(g.groupId))
+          _SectionChoice(key: 'g:${g.groupId}', label: g.groupName, groupId: g.groupId, saleUnitCodes: g.saleUnitCodes),
+    ];
+  }
 
   bool get _canSave =>
       !_saving &&
-      _groupId != null &&
+      _choiceKey != null &&
       _nameArController.text.trim().isNotEmpty &&
       _nameEnController.text.trim().isNotEmpty &&
       double.tryParse(_priceController.text.trim().replaceAll(',', '.').replaceAll('٫', '.')) != null;
@@ -973,7 +1012,9 @@ class _NewCustomItemDialogState extends ConsumerState<_NewCustomItemDialog> {
 
   Future<void> _save() async {
     final price = double.tryParse(_priceController.text.trim().replaceAll(',', '.').replaceAll('٫', '.'));
-    if (_groupId == null || price == null) return;
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
+    final choice = _buildChoices(isEnglish).where((c) => c.key == _choiceKey).firstOrNull;
+    if (choice == null || price == null) return;
 
     setState(() => _saving = true);
     try {
@@ -984,7 +1025,8 @@ class _NewCustomItemDialogState extends ConsumerState<_NewCustomItemDialog> {
         supplyPrice: double.tryParse(_supplyController.text.trim().replaceAll(',', '.').replaceAll('٫', '.')),
         saleUnit: _selectedUnit,
         availableQuantity: int.tryParse(_quantityController.text.trim()),
-        optionGroupId: _groupId,
+        menuSectionId: choice.sectionId,
+        optionGroupId: choice.groupId,
       );
       final path = _imagePath;
       if (path != null) {
@@ -1003,8 +1045,11 @@ class _NewCustomItemDialogState extends ConsumerState<_NewCustomItemDialog> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
     final decimalFormatters = [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,٫]'))];
-    final saleUnitCodes = _group?.saleUnitCodes;
+    final choices = _buildChoices(isEnglish);
+    final selected = choices.where((c) => c.key == _choiceKey).firstOrNull;
+    final saleUnitCodes = selected?.saleUnitCodes;
     final unitsAsync = ref.watch(saleUnitOptionsProvider);
     final units = saleUnitCodes == null
         ? const <SaleUnitOption>[]
@@ -1025,13 +1070,13 @@ class _NewCustomItemDialogState extends ConsumerState<_NewCustomItemDialog> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            DropdownButtonFormField<int>(
-              initialValue: _groupId,
+            DropdownButtonFormField<String>(
+              initialValue: _choiceKey,
               isExpanded: true,
               decoration: InputDecoration(labelText: l10n.menuItemSectionLabel, isDense: true, border: const OutlineInputBorder()),
-              items: widget.groups.map((g) => DropdownMenuItem(value: g.groupId, child: Text(g.groupName))).toList(),
+              items: choices.map((c) => DropdownMenuItem(value: c.key, child: Text(c.label))).toList(),
               onChanged: (value) => setState(() {
-                _groupId = value;
+                _choiceKey = value;
                 _selectedUnit = null;
               }),
             ),
