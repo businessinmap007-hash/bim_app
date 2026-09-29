@@ -67,9 +67,9 @@ class BusinessFulfillment {
 
   bool get any => methods.isNotEmpty || dineIn;
 
-  /// The keys `FulfillmentSelectorBar`/`CheckoutScreen` choose between:
-  /// each method's id (as a string) plus 'dine_in' when the business has an
-  /// active table. Order matches what the merchant sees on its own screen.
+  /// The keys `CheckoutScreen` chooses between: each method's id (as a
+  /// string) plus 'dine_in' when the business has an active table. Order
+  /// matches what the merchant sees on its own screen.
   List<String> get selectionKeys => [
     ...methods.map((m) => m.id.toString()),
     if (dineIn) 'dine_in',

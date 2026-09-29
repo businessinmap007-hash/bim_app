@@ -13,12 +13,11 @@ import '../screens/shared_cart_screen.dart';
 import 'group_member_picker_sheet.dart';
 
 /// Every way to bring someone into a shared cart, in one popup — QR to show,
-/// invite one friend, or invite a whole contact group — reached right where
-/// the customer picks delivery/pickup, before they've added anything, rather
-/// than only after they've built up a cart (see FulfillmentSelectorBar's
-/// caller in BusinessDetailScreen). Talks to SharedCartApi directly instead
-/// of the per-screen SharedCartController, since this isn't tied to viewing
-/// the cart itself.
+/// invite one friend, or invite a whole contact group — reached right above
+/// the menu, before the customer has added anything, rather than only after
+/// they've built up a cart (see the share icon in BusinessDetailScreen's
+/// `_MenuTab`). Talks to SharedCartApi directly instead of the per-screen
+/// SharedCartController, since this isn't tied to viewing the cart itself.
 Future<void> showShareCartSheet(
   BuildContext context, {
   required int orderId,

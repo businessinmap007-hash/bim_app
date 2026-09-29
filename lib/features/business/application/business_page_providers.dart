@@ -13,10 +13,13 @@ final businessPageApiProvider = Provider<BusinessPageApi>((ref) {
 /// The customer's chosen fulfillment method for this business visit — either
 /// the literal 'dine_in', or the ticked `FulfillmentMethod.id` (as a string)
 /// the customer picked, or null before they've picked one. Session-only (not
-/// persisted): picked once above the menu via FulfillmentSelectorBar, read by
-/// CheckoutScreen so it isn't asked again. Resolve the underlying
-/// `fulfillment_type` (delivery/pickup/dine_in) the checkout API expects via
-/// `BusinessFulfillment.typeOfSelection`.
+/// persisted). Nothing writes it anymore — the business page's own picker
+/// was removed as redundant with CheckoutScreen's own (see
+/// BusinessDetailScreen's `_MenuTab`) — so CheckoutScreen's read of it now
+/// always falls back to the business's first fulfillment method; kept
+/// rather than stripped out in case a picker above the menu comes back.
+/// Resolve the underlying `fulfillment_type` (delivery/pickup/dine_in) the
+/// checkout API expects via `BusinessFulfillment.typeOfSelection`.
 final businessFulfillmentChoiceProvider = StateProvider.family<String?, int>((ref, businessId) => null);
 
 /// A customer's own list/grid preference, persisted across EVERY business's

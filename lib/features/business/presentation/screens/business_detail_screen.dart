@@ -31,7 +31,6 @@ import '../../data/models/menu_section_group.dart';
 import '../../data/models/offering_item.dart';
 import 'business_info_screen.dart';
 import '../widgets/business_rating_row.dart';
-import '../widgets/fulfillment_selector_bar.dart';
 import '../widgets/menu_item_grid_card.dart';
 import '../widgets/menu_item_tile.dart';
 import '../widgets/offering_card.dart';
@@ -145,7 +144,7 @@ class _BusinessDetailBody extends StatelessWidget {
     // with no menu keeps Posts first, same as before.
     if (profile.sections.menu) {
       tabs.add(Tab(text: l10n.businessTabMenu));
-      tabViews.add(_MenuTab(businessId: profile.id, fulfillment: profile.fulfillment, sharedOrderId: sharedOrderId));
+      tabViews.add(_MenuTab(businessId: profile.id, sharedOrderId: sharedOrderId));
     }
     if (profile.sections.posts) {
       tabs.add(Tab(text: l10n.businessTabPosts));
@@ -495,9 +494,8 @@ double _menuNavHeight(List<_SectionData> sections) => sections.length > 1 ? 44 :
 
 class _MenuTab extends ConsumerStatefulWidget {
   final int businessId;
-  final BusinessFulfillment fulfillment;
   final int? sharedOrderId;
-  const _MenuTab({required this.businessId, required this.fulfillment, this.sharedOrderId});
+  const _MenuTab({required this.businessId, this.sharedOrderId});
 
   @override
   ConsumerState<_MenuTab> createState() => _MenuTabState();
@@ -577,22 +575,29 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
             key: const PageStorageKey('business_menu'),
             slivers: [
               SliverOverlapInjector(handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
-              // The one entry point for delivery/pickup/dine-in, right above
-              // the products it applies to (product doc, "منيو ومطاعم"
-              // section) — not in the shared page header, since it has
-              // nothing to do with the Posts/Services tabs. The list/grid
-              // toggle (a customer's own browsing preference — see the
-              // merchant's identical "My Menu" screen) and the share
-              // shortcut ride along here too, instead of each getting its
-              // own row, since sharing is a decision made before ordering.
+              // «احذف عايز تستلم طلبك ازاى لانها تحولت للعربة» — المالك،
+              // 2026-09-29: the fulfillment prompt that used to lead this row
+              // is gone — CheckoutScreen already asks the same question with
+              // its own SegmentedButton (falling back to the business's first
+              // method when nothing was picked here), so asking it twice was
+              // redundant. «شبكة ومشاركة خليهم على نفس سطر كل الاقسام وفى
+              // السطر التالى الاقسام»: the "كل الأقسام" chip moved up onto
+              // this row, beside the list/grid toggle (a customer's own
+              // browsing preference) and the share shortcut — the line below
+              // ([_MenuNavRows]) now carries only the individual section
+              // chips, not "كل الأقسام" again.
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
                 sliver: SliverToBoxAdapter(
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(child: FulfillmentSelectorBar(businessId: widget.businessId, fulfillment: widget.fulfillment)),
-                      const SizedBox(width: 4),
+                      if (sections.length > 1)
+                        ChoiceChip(
+                          label: Text(l10n.menuItemsAllSections),
+                          selected: _activeSectionIndex == null,
+                          onSelected: (_) => setState(() => _activeSectionIndex = null),
+                        ),
+                      const Spacer(),
                       ViewModeToggle(
                         isGrid: isGrid,
                         listLabel: l10n.menuItemsDisplayModeList,
@@ -601,12 +606,12 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
                             ref.read(customerMenuDisplayModeControllerProvider.notifier).setMode(grid ? 'grid' : 'list'),
                       ),
                       if (widget.sharedOrderId == null) ...[
+                        const SizedBox(width: 4),
                         IconButton(
                           tooltip: l10n.cartShareCart,
                           icon: const Icon(Icons.group_add_outlined),
                           onPressed: () => _startShareCart(context, ref),
                         ),
-                        const SizedBox(width: 4),
                       ],
                     ],
                   ),
@@ -689,11 +694,14 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
   }
 }
 
-/// A single chip row pinned above the menu — an "All" chip plus one per
-/// section. Picking one FILTERS the page down to it instead of merely
-/// scrolling there — see [_MenuTabState._activeSectionIndex]. No second
-/// branch-chip row: the item cards themselves are the branch list once a
-/// section is this short a scroll away.
+/// A single chip row pinned above the menu — one per section. The "كل
+/// الأقسام" chip lives one row up now (beside the list/grid toggle and the
+/// share shortcut — see the owner-quoted comment at its call site), so this
+/// row is just the individual sections. Picking one FILTERS the page down
+/// to it instead of merely scrolling there — see
+/// [_MenuTabState._activeSectionIndex]. No second branch-chip row: the item
+/// cards themselves are the branch list once a section is this short a
+/// scroll away.
 class _MenuNavRows extends StatelessWidget {
   final List<_SectionData> sections;
   final int? activeSectionIndex;
@@ -704,7 +712,6 @@ class _MenuNavRows extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context)!;
 
     return ColoredBox(
       color: theme.scaffoldBackgroundColor,
@@ -713,21 +720,13 @@ class _MenuNavRows extends StatelessWidget {
         child: ListView.separated(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
           scrollDirection: Axis.horizontal,
-          itemCount: sections.length + 1,
+          itemCount: sections.length,
           separatorBuilder: (context, index) => const SizedBox(width: 8),
           itemBuilder: (context, index) {
-            if (index == 0) {
-              return ChoiceChip(
-                label: Text(l10n.menuItemsAllSections),
-                selected: activeSectionIndex == null,
-                onSelected: (_) => onSectionTap(null),
-              );
-            }
-            final sectionIndex = index - 1;
             return ChoiceChip(
-              label: Text(sections[sectionIndex].group.name),
-              selected: sectionIndex == activeSectionIndex,
-              onSelected: (_) => onSectionTap(sectionIndex),
+              label: Text(sections[index].group.name),
+              selected: index == activeSectionIndex,
+              onSelected: (_) => onSectionTap(index),
             );
           },
         ),
