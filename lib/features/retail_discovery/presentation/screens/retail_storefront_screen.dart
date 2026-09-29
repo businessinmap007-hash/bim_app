@@ -89,7 +89,7 @@ class _RetailStorefrontScreenState extends ConsumerState<RetailStorefrontScreen>
         value: storefrontAsync,
         onRetry: () => ref.invalidate(retailStorefrontProvider(businessId)),
         builder: (context, storefront) {
-          if (storefront.listings.isEmpty && storefront.variantGroups.isEmpty) {
+          if (storefront.listings.isEmpty) {
             return Center(child: Text(l10n.retailStorefrontEmpty));
           }
 
@@ -97,10 +97,6 @@ class _RetailStorefrontScreenState extends ConsumerState<RetailStorefrontScreen>
               .where((l) => _conditions.isEmpty || (l.condition != null && _conditions.contains(l.condition!.id)))
               .where((l) => _payments.isEmpty || (l.payment != null && _payments.contains(l.payment!.id)))
               .toList();
-          final filtering = _conditions.isNotEmpty || _payments.isNotEmpty;
-          final groups = filtering ? const <RetailVariantGroupCard>[] : storefront.variantGroups;
-          final groupCount = groups.length;
-          final total = groupCount + listings.length;
 
           return Column(
             children: [
@@ -108,15 +104,9 @@ class _RetailStorefrontScreenState extends ConsumerState<RetailStorefrontScreen>
               Expanded(
                 child: ListView.separated(
                   padding: const EdgeInsets.all(16),
-                  itemCount: total,
+                  itemCount: listings.length,
                   separatorBuilder: (context, index) => const SizedBox(height: 8),
-                  itemBuilder: (context, index) {
-                    if (index < groupCount) {
-                      return _VariantGroupTile(group: groups[index]);
-                    }
-                    final listing = listings[index - groupCount];
-                    return _StorefrontListingTile(listing: listing);
-                  },
+                  itemBuilder: (context, index) => _StorefrontListingTile(listing: listings[index]),
                 ),
               ),
             ],
@@ -158,72 +148,6 @@ Future<void> _openQuantitySheet(BuildContext context, WidgetRef ref, RetailStore
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
     }
-  }
-}
-
-class _VariantGroupTile extends ConsumerWidget {
-  final RetailVariantGroupCard group;
-  const _VariantGroupTile({required this.group});
-
-  Future<void> _pickVariant(BuildContext context, WidgetRef ref) async {
-    final l10n = AppLocalizations.of(context)!;
-    final chosen = await showModalBottomSheet<RetailVariantOptionCard>(
-      context: context,
-      isScrollControlled: true,
-      builder: (sheetContext) => Padding(
-        padding: const EdgeInsets.all(20),
-        child: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(group.name, style: Theme.of(sheetContext).textTheme.titleMedium),
-              const SizedBox(height: 4),
-              Text(l10n.retailStorefrontChooseVariantTitle, style: TextStyle(color: Theme.of(sheetContext).hintColor)),
-              const SizedBox(height: 12),
-              for (final o in group.options)
-                ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(o.label),
-                  trailing: Text('${o.price.toStringAsFixed(0)} ${o.currency}'),
-                  enabled: o.stock == null || o.stock! > 0,
-                  onTap: () => Navigator.of(sheetContext).pop(o),
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
-    if (chosen == null || !context.mounted) return;
-    await _openQuantitySheet(context, ref, chosen.toStorefrontListing(group.name, group.image));
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Card(
-      margin: EdgeInsets.zero,
-      clipBehavior: Clip.antiAlias,
-      child: ListTile(
-        onTap: () => _pickVariant(context, ref),
-        leading: ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: SizedBox(
-            width: 48,
-            height: 48,
-            child: group.image != null
-                ? CachedNetworkImage(imageUrl: group.image!, fit: BoxFit.cover)
-                : Container(
-                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.08),
-                    alignment: Alignment.center,
-                    child: Text(produceEmoji(group.name), style: const TextStyle(fontSize: 20)),
-                  ),
-          ),
-        ),
-        title: Text(group.name),
-        subtitle: Text('${group.options.length} · ${group.priceFrom.toStringAsFixed(0)}+'),
-        trailing: const Icon(Icons.chevron_right),
-      ),
-    );
   }
 }
 
