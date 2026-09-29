@@ -7,6 +7,7 @@ import '../../../../shared/utils/produce_emoji.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../../shared/widgets/view_mode_toggle.dart';
 import '../../application/business_menu_providers.dart';
+import '../../data/business_menu_api.dart' show SaleUnitOption;
 import '../../data/models/menu_item.dart';
 import '../../data/models/menu_vocabulary.dart';
 import 'market_catalog_screen.dart';
@@ -86,42 +87,67 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
   /// for, and creates the item with the branch's own name (same convention
   /// [_itemEmoji]'s doc comment already relies on: a branch-created item
   /// keeps that name until the merchant opens the full editor and changes it).
-  Future<void> _quickAddPrice(VocabularyOptionRef branch) async {
+  Future<void> _quickAddPrice(VocabularyOptionRef branch, List<String>? saleUnitCodes) async {
     final l10n = AppLocalizations.of(context)!;
     final supplyController = TextEditingController();
     final priceController = TextEditingController();
     final quantityController = TextEditingController();
+    String? selectedUnit;
+
+    // Only a group the backend actually narrows (today: «أعشاب وورقيات» →
+    // bunch/kg/g — see SaleUnits::herbsCodes()) gets a unit field here at
+    // all; every other branch keeps this dialog to exactly what the owner
+    // first asked for (supply/sale price, quantity).
+    List<SaleUnitOption> units = const [];
+    if (saleUnitCodes != null) {
+      final all = await ref.read(saleUnitOptionsProvider.future);
+      units = all.where((u) => saleUnitCodes.contains(u.code)).toList();
+      if (units.isNotEmpty) selectedUnit = units.first.code;
+    }
+    if (!mounted) return;
 
     final saved = await showDialog<bool>(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(localizedName(branch.nameAr, branch.nameEn, Localizations.localeOf(context).languageCode == 'en')),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: supplyController,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              decoration: InputDecoration(labelText: l10n.marketCatalogSupplyPrice, isDense: true, border: const OutlineInputBorder()),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: priceController,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              decoration: InputDecoration(labelText: l10n.marketCatalogSalePrice, isDense: true, border: const OutlineInputBorder()),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: quantityController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: l10n.marketCatalogQuantity, isDense: true, border: const OutlineInputBorder()),
-            ),
+      builder: (dialogContext) => StatefulBuilder(
+        builder: (dialogContext, setDialogState) => AlertDialog(
+          title: Text(localizedName(branch.nameAr, branch.nameEn, Localizations.localeOf(context).languageCode == 'en')),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: supplyController,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                decoration: InputDecoration(labelText: l10n.marketCatalogSupplyPrice, isDense: true, border: const OutlineInputBorder()),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: priceController,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                decoration: InputDecoration(labelText: l10n.marketCatalogSalePrice, isDense: true, border: const OutlineInputBorder()),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: quantityController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(labelText: l10n.marketCatalogQuantity, isDense: true, border: const OutlineInputBorder()),
+              ),
+              if (units.isNotEmpty) ...[
+                const SizedBox(height: 12),
+                DropdownButtonFormField<String>(
+                  initialValue: selectedUnit,
+                  isExpanded: true,
+                  decoration: InputDecoration(labelText: l10n.marketCatalogUnit, isDense: true, border: const OutlineInputBorder()),
+                  items: units.map((u) => DropdownMenuItem(value: u.code, child: Text(u.label))).toList(),
+                  onChanged: (value) => setDialogState(() => selectedUnit = value),
+                ),
+              ],
+            ],
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: Text(l10n.commonCancel)),
+            FilledButton(onPressed: () => Navigator.pop(dialogContext, true), child: Text(l10n.marketCatalogSave)),
           ],
         ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: Text(l10n.commonCancel)),
-          FilledButton(onPressed: () => Navigator.pop(dialogContext, true), child: Text(l10n.marketCatalogSave)),
-        ],
       ),
     );
 
@@ -135,6 +161,7 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
         nameEn: branch.nameEn,
         basePrice: price,
         supplyPrice: double.tryParse(supplyController.text.trim()),
+        saleUnit: selectedUnit,
         availableQuantity: int.tryParse(quantityController.text.trim()),
         lineOptionId: branch.id,
       );
@@ -315,7 +342,7 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
               // always-there per-branch button is gone.
               child: (itemsByBranch[branch.id]?.isNotEmpty ?? false)
                   ? _itemsFor(itemsByBranch[branch.id]!, displayMode)
-                  : _EmptyBranchCard(branch: branch, onAddPrice: () => _quickAddPrice(branch)),
+                  : _EmptyBranchCard(branch: branch, onAddPrice: () => _quickAddPrice(branch, group.saleUnitCodes)),
             ),
           ],
         ],

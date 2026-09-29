@@ -91,6 +91,12 @@ class _MarketCatalogGroupScreenState extends ConsumerState<MarketCatalogGroupScr
     _initControllers(group);
 
     final margin = catalog?.defaultMarginPercent;
+    final allUnits = catalog?.saleUnits ?? const <SaleUnitOption>[];
+    // null = every unit is fair game; a restricted list (e.g. «أعشاب
+    // وورقيات» → bunch/kg/g) narrows the picker to just those codes.
+    final groupUnits = group.saleUnitCodes == null
+        ? allUnits
+        : allUnits.where((u) => group.saleUnitCodes!.contains(u.code)).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -132,7 +138,7 @@ class _MarketCatalogGroupScreenState extends ConsumerState<MarketCatalogGroupScr
                   basePriceController: _basePrice[row.optionId]!,
                   brandNameController: _brandName[row.optionId]!,
                   saleUnit: _saleUnit[row.optionId],
-                  saleUnits: catalog?.saleUnits ?? const [],
+                  saleUnits: groupUnits,
                   isPriced: row.item != null,
                   onUnitChanged: (value) => setState(() => _saleUnit[row.optionId] = value),
                 );

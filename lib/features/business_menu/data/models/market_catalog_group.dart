@@ -69,6 +69,11 @@ class MarketCatalogGroup {
   final List<MarketCatalogRow> rows;
   final int filled;
   final int total;
+  /// null = every unit in the catalog's own `saleUnits` is fair game.
+  /// Non-null (e.g. «أعشاب وورقيات» → bunch/kg/g — see
+  /// `SaleUnits::herbsCodes()` on the backend) narrows the picker to just
+  /// these codes, since most of the full list makes no sense for the row.
+  final List<String>? saleUnitCodes;
 
   const MarketCatalogGroup({
     required this.groupId,
@@ -77,6 +82,7 @@ class MarketCatalogGroup {
     required this.rows,
     required this.filled,
     required this.total,
+    this.saleUnitCodes,
   });
 
   String name(String languageCode) {
@@ -94,6 +100,7 @@ class MarketCatalogGroup {
           .toList(),
       filled: (json['filled'] as num?)?.toInt() ?? 0,
       total: (json['total'] as num?)?.toInt() ?? 0,
+      saleUnitCodes: (json['sale_unit_codes'] as List<dynamic>?)?.map((e) => e as String).toList(),
     );
   }
 }

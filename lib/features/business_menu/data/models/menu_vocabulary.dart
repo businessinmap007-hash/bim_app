@@ -11,11 +11,17 @@ class VocabularyGroup {
   /// dictionary, singled out by the backend so the item form can give it
   /// its own dropdown instead of lumping it into the generic modifier chips.
   final bool isBrand;
+  /// null = every sale unit is fair game. Non-null (e.g. «أعشاب وورقيات»
+  /// → bunch/kg/g) narrows a quick-price picker to just these codes —
+  /// same restriction MenuMarketCatalogService already applies to «تعبئة
+  /// الرفوف»'s own unit dropdown, mirrored here for this vocabulary.
+  final List<String>? saleUnitCodes;
   const VocabularyGroup({
     required this.groupId,
     required this.groupName,
     required this.options,
     this.isBrand = false,
+    this.saleUnitCodes,
   });
 
   factory VocabularyGroup.fromJson(Map<String, dynamic> json) => VocabularyGroup(
@@ -25,6 +31,7 @@ class VocabularyGroup {
         .map((e) => VocabularyOptionRef.fromJson(e as Map<String, dynamic>))
         .toList(),
     isBrand: json['is_brand'] as bool? ?? false,
+    saleUnitCodes: (json['sale_unit_codes'] as List<dynamic>?)?.map((e) => e as String).toList(),
   );
 }
 
