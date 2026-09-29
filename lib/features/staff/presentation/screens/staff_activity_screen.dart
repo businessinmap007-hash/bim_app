@@ -10,8 +10,8 @@ import '../../data/models/staff_activity.dart';
 /// The owner's end-of-shift review: every order/booking action a staff
 /// member took, plus how many operations each of them ran in the selected
 /// period. Owner-only — the backend rejects a staff caller here regardless
-/// of capability, so this screen is reached only from the owner's own
-/// Staff & permissions settings.
+/// of capability. Body-only — reached as a tab inside
+/// [StaffTeamSettingsScreen], which supplies the shared Scaffold/AppBar.
 class StaffActivityScreen extends ConsumerStatefulWidget {
   const StaffActivityScreen({super.key});
 
@@ -59,9 +59,7 @@ class _StaffActivityScreenState extends ConsumerState<StaffActivityScreen> {
     final state = ref.watch(staffActivityControllerProvider);
     final dateFormat = DateFormat('yyyy-MM-dd');
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.staffActivityTitle)),
-      body: RefreshIndicator(
+    return RefreshIndicator(
         onRefresh: () => ref.read(staffActivityControllerProvider.notifier).load(),
         child: CustomScrollView(
           controller: _scrollController,
@@ -185,8 +183,7 @@ class _StaffActivityScreenState extends ConsumerState<StaffActivityScreen> {
               ),
           ],
         ),
-      ),
-    );
+      );
   }
 }
 

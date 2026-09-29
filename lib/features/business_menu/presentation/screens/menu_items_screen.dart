@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/utils/localized_name.dart';
 import '../../../../shared/utils/produce_emoji.dart';
@@ -343,8 +344,13 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
   /// [MenuItemEditScreen] (see [_priceDialog]'s doc for why).
   Widget _itemsFor(List<BusinessMenuItem> items, String displayMode, List<String>? saleUnitCodes) {
     if (displayMode == 'grid') {
+      // «اجعل كل كارتين فى سطر واذا كانت الشاشة اكبر يكون 3 فى سطر» —
+      // المالك، 2026-09-29. Mobile stays 2 per row; a wider screen (tablet/
+      // desktop, same tiers as Breakpoints.gridColumnsFor's own category
+      // grid) gets 3.
+      final columns = Breakpoints.sizeFor(MediaQuery.of(context).size.width) == ScreenSize.mobile ? 2 : 3;
       return GridView.count(
-        crossAxisCount: 2,
+        crossAxisCount: columns,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         mainAxisSpacing: 8,
@@ -371,6 +377,51 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
             ),
           ),
       ],
+    );
+  }
+
+  /// «شبكة بيكون كل كارت فى سطر منفردا اجعل كل كارتين فى سطر واذا كانت
+  /// الشاشة اكبر يكون 3 فى سطر» — المالك، 2026-09-29. [_itemsFor] used to
+  /// be called separately PER BRANCH, and most branches carry exactly one
+  /// priced item — a grid of one child renders that one card alone, blank
+  /// space beside it, no matter the column count. This builds ONE shared
+  /// grid for the whole GROUP instead, so cards actually flow across
+  /// branch boundaries. List mode is untouched — its own per-branch blocks
+  /// are what "jump to this branch" scrolls to; here the first tile
+  /// standing in for a branch carries that same [_branchKey].
+  Widget _groupGrid(List<VocabularyOptionRef> branches, Map<int, List<BusinessMenuItem>> itemsByBranch, List<String>? saleUnitCodes) {
+    final columns = Breakpoints.sizeFor(MediaQuery.of(context).size.width) == ScreenSize.mobile ? 2 : 3;
+    final tiles = <Widget>[];
+
+    for (final branch in branches) {
+      final items = itemsByBranch[branch.id];
+      if (items != null && items.isNotEmpty) {
+        for (var i = 0; i < items.length; i++) {
+          final item = items[i];
+          final isFirst = i == 0;
+          tiles.add(_ItemGridTile(
+            key: isFirst ? _branchKey(branch.id) : null,
+            item: item,
+            onTap: () => _quickEditPrice(item, saleUnitCodes),
+          ));
+        }
+      } else {
+        tiles.add(_EmptyBranchGridTile(
+          key: _branchKey(branch.id),
+          branch: branch,
+          onAddPrice: () => _quickAddPrice(branch, saleUnitCodes),
+        ));
+      }
+    }
+
+    return GridView.count(
+      crossAxisCount: columns,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      mainAxisSpacing: 8,
+      crossAxisSpacing: 8,
+      childAspectRatio: 0.62,
+      children: tiles,
     );
   }
 
@@ -460,24 +511,27 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
           // المالك، 2026-09-29: priced branches first (A→Z among
           // themselves), then unpriced ones (A→Z among themselves) — never
           // interleaved by vocabulary order the way they used to be.
-          for (final branch in _sortedBranches(group.options, itemsByBranch, isEnglish)) ...[
-            Padding(
-              key: _branchKey(branch.id),
-              padding: const EdgeInsets.only(bottom: 8),
-              // A branch already carrying at least one priced item shows
-              // exactly those cards — no separate heading, no more "add"
-              // next to something already priced (the merchant's own
-              // complaint: that button sat beside كزبرة خضراء even though
-              // it already had a price). A branch with nothing yet shows
-              // ONE placeholder card instead, matching a priced card's own
-              // look (image/emoji, name) with "إضافة سعر" where the price
-              // would be — tapping it is the only way in now; the old
-              // always-there per-branch button is gone.
-              child: (itemsByBranch[branch.id]?.isNotEmpty ?? false)
-                  ? _itemsFor(itemsByBranch[branch.id]!, displayMode, group.saleUnitCodes)
-                  : _EmptyBranchCard(branch: branch, onAddPrice: () => _quickAddPrice(branch, group.saleUnitCodes)),
-            ),
-          ],
+          if (displayMode == 'grid')
+            _groupGrid(_sortedBranches(group.options, itemsByBranch, isEnglish), itemsByBranch, group.saleUnitCodes)
+          else
+            for (final branch in _sortedBranches(group.options, itemsByBranch, isEnglish)) ...[
+              Padding(
+                key: _branchKey(branch.id),
+                padding: const EdgeInsets.only(bottom: 8),
+                // A branch already carrying at least one priced item shows
+                // exactly those cards — no separate heading, no more "add"
+                // next to something already priced (the merchant's own
+                // complaint: that button sat beside كزبرة خضراء even though
+                // it already had a price). A branch with nothing yet shows
+                // ONE placeholder card instead, matching a priced card's own
+                // look (image/emoji, name) with "إضافة سعر" where the price
+                // would be — tapping it is the only way in now; the old
+                // always-there per-branch button is gone.
+                child: (itemsByBranch[branch.id]?.isNotEmpty ?? false)
+                    ? _itemsFor(itemsByBranch[branch.id]!, displayMode, group.saleUnitCodes)
+                    : _EmptyBranchCard(branch: branch, onAddPrice: () => _quickAddPrice(branch, group.saleUnitCodes)),
+              ),
+            ],
         ],
         if (unbranched.isNotEmpty) ...[
           Text(AppLocalizations.of(context)!.menuItemsUnbranchedSection, style: Theme.of(context).textTheme.titleSmall),
@@ -768,6 +822,67 @@ class _EmptyBranchCard extends StatelessWidget {
   }
 }
 
+/// [_EmptyBranchCard]'s counterpart for grid mode — same emoji placeholder,
+/// name and "إضافة سعر" action, shaped to sit in [_ItemGridTile]'s own
+/// GridView instead of falling back to a full-width ListTile there.
+class _EmptyBranchGridTile extends StatelessWidget {
+  final VocabularyOptionRef branch;
+  final VoidCallback onAddPrice;
+  const _EmptyBranchGridTile({super.key, required this.branch, required this.onAddPrice});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
+
+    return Card(
+      margin: EdgeInsets.zero,
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onAddPrice,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            AspectRatio(
+              aspectRatio: 1,
+              child: Container(
+                alignment: Alignment.center,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
+                child: Text(produceEmoji(branch.nameEn), style: const TextStyle(fontSize: 36)),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    localizedName(branch.nameAr, branch.nameEn, isEnglish),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.titleSmall,
+                  ),
+                  const SizedBox(height: 6),
+                  TextButton.icon(
+                    onPressed: onAddPrice,
+                    icon: const Icon(Icons.add, size: 16),
+                    label: Text(AppLocalizations.of(context)!.menuItemsAddPrice),
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      visualDensity: VisualDensity.compact,
+                      alignment: Alignment.centerLeft,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _ItemTile extends ConsumerWidget {
   final BusinessMenuItem item;
   final VoidCallback onTap;
@@ -833,7 +948,7 @@ class _ItemTile extends ConsumerWidget {
 class _ItemGridTile extends ConsumerWidget {
   final BusinessMenuItem item;
   final VoidCallback onTap;
-  const _ItemGridTile({required this.item, required this.onTap});
+  const _ItemGridTile({super.key, required this.item, required this.onTap});
 
   Future<void> _delete(BuildContext context, WidgetRef ref) async {
     final l10n = AppLocalizations.of(context)!;

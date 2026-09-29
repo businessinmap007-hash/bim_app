@@ -9,12 +9,10 @@ class StaffApi {
   final ApiClient _client;
   const StaffApi(this._client);
 
-  Future<List<CapabilityOption>> capabilities() async {
+  Future<BusinessCapabilities> capabilities() async {
     final data =
         await _client.get('/business/capabilities') as Map<String, dynamic>;
-    return (data['capabilities'] as List<dynamic>? ?? [])
-        .map((e) => CapabilityOption.fromJson(e as Map<String, dynamic>))
-        .toList();
+    return BusinessCapabilities.fromJson(data);
   }
 
   Future<List<StaffMember>> list() async {
@@ -71,7 +69,8 @@ class StaffApi {
   /// card carrying today's operation count, attendance, and (drivers only)
   /// live delivery workload. Owner-only.
   Future<List<StaffGroup>> groups() async {
-    final data = await _client.get('/business/staff/groups') as Map<String, dynamic>;
+    final data =
+        await _client.get('/business/staff/groups') as Map<String, dynamic>;
     return (data['groups'] as List<dynamic>? ?? [])
         .map((e) => StaffGroup.fromJson(e as Map<String, dynamic>))
         .toList();
@@ -80,7 +79,8 @@ class StaffApi {
   /// GET /business/memberships — the businesses I work for as staff, with
   /// what I'm allowed to do at each. May be called by any account.
   Future<List<StaffMembership>> memberships() async {
-    final data = await _client.get('/business/memberships') as Map<String, dynamic>;
+    final data =
+        await _client.get('/business/memberships') as Map<String, dynamic>;
     return (data['memberships'] as List<dynamic>? ?? [])
         .map((e) => StaffMembership.fromJson(e as Map<String, dynamic>))
         .toList();
@@ -88,19 +88,24 @@ class StaffApi {
 
   /// GET /staff/invitations — grants I haven't answered yet.
   Future<List<StaffInvitation>> invitations() async {
-    final data = await _client.get('/staff/invitations') as Map<String, dynamic>;
+    final data =
+        await _client.get('/staff/invitations') as Map<String, dynamic>;
     return (data['invitations'] as List<dynamic>? ?? [])
         .map((e) => StaffInvitation.fromJson(e as Map<String, dynamic>))
         .toList();
   }
 
   Future<StaffMember> acceptInvitation(int businessId) async {
-    final data = await _client.post('/staff/invitations/$businessId/accept') as Map<String, dynamic>;
+    final data =
+        await _client.post('/staff/invitations/$businessId/accept')
+            as Map<String, dynamic>;
     return StaffMember.fromJson(data['staff'] as Map<String, dynamic>);
   }
 
   Future<StaffMember> declineInvitation(int businessId) async {
-    final data = await _client.post('/staff/invitations/$businessId/decline') as Map<String, dynamic>;
+    final data =
+        await _client.post('/staff/invitations/$businessId/decline')
+            as Map<String, dynamic>;
     return StaffMember.fromJson(data['staff'] as Map<String, dynamic>);
   }
 }

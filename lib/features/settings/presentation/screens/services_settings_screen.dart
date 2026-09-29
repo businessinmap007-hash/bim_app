@@ -25,10 +25,7 @@ import '../../../projects/presentation/screens/projects_screen.dart';
 import '../../../retail_listings/presentation/screens/retail_listings_screen.dart';
 import '../../../schedules/presentation/screens/my_trip_schedules_screen.dart';
 import '../../../staff/application/staff_providers.dart';
-import '../../../staff/presentation/screens/attendance_verification_settings_screen.dart';
-import '../../../staff/presentation/screens/staff_activity_screen.dart';
-import '../../../staff/presentation/screens/staff_groups_screen.dart';
-import '../../../staff/presentation/screens/staff_screen.dart';
+import '../../../staff/presentation/screens/staff_team_settings_screen.dart';
 import '../../../table/presentation/screens/table_calls_screen.dart';
 import '../../../training/presentation/screens/my_training_clients_screen.dart';
 import '../../../training_templates/presentation/screens/training_templates_screen.dart';
@@ -54,16 +51,29 @@ class ServicesSettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final keysAsync = ref.watch(myServiceKeysProvider);
+    // Still loading/errored is read as "unknown" (fail open, same as
+    // keysAsync's own error branch below) rather than gating the whole
+    // screen behind a second spinner for what's a narrow, secondary filter.
+    final menuKinds = ref.watch(myMenuKindsProvider).valueOrNull;
     final authState = ref.watch(authControllerProvider);
-    final isCarrier = authState is AuthSignedIn && authState.user.isShippingCarrier;
+    final isCarrier =
+        authState is AuthSignedIn && authState.user.isShippingCarrier;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsServicesSection)),
       body: keysAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         // Fail open: every tile, same as before this screen filtered at all.
-        error: (_, _) => _ServiceList(keys: null, isCarrier: isCarrier),
-        data: (keys) => _ServiceList(keys: keys, isCarrier: isCarrier),
+        error: (_, _) => _ServiceList(
+          keys: null,
+          menuKinds: menuKinds,
+          isCarrier: isCarrier,
+        ),
+        data: (keys) => _ServiceList(
+          keys: keys,
+          menuKinds: menuKinds,
+          isCarrier: isCarrier,
+        ),
       ),
     );
   }
@@ -73,11 +83,27 @@ class _ServiceList extends StatelessWidget {
   /// null means "don't filter — show everything" (loading fallback / error).
   final Set<String>? keys;
 
+  /// null/empty = unknown or unconfigured — never a reason to narrow, same
+  /// convention the backend's own assertFoodMenu() guard reads it with.
+  /// Only a NON-empty set that excludes `menu_food` actually hides a tile.
+  final Set<String>? menuKinds;
+
   /// Shipping & Delivery accounts run deliveries from here (and only they do).
   final bool isCarrier;
-  const _ServiceList({required this.keys, required this.isCarrier});
+  const _ServiceList({
+    required this.keys,
+    required this.menuKinds,
+    required this.isCarrier,
+  });
 
   bool _has(String key) => keys == null || keys!.contains(key);
+
+  /// «نداء الطاولات وباقات المنيو تخص المطاعم فقط فلماذا تظهر عند الحسابات
+  /// الاخرى» — المالك، 2026-09-29.
+  bool get _isFoodShaped =>
+      menuKinds == null ||
+      menuKinds!.isEmpty ||
+      menuKinds!.contains('menu_food');
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +117,7 @@ class _ServiceList extends StatelessWidget {
         builder: (_) => const MenuItemsScreen(),
       ),
       _Tile(
-        show: _has('menu'),
+        show: _has('menu') && _isFoodShaped,
         leading: Icons.fastfood_outlined,
         title: l10n.menuBundlesTitle,
         builder: (_) => const MenuBundlesScreen(),
@@ -207,32 +233,17 @@ class _ServiceList extends StatelessWidget {
           },
         ),
       ),
+      // «جمع ما يخص فريق العمل فى زر واحد (اعدادات فريق العمل) وداخله Tabs
+      // لكل صفحة» — المالك، 2026-09-29: one entry replacing the 4 separate
+      // staff-related tiles that used to sit here.
       _Tile(
         show: true, // account management — no capability of its own.
         leading: Icons.badge_outlined,
-        title: l10n.staffTitle,
-        builder: (_) => const StaffScreen(),
+        title: l10n.staffTeamSettingsTitle,
+        builder: (_) => const StaffTeamSettingsScreen(),
       ),
       _Tile(
-        show: true, // account management — no capability of its own.
-        leading: Icons.fact_check_outlined,
-        title: l10n.staffActivityTitle,
-        builder: (_) => const StaffActivityScreen(),
-      ),
-      _Tile(
-        show: true, // account management — no capability of its own.
-        leading: Icons.groups_outlined,
-        title: l10n.staffGroupsTitle,
-        builder: (_) => const StaffGroupsScreen(),
-      ),
-      _Tile(
-        show: true, // account management — no capability of its own.
-        leading: Icons.qr_code_2_outlined,
-        title: l10n.attendanceVerificationSettingsTitle,
-        builder: (_) => const AttendanceVerificationSettingsScreen(),
-      ),
-      _Tile(
-        show: _has('orders'),
+        show: _has('orders') && _isFoodShaped,
         leading: Icons.room_service_outlined,
         title: l10n.tableCallsTitle,
         builder: (_) => const TableCallsScreen(),
@@ -263,7 +274,9 @@ class _ServiceList extends StatelessWidget {
           padding: const EdgeInsets.all(24),
           child: Text(
             l10n.settingsNoServicesForCategory,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).hintColor),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(context).hintColor,
+            ),
             textAlign: TextAlign.center,
           ),
         ),
@@ -281,7 +294,9 @@ class _ServiceList extends StatelessWidget {
                 leading: Icon(tiles[i].leading),
                 title: Text(tiles[i].title),
                 trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: tiles[i].builder)),
+                onTap: () => Navigator.of(
+                  context,
+                ).push(MaterialPageRoute(builder: tiles[i].builder)),
               ),
             ],
           ],
@@ -296,7 +311,12 @@ class _Tile {
   final IconData leading;
   final String title;
   final WidgetBuilder builder;
-  const _Tile({required this.show, required this.leading, required this.title, required this.builder});
+  const _Tile({
+    required this.show,
+    required this.leading,
+    required this.title,
+    required this.builder,
+  });
 }
 
 class _OptionCard extends StatelessWidget {

@@ -2436,6 +2436,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get retailListingBusinessGroupPickerEmpty => 'No business groups yet.';
 
   @override
+  String get staffTeamSettingsTitle => 'Team Settings';
+
+  @override
   String get staffTitle => 'Staff';
 
   @override

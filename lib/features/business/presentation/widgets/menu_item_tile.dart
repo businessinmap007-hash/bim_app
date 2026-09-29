@@ -6,6 +6,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/utils/produce_emoji.dart';
 import '../../../../shared/widgets/full_screen_gallery.dart';
 import '../../data/models/menu_item_summary.dart';
+import 'menu_card_stepper.dart';
 
 /// One item card on the "menu" tab — modeled on the item-card pattern from
 /// [[ux-references-doc]]'s single-vendor menu review (docs/ux-references.md
@@ -28,9 +29,15 @@ class MenuItemTile extends StatefulWidget {
   final VoidCallback? onTap;
   final Future<void> Function(int qty)? onDirectAdd;
 
-  const MenuItemTile({super.key, required this.item, this.onTap, this.onDirectAdd});
+  const MenuItemTile({
+    super.key,
+    required this.item,
+    this.onTap,
+    this.onDirectAdd,
+  });
 
-  bool get _offersStepper => onDirectAdd != null && !item.hasChoices && item.saleUnitLabel != null;
+  bool get _offersStepper =>
+      onDirectAdd != null && !item.hasChoices && item.saleUnitLabel != null;
 
   @override
   State<MenuItemTile> createState() => _MenuItemTileState();
@@ -88,7 +95,9 @@ class _MenuItemTileState extends State<MenuItemTile> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final imageUrl = item.imageUrl ?? (item.imageUrls.isNotEmpty ? item.imageUrls.first : null);
+    final imageUrl =
+        item.imageUrl ??
+        (item.imageUrls.isNotEmpty ? item.imageUrls.first : null);
 
     final offersStepper = widget._offersStepper;
 
@@ -118,7 +127,8 @@ class _MenuItemTileState extends State<MenuItemTile> {
                             ? CachedNetworkImage(
                                 imageUrl: imageUrl,
                                 fit: BoxFit.cover,
-                                errorWidget: (context, url, error) => _ImagePlaceholder(emoji: _placeholderEmoji),
+                                errorWidget: (context, url, error) =>
+                                    _ImagePlaceholder(emoji: _placeholderEmoji),
                               )
                             : _ImagePlaceholder(emoji: _placeholderEmoji),
                       ),
@@ -135,7 +145,10 @@ class _MenuItemTileState extends State<MenuItemTile> {
                         end: -4,
                         child: _PhotoCountBadge(
                           count: item.imageUrls.length,
-                          onTap: () => FullScreenGallery.show(context, urls: item.imageUrls),
+                          onTap: () => FullScreenGallery.show(
+                            context,
+                            urls: item.imageUrls,
+                          ),
                         ),
                       ),
                   ],
@@ -155,17 +168,29 @@ class _MenuItemTileState extends State<MenuItemTile> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Expanded(
-                              child: Text(item.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: theme.textTheme.titleSmall),
+                              child: Text(
+                                item.name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: theme.textTheme.titleSmall,
+                              ),
                             ),
                             const SizedBox(width: 8),
                             Text(
                               _priceLabel(item, l10n),
-                              style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                              style: theme.textTheme.titleSmall?.copyWith(
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                           ],
                         )
                       else
-                        Text(item.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: theme.textTheme.titleSmall),
+                        Text(
+                          item.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.titleSmall,
+                        ),
                       if (_subtitle != null)
                         Padding(
                           padding: const EdgeInsets.only(top: 2),
@@ -173,7 +198,9 @@ class _MenuItemTileState extends State<MenuItemTile> {
                             _subtitle!,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.hintColor,
+                            ),
                           ),
                         ),
                       if (item.specSummary != null)
@@ -183,7 +210,10 @@ class _MenuItemTileState extends State<MenuItemTile> {
                             item.specSummary!,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor, fontSize: 11),
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.hintColor,
+                              fontSize: 11,
+                            ),
                           ),
                         ),
                       const SizedBox(height: 8),
@@ -194,21 +224,38 @@ class _MenuItemTileState extends State<MenuItemTile> {
                             Expanded(
                               child: Text(
                                 _priceLabel(item, l10n),
-                                style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                                style: theme.textTheme.titleSmall?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
                             ),
                             if (item.isOutOfStock)
-                              Text(l10n.businessOutOfStock, style: TextStyle(fontSize: 10, color: theme.colorScheme.error))
+                              Text(
+                                l10n.businessOutOfStock,
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  color: theme.colorScheme.error,
+                                ),
+                              )
                             else
-                              _ContextAction(hasChoices: item.hasChoices, label: l10n.menuCardViewOptions),
+                              _ContextAction(
+                                hasChoices: item.hasChoices,
+                                label: l10n.menuCardViewOptions,
+                              ),
                           ],
                         ),
                       if (offersStepper && item.isOutOfStock)
-                        Text(l10n.businessOutOfStock, style: TextStyle(fontSize: 10, color: theme.colorScheme.error)),
+                        Text(
+                          l10n.businessOutOfStock,
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: theme.colorScheme.error,
+                          ),
+                        ),
                       if (offersStepper && !item.isOutOfStock) ...[
                         Divider(height: 1, color: theme.dividerColor),
                         const SizedBox(height: 8),
-                        _StepperRow(
+                        MenuCardStepperRow(
                           qty: _qty,
                           adding: _adding,
                           onInc: _inc,
@@ -233,7 +280,9 @@ class _MenuItemTileState extends State<MenuItemTile> {
     final startingPrice = item.startingPrice;
     if (startingPrice != null) {
       final price = startingPrice.toStringAsFixed(0);
-      return unit != null ? l10n.menuCardPricePerUnit(price, unit) : l10n.menuCardPriceFrom(price);
+      return unit != null
+          ? l10n.menuCardPricePerUnit(price, unit)
+          : l10n.menuCardPriceFrom(price);
     }
     final price = item.basePrice.toStringAsFixed(0);
     return unit != null ? l10n.menuCardPricePerUnit(price, unit) : price;
@@ -254,7 +303,11 @@ class _BestsellerBadge extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w700, color: AppColors.primaryNavy),
+        style: const TextStyle(
+          fontSize: 9,
+          fontWeight: FontWeight.w700,
+          color: AppColors.primaryNavy,
+        ),
       ),
     );
   }
@@ -281,113 +334,14 @@ class _ContextAction extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(label, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.primary)),
-        Icon(Icons.chevron_right, size: 16, color: theme.colorScheme.primary),
-      ],
-    );
-  }
-}
-
-/// The quick-add row for a goods-catalog item: a +/- stepper on one side, a
-/// standalone "أضف" (add) pill on the other — one line, one glance, matching
-/// the Tech Catalog Setup canvas's "بلا تفاصيل" storefront card exactly.
-class _StepperRow extends StatelessWidget {
-  final int qty;
-  final bool adding;
-  final VoidCallback onInc;
-  final VoidCallback? onDec;
-  final VoidCallback onAdd;
-  final String addLabel;
-
-  const _StepperRow({
-    required this.qty,
-    required this.adding,
-    required this.onInc,
-    required this.onDec,
-    required this.onAdd,
-    required this.addLabel,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            _StepperButton(icon: Icons.remove, filled: false, onTap: onDec),
-            SizedBox(
-              width: 32,
-              child: Text('$qty', textAlign: TextAlign.center, style: theme.textTheme.titleSmall),
-            ),
-            _StepperButton(icon: Icons.add, filled: true, onTap: onInc),
-          ],
-        ),
-        InkWell(
-          onTap: adding ? null : onAdd,
-          borderRadius: BorderRadius.circular(10),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-            decoration: BoxDecoration(
-              color: AppColors.accentGold.withValues(alpha: 0.14),
-              border: Border.all(color: AppColors.accentGold.withValues(alpha: 0.4)),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: adding
-                ? const SizedBox(
-                    width: 14,
-                    height: 14,
-                    child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.accentGold),
-                  )
-                : Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.shopping_cart_outlined, size: 15, color: AppColors.accentGold),
-                      const SizedBox(width: 6),
-                      Text(
-                        addLabel,
-                        style: theme.textTheme.bodySmall
-                            ?.copyWith(color: AppColors.accentGold, fontWeight: FontWeight.w700),
-                      ),
-                    ],
-                  ),
+        Text(
+          label,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.primary,
           ),
         ),
+        Icon(Icons.chevron_right, size: 16, color: theme.colorScheme.primary),
       ],
-    );
-  }
-}
-
-class _StepperButton extends StatelessWidget {
-  final IconData icon;
-  final bool filled;
-  final VoidCallback? onTap;
-
-  const _StepperButton({required this.icon, required this.filled, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(15),
-      child: Container(
-        width: 30,
-        height: 30,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: filled ? AppColors.accentGold : null,
-          border: filled ? null : Border.all(color: Theme.of(context).dividerColor),
-        ),
-        child: Icon(
-          icon,
-          size: 16,
-          color: filled
-              ? AppColors.primaryNavy
-              : (onTap == null ? Theme.of(context).disabledColor : Theme.of(context).iconTheme.color),
-        ),
-      ),
     );
   }
 }
@@ -411,11 +365,18 @@ class _PhotoCountBadge extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: AppColors.primaryNavy,
-          border: Border.all(color: Theme.of(context).scaffoldBackgroundColor, width: 1.5),
+          border: Border.all(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            width: 1.5,
+          ),
         ),
         child: Text(
           '$count',
-          style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.white),
+          style: const TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.w700,
+            color: Colors.white,
+          ),
         ),
       ),
     );

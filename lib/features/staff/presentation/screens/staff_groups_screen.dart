@@ -11,7 +11,8 @@ import '../../data/models/staff_group.dart';
 /// مناديب التوصيل، ...), each card showing today's operations, whether they
 /// checked in, and — drivers only — whether they're currently carrying an
 /// order. Read-only monitoring; capabilities themselves are still granted
-/// from "الموظفون".
+/// from "الموظفون". Body-only — reached as a tab inside
+/// [StaffTeamSettingsScreen], which supplies the shared Scaffold/AppBar.
 class StaffGroupsScreen extends ConsumerWidget {
   const StaffGroupsScreen({super.key});
 
@@ -20,35 +21,32 @@ class StaffGroupsScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(staffGroupsControllerProvider);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.staffGroupsTitle)),
-      body: RefreshIndicator(
-        onRefresh: () => ref.read(staffGroupsControllerProvider.notifier).load(),
-        child: state.isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : state.error != null
-            ? Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(l10n.commonSomethingWentWrong),
-                    const SizedBox(height: 8),
-                    OutlinedButton(
-                      onPressed: () => ref.read(staffGroupsControllerProvider.notifier).load(),
-                      child: Text(l10n.commonRetry),
-                    ),
-                  ],
-                ),
-              )
-            : state.groups.isEmpty
-            ? Center(child: Text(l10n.staffEmpty))
-            : ListView.separated(
-                padding: const EdgeInsets.all(16),
-                itemCount: state.groups.length,
-                separatorBuilder: (context, index) => const SizedBox(height: 12),
-                itemBuilder: (context, index) => _GroupSection(group: state.groups[index]),
+    return RefreshIndicator(
+      onRefresh: () => ref.read(staffGroupsControllerProvider.notifier).load(),
+      child: state.isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : state.error != null
+          ? Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(l10n.commonSomethingWentWrong),
+                  const SizedBox(height: 8),
+                  OutlinedButton(
+                    onPressed: () => ref.read(staffGroupsControllerProvider.notifier).load(),
+                    child: Text(l10n.commonRetry),
+                  ),
+                ],
               ),
-      ),
+            )
+          : state.groups.isEmpty
+          ? Center(child: Text(l10n.staffEmpty))
+          : ListView.separated(
+              padding: const EdgeInsets.all(16),
+              itemCount: state.groups.length,
+              separatorBuilder: (context, index) => const SizedBox(height: 12),
+              itemBuilder: (context, index) => _GroupSection(group: state.groups[index]),
+            ),
     );
   }
 }

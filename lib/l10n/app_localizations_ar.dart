@@ -2441,6 +2441,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get retailListingBusinessGroupPickerEmpty => 'لا توجد مجموعات بعد.';
 
   @override
+  String get staffTeamSettingsTitle => 'إعدادات فريق العمل';
+
+  @override
   String get staffTitle => 'الموظفون';
 
   @override

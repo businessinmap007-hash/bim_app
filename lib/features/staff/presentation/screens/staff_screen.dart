@@ -12,7 +12,9 @@ import '../../data/models/staff_member.dart';
 
 /// The business owner's delegated-staff roster: who can act on the page's
 /// behalf, and for which capabilities. Owner-only (the backend rejects a
-/// staff caller here regardless).
+/// staff caller here regardless). Body-only — [StaffTeamSettingsScreen]
+/// supplies the shared Scaffold/AppBar/tabs and its own "add staff" FAB
+/// (calling the same [showStaffMemberSheet] this screen used to own).
 class StaffScreen extends ConsumerWidget {
   const StaffScreen({super.key});
 
@@ -21,47 +23,40 @@ class StaffScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(staffControllerProvider);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.staffTitle)),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => showStaffMemberSheet(context, ref),
-        child: const Icon(Icons.person_add_alt_1_outlined),
-      ),
-      body: state.isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : state.error != null
-          ? Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(l10n.commonSomethingWentWrong),
-                  const SizedBox(height: 8),
-                  OutlinedButton(
-                    onPressed: () => ref.read(staffControllerProvider.notifier).loadAll(),
-                    child: Text(l10n.commonRetry),
-                  ),
-                ],
-              ),
-            )
-          : state.staff.isEmpty
-          ? Center(child: Text(l10n.staffEmpty))
-          : RefreshIndicator(
-              onRefresh: () => ref.read(staffControllerProvider.notifier).loadAll(),
-              child: ListView.separated(
-                padding: const EdgeInsets.all(16),
-                itemCount: state.staff.length,
-                separatorBuilder: (context, index) => const SizedBox(height: 8),
-                itemBuilder: (context, index) {
-                  final member = state.staff[index];
-                  return _StaffTile(
-                    member: member,
-                    capabilities: state.capabilities,
-                    onTap: () => showStaffMemberSheet(context, ref, existing: member),
-                  );
-                },
-              ),
+    return state.isLoading
+        ? const Center(child: CircularProgressIndicator())
+        : state.error != null
+        ? Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(l10n.commonSomethingWentWrong),
+                const SizedBox(height: 8),
+                OutlinedButton(
+                  onPressed: () => ref.read(staffControllerProvider.notifier).loadAll(),
+                  child: Text(l10n.commonRetry),
+                ),
+              ],
             ),
-    );
+          )
+        : state.staff.isEmpty
+        ? Center(child: Text(l10n.staffEmpty))
+        : RefreshIndicator(
+            onRefresh: () => ref.read(staffControllerProvider.notifier).loadAll(),
+            child: ListView.separated(
+              padding: const EdgeInsets.all(16),
+              itemCount: state.staff.length,
+              separatorBuilder: (context, index) => const SizedBox(height: 8),
+              itemBuilder: (context, index) {
+                final member = state.staff[index];
+                return _StaffTile(
+                  member: member,
+                  capabilities: state.capabilities,
+                  onTap: () => showStaffMemberSheet(context, ref, existing: member),
+                );
+              },
+            ),
+          );
   }
 }
 

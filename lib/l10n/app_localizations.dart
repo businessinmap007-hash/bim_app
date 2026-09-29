@@ -4484,6 +4484,12 @@ abstract class AppLocalizations {
   /// **'لا توجد مجموعات بعد.'**
   String get retailListingBusinessGroupPickerEmpty;
 
+  /// No description provided for @staffTeamSettingsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعدادات فريق العمل'**
+  String get staffTeamSettingsTitle;
+
   /// No description provided for @staffTitle.
   ///
   /// In ar, this message translates to:

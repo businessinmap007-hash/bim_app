@@ -6,18 +6,63 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/utils/produce_emoji.dart';
 import '../../../../shared/widgets/full_screen_gallery.dart';
 import '../../data/models/menu_item_summary.dart';
+import 'menu_card_stepper.dart';
 
 /// One item's card in the menu's grid display mode — a square photo up
-/// front, then name/price, two per row. See MenuItemTile for the list-mode
-/// counterpart this mirrors (same badges, same tap targets).
-class MenuItemGridCard extends StatelessWidget {
+/// front, then name/price, two-or-three per row. See [MenuItemTile] for the
+/// list-mode counterpart this mirrors (same badges, same tap targets, and —
+/// for a goods item sold by a measured unit — the SAME +/- stepper and
+/// "أضف" button via [onDirectAdd], not just a plain price label). «زيادة
+/// الكمية من الكارت يجب ان يكون نفس المكونات قائمة او كارت» — المالك،
+/// 2026-09-29: switching to grid mode used to drop the add-to-cart stepper
+/// entirely (this card had no [onDirectAdd] at all), so a goods item could
+/// only be added through the sheet, not straight from the card like list
+/// mode already allowed.
+class MenuItemGridCard extends StatefulWidget {
   final MenuItemSummary item;
   final VoidCallback? onTap;
-  const MenuItemGridCard({super.key, required this.item, this.onTap});
+  final Future<void> Function(int qty)? onDirectAdd;
+  const MenuItemGridCard({
+    super.key,
+    required this.item,
+    this.onTap,
+    this.onDirectAdd,
+  });
 
-  /// Only a goods item (one sold under a vocabulary branch — "بطاطس", not a
-  /// hand-typed restaurant dish) gets a produce emoji; a plain "برجر" keeps
-  /// the neutral fork-and-knife icon rather than a random 🧺 fallback.
+  bool get _offersStepper =>
+      onDirectAdd != null && !item.hasChoices && item.saleUnitLabel != null;
+
+  @override
+  State<MenuItemGridCard> createState() => _MenuItemGridCardState();
+}
+
+class _MenuItemGridCardState extends State<MenuItemGridCard> {
+  int _qty = 1;
+  bool _adding = false;
+
+  MenuItemSummary get item => widget.item;
+
+  void _inc() => setState(() => _qty++);
+
+  /// See MenuItemTile's identical method for why this stays clamped at 1.
+  void _dec() {
+    if (_qty <= 1) return;
+    setState(() => _qty--);
+  }
+
+  Future<void> _add() async {
+    if (_adding) return;
+    setState(() => _adding = true);
+    try {
+      await widget.onDirectAdd!(_qty);
+      if (mounted) setState(() => _qty = 1);
+    } finally {
+      if (mounted) setState(() => _adding = false);
+    }
+  }
+
+  /// See MenuItemTile's identical getter — only a goods item (sold under a
+  /// vocabulary branch) gets a produce emoji.
   String? get _placeholderEmoji {
     final branch = item.lineOption;
     return branch == null ? null : produceEmoji(branch.nameEn);
@@ -27,7 +72,10 @@ class MenuItemGridCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final imageUrl = item.imageUrl ?? (item.imageUrls.isNotEmpty ? item.imageUrls.first : null);
+    final imageUrl =
+        item.imageUrl ??
+        (item.imageUrls.isNotEmpty ? item.imageUrls.first : null);
+    final offersStepper = widget._offersStepper;
 
     return Opacity(
       opacity: item.isOutOfStock ? 0.5 : 1,
@@ -35,7 +83,10 @@ class MenuItemGridCard extends StatelessWidget {
         margin: EdgeInsets.zero,
         clipBehavior: Clip.antiAlias,
         child: InkWell(
-          onTap: item.isOutOfStock ? null : onTap,
+          // The stepper row below is its own tap targets; the card itself
+          // has nothing left to open for a quick-add item — same rule
+          // MenuItemTile's list mode already follows.
+          onTap: item.isOutOfStock || offersStepper ? null : widget.onTap,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -49,7 +100,8 @@ class MenuItemGridCard extends StatelessWidget {
                           ? CachedNetworkImage(
                               imageUrl: imageUrl,
                               fit: BoxFit.cover,
-                              errorWidget: (context, url, error) => _ImagePlaceholder(emoji: _placeholderEmoji),
+                              errorWidget: (context, url, error) =>
+                                  _ImagePlaceholder(emoji: _placeholderEmoji),
                             )
                           : _ImagePlaceholder(emoji: _placeholderEmoji),
                     ),
@@ -58,11 +110,21 @@ class MenuItemGridCard extends StatelessWidget {
                         top: 6,
                         start: 6,
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                          decoration: BoxDecoration(color: AppColors.accentGold, borderRadius: BorderRadius.circular(6)),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.accentGold,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
                           child: Text(
                             l10n.menuCardBestseller,
-                            style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w700, color: AppColors.primaryNavy),
+                            style: const TextStyle(
+                              fontSize: 9,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.primaryNavy,
+                            ),
                           ),
                         ),
                       ),
@@ -71,16 +133,26 @@ class MenuItemGridCard extends StatelessWidget {
                         bottom: 6,
                         end: 6,
                         child: InkWell(
-                          onTap: () => FullScreenGallery.show(context, urls: item.imageUrls),
+                          onTap: () => FullScreenGallery.show(
+                            context,
+                            urls: item.imageUrls,
+                          ),
                           borderRadius: BorderRadius.circular(10),
                           child: Container(
                             width: 20,
                             height: 20,
                             alignment: Alignment.center,
-                            decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.black54),
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.black54,
+                            ),
                             child: Text(
                               '${item.imageUrls.length}',
-                              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.white),
+                              style: const TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
@@ -93,20 +165,54 @@ class MenuItemGridCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(item.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: theme.textTheme.titleSmall),
+                    Text(
+                      item.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.titleSmall,
+                    ),
                     if (item.availableQuantity != null)
                       Padding(
                         padding: const EdgeInsets.only(top: 2),
                         child: Text(
-                          l10n.businessMenuAvailableQuantity(item.availableQuantity!),
-                          style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
+                          l10n.businessMenuAvailableQuantity(
+                            item.availableQuantity!,
+                          ),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.hintColor,
+                          ),
                         ),
                       ),
                     const SizedBox(height: 6),
                     if (item.isOutOfStock)
-                      Text(l10n.businessOutOfStock, style: TextStyle(fontSize: 11, color: theme.colorScheme.error))
+                      Text(
+                        l10n.businessOutOfStock,
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: theme.colorScheme.error,
+                        ),
+                      )
                     else
-                      Text(_priceLabel(item, l10n), style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700, color: AppColors.accentGold)),
+                      Text(
+                        _priceLabel(item, l10n),
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.accentGold,
+                        ),
+                      ),
+                    if (offersStepper && !item.isOutOfStock) ...[
+                      const SizedBox(height: 8),
+                      Divider(height: 1, color: theme.dividerColor),
+                      const SizedBox(height: 8),
+                      MenuCardStepperRow(
+                        qty: _qty,
+                        adding: _adding,
+                        onInc: _inc,
+                        onDec: _qty > 1 ? _dec : null,
+                        onAdd: _add,
+                        addLabel: l10n.menuCardAddShort,
+                      ),
+                    ],
                   ],
                 ),
               ),

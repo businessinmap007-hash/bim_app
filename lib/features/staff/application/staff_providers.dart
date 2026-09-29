@@ -9,6 +9,16 @@ final staffApiProvider = Provider<StaffApi>((ref) {
   return StaffApi(ref.watch(apiClientProvider));
 });
 
+/// The single fetch of GET /business/capabilities — the delegable
+/// capability list AND this business's own menu shape, cached once so
+/// [myServiceKeysProvider] and [myMenuKindsProvider] both derive from it
+/// without a second round trip.
+final myCapabilitiesProvider = FutureProvider<BusinessCapabilities>((
+  ref,
+) async {
+  return ref.watch(staffApiProvider).capabilities();
+});
+
 /// The keys of the platform services this business's own category actually
 /// offers (BusinessCapability::forBusiness on the backend) — reused from the
 /// staff-delegation picker to gate which tiles Service Settings shows, so a
@@ -20,8 +30,19 @@ final staffApiProvider = Provider<StaffApi>((ref) {
 /// training/schedules/projects), not a pure menu/retail one — see the
 /// backend's own doc comment on BusinessCapability::PRICEABLE_SERVICES.
 final myServiceKeysProvider = FutureProvider<Set<String>>((ref) async {
-  final options = await ref.watch(staffApiProvider).capabilities();
-  return options.map((o) => o.key).toSet();
+  final result = await ref.watch(myCapabilitiesProvider.future);
+  return result.capabilities.map((o) => o.key).toSet();
+});
+
+/// This business's own menu shape — `menu_food`/`menu_market`/... — empty
+/// when unconfigured (never a reason to narrow, same convention
+/// BusinessMenuBundleController::assertFoodMenu() reads server-side).
+/// «نداء الطاولات وباقات المنيو تخص المطاعم فقط فلماذا تظهر عند الحسابات
+/// الاخرى» — المالك، 2026-09-29: this is what lets Service Settings hide
+/// those two tiles for anything that isn't a food-shaped menu.
+final myMenuKindsProvider = FutureProvider<Set<String>>((ref) async {
+  final result = await ref.watch(myCapabilitiesProvider.future);
+  return result.menuKinds;
 });
 
 class StaffState {
@@ -68,7 +89,7 @@ class StaffController extends StateNotifier<StaffState> {
     try {
       final results = await Future.wait([_api.capabilities(), _api.list()]);
       state = state.copyWith(
-        capabilities: results[0] as List<CapabilityOption>,
+        capabilities: (results[0] as BusinessCapabilities).capabilities,
         staff: results[1] as List<StaffMember>,
         isLoading: false,
       );
@@ -83,8 +104,15 @@ class StaffController extends StateNotifier<StaffState> {
     required List<String> capabilities,
     bool isActive = true,
   }) async {
-    final member = await _api.add(phone: phone, title: title, capabilities: capabilities, isActive: isActive);
-    final without = state.staff.where((s) => s.userId != member.userId).toList();
+    final member = await _api.add(
+      phone: phone,
+      title: title,
+      capabilities: capabilities,
+      isActive: isActive,
+    );
+    final without = state.staff
+        .where((s) => s.userId != member.userId)
+        .toList();
     state = state.copyWith(staff: [member, ...without]);
     return member;
   }
@@ -95,7 +123,12 @@ class StaffController extends StateNotifier<StaffState> {
     List<String>? capabilities,
     bool? isActive,
   }) async {
-    final updated = await _api.update(userId, title: title, capabilities: capabilities, isActive: isActive);
+    final updated = await _api.update(
+      userId,
+      title: title,
+      capabilities: capabilities,
+      isActive: isActive,
+    );
     state = state.copyWith(
       staff: [for (final s in state.staff) s.userId == userId ? updated : s],
     );
@@ -103,21 +136,26 @@ class StaffController extends StateNotifier<StaffState> {
 
   Future<void> remove(int userId) async {
     await _api.remove(userId);
-    state = state.copyWith(staff: state.staff.where((s) => s.userId != userId).toList());
+    state = state.copyWith(
+      staff: state.staff.where((s) => s.userId != userId).toList(),
+    );
   }
 }
 
-final staffControllerProvider = StateNotifierProvider<StaffController, StaffState>((ref) {
-  return StaffController(ref.watch(staffApiProvider));
-});
+final staffControllerProvider =
+    StateNotifierProvider<StaffController, StaffState>((ref) {
+      return StaffController(ref.watch(staffApiProvider));
+    });
 
 /// Staff invitations I (the invited person) haven't answered yet — accepting
 /// or declining removes it from this list, same shape as StaffController.
-class StaffInvitationsController extends StateNotifier<AsyncValue<List<StaffInvitation>>> {
+class StaffInvitationsController
+    extends StateNotifier<AsyncValue<List<StaffInvitation>>> {
   final StaffApi _api;
   final Ref _ref;
 
-  StaffInvitationsController(this._api, this._ref) : super(const AsyncValue.loading()) {
+  StaffInvitationsController(this._api, this._ref)
+    : super(const AsyncValue.loading()) {
     _load();
   }
 
@@ -134,13 +172,17 @@ class StaffInvitationsController extends StateNotifier<AsyncValue<List<StaffInvi
 
   Future<void> accept(int businessId) async {
     await _api.acceptInvitation(businessId);
-    state = state.whenData((items) => items.where((i) => i.businessId != businessId).toList());
+    state = state.whenData(
+      (items) => items.where((i) => i.businessId != businessId).toList(),
+    );
     _refreshNotifications();
   }
 
   Future<void> decline(int businessId) async {
     await _api.declineInvitation(businessId);
-    state = state.whenData((items) => items.where((i) => i.businessId != businessId).toList());
+    state = state.whenData(
+      (items) => items.where((i) => i.businessId != businessId).toList(),
+    );
     _refreshNotifications();
   }
 
@@ -156,6 +198,9 @@ class StaffInvitationsController extends StateNotifier<AsyncValue<List<StaffInvi
 }
 
 final staffInvitationsControllerProvider =
-    StateNotifierProvider<StaffInvitationsController, AsyncValue<List<StaffInvitation>>>((ref) {
+    StateNotifierProvider<
+      StaffInvitationsController,
+      AsyncValue<List<StaffInvitation>>
+    >((ref) {
       return StaffInvitationsController(ref.watch(staffApiProvider), ref);
     });

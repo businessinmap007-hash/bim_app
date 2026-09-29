@@ -465,7 +465,8 @@ List<_SectionData> _prepareSections(List<MenuSectionGroup> sections, bool isEngl
 class _SectionGrid extends StatelessWidget {
   final List<MenuItemSummary> items;
   final ValueChanged<MenuItemSummary> onTap;
-  const _SectionGrid({required this.items, required this.onTap});
+  final Future<void> Function(MenuItemSummary item, int qty)? onDirectAdd;
+  const _SectionGrid({required this.items, required this.onTap, this.onDirectAdd});
 
   @override
   Widget build(BuildContext context) {
@@ -482,7 +483,11 @@ class _SectionGrid extends StatelessWidget {
       itemCount: items.length,
       itemBuilder: (context, index) {
         final item = items[index];
-        return MenuItemGridCard(item: item, onTap: () => onTap(item));
+        return MenuItemGridCard(
+          item: item,
+          onTap: () => onTap(item),
+          onDirectAdd: onDirectAdd == null ? null : (qty) => onDirectAdd!(item, qty),
+        );
       },
     );
   }
@@ -658,6 +663,7 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
                                 _SectionGrid(
                                   items: section.branches.expand((b) => b.items).toList(),
                                   onTap: (item) => showAddToCartSheet(context, item, sharedOrderId: widget.sharedOrderId),
+                                  onDirectAdd: (item, qty) => _directAdd(context, item, qty),
                                 )
                               else
                                 for (final branch in section.branches) ...[

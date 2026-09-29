@@ -7,15 +7,43 @@ class CapabilityOption {
   final String nameAr;
   final String nameEn;
 
-  const CapabilityOption({required this.key, required this.nameAr, required this.nameEn});
+  const CapabilityOption({
+    required this.key,
+    required this.nameAr,
+    required this.nameEn,
+  });
 
   String name(String languageCode) => languageCode == 'ar' ? nameAr : nameEn;
 
-  factory CapabilityOption.fromJson(Map<String, dynamic> json) => CapabilityOption(
-    key: json['key'] as String? ?? '',
-    nameAr: json['name_ar'] as String? ?? '',
-    nameEn: json['name_en'] as String? ?? '',
-  );
+  factory CapabilityOption.fromJson(Map<String, dynamic> json) =>
+      CapabilityOption(
+        key: json['key'] as String? ?? '',
+        nameAr: json['name_ar'] as String? ?? '',
+        nameEn: json['name_en'] as String? ?? '',
+      );
+}
+
+/// GET /business/capabilities' full shape — the delegable capability list
+/// plus this business's own menu shape (`menu_food`/`menu_market`/...,
+/// empty when unconfigured). See BusinessStaffController::capabilities()'s
+/// own doc for why the two ride together on one endpoint.
+class BusinessCapabilities {
+  final List<CapabilityOption> capabilities;
+  final Set<String> menuKinds;
+  const BusinessCapabilities({
+    required this.capabilities,
+    required this.menuKinds,
+  });
+
+  factory BusinessCapabilities.fromJson(Map<String, dynamic> json) =>
+      BusinessCapabilities(
+        capabilities: (json['capabilities'] as List<dynamic>? ?? [])
+            .map((e) => CapabilityOption.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        menuKinds: (json['menu_kinds'] as List<dynamic>? ?? [])
+            .map((e) => e as String)
+            .toSet(),
+      );
 }
 
 /// Mirrors BusinessStaff's status column — a fresh or re-sent grant is
@@ -60,7 +88,9 @@ class StaffMember {
       phone: user['phone'] as String?,
       logoUrl: Env.assetUrl(user['logo'] as String?),
       title: json['title'] as String?,
-      capabilities: (json['capabilities'] as List<dynamic>? ?? []).map((e) => e as String).toList(),
+      capabilities: (json['capabilities'] as List<dynamic>? ?? [])
+          .map((e) => e as String)
+          .toList(),
       isActive: json['is_active'] as bool? ?? true,
       status: json['status'] as String? ?? StaffStatus.accepted,
     );
@@ -90,12 +120,17 @@ class StaffInvitation {
   factory StaffInvitation.fromJson(Map<String, dynamic> json) {
     final business = json['business'] as Map<String, dynamic>? ?? const {};
     return StaffInvitation(
-      businessId: (json['business_id'] as num?)?.toInt() ?? (business['id'] as num?)?.toInt() ?? 0,
+      businessId:
+          (json['business_id'] as num?)?.toInt() ??
+          (business['id'] as num?)?.toInt() ??
+          0,
       businessName: business['name'] as String? ?? '',
       businessPhone: business['phone'] as String?,
       businessLogoUrl: Env.assetUrl(business['logo'] as String?),
       title: json['title'] as String?,
-      capabilities: (json['capabilities'] as List<dynamic>? ?? []).map((e) => e as String).toList(),
+      capabilities: (json['capabilities'] as List<dynamic>? ?? [])
+          .map((e) => e as String)
+          .toList(),
     );
   }
 }

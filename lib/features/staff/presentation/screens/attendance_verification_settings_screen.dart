@@ -9,7 +9,9 @@ import 'attendance_qr_display_screen.dart';
 /// verification (StaffAttendanceController::updateSettings), plus the way
 /// in to the physical display screen. A business that never opens this
 /// screen never turns the toggle on, so its staff keep the plain
-/// self-service check-in they always had.
+/// self-service check-in they always had. Body-only — reached as a tab
+/// inside [StaffTeamSettingsScreen], which supplies the shared
+/// Scaffold/AppBar.
 class AttendanceVerificationSettingsScreen extends ConsumerStatefulWidget {
   const AttendanceVerificationSettingsScreen({super.key});
 
@@ -64,41 +66,38 @@ class _AttendanceVerificationSettingsScreenState extends ConsumerState<Attendanc
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.attendanceVerificationSettingsTitle)),
-      body: _loading
-          ? const Center(child: CircularProgressIndicator())
-          : _error != null
-          ? Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(_error!),
-                  const SizedBox(height: 8),
-                  OutlinedButton(onPressed: _load, child: Text(l10n.commonRetry)),
-                ],
-              ),
-            )
-          : ListView(
-              padding: const EdgeInsets.all(16),
+    return _loading
+        ? const Center(child: CircularProgressIndicator())
+        : _error != null
+        ? Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                SwitchListTile(
-                  value: _enabled ?? false,
-                  onChanged: _saving ? null : _toggle,
-                  title: Text(l10n.attendanceVerificationToggleLabel),
-                  subtitle: Text(l10n.attendanceVerificationToggleHint),
-                ),
-                const SizedBox(height: 16),
-                if (_enabled == true)
-                  FilledButton.icon(
-                    onPressed: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const AttendanceQrDisplayScreen()),
-                    ),
-                    icon: const Icon(Icons.qr_code_2),
-                    label: Text(l10n.attendanceOpenDisplayScreen),
-                  ),
+                Text(_error!),
+                const SizedBox(height: 8),
+                OutlinedButton(onPressed: _load, child: Text(l10n.commonRetry)),
               ],
             ),
-    );
+          )
+        : ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              SwitchListTile(
+                value: _enabled ?? false,
+                onChanged: _saving ? null : _toggle,
+                title: Text(l10n.attendanceVerificationToggleLabel),
+                subtitle: Text(l10n.attendanceVerificationToggleHint),
+              ),
+              const SizedBox(height: 16),
+              if (_enabled == true)
+                FilledButton.icon(
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const AttendanceQrDisplayScreen()),
+                  ),
+                  icon: const Icon(Icons.qr_code_2),
+                  label: Text(l10n.attendanceOpenDisplayScreen),
+                ),
+            ],
+          );
   }
 }
