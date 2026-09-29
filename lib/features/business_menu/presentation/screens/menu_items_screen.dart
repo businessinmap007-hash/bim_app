@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +9,7 @@ import '../../../../shared/utils/localized_name.dart';
 import '../../../../shared/utils/produce_emoji.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../../shared/widgets/view_mode_toggle.dart';
+import '../../../media/application/media_picker_service.dart';
 import '../../application/business_menu_providers.dart';
 import '../../data/business_menu_api.dart' show SaleUnitOption;
 import '../../data/models/menu_item.dart';
@@ -77,11 +80,34 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
     super.dispose();
   }
 
+  /// «زر اضافة صنف العائم يجب ان يتم معالجته بان الصنف لابد ان يكون تابع
+  /// لقسم من الاقسام اسم عربى واسم انجليزى … وياخذ نفس الموصفات كيلو -
+  /// جرام - رابطة طالما تحت خضار وفاكهه سعر التوريد والبيع والكمية
+  /// والصورة» — المالك، 2026-09-29. A business WITH a vocabulary picks a
+  /// section here through [_NewCustomItemDialog] instead of the full
+  /// [MenuItemEditScreen] — a hand-typed business with none keeps the full
+  /// editor, since it has no sections to require a pick from.
   Future<void> _openCreate() async {
-    final createdId = await Navigator.of(context).push<int>(
-      MaterialPageRoute(builder: (_) => const MenuItemEditScreen()),
+    final groups = ref.read(menuVocabularyProvider).maybeWhen(
+      data: (v) => v.lines.where((g) => g.options.isNotEmpty).toList(),
+      orElse: () => const <VocabularyGroup>[],
     );
-    if (createdId != null) {
+
+    if (groups.isEmpty) {
+      final createdId = await Navigator.of(context).push<int>(
+        MaterialPageRoute(builder: (_) => const MenuItemEditScreen()),
+      );
+      if (createdId != null) {
+        ref.read(menuItemsControllerProvider.notifier).load();
+      }
+      return;
+    }
+
+    final created = await showDialog<bool>(
+      context: context,
+      builder: (_) => _NewCustomItemDialog(groups: groups),
+    );
+    if (created == true) {
       ref.read(menuItemsControllerProvider.notifier).load();
     }
   }
@@ -889,6 +915,201 @@ class _ItemGridTile extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// The FAB's "اضافة صنف" flow for a business WITH a vocabulary — a NEW
+/// item name (not one of the fixed line options) that still has to belong
+/// to one of the merchant's own sections, with the same required shape as
+/// every other product there: bilingual name, the section's own sale-unit
+/// restriction if it has one, price/supply/quantity, and a photo. See
+/// [MenuItemsScreenState._openCreate]'s doc for the owner quote this answers.
+class _NewCustomItemDialog extends ConsumerStatefulWidget {
+  final List<VocabularyGroup> groups;
+  const _NewCustomItemDialog({required this.groups});
+
+  @override
+  ConsumerState<_NewCustomItemDialog> createState() => _NewCustomItemDialogState();
+}
+
+class _NewCustomItemDialogState extends ConsumerState<_NewCustomItemDialog> {
+  final _nameArController = TextEditingController();
+  final _nameEnController = TextEditingController();
+  final _supplyController = TextEditingController();
+  final _priceController = TextEditingController();
+  final _quantityController = TextEditingController();
+  final _picker = MediaPickerService();
+
+  int? _groupId;
+  String? _selectedUnit;
+  String? _imagePath;
+  bool _saving = false;
+
+  @override
+  void dispose() {
+    _nameArController.dispose();
+    _nameEnController.dispose();
+    _supplyController.dispose();
+    _priceController.dispose();
+    _quantityController.dispose();
+    super.dispose();
+  }
+
+  VocabularyGroup? get _group => widget.groups.where((g) => g.groupId == _groupId).firstOrNull;
+
+  bool get _canSave =>
+      !_saving &&
+      _groupId != null &&
+      _nameArController.text.trim().isNotEmpty &&
+      _nameEnController.text.trim().isNotEmpty &&
+      double.tryParse(_priceController.text.trim().replaceAll(',', '.').replaceAll('٫', '.')) != null;
+
+  Future<void> _pickImage() async {
+    final picked = await _picker.pickFromGallery(allowMultiple: false);
+    if (picked.isEmpty) return;
+    setState(() => _imagePath = picked.first.file.path);
+  }
+
+  Future<void> _save() async {
+    final price = double.tryParse(_priceController.text.trim().replaceAll(',', '.').replaceAll('٫', '.'));
+    if (_groupId == null || price == null) return;
+
+    setState(() => _saving = true);
+    try {
+      final item = await ref.read(businessMenuApiProvider).createItem(
+        nameAr: _nameArController.text.trim(),
+        nameEn: _nameEnController.text.trim(),
+        basePrice: price,
+        supplyPrice: double.tryParse(_supplyController.text.trim().replaceAll(',', '.').replaceAll('٫', '.')),
+        saleUnit: _selectedUnit,
+        availableQuantity: int.tryParse(_quantityController.text.trim()),
+        optionGroupId: _groupId,
+      );
+      final path = _imagePath;
+      if (path != null) {
+        await ref.read(businessMenuApiProvider).addImage(item.id, path);
+      }
+      if (mounted) Navigator.pop(context, true);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.commonSomethingWentWrong)));
+      }
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final decimalFormatters = [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,٫]'))];
+    final saleUnitCodes = _group?.saleUnitCodes;
+    final unitsAsync = ref.watch(saleUnitOptionsProvider);
+    final units = saleUnitCodes == null
+        ? const <SaleUnitOption>[]
+        : unitsAsync.maybeWhen(
+            data: (all) => all.where((u) => saleUnitCodes.contains(u.code)).toList(),
+            orElse: () => const <SaleUnitOption>[],
+          );
+    if (units.isNotEmpty && _selectedUnit == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) setState(() => _selectedUnit = units.first.code);
+      });
+    }
+
+    return AlertDialog(
+      title: Text(l10n.menuItemAdd),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            DropdownButtonFormField<int>(
+              initialValue: _groupId,
+              isExpanded: true,
+              decoration: InputDecoration(labelText: l10n.menuItemSectionLabel, isDense: true, border: const OutlineInputBorder()),
+              items: widget.groups.map((g) => DropdownMenuItem(value: g.groupId, child: Text(g.groupName))).toList(),
+              onChanged: (value) => setState(() {
+                _groupId = value;
+                _selectedUnit = null;
+              }),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _nameArController,
+              decoration: InputDecoration(labelText: l10n.menuItemNameArHint, isDense: true, border: const OutlineInputBorder()),
+              onChanged: (_) => setState(() {}),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _nameEnController,
+              decoration: InputDecoration(labelText: l10n.menuItemNameEnHint, isDense: true, border: const OutlineInputBorder()),
+              onChanged: (_) => setState(() {}),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _supplyController,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              inputFormatters: decimalFormatters,
+              decoration: InputDecoration(labelText: l10n.marketCatalogSupplyPrice, isDense: true, border: const OutlineInputBorder()),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _priceController,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              inputFormatters: decimalFormatters,
+              decoration: InputDecoration(labelText: l10n.marketCatalogSalePrice, isDense: true, border: const OutlineInputBorder()),
+              onChanged: (_) => setState(() {}),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _quantityController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              decoration: InputDecoration(labelText: l10n.marketCatalogQuantity, isDense: true, border: const OutlineInputBorder()),
+            ),
+            if (units.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              DropdownButtonFormField<String>(
+                initialValue: _selectedUnit,
+                isExpanded: true,
+                decoration: InputDecoration(labelText: l10n.marketCatalogUnit, isDense: true, border: const OutlineInputBorder()),
+                items: units.map((u) => DropdownMenuItem(value: u.code, child: Text(u.label))).toList(),
+                onChanged: (value) => setState(() => _selectedUnit = value),
+              ),
+            ],
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Text(l10n.menuItemImagesSection, style: Theme.of(context).textTheme.labelMedium),
+                const SizedBox(width: 12),
+                InkWell(
+                  onTap: _pickImage,
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    width: 56,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Theme.of(context).dividerColor),
+                      image: _imagePath != null
+                          ? DecorationImage(image: FileImage(File(_imagePath!)), fit: BoxFit.cover)
+                          : null,
+                    ),
+                    alignment: Alignment.center,
+                    child: _imagePath == null ? const Icon(Icons.add_a_photo_outlined) : null,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(onPressed: _saving ? null : () => Navigator.pop(context, false), child: Text(l10n.commonCancel)),
+        FilledButton(onPressed: _canSave ? _save : null, child: Text(l10n.marketCatalogSave)),
+      ],
     );
   }
 }

@@ -174,6 +174,7 @@ class BusinessMenuApi {
     String? brandName,
     int? availableQuantity,
     int? lineOptionId,
+    int? optionGroupId,
     List<int> modifierOptionIds = const [],
     int sortOrder = 0,
     bool isActive = true,
@@ -193,6 +194,7 @@ class BusinessMenuApi {
                 brandName: brandName,
                 availableQuantity: availableQuantity,
                 lineOptionId: lineOptionId,
+                optionGroupId: optionGroupId,
                 modifierOptionIds: modifierOptionIds,
                 sortOrder: sortOrder,
                 isActive: isActive,
@@ -255,6 +257,12 @@ class BusinessMenuApi {
     String? brandName,
     int? availableQuantity,
     int? lineOptionId,
+    // A brand-new item with no line option of its own still needs a
+    // section — «اضافة صنف» flow sends the vocabulary group id it belongs
+    // to instead, and the backend grows/reuses that group's own section
+    // (BusinessMenuItemController::applyVocabulary()). Ignored server-side
+    // whenever menu_section_id or line_option_id already settled it.
+    int? optionGroupId,
     List<int> modifierOptionIds = const [],
     required int sortOrder,
     required bool isActive,
@@ -278,6 +286,7 @@ class BusinessMenuApi {
       // What this item IS/what qualifies it — see HasOfferingOptions. Always
       // sent (even empty) so clearing a pick on a resubmit actually clears it.
       'line_option_id': lineOptionId ?? 0,
+      'option_group_id': ?optionGroupId,
       'modifier_option_ids': modifierOptionIds,
       'sort_order': sortOrder,
       'is_active': isActive,
