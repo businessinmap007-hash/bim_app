@@ -165,12 +165,43 @@ class _MenuItemGridCardState extends State<MenuItemGridCard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      item.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.titleSmall,
-                    ),
+                    // «ارفع السعر ليكون على نفس سطر الصنف فى عرض الشبكة فى
+                    // شاشة العميل» — المالك، 2026-09-29: for a goods item
+                    // (stepper offered), the price sits on the name's own
+                    // line instead of its own row below — same pattern
+                    // MenuItemTile's list mode already uses. Also what
+                    // fixed a real overflow: the extra stepper row this
+                    // card gained needed the vertical room this line frees
+                    // up.
+                    if (offersStepper)
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              item.name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.titleSmall,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            _priceLabel(item, l10n),
+                            style: theme.textTheme.titleSmall?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.accentGold,
+                            ),
+                          ),
+                        ],
+                      )
+                    else
+                      Text(
+                        item.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.titleSmall,
+                      ),
                     if (item.availableQuantity != null)
                       Padding(
                         padding: const EdgeInsets.only(top: 2),
@@ -192,7 +223,7 @@ class _MenuItemGridCardState extends State<MenuItemGridCard> {
                           color: theme.colorScheme.error,
                         ),
                       )
-                    else
+                    else if (!offersStepper)
                       Text(
                         _priceLabel(item, l10n),
                         style: theme.textTheme.titleSmall?.copyWith(
@@ -201,7 +232,6 @@ class _MenuItemGridCardState extends State<MenuItemGridCard> {
                         ),
                       ),
                     if (offersStepper && !item.isOutOfStock) ...[
-                      const SizedBox(height: 8),
                       Divider(height: 1, color: theme.dividerColor),
                       const SizedBox(height: 8),
                       MenuCardStepperRow(
