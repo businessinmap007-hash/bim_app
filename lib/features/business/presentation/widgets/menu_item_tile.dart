@@ -145,7 +145,27 @@ class _MenuItemTileState extends State<MenuItemTile> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(item.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: theme.textTheme.titleSmall),
+                      // «السعر يكون فوق اضف فى نفس سطر اسم المنتج» — المالك،
+                      // 2026-09-29: for a goods item (stepper offered), the
+                      // price sits on the name's own line instead of its own
+                      // row below — nothing left between the divider and the
+                      // stepper/"أضف" row but the out-of-stock note, if any.
+                      if (offersStepper)
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Text(item.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: theme.textTheme.titleSmall),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              _priceLabel(item, l10n),
+                              style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        )
+                      else
+                        Text(item.name, maxLines: 1, overflow: TextOverflow.ellipsis, style: theme.textTheme.titleSmall),
                       if (_subtitle != null)
                         Padding(
                           padding: const EdgeInsets.only(top: 2),
@@ -167,23 +187,25 @@ class _MenuItemTileState extends State<MenuItemTile> {
                           ),
                         ),
                       const SizedBox(height: 8),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              _priceLabel(item, l10n),
-                              style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                      if (!offersStepper)
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                _priceLabel(item, l10n),
+                                style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                              ),
                             ),
-                          ),
-                          if (item.isOutOfStock)
-                            Text(l10n.businessOutOfStock, style: TextStyle(fontSize: 10, color: theme.colorScheme.error))
-                          else if (!offersStepper)
-                            _ContextAction(hasChoices: item.hasChoices, label: l10n.menuCardViewOptions),
-                        ],
-                      ),
+                            if (item.isOutOfStock)
+                              Text(l10n.businessOutOfStock, style: TextStyle(fontSize: 10, color: theme.colorScheme.error))
+                            else
+                              _ContextAction(hasChoices: item.hasChoices, label: l10n.menuCardViewOptions),
+                          ],
+                        ),
+                      if (offersStepper && item.isOutOfStock)
+                        Text(l10n.businessOutOfStock, style: TextStyle(fontSize: 10, color: theme.colorScheme.error)),
                       if (offersStepper && !item.isOutOfStock) ...[
-                        const SizedBox(height: 8),
                         Divider(height: 1, color: theme.dividerColor),
                         const SizedBox(height: 8),
                         _StepperRow(

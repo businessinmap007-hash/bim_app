@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
@@ -10,7 +11,6 @@ import '../../application/business_menu_providers.dart';
 import '../../data/business_menu_api.dart' show SaleUnitOption;
 import '../../data/models/menu_item.dart';
 import '../../data/models/menu_vocabulary.dart';
-import 'market_catalog_screen.dart';
 import 'menu_item_edit_screen.dart';
 import 'menu_sections_screen.dart';
 import 'menu_type_selection_screen.dart';
@@ -21,6 +21,14 @@ import 'menu_type_selection_screen.dart';
 /// created directly from that vocabulary branch and never got its own
 /// English name typed in.
 String _itemEmoji(BusinessMenuItem item) => produceEmoji(item.nameEn ?? item.lineOption?.nameEn);
+
+class _PriceDialogResult {
+  final double price;
+  final double? supplyPrice;
+  final int? quantity;
+  final String? unit;
+  const _PriceDialogResult({required this.price, this.supplyPrice, this.quantity, this.unit});
+}
 
 class MenuItemsScreen extends ConsumerStatefulWidget {
   const MenuItemsScreen({super.key});
@@ -80,55 +88,72 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
 
   /// «بدل اضافة صنف يكون الكارت بالصورة او الايموجى ومكان السعر يكون اضافة
   /// لسعر … وعند الضغط على اضافة سعر يظهر كارت اضافة سعر التوريد والبيع
-  /// والكمية المتاحة» — المالك، 2026-09-29. The full [MenuItemEditScreen]
-  /// (name, description, images, variants…) is the right tool for a real
-  /// edit, but too much just to put a first price on a branch whose name is
-  /// already fixed by the vocabulary — this asks only what the owner asked
-  /// for, and creates the item with the branch's own name (same convention
-  /// [_itemEmoji]'s doc comment already relies on: a branch-created item
-  /// keeps that name until the merchant opens the full editor and changes it).
-  Future<void> _quickAddPrice(VocabularyOptionRef branch, List<String>? saleUnitCodes) async {
+  /// والكمية المتاحة» — المالك، 2026-09-29. Shared by [_quickAddPrice] (a
+  /// branch with nothing priced yet) and [_quickEditPrice] (re-pricing an
+  /// already-priced item — «بعد اضافة سعر لمنتج او الضغط على المنتج يفتح
+  /// صفحة تسعير اخرى قم بحذفها», same owner, same day: tapping a priced
+  /// item no longer opens the full [MenuItemEditScreen], it reopens this
+  /// same minimal dialog, pre-filled). Returns null if the merchant
+  /// cancelled or left the price blank.
+  ///
+  /// Price fields allow a decimal point OR comma — «سعر التوريد ممكن يكون
+  /// 9.5 والبيع 12 ولا استطيع كتابة الرقم العشرى»: some Arabic-locale
+  /// keyboards only offer the Eastern Arabic decimal separator «٫», which a
+  /// plain `.`-only formatter would silently reject. Both parse the same way.
+  Future<_PriceDialogResult?> _priceDialog({
+    required String title,
+    required List<String>? saleUnitCodes,
+    double? initialSupplyPrice,
+    double? initialPrice,
+    int? initialQuantity,
+    String? initialUnit,
+  }) async {
     final l10n = AppLocalizations.of(context)!;
-    final supplyController = TextEditingController();
-    final priceController = TextEditingController();
-    final quantityController = TextEditingController();
-    String? selectedUnit;
+    final supplyController = TextEditingController(text: initialSupplyPrice?.toString() ?? '');
+    final priceController = TextEditingController(text: initialPrice?.toString() ?? '');
+    final quantityController = TextEditingController(text: initialQuantity?.toString() ?? '');
+    String? selectedUnit = initialUnit;
 
-    // Only a group the backend actually narrows (today: «أعشاب وورقيات» →
-    // bunch/kg/g — see SaleUnits::herbsCodes()) gets a unit field here at
+    // Only a group the backend actually narrows (produce: bunch/kg/g — see
+    // SaleUnits::producePackagingGroupNames()) gets a unit field here at
     // all; every other branch keeps this dialog to exactly what the owner
     // first asked for (supply/sale price, quantity).
     List<SaleUnitOption> units = const [];
     if (saleUnitCodes != null) {
       final all = await ref.read(saleUnitOptionsProvider.future);
       units = all.where((u) => saleUnitCodes.contains(u.code)).toList();
-      if (units.isNotEmpty) selectedUnit = units.first.code;
+      if (selectedUnit == null && units.isNotEmpty) selectedUnit = units.first.code;
     }
-    if (!mounted) return;
+    if (!mounted) return null;
+
+    final decimalFormatters = [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,٫]'))];
 
     final saved = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => StatefulBuilder(
         builder: (dialogContext, setDialogState) => AlertDialog(
-          title: Text(localizedName(branch.nameAr, branch.nameEn, Localizations.localeOf(context).languageCode == 'en')),
+          title: Text(title),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: supplyController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                inputFormatters: decimalFormatters,
                 decoration: InputDecoration(labelText: l10n.marketCatalogSupplyPrice, isDense: true, border: const OutlineInputBorder()),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: priceController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                inputFormatters: decimalFormatters,
                 decoration: InputDecoration(labelText: l10n.marketCatalogSalePrice, isDense: true, border: const OutlineInputBorder()),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: quantityController,
                 keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 decoration: InputDecoration(labelText: l10n.marketCatalogQuantity, isDense: true, border: const OutlineInputBorder()),
               ),
               if (units.isNotEmpty) ...[
@@ -151,24 +176,81 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
       ),
     );
 
-    if (saved != true) return;
-    final price = double.tryParse(priceController.text.trim());
-    if (price == null) return;
+    if (saved != true) return null;
+    final price = double.tryParse(priceController.text.trim().replaceAll(',', '.').replaceAll('٫', '.'));
+    if (price == null) return null;
+
+    return _PriceDialogResult(
+      price: price,
+      supplyPrice: double.tryParse(supplyController.text.trim().replaceAll(',', '.').replaceAll('٫', '.')),
+      quantity: int.tryParse(quantityController.text.trim()),
+      unit: selectedUnit,
+    );
+  }
+
+  Future<void> _quickAddPrice(VocabularyOptionRef branch, List<String>? saleUnitCodes) async {
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
+    final result = await _priceDialog(
+      title: localizedName(branch.nameAr, branch.nameEn, isEnglish),
+      saleUnitCodes: saleUnitCodes,
+    );
+    if (result == null) return;
 
     try {
       await ref.read(businessMenuApiProvider).createItem(
         nameAr: branch.nameAr,
         nameEn: branch.nameEn,
-        basePrice: price,
-        supplyPrice: double.tryParse(supplyController.text.trim()),
-        saleUnit: selectedUnit,
-        availableQuantity: int.tryParse(quantityController.text.trim()),
+        basePrice: result.price,
+        supplyPrice: result.supplyPrice,
+        saleUnit: result.unit,
+        availableQuantity: result.quantity,
         lineOptionId: branch.id,
       );
       ref.read(menuItemsControllerProvider.notifier).load();
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.commonSomethingWentWrong)));
+      }
+    }
+  }
+
+  /// Re-price an already-priced item through the SAME minimal dialog instead
+  /// of the full [MenuItemEditScreen] — everything else about the item
+  /// (name, images, description, brand…) is left exactly as it was.
+  Future<void> _quickEditPrice(BusinessMenuItem item, List<String>? saleUnitCodes) async {
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
+    final result = await _priceDialog(
+      title: localizedName(item.nameAr, item.nameEn, isEnglish),
+      saleUnitCodes: saleUnitCodes,
+      initialSupplyPrice: item.supplyPrice,
+      initialPrice: item.basePrice,
+      initialQuantity: item.availableQuantity,
+      initialUnit: item.saleUnit,
+    );
+    if (result == null) return;
+
+    try {
+      await ref.read(businessMenuApiProvider).updateItem(
+        item.id,
+        nameAr: item.nameAr,
+        nameEn: item.nameEn,
+        menuSectionId: item.menuSectionId,
+        descriptionAr: item.descriptionAr,
+        descriptionEn: item.descriptionEn,
+        basePrice: result.price,
+        supplyPrice: result.supplyPrice,
+        saleUnit: result.unit,
+        brandName: item.brandName,
+        availableQuantity: result.quantity,
+        lineOptionId: item.lineOption?.id,
+        modifierOptionIds: item.modifierOptions.map((o) => o.id).toList(),
+        sortOrder: item.sortOrder,
+        isActive: item.isActive,
+      );
+      ref.read(menuItemsControllerProvider.notifier).load();
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.commonSomethingWentWrong)));
       }
     }
   }
@@ -200,11 +282,40 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
     return vocabulary != null && vocabulary.lines.any((g) => g.options.isNotEmpty);
   }
 
+  /// Priced branches first (A→Z among themselves), then unpriced ones
+  /// (A→Z among themselves) — see the call site's doc comment.
+  List<VocabularyOptionRef> _sortedBranches(
+    List<VocabularyOptionRef> branches,
+    Map<int, List<BusinessMenuItem>> itemsByBranch,
+    bool isEnglish,
+  ) {
+    final sorted = [...branches];
+    sorted.sort((a, b) {
+      final aFilled = itemsByBranch[a.id]?.isNotEmpty ?? false;
+      final bFilled = itemsByBranch[b.id]?.isNotEmpty ?? false;
+      if (aFilled != bFilled) return aFilled ? -1 : 1;
+      return localizedName(a.nameAr, a.nameEn, isEnglish).compareTo(localizedName(b.nameAr, b.nameEn, isEnglish));
+    });
+    return sorted;
+  }
+
+  List<BusinessMenuItem> _sortedItems(List<BusinessMenuItem> items, bool isEnglish) {
+    final sorted = [...items];
+    sorted.sort(
+      (a, b) => localizedName(a.nameAr, a.nameEn, isEnglish).compareTo(localizedName(b.nameAr, b.nameEn, isEnglish)),
+    );
+    return sorted;
+  }
+
   /// A [_ItemTile] column, or — once the merchant picked "Grid" for
   /// customer display — the SAME items as [_ItemGridTile] cards, so this
   /// screen actually shows what that toggle does instead of only ever
   /// looking like a plain list regardless of which mode is selected.
-  Widget _itemsFor(List<BusinessMenuItem> items, String displayMode) {
+  ///
+  /// Tapping a card re-prices it through [_quickEditPrice] — the same
+  /// minimal dialog [_EmptyBranchCard] opens, not the full
+  /// [MenuItemEditScreen] (see [_priceDialog]'s doc for why).
+  Widget _itemsFor(List<BusinessMenuItem> items, String displayMode, List<String>? saleUnitCodes) {
     if (displayMode == 'grid') {
       return GridView.count(
         crossAxisCount: 2,
@@ -217,12 +328,7 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
           for (final item in items)
             _ItemGridTile(
               item: item,
-              onTap: () async {
-                await Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => MenuItemEditScreen(itemId: item.id)),
-                );
-                ref.read(menuItemsControllerProvider.notifier).load();
-              },
+              onTap: () => _quickEditPrice(item, saleUnitCodes),
             ),
         ],
       );
@@ -235,12 +341,7 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
             padding: const EdgeInsets.only(bottom: 8),
             child: _ItemTile(
               item: item,
-              onTap: () async {
-                await Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => MenuItemEditScreen(itemId: item.id)),
-                );
-                ref.read(menuItemsControllerProvider.notifier).load();
-              },
+              onTap: () => _quickEditPrice(item, saleUnitCodes),
             ),
           ),
       ],
@@ -250,6 +351,7 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
   Widget _buildList(BuildContext context, MenuItemsState state) {
     final vocabulary = _vocabularyForGrouping(state);
     final displayMode = ref.watch(menuDisplayModeControllerProvider).maybeWhen(data: (m) => m, orElse: () => 'list');
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
     if (vocabulary == null) {
       return ListView.separated(
         controller: _scrollController,
@@ -327,7 +429,12 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
             ],
           ),
           const SizedBox(height: 8),
-          for (final branch in group.options) ...[
+          // «تنسيق المنتجات يجب ان يكون ابجديا والمنتجات المسعرة تكون فى
+          // اعلى القائمة وليست بين المنتجات المسعرة وغير المسعرة» —
+          // المالك، 2026-09-29: priced branches first (A→Z among
+          // themselves), then unpriced ones (A→Z among themselves) — never
+          // interleaved by vocabulary order the way they used to be.
+          for (final branch in _sortedBranches(group.options, itemsByBranch, isEnglish)) ...[
             Padding(
               key: _branchKey(branch.id),
               padding: const EdgeInsets.only(bottom: 8),
@@ -341,7 +448,7 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
               // would be — tapping it is the only way in now; the old
               // always-there per-branch button is gone.
               child: (itemsByBranch[branch.id]?.isNotEmpty ?? false)
-                  ? _itemsFor(itemsByBranch[branch.id]!, displayMode)
+                  ? _itemsFor(itemsByBranch[branch.id]!, displayMode, group.saleUnitCodes)
                   : _EmptyBranchCard(branch: branch, onAddPrice: () => _quickAddPrice(branch, group.saleUnitCodes)),
             ),
           ],
@@ -349,7 +456,7 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
         if (unbranched.isNotEmpty) ...[
           Text(AppLocalizations.of(context)!.menuItemsUnbranchedSection, style: Theme.of(context).textTheme.titleSmall),
           const SizedBox(height: 8),
-          _itemsFor(unbranched, displayMode),
+          _itemsFor(_sortedItems(unbranched, isEnglish), displayMode, null),
         ],
         if (state.isLoadingMore)
           const Padding(
@@ -382,13 +489,6 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
       appBar: AppBar(
         title: Text(l10n.menuItemsTitle),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.checklist_rtl_outlined),
-            tooltip: l10n.marketCatalogTitle,
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const MarketCatalogScreen()),
-            ),
-          ),
           IconButton(
             icon: const Icon(Icons.category_outlined),
             tooltip: l10n.menuSectionsTitle,
