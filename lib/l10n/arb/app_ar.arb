@@ -1380,6 +1380,7 @@
   },
   "menuTypeSelectionSaved": "تم تحديث الأصناف",
   "menuItemAdd": "إضافة صنف",
+  "menuItemsAddPrice": "إضافة سعر",
   "menuItemEditTitle": "تعديل الصنف",
   "menuItemAddTitle": "إضافة صنف",
   "menuItemDeleteConfirm": "حذف هذا الصنف؟",

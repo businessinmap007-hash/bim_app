@@ -1380,6 +1380,7 @@
   },
   "menuTypeSelectionSaved": "Types updated",
   "menuItemAdd": "Add item",
+  "menuItemsAddPrice": "Add price",
   "menuItemEditTitle": "Edit item",
   "menuItemAddTitle": "Add item",
   "menuItemDeleteConfirm": "Delete this item?",

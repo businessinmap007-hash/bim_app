@@ -4109,6 +4109,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get menuItemAdd => 'إضافة صنف';
 
   @override
+  String get menuItemsAddPrice => 'إضافة سعر';
+
+  @override
   String get menuItemEditTitle => 'تعديل الصنف';
 
   @override

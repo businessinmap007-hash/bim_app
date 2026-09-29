@@ -77,12 +77,72 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
     }
   }
 
-  Future<void> _openCreateForBranch(int branchOptionId) async {
-    final createdId = await Navigator.of(context).push<int>(
-      MaterialPageRoute(builder: (_) => MenuItemEditScreen(initialLineOptionId: branchOptionId)),
+  /// «بدل اضافة صنف يكون الكارت بالصورة او الايموجى ومكان السعر يكون اضافة
+  /// لسعر … وعند الضغط على اضافة سعر يظهر كارت اضافة سعر التوريد والبيع
+  /// والكمية المتاحة» — المالك، 2026-09-29. The full [MenuItemEditScreen]
+  /// (name, description, images, variants…) is the right tool for a real
+  /// edit, but too much just to put a first price on a branch whose name is
+  /// already fixed by the vocabulary — this asks only what the owner asked
+  /// for, and creates the item with the branch's own name (same convention
+  /// [_itemEmoji]'s doc comment already relies on: a branch-created item
+  /// keeps that name until the merchant opens the full editor and changes it).
+  Future<void> _quickAddPrice(VocabularyOptionRef branch) async {
+    final l10n = AppLocalizations.of(context)!;
+    final supplyController = TextEditingController();
+    final priceController = TextEditingController();
+    final quantityController = TextEditingController();
+
+    final saved = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(localizedName(branch.nameAr, branch.nameEn, Localizations.localeOf(context).languageCode == 'en')),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: supplyController,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(labelText: l10n.marketCatalogSupplyPrice, isDense: true, border: const OutlineInputBorder()),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: priceController,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(labelText: l10n.marketCatalogSalePrice, isDense: true, border: const OutlineInputBorder()),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: quantityController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: l10n.marketCatalogQuantity, isDense: true, border: const OutlineInputBorder()),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: Text(l10n.commonCancel)),
+          FilledButton(onPressed: () => Navigator.pop(dialogContext, true), child: Text(l10n.marketCatalogSave)),
+        ],
+      ),
     );
-    if (createdId != null) {
+
+    if (saved != true) return;
+    final price = double.tryParse(priceController.text.trim());
+    if (price == null) return;
+
+    try {
+      await ref.read(businessMenuApiProvider).createItem(
+        nameAr: branch.nameAr,
+        nameEn: branch.nameEn,
+        basePrice: price,
+        supplyPrice: double.tryParse(supplyController.text.trim()),
+        availableQuantity: int.tryParse(quantityController.text.trim()),
+        lineOptionId: branch.id,
+      );
       ref.read(menuItemsControllerProvider.notifier).load();
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+      }
     }
   }
 
@@ -163,7 +223,6 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
   Widget _buildList(BuildContext context, MenuItemsState state) {
     final vocabulary = _vocabularyForGrouping(state);
     final displayMode = ref.watch(menuDisplayModeControllerProvider).maybeWhen(data: (m) => m, orElse: () => 'list');
-    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
     if (vocabulary == null) {
       return ListView.separated(
         controller: _scrollController,
@@ -204,14 +263,6 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
     final groups = vocabulary.lines
         .where((g) => g.options.isNotEmpty && (_activeGroupId == null || g.groupId == _activeGroupId))
         .toList();
-    // "+ Add brand" only makes sense when this business actually HAS a
-    // brand vocabulary (an appliance business: "ثلاجات" — توشيبا، فريش...).
-    // A greengrocer's "فراولة" has no brand at all, and a business whose
-    // branches themselves ARE the brand (no separate brand group exists)
-    // needs no extra brand step either — both get the generic "Add item"
-    // instead of a label promising a step that isn't there.
-    final hasBrand = vocabulary.brandGroup != null;
-
     return ListView(
       controller: _scrollController,
       padding: const EdgeInsets.all(16),
@@ -252,21 +303,20 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
           for (final branch in group.options) ...[
             Padding(
               key: _branchKey(branch.id),
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(localizedName(branch.nameAr, branch.nameEn, isEnglish), style: const TextStyle(fontWeight: FontWeight.w700)),
-                  TextButton.icon(
-                    onPressed: () => _openCreateForBranch(branch.id),
-                    icon: const Icon(Icons.add, size: 16),
-                    label: Text(hasBrand ? AppLocalizations.of(context)!.menuItemsAddBrandRow : AppLocalizations.of(context)!.menuItemAdd),
-                  ),
-                ],
-              ),
+              padding: const EdgeInsets.only(bottom: 8),
+              // A branch already carrying at least one priced item shows
+              // exactly those cards — no separate heading, no more "add"
+              // next to something already priced (the merchant's own
+              // complaint: that button sat beside كزبرة خضراء even though
+              // it already had a price). A branch with nothing yet shows
+              // ONE placeholder card instead, matching a priced card's own
+              // look (image/emoji, name) with "إضافة سعر" where the price
+              // would be — tapping it is the only way in now; the old
+              // always-there per-branch button is gone.
+              child: (itemsByBranch[branch.id]?.isNotEmpty ?? false)
+                  ? _itemsFor(itemsByBranch[branch.id]!, displayMode)
+                  : _EmptyBranchCard(branch: branch, onAddPrice: () => _quickAddPrice(branch)),
             ),
-            _itemsFor(itemsByBranch[branch.id] ?? const <BusinessMenuItem>[], displayMode),
-            const SizedBox(height: 8),
           ],
         ],
         if (unbranched.isNotEmpty) ...[
@@ -531,6 +581,36 @@ class _DisplayModeToggle extends ConsumerWidget {
         ),
       ),
       orElse: () => const SizedBox.shrink(),
+    );
+  }
+}
+
+/// A branch with nothing priced yet — same card shape as [_ItemTile] (an
+/// emoji stand-in for the photo no item exists to carry, the branch's own
+/// name), with "إضافة سعر" where a price would sit. The one way onto this
+/// branch now that its old always-there header button is gone.
+class _EmptyBranchCard extends StatelessWidget {
+  final VocabularyOptionRef branch;
+  final VoidCallback onAddPrice;
+  const _EmptyBranchCard({required this.branch, required this.onAddPrice});
+
+  @override
+  Widget build(BuildContext context) {
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
+    return Card(
+      margin: EdgeInsets.zero,
+      child: ListTile(
+        onTap: onAddPrice,
+        leading: CircleAvatar(
+          child: Text(produceEmoji(branch.nameEn), style: const TextStyle(fontSize: 18)),
+        ),
+        title: Text(localizedName(branch.nameAr, branch.nameEn, isEnglish)),
+        trailing: TextButton.icon(
+          onPressed: onAddPrice,
+          icon: const Icon(Icons.add, size: 16),
+          label: Text(AppLocalizations.of(context)!.menuItemsAddPrice),
+        ),
+      ),
     );
   }
 }

@@ -4111,6 +4111,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuItemAdd => 'Add item';
 
   @override
+  String get menuItemsAddPrice => 'Add price';
+
+  @override
   String get menuItemEditTitle => 'Edit item';
 
   @override

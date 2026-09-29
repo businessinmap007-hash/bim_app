@@ -7658,6 +7658,12 @@ abstract class AppLocalizations {
   /// **'إضافة صنف'**
   String get menuItemAdd;
 
+  /// No description provided for @menuItemsAddPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة سعر'**
+  String get menuItemsAddPrice;
+
   /// No description provided for @menuItemEditTitle.
   ///
   /// In ar, this message translates to:
