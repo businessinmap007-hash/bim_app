@@ -7736,6 +7736,12 @@ abstract class AppLocalizations {
   /// **'إضافة موديل آخر'**
   String get techPricingAddAnother;
 
+  /// No description provided for @techPricingAddProduct.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة منتج'**
+  String get techPricingAddProduct;
+
   /// No description provided for @menuBundlesTitle.
   ///
   /// In ar, this message translates to:

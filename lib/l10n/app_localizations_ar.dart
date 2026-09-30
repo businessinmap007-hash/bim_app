@@ -4148,6 +4148,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get techPricingAddAnother => 'إضافة موديل آخر';
 
   @override
+  String get techPricingAddProduct => 'إضافة منتج';
+
+  @override
   String get menuBundlesTitle => 'باقات المنيو';
 
   @override

@@ -4150,6 +4150,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get techPricingAddAnother => 'Add another model';
 
   @override
+  String get techPricingAddProduct => 'Add product';
+
+  @override
   String get menuBundlesTitle => 'Menu Bundles';
 
   @override

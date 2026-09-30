@@ -390,7 +390,11 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
           // A detailed branch may carry several real models — unlike an
           // ordinary branch, "add" stays available even once it has items.
           if (detailed && branch != null)
-            _EmptyBranchGridTile(branch: branch, onAddPrice: () => _openTechPricing(branch)),
+            _EmptyBranchGridTile(
+              branch: branch,
+              onAddPrice: () => _openTechPricing(branch),
+              label: AppLocalizations.of(context)!.techPricingAddAnother,
+            ),
         ],
       );
     }
@@ -453,13 +457,18 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
         // A detailed branch may carry several real models — unlike an
         // ordinary branch, "add" stays available even once it has items.
         if (detailed) {
-          tiles.add(_EmptyBranchGridTile(branch: branch, onAddPrice: () => _openTechPricing(branch)));
+          tiles.add(_EmptyBranchGridTile(
+            branch: branch,
+            onAddPrice: () => _openTechPricing(branch),
+            label: AppLocalizations.of(context)!.techPricingAddAnother,
+          ));
         }
       } else {
         tiles.add(_EmptyBranchGridTile(
           key: _branchKey(branch.id),
           branch: branch,
           onAddPrice: detailed ? () => _openTechPricing(branch) : () => _quickAddPrice(branch, saleUnitCodes),
+          label: detailed ? AppLocalizations.of(context)!.techPricingAddProduct : null,
         ));
       }
     }
@@ -598,6 +607,7 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
                         onAddPrice: group.detailed
                             ? () => _openTechPricing(branch)
                             : () => _quickAddPrice(branch, group.saleUnitCodes),
+                        label: group.detailed ? AppLocalizations.of(context)!.techPricingAddProduct : null,
                       ),
               ),
             ],
@@ -864,11 +874,18 @@ class _DisplayModeToggle extends ConsumerWidget {
 /// A branch with nothing priced yet — same card shape as [_ItemTile] (an
 /// emoji stand-in for the photo no item exists to carry, the branch's own
 /// name), with "إضافة سعر" where a price would sit. The one way onto this
-/// branch now that its old always-there header button is gone.
+/// branch now that its old always-there header button is gone. A
+/// `detailed` branch (see [VocabularyGroup.detailed]) shows "إضافة منتج"
+/// instead — «على تابلت بدون سعر المفروض يكون اضافة منتج بدل من اضافة
+/// سعر» — المالك، 2026-09-30: this button already opened «التسعير
+/// والتفاصيل» correctly for a detailed branch, but its LABEL stayed the
+/// plain quick-price wording regardless, which read as if the wrong
+/// screen was about to open.
 class _EmptyBranchCard extends StatelessWidget {
   final VocabularyOptionRef branch;
   final VoidCallback onAddPrice;
-  const _EmptyBranchCard({required this.branch, required this.onAddPrice});
+  final String? label;
+  const _EmptyBranchCard({required this.branch, required this.onAddPrice, this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -884,7 +901,7 @@ class _EmptyBranchCard extends StatelessWidget {
         trailing: TextButton.icon(
           onPressed: onAddPrice,
           icon: const Icon(Icons.add, size: 16),
-          label: Text(AppLocalizations.of(context)!.menuItemsAddPrice),
+          label: Text(label ?? AppLocalizations.of(context)!.menuItemsAddPrice),
         ),
       ),
     );
@@ -893,11 +910,15 @@ class _EmptyBranchCard extends StatelessWidget {
 
 /// [_EmptyBranchCard]'s counterpart for grid mode — same emoji placeholder,
 /// name and "إضافة سعر" action, shaped to sit in [_ItemGridTile]'s own
-/// GridView instead of falling back to a full-width ListTile there.
+/// GridView instead of falling back to a full-width ListTile there. See
+/// [_EmptyBranchCard]'s own doc for why [label] exists — this same widget
+/// also doubles as the "add another" tile after a detailed branch, so the
+/// caller always states its own wording rather than this tile guessing.
 class _EmptyBranchGridTile extends StatelessWidget {
   final VocabularyOptionRef branch;
   final VoidCallback onAddPrice;
-  const _EmptyBranchGridTile({super.key, required this.branch, required this.onAddPrice});
+  final String? label;
+  const _EmptyBranchGridTile({super.key, required this.branch, required this.onAddPrice, this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -935,7 +956,7 @@ class _EmptyBranchGridTile extends StatelessWidget {
                   TextButton.icon(
                     onPressed: onAddPrice,
                     icon: const Icon(Icons.add, size: 16),
-                    label: Text(AppLocalizations.of(context)!.menuItemsAddPrice),
+                    label: Text(label ?? AppLocalizations.of(context)!.menuItemsAddPrice),
                     style: TextButton.styleFrom(
                       padding: EdgeInsets.zero,
                       visualDensity: VisualDensity.compact,
