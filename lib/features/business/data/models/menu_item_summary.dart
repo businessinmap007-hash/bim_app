@@ -83,6 +83,18 @@ class MenuItemSpec {
   );
 }
 
+/// «جديد»/«مستعمل» — the item's own «حالة المنتج» modifier, when the
+/// merchant set one. See MenuDiscoveryController::itemPayload()'s
+/// `condition`. Null for an item with no condition modifier at all.
+class MenuItemCondition {
+  final int id;
+  final String name;
+  const MenuItemCondition({required this.id, required this.name});
+
+  factory MenuItemCondition.fromJson(Map<String, dynamic> json) =>
+      MenuItemCondition(id: json['id'] as int, name: json['name'] as String? ?? '');
+}
+
 class MenuItemExtra {
   final int id;
   final String name;
@@ -116,6 +128,7 @@ class MenuItemSummary {
   final String? saleUnitLabel;
   final int? availableQuantity;
   final bool isFeatured;
+  final MenuItemCondition? condition;
   final MenuItemBranch? lineOption;
   final List<MenuItemVariant> variants;
   final List<MenuItemExtraGroup> extraGroups;
@@ -134,6 +147,7 @@ class MenuItemSummary {
     this.saleUnitLabel,
     this.availableQuantity,
     this.isFeatured = false,
+    this.condition,
     this.lineOption,
     required this.variants,
     this.extraGroups = const [],
@@ -155,7 +169,10 @@ class MenuItemSummary {
 
   /// Whether picking this item needs a choice at all — decides the card's
   /// contextual action (a direct add vs. one that opens the picker first).
-  bool get hasChoices => variants.isNotEmpty || extras.isNotEmpty;
+  /// A catalog-linked item (real specs) always counts as one even with no
+  /// variants/extras of its own — a real device deserves its full detail
+  /// page (see TechProductDetailScreen), never a bare quantity stepper.
+  bool get hasChoices => variants.isNotEmpty || extras.isNotEmpty || specs.isNotEmpty;
 
   /// The lowest variant price, when there's more than one size/price to
   /// choose from — the card shows "From X" instead of a single price.
@@ -177,6 +194,9 @@ class MenuItemSummary {
     saleUnitLabel: json['sale_unit_label'] as String?,
     availableQuantity: (json['available_quantity'] as num?)?.toInt(),
     isFeatured: json['is_featured'] as bool? ?? false,
+    condition: json['condition'] != null
+        ? MenuItemCondition.fromJson(json['condition'] as Map<String, dynamic>)
+        : null,
     lineOption: json['line_option'] != null
         ? MenuItemBranch.fromJson(json['line_option'] as Map<String, dynamic>)
         : null,

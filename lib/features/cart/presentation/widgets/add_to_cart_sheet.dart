@@ -7,17 +7,31 @@ import '../../../offers/presentation/screens/offer_comparison_screen.dart';
 import '../../application/cart_controller.dart';
 import '../../application/shared_cart_providers.dart';
 import '../screens/checkout_screen.dart';
+import '../screens/tech_product_detail_screen.dart';
 
 /// Opens the picker for a menu item (variant + extras + qty) and adds it to
 /// the cart on confirm. A plain item with no variants/extras skips straight
 /// to a qty-only sheet — same widget, the variant/extras sections just don't
 /// render when there's nothing to choose.
 ///
+/// A catalog-linked item (one with a real spec table — see
+/// [MenuItemSummary.specs]) opens the full-page [TechProductDetailScreen]
+/// instead — a device model deserves a proper detail page (hero image, spec
+/// table, condition badge), not a compact sheet. Both share the exact same
+/// variant/extras/qty picker and cart submission underneath.
+///
 /// [sharedOrderId] routes the add through the group cart instead of the
 /// caller's own solo cart — set when reached via SharedCartScreen's "add
 /// items", which pushes BusinessDetailScreen carrying that id.
-Future<void> showAddToCartSheet(BuildContext context, MenuItemSummary item, {int? sharedOrderId}) {
-  return showModalBottomSheet<void>(
+Future<void> showAddToCartSheet(BuildContext context, MenuItemSummary item, {int? sharedOrderId}) async {
+  if (item.specs.isNotEmpty) {
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => TechProductDetailScreen(item: item, sharedOrderId: sharedOrderId)),
+    );
+    return;
+  }
+
+  await showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
     builder: (context) => _AddToCartSheet(item: item, sharedOrderId: sharedOrderId),

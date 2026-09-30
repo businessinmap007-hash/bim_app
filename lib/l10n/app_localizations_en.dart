@@ -1004,6 +1004,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cartExtrasChoose => 'Extras';
 
   @override
+  String get menuItemDetailTitle => 'Product Details';
+
+  @override
   String cartItemsCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,

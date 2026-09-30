@@ -1934,6 +1934,12 @@ abstract class AppLocalizations {
   /// **'إضافات'**
   String get cartExtrasChoose;
 
+  /// No description provided for @menuItemDetailTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل المنتج'**
+  String get menuItemDetailTitle;
+
   /// No description provided for @cartItemsCount.
   ///
   /// In ar, this message translates to:
