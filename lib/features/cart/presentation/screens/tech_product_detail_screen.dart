@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
-import '../../../../app/theme/app_theme.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../business/data/models/menu_item_summary.dart';
 import '../../application/cart_controller.dart';
@@ -23,11 +22,6 @@ import 'checkout_screen.dart';
 /// than sharing a controller — small enough that duplicating it once was
 /// safer than refactoring the already-verified sheet to fit a second,
 /// differently-laid-out caller.
-///
-/// Forced into [AppTheme.dark] like [TechPricingScreen] — see that file's
-/// doc comment for why a detailed device's own catalog surfaces keep the
-/// canvas's navy/gold identity regardless of the customer's own device
-/// theme setting.
 class TechProductDetailScreen extends ConsumerStatefulWidget {
   final MenuItemSummary item;
   final int? sharedOrderId;
@@ -136,12 +130,8 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
 
   @override
   Widget build(BuildContext context) {
-    return Theme(data: AppTheme.dark(), child: Builder(builder: _buildScaffold));
-  }
-
-  Widget _buildScaffold(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final labelStyle = const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Colors.white);
+    final theme = Theme.of(context);
     final item = widget.item;
     final imageUrl = item.imageUrl ?? (item.imageUrls.isNotEmpty ? item.imageUrls.first : null);
 
@@ -171,28 +161,31 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  item.name,
-                  style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w700, color: Colors.white),
-                ),
+                Text(item.name, style: theme.textTheme.titleLarge),
                 const SizedBox(height: 6),
                 Row(
                   children: [
                     Text(
                       item.basePrice.toStringAsFixed(0),
-                      style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700, color: AppColors.accentGold),
+                      style: theme.textTheme.headlineSmall?.copyWith(
+                        color: AppColors.accentGold,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     if (item.condition != null) ...[
                       const SizedBox(width: 10),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+                        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 2),
                         decoration: BoxDecoration(
-                          color: AppColors.success.withValues(alpha: 0.16),
+                          color: AppColors.success.withValues(alpha: 0.14),
                           borderRadius: BorderRadius.circular(7),
                         ),
                         child: Text(
                           item.condition!.name,
-                          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.success),
+                          style: theme.textTheme.labelMedium?.copyWith(
+                            color: AppColors.success,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
                     ],
@@ -200,110 +193,98 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
                 ),
                 if (item.description.isNotEmpty) ...[
                   const SizedBox(height: 8),
-                  Text(
-                    item.description,
-                    style: TextStyle(fontSize: 13, color: Colors.white.withValues(alpha: 0.55)),
-                  ),
+                  Text(item.description, style: theme.textTheme.bodyMedium?.copyWith(color: theme.hintColor)),
                 ],
                 if (item.specs.isNotEmpty) ...[
                   const SizedBox(height: 18),
-                  Text(l10n.menuCardSpecsTitle, style: labelStyle),
+                  Text(l10n.menuCardSpecsTitle, style: theme.textTheme.titleSmall),
                   const SizedBox(height: 8),
                   _SpecTable(specs: item.specs),
                 ],
                 if (item.variants.isNotEmpty) ...[
                   const SizedBox(height: 18),
-                  Text(l10n.cartVariantChoose, style: labelStyle),
-                  const SizedBox(height: 4),
-                  _OptionGroup(
-                    multi: false,
-                    rows: [
-                      for (final v in item.variants)
-                        _OptionRowData(
-                          id: v.id,
-                          label: v.name,
-                          trailing: v.price.toStringAsFixed(0),
-                          selected: v.id == _variantId,
-                        ),
-                    ],
-                    onTap: (id) => setState(() => _variantId = id),
+                  Text(l10n.cartVariantChoose, style: theme.textTheme.titleSmall),
+                  ...item.variants.map(
+                    (v) => RadioListTile<int>(
+                      contentPadding: EdgeInsets.zero,
+                      value: v.id,
+                      groupValue: _variantId,
+                      onChanged: (value) => setState(() => _variantId = value),
+                      title: Text(v.name),
+                      secondary: Text(v.price.toStringAsFixed(0)),
+                    ),
                   ),
                 ],
                 for (final group in item.extraGroups) ...[
-                  const SizedBox(height: 16),
-                  Text(group.name, style: labelStyle),
-                  const SizedBox(height: 4),
-                  _OptionGroup(
-                    multi: !group.isSingle,
-                    rows: [
-                      for (final e in item.extras.where((e) => e.extraGroupId == group.id))
-                        _OptionRowData(
-                          id: e.id,
-                          label: e.name,
-                          trailing: '+${e.price.toStringAsFixed(0)}',
-                          selected: group.isSingle ? e.id == _singleGroupValue(group.id) : _extraIds.contains(e.id),
-                        ),
-                    ],
-                    onTap: (id) => group.isSingle
-                        ? _pickSingle(group.id, id)
-                        : setState(() => _extraIds.contains(id) ? _extraIds.remove(id) : _extraIds.add(id)),
-                  ),
+                  const SizedBox(height: 12),
+                  Text(group.name, style: theme.textTheme.titleSmall),
+                  if (group.isSingle)
+                    ...item.extras.where((e) => e.extraGroupId == group.id).map(
+                      (e) => RadioListTile<int>(
+                        contentPadding: EdgeInsets.zero,
+                        value: e.id,
+                        groupValue: _singleGroupValue(group.id),
+                        onChanged: (value) => _pickSingle(group.id, e.id),
+                        title: Text(e.name),
+                        secondary: Text('+${e.price.toStringAsFixed(0)}'),
+                      ),
+                    )
+                  else
+                    ...item.extras.where((e) => e.extraGroupId == group.id).map(
+                      (e) => CheckboxListTile(
+                        contentPadding: EdgeInsets.zero,
+                        value: _extraIds.contains(e.id),
+                        onChanged: (checked) => setState(() {
+                          if (checked ?? false) {
+                            _extraIds.add(e.id);
+                          } else {
+                            _extraIds.remove(e.id);
+                          }
+                        }),
+                        title: Text(e.name),
+                        secondary: Text('+${e.price.toStringAsFixed(0)}'),
+                      ),
+                    ),
                 ],
                 if (item.extras.any((e) => e.extraGroupId == null)) ...[
-                  const SizedBox(height: 16),
-                  Text(l10n.cartExtrasChoose, style: labelStyle),
-                  const SizedBox(height: 4),
-                  _OptionGroup(
-                    multi: true,
-                    rows: [
-                      for (final e in item.extras.where((e) => e.extraGroupId == null))
-                        _OptionRowData(
-                          id: e.id,
-                          label: e.name,
-                          trailing: '+${e.price.toStringAsFixed(0)}',
-                          selected: _extraIds.contains(e.id),
-                        ),
-                    ],
-                    onTap: (id) => setState(() => _extraIds.contains(id) ? _extraIds.remove(id) : _extraIds.add(id)),
+                  const SizedBox(height: 12),
+                  Text(l10n.cartExtrasChoose, style: theme.textTheme.titleSmall),
+                  ...item.extras.where((e) => e.extraGroupId == null).map(
+                    (e) => CheckboxListTile(
+                      contentPadding: EdgeInsets.zero,
+                      value: _extraIds.contains(e.id),
+                      onChanged: (checked) => setState(() {
+                        if (checked ?? false) {
+                          _extraIds.add(e.id);
+                        } else {
+                          _extraIds.remove(e.id);
+                        }
+                      }),
+                      title: Text(e.name),
+                      secondary: Text('+${e.price.toStringAsFixed(0)}'),
+                    ),
                   ),
                 ],
-                const SizedBox(height: 18),
+                const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      l10n.marketCatalogQuantity,
-                      style: TextStyle(fontSize: 14, color: Colors.white.withValues(alpha: 0.75)),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.darkSurface,
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        children: [
-                          IconButton(
-                            onPressed: _qty > 1 ? () => setState(() => _qty--) : null,
-                            icon: const Icon(Icons.remove, size: 18),
-                            color: Colors.white,
-                            disabledColor: Colors.white.withValues(alpha: 0.2),
-                          ),
-                          SizedBox(
-                            width: 28,
-                            child: Text(
-                              '$_qty',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700, color: Colors.white),
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () => setState(() => _qty++),
-                            icon: const Icon(Icons.add, size: 18),
-                            color: AppColors.accentGold,
-                          ),
-                        ],
-                      ),
+                    Text(l10n.marketCatalogQuantity, style: theme.textTheme.bodyMedium),
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: _qty > 1 ? () => setState(() => _qty--) : null,
+                          icon: const Icon(Icons.remove_circle_outline),
+                        ),
+                        SizedBox(
+                          width: 32,
+                          child: Text('$_qty', textAlign: TextAlign.center, style: theme.textTheme.titleMedium),
+                        ),
+                        IconButton(
+                          onPressed: () => setState(() => _qty++),
+                          icon: const Icon(Icons.add_circle_outline),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -315,13 +296,7 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
       bottomNavigationBar: SafeArea(
         minimum: const EdgeInsets.fromLTRB(16, 12, 16, 12),
         child: _submitting
-            ? const Center(
-                child: SizedBox(
-                  height: 20,
-                  width: 20,
-                  child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.accentGold),
-                ),
-              )
+            ? const Center(child: SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2)))
             : widget.sharedOrderId != null
             ? SizedBox(
                 width: double.infinity,
@@ -353,37 +328,35 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
   }
 }
 
-/// Same visual shape as `add_to_cart_sheet.dart`'s own private `_SpecTable`,
-/// dark-styled to the canvas's own spec-row look.
+/// Same visual shape as `add_to_cart_sheet.dart`'s own private `_SpecTable`.
 class _SpecTable extends StatelessWidget {
   final List<MenuItemSpec> specs;
   const _SpecTable({required this.specs});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
-        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: theme.dividerColor),
+        borderRadius: BorderRadius.circular(10),
       ),
-      clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
           for (var i = 0; i < specs.length; i++)
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-              color: i.isEven ? Colors.white.withValues(alpha: 0.03) : null,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: i == specs.length - 1
+                  ? null
+                  : BoxDecoration(border: Border(bottom: BorderSide(color: theme.dividerColor))),
               child: Row(
                 children: [
                   Expanded(
-                    child: Text(
-                      specs[i].name,
-                      style: TextStyle(fontSize: 12.5, color: Colors.white.withValues(alpha: 0.5)),
-                    ),
+                    child: Text(specs[i].name, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
                   ),
                   Text(
                     specs[i].value,
-                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.white),
+                    style: theme.textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600),
                     textAlign: TextAlign.end,
                   ),
                 ],
@@ -391,112 +364,6 @@ class _SpecTable extends StatelessWidget {
             ),
         ],
       ),
-    );
-  }
-}
-
-class _OptionRowData {
-  final int id;
-  final String label;
-  final String trailing;
-  final bool selected;
-  const _OptionRowData({required this.id, required this.label, required this.trailing, required this.selected});
-}
-
-/// A canvas-matching row group: a radio (single-select) or checkbox
-/// (multi-select) mark that is hand-drawn rather than a Material
-/// `RadioListTile`/`CheckboxListTile`, to match the Tech Catalog Setup
-/// canvas exactly — unselected = a plain outlined ring/box, selected =
-/// filled gold with a navy dot (radio) or a navy check (checkbox), never
-/// the platform's own blue/teal check styling.
-class _OptionGroup extends StatelessWidget {
-  final bool multi;
-  final List<_OptionRowData> rows;
-  final ValueChanged<int> onTap;
-  const _OptionGroup({required this.multi, required this.rows, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        children: [
-          for (var i = 0; i < rows.length; i++)
-            InkWell(
-              onTap: () => onTap(rows[i].id),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                decoration: BoxDecoration(
-                  border: i == rows.length - 1
-                      ? null
-                      : Border(bottom: BorderSide(color: Colors.white.withValues(alpha: 0.08))),
-                ),
-                child: Row(
-                  children: [
-                    _Mark(multi: multi, selected: rows[i].selected),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        rows[i].label,
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white),
-                      ),
-                    ),
-                    Text(
-                      rows[i].trailing,
-                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.white.withValues(alpha: 0.7)),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-class _Mark extends StatelessWidget {
-  final bool multi;
-  final bool selected;
-  const _Mark({required this.multi, required this.selected});
-
-  @override
-  Widget build(BuildContext context) {
-    const size = 20.0;
-    if (multi) {
-      return AnimatedContainer(
-        duration: const Duration(milliseconds: 120),
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          color: selected ? AppColors.accentGold : Colors.transparent,
-          border: Border.all(color: selected ? AppColors.accentGold : Colors.white.withValues(alpha: 0.35), width: 1.5),
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: selected ? const Icon(Icons.check, size: 14, color: AppColors.primaryNavy) : null,
-      );
-    }
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 120),
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        color: selected ? AppColors.accentGold : Colors.transparent,
-        border: Border.all(color: selected ? AppColors.accentGold : Colors.white.withValues(alpha: 0.35), width: 1.5),
-        shape: BoxShape.circle,
-      ),
-      alignment: Alignment.center,
-      child: selected
-          ? Container(
-              width: 8,
-              height: 8,
-              decoration: const BoxDecoration(color: AppColors.primaryNavy, shape: BoxShape.circle),
-            )
-          : null,
     );
   }
 }
