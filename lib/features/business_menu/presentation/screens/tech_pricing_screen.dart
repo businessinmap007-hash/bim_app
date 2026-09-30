@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
+import '../../../../app/theme/app_theme.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/utils/localized_name.dart';
 import '../../application/business_menu_providers.dart';
@@ -24,6 +25,15 @@ import '../../data/models/menu_vocabulary.dart';
 /// of the plain quantity/price dialog — and, unlike an ordinary branch, a
 /// detailed one may carry several of these (several real models), so the
 /// branch itself is always required, even when editing an existing item.
+///
+/// Forced into [AppTheme.dark] regardless of the device's own theme
+/// setting — the Tech Catalog Setup canvas's navy/gold palette IS the
+/// app's existing dark theme byte-for-byte (same hex values), so a device
+/// shop's own catalog surfaces keep that identity always, the way a
+/// dedicated "electronics store" corner of the app would, rather than
+/// flipping to the light theme whenever the merchant's phone happens to be
+/// in light mode. «لماذا ال UX/UI غير مطابق للتصميم على كانفا» — المالك،
+/// 2026-09-30: this and [TechProductDetailScreen] both do this now.
 class TechPricingScreen extends ConsumerStatefulWidget {
   final VocabularyOptionRef lineOption;
   final BusinessMenuItem? existingItem;
@@ -88,7 +98,11 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     final picked = await showModalBottomSheet<CatalogProductRef>(
       context: context,
       isScrollControlled: true,
-      builder: (_) => const _ProductPickerSheet(),
+      backgroundColor: AppColors.darkBackground,
+      builder: (_) => Theme(
+        data: AppTheme.dark(),
+        child: const _ProductPickerSheet(),
+      ),
     );
     if (picked != null && mounted) setState(() => _product = picked);
   }
@@ -154,8 +168,13 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return Theme(data: AppTheme.dark(), child: Builder(builder: _buildScaffold));
+  }
+
+  Widget _buildScaffold(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final labelStyle = theme.textTheme.labelMedium?.copyWith(color: Colors.white.withValues(alpha: 0.55));
     final isEnglish = Localizations.localeOf(context).languageCode == 'en';
     final vocabAsync = ref.watch(menuVocabularyProvider);
     final conditionGroup = vocabAsync.maybeWhen(
@@ -169,24 +188,18 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          Text(
-            l10n.techPricingProductLabel,
-            style: theme.textTheme.labelMedium,
-          ),
+          Text(l10n.techPricingProductLabel, style: labelStyle),
           const SizedBox(height: 8),
           _ProductPickerField(product: _product, onTap: _pickProduct),
           if (_product != null && _product!.specs.isNotEmpty) ...[
-            const SizedBox(height: 16),
-            Text(l10n.menuCardSpecsTitle, style: theme.textTheme.labelMedium),
+            const SizedBox(height: 18),
+            Text(l10n.menuCardSpecsTitle, style: labelStyle),
             const SizedBox(height: 8),
             _SpecTable(specs: _product!.specs),
           ],
           if (conditionGroup != null) ...[
-            const SizedBox(height: 16),
-            Text(
-              l10n.techPricingConditionLabel,
-              style: theme.textTheme.labelMedium,
-            ),
+            const SizedBox(height: 18),
+            Text(l10n.techPricingConditionLabel, style: labelStyle),
             const SizedBox(height: 8),
             _ConditionToggle(
               options: conditionGroup.options,
@@ -195,54 +208,39 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
               onChanged: (id) => setState(() => _conditionOptionId = id),
             ),
           ],
-          const SizedBox(height: 16),
+          const SizedBox(height: 18),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: TextField(
+                flex: 1,
+                child: _DarkField(
+                  label: l10n.menuItemBasePriceHint,
                   controller: _priceController,
-                  keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9.,٫]')),
-                  ],
-                  decoration: InputDecoration(
-                    labelText: l10n.menuItemBasePriceHint,
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(
-                        color: AppColors.accentGold,
-                        width: 1.5,
-                      ),
-                    ),
-                  ),
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,٫]'))],
+                  goldBorder: true,
+                  valueColor: AppColors.accentGold,
                 ),
               ),
               const SizedBox(width: 10),
               Expanded(
-                child: TextField(
+                flex: 1,
+                child: _DarkField(
+                  label: l10n.menuItemAvailableQuantityHint,
                   controller: _stockController,
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  decoration: InputDecoration(
-                    labelText: l10n.menuItemAvailableQuantityHint,
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                  ),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 12),
-          TextField(
+          _DarkField(
+            label: l10n.menuItemDescriptionArHint,
             controller: _descController,
-            maxLines: 2,
-            decoration: InputDecoration(
-              labelText: l10n.menuItemDescriptionArHint,
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-            ),
+            maxLines: 3,
+            counter: '${_descController.text.length}/300',
           ),
           if (_error != null) ...[
             const SizedBox(height: 12),
@@ -251,18 +249,24 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
         ],
       ),
       bottomNavigationBar: SafeArea(
-        minimum: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+        minimum: const EdgeInsets.fromLTRB(16, 12, 16, 20),
         child: SizedBox(
           width: double.infinity,
           child: FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: AppColors.accentGold,
+              foregroundColor: AppColors.primaryNavy,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
             onPressed: _saving ? null : _save,
             child: _saving
                 ? const SizedBox(
                     height: 20,
                     width: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
+                    child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primaryNavy),
                   )
-                : Text(l10n.commonSave),
+                : Text(l10n.commonSave, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
           ),
         ),
       ),
@@ -270,9 +274,102 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
   }
 }
 
+/// A dark-surface field matching the canvas's own input rows — label above
+/// the value (not a floating Material label), `#11213B` fill, subtle white
+/// border, gold border when [goldBorder] (the canvas's own "السعر" field).
+class _DarkField extends StatefulWidget {
+  final String label;
+  final TextEditingController controller;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
+  final int maxLines;
+  final bool goldBorder;
+  final Color? valueColor;
+  final String? counter;
+  const _DarkField({
+    required this.label,
+    required this.controller,
+    this.keyboardType,
+    this.inputFormatters,
+    this.maxLines = 1,
+    this.goldBorder = false,
+    this.valueColor,
+    this.counter,
+  });
+
+  @override
+  State<_DarkField> createState() => _DarkFieldState();
+}
+
+class _DarkFieldState extends State<_DarkField> {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.counter != null) widget.controller.addListener(_onChanged);
+  }
+
+  @override
+  void dispose() {
+    if (widget.counter != null) widget.controller.removeListener(_onChanged);
+    super.dispose();
+  }
+
+  void _onChanged() => setState(() {});
+
+  @override
+  Widget build(BuildContext context) {
+    final border = widget.goldBorder ? AppColors.accentGold : Colors.white.withValues(alpha: 0.14);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.darkSurface,
+        border: Border.all(color: border, width: widget.goldBorder ? 1.5 : 1),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                widget.label,
+                style: TextStyle(
+                  fontSize: 11,
+                  color: widget.goldBorder ? AppColors.accentGold.withValues(alpha: 0.75) : Colors.white.withValues(alpha: 0.45),
+                ),
+              ),
+              if (widget.counter != null)
+                Text(widget.counter!, style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.3))),
+            ],
+          ),
+          TextField(
+            controller: widget.controller,
+            keyboardType: widget.keyboardType,
+            inputFormatters: widget.inputFormatters,
+            maxLines: widget.maxLines,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              color: widget.valueColor ?? Colors.white,
+            ),
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              isDense: true,
+              contentPadding: EdgeInsets.zero,
+              filled: false,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// The tappable "المنتج" row — either "اختر منتجًا حقيقيًا" (nothing picked
-/// yet) or the picked product's own name/brand/image, mirroring the TechPricing
-/// canvas's product card.
+/// yet) or the picked product's own name/brand/image, matching the
+/// TechPricing canvas's product card exactly.
 class _ProductPickerField extends StatelessWidget {
   final CatalogProductRef? product;
   final VoidCallback onTap;
@@ -280,14 +377,14 @@ class _ProductPickerField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          border: Border.all(color: theme.dividerColor),
+          color: AppColors.darkSurface,
+          border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
@@ -296,13 +393,17 @@ class _ProductPickerField extends StatelessWidget {
               width: 44,
               height: 44,
               decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceContainerHighest,
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [AppColors.primaryNavyLight, AppColors.primaryNavy],
+                ),
                 borderRadius: BorderRadius.circular(10),
               ),
               clipBehavior: Clip.antiAlias,
               child: product?.image != null
                   ? Image.network(product!.image!, fit: BoxFit.cover)
-                  : Icon(Icons.smartphone_outlined, color: theme.hintColor),
+                  : const Icon(Icons.smartphone_outlined, color: AppColors.accentGold, size: 20),
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -310,23 +411,20 @@ class _ProductPickerField extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    product?.name ??
-                        AppLocalizations.of(context)!.techPricingPickProduct,
-                    style: theme.textTheme.titleSmall,
+                    product?.name ?? AppLocalizations.of(context)!.techPricingPickProduct,
+                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.white),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   if (product?.brand != null)
                     Text(
                       product!.brand!,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.hintColor,
-                      ),
+                      style: TextStyle(fontSize: 12, color: Colors.white.withValues(alpha: 0.45)),
                     ),
                 ],
               ),
             ),
-            Icon(Icons.chevron_right, color: theme.hintColor),
+            Icon(Icons.chevron_right, color: Colors.white.withValues(alpha: 0.5), size: 15),
           ],
         ),
       ),
@@ -335,46 +433,36 @@ class _ProductPickerField extends StatelessWidget {
 }
 
 /// Read-only preview of the picked product's real spec table — same visual
-/// shape as the customer-facing add-to-cart sheet's own `_SpecTable`.
+/// shape as the customer-facing add-to-cart sheet's own `_SpecTable`, dark-styled.
 class _SpecTable extends StatelessWidget {
   final List<CatalogSpecRow> specs;
   const _SpecTable({required this.specs});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: theme.dividerColor),
-        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
+        borderRadius: BorderRadius.circular(12),
       ),
+      clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
           for (var i = 0; i < specs.length; i++)
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: i == specs.length - 1
-                  ? null
-                  : BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(color: theme.dividerColor),
-                      ),
-                    ),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              color: i.isEven ? Colors.white.withValues(alpha: 0.03) : null,
               child: Row(
                 children: [
                   Expanded(
                     child: Text(
                       specs[i].name,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.hintColor,
-                      ),
+                      style: TextStyle(fontSize: 12.5, color: Colors.white.withValues(alpha: 0.5)),
                     ),
                   ),
                   Text(
                     specs[i].value,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.white),
                     textAlign: TextAlign.end,
                   ),
                 ],
@@ -403,11 +491,11 @@ class _ConditionToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
-        border: Border.all(color: theme.dividerColor),
+        color: AppColors.darkSurface,
+        border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -426,11 +514,10 @@ class _ConditionToggle extends StatelessWidget {
                   alignment: Alignment.center,
                   child: Text(
                     localizedName(o.nameAr, o.nameEn, isEnglish),
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      fontWeight: selectedId == o.id
-                          ? FontWeight.w700
-                          : FontWeight.w500,
-                      color: selectedId == o.id ? AppColors.primaryNavy : null,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: selectedId == o.id ? FontWeight.w700 : FontWeight.w500,
+                      color: selectedId == o.id ? AppColors.primaryNavy : Colors.white,
                     ),
                   ),
                 ),
@@ -443,13 +530,13 @@ class _ConditionToggle extends StatelessWidget {
 }
 
 /// Search-and-pick a real catalog master — mirrors
-/// prescriptions/business_picker_sheet.dart's own debounced-search shape.
+/// prescriptions/business_picker_sheet.dart's own debounced-search shape,
+/// dark-styled to match the canvas.
 class _ProductPickerSheet extends ConsumerStatefulWidget {
   const _ProductPickerSheet();
 
   @override
-  ConsumerState<_ProductPickerSheet> createState() =>
-      _ProductPickerSheetState();
+  ConsumerState<_ProductPickerSheet> createState() => _ProductPickerSheetState();
 }
 
 class _ProductPickerSheetState extends ConsumerState<_ProductPickerSheet> {
@@ -479,9 +566,7 @@ class _ProductPickerSheetState extends ConsumerState<_ProductPickerSheet> {
   Future<void> _search(String q) async {
     setState(() => _loading = true);
     try {
-      final results = await ref
-          .read(businessMenuApiProvider)
-          .catalogLookup(q.trim());
+      final results = await ref.read(businessMenuApiProvider).catalogLookup(q.trim());
       if (mounted) setState(() => _results = results);
     } finally {
       if (mounted) setState(() => _loading = false);
@@ -492,9 +577,7 @@ class _ProductPickerSheetState extends ConsumerState<_ProductPickerSheet> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Padding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
-      ),
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -504,15 +587,31 @@ class _ProductPickerSheetState extends ConsumerState<_ProductPickerSheet> {
             children: [
               Text(
                 l10n.techPricingPickProduct,
-                style: Theme.of(context).textTheme.titleMedium,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: _controller,
                 autofocus: true,
+                style: const TextStyle(color: Colors.white),
                 decoration: InputDecoration(
                   hintText: l10n.techPricingSearchHint,
-                  prefixIcon: const Icon(Icons.search),
+                  hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.35)),
+                  prefixIcon: Icon(Icons.search, color: Colors.white.withValues(alpha: 0.5)),
+                  filled: true,
+                  fillColor: AppColors.darkSurface,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.14)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.14)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: AppColors.accentGold, width: 1.5),
+                  ),
                 ),
                 onChanged: _onChanged,
               ),
@@ -520,24 +619,34 @@ class _ProductPickerSheetState extends ConsumerState<_ProductPickerSheet> {
               SizedBox(
                 height: 380,
                 child: _loading
-                    ? const Center(child: CircularProgressIndicator())
+                    ? const Center(child: CircularProgressIndicator(color: AppColors.accentGold))
                     : _results.isEmpty
-                    ? Center(child: Text(l10n.techPricingNoResults))
+                    ? Center(
+                        child: Text(l10n.techPricingNoResults, style: TextStyle(color: Colors.white.withValues(alpha: 0.5))),
+                      )
                     : ListView.builder(
                         itemCount: _results.length,
                         itemBuilder: (context, index) {
                           final p = _results[index];
                           return ListTile(
-                            leading: CircleAvatar(
-                              backgroundImage: p.image != null
-                                  ? NetworkImage(p.image!)
-                                  : null,
-                              child: p.image == null
-                                  ? const Icon(Icons.smartphone_outlined)
-                                  : null,
+                            leading: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [AppColors.primaryNavyLight, AppColors.primaryNavy],
+                                ),
+                                shape: BoxShape.circle,
+                              ),
+                              clipBehavior: Clip.antiAlias,
+                              child: p.image != null
+                                  ? Image.network(p.image!, fit: BoxFit.cover)
+                                  : const Icon(Icons.smartphone_outlined, color: AppColors.accentGold, size: 18),
                             ),
-                            title: Text(p.name),
-                            subtitle: p.brand != null ? Text(p.brand!) : null,
+                            title: Text(p.name, style: const TextStyle(color: Colors.white)),
+                            subtitle: p.brand != null
+                                ? Text(p.brand!, style: TextStyle(color: Colors.white.withValues(alpha: 0.45)))
+                                : null,
                             onTap: () => Navigator.of(context).pop(p),
                           );
                         },

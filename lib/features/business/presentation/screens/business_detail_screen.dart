@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../app/theme/app_theme.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -574,8 +575,19 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
         final visibleSections = _activeSectionIndex != null ? [sections[_activeSectionIndex!]] : sections;
         final displayModeOverride = ref.watch(customerMenuDisplayModeControllerProvider);
         final isGrid = (displayModeOverride ?? page.displayMode) == 'grid';
+        // A "detailed" storefront (a real catalog product picked per item —
+        // see TechPricingScreen) forces the same dark navy/gold theme its
+        // own merchant-facing screens already use, matching the Tech
+        // Catalog Setup canvas's TechStorefront board exactly — every
+        // existing card (MenuItemTile/MenuItemGridCard already read
+        // Theme.of(context) throughout) picks up the cascade for free. A
+        // plain restaurant/salon/etc menu (no item carries specs) renders
+        // exactly as before, in the ambient theme.
+        final isDetailedStorefront = sections.any(
+          (s) => s.branches.any((b) => b.items.any((i) => i.specs.isNotEmpty)),
+        );
 
-        return Builder(
+        final content = Builder(
           builder: (context) => CustomScrollView(
             key: const PageStorageKey('business_menu'),
             slivers: [
@@ -695,6 +707,8 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
             ],
           ),
         );
+
+        return isDetailedStorefront ? Theme(data: AppTheme.dark(), child: content) : content;
       },
     );
   }
