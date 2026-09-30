@@ -18,6 +18,7 @@ import '../../data/models/menu_vocabulary.dart';
 import 'menu_item_edit_screen.dart';
 import 'menu_sections_screen.dart';
 import 'menu_type_selection_screen.dart';
+import 'tech_pricing_screen.dart';
 
 /// An item's own name is the best key for its emoji — "بطاطس" IS a potato
 /// regardless of which vocabulary group it happens to sell under — falling
@@ -282,6 +283,20 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
     }
   }
 
+  /// A `detailed` branch (see [VocabularyGroup.detailed]) opens «التسعير
+  /// والتفاصيل» — the catalog-linked product picker — instead of the plain
+  /// quantity/price dialog [_quickAddPrice]/[_quickEditPrice] open for an
+  /// ordinary branch. Unlike those, this can be reopened for the SAME
+  /// branch any number of times — a branch may carry several real models.
+  Future<void> _openTechPricing(VocabularyOptionRef branch, {BusinessMenuItem? existingItem}) async {
+    final saved = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(builder: (_) => TechPricingScreen(lineOption: branch, existingItem: existingItem)),
+    );
+    if (saved == true) {
+      ref.read(menuItemsControllerProvider.notifier).load();
+    }
+  }
+
   /// "أنواع الأجهزة الكهربائية" as a SECTION: tapping its heading opens the
   /// full checklist of every type in that section (not just the narrow set
   /// already ticked), so a merchant isn't stuck with whatever a handful of
@@ -342,7 +357,17 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
   /// Tapping a card re-prices it through [_quickEditPrice] — the same
   /// minimal dialog [_EmptyBranchCard] opens, not the full
   /// [MenuItemEditScreen] (see [_priceDialog]'s doc for why).
-  Widget _itemsFor(List<BusinessMenuItem> items, String displayMode, List<String>? saleUnitCodes) {
+  Widget _itemsFor(
+    List<BusinessMenuItem> items,
+    String displayMode,
+    List<String>? saleUnitCodes, {
+    bool detailed = false,
+    VocabularyOptionRef? branch,
+  }) {
+    VoidCallback tapFor(BusinessMenuItem item) => detailed
+        ? () => _openTechPricing(branch!, existingItem: item)
+        : () => _quickEditPrice(item, saleUnitCodes);
+
     if (displayMode == 'grid') {
       // «اجعل كل كارتين فى سطر واذا كانت الشاشة اكبر يكون 3 فى سطر» —
       // المالك، 2026-09-29. Mobile stays 2 per row; a wider screen (tablet/
@@ -360,8 +385,12 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
           for (final item in items)
             _ItemGridTile(
               item: item,
-              onTap: () => _quickEditPrice(item, saleUnitCodes),
+              onTap: tapFor(item),
             ),
+          // A detailed branch may carry several real models — unlike an
+          // ordinary branch, "add" stays available even once it has items.
+          if (detailed && branch != null)
+            _EmptyBranchGridTile(branch: branch, onAddPrice: () => _openTechPricing(branch)),
         ],
       );
     }
@@ -373,7 +402,16 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
             padding: const EdgeInsets.only(bottom: 8),
             child: _ItemTile(
               item: item,
-              onTap: () => _quickEditPrice(item, saleUnitCodes),
+              onTap: tapFor(item),
+            ),
+          ),
+        if (detailed && branch != null)
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: TextButton.icon(
+              onPressed: () => _openTechPricing(branch),
+              icon: const Icon(Icons.add, size: 16),
+              label: Text(AppLocalizations.of(context)!.techPricingAddAnother),
             ),
           ),
       ],
@@ -389,7 +427,12 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
   /// branch boundaries. List mode is untouched — its own per-branch blocks
   /// are what "jump to this branch" scrolls to; here the first tile
   /// standing in for a branch carries that same [_branchKey].
-  Widget _groupGrid(List<VocabularyOptionRef> branches, Map<int, List<BusinessMenuItem>> itemsByBranch, List<String>? saleUnitCodes) {
+  Widget _groupGrid(
+    List<VocabularyOptionRef> branches,
+    Map<int, List<BusinessMenuItem>> itemsByBranch,
+    List<String>? saleUnitCodes, {
+    bool detailed = false,
+  }) {
     final columns = Breakpoints.sizeFor(MediaQuery.of(context).size.width) == ScreenSize.mobile ? 2 : 3;
     final tiles = <Widget>[];
 
@@ -402,14 +445,21 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
           tiles.add(_ItemGridTile(
             key: isFirst ? _branchKey(branch.id) : null,
             item: item,
-            onTap: () => _quickEditPrice(item, saleUnitCodes),
+            onTap: detailed
+                ? () => _openTechPricing(branch, existingItem: item)
+                : () => _quickEditPrice(item, saleUnitCodes),
           ));
+        }
+        // A detailed branch may carry several real models — unlike an
+        // ordinary branch, "add" stays available even once it has items.
+        if (detailed) {
+          tiles.add(_EmptyBranchGridTile(branch: branch, onAddPrice: () => _openTechPricing(branch)));
         }
       } else {
         tiles.add(_EmptyBranchGridTile(
           key: _branchKey(branch.id),
           branch: branch,
-          onAddPrice: () => _quickAddPrice(branch, saleUnitCodes),
+          onAddPrice: detailed ? () => _openTechPricing(branch) : () => _quickAddPrice(branch, saleUnitCodes),
         ));
       }
     }
@@ -512,7 +562,12 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
           // themselves), then unpriced ones (A→Z among themselves) — never
           // interleaved by vocabulary order the way they used to be.
           if (displayMode == 'grid')
-            _groupGrid(_sortedBranches(group.options, itemsByBranch, isEnglish), itemsByBranch, group.saleUnitCodes)
+            _groupGrid(
+              _sortedBranches(group.options, itemsByBranch, isEnglish),
+              itemsByBranch,
+              group.saleUnitCodes,
+              detailed: group.detailed,
+            )
           else
             for (final branch in _sortedBranches(group.options, itemsByBranch, isEnglish)) ...[
               Padding(
@@ -526,10 +581,24 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
                 // ONE placeholder card instead, matching a priced card's own
                 // look (image/emoji, name) with "إضافة سعر" where the price
                 // would be — tapping it is the only way in now; the old
-                // always-there per-branch button is gone.
+                // always-there per-branch button is gone. A `detailed`
+                // branch (see [VocabularyGroup.detailed]) is the one
+                // exception: it may carry several real models, so "add"
+                // stays available beside its own priced cards too.
                 child: (itemsByBranch[branch.id]?.isNotEmpty ?? false)
-                    ? _itemsFor(itemsByBranch[branch.id]!, displayMode, group.saleUnitCodes)
-                    : _EmptyBranchCard(branch: branch, onAddPrice: () => _quickAddPrice(branch, group.saleUnitCodes)),
+                    ? _itemsFor(
+                        itemsByBranch[branch.id]!,
+                        displayMode,
+                        group.saleUnitCodes,
+                        detailed: group.detailed,
+                        branch: branch,
+                      )
+                    : _EmptyBranchCard(
+                        branch: branch,
+                        onAddPrice: group.detailed
+                            ? () => _openTechPricing(branch)
+                            : () => _quickAddPrice(branch, group.saleUnitCodes),
+                      ),
               ),
             ],
         ],

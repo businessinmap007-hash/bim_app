@@ -127,6 +127,19 @@ class BusinessMenuApi {
     );
   }
 
+  /// Real catalog masters (a real phone/laptop model…) a merchant may LINK a
+  /// menu item to — read-only, never writes anything. Powers «التسعير
+  /// والتفاصيل»'s product picker. See [[tech-spec-menu-implementation]].
+  Future<List<CatalogProductRef>> catalogLookup(String q) async {
+    final body = await _client.getForBody(
+      '/business/menu/catalog-lookup',
+      query: {if (q.isNotEmpty) 'q': q},
+    );
+    return (body['data']['items'] as List<dynamic>? ?? [])
+        .map((e) => CatalogProductRef.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
   // ─────────────────────────── Items ───────────────────────────
 
   Future<MenuItemsPage> items({
@@ -173,6 +186,7 @@ class BusinessMenuApi {
     String? saleUnit,
     String? brandName,
     int? availableQuantity,
+    int? catalogProductId,
     int? lineOptionId,
     int? optionGroupId,
     List<int> modifierOptionIds = const [],
@@ -193,6 +207,7 @@ class BusinessMenuApi {
                 saleUnit: saleUnit,
                 brandName: brandName,
                 availableQuantity: availableQuantity,
+                catalogProductId: catalogProductId,
                 lineOptionId: lineOptionId,
                 optionGroupId: optionGroupId,
                 modifierOptionIds: modifierOptionIds,
@@ -216,6 +231,7 @@ class BusinessMenuApi {
     String? saleUnit,
     String? brandName,
     int? availableQuantity,
+    int? catalogProductId,
     int? lineOptionId,
     List<int> modifierOptionIds = const [],
     int sortOrder = 0,
@@ -235,6 +251,7 @@ class BusinessMenuApi {
                 saleUnit: saleUnit,
                 brandName: brandName,
                 availableQuantity: availableQuantity,
+                catalogProductId: catalogProductId,
                 lineOptionId: lineOptionId,
                 modifierOptionIds: modifierOptionIds,
                 sortOrder: sortOrder,
@@ -256,6 +273,7 @@ class BusinessMenuApi {
     String? saleUnit,
     String? brandName,
     int? availableQuantity,
+    int? catalogProductId,
     int? lineOptionId,
     // A brand-new item with no line option of its own still needs a
     // section — «اضافة صنف» flow sends the vocabulary group id it belongs
@@ -283,6 +301,7 @@ class BusinessMenuApi {
       'sale_unit': ?saleUnit,
       if (brandName != null && brandName.isNotEmpty) 'brand_name': brandName,
       'available_quantity': ?availableQuantity,
+      'catalog_product_id': ?catalogProductId,
       // What this item IS/what qualifies it — see HasOfferingOptions. Always
       // sent (even empty) so clearing a pick on a resubmit actually clears it.
       'line_option_id': lineOptionId ?? 0,

@@ -16,6 +16,46 @@ class VocabularyOptionRef {
   );
 }
 
+/// One row of a catalog product's spec table — {code, name, value}, already
+/// localized and unit-formatted server-side. See ProductSpecs.php.
+class CatalogSpecRow {
+  final String code;
+  final String name;
+  final String value;
+  const CatalogSpecRow({required this.code, required this.name, required this.value});
+
+  factory CatalogSpecRow.fromJson(Map<String, dynamic> json) => CatalogSpecRow(
+    code: json['code'] as String,
+    name: json['name'] as String,
+    value: json['value'] as String,
+  );
+}
+
+/// A real catalog master (a real phone/laptop model…) a merchant may LINK a
+/// menu item to instead of retyping its specs — see [[menu-catalog-specs-link]].
+/// Carries its own spec table so the item form can preview it without a
+/// second round trip, both from a catalog-lookup search result and from an
+/// already-linked item.
+class CatalogProductRef {
+  final int id;
+  final String name;
+  final String? brand;
+  final String? image;
+  final List<CatalogSpecRow> specs;
+  const CatalogProductRef({required this.id, required this.name, this.brand, this.image, this.specs = const []});
+
+  factory CatalogProductRef.fromJson(Map<String, dynamic> json) => CatalogProductRef(
+    id: json['id'] as int,
+    name: json['name'] as String,
+    brand: json['brand'] as String?,
+    image: json['image'] as String?,
+    specs: (json['specs'] as List<dynamic>?)
+            ?.map((e) => CatalogSpecRow.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        const [],
+  );
+}
+
 /// A business's own menu item — see Api\V2\BusinessMenuItemController /
 /// MenuItemResource. `images`/`variants`/`extras` are only populated when
 /// the backend eager-loads them (the list endpoint carries images only;
@@ -37,6 +77,10 @@ class BusinessMenuItem {
   final int? availableQuantity;
   final int sortOrder;
   final bool isActive;
+  /// The real catalog master this item prices, when the merchant linked
+  /// one instead of typing specs by hand — see [[menu-catalog-specs-link]].
+  final int? catalogProductId;
+  final CatalogProductRef? catalogProduct;
   /// What this item IS — a `line` option (e.g. "ثلاجات") from the merchant's
   /// own vocabulary. Null for a hand-typed item (a restaurant's dish).
   final VocabularyOptionRef? lineOption;
@@ -63,6 +107,8 @@ class BusinessMenuItem {
     this.availableQuantity,
     required this.sortOrder,
     required this.isActive,
+    this.catalogProductId,
+    this.catalogProduct,
     this.lineOption,
     this.modifierOptions = const [],
     this.images = const [],
@@ -86,6 +132,10 @@ class BusinessMenuItem {
     availableQuantity: json['available_quantity'] as int?,
     sortOrder: json['sort_order'] as int,
     isActive: json['is_active'] as bool,
+    catalogProductId: json['catalog_product_id'] as int?,
+    catalogProduct: json['catalog_product'] != null
+        ? CatalogProductRef.fromJson(json['catalog_product'] as Map<String, dynamic>)
+        : null,
     lineOption: json['line_option'] != null
         ? VocabularyOptionRef.fromJson(json['line_option'] as Map<String, dynamic>)
         : null,

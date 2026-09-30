@@ -11,17 +11,32 @@ class VocabularyGroup {
   /// dictionary, singled out by the backend so the item form can give it
   /// its own dropdown instead of lumping it into the generic modifier chips.
   final bool isBrand;
+  /// True for «حالة المنتج» (جديد/مستعمل) — singled out the same way
+  /// [isBrand] is, so a form can give it its own single-select toggle
+  /// instead of lumping it into generic modifier chips.
+  final bool isCondition;
   /// null = every sale unit is fair game. Non-null (e.g. «أعشاب وورقيات»
   /// → bunch/kg/g) narrows a quick-price picker to just these codes —
   /// same restriction MenuMarketCatalogService already applies to «تعبئة
   /// الرفوف»'s own unit dropdown, mirrored here for this vocabulary.
   final List<String>? saleUnitCodes;
+  /// True when «مكونات الخدمة» split this group's branches into their own
+  /// storefront sections (`branches_as_sections`) — e.g. «موبايل»/«تابلت»
+  /// each standalone instead of living under one «أجهزة الموبايل
+  /// وملحقاتها» heading. A branch under a detailed group opens the
+  /// catalog-linked "التسعير والتفاصيل" flow (product picker + real specs)
+  /// instead of the plain quantity/price dialog, and — unlike an ordinary
+  /// branch — may carry more than one priced item (several real models).
+  /// See [[tech-spec-menu-implementation]].
+  final bool detailed;
   const VocabularyGroup({
     required this.groupId,
     required this.groupName,
     required this.options,
     this.isBrand = false,
+    this.isCondition = false,
     this.saleUnitCodes,
+    this.detailed = false,
   });
 
   factory VocabularyGroup.fromJson(Map<String, dynamic> json) => VocabularyGroup(
@@ -31,7 +46,9 @@ class VocabularyGroup {
         .map((e) => VocabularyOptionRef.fromJson(e as Map<String, dynamic>))
         .toList(),
     isBrand: json['is_brand'] as bool? ?? false,
+    isCondition: json['is_condition'] as bool? ?? false,
     saleUnitCodes: (json['sale_unit_codes'] as List<dynamic>?)?.map((e) => e as String).toList(),
+    detailed: json['detailed'] as bool? ?? false,
   );
 }
 
@@ -62,6 +79,15 @@ class MenuVocabulary {
   VocabularyGroup? get brandGroup {
     for (final g in modifiers) {
       if (g.isBrand && g.options.isNotEmpty) return g;
+    }
+    return null;
+  }
+
+  /// «حالة المنتج» (جديد/مستعمل), when this business's specialty carries
+  /// it — used by «التسعير والتفاصيل» for its single-select condition toggle.
+  VocabularyGroup? get conditionGroup {
+    for (final g in modifiers) {
+      if (g.isCondition && g.options.isNotEmpty) return g;
     }
     return null;
   }

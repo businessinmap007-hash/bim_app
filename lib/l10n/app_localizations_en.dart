@@ -4126,6 +4126,27 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuItemDeleteConfirm => 'Delete this item?';
 
   @override
+  String get techPricingTitle => 'Pricing & Details';
+
+  @override
+  String get techPricingProductLabel => 'Product';
+
+  @override
+  String get techPricingPickProduct => 'Pick a real product';
+
+  @override
+  String get techPricingSearchHint => 'Search for a model...';
+
+  @override
+  String get techPricingNoResults => 'No results';
+
+  @override
+  String get techPricingConditionLabel => 'Condition';
+
+  @override
+  String get techPricingAddAnother => 'Add another model';
+
+  @override
   String get menuBundlesTitle => 'Menu Bundles';
 
   @override

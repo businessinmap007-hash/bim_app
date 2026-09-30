@@ -7688,6 +7688,48 @@ abstract class AppLocalizations {
   /// **'حذف هذا الصنف؟'**
   String get menuItemDeleteConfirm;
 
+  /// No description provided for @techPricingTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'التسعير والتفاصيل'**
+  String get techPricingTitle;
+
+  /// No description provided for @techPricingProductLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المنتج'**
+  String get techPricingProductLabel;
+
+  /// No description provided for @techPricingPickProduct.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر منتجًا حقيقيًا'**
+  String get techPricingPickProduct;
+
+  /// No description provided for @techPricingSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث عن الموديل...'**
+  String get techPricingSearchHint;
+
+  /// No description provided for @techPricingNoResults.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد نتائج'**
+  String get techPricingNoResults;
+
+  /// No description provided for @techPricingConditionLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'حالة المنتج'**
+  String get techPricingConditionLabel;
+
+  /// No description provided for @techPricingAddAnother.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة موديل آخر'**
+  String get techPricingAddAnother;
+
   /// No description provided for @menuBundlesTitle.
   ///
   /// In ar, this message translates to:

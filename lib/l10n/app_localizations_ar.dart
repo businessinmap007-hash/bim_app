@@ -4124,6 +4124,27 @@ class AppLocalizationsAr extends AppLocalizations {
   String get menuItemDeleteConfirm => 'حذف هذا الصنف؟';
 
   @override
+  String get techPricingTitle => 'التسعير والتفاصيل';
+
+  @override
+  String get techPricingProductLabel => 'المنتج';
+
+  @override
+  String get techPricingPickProduct => 'اختر منتجًا حقيقيًا';
+
+  @override
+  String get techPricingSearchHint => 'ابحث عن الموديل...';
+
+  @override
+  String get techPricingNoResults => 'لا توجد نتائج';
+
+  @override
+  String get techPricingConditionLabel => 'حالة المنتج';
+
+  @override
+  String get techPricingAddAnother => 'إضافة موديل آخر';
+
+  @override
   String get menuBundlesTitle => 'باقات المنيو';
 
   @override
