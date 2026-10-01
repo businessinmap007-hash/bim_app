@@ -40,20 +40,74 @@ class CatalogProductRef {
   final int id;
   final String name;
   final String? brand;
+  final int? brandId;
+  /// «Galaxy A», «Reno», «F»… — the family below the brand.
+  final String? series;
   final String? image;
+  /// Proposed by this business («الموديل مش موجود») and not reviewed yet.
+  final bool pending;
   final List<CatalogSpecRow> specs;
-  const CatalogProductRef({required this.id, required this.name, this.brand, this.image, this.specs = const []});
+  const CatalogProductRef({
+    required this.id,
+    required this.name,
+    this.brand,
+    this.brandId,
+    this.series,
+    this.image,
+    this.pending = false,
+    this.specs = const [],
+  });
 
   factory CatalogProductRef.fromJson(Map<String, dynamic> json) => CatalogProductRef(
     id: json['id'] as int,
     name: json['name'] as String,
     brand: json['brand'] as String?,
+    brandId: json['brand_id'] as int?,
+    series: json['series'] as String?,
     image: json['image'] as String?,
+    pending: json['pending'] == true,
     specs: (json['specs'] as List<dynamic>?)
             ?.map((e) => CatalogSpecRow.fromJson(e as Map<String, dynamic>))
             .toList() ??
         const [],
   );
+}
+
+/// One chip of the picker's brand/series rows — `id` is null for a series.
+class CatalogFacet {
+  final int? id;
+  final String name;
+  final int count;
+  const CatalogFacet({this.id, required this.name, required this.count});
+
+  factory CatalogFacet.fromJson(Map<String, dynamic> json) => CatalogFacet(
+    id: json['id'] as int?,
+    name: json['name'] as String,
+    count: (json['count'] as int?) ?? 0,
+  );
+}
+
+/// GET /business/menu/catalog-lookup — a page of products plus the brand and
+/// (once a brand is picked) series chips counted inside the same branch.
+class CatalogLookupResult {
+  final List<CatalogProductRef> items;
+  final List<CatalogFacet> brands;
+  final List<CatalogFacet> series;
+  const CatalogLookupResult({required this.items, this.brands = const [], this.series = const []});
+
+  factory CatalogLookupResult.fromJson(Map<String, dynamic> data) {
+    final facets = data['facets'] as Map<String, dynamic>? ?? const {};
+    List<CatalogFacet> list(Object? raw) => (raw as List<dynamic>? ?? [])
+        .map((e) => CatalogFacet.fromJson(e as Map<String, dynamic>))
+        .toList();
+    return CatalogLookupResult(
+      items: (data['items'] as List<dynamic>? ?? [])
+          .map((e) => CatalogProductRef.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      brands: list(facets['brands']),
+      series: list(facets['series']),
+    );
+  }
 }
 
 /// A business's own menu item — see Api\V2\BusinessMenuItemController /

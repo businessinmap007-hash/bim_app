@@ -88,7 +88,7 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     final picked = await showModalBottomSheet<CatalogProductRef>(
       context: context,
       isScrollControlled: true,
-      builder: (_) => const _ProductPickerSheet(),
+      builder: (_) => _ProductPickerSheet(lineOptionId: widget.lineOption.id),
     );
     if (picked != null && mounted) setState(() => _product = picked);
   }
@@ -444,8 +444,14 @@ class _ConditionToggle extends StatelessWidget {
 
 /// Search-and-pick a real catalog master — mirrors
 /// prescriptions/business_picker_sheet.dart's own debounced-search shape.
+///
+/// Narrowed to the branch it was opened from («تابلت» → tablets), then by two
+/// chip rows: the brand, and once a brand is picked, its series — «أوبو» →
+/// «F» → every F model. A merchant whose model is not listed adds it from
+/// the button at the bottom ([_NewModelSheet]).
 class _ProductPickerSheet extends ConsumerStatefulWidget {
-  const _ProductPickerSheet();
+  final int lineOptionId;
+  const _ProductPickerSheet({required this.lineOptionId});
 
   @override
   ConsumerState<_ProductPickerSheet> createState() =>
@@ -455,13 +461,17 @@ class _ProductPickerSheet extends ConsumerStatefulWidget {
 class _ProductPickerSheetState extends ConsumerState<_ProductPickerSheet> {
   final _controller = TextEditingController();
   Timer? _debounce;
-  List<CatalogProductRef> _results = const [];
+  CatalogLookupResult _result = const CatalogLookupResult(items: []);
+  List<CatalogFacet> _brands = const [];
+  int? _brandId;
+  String? _series;
   bool _loading = true;
+  int _request = 0;
 
   @override
   void initState() {
     super.initState();
-    _search('');
+    _search();
   }
 
   @override
@@ -471,26 +481,76 @@ class _ProductPickerSheetState extends ConsumerState<_ProductPickerSheet> {
     super.dispose();
   }
 
-  void _onChanged(String q) {
+  void _onChanged(String _) {
     _debounce?.cancel();
-    _debounce = Timer(const Duration(milliseconds: 350), () => _search(q));
+    _debounce = Timer(const Duration(milliseconds: 350), _search);
   }
 
-  Future<void> _search(String q) async {
+  Future<void> _search() async {
+    final request = ++_request;
     setState(() => _loading = true);
     try {
-      final results = await ref
+      final result = await ref
           .read(businessMenuApiProvider)
-          .catalogLookup(q.trim());
-      if (mounted) setState(() => _results = results);
+          .catalogLookup(
+            _controller.text.trim(),
+            lineOptionId: widget.lineOptionId,
+            brandId: _brandId,
+            series: _series,
+          );
+      // A slower, older response must not overwrite a newer one.
+      if (!mounted || request != _request) return;
+      setState(() {
+        _result = result;
+        // The brand row is the branch's whole brand list — keep the first
+        // full one rather than letting a search shrink the chips under the
+        // merchant's finger.
+        if (_brands.isEmpty || _brandId == null) _brands = result.brands;
+      });
+    } catch (_) {
+      if (mounted && request == _request) {
+        setState(() => _result = const CatalogLookupResult(items: []));
+      }
     } finally {
-      if (mounted) setState(() => _loading = false);
+      if (mounted && request == _request) setState(() => _loading = false);
     }
+  }
+
+  void _pickBrand(int? id) {
+    setState(() {
+      _brandId = id;
+      _series = null;
+    });
+    _search();
+  }
+
+  void _pickSeries(String? name) {
+    setState(() => _series = name);
+    _search();
+  }
+
+  Future<void> _addMissing() async {
+    final created = await showModalBottomSheet<CatalogProductRef>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => _NewModelSheet(
+        lineOptionId: widget.lineOptionId,
+        brands: _brands,
+        initialBrandId: _brandId,
+        initialSeries: _series,
+        initialModel: _controller.text.trim(),
+      ),
+    );
+    if (created != null && mounted) Navigator.of(context).pop(created);
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final items = _result.items;
+    final series = _brandId == null ? const <CatalogFacet>[] : _result.series;
+
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -502,31 +562,54 @@ class _ProductPickerSheetState extends ConsumerState<_ProductPickerSheet> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                l10n.techPricingPickProduct,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
+              Text(l10n.techPricingPickProduct, style: theme.textTheme.titleMedium),
               const SizedBox(height: 12),
               TextField(
                 controller: _controller,
-                autofocus: true,
                 decoration: InputDecoration(
                   hintText: l10n.techPricingSearchHint,
                   prefixIcon: const Icon(Icons.search),
                 ),
                 onChanged: _onChanged,
               ),
+              if (_brands.isNotEmpty) ...[
+                const SizedBox(height: 10),
+                _FacetChips(
+                  allLabel: l10n.techPricingAllBrands,
+                  facets: _brands,
+                  selected: (f) => f.id == _brandId,
+                  allSelected: _brandId == null,
+                  onAll: () => _pickBrand(null),
+                  onPick: (f) => _pickBrand(f.id),
+                ),
+              ],
+              if (series.isNotEmpty) ...[
+                const SizedBox(height: 6),
+                _FacetChips(
+                  allLabel: l10n.techPricingAllBrands,
+                  facets: series,
+                  dense: true,
+                  selected: (f) => f.name == _series,
+                  allSelected: _series == null,
+                  onAll: () => _pickSeries(null),
+                  onPick: (f) => _pickSeries(f.name),
+                ),
+              ],
               const SizedBox(height: 8),
               SizedBox(
-                height: 380,
+                height: 340,
                 child: _loading
                     ? const Center(child: CircularProgressIndicator())
-                    : _results.isEmpty
+                    : items.isEmpty
                     ? Center(child: Text(l10n.techPricingNoResults))
                     : ListView.builder(
-                        itemCount: _results.length,
+                        itemCount: items.length,
                         itemBuilder: (context, index) {
-                          final p = _results[index];
+                          final p = items[index];
+                          final subtitle = [
+                            ?p.brand,
+                            ?p.series,
+                          ].join(' · ');
                           return ListTile(
                             leading: CircleAvatar(
                               backgroundImage: p.image != null
@@ -537,11 +620,245 @@ class _ProductPickerSheetState extends ConsumerState<_ProductPickerSheet> {
                                   : null,
                             ),
                             title: Text(p.name),
-                            subtitle: p.brand != null ? Text(p.brand!) : null,
+                            subtitle: subtitle.isEmpty ? null : Text(subtitle),
+                            trailing: p.pending
+                                ? Chip(
+                                    label: Text(l10n.techPricingPending),
+                                    visualDensity: VisualDensity.compact,
+                                  )
+                                : null,
                             onTap: () => Navigator.of(context).pop(p),
                           );
                         },
                       ),
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: _addMissing,
+                  icon: const Icon(Icons.add),
+                  label: Text(l10n.techPricingNotFound),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// One horizontally scrolling row of choice chips with a leading «الكل».
+class _FacetChips extends StatelessWidget {
+  final String allLabel;
+  final List<CatalogFacet> facets;
+  final bool Function(CatalogFacet) selected;
+  final bool allSelected;
+  final VoidCallback onAll;
+  final ValueChanged<CatalogFacet> onPick;
+  final bool dense;
+  const _FacetChips({
+    required this.allLabel,
+    required this.facets,
+    required this.selected,
+    required this.allSelected,
+    required this.onAll,
+    required this.onPick,
+    this.dense = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final density = dense ? VisualDensity.compact : VisualDensity.standard;
+    return SizedBox(
+      height: dense ? 36 : 42,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          ChoiceChip(
+            label: Text(allLabel),
+            selected: allSelected,
+            visualDensity: density,
+            onSelected: (_) => onAll(),
+          ),
+          for (final f in facets)
+            Padding(
+              padding: const EdgeInsetsDirectional.only(start: 6),
+              child: ChoiceChip(
+                label: Text('${f.name} (${f.count})'),
+                selected: selected(f),
+                visualDensity: density,
+                onSelected: (_) => onPick(f),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// «الموديل مش موجود» — brand (from the branch's own brand chips, or typed),
+/// series, model name and the core specs. Saved as a PENDING catalog product:
+/// the merchant can price it immediately, everyone else sees it once an admin
+/// approves it.
+class _NewModelSheet extends ConsumerStatefulWidget {
+  final int lineOptionId;
+  final List<CatalogFacet> brands;
+  final int? initialBrandId;
+  final String? initialSeries;
+  final String initialModel;
+  const _NewModelSheet({
+    required this.lineOptionId,
+    required this.brands,
+    this.initialBrandId,
+    this.initialSeries,
+    this.initialModel = '',
+  });
+
+  @override
+  ConsumerState<_NewModelSheet> createState() => _NewModelSheetState();
+}
+
+class _NewModelSheetState extends ConsumerState<_NewModelSheet> {
+  /// -1 = «ماركة أخرى» (typed by hand).
+  late int? _brandId = widget.initialBrandId;
+  late final _brandName = TextEditingController();
+  late final _series = TextEditingController(text: widget.initialSeries ?? '');
+  late final _model = TextEditingController(text: widget.initialModel);
+  final _processor = TextEditingController();
+  final _ram = TextEditingController();
+  final _storage = TextEditingController();
+  final _screen = TextEditingController();
+  final _os = TextEditingController();
+  bool _saving = false;
+  String? _error;
+
+  @override
+  void dispose() {
+    for (final c in [_brandName, _series, _model, _processor, _ram, _storage, _screen, _os]) {
+      c.dispose();
+    }
+    super.dispose();
+  }
+
+  String? _text(TextEditingController c) {
+    final v = c.text.trim();
+    return v.isEmpty ? null : v;
+  }
+
+  num? _number(TextEditingController c) =>
+      num.tryParse(c.text.trim().replaceAll(',', '.').replaceAll('٫', '.'));
+
+  Future<void> _save() async {
+    final l10n = AppLocalizations.of(context)!;
+    final typedBrand = _brandId == -1 ? _text(_brandName) : null;
+    if (_text(_model) == null || _brandId == null || (_brandId == -1 && typedBrand == null)) {
+      setState(() => _error = l10n.techPricingModelRequired);
+      return;
+    }
+    setState(() {
+      _saving = true;
+      _error = null;
+    });
+    try {
+      final product = await ref.read(businessMenuApiProvider).proposeCatalogProduct(
+        lineOptionId: widget.lineOptionId,
+        brandId: _brandId == -1 ? null : _brandId,
+        brandName: typedBrand,
+        series: _text(_series),
+        model: _text(_model)!,
+        processor: _text(_processor),
+        ramGb: _number(_ram),
+        storage: _text(_storage),
+        screenInches: _number(_screen),
+        os: _text(_os),
+      );
+      if (mounted) Navigator.of(context).pop(product);
+    } catch (_) {
+      if (mounted) setState(() => _error = l10n.commonSomethingWentWrong);
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+  }
+
+  Widget _field(TextEditingController c, String label, {bool number = false}) => Padding(
+    padding: const EdgeInsets.only(bottom: 10),
+    child: TextField(
+      controller: c,
+      keyboardType: number ? const TextInputType.numberWithOptions(decimal: true) : null,
+      decoration: InputDecoration(
+        labelText: label,
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+      ),
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    return Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(l10n.techPricingNewModelTitle, style: theme.textTheme.titleMedium),
+              const SizedBox(height: 4),
+              Text(
+                l10n.techPricingNewModelNote,
+                style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
+              ),
+              const SizedBox(height: 14),
+              DropdownButtonFormField<int>(
+                initialValue: _brandId,
+                decoration: InputDecoration(
+                  labelText: l10n.techPricingBrandLabel,
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                ),
+                items: [
+                  for (final b in widget.brands)
+                    DropdownMenuItem(value: b.id, child: Text(b.name)),
+                  DropdownMenuItem(value: -1, child: Text(l10n.techPricingOtherBrand)),
+                ],
+                onChanged: (v) => setState(() => _brandId = v),
+              ),
+              const SizedBox(height: 10),
+              if (_brandId == -1) _field(_brandName, l10n.techPricingBrandNameHint),
+              _field(_series, l10n.techPricingSeriesLabel),
+              _field(_model, l10n.techPricingModelLabel),
+              _field(_processor, l10n.techPricingProcessorLabel),
+              Row(
+                children: [
+                  Expanded(child: _field(_ram, l10n.techPricingRamLabel, number: true)),
+                  const SizedBox(width: 10),
+                  Expanded(child: _field(_storage, l10n.techPricingStorageLabel)),
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(child: _field(_screen, l10n.techPricingScreenLabel, number: true)),
+                  const SizedBox(width: 10),
+                  Expanded(child: _field(_os, l10n.techPricingOsLabel)),
+                ],
+              ),
+              if (_error != null) ...[
+                Text(_error!, style: TextStyle(color: theme.colorScheme.error)),
+                const SizedBox(height: 8),
+              ],
+              FilledButton(
+                onPressed: _saving ? null : _save,
+                child: _saving
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : Text(l10n.commonSave),
               ),
             ],
           ),

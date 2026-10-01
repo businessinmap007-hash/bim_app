@@ -140,6 +140,11 @@ class MenuItemSummary {
   /// item it's whatever the merchant typed. See
   /// [[tech-spec-menu-implementation]].
   final String? brandName;
+  /// The catalog master's own brand and series («سامسونج» · «Galaxy A») —
+  /// what the storefront's brand → series chips filter a section by. Null for
+  /// an item with no catalog master.
+  final String? catalogBrand;
+  final String? series;
 
   const MenuItemSummary({
     required this.id,
@@ -160,7 +165,16 @@ class MenuItemSummary {
     required this.extras,
     this.specs = const [],
     this.brandName,
+    this.catalogBrand,
+    this.series,
   });
+
+  /// The brand a filter chip groups this item under — the catalog's own
+  /// brand when linked, else whatever the merchant typed.
+  String? get filterBrand {
+    final b = (catalogBrand ?? brandName)?.trim();
+    return b == null || b.isEmpty ? null : b;
+  }
 
   /// The card's compact spec line — "Core i5 · 8GB RAM · 256GB SSD" — the
   /// first three specs joined, matching the Tech Catalog Setup canvas's
@@ -220,5 +234,7 @@ class MenuItemSummary {
         .map((e) => MenuItemSpec.fromJson(e as Map<String, dynamic>))
         .toList(),
     brandName: json['brand_name'] as String?,
+    catalogBrand: json['catalog_brand'] as String?,
+    series: json['series'] as String?,
   );
 }

@@ -4151,6 +4151,58 @@ class AppLocalizationsAr extends AppLocalizations {
   String get techPricingAddProduct => 'إضافة منتج';
 
   @override
+  String get techPricingAllBrands => 'الكل';
+
+  @override
+  String get techPricingPending => 'قيد المراجعة';
+
+  @override
+  String get techPricingNotFound => 'الموديل مش موجود؟ أضفه بنفسك';
+
+  @override
+  String get techPricingNewModelTitle => 'إضافة موديل جديد';
+
+  @override
+  String get techPricingNewModelNote =>
+      'هيظهر في متجرك فورًا، ولباقي التجار بعد مراجعة الإدارة.';
+
+  @override
+  String get techPricingBrandLabel => 'الماركة';
+
+  @override
+  String get techPricingOtherBrand => 'ماركة أخرى';
+
+  @override
+  String get techPricingBrandNameHint => 'اسم الماركة';
+
+  @override
+  String get techPricingSeriesLabel => 'السلسلة (اختياري)';
+
+  @override
+  String get techPricingModelLabel => 'اسم الموديل';
+
+  @override
+  String get techPricingProcessorLabel => 'المعالج';
+
+  @override
+  String get techPricingRamLabel => 'الرام (جيجا)';
+
+  @override
+  String get techPricingStorageLabel => 'سعة التخزين';
+
+  @override
+  String get techPricingScreenLabel => 'مقاس الشاشة (بوصة)';
+
+  @override
+  String get techPricingOsLabel => 'نظام التشغيل';
+
+  @override
+  String get techPricingModelRequired => 'اكتب اسم الموديل واختر الماركة';
+
+  @override
+  String get menuFilterAllBrands => 'كل الماركات';
+
+  @override
   String get menuBundlesTitle => 'باقات المنيو';
 
   @override

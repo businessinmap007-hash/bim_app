@@ -130,14 +130,58 @@ class BusinessMenuApi {
   /// Real catalog masters (a real phone/laptop model…) a merchant may LINK a
   /// menu item to — read-only, never writes anything. Powers «التسعير
   /// والتفاصيل»'s product picker. See [[tech-spec-menu-implementation]].
-  Future<List<CatalogProductRef>> catalogLookup(String q) async {
+  ///
+  /// [lineOptionId] narrows to the branch the picker was opened from
+  /// («تابلت» → tablets only); [brandId] and [series] are the chip filters.
+  Future<CatalogLookupResult> catalogLookup(
+    String q, {
+    int? lineOptionId,
+    int? brandId,
+    String? series,
+  }) async {
     final body = await _client.getForBody(
       '/business/menu/catalog-lookup',
-      query: {if (q.isNotEmpty) 'q': q},
+      query: {
+        if (q.isNotEmpty) 'q': q,
+        'line_option_id': ?lineOptionId,
+        'brand_id': ?brandId,
+        'series': ?series,
+      },
     );
-    return (body['data']['items'] as List<dynamic>? ?? [])
-        .map((e) => CatalogProductRef.fromJson(e as Map<String, dynamic>))
-        .toList();
+    return CatalogLookupResult.fromJson(body['data'] as Map<String, dynamic>);
+  }
+
+  /// «الموديل مش موجود» — the merchant names a model the catalog lacks. It is
+  /// created PENDING: usable by this business at once, by everyone after an
+  /// admin approves it. Returns the existing row when it is already there.
+  Future<CatalogProductRef> proposeCatalogProduct({
+    required int lineOptionId,
+    int? brandId,
+    String? brandName,
+    String? series,
+    required String model,
+    String? processor,
+    num? ramGb,
+    String? storage,
+    num? screenInches,
+    String? os,
+  }) async {
+    final body = await _client.postForBody(
+      '/business/menu/catalog-products',
+      data: {
+        'line_option_id': lineOptionId,
+        'brand_id': ?brandId,
+        'brand_name': ?brandName,
+        'series': ?series,
+        'model': model,
+        'processor': ?processor,
+        'ram_gb': ?ramGb,
+        'storage': ?storage,
+        'screen_inches': ?screenInches,
+        'os': ?os,
+      },
+    );
+    return CatalogProductRef.fromJson(body['data']['product'] as Map<String, dynamic>);
   }
 
   // ─────────────────────────── Items ───────────────────────────

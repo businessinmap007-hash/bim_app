@@ -7742,6 +7742,108 @@ abstract class AppLocalizations {
   /// **'إضافة منتج'**
   String get techPricingAddProduct;
 
+  /// No description provided for @techPricingAllBrands.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get techPricingAllBrands;
+
+  /// No description provided for @techPricingPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيد المراجعة'**
+  String get techPricingPending;
+
+  /// No description provided for @techPricingNotFound.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموديل مش موجود؟ أضفه بنفسك'**
+  String get techPricingNotFound;
+
+  /// No description provided for @techPricingNewModelTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة موديل جديد'**
+  String get techPricingNewModelTitle;
+
+  /// No description provided for @techPricingNewModelNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'هيظهر في متجرك فورًا، ولباقي التجار بعد مراجعة الإدارة.'**
+  String get techPricingNewModelNote;
+
+  /// No description provided for @techPricingBrandLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الماركة'**
+  String get techPricingBrandLabel;
+
+  /// No description provided for @techPricingOtherBrand.
+  ///
+  /// In ar, this message translates to:
+  /// **'ماركة أخرى'**
+  String get techPricingOtherBrand;
+
+  /// No description provided for @techPricingBrandNameHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الماركة'**
+  String get techPricingBrandNameHint;
+
+  /// No description provided for @techPricingSeriesLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'السلسلة (اختياري)'**
+  String get techPricingSeriesLabel;
+
+  /// No description provided for @techPricingModelLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الموديل'**
+  String get techPricingModelLabel;
+
+  /// No description provided for @techPricingProcessorLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المعالج'**
+  String get techPricingProcessorLabel;
+
+  /// No description provided for @techPricingRamLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرام (جيجا)'**
+  String get techPricingRamLabel;
+
+  /// No description provided for @techPricingStorageLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعة التخزين'**
+  String get techPricingStorageLabel;
+
+  /// No description provided for @techPricingScreenLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقاس الشاشة (بوصة)'**
+  String get techPricingScreenLabel;
+
+  /// No description provided for @techPricingOsLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'نظام التشغيل'**
+  String get techPricingOsLabel;
+
+  /// No description provided for @techPricingModelRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب اسم الموديل واختر الماركة'**
+  String get techPricingModelRequired;
+
+  /// No description provided for @menuFilterAllBrands.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل الماركات'**
+  String get menuFilterAllBrands;
+
   /// No description provided for @menuBundlesTitle.
   ///
   /// In ar, this message translates to:

@@ -513,6 +513,78 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
   // customer actually asked to see.
   int? _activeSectionIndex;
 
+  /// The brand → series chip filter, per section (keyed by section name):
+  /// «اختار الماركة اوبو يظهر كل الموبايلات … لو اخترت F يظهر كل الموديلات
+  /// F» — المالك، 2026-10-01. null = no filter.
+  final Map<String, String?> _brandBySection = {};
+  final Map<String, String?> _seriesBySection = {};
+
+  bool _passesFilter(String section, MenuItemSummary item) {
+    final brand = _brandBySection[section];
+    final series = _seriesBySection[section];
+    if (brand != null && item.filterBrand != brand) return false;
+    if (series != null && item.series != series) return false;
+    return true;
+  }
+
+  /// The chip rows under a section heading — only when they can narrow
+  /// anything: two or more brands, and (once one is picked) two or more of
+  /// its series. A one-brand restaurant section shows nothing.
+  Widget _sectionFilter(BuildContext context, _SectionData section) {
+    final key = section.group.name;
+    final items = section.branches.expand((b) => b.items).toList();
+    final brands = <String>{for (final i in items) ?i.filterBrand}.toList();
+    if (brands.length < 2) return const SizedBox.shrink();
+
+    final brand = _brandBySection[key];
+    final series = brand == null
+        ? const <String>[]
+        : <String>{for (final i in items.where((i) => i.filterBrand == brand)) ?i.series}.toList();
+    final l10n = AppLocalizations.of(context)!;
+
+    Widget row(List<String> values, String? selected, ValueChanged<String?> onPick, String allLabel) => SizedBox(
+      height: 40,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          ChoiceChip(
+            label: Text(allLabel),
+            selected: selected == null,
+            visualDensity: VisualDensity.compact,
+            onSelected: (_) => onPick(null),
+          ),
+          for (final v in values)
+            Padding(
+              padding: const EdgeInsetsDirectional.only(start: 6),
+              child: ChoiceChip(
+                label: Text(v),
+                selected: selected == v,
+                visualDensity: VisualDensity.compact,
+                onSelected: (_) => onPick(v),
+              ),
+            ),
+        ],
+      ),
+    );
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          row(brands, brand, (v) => setState(() {
+            _brandBySection[key] = v;
+            _seriesBySection[key] = null;
+          }), l10n.menuFilterAllBrands),
+          if (series.length > 1) ...[
+            const SizedBox(height: 4),
+            row(series, _seriesBySection[key], (v) => setState(() => _seriesBySection[key] = v), l10n.techPricingAllBrands),
+          ],
+        ],
+      ),
+    );
+  }
+
   /// Turns the caller's cart for this business into a shared one (idempotent
   /// — reuses the existing share token if it's already shared) and opens the
   /// one popup for every way to bring someone into it. Lives beside the
@@ -651,6 +723,7 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
                             children: [
                               Text(section.group.name, style: Theme.of(context).textTheme.titleSmall),
                               const SizedBox(height: 8),
+                              _sectionFilter(context, section),
                               // Grid mode packs every item in the SECTION into
                               // one flat, two-per-row grid — branch headers
                               // are dropped here (not per LIST mode below):
@@ -661,12 +734,16 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
                               // second card could sit right beside it.
                               if (isGrid)
                                 _SectionGrid(
-                                  items: section.branches.expand((b) => b.items).toList(),
+                                  items: section.branches
+                                      .expand((b) => b.items)
+                                      .where((i) => _passesFilter(section.group.name, i))
+                                      .toList(),
                                   onTap: (item) => showAddToCartSheet(context, item, sharedOrderId: widget.sharedOrderId),
                                   onDirectAdd: (item, qty) => _directAdd(context, item, qty),
                                 )
                               else
-                                for (final branch in section.branches) ...[
+                                for (final branch in section.branches)
+                                  if (branch.items.any((i) => _passesFilter(section.group.name, i))) ...[
                                   if (branch.id != null)
                                     Padding(
                                       padding: EdgeInsets.symmetric(vertical: branch.headingIsRedundant ? 0 : 6),
@@ -674,7 +751,7 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
                                           ? const SizedBox.shrink()
                                           : Text(branch.name, style: Theme.of(context).textTheme.titleSmall),
                                     ),
-                                  ...branch.items.map(
+                                  ...branch.items.where((i) => _passesFilter(section.group.name, i)).map(
                                     (item) => Padding(
                                       padding: const EdgeInsets.only(bottom: 8),
                                       child: MenuItemTile(

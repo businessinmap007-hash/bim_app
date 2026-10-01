@@ -4153,6 +4153,59 @@ class AppLocalizationsEn extends AppLocalizations {
   String get techPricingAddProduct => 'Add product';
 
   @override
+  String get techPricingAllBrands => 'All';
+
+  @override
+  String get techPricingPending => 'Under review';
+
+  @override
+  String get techPricingNotFound => 'Model not listed? Add it yourself';
+
+  @override
+  String get techPricingNewModelTitle => 'Add a new model';
+
+  @override
+  String get techPricingNewModelNote =>
+      'It shows in your store right away, and to other merchants after admin review.';
+
+  @override
+  String get techPricingBrandLabel => 'Brand';
+
+  @override
+  String get techPricingOtherBrand => 'Other brand';
+
+  @override
+  String get techPricingBrandNameHint => 'Brand name';
+
+  @override
+  String get techPricingSeriesLabel => 'Series (optional)';
+
+  @override
+  String get techPricingModelLabel => 'Model name';
+
+  @override
+  String get techPricingProcessorLabel => 'Processor';
+
+  @override
+  String get techPricingRamLabel => 'RAM (GB)';
+
+  @override
+  String get techPricingStorageLabel => 'Storage';
+
+  @override
+  String get techPricingScreenLabel => 'Screen size (inch)';
+
+  @override
+  String get techPricingOsLabel => 'Operating system';
+
+  @override
+  String get techPricingModelRequired =>
+      'Enter the model name and pick a brand';
+
+  @override
+  String get menuFilterAllBrands => 'All brands';
+
+  @override
   String get menuBundlesTitle => 'Menu Bundles';
 
   @override
