@@ -162,6 +162,14 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(item.name, style: theme.textTheme.titleLarge),
+                if (item.brandName != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: Text(
+                      item.brandName!,
+                      style: theme.textTheme.bodyMedium?.copyWith(color: theme.hintColor, fontWeight: FontWeight.w600),
+                    ),
+                  ),
                 const SizedBox(height: 6),
                 Row(
                   children: [

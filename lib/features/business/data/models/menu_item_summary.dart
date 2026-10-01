@@ -134,6 +134,12 @@ class MenuItemSummary {
   final List<MenuItemExtraGroup> extraGroups;
   final List<MenuItemExtra> extras;
   final List<MenuItemSpec> specs;
+  /// The maker, when known — for a catalog-linked item this comes from the
+  /// real product's own `catalog_brands` row automatically (never a
+  /// separate «ماركات الموبايلات»/«ماركات السيارات» pick), for a hand-typed
+  /// item it's whatever the merchant typed. See
+  /// [[tech-spec-menu-implementation]].
+  final String? brandName;
 
   const MenuItemSummary({
     required this.id,
@@ -153,12 +159,13 @@ class MenuItemSummary {
     this.extraGroups = const [],
     required this.extras,
     this.specs = const [],
+    this.brandName,
   });
 
   /// The card's compact spec line — "Core i5 · 8GB RAM · 256GB SSD" — the
   /// first three specs joined, matching the Tech Catalog Setup canvas's
-  /// storefront card. Brand is already shown via [MenuItemSummary]'s own
-  /// name/branding elsewhere, so it's skipped here to avoid repeating it.
+  /// storefront card. Brand is shown via [brandName] instead, so it's
+  /// skipped here to avoid repeating it.
   String? get specSummary {
     final rows = specs.where((s) => s.code != 'brand').take(3).map((s) => s.value).where((v) => v.isNotEmpty);
     return rows.isEmpty ? null : rows.join(' · ');
@@ -212,5 +219,6 @@ class MenuItemSummary {
     specs: (json['specs'] as List<dynamic>? ?? [])
         .map((e) => MenuItemSpec.fromJson(e as Map<String, dynamic>))
         .toList(),
+    brandName: json['brand_name'] as String?,
   );
 }

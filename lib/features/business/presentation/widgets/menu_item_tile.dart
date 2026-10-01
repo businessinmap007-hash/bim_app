@@ -191,6 +191,19 @@ class _MenuItemTileState extends State<MenuItemTile> {
                           overflow: TextOverflow.ellipsis,
                           style: theme.textTheme.titleSmall,
                         ),
+                      if (item.brandName != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2),
+                          child: Text(
+                            item.brandName!,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.hintColor,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
                       if (_subtitle != null)
                         Padding(
                           padding: const EdgeInsets.only(top: 2),
