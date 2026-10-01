@@ -464,7 +464,7 @@ class _SpecTable extends StatelessWidget {
   }
 }
 
-/// «حالة المنتج» as a single-select segmented toggle (جديد/مستعمل), matching
+/// «حالة المنتج» as a single-select segmented toggle (جديد/مستعمل/كسر زيرو), matching
 /// the TechPricing canvas's two-button look — never a multi-select chip row,
 /// a product has exactly one condition.
 class _ConditionToggle extends StatelessWidget {
@@ -479,43 +479,83 @@ class _ConditionToggle extends StatelessWidget {
     required this.onChanged,
   });
 
+  /// Below this a segment's label starts to wrap — the toggle then turns
+  /// into a radio list instead of squeezing.
+  static const double _minSegmentWidth = 96;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.all(3),
-      decoration: BoxDecoration(
-        border: Border.all(color: theme.dividerColor),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        children: [
-          for (final o in options)
-            Expanded(
-              child: InkWell(
-                onTap: () => onChanged(o.id),
-                borderRadius: BorderRadius.circular(7),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  decoration: BoxDecoration(
-                    color: selectedId == o.id ? AppColors.accentGold : null,
+    String label(VocabularyOptionRef o) => localizedName(o.nameAr, o.nameEn, isEnglish);
+
+    // «جديد · مستعمل · كسر زيرو» on one row when the screen has room for
+    // every segment; a radio list otherwise — المالك، 2026-10-01.
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final fitsOneRow = options.isNotEmpty && (constraints.maxWidth - 6) / options.length >= _minSegmentWidth;
+
+        if (!fitsOneRow) {
+          return Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: theme.dividerColor),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: RadioGroup<int>(
+              groupValue: selectedId,
+              onChanged: (id) {
+                if (id != null) onChanged(id);
+              },
+              child: Column(
+                children: [
+                  for (final o in options)
+                    RadioListTile<int>(
+                      value: o.id,
+                      dense: true,
+                      activeColor: AppColors.accentGold,
+                      title: Text(label(o), style: theme.textTheme.bodyMedium),
+                    ),
+                ],
+              ),
+            ),
+          );
+        }
+
+        return Container(
+          padding: const EdgeInsets.all(3),
+          decoration: BoxDecoration(
+            border: Border.all(color: theme.dividerColor),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Row(
+            children: [
+              for (final o in options)
+                Expanded(
+                  child: InkWell(
+                    onTap: () => onChanged(o.id),
                     borderRadius: BorderRadius.circular(7),
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    localizedName(o.nameAr, o.nameEn, isEnglish),
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      fontWeight: selectedId == o.id
-                          ? FontWeight.w700
-                          : FontWeight.w500,
-                      color: selectedId == o.id ? AppColors.primaryNavy : null,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      decoration: BoxDecoration(
+                        color: selectedId == o.id ? AppColors.accentGold : null,
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        label(o),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontWeight: selectedId == o.id ? FontWeight.w700 : FontWeight.w500,
+                          color: selectedId == o.id ? AppColors.primaryNavy : null,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-        ],
-      ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

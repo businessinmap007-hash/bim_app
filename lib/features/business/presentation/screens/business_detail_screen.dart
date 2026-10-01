@@ -519,22 +519,33 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
   final Map<String, String?> _brandBySection = {};
   final Map<String, String?> _seriesBySection = {};
 
+  /// «جديد / مستعمل / كسر زيرو» — the item's own «حالة المنتج», a third
+  /// chip row beside brand → series (المالك، 2026-10-01).
+  final Map<String, String?> _conditionBySection = {};
+
   bool _passesFilter(String section, MenuItemSummary item) {
     final brand = _brandBySection[section];
     final series = _seriesBySection[section];
+    final condition = _conditionBySection[section];
     if (brand != null && item.filterBrand != brand) return false;
     if (series != null && item.series != series) return false;
+    if (condition != null && item.condition?.name != condition) return false;
     return true;
   }
 
   /// The chip rows under a section heading — only when they can narrow
-  /// anything: two or more brands, and (once one is picked) two or more of
-  /// its series. A one-brand restaurant section shows nothing.
+  /// anything: two or more brands (and, once one is picked, two or more of
+  /// its series), and two or more conditions. A restaurant section shows
+  /// nothing.
   Widget _sectionFilter(BuildContext context, _SectionData section) {
     final key = section.group.name;
     final items = section.branches.expand((b) => b.items).toList();
     final brands = <String>{for (final i in items) ?i.filterBrand}.toList();
-    if (brands.length < 2) return const SizedBox.shrink();
+    final conditions = <String>{
+      for (final i in items)
+        if (i.condition != null && i.condition!.name.isNotEmpty) i.condition!.name,
+    }.toList();
+    if (brands.length < 2 && conditions.length < 2) return const SizedBox.shrink();
 
     final brand = _brandBySection[key];
     final series = brand == null
@@ -572,13 +583,18 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          row(brands, brand, (v) => setState(() {
-            _brandBySection[key] = v;
-            _seriesBySection[key] = null;
-          }), l10n.menuFilterAllBrands),
+          if (brands.length > 1)
+            row(brands, brand, (v) => setState(() {
+              _brandBySection[key] = v;
+              _seriesBySection[key] = null;
+            }), l10n.menuFilterAllBrands),
           if (series.length > 1) ...[
             const SizedBox(height: 4),
             row(series, _seriesBySection[key], (v) => setState(() => _seriesBySection[key] = v), l10n.techPricingAllBrands),
+          ],
+          if (conditions.length > 1) ...[
+            const SizedBox(height: 4),
+            row(conditions, _conditionBySection[key], (v) => setState(() => _conditionBySection[key] = v), l10n.techPricingAllBrands),
           ],
         ],
       ),
