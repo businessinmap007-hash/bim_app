@@ -7838,6 +7838,12 @@ abstract class AppLocalizations {
   /// **'اكتب اسم الموديل واختر الماركة'**
   String get techPricingModelRequired;
 
+  /// No description provided for @techDetailTotal.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجمالي'**
+  String get techDetailTotal;
+
   /// No description provided for @techPricingPhotosLabel.
   ///
   /// In ar, this message translates to:

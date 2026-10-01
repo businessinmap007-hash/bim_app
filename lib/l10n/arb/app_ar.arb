@@ -1410,6 +1410,7 @@
   "techPricingScreenLabel": "مقاس الشاشة (بوصة)",
   "techPricingOsLabel": "نظام التشغيل",
   "techPricingModelRequired": "اكتب اسم الموديل واختر الماركة",
+  "techDetailTotal": "الإجمالي",
   "techPricingPhotosLabel": "صور المنتج",
   "techPricingTakePhoto": "التقاط بالكاميرا",
   "techPricingFromGallery": "من المعرض",

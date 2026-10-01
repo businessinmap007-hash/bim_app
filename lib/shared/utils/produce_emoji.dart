@@ -1,4 +1,4 @@
-/// A best-effort emoji for a produce name — a lightweight, offline stand-in
+/// A best-effort emoji for a produce (or device) name — a lightweight, offline stand-in
 /// for a real photo per item (downloading and licensing photos for ~120
 /// generic vegetables/fruits isn't something to do sight-unseen). Matched by
 /// substring on the English name so e.g. "Baladi Orange"/"Navel Orange"/
@@ -13,6 +13,18 @@ String produceEmoji(String? nameEn) {
   if (name.isEmpty) return '🧺';
 
   const byMostSpecificFirst = <String, String>{
+    // Devices and their accessories (the «أجهزة الموبايل» / «اكسسوارات»
+    // branches) — a phone with no photo showed a produce basket.
+    'in-car': '🚗',
+    'smart watch': '⌚',
+    'headphone': '🎧',
+    'charger': '🔌',
+    'power bank': '🔋',
+    'memory card': '💾',
+    'screen protector': '📱',
+    'cases & covers': '📱',
+    'tablet': '📱',
+    'mobile': '📱',
     'sweet potato': '🍠',
     'watermelon': '🍉',
     'cantaloupe': '🍈',

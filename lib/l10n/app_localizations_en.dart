@@ -4203,6 +4203,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Enter the model name and pick a brand';
 
   @override
+  String get techDetailTotal => 'Total';
+
+  @override
   String get techPricingPhotosLabel => 'Product photos';
 
   @override

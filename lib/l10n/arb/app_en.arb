@@ -1410,6 +1410,7 @@
   "techPricingScreenLabel": "Screen size (inch)",
   "techPricingOsLabel": "Operating system",
   "techPricingModelRequired": "Enter the model name and pick a brand",
+  "techDetailTotal": "Total",
   "techPricingPhotosLabel": "Product photos",
   "techPricingTakePhoto": "Take a photo",
   "techPricingFromGallery": "From gallery",

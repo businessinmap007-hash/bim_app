@@ -25,7 +25,15 @@ import 'tech_pricing_screen.dart';
 /// back to its line option's name for the (usual) case where the item was
 /// created directly from that vocabulary branch and never got its own
 /// English name typed in.
-String _itemEmoji(BusinessMenuItem item) => produceEmoji(item.nameEn ?? item.lineOption?.nameEn);
+String _itemEmoji(BusinessMenuItem item) => produceEmoji(
+      // A catalog-linked device is named by its model («Oppo Reno 12F»),
+      // which no emoji matches — its branch («Mobile») does.
+      item.catalogProductId != null ? item.lineOption?.nameEn : (item.nameEn ?? item.lineOption?.nameEn),
+    );
+
+/// The merchant's own first photo, else the catalog model's photo.
+String? _itemImage(BusinessMenuItem item) =>
+    item.images.isNotEmpty ? item.images.first.url : item.catalogProduct?.image;
 
 class _PriceDialogResult {
   final double price;
@@ -394,7 +402,7 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
             _EmptyBranchGridTile(
               branch: branch,
               onAddPrice: () => _openTechPricing(branch),
-              label: AppLocalizations.of(context)!.techPricingAddAnother,
+              label: '${AppLocalizations.of(context)!.techPricingAddAnother} · ${localizedName(branch.nameAr, branch.nameEn, Localizations.localeOf(context).languageCode == 'en')}',
             ),
         ],
       );
@@ -416,7 +424,9 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
             child: TextButton.icon(
               onPressed: () => _openTechPricing(branch),
               icon: const Icon(Icons.add, size: 16),
-              label: Text(AppLocalizations.of(context)!.techPricingAddAnother),
+              label: Text(
+                '${AppLocalizations.of(context)!.techPricingAddAnother} · ${localizedName(branch.nameAr, branch.nameEn, Localizations.localeOf(context).languageCode == 'en')}',
+              ),
             ),
           ),
       ],
@@ -1010,8 +1020,8 @@ class _ItemTile extends ConsumerWidget {
       child: ListTile(
         onTap: onTap,
         leading: CircleAvatar(
-          backgroundImage: item.images.isNotEmpty ? NetworkImage(item.images.first.url) : null,
-          child: item.images.isEmpty ? Text(_itemEmoji(item), style: const TextStyle(fontSize: 18)) : null,
+          backgroundImage: _itemImage(item) != null ? NetworkImage(_itemImage(item)!) : null,
+          child: _itemImage(item) == null ? Text(_itemEmoji(item), style: const TextStyle(fontSize: 18)) : null,
         ),
         title: Text(title, style: TextStyle(color: item.isActive ? null : Theme.of(context).hintColor)),
         subtitle: item.availableQuantity != null
@@ -1076,8 +1086,12 @@ class _ItemGridTile extends ConsumerWidget {
             children: [
               AspectRatio(
                 aspectRatio: 1,
-                child: item.images.isNotEmpty
-                    ? Image.network(item.images.first.url, fit: BoxFit.cover)
+                child: _itemImage(item) != null
+                    ? Image.network(
+                        _itemImage(item)!,
+                        // a catalog shot is shown whole, the merchant's own filled
+                        fit: item.images.isNotEmpty ? BoxFit.cover : BoxFit.contain,
+                      )
                     : Container(
                         alignment: Alignment.center,
                         color: theme.colorScheme.onSurface.withValues(alpha: 0.08),

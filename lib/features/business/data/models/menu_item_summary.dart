@@ -190,7 +190,9 @@ class MenuItemSummary {
   /// skipped here to avoid repeating it.
   String? get specSummary {
     final rows = specs.where((s) => s.code != 'brand').take(3).map((s) => s.value).where((v) => v.isNotEmpty);
-    return rows.isEmpty ? null : rows.join(' · ');
+    // Each value is a bidi isolate (FSI…PDI): «8 جيجا» beside «256GB» and
+    // «Apple A17 Pro» otherwise reorders into «8 · جيجا 256GB» in RTL.
+    return rows.isEmpty ? null : rows.map((v) => '\u2068$v\u2069').join(' · ');
   }
 
   /// `null` = not tracked (always orderable); `0` = tracked and out of stock.

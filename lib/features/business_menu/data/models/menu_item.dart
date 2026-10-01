@@ -1,3 +1,4 @@
+import '../../../../core/env/env.dart';
 import 'menu_item_image.dart';
 import 'menu_variant.dart';
 
@@ -64,7 +65,7 @@ class CatalogProductRef {
     brand: json['brand'] as String?,
     brandId: json['brand_id'] as int?,
     series: json['series'] as String?,
-    image: json['image'] as String?,
+    image: Env.assetUrl(json['image'] as String?),
     pending: json['pending'] == true,
     specs: (json['specs'] as List<dynamic>?)
             ?.map((e) => CatalogSpecRow.fromJson(e as Map<String, dynamic>))

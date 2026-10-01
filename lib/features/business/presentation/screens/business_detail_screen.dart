@@ -760,7 +760,9 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
                               else
                                 for (final branch in section.branches)
                                   if (branch.items.any((i) => _passesFilter(section.group.name, i))) ...[
-                                  if (branch.id != null)
+                                  // A split section IS its branch («تابلت» under
+                                  // «تابلت») — its name is already the heading.
+                                  if (branch.id != null && branch.name.trim() != section.group.name.trim())
                                     Padding(
                                       padding: EdgeInsets.symmetric(vertical: branch.headingIsRedundant ? 0 : 6),
                                       child: branch.headingIsRedundant

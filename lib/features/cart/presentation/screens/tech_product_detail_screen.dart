@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -161,8 +162,25 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
                       imageUrl: imageUrl,
                       fit: item.imageCredit != null ? BoxFit.contain : BoxFit.cover,
                     )
-                  : const Center(
-                      child: Icon(Icons.smartphone_outlined, size: 72, color: AppColors.accentGold),
+                  // No open-licensed photo of this model exists yet — show
+                  // what it is rather than a bare icon.
+                  : Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.smartphone_outlined, size: 64, color: AppColors.accentGold),
+                          if (item.brandName != null) ...[
+                            const SizedBox(height: 10),
+                            Text(
+                              item.brandName!,
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
                     ),
                 ),
                 // A live camera shot of this very unit (required for a used
@@ -201,7 +219,7 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
                 Row(
                   children: [
                     Text(
-                      item.basePrice.toStringAsFixed(0),
+                      '${NumberFormat.decimalPattern('en').format(item.basePrice.round())} ${l10n.pharmacyCurrencyLabel}',
                       style: theme.textTheme.headlineSmall?.copyWith(
                         color: AppColors.accentGold,
                         fontWeight: FontWeight.w700,
@@ -303,64 +321,78 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
                     ),
                   ),
                 ],
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(l10n.marketCatalogQuantity, style: theme.textTheme.bodyMedium),
-                    Row(
-                      children: [
-                        IconButton(
-                          onPressed: _qty > 1 ? () => setState(() => _qty--) : null,
-                          icon: const Icon(Icons.remove_circle_outline),
-                        ),
-                        SizedBox(
-                          width: 32,
-                          child: Text('$_qty', textAlign: TextAlign.center, style: theme.textTheme.titleMedium),
-                        ),
-                        IconButton(
-                          onPressed: () => setState(() => _qty++),
-                          icon: const Icon(Icons.add_circle_outline),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
               ],
             ),
           ),
         ],
       ),
+      // «هل شكل الازرار كدا افضل» — المالك، 2026-10-01. Quantity and the
+      // total on one line, then the two actions side by side at the same
+      // height: «أضف للسلة» (outlined, cart icon) and «شراء الآن» in the
+      // brand gold — the price is said once, in the total, not on a button.
       bottomNavigationBar: SafeArea(
-        minimum: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-        child: _submitting
-            ? const Center(child: SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2)))
-            : widget.sharedOrderId != null
-            ? SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: () => _confirm(buyNow: false),
-                  child: Text('${l10n.cartAdd} · ${(_unitPrice * _qty).toStringAsFixed(0)}'),
+        minimum: const EdgeInsets.fromLTRB(16, 10, 16, 12),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                _QtyStepper(
+                  qty: _qty,
+                  onMinus: _qty > 1 ? () => setState(() => _qty--) : null,
+                  onPlus: () => setState(() => _qty++),
                 ),
-              )
-            : Row(
+                const Spacer(),
+                Text(l10n.techDetailTotal, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+                const SizedBox(width: 8),
+                Text(
+                  '${NumberFormat.decimalPattern('en').format((_unitPrice * _qty).round())} ${l10n.pharmacyCurrencyLabel}',
+                  style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            if (_submitting)
+              const SizedBox(height: 52, child: Center(child: CircularProgressIndicator(strokeWidth: 2)))
+            else
+              Row(
                 children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => _confirm(buyNow: false),
-                      child: Text(l10n.cartAdd),
+                  if (widget.sharedOrderId == null) ...[
+                    Expanded(
+                      child: SizedBox(
+                        height: 52,
+                        child: OutlinedButton.icon(
+                          onPressed: () => _confirm(buyNow: false),
+                          icon: const Icon(Icons.add_shopping_cart_rounded, size: 20),
+                          label: Text(l10n.cartAdd),
+                          style: OutlinedButton.styleFrom(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                            side: BorderSide(color: theme.colorScheme.primary, width: 1.4),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 10),
+                    const SizedBox(width: 10),
+                  ],
                   Expanded(
-                    flex: 2,
-                    child: FilledButton(
-                      onPressed: () => _confirm(buyNow: true),
-                      child: Text('${l10n.cartBuyNow} · ${(_unitPrice * _qty).toStringAsFixed(0)}'),
+                    child: SizedBox(
+                      height: 52,
+                      child: FilledButton(
+                        onPressed: () => _confirm(buyNow: widget.sharedOrderId == null),
+                        style: FilledButton.styleFrom(
+                          backgroundColor: AppColors.accentGold,
+                          foregroundColor: AppColors.primaryNavy,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                          textStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                        ),
+                        child: Text(widget.sharedOrderId == null ? l10n.cartBuyNow : l10n.cartAdd),
+                      ),
                     ),
                   ),
                 ],
               ),
+          ],
+        ),
       ),
     );
   }
@@ -393,24 +425,75 @@ class _SpecTable extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
+                    flex: 2,
                     child: Text(
                       specs[i].name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onSurface.withValues(alpha: 0.75),
                       ),
                     ),
                   ),
                   const SizedBox(width: 12),
-                  Flexible(
-                    child: Text(
-                      specs[i].value,
-                      style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
-                      textAlign: TextAlign.end,
+                  // «المعالج مكتوب على سطرين خليه على سطر واحد فقط» — a long
+                  // value («MediaTek Dimensity 6300») shrinks to fit one line.
+                  Expanded(
+                    flex: 3,
+                    child: Align(
+                      alignment: AlignmentDirectional.centerEnd,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          specs[i].value,
+                          maxLines: 1,
+                          style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
+        ],
+      ),
+    );
+  }
+}
+
+/// − 1 + in one rounded pill, for the bottom bar.
+class _QtyStepper extends StatelessWidget {
+  final int qty;
+  final VoidCallback? onMinus;
+  final VoidCallback onPlus;
+  const _QtyStepper({required this.qty, required this.onMinus, required this.onPlus});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      height: 40,
+      decoration: BoxDecoration(
+        border: Border.all(color: theme.dividerColor),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            visualDensity: VisualDensity.compact,
+            onPressed: onMinus,
+            icon: const Icon(Icons.remove_rounded, size: 20),
+          ),
+          SizedBox(
+            width: 28,
+            child: Text('$qty', textAlign: TextAlign.center, style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
+          ),
+          IconButton(
+            visualDensity: VisualDensity.compact,
+            onPressed: onPlus,
+            icon: const Icon(Icons.add_rounded, size: 20),
+          ),
         ],
       ),
     );

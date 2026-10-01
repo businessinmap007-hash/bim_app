@@ -438,21 +438,32 @@ class _SpecTable extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
+                    flex: 2,
                     child: Text(
                       specs[i].name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onSurface.withValues(alpha: 0.75),
                       ),
                     ),
                   ),
                   const SizedBox(width: 12),
-                  Flexible(
-                    child: Text(
-                      specs[i].value,
-                      style: theme.textTheme.bodyLarge?.copyWith(
-                        fontWeight: FontWeight.w700,
+                  // One line: a long value shrinks to fit instead of wrapping.
+                  Expanded(
+                    flex: 3,
+                    child: Align(
+                      alignment: AlignmentDirectional.centerEnd,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          specs[i].value,
+                          maxLines: 1,
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                       ),
-                      textAlign: TextAlign.end,
                     ),
                   ),
                 ],

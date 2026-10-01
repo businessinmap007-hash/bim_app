@@ -4200,6 +4200,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get techPricingModelRequired => 'اكتب اسم الموديل واختر الماركة';
 
   @override
+  String get techDetailTotal => 'الإجمالي';
+
+  @override
   String get techPricingPhotosLabel => 'صور المنتج';
 
   @override
