@@ -86,7 +86,7 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
   /// لقسم من الاقسام اسم عربى واسم انجليزى … وياخذ نفس الموصفات كيلو -
   /// جرام - رابطة طالما تحت خضار وفاكهه سعر التوريد والبيع والكمية
   /// والصورة» — المالك، 2026-09-29. A business WITH a vocabulary picks a
-  /// section here through [_NewCustomItemDialog] instead of the full
+  /// section here through [_NewItemScreen] instead of the full
   /// [MenuItemEditScreen] — a hand-typed business with none keeps the full
   /// editor, since it has no sections to require a pick from.
   Future<void> _openCreate() async {
@@ -105,9 +105,10 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
       return;
     }
 
-    final created = await showDialog<bool>(
-      context: context,
-      builder: (_) => _NewCustomItemDialog(groups: groups),
+    // «فتح شاشة اضافة صنف بدلا من البوب اب ويكون فيها اختيار القسم ايضا»
+    // — المالك، 2026-10-01: a full page, not a dialog.
+    final created = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(builder: (_) => _NewItemScreen(groups: groups)),
     );
     if (created == true) {
       ref.read(menuItemsControllerProvider.notifier).load();
@@ -1124,7 +1125,7 @@ class _ItemGridTile extends ConsumerWidget {
   }
 }
 
-/// One choice in [_NewCustomItemDialog]'s section picker — EITHER an
+/// One choice in [_NewItemScreen]'s section picker — EITHER an
 /// existing `menu_sections` row (hand-typed by the owner, or already grown
 /// from a vocabulary group earlier) or a vocabulary group that has not
 /// grown a section yet. Exactly one of [sectionId]/[groupId] is set; which
@@ -1136,7 +1137,18 @@ class _SectionChoice {
   final int? sectionId;
   final int? groupId;
   final List<String>? saleUnitCodes;
-  const _SectionChoice({required this.key, required this.label, this.sectionId, this.groupId, this.saleUnitCodes});
+  /// Set for a branch of a DETAILED group («موبايل», «تابلت»…): picking it
+  /// hands over to «التسعير والتفاصيل», which prices a real catalog model
+  /// rather than a hand-typed name.
+  final VocabularyOptionRef? branch;
+  const _SectionChoice({
+    required this.key,
+    required this.label,
+    this.sectionId,
+    this.groupId,
+    this.saleUnitCodes,
+    this.branch,
+  });
 }
 
 /// The FAB's "اضافة صنف" flow for a business WITH a vocabulary — a NEW
@@ -1152,15 +1164,15 @@ class _SectionChoice {
 /// group) never appeared. It now merges every EXISTING section (hand-typed
 /// or already grown) with whichever vocabulary groups have not grown one
 /// yet — see [_buildChoices].
-class _NewCustomItemDialog extends ConsumerStatefulWidget {
+class _NewItemScreen extends ConsumerStatefulWidget {
   final List<VocabularyGroup> groups;
-  const _NewCustomItemDialog({required this.groups});
+  const _NewItemScreen({required this.groups});
 
   @override
-  ConsumerState<_NewCustomItemDialog> createState() => _NewCustomItemDialogState();
+  ConsumerState<_NewItemScreen> createState() => _NewItemScreenState();
 }
 
-class _NewCustomItemDialogState extends ConsumerState<_NewCustomItemDialog> {
+class _NewItemScreenState extends ConsumerState<_NewItemScreen> {
   final _nameArController = TextEditingController();
   final _nameEnController = TextEditingController();
   final _supplyController = TextEditingController();
@@ -1187,9 +1199,20 @@ class _NewCustomItemDialogState extends ConsumerState<_NewCustomItemDialog> {
     final sections = ref.watch(menuSectionsControllerProvider).items;
     final groupSaleUnits = {for (final g in widget.groups) g.groupId: g.saleUnitCodes};
     final grownGroupIds = sections.map((s) => s.optionGroupId).whereType<int>().toSet();
+    final detailed = widget.groups.where((g) => g.detailed).toList();
+    final detailedIds = detailed.map((g) => g.groupId).toSet();
 
     return [
-      for (final s in sections)
+      // A detailed group is offered by BRANCH — its sections are grown per
+      // branch from the catalog flow, never typed in by hand here.
+      for (final g in detailed)
+        for (final o in g.options)
+          _SectionChoice(
+            key: 'b:${o.id}',
+            label: '${g.groupName} — ${localizedName(o.nameAr, o.nameEn, isEnglish)}',
+            branch: o,
+          ),
+      for (final s in sections.where((s) => !detailedIds.contains(s.optionGroupId)))
         _SectionChoice(
           key: 's:${s.id}',
           label: localizedName(s.nameAr, s.nameEn, isEnglish),
@@ -1197,7 +1220,7 @@ class _NewCustomItemDialogState extends ConsumerState<_NewCustomItemDialog> {
           saleUnitCodes: s.optionGroupId != null ? groupSaleUnits[s.optionGroupId] : null,
         ),
       for (final g in widget.groups)
-        if (!grownGroupIds.contains(g.groupId))
+        if (!g.detailed && !grownGroupIds.contains(g.groupId))
           _SectionChoice(key: 'g:${g.groupId}', label: g.groupName, groupId: g.groupId, saleUnitCodes: g.saleUnitCodes),
     ];
   }
@@ -1208,6 +1231,15 @@ class _NewCustomItemDialogState extends ConsumerState<_NewCustomItemDialog> {
       _nameArController.text.trim().isNotEmpty &&
       _nameEnController.text.trim().isNotEmpty &&
       double.tryParse(_priceController.text.trim().replaceAll(',', '.').replaceAll('٫', '.')) != null;
+
+  /// A detailed branch is priced through the catalog — this screen steps
+  /// aside and reports whatever «التسعير والتفاصيل» saved.
+  Future<void> _openTechPricing(VocabularyOptionRef branch) async {
+    final saved = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(builder: (_) => TechPricingScreen(lineOption: branch)),
+    );
+    if (mounted) Navigator.pop(context, saved == true);
+  }
 
   Future<void> _pickImage() async {
     final picked = await _picker.pickFromGallery(allowMultiple: false);
@@ -1268,9 +1300,10 @@ class _NewCustomItemDialogState extends ConsumerState<_NewCustomItemDialog> {
       });
     }
 
-    return AlertDialog(
-      title: Text(l10n.menuItemAdd),
-      content: SingleChildScrollView(
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.menuItemAdd)),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1280,10 +1313,17 @@ class _NewCustomItemDialogState extends ConsumerState<_NewCustomItemDialog> {
               isExpanded: true,
               decoration: InputDecoration(labelText: l10n.menuItemSectionLabel, isDense: true, border: const OutlineInputBorder()),
               items: choices.map((c) => DropdownMenuItem(value: c.key, child: Text(c.label))).toList(),
-              onChanged: (value) => setState(() {
-                _choiceKey = value;
-                _selectedUnit = null;
-              }),
+              onChanged: (value) {
+                final branch = choices.where((c) => c.key == value).firstOrNull?.branch;
+                if (branch != null) {
+                  _openTechPricing(branch);
+                  return;
+                }
+                setState(() {
+                  _choiceKey = value;
+                  _selectedUnit = null;
+                });
+              },
             ),
             const SizedBox(height: 12),
             TextField(
@@ -1356,10 +1396,18 @@ class _NewCustomItemDialogState extends ConsumerState<_NewCustomItemDialog> {
           ],
         ),
       ),
-      actions: [
-        TextButton(onPressed: _saving ? null : () => Navigator.pop(context, false), child: Text(l10n.commonCancel)),
-        FilledButton(onPressed: _canSave ? _save : null, child: Text(l10n.marketCatalogSave)),
-      ],
+      bottomNavigationBar: SafeArea(
+        minimum: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+        child: SizedBox(
+          width: double.infinity,
+          child: FilledButton(
+            onPressed: _canSave ? _save : null,
+            child: _saving
+                ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                : Text(l10n.marketCatalogSave),
+          ),
+        ),
+      ),
     );
   }
 }
