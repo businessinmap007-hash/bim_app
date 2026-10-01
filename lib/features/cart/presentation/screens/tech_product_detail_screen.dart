@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../business/data/models/menu_item_summary.dart';
+import '../../../media/data/picked_media.dart';
+import '../../../media/presentation/widgets/media_source_badge.dart';
 import '../../application/cart_controller.dart';
 import '../../application/shared_cart_providers.dart';
 import 'checkout_screen.dart';
@@ -141,7 +143,10 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
         children: [
           AspectRatio(
             aspectRatio: 16 / 10,
-            child: Container(
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                Container(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
@@ -159,6 +164,12 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
                   : const Center(
                       child: Icon(Icons.smartphone_outlined, size: 72, color: AppColors.accentGold),
                     ),
+                ),
+                // A live camera shot of this very unit (required for a used
+                // one) — the same badge albums carry.
+                if (imageUrl != null && item.cameraImageUrls.contains(imageUrl))
+                  const MediaSourceBadge(source: MediaSource.camera),
+              ],
             ),
           ),
           // The open licence's condition: credit the photographer.

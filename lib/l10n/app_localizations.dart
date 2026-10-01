@@ -7838,6 +7838,30 @@ abstract class AppLocalizations {
   /// **'اكتب اسم الموديل واختر الماركة'**
   String get techPricingModelRequired;
 
+  /// No description provided for @techPricingPhotosLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'صور المنتج'**
+  String get techPricingPhotosLabel;
+
+  /// No description provided for @techPricingTakePhoto.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقاط بالكاميرا'**
+  String get techPricingTakePhoto;
+
+  /// No description provided for @techPricingFromGallery.
+  ///
+  /// In ar, this message translates to:
+  /// **'من المعرض'**
+  String get techPricingFromGallery;
+
+  /// No description provided for @techPricingUsedCameraOnly.
+  ///
+  /// In ar, this message translates to:
+  /// **'المنتج المستعمل يُصوَّر بالكاميرا مباشرة — صورة حقيقية للقطعة نفسها بدون تعديل.'**
+  String get techPricingUsedCameraOnly;
+
   /// No description provided for @techPricingRearCameraLabel.
   ///
   /// In ar, this message translates to:

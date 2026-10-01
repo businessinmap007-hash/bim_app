@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
 import '../../../core/network/api_client.dart';
+import '../../media/data/picked_media.dart';
 import 'models/menu_available_types.dart';
 import 'models/menu_item.dart';
 import 'models/menu_section.dart';
@@ -371,6 +372,20 @@ class BusinessMenuApi {
       '/business/menu/items/$itemId/images',
       data: FormData.fromMap({
         'images[0]': await MultipartFile.fromFile(filePath),
+      }),
+    );
+  }
+
+  /// Uploads one picked photo with where it came from — `camera` is required
+  /// by the server for a second-hand unit (MenuItem::isSecondHand). Sent as
+  /// bytes so it works on web too, where a picked file has no real path.
+  Future<void> addPickedImage(int itemId, PickedMedia media) async {
+    final bytes = media.processedBytes ?? await media.file.readAsBytes();
+    await _client.post(
+      '/business/menu/items/$itemId/images',
+      data: FormData.fromMap({
+        'images[0]': MultipartFile.fromBytes(bytes, filename: media.file.name),
+        'source': media.source == MediaSource.camera ? 'camera' : 'upload',
       }),
     );
   }

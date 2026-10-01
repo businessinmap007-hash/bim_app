@@ -4200,6 +4200,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String get techPricingModelRequired => 'اكتب اسم الموديل واختر الماركة';
 
   @override
+  String get techPricingPhotosLabel => 'صور المنتج';
+
+  @override
+  String get techPricingTakePhoto => 'التقاط بالكاميرا';
+
+  @override
+  String get techPricingFromGallery => 'من المعرض';
+
+  @override
+  String get techPricingUsedCameraOnly =>
+      'المنتج المستعمل يُصوَّر بالكاميرا مباشرة — صورة حقيقية للقطعة نفسها بدون تعديل.';
+
+  @override
   String get techPricingRearCameraLabel => 'الكاميرا الخلفية (ميجابكسل)';
 
   @override

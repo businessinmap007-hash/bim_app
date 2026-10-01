@@ -127,6 +127,9 @@ class MenuItemSummary {
   /// own (CC BY-SA asks for it) — null for the merchant's own photo.
   final String? imageCredit;
   final List<String> imageUrls;
+  /// The gallery photos that are live camera shots (`source: camera`) —
+  /// badged with the camera icon wherever they show.
+  final Set<String> cameraImageUrls;
   final double basePrice;
   final String? saleUnitLabel;
   final int? availableQuantity;
@@ -158,6 +161,7 @@ class MenuItemSummary {
     this.imageUrl,
     this.imageCredit,
     required this.imageUrls,
+    this.cameraImageUrls = const {},
     required this.basePrice,
     this.saleUnitLabel,
     this.availableQuantity,
@@ -216,6 +220,12 @@ class MenuItemSummary {
         .map((e) => Env.assetUrl((e as Map<String, dynamic>)['image'] as String?))
         .whereType<String>()
         .toList(),
+    cameraImageUrls: (json['images'] as List<dynamic>? ?? [])
+        .map((e) => e as Map<String, dynamic>)
+        .where((e) => e['source'] == 'camera')
+        .map((e) => Env.assetUrl(e['image'] as String?))
+        .whereType<String>()
+        .toSet(),
     basePrice: (json['base_price'] as num?)?.toDouble() ?? 0,
     saleUnitLabel: json['sale_unit_label'] as String?,
     availableQuantity: (json['available_quantity'] as num?)?.toInt(),

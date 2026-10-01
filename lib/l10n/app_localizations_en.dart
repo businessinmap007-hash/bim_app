@@ -4203,6 +4203,19 @@ class AppLocalizationsEn extends AppLocalizations {
       'Enter the model name and pick a brand';
 
   @override
+  String get techPricingPhotosLabel => 'Product photos';
+
+  @override
+  String get techPricingTakePhoto => 'Take a photo';
+
+  @override
+  String get techPricingFromGallery => 'From gallery';
+
+  @override
+  String get techPricingUsedCameraOnly =>
+      'A used item is photographed live with the camera — a real, unedited shot of this very unit.';
+
+  @override
   String get techPricingRearCameraLabel => 'Rear camera (MP)';
 
   @override

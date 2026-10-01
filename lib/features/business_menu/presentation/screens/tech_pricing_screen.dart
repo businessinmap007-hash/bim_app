@@ -7,8 +7,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/utils/localized_name.dart';
+import '../../../media/application/media_picker_service.dart';
+import '../../../media/data/picked_media.dart';
+import '../../../media/presentation/widgets/media_source_badge.dart';
 import '../../application/business_menu_providers.dart';
 import '../../data/models/menu_item.dart';
+import '../../data/models/menu_item_image.dart';
 import '../../data/models/menu_vocabulary.dart';
 
 /// «التسعير والتفاصيل» — «منيو مواصفات 1»: a merchant PICKS a real catalog
@@ -46,6 +50,32 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
   bool _conditionSeeded = false;
   bool _saving = false;
   String? _error;
+  final _picker = MediaPickerService();
+
+  /// Photos picked in this visit, uploaded after the item is saved — kept
+  /// with their bytes so the strip can preview them on every platform.
+  final List<({PickedMedia media, Uint8List bytes})> _newPhotos = [];
+
+  /// «مستعمل» / «كسر زيرو» — a second-hand unit, photographed live only.
+  bool _isSecondHand(VocabularyGroup? conditionGroup) {
+    final picked = conditionGroup?.options.where((o) => o.id == _conditionOptionId).firstOrNull;
+    return picked != null && (picked.nameEn == 'Used' || picked.nameEn == 'Nearly New');
+  }
+
+  Future<void> _takePhoto() async {
+    final picked = await _picker.pickFromCamera();
+    if (picked == null) return;
+    final bytes = await picked.file.readAsBytes();
+    if (mounted) setState(() => _newPhotos.add((media: picked, bytes: bytes)));
+  }
+
+  Future<void> _pickFromGallery() async {
+    final picked = await _picker.pickFromGallery();
+    for (final p in picked) {
+      final bytes = await p.file.readAsBytes();
+      if (mounted) setState(() => _newPhotos.add((media: p, bytes: bytes)));
+    }
+  }
 
   @override
   void initState() {
@@ -118,8 +148,9 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
       final modifierIds = <int>[?_conditionOptionId];
       final desc = _descController.text.trim();
 
+      final int itemId;
       if (widget.existingItem == null) {
-        await api.createItem(
+        itemId = (await api.createItem(
           nameAr: _product!.name,
           nameEn: _product!.name,
           descriptionAr: desc,
@@ -128,8 +159,9 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
           catalogProductId: _product!.id,
           lineOptionId: widget.lineOption.id,
           modifierOptionIds: modifierIds,
-        );
+        )).id;
       } else {
+        itemId = widget.existingItem!.id;
         await api.updateItem(
           widget.existingItem!.id,
           nameAr: _product!.name,
@@ -143,6 +175,9 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
           sortOrder: widget.existingItem!.sortOrder,
           isActive: widget.existingItem!.isActive,
         );
+      }
+      for (final p in _newPhotos) {
+        await api.addPickedImage(itemId, p.media);
       }
       if (mounted) Navigator.of(context).pop(true);
     } catch (_) {
@@ -192,7 +227,47 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
               options: conditionGroup.options,
               selectedId: _conditionOptionId,
               isEnglish: isEnglish,
-              onChanged: (id) => setState(() => _conditionOptionId = id),
+              onChanged: (id) => setState(() {
+                _conditionOptionId = id;
+                // A used unit keeps only its live shots — a gallery photo
+                // picked while it was «جديد» no longer qualifies.
+                if (_isSecondHand(conditionGroup)) {
+                  _newPhotos.removeWhere((p) => p.media.source != MediaSource.camera);
+                }
+              }),
+            ),
+          ],
+          const SizedBox(height: 16),
+          Text(l10n.techPricingPhotosLabel, style: theme.textTheme.labelMedium),
+          const SizedBox(height: 8),
+          _PhotoStrip(
+            existing: widget.existingItem?.images ?? const [],
+            picked: _newPhotos,
+            onRemovePicked: (i) => setState(() => _newPhotos.removeAt(i)),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              OutlinedButton.icon(
+                onPressed: _takePhoto,
+                icon: const Icon(Icons.photo_camera_rounded),
+                label: Text(l10n.techPricingTakePhoto),
+              ),
+              if (!_isSecondHand(conditionGroup))
+                OutlinedButton.icon(
+                  onPressed: _pickFromGallery,
+                  icon: const Icon(Icons.photo_library_rounded),
+                  label: Text(l10n.techPricingFromGallery),
+                ),
+            ],
+          ),
+          if (_isSecondHand(conditionGroup)) ...[
+            const SizedBox(height: 6),
+            Text(
+              l10n.techPricingUsedCameraOnly,
+              style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
             ),
           ],
           const SizedBox(height: 16),
@@ -880,6 +955,66 @@ class _NewModelSheetState extends ConsumerState<_NewModelSheet> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// The item's photos in one row — already-saved ones and the ones picked in
+/// this visit — each with the camera/gallery badge albums use, so a live shot
+/// is visibly a live shot.
+class _PhotoStrip extends StatelessWidget {
+  final List<MenuItemImage> existing;
+  final List<({PickedMedia media, Uint8List bytes})> picked;
+  final ValueChanged<int> onRemovePicked;
+  const _PhotoStrip({required this.existing, required this.picked, required this.onRemovePicked});
+
+  @override
+  Widget build(BuildContext context) {
+    if (existing.isEmpty && picked.isEmpty) return const SizedBox.shrink();
+
+    Widget tile(ImageProvider image, MediaSource source, {VoidCallback? onRemove}) => Padding(
+      padding: const EdgeInsetsDirectional.only(end: 8),
+      child: SizedBox(
+        width: 96,
+        height: 96,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image(image: image, fit: BoxFit.cover),
+              ),
+            ),
+            MediaSourceBadge(source: source),
+            if (onRemove != null)
+              PositionedDirectional(
+                top: 4,
+                start: 4,
+                child: GestureDetector(
+                  onTap: onRemove,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.55), shape: BoxShape.circle),
+                    child: const Icon(Icons.close_rounded, color: Colors.white, size: 14),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+
+    return SizedBox(
+      height: 96,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          for (final img in existing)
+            tile(NetworkImage(img.url), img.isFromCamera ? MediaSource.camera : MediaSource.gallery),
+          for (var i = 0; i < picked.length; i++)
+            tile(MemoryImage(picked[i].bytes), picked[i].media.source, onRemove: () => onRemovePicked(i)),
+        ],
       ),
     );
   }
