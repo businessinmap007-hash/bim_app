@@ -4200,6 +4200,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get techPricingModelRequired => 'اكتب اسم الموديل واختر الماركة';
 
   @override
+  String get techPricingRearCameraLabel => 'الكاميرا الخلفية (ميجابكسل)';
+
+  @override
+  String get techPricingFrontCameraLabel => 'الكاميرا الأمامية (ميجابكسل)';
+
+  @override
+  String get techPricingBatteryLabel => 'البطارية (مللي أمبير)';
+
+  @override
   String get menuFilterAllBrands => 'كل الماركات';
 
   @override

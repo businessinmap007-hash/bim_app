@@ -4203,6 +4203,15 @@ class AppLocalizationsEn extends AppLocalizations {
       'Enter the model name and pick a brand';
 
   @override
+  String get techPricingRearCameraLabel => 'Rear camera (MP)';
+
+  @override
+  String get techPricingFrontCameraLabel => 'Front camera (MP)';
+
+  @override
+  String get techPricingBatteryLabel => 'Battery (mAh)';
+
+  @override
   String get menuFilterAllBrands => 'All brands';
 
   @override

@@ -123,6 +123,9 @@ class MenuItemSummary {
   final String description;
   final String? offeringLabel;
   final String? imageUrl;
+  /// The licence credit of a catalog photo shown in place of the merchant's
+  /// own (CC BY-SA asks for it) — null for the merchant's own photo.
+  final String? imageCredit;
   final List<String> imageUrls;
   final double basePrice;
   final String? saleUnitLabel;
@@ -153,6 +156,7 @@ class MenuItemSummary {
     required this.description,
     this.offeringLabel,
     this.imageUrl,
+    this.imageCredit,
     required this.imageUrls,
     required this.basePrice,
     this.saleUnitLabel,
@@ -207,6 +211,7 @@ class MenuItemSummary {
     description: json['description'] as String? ?? '',
     offeringLabel: json['offering_label'] as String?,
     imageUrl: Env.assetUrl(json['image'] as String?),
+    imageCredit: json['image_credit'] as String?,
     imageUrls: (json['images'] as List<dynamic>? ?? [])
         .map((e) => Env.assetUrl((e as Map<String, dynamic>)['image'] as String?))
         .whereType<String>()

@@ -7838,6 +7838,24 @@ abstract class AppLocalizations {
   /// **'اكتب اسم الموديل واختر الماركة'**
   String get techPricingModelRequired;
 
+  /// No description provided for @techPricingRearCameraLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكاميرا الخلفية (ميجابكسل)'**
+  String get techPricingRearCameraLabel;
+
+  /// No description provided for @techPricingFrontCameraLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكاميرا الأمامية (ميجابكسل)'**
+  String get techPricingFrontCameraLabel;
+
+  /// No description provided for @techPricingBatteryLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'البطارية (مللي أمبير)'**
+  String get techPricingBatteryLabel;
+
   /// No description provided for @menuFilterAllBrands.
   ///
   /// In ar, this message translates to:

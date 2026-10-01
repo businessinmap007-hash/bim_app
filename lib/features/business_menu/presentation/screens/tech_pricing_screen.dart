@@ -731,12 +731,15 @@ class _NewModelSheetState extends ConsumerState<_NewModelSheet> {
   final _storage = TextEditingController();
   final _screen = TextEditingController();
   final _os = TextEditingController();
+  final _rearCamera = TextEditingController();
+  final _frontCamera = TextEditingController();
+  final _battery = TextEditingController();
   bool _saving = false;
   String? _error;
 
   @override
   void dispose() {
-    for (final c in [_brandName, _series, _model, _processor, _ram, _storage, _screen, _os]) {
+    for (final c in [_brandName, _series, _model, _processor, _ram, _storage, _screen, _os, _rearCamera, _frontCamera, _battery]) {
       c.dispose();
     }
     super.dispose();
@@ -773,6 +776,9 @@ class _NewModelSheetState extends ConsumerState<_NewModelSheet> {
         storage: _text(_storage),
         screenInches: _number(_screen),
         os: _text(_os),
+        rearCameraMp: _number(_rearCamera),
+        frontCameraMp: _number(_frontCamera),
+        batteryMah: _number(_battery)?.round(),
       );
       if (mounted) Navigator.of(context).pop(product);
     } catch (_) {
@@ -846,6 +852,14 @@ class _NewModelSheetState extends ConsumerState<_NewModelSheet> {
                   Expanded(child: _field(_os, l10n.techPricingOsLabel)),
                 ],
               ),
+              Row(
+                children: [
+                  Expanded(child: _field(_rearCamera, l10n.techPricingRearCameraLabel, number: true)),
+                  const SizedBox(width: 10),
+                  Expanded(child: _field(_frontCamera, l10n.techPricingFrontCameraLabel, number: true)),
+                ],
+              ),
+              _field(_battery, l10n.techPricingBatteryLabel, number: true),
               if (_error != null) ...[
                 Text(_error!, style: TextStyle(color: theme.colorScheme.error)),
                 const SizedBox(height: 8),

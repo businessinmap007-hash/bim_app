@@ -165,6 +165,9 @@ class BusinessMenuApi {
     String? storage,
     num? screenInches,
     String? os,
+    num? rearCameraMp,
+    num? frontCameraMp,
+    int? batteryMah,
   }) async {
     final body = await _client.postForBody(
       '/business/menu/catalog-products',
@@ -179,6 +182,9 @@ class BusinessMenuApi {
         'storage': ?storage,
         'screen_inches': ?screenInches,
         'os': ?os,
+        'rear_camera_mp': ?rearCameraMp,
+        'front_camera_mp': ?frontCameraMp,
+        'battery_mah': ?batteryMah,
       },
     );
     return CatalogProductRef.fromJson(body['data']['product'] as Map<String, dynamic>);

@@ -150,12 +150,28 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
                 ),
               ),
               child: imageUrl != null
-                  ? CachedNetworkImage(imageUrl: imageUrl, fit: BoxFit.cover)
+                  // A catalog photo (it carries a credit) is a product shot of
+                  // any shape — shown whole rather than cropped.
+                  ? CachedNetworkImage(
+                      imageUrl: imageUrl,
+                      fit: item.imageCredit != null ? BoxFit.contain : BoxFit.cover,
+                    )
                   : const Center(
                       child: Icon(Icons.smartphone_outlined, size: 72, color: AppColors.accentGold),
                     ),
             ),
           ),
+          // The open licence's condition: credit the photographer.
+          if (imageUrl != null && item.imageCredit != null)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+              child: Text(
+                item.imageCredit!,
+                style: theme.textTheme.labelSmall?.copyWith(color: theme.hintColor),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
           Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
