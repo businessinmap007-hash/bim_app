@@ -352,7 +352,7 @@ class _SpecTable extends StatelessWidget {
         children: [
           for (var i = 0; i < specs.length; i++)
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               decoration: i == specs.length - 1
                   ? null
                   : BoxDecoration(
@@ -365,17 +365,20 @@ class _SpecTable extends StatelessWidget {
                   Expanded(
                     child: Text(
                       specs[i].name,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.hintColor,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.75),
                       ),
                     ),
                   ),
-                  Text(
-                    specs[i].value,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.w600,
+                  const SizedBox(width: 12),
+                  Flexible(
+                    child: Text(
+                      specs[i].value,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                      textAlign: TextAlign.end,
                     ),
-                    textAlign: TextAlign.end,
                   ),
                 ],
               ),

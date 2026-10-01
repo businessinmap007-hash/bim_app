@@ -221,7 +221,10 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
                 ],
                 if (item.specs.isNotEmpty) ...[
                   const SizedBox(height: 18),
-                  Text(l10n.menuCardSpecsTitle, style: theme.textTheme.titleSmall),
+                  Text(
+                    l10n.menuCardSpecsTitle,
+                    style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                  ),
                   const SizedBox(height: 8),
                   _SpecTable(specs: item.specs),
                 ],
@@ -369,19 +372,30 @@ class _SpecTable extends StatelessWidget {
         children: [
           for (var i = 0; i < specs.length; i++)
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              // «كبر الفونت التفاصيل وخليه اوضح» — المالك، 2026-10-01: the
+              // label reads in the body colour (not the faint hint grey) and
+              // the value one size up and bold.
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               decoration: i == specs.length - 1
                   ? null
                   : BoxDecoration(border: Border(bottom: BorderSide(color: theme.dividerColor))),
               child: Row(
                 children: [
                   Expanded(
-                    child: Text(specs[i].name, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+                    child: Text(
+                      specs[i].name,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurface.withValues(alpha: 0.75),
+                      ),
+                    ),
                   ),
-                  Text(
-                    specs[i].value,
-                    style: theme.textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600),
-                    textAlign: TextAlign.end,
+                  const SizedBox(width: 12),
+                  Flexible(
+                    child: Text(
+                      specs[i].value,
+                      style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
+                      textAlign: TextAlign.end,
+                    ),
                   ),
                 ],
               ),
