@@ -187,6 +187,17 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     }
   }
 
+  /// The picked product's specs in the order its detail kind lists them,
+  /// limited to that kind's fields — a phone never shows a car's rows. A
+  /// kind with none of this product's values (or no kind at all) falls back
+  /// to every spec the product has.
+  List<CatalogSpecRow> _profileSpecs(List<CatalogSpecRow> specs, DetailProfile? profile) {
+    if (profile == null || profile.fields.isEmpty) return specs;
+    final byCode = {for (final s in specs) s.code: s};
+    final ordered = [for (final f in profile.fields) if (byCode[f.code] != null) byCode[f.code]!];
+    return ordered.isEmpty ? specs : ordered;
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -198,6 +209,17 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
       orElse: () => null,
     );
     _seedConditionFromItem(conditionGroup);
+
+    // The kind of details this branch's group is (mobiles, laptops, cars…) —
+    // decided in the admin's «أشكال المنيو», never here.
+    final detailProfile = vocabAsync.maybeWhen(
+      data: (v) => v.lines
+          .where((g) => g.options.any((o) => o.id == widget.lineOption.id))
+          .map((g) => g.detailProfile)
+          .whereType<DetailProfile>()
+          .firstOrNull,
+      orElse: () => null,
+    );
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.techPricingTitle)),
@@ -214,7 +236,7 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
             const SizedBox(height: 16),
             Text(l10n.menuCardSpecsTitle, style: theme.textTheme.labelMedium),
             const SizedBox(height: 8),
-            _SpecTable(specs: _product!.specs),
+            _SpecTable(specs: _profileSpecs(_product!.specs, detailProfile)),
           ],
           if (conditionGroup != null) ...[
             const SizedBox(height: 16),

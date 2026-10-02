@@ -29,6 +29,10 @@ class VocabularyGroup {
   /// branch — may carry more than one priced item (several real models).
   /// See [[tech-spec-menu-implementation]].
   final bool detailed;
+  /// Which «منيو تفصيلي» this group is (mobiles, laptops, cars…) and the
+  /// fields that kind is described by — set per group in the admin's «أشكال
+  /// المنيو». null = «منيو أساسي». Never decided in the app.
+  final DetailProfile? detailProfile;
   const VocabularyGroup({
     required this.groupId,
     required this.groupName,
@@ -37,6 +41,7 @@ class VocabularyGroup {
     this.isCondition = false,
     this.saleUnitCodes,
     this.detailed = false,
+    this.detailProfile,
   });
 
   factory VocabularyGroup.fromJson(Map<String, dynamic> json) => VocabularyGroup(
@@ -49,6 +54,42 @@ class VocabularyGroup {
     isCondition: json['is_condition'] as bool? ?? false,
     saleUnitCodes: (json['sale_unit_codes'] as List<dynamic>?)?.map((e) => e as String).toList(),
     detailed: json['detailed'] as bool? ?? false,
+    detailProfile: json['detail_profile'] is Map<String, dynamic>
+        ? DetailProfile.fromJson(json['detail_profile'] as Map<String, dynamic>)
+        : null,
+  );
+}
+
+/// One kind of «منيو تفصيلي» and its fields, in display order — what
+/// «التسعير والتفاصيل» lists for the picked product. See
+/// Api\V2\BusinessMenuItemController::detailProfilesFor().
+class DetailProfile {
+  final String code;
+  final String name;
+  final List<DetailField> fields;
+  const DetailProfile({required this.code, required this.name, required this.fields});
+
+  factory DetailProfile.fromJson(Map<String, dynamic> json) => DetailProfile(
+    code: json['code'] as String,
+    name: json['name'] as String? ?? '',
+    fields: (json['fields'] as List<dynamic>? ?? [])
+        .map((e) => DetailField.fromJson(e as Map<String, dynamic>))
+        .toList(),
+  );
+}
+
+class DetailField {
+  final String code;
+  final String name;
+  final String? unit;
+  final bool showOnCard;
+  const DetailField({required this.code, required this.name, this.unit, this.showOnCard = false});
+
+  factory DetailField.fromJson(Map<String, dynamic> json) => DetailField(
+    code: json['code'] as String,
+    name: json['name'] as String? ?? '',
+    unit: json['unit'] as String?,
+    showOnCard: json['show_on_card'] as bool? ?? false,
   );
 }
 

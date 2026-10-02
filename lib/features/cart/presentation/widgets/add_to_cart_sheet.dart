@@ -8,6 +8,7 @@ import '../../application/cart_controller.dart';
 import '../../application/shared_cart_providers.dart';
 import '../screens/checkout_screen.dart';
 import '../screens/tech_product_detail_screen.dart';
+import 'cart_action_bar.dart';
 
 /// Opens the picker for a menu item (variant + extras + qty) and adds it to
 /// the cart on confirm. A plain item with no variants/extras skips straight
@@ -274,51 +275,20 @@ class _AddToCartSheetState extends ConsumerState<_AddToCartSheet> {
                 ),
                 const SizedBox(height: 8),
               ],
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    onPressed: _qty > 1 ? () => setState(() => _qty--) : null,
-                    icon: const Icon(Icons.remove_circle_outline),
-                  ),
-                  SizedBox(
-                    width: 40,
-                    child: Text('$_qty', textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleMedium),
-                  ),
-                  IconButton(
-                    onPressed: () => setState(() => _qty++),
-                    icon: const Icon(Icons.add_circle_outline),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              if (_submitting)
-                const Center(child: SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2)))
-              else if (widget.sharedOrderId != null)
-                // A shared cart checks out through its host, all at once —
-                // "buy now" (an immediate solo checkout) doesn't fit that.
-                FilledButton(
-                  onPressed: () => _confirm(buyNow: false),
-                  child: Text('${l10n.cartAdd} · ${(_unitPrice * _qty).toStringAsFixed(0)}'),
-                )
-              else
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () => _confirm(buyNow: false),
-                        child: Text(l10n.cartAdd),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: FilledButton(
-                        onPressed: () => _confirm(buyNow: true),
-                        child: Text('${l10n.cartBuyNow} · ${(_unitPrice * _qty).toStringAsFixed(0)}'),
-                      ),
-                    ),
-                  ],
+              const SizedBox(height: 4),
+              // The one bar every service draws — see CartActionBar.
+              CartActionBar(
+                total: _unitPrice * _qty,
+                submitting: _submitting,
+                sharedCart: widget.sharedOrderId != null,
+                onAdd: () => _confirm(buyNow: false),
+                onBuyNow: () => _confirm(buyNow: true),
+                leading: CartQtyStepper(
+                  qty: _qty,
+                  onMinus: _qty > 1 ? () => setState(() => _qty--) : null,
+                  onPlus: () => setState(() => _qty++),
                 ),
+              ),
             ],
           ),
         ),

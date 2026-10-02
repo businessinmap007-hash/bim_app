@@ -10,6 +10,7 @@ import '../../../../shared/utils/retail_quantity_format.dart';
 import '../../../../shared/widgets/async_value_view.dart';
 import '../../../cart/application/cart_controller.dart';
 import '../../../cart/presentation/screens/checkout_screen.dart';
+import '../../../cart/presentation/widgets/cart_action_bar.dart';
 import '../../application/retail_discovery_providers.dart';
 import '../../data/models/catalog_product_listing.dart';
 
@@ -489,31 +490,18 @@ class _QuantitySheetState extends State<_QuantitySheet> {
                 ),
               ],
               const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () {
-                        _commitTypedQty();
-                        Navigator.of(context).pop((qty: _qty, buyNow: false, extras: _picked.toList()));
-                      },
-                      child: Text(l10n.cartAdd),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: FilledButton(
-                      onPressed: () {
-                        _commitTypedQty();
-                        Navigator.of(context).pop((qty: _qty, buyNow: true, extras: _picked.toList()));
-                      },
-                      child: Text(
-                        '${l10n.cartBuyNow} · ${(_unitPrice * _qty).toStringAsFixed(0)}',
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ),
-                ],
+              // The one bar every service draws — see CartActionBar. The
+              // quantity stays typed above (a wholesale order can be 500).
+              CartActionBar(
+                total: _unitPrice * _qty,
+                onAdd: () {
+                  _commitTypedQty();
+                  Navigator.of(context).pop((qty: _qty, buyNow: false, extras: _picked.toList()));
+                },
+                onBuyNow: () {
+                  _commitTypedQty();
+                  Navigator.of(context).pop((qty: _qty, buyNow: true, extras: _picked.toList()));
+                },
               ),
             ],
           ),

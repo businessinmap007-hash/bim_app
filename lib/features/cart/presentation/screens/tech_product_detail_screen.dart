@@ -10,6 +10,7 @@ import '../../../media/data/picked_media.dart';
 import '../../../media/presentation/widgets/media_source_badge.dart';
 import '../../application/cart_controller.dart';
 import '../../application/shared_cart_providers.dart';
+import '../widgets/cart_action_bar.dart';
 import 'checkout_screen.dart';
 
 /// «تفاصيل المنتج» — the full-page counterpart of [showAddToCartSheet]'s
@@ -326,72 +327,20 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
           ),
         ],
       ),
-      // «هل شكل الازرار كدا افضل» — المالك، 2026-10-01. Quantity and the
-      // total on one line, then the two actions side by side at the same
-      // height: «أضف للسلة» (outlined, cart icon) and «شراء الآن» in the
-      // brand gold — the price is said once, in the total, not on a button.
+      // The one bar every service draws — see CartActionBar.
       bottomNavigationBar: SafeArea(
         minimum: const EdgeInsets.fromLTRB(16, 10, 16, 12),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              children: [
-                _QtyStepper(
-                  qty: _qty,
-                  onMinus: _qty > 1 ? () => setState(() => _qty--) : null,
-                  onPlus: () => setState(() => _qty++),
-                ),
-                const Spacer(),
-                Text(l10n.techDetailTotal, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
-                const SizedBox(width: 8),
-                Text(
-                  '${NumberFormat.decimalPattern('en').format((_unitPrice * _qty).round())} ${l10n.pharmacyCurrencyLabel}',
-                  style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            if (_submitting)
-              const SizedBox(height: 52, child: Center(child: CircularProgressIndicator(strokeWidth: 2)))
-            else
-              Row(
-                children: [
-                  if (widget.sharedOrderId == null) ...[
-                    Expanded(
-                      child: SizedBox(
-                        height: 52,
-                        child: OutlinedButton.icon(
-                          onPressed: () => _confirm(buyNow: false),
-                          icon: const Icon(Icons.add_shopping_cart_rounded, size: 20),
-                          label: Text(l10n.cartAdd),
-                          style: OutlinedButton.styleFrom(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                            side: BorderSide(color: theme.colorScheme.primary, width: 1.4),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                  ],
-                  Expanded(
-                    child: SizedBox(
-                      height: 52,
-                      child: FilledButton(
-                        onPressed: () => _confirm(buyNow: widget.sharedOrderId == null),
-                        style: FilledButton.styleFrom(
-                          backgroundColor: AppColors.accentGold,
-                          foregroundColor: AppColors.primaryNavy,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-                          textStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
-                        ),
-                        child: Text(widget.sharedOrderId == null ? l10n.cartBuyNow : l10n.cartAdd),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-          ],
+        child: CartActionBar(
+          total: _unitPrice * _qty,
+          submitting: _submitting,
+          sharedCart: widget.sharedOrderId != null,
+          onAdd: () => _confirm(buyNow: false),
+          onBuyNow: () => _confirm(buyNow: true),
+          leading: CartQtyStepper(
+            qty: _qty,
+            onMinus: _qty > 1 ? () => setState(() => _qty--) : null,
+            onPlus: () => setState(() => _qty++),
+          ),
         ),
       ),
     );
@@ -462,40 +411,3 @@ class _SpecTable extends StatelessWidget {
 }
 
 /// − 1 + in one rounded pill, for the bottom bar.
-class _QtyStepper extends StatelessWidget {
-  final int qty;
-  final VoidCallback? onMinus;
-  final VoidCallback onPlus;
-  const _QtyStepper({required this.qty, required this.onMinus, required this.onPlus});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Container(
-      height: 40,
-      decoration: BoxDecoration(
-        border: Border.all(color: theme.dividerColor),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            visualDensity: VisualDensity.compact,
-            onPressed: onMinus,
-            icon: const Icon(Icons.remove_rounded, size: 20),
-          ),
-          SizedBox(
-            width: 28,
-            child: Text('$qty', textAlign: TextAlign.center, style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
-          ),
-          IconButton(
-            visualDensity: VisualDensity.compact,
-            onPressed: onPlus,
-            icon: const Icon(Icons.add_rounded, size: 20),
-          ),
-        ],
-      ),
-    );
-  }
-}
