@@ -4154,6 +4154,85 @@ class AppLocalizationsAr extends AppLocalizations {
   String get techPricingUnitDetails => 'لهذه الوحدة بالذات';
 
   @override
+  String get menuSearchTitle => 'بحث ومقارنة';
+
+  @override
+  String get menuSearchHint => 'ابحث بالاسم أو الموديل…';
+
+  @override
+  String get menuSearchFilters => 'الفلاتر';
+
+  @override
+  String menuSearchFiltersCount(int n) {
+    return 'الفلاتر ($n)';
+  }
+
+  @override
+  String get menuSearchApply => 'عرض النتائج';
+
+  @override
+  String get menuSearchReset => 'مسح الكل';
+
+  @override
+  String get menuSearchFrom => 'من';
+
+  @override
+  String get menuSearchTo => 'إلى';
+
+  @override
+  String menuSearchRangeHint(String min, String max) {
+    return '$min – $max';
+  }
+
+  @override
+  String menuSearchResults(int n) {
+    return '$n نتيجة';
+  }
+
+  @override
+  String get menuSearchEmpty => 'لا توجد نتائج بهذه المواصفات.';
+
+  @override
+  String get menuSearchNoKinds => 'لا توجد منتجات بمواصفات معروضة بعد.';
+
+  @override
+  String get menuSearchPickKind => 'اختر نوع المنتج لتظهر فلاتره';
+
+  @override
+  String get menuSearchAllKinds => 'الكل';
+
+  @override
+  String get menuSearchSortPriceAsc => 'الأرخص أولًا';
+
+  @override
+  String get menuSearchSortPriceDesc => 'الأغلى أولًا';
+
+  @override
+  String get menuSearchSortNewest => 'الأحدث';
+
+  @override
+  String get menuSearchCompare => 'قارن الأسعار';
+
+  @override
+  String get menuCompareTitle => 'مقارنة الأسعار';
+
+  @override
+  String menuCompareShops(int n) {
+    return '$n محل يبيعه';
+  }
+
+  @override
+  String get menuCompareCheapest => 'الأرخص';
+
+  @override
+  String menuCompareMore(String amount) {
+    return '+$amount عن الأرخص';
+  }
+
+  @override
+  String get menuCompareOpenShop => 'افتح المحل';
+
+  @override
   String techPricingFieldNotNumber(String field) {
     return '«$field» رقم صحيح';
   }

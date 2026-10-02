@@ -4156,6 +4156,85 @@ class AppLocalizationsEn extends AppLocalizations {
   String get techPricingUnitDetails => 'This unit\'s details';
 
   @override
+  String get menuSearchTitle => 'Search & compare';
+
+  @override
+  String get menuSearchHint => 'Search by name or model…';
+
+  @override
+  String get menuSearchFilters => 'Filters';
+
+  @override
+  String menuSearchFiltersCount(int n) {
+    return 'Filters ($n)';
+  }
+
+  @override
+  String get menuSearchApply => 'Show results';
+
+  @override
+  String get menuSearchReset => 'Clear all';
+
+  @override
+  String get menuSearchFrom => 'From';
+
+  @override
+  String get menuSearchTo => 'To';
+
+  @override
+  String menuSearchRangeHint(String min, String max) {
+    return '$min – $max';
+  }
+
+  @override
+  String menuSearchResults(int n) {
+    return '$n results';
+  }
+
+  @override
+  String get menuSearchEmpty => 'Nothing matches these specs.';
+
+  @override
+  String get menuSearchNoKinds => 'No products with specs are on sale yet.';
+
+  @override
+  String get menuSearchPickKind => 'Pick a product type to see its filters';
+
+  @override
+  String get menuSearchAllKinds => 'All';
+
+  @override
+  String get menuSearchSortPriceAsc => 'Cheapest first';
+
+  @override
+  String get menuSearchSortPriceDesc => 'Most expensive first';
+
+  @override
+  String get menuSearchSortNewest => 'Newest';
+
+  @override
+  String get menuSearchCompare => 'Compare prices';
+
+  @override
+  String get menuCompareTitle => 'Price comparison';
+
+  @override
+  String menuCompareShops(int n) {
+    return 'Sold by $n shops';
+  }
+
+  @override
+  String get menuCompareCheapest => 'Cheapest';
+
+  @override
+  String menuCompareMore(String amount) {
+    return '+$amount over the cheapest';
+  }
+
+  @override
+  String get menuCompareOpenShop => 'Open shop';
+
+  @override
   String techPricingFieldNotNumber(String field) {
     return '\"$field\" must be a number';
   }

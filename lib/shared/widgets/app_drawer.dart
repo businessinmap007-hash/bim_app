@@ -9,6 +9,7 @@ import '../../features/business_groups/presentation/screens/business_groups_scre
 import '../../features/contact_groups/presentation/screens/contact_groups_screen.dart';
 import '../../features/jobs/presentation/screens/jobs_screen.dart';
 import '../../features/offers/presentation/screens/my_offer_follows_screen.dart';
+import '../../features/menu_search/presentation/screens/menu_search_screen.dart';
 import '../../features/offers/presentation/screens/offers_screen.dart';
 import '../../features/posts/presentation/screens/my_follows_screen.dart';
 import '../../features/posts/presentation/screens/my_jobs_screen.dart';
@@ -237,6 +238,16 @@ class _AppDrawerContent extends ConsumerWidget {
                       MaterialPageRoute(
                         builder: (_) => const MyFollowsScreen(),
                       ),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.compare_arrows_rounded),
+                  title: Text(l10n.menuSearchTitle),
+                  onTap: () {
+                    close();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const MenuSearchScreen()),
                     );
                   },
                 ),

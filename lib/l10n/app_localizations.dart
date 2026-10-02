@@ -7748,6 +7748,144 @@ abstract class AppLocalizations {
   /// **'لهذه الوحدة بالذات'**
   String get techPricingUnitDetails;
 
+  /// No description provided for @menuSearchTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'بحث ومقارنة'**
+  String get menuSearchTitle;
+
+  /// No description provided for @menuSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث بالاسم أو الموديل…'**
+  String get menuSearchHint;
+
+  /// No description provided for @menuSearchFilters.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفلاتر'**
+  String get menuSearchFilters;
+
+  /// No description provided for @menuSearchFiltersCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفلاتر ({n})'**
+  String menuSearchFiltersCount(int n);
+
+  /// No description provided for @menuSearchApply.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض النتائج'**
+  String get menuSearchApply;
+
+  /// No description provided for @menuSearchReset.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسح الكل'**
+  String get menuSearchReset;
+
+  /// No description provided for @menuSearchFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'من'**
+  String get menuSearchFrom;
+
+  /// No description provided for @menuSearchTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلى'**
+  String get menuSearchTo;
+
+  /// No description provided for @menuSearchRangeHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'{min} – {max}'**
+  String menuSearchRangeHint(String min, String max);
+
+  /// No description provided for @menuSearchResults.
+  ///
+  /// In ar, this message translates to:
+  /// **'{n} نتيجة'**
+  String menuSearchResults(int n);
+
+  /// No description provided for @menuSearchEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد نتائج بهذه المواصفات.'**
+  String get menuSearchEmpty;
+
+  /// No description provided for @menuSearchNoKinds.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد منتجات بمواصفات معروضة بعد.'**
+  String get menuSearchNoKinds;
+
+  /// No description provided for @menuSearchPickKind.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر نوع المنتج لتظهر فلاتره'**
+  String get menuSearchPickKind;
+
+  /// No description provided for @menuSearchAllKinds.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get menuSearchAllKinds;
+
+  /// No description provided for @menuSearchSortPriceAsc.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأرخص أولًا'**
+  String get menuSearchSortPriceAsc;
+
+  /// No description provided for @menuSearchSortPriceDesc.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأغلى أولًا'**
+  String get menuSearchSortPriceDesc;
+
+  /// No description provided for @menuSearchSortNewest.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأحدث'**
+  String get menuSearchSortNewest;
+
+  /// No description provided for @menuSearchCompare.
+  ///
+  /// In ar, this message translates to:
+  /// **'قارن الأسعار'**
+  String get menuSearchCompare;
+
+  /// No description provided for @menuCompareTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقارنة الأسعار'**
+  String get menuCompareTitle;
+
+  /// No description provided for @menuCompareShops.
+  ///
+  /// In ar, this message translates to:
+  /// **'{n} محل يبيعه'**
+  String menuCompareShops(int n);
+
+  /// No description provided for @menuCompareCheapest.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأرخص'**
+  String get menuCompareCheapest;
+
+  /// No description provided for @menuCompareMore.
+  ///
+  /// In ar, this message translates to:
+  /// **'+{amount} عن الأرخص'**
+  String menuCompareMore(String amount);
+
+  /// No description provided for @menuCompareOpenShop.
+  ///
+  /// In ar, this message translates to:
+  /// **'افتح المحل'**
+  String get menuCompareOpenShop;
+
   /// No description provided for @techPricingFieldNotNumber.
   ///
   /// In ar, this message translates to:
