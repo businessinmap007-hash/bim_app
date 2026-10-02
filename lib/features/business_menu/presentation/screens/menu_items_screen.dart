@@ -509,14 +509,20 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
             branch: branch,
             onAddPrice: _addFor(branch, detailed, saleUnitCodes),
             label: AppLocalizations.of(context)!.techPricingAddProduct,
+            showName: !captions,
           ),
         ));
       } else {
-        tiles.add(_EmptyBranchGridTile(
-          key: _branchKey(branch.id),
-          branch: branch,
-          onAddPrice: detailed ? () => _openTechPricing(branch) : () => _quickAddPrice(branch, saleUnitCodes),
-          label: detailed ? AppLocalizations.of(context)!.techPricingAddProduct : null,
+        tiles.add(captioned(
+          branch,
+          _EmptyBranchGridTile(
+            key: captions ? null : _branchKey(branch.id),
+            branch: branch,
+            onAddPrice: detailed ? () => _openTechPricing(branch) : () => _quickAddPrice(branch, saleUnitCodes),
+            label: detailed ? AppLocalizations.of(context)!.techPricingAddProduct : null,
+            showName: !captions,
+          ),
+          key: captions ? _branchKey(branch.id) : null,
         ));
       }
     }
@@ -1065,7 +1071,15 @@ class _EmptyBranchGridTile extends StatelessWidget {
   final VocabularyOptionRef branch;
   final VoidCallback onAddPrice;
   final String? label;
-  const _EmptyBranchGridTile({super.key, required this.branch, required this.onAddPrice, this.label});
+  /// false when a caption above the card already names the section.
+  final bool showName;
+  const _EmptyBranchGridTile({
+    super.key,
+    required this.branch,
+    required this.onAddPrice,
+    this.label,
+    this.showName = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1085,7 +1099,7 @@ class _EmptyBranchGridTile extends StatelessWidget {
               child: Container(
                 alignment: Alignment.center,
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
-                child: Text(produceEmoji(branch.nameEn), style: const TextStyle(fontSize: 36)),
+                child: Text(produceEmoji(branch.nameEn ?? branch.nameAr), style: const TextStyle(fontSize: 36)),
               ),
             ),
             Padding(
@@ -1093,13 +1107,15 @@ class _EmptyBranchGridTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    localizedName(branch.nameAr, branch.nameEn, isEnglish),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.titleSmall,
-                  ),
-                  const SizedBox(height: 6),
+                  if (showName) ...[
+                    Text(
+                      localizedName(branch.nameAr, branch.nameEn, isEnglish),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.titleSmall,
+                    ),
+                    const SizedBox(height: 6),
+                  ],
                   TextButton.icon(
                     onPressed: onAddPrice,
                     icon: const Icon(Icons.add, size: 16),
