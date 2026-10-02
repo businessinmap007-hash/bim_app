@@ -4154,6 +4154,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get techPricingUnitDetails => 'لهذه الوحدة بالذات';
 
   @override
+  String get techPricingItemDetails => 'تفاصيل الصنف';
+
+  @override
   String get menuSearchTitle => 'بحث ومقارنة';
 
   @override

@@ -7748,6 +7748,12 @@ abstract class AppLocalizations {
   /// **'لهذه الوحدة بالذات'**
   String get techPricingUnitDetails;
 
+  /// No description provided for @techPricingItemDetails.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل الصنف'**
+  String get techPricingItemDetails;
+
   /// No description provided for @menuSearchTitle.
   ///
   /// In ar, this message translates to:

@@ -103,10 +103,13 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
 
     // A trade whose groups DESCRIBE the item («غرفة نوم» — مودرن — زان) needs
     // the full form: what it is, its description, those choices, its photos.
-    // The quick name-and-price page below has none of them.
+    // The quick name-and-price page below has none of them. A trade with a
+    // DETAILED group does not come here: its branches go on to «التسعير
+    // والتفاصيل», which draws the describing choices itself.
     final describes = vocab?.modifiers.any((g) => g.descriptive && g.options.isNotEmpty) ?? false;
+    final hasDetailed = groups.any((g) => g.detailed);
 
-    if (groups.isEmpty || describes) {
+    if (groups.isEmpty || (describes && !hasDetailed)) {
       await Navigator.of(context).push<int>(
         MaterialPageRoute(builder: (_) => const MenuItemEditScreen()),
       );
@@ -1216,6 +1219,7 @@ class _NewItemScreenState extends ConsumerState<_NewItemScreen> {
     final grownGroupIds = sections.map((s) => s.optionGroupId).whereType<int>().toSet();
     final detailed = widget.groups.where((g) => g.detailed).toList();
     final detailedIds = detailed.map((g) => g.groupId).toSet();
+    final sellable = widget.groups.map((g) => g.groupId).toSet();
 
     return [
       // A detailed group is offered by BRANCH — its sections are grown per
@@ -1227,7 +1231,10 @@ class _NewItemScreenState extends ConsumerState<_NewItemScreen> {
             label: '${g.groupName} — ${localizedName(o.nameAr, o.nameEn, isEnglish)}',
             branch: o,
           ),
-      for (final s in sections.where((s) => !detailedIds.contains(s.optionGroupId)))
+      // Only sections that still belong to a group this trade sells: a section
+      // grown earlier from a group that now DESCRIBES («أنواع الأخشاب») or from
+      // another trade's group is not an answer to «what is it».
+      for (final s in sections.where((s) => !detailedIds.contains(s.optionGroupId) && (s.optionGroupId == null || sellable.contains(s.optionGroupId))))
         _SectionChoice(
           key: 's:${s.id}',
           label: localizedName(s.nameAr, s.nameEn, isEnglish),

@@ -4156,6 +4156,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get techPricingUnitDetails => 'This unit\'s details';
 
   @override
+  String get techPricingItemDetails => 'Item details';
+
+  @override
   String get menuSearchTitle => 'Search & compare';
 
   @override

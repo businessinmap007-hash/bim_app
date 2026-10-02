@@ -46,6 +46,11 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
   final _stockController = TextEditingController();
   final _descController = TextEditingController();
   CatalogProductRef? _product;
+  /// A kind with no catalog: the merchant names the item and picks, from the
+  /// option groups that DESCRIBE it («مودرن»، «زان»), what it is made of.
+  final _nameController = TextEditingController();
+  final Set<int> _choiceIds = {};
+  bool _choicesSeeded = false;
   int? _conditionOptionId;
   bool _conditionSeeded = false;
 
@@ -92,6 +97,7 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
       _stockController.text = item.availableQuantity?.toString() ?? '';
       _descController.text = item.descriptionAr ?? '';
       _product = item.catalogProduct;
+      _nameController.text = item.nameAr;
     }
   }
 
@@ -100,6 +106,7 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     _priceController.dispose();
     _stockController.dispose();
     _descController.dispose();
+    _nameController.dispose();
     for (final c in _unitText.values) {
       c.dispose();
     }
@@ -178,8 +185,14 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
 
   Future<void> _save() async {
     final l10n = AppLocalizations.of(context)!;
-    if (_product == null) {
+    final profile = _profileFor(ref.read(menuVocabularyProvider).asData?.value);
+    final usesCatalog = profile?.usesCatalog ?? true;
+    if (usesCatalog && _product == null) {
       setState(() => _error = l10n.techPricingPickProduct);
+      return;
+    }
+    if (!usesCatalog && _nameController.text.trim().isEmpty) {
+      setState(() => _error = l10n.menuNameRequired);
       return;
     }
     final price = double.tryParse(
@@ -190,7 +203,6 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
       return;
     }
 
-    final profile = _profileFor(ref.read(menuVocabularyProvider).asData?.value);
     final bad = _badUnitNumber(profile);
     if (bad != null) {
       setState(() => _error = l10n.techPricingFieldNotNumber(bad));
@@ -206,18 +218,25 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
       final api = ref.read(businessMenuApiProvider);
       final unitValues = _unitValues(profile);
       final stock = int.tryParse(_stockController.text.trim());
-      final modifierIds = <int>[?_conditionOptionId];
+      // The condition toggle's option, plus what the merchant chose from the
+      // describing groups — never the condition twice.
+      final conditionIds = ref.read(menuVocabularyProvider).asData?.value.conditionGroup?.options.map((o) => o.id).toSet() ?? <int>{};
+      final modifierIds = <int>{
+        ..._choiceIds.where((id) => !conditionIds.contains(id)),
+        ?_conditionOptionId,
+      }.toList();
+      final nameAr = usesCatalog ? _product!.name : _nameController.text.trim();
       final desc = _descController.text.trim();
 
       final int itemId;
       if (widget.existingItem == null) {
         itemId = (await api.createItem(
-          nameAr: _product!.name,
-          nameEn: _product!.name,
+          nameAr: nameAr,
+          nameEn: usesCatalog ? _product!.name : null,
           descriptionAr: desc,
           basePrice: price,
           availableQuantity: stock,
-          catalogProductId: _product!.id,
+          catalogProductId: usesCatalog ? _product!.id : null,
           lineOptionId: widget.lineOption.id,
           modifierOptionIds: modifierIds,
           attributes: unitValues,
@@ -226,12 +245,12 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
         itemId = widget.existingItem!.id;
         await api.updateItem(
           widget.existingItem!.id,
-          nameAr: _product!.name,
-          nameEn: _product!.name,
+          nameAr: nameAr,
+          nameEn: usesCatalog ? _product!.name : null,
           descriptionAr: desc,
           basePrice: price,
           availableQuantity: stock,
-          catalogProductId: _product!.id,
+          catalogProductId: usesCatalog ? _product!.id : null,
           lineOptionId: widget.lineOption.id,
           modifierOptionIds: modifierIds,
           attributes: unitValues,
@@ -288,19 +307,46 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     // decided in the admin's «أشكال المنيو», never here.
     final detailProfile = _profileFor(vocabAsync.asData?.value);
     _seedUnitFields(detailProfile);
+    final usesCatalog = detailProfile?.usesCatalog ?? true;
+    if (!_choicesSeeded && widget.existingItem != null) {
+      _choicesSeeded = true;
+      _choiceIds.addAll(widget.existingItem!.modifierOptions.map((o) => o.id));
+    }
+    // The groups «مكونات الخدمة» made DESCRIBE what an item is for this trade.
+    final describing = vocabAsync.maybeWhen(
+      data: (v) {
+        final lineIds = v.lines.map((g) => g.groupId).toSet();
+        return v.modifiers.where((g) => g.descriptive && g.options.isNotEmpty && !lineIds.contains(g.groupId)).toList();
+      },
+      orElse: () => const <VocabularyGroup>[],
+    );
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.techPricingTitle)),
+      appBar: AppBar(
+        title: Text(usesCatalog
+            ? l10n.techPricingTitle
+            : (widget.existingItem == null ? l10n.menuItemAddTitle : l10n.menuItemEditTitle)),
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          Text(
-            l10n.techPricingProductLabel,
-            style: theme.textTheme.labelMedium,
-          ),
-          const SizedBox(height: 8),
-          _ProductPickerField(product: _product, onTap: _pickProduct),
-          if (_product != null && _product!.specs.isNotEmpty) ...[
+          if (usesCatalog) ...[
+            Text(
+              l10n.techPricingProductLabel,
+              style: theme.textTheme.labelMedium,
+            ),
+            const SizedBox(height: 8),
+            _ProductPickerField(product: _product, onTap: _pickProduct),
+          ] else ...[
+            // What it is — the branch the merchant tapped («غرفة نوم»).
+            Chip(label: Text(localizedName(widget.lineOption.nameAr, widget.lineOption.nameEn, isEnglish))),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _nameController,
+              decoration: InputDecoration(labelText: l10n.menuItemNameArHint),
+            ),
+          ],
+          if (usesCatalog && _product != null && _product!.specs.isNotEmpty) ...[
             const SizedBox(height: 16),
             Text(l10n.menuCardSpecsTitle, style: theme.textTheme.labelMedium),
             const SizedBox(height: 8),
@@ -310,7 +356,7 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
           // mileage, gearbox, colour); the catalog knows the model, not the unit.
           if (detailProfile != null && detailProfile.fields.any((f) => f.perItem)) ...[
             const SizedBox(height: 16),
-            Text(l10n.techPricingUnitDetails, style: theme.textTheme.labelMedium),
+            Text(usesCatalog ? l10n.techPricingUnitDetails : l10n.techPricingItemDetails, style: theme.textTheme.labelMedium),
             const SizedBox(height: 8),
             for (final f in detailProfile.fields.where((f) => f.perItem)) ...[
               if (f.dataType == 'select')
@@ -332,6 +378,25 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
                   ),
                 ),
             ],
+          ],
+          // «اختيار الوصف ونوع الخشب من مجموعات الخيارات»: one row of chips per
+          // describing group — the style, the wood — never typed.
+          for (final g in describing) ...[
+            const SizedBox(height: 8),
+            Text(g.groupName, style: theme.textTheme.labelMedium),
+            const SizedBox(height: 6),
+            Wrap(
+              spacing: 8,
+              runSpacing: 6,
+              children: [
+                for (final o in g.options)
+                  FilterChip(
+                    label: Text(localizedName(o.nameAr, o.nameEn, isEnglish)),
+                    selected: _choiceIds.contains(o.id),
+                    onSelected: (on) => setState(() => on ? _choiceIds.add(o.id) : _choiceIds.remove(o.id)),
+                  ),
+              ],
+            ),
           ],
           if (conditionGroup != null) ...[
             const SizedBox(height: 16),

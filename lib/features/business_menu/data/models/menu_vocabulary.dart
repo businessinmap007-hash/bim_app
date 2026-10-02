@@ -73,11 +73,16 @@ class DetailProfile {
   final String code;
   final String name;
   final List<DetailField> fields;
-  const DetailProfile({required this.code, required this.name, required this.fields});
+  /// false = no catalog behind this kind (a bedroom has no «model» to pick):
+  /// the merchant names the item himself and states every field. Set in the
+  /// admin's «أشكال المنيو», never here.
+  final bool usesCatalog;
+  const DetailProfile({required this.code, required this.name, required this.fields, this.usesCatalog = true});
 
   factory DetailProfile.fromJson(Map<String, dynamic> json) => DetailProfile(
     code: json['code'] as String,
     name: json['name'] as String? ?? '',
+    usesCatalog: json['uses_catalog'] as bool? ?? true,
     fields: (json['fields'] as List<dynamic>? ?? [])
         .map((e) => DetailField.fromJson(e as Map<String, dynamic>))
         .toList(),

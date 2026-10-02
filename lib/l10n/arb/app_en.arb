@@ -1395,6 +1395,7 @@
   "techPricingAddAnother": "Add another model",
   "techPricingAddProduct": "Add product",
   "techPricingUnitDetails": "This unit's details",
+  "techPricingItemDetails": "Item details",
   "menuSearchTitle": "Search & compare",
   "menuSearchHint": "Search by name or model…",
   "menuSearchFilters": "Filters",
