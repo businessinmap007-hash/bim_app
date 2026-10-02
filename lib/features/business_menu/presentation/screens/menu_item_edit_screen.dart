@@ -127,7 +127,14 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
           sortOrder: int.tryParse(_sortController.text.trim()) ?? 0,
           isActive: _isActive,
         );
-        if (mounted) Navigator.of(context).pop(created.id);
+        // Straight on to the item's own editor — that is where its photos,
+        // sizes and extras are added; a new item has no id to attach them to
+        // until it is saved.
+        if (mounted) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => MenuItemEditScreen(itemId: created.id)),
+          );
+        }
       } else {
         await api.updateItem(
           widget.itemId!,

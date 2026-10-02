@@ -98,18 +98,19 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
   /// [MenuItemEditScreen] — a hand-typed business with none keeps the full
   /// editor, since it has no sections to require a pick from.
   Future<void> _openCreate() async {
-    final groups = ref.read(menuVocabularyProvider).maybeWhen(
-      data: (v) => v.lines.where((g) => g.options.isNotEmpty).toList(),
-      orElse: () => const <VocabularyGroup>[],
-    );
+    final vocab = ref.read(menuVocabularyProvider).asData?.value;
+    final groups = vocab?.lines.where((g) => g.options.isNotEmpty).toList() ?? const <VocabularyGroup>[];
 
-    if (groups.isEmpty) {
-      final createdId = await Navigator.of(context).push<int>(
+    // A trade whose groups DESCRIBE the item («غرفة نوم» — مودرن — زان) needs
+    // the full form: what it is, its description, those choices, its photos.
+    // The quick name-and-price page below has none of them.
+    final describes = vocab?.modifiers.any((g) => g.descriptive && g.options.isNotEmpty) ?? false;
+
+    if (groups.isEmpty || describes) {
+      await Navigator.of(context).push<int>(
         MaterialPageRoute(builder: (_) => const MenuItemEditScreen()),
       );
-      if (createdId != null) {
-        ref.read(menuItemsControllerProvider.notifier).load();
-      }
+      ref.read(menuItemsControllerProvider.notifier).load();
       return;
     }
 

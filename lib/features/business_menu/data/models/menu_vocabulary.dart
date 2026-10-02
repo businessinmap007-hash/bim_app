@@ -33,6 +33,10 @@ class VocabularyGroup {
   /// fields that kind is described by — set per group in the admin's «أشكال
   /// المنيو». null = «منيو أساسي». Never decided in the app.
   final DetailProfile? detailProfile;
+  /// True when the admin's «مكونات الخدمة» made this group DESCRIBE what the
+  /// item is for this trade («مودرن»، «زان» on a bedroom) — it is offered as a
+  /// choice on the item, never as a second thing the item IS.
+  final bool descriptive;
   const VocabularyGroup({
     required this.groupId,
     required this.groupName,
@@ -42,6 +46,7 @@ class VocabularyGroup {
     this.saleUnitCodes,
     this.detailed = false,
     this.detailProfile,
+    this.descriptive = false,
   });
 
   factory VocabularyGroup.fromJson(Map<String, dynamic> json) => VocabularyGroup(
@@ -54,6 +59,7 @@ class VocabularyGroup {
     isCondition: json['is_condition'] as bool? ?? false,
     saleUnitCodes: (json['sale_unit_codes'] as List<dynamic>?)?.map((e) => e as String).toList(),
     detailed: json['detailed'] as bool? ?? false,
+    descriptive: json['descriptive'] as bool? ?? false,
     detailProfile: json['detail_profile'] is Map<String, dynamic>
         ? DetailProfile.fromJson(json['detail_profile'] as Map<String, dynamic>)
         : null,
