@@ -358,7 +358,9 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
             const SizedBox(height: 16),
             Text(usesCatalog ? l10n.techPricingUnitDetails : l10n.techPricingItemDetails, style: theme.textTheme.labelMedium),
             const SizedBox(height: 8),
-            for (final f in detailProfile.fields.where((f) => f.perItem)) ...[
+            // A list field nobody filled with choices («الخامة» — the wood comes
+            // from the option groups below) would be a label over nothing.
+            for (final f in detailProfile.fields.where((f) => f.perItem && !(f.dataType == 'select' && f.options.isEmpty))) ...[
               if (f.dataType == 'select')
                 _UnitChoice(
                   label: f.name,
