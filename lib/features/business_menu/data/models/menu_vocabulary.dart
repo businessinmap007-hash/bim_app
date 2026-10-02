@@ -84,12 +84,23 @@ class DetailProfile {
   /// the merchant names the item himself and states every field. Set in the
   /// admin's «أشكال المنيو», never here.
   final bool usesCatalog;
-  const DetailProfile({required this.code, required this.name, required this.fields, this.usesCatalog = true});
+  /// The descriptive option groups the admin ticked for this kind in «أشكال
+  /// المنيو», in its order. Empty = the kind never chose, so the form offers
+  /// every group «مكونات الخدمة» made descriptive for the trade.
+  final List<int> descriptiveGroupIds;
+  const DetailProfile({
+    required this.code,
+    required this.name,
+    required this.fields,
+    this.usesCatalog = true,
+    this.descriptiveGroupIds = const [],
+  });
 
   factory DetailProfile.fromJson(Map<String, dynamic> json) => DetailProfile(
     code: json['code'] as String,
     name: json['name'] as String? ?? '',
     usesCatalog: json['uses_catalog'] as bool? ?? true,
+    descriptiveGroupIds: (json['descriptive_group_ids'] as List<dynamic>? ?? []).map((e) => (e as num).toInt()).toList(),
     fields: (json['fields'] as List<dynamic>? ?? [])
         .map((e) => DetailField.fromJson(e as Map<String, dynamic>))
         .toList(),

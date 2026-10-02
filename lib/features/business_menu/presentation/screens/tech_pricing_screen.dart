@@ -316,6 +316,15 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     final describing = vocabAsync.maybeWhen(
       data: (v) {
         final lineIds = v.lines.map((g) => g.groupId).toSet();
+        // The admin's choice for this kind («أشكال المنيو» → حقول وصفية), in its
+        // order; a kind that never chose offers every descriptive group.
+        final chosen = detailProfile?.descriptiveGroupIds ?? const <int>[];
+        if (chosen.isNotEmpty) {
+          return [
+            for (final id in chosen)
+              ...v.modifiers.where((g) => g.groupId == id && g.options.isNotEmpty && !lineIds.contains(g.groupId)),
+          ];
+        }
         return v.modifiers.where((g) => g.descriptive && g.options.isNotEmpty && !lineIds.contains(g.groupId)).toList();
       },
       orElse: () => const <VocabularyGroup>[],
