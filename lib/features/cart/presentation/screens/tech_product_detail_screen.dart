@@ -29,7 +29,17 @@ import 'checkout_screen.dart';
 class TechProductDetailScreen extends ConsumerStatefulWidget {
   final MenuItemSummary item;
   final int? sharedOrderId;
-  const TechProductDetailScreen({super.key, required this.item, this.sharedOrderId});
+  /// Set when the page is opened from a search or a price comparison, where
+  /// nothing else says WHOSE unit this is: «يُباع لدى [shop]», tappable.
+  final String? shopName;
+  final VoidCallback? onOpenShop;
+  const TechProductDetailScreen({
+    super.key,
+    required this.item,
+    this.sharedOrderId,
+    this.shopName,
+    this.onOpenShop,
+  });
 
   @override
   ConsumerState<TechProductDetailScreen> createState() => _TechProductDetailScreenState();
@@ -214,6 +224,34 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
                     child: Text(
                       item.brandName!,
                       style: theme.textTheme.bodyMedium?.copyWith(color: theme.hintColor, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                if (widget.shopName != null)
+                  InkWell(
+                    onTap: widget.onOpenShop,
+                    borderRadius: BorderRadius.circular(8),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.storefront_outlined, size: 16, color: theme.hintColor),
+                          const SizedBox(width: 6),
+                          Flexible(
+                            child: Text(
+                              widget.shopName!,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: AppColors.primaryNavy,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          if (widget.onOpenShop != null)
+                            Icon(Icons.chevron_right_rounded, size: 18, color: theme.hintColor),
+                        ],
+                      ),
                     ),
                   ),
                 const SizedBox(height: 6),

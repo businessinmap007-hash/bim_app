@@ -1,4 +1,5 @@
 import '../../../core/network/api_client.dart';
+import '../../business/data/models/menu_item_summary.dart';
 import 'models/menu_search.dart';
 
 /// Public search across shops by a detail kind's fields, and the price
@@ -12,6 +13,13 @@ class MenuSearchApi {
     return (data['kinds'] as List<dynamic>? ?? [])
         .map((e) => SearchKind.fromJson(e as Map<String, dynamic>))
         .toList();
+  }
+
+  /// One unit, shaped like a row of its shop's menu — what a result opens as
+  /// the product page. See Api\V2\MenuDiscoveryController::item().
+  Future<MenuItemSummary> item(int id) async {
+    final data = await _client.get('/discovery/menu-items/$id') as Map<String, dynamic>;
+    return MenuItemSummary.fromJson(data['item'] as Map<String, dynamic>);
   }
 
   Future<SearchPage> search({

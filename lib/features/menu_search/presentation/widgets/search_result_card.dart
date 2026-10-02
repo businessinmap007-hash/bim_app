@@ -11,9 +11,9 @@ import '../../data/models/menu_search.dart';
 /// product, which lists every shop that has the same one.
 class SearchResultCard extends StatelessWidget {
   final SearchItem item;
-  final VoidCallback onOpenShop;
+  final VoidCallback onOpen;
   final VoidCallback? onCompare;
-  const SearchResultCard({super.key, required this.item, required this.onOpenShop, this.onCompare});
+  const SearchResultCard({super.key, required this.item, required this.onOpen, this.onCompare});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class SearchResultCard extends StatelessWidget {
       margin: EdgeInsets.zero,
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: onOpenShop,
+        onTap: onOpen,
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Row(

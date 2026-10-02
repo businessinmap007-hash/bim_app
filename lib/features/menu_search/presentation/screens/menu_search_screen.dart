@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
-import '../../../business/presentation/screens/business_detail_screen.dart';
 import '../../application/menu_search_providers.dart';
 import '../../data/models/menu_search.dart';
+import '../open_search_item.dart';
 import '../widgets/search_filter_sheet.dart';
 import '../widgets/search_result_card.dart';
 import 'menu_compare_screen.dart';
@@ -44,9 +44,7 @@ class _MenuSearchScreenState extends ConsumerState<MenuSearchScreen> {
     super.dispose();
   }
 
-  void _openShop(SearchItem item) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => BusinessDetailScreen(businessId: item.shop.id)));
-  }
+  void _openItem(SearchItem item) => openSearchItem(context, ref, item);
 
   void _compare(SearchItem item) {
     Navigator.of(context).push(
@@ -80,7 +78,7 @@ class _MenuSearchScreenState extends ConsumerState<MenuSearchScreen> {
             kinds: kinds,
             scroll: _scroll,
             queryController: _queryController,
-            onOpenShop: _openShop,
+            onOpenItem: _openItem,
             onCompare: _compare,
             onOpenFilters: _openFilters,
           );
@@ -94,14 +92,14 @@ class _Body extends ConsumerStatefulWidget {
   final List<SearchKind> kinds;
   final ScrollController scroll;
   final TextEditingController queryController;
-  final void Function(SearchItem) onOpenShop;
+  final void Function(SearchItem) onOpenItem;
   final void Function(SearchItem) onCompare;
   final Future<void> Function(SearchKind, MenuSearchState) onOpenFilters;
   const _Body({
     required this.kinds,
     required this.scroll,
     required this.queryController,
-    required this.onOpenShop,
+    required this.onOpenItem,
     required this.onCompare,
     required this.onOpenFilters,
   });
@@ -230,7 +228,7 @@ class _BodyState extends ConsumerState<_Body> {
                     final item = state.items[i];
                     return SearchResultCard(
                       item: item,
-                      onOpenShop: () => widget.onOpenShop(item),
+                      onOpen: () => widget.onOpenItem(item),
                       onCompare: item.catalogProductId == null ? null : () => widget.onCompare(item),
                     );
                   },

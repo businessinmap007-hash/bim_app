@@ -321,72 +321,117 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
       orElse: () => const <VocabularyGroup>[],
     );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(usesCatalog
-            ? l10n.techPricingTitle
-            : (widget.existingItem == null ? l10n.menuItemAddTitle : l10n.menuItemEditTitle)),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          if (usesCatalog) ...[
-            Text(
-              l10n.techPricingProductLabel,
-              style: theme.textTheme.labelMedium,
+    // The page is drawn exactly like the admin's «أشكال المنيو» phone preview —
+    // small muted section labels, compact fields, per-unit fields two to a row,
+    // a navy segmented condition toggle, price beside quantity — المالك،
+    // 2026-10-02. Compact fields come from the theme override below.
+    final fieldTheme = theme.inputDecorationTheme;
+    Widget label(String text) => Padding(
+          padding: const EdgeInsets.only(top: 12, bottom: 6),
+          child: Text(
+            text,
+            style: theme.textTheme.labelMedium?.copyWith(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: AppColors.primaryNavy.withValues(alpha: 0.6),
             ),
-            const SizedBox(height: 8),
+          ),
+        );
+
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.techPricingTitle)),
+      body: Theme(
+        data: theme.copyWith(
+          inputDecorationTheme: fieldTheme.copyWith(
+            isDense: true,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          ),
+        ),
+        child: ListView(
+        padding: const EdgeInsets.fromLTRB(14, 8, 14, 14),
+        children: [
+          // What it is — the branch the merchant tapped («غرفة نوم»): the
+          // preview's small gold pill.
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppColors.accentGold,
+                borderRadius: BorderRadius.circular(999),
+              ),
+              child: Text(
+                localizedName(widget.lineOption.nameAr, widget.lineOption.nameEn, isEnglish),
+                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.primaryNavy),
+              ),
+            ),
+          ),
+          if (usesCatalog) ...[
+            label(l10n.techPricingProductLabel),
             _ProductPickerField(product: _product, onTap: _pickProduct),
           ] else ...[
-            // What it is — the branch the merchant tapped («غرفة نوم»).
-            Chip(label: Text(localizedName(widget.lineOption.nameAr, widget.lineOption.nameEn, isEnglish))),
-            const SizedBox(height: 10),
+            label(l10n.menuItemNameArHint),
             TextField(
               controller: _nameController,
-              decoration: InputDecoration(labelText: l10n.menuItemNameArHint),
+              decoration: InputDecoration(hintText: l10n.menuItemNameArHint),
             ),
           ],
           if (usesCatalog && _product != null && _product!.specs.isNotEmpty) ...[
-            const SizedBox(height: 16),
-            Text(l10n.menuCardSpecsTitle, style: theme.textTheme.labelMedium),
-            const SizedBox(height: 8),
+            label(l10n.menuCardSpecsTitle),
             _SpecTable(specs: _profileSpecs(_product!.specs, detailProfile)),
           ],
           // «لهذه الوحدة بالذات» — what only THIS unit can say (a car's year,
           // mileage, gearbox, colour); the catalog knows the model, not the unit.
-          if (detailProfile != null && detailProfile.fields.any((f) => f.perItem)) ...[
-            const SizedBox(height: 16),
-            Text(usesCatalog ? l10n.techPricingUnitDetails : l10n.techPricingItemDetails, style: theme.textTheme.labelMedium),
-            const SizedBox(height: 8),
-            // A list field nobody filled with choices («الخامة» — the wood comes
-            // from the option groups below) would be a label over nothing.
-            for (final f in detailProfile.fields.where((f) => f.perItem && !(f.dataType == 'select' && f.options.isEmpty))) ...[
-              if (f.dataType == 'select')
-                _UnitChoice(
-                  label: f.name,
-                  options: f.options,
-                  selectedId: _unitOption[f.id],
-                  onChanged: (id) => setState(() => _unitOption[f.id] = id),
-                )
-              else
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: TextField(
-                    controller: _unitText[f.id],
-                    keyboardType: f.dataType == 'number'
-                        ? const TextInputType.numberWithOptions(decimal: true)
-                        : TextInputType.text,
-                    decoration: InputDecoration(labelText: f.name, suffixText: f.unit),
-                  ),
-                ),
-            ],
-          ],
+          // A list field nobody filled with choices («الخامة» — the wood comes
+          // from the option groups below) would be a box over nothing.
+          if (detailProfile != null)
+            Builder(builder: (context) {
+              final unitFields = detailProfile.fields
+                  .where((f) => f.perItem && !(f.dataType == 'select' && f.options.isEmpty))
+                  .toList();
+              if (unitFields.isEmpty) return const SizedBox.shrink();
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  label(usesCatalog ? l10n.techPricingUnitDetails : l10n.techPricingItemDetails),
+                  LayoutBuilder(builder: (context, c) {
+                    // Two to a row, as the preview's 44% boxes.
+                    final w = (c.maxWidth - 8) / 2;
+                    return Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        for (final f in unitFields)
+                          SizedBox(
+                            width: w,
+                            child: f.dataType == 'select'
+                                ? DropdownButtonFormField<int>(
+                                    initialValue: _unitOption[f.id],
+                                    isExpanded: true,
+                                    hint: Text(f.name),
+                                    items: [
+                                      for (final o in f.options) DropdownMenuItem(value: o.id, child: Text(o.name)),
+                                    ],
+                                    onChanged: (id) => setState(() => _unitOption[f.id] = id),
+                                  )
+                                : TextField(
+                                    controller: _unitText[f.id],
+                                    keyboardType: f.dataType == 'number'
+                                        ? const TextInputType.numberWithOptions(decimal: true)
+                                        : TextInputType.text,
+                                    decoration: InputDecoration(hintText: f.name, suffixText: f.unit),
+                                  ),
+                          ),
+                      ],
+                    );
+                  }),
+                ],
+              );
+            }),
           // «اختيار الوصف ونوع الخشب من مجموعات الخيارات»: one row of chips per
           // describing group — the style, the wood — never typed.
           for (final g in describing) ...[
-            const SizedBox(height: 8),
-            Text(g.groupName, style: theme.textTheme.labelMedium),
-            const SizedBox(height: 6),
+            label(g.groupName),
             Wrap(
               spacing: 8,
               runSpacing: 6,
@@ -401,12 +446,7 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
             ),
           ],
           if (conditionGroup != null) ...[
-            const SizedBox(height: 16),
-            Text(
-              l10n.techPricingConditionLabel,
-              style: theme.textTheme.labelMedium,
-            ),
-            const SizedBox(height: 8),
+            label(l10n.techPricingConditionLabel),
             _ConditionToggle(
               options: conditionGroup.options,
               selectedId: _conditionOptionId,
@@ -421,9 +461,52 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
               }),
             ),
           ],
-          const SizedBox(height: 16),
-          Text(l10n.techPricingPhotosLabel, style: theme.textTheme.labelMedium),
+          // Price beside quantity, then the description — the preview's order;
+          // the photos come last (the preview has no room for them).
+          const SizedBox(height: 12),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _priceController,
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9.,٫]')),
+                  ],
+                  decoration: InputDecoration(
+                    hintText: l10n.menuItemBasePriceHint,
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(
+                        color: AppColors.accentGold,
+                        width: 1.5,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: TextField(
+                  controller: _stockController,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  decoration: InputDecoration(hintText: l10n.menuItemAvailableQuantityHint),
+                ),
+              ),
+            ],
+          ),
           const SizedBox(height: 8),
+          TextField(
+            controller: _descController,
+            minLines: 2,
+            maxLines: 4,
+            decoration: InputDecoration(hintText: l10n.menuItemDescriptionArHint),
+          ),
+          label(l10n.techPricingPhotosLabel),
           _PhotoStrip(
             existing: widget.existingItem?.images ?? const [],
             picked: _newPhotos,
@@ -454,60 +537,12 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
               style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
             ),
           ],
-          const SizedBox(height: 16),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _priceController,
-                  keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9.,٫]')),
-                  ],
-                  decoration: InputDecoration(
-                    labelText: l10n.menuItemBasePriceHint,
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(
-                        color: AppColors.accentGold,
-                        width: 1.5,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: TextField(
-                  controller: _stockController,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  decoration: InputDecoration(
-                    labelText: l10n.menuItemAvailableQuantityHint,
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _descController,
-            maxLines: 2,
-            decoration: InputDecoration(
-              labelText: l10n.menuItemDescriptionArHint,
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-            ),
-          ),
           if (_error != null) ...[
             const SizedBox(height: 12),
             Text(_error!, style: TextStyle(color: theme.colorScheme.error)),
           ],
         ],
+        ),
       ),
       bottomNavigationBar: SafeArea(
         minimum: const EdgeInsets.fromLTRB(16, 12, 16, 12),
@@ -731,7 +766,7 @@ class _ConditionToggle extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       decoration: BoxDecoration(
-                        color: selectedId == o.id ? AppColors.accentGold : null,
+                        color: selectedId == o.id ? Colors.white : null,
                         borderRadius: BorderRadius.circular(7),
                       ),
                       alignment: Alignment.center,
@@ -1249,43 +1284,6 @@ class _PhotoStrip extends StatelessWidget {
             tile(NetworkImage(img.url), img.isFromCamera ? MediaSource.camera : MediaSource.gallery),
           for (var i = 0; i < picked.length; i++)
             tile(MemoryImage(picked[i].bytes), picked[i].media.source, onRemove: () => onRemovePicked(i)),
-        ],
-      ),
-    );
-  }
-}
-
-/// A per-unit choice (gearbox, fuel, colour) as chips — tap one to pick it,
-/// tap it again to clear. Nothing is typed.
-class _UnitChoice extends StatelessWidget {
-  final String label;
-  final List<DetailOption> options;
-  final int? selectedId;
-  final ValueChanged<int?> onChanged;
-  const _UnitChoice({required this.label, required this.options, required this.selectedId, required this.onChanged});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
-          const SizedBox(height: 6),
-          Wrap(
-            spacing: 8,
-            runSpacing: 6,
-            children: [
-              for (final o in options)
-                ChoiceChip(
-                  label: Text(o.name),
-                  selected: selectedId == o.id,
-                  onSelected: (on) => onChanged(on ? o.id : null),
-                ),
-            ],
-          ),
         ],
       ),
     );

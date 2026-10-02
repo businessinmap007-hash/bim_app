@@ -6,9 +6,9 @@ import 'package:intl/intl.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
-import '../../../business/presentation/screens/business_detail_screen.dart';
 import '../../application/menu_search_providers.dart';
 import '../../data/models/menu_search.dart';
+import '../open_search_item.dart';
 
 /// Every shop that sells one exact product, cheapest first — «أعرف المحلات
 /// اللي عندها المنتج ده وأقارن الأسعار بينهم».
@@ -49,9 +49,7 @@ class MenuCompareScreen extends ConsumerWidget {
                   child: Card(
                     margin: EdgeInsets.zero,
                     child: ListTile(
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => BusinessDetailScreen(businessId: items[i].shop.id)),
-                      ),
+                      onTap: () => openSearchItem(context, ref, items[i]),
                       leading: CircleAvatar(
                         backgroundImage: items[i].shop.logo != null ? CachedNetworkImageProvider(items[i].shop.logo!) : null,
                         child: items[i].shop.logo == null ? const Icon(Icons.storefront_outlined) : null,
