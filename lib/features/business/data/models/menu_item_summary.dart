@@ -151,6 +151,10 @@ class MenuItemSummary {
   /// an item with no catalog master.
   final String? catalogBrand;
   final String? series;
+  /// The card's one line from the fields this item's detail kind puts on the
+  /// card («2021 · 42500 كم · أوتوماتيك»), in the admin's order — null under a
+  /// basic menu, where [specSummary] falls back to the first few specs.
+  final String? cardSummary;
 
   const MenuItemSummary({
     required this.id,
@@ -175,6 +179,7 @@ class MenuItemSummary {
     this.brandName,
     this.catalogBrand,
     this.series,
+    this.cardSummary,
   });
 
   /// The brand a filter chip groups this item under — the catalog's own
@@ -189,6 +194,10 @@ class MenuItemSummary {
   /// storefront card. Brand is shown via [brandName] instead, so it's
   /// skipped here to avoid repeating it.
   String? get specSummary {
+    final card = cardSummary;
+    if (card != null && card.isNotEmpty) {
+      return card.split(' · ').map((v) => '\u2068$v\u2069').join(' · ');
+    }
     final rows = specs.where((s) => s.code != 'brand').take(3).map((s) => s.value).where((v) => v.isNotEmpty);
     // Each value is a bidi isolate (FSI…PDI): «8 جيجا» beside «256GB» and
     // «Apple A17 Pro» otherwise reorders into «8 · جيجا 256GB» in RTL.
@@ -251,6 +260,7 @@ class MenuItemSummary {
         .map((e) => MenuItemSpec.fromJson(e as Map<String, dynamic>))
         .toList(),
     brandName: json['brand_name'] as String?,
+    cardSummary: json['card_summary'] as String?,
     catalogBrand: json['catalog_brand'] as String?,
     series: json['series'] as String?,
   );

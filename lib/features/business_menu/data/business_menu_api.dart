@@ -241,6 +241,7 @@ class BusinessMenuApi {
     int? lineOptionId,
     int? optionGroupId,
     List<int> modifierOptionIds = const [],
+    Map<int, String>? attributes,
     int sortOrder = 0,
     bool isActive = true,
   }) async {
@@ -262,6 +263,7 @@ class BusinessMenuApi {
                 lineOptionId: lineOptionId,
                 optionGroupId: optionGroupId,
                 modifierOptionIds: modifierOptionIds,
+                attributes: attributes,
                 sortOrder: sortOrder,
                 isActive: isActive,
               ),
@@ -285,6 +287,7 @@ class BusinessMenuApi {
     int? catalogProductId,
     int? lineOptionId,
     List<int> modifierOptionIds = const [],
+    Map<int, String>? attributes,
     int sortOrder = 0,
     bool isActive = true,
   }) async {
@@ -305,6 +308,7 @@ class BusinessMenuApi {
                 catalogProductId: catalogProductId,
                 lineOptionId: lineOptionId,
                 modifierOptionIds: modifierOptionIds,
+                attributes: attributes,
                 sortOrder: sortOrder,
                 isActive: isActive,
               ),
@@ -333,6 +337,10 @@ class BusinessMenuApi {
     // whenever menu_section_id or line_option_id already settled it.
     int? optionGroupId,
     List<int> modifierOptionIds = const [],
+    // What this UNIT states (a car's year…), attribute id → value; an empty
+    // string removes one. Null = the key is not sent, so an edit that never
+    // touched them leaves them be.
+    Map<int, String>? attributes,
     required int sortOrder,
     required bool isActive,
   }) {
@@ -353,6 +361,7 @@ class BusinessMenuApi {
       if (brandName != null && brandName.isNotEmpty) 'brand_name': brandName,
       'available_quantity': ?availableQuantity,
       'catalog_product_id': ?catalogProductId,
+      if (attributes != null) 'attributes': {for (final e in attributes.entries) '${e.key}': e.value},
       // What this item IS/what qualifies it — see HasOfferingOptions. Always
       // sent (even empty) so clearing a pick on a resubmit actually clears it.
       'line_option_id': lineOptionId ?? 0,

@@ -79,18 +79,49 @@ class DetailProfile {
 }
 
 class DetailField {
+  final int id;
   final String code;
   final String name;
   final String? unit;
   final bool showOnCard;
-  const DetailField({required this.code, required this.name, this.unit, this.showOnCard = false});
+  /// The merchant states it for each unit (a car's year) instead of taking it
+  /// from the catalog product.
+  final bool perItem;
+  /// 'number' | 'select' | 'text'.
+  final String dataType;
+  final List<DetailOption> options;
+  const DetailField({
+    required this.id,
+    required this.code,
+    required this.name,
+    this.unit,
+    this.showOnCard = false,
+    this.perItem = false,
+    this.dataType = 'text',
+    this.options = const [],
+  });
 
   factory DetailField.fromJson(Map<String, dynamic> json) => DetailField(
+    id: json['id'] as int,
     code: json['code'] as String,
     name: json['name'] as String? ?? '',
     unit: json['unit'] as String?,
     showOnCard: json['show_on_card'] as bool? ?? false,
+    perItem: json['per_item'] as bool? ?? false,
+    dataType: json['data_type'] as String? ?? 'text',
+    options: (json['options'] as List<dynamic>? ?? [])
+        .map((e) => DetailOption.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
+}
+
+class DetailOption {
+  final int id;
+  final String name;
+  const DetailOption({required this.id, required this.name});
+
+  factory DetailOption.fromJson(Map<String, dynamic> json) =>
+      DetailOption(id: json['id'] as int, name: json['name'] as String? ?? '');
 }
 
 /// GET /business/menu/vocabulary — what this merchant may say a catalog item

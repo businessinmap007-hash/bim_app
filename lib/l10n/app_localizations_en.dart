@@ -4153,6 +4153,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get techPricingAddProduct => 'Add product';
 
   @override
+  String get techPricingUnitDetails => 'This unit\'s details';
+
+  @override
+  String techPricingFieldNotNumber(String field) {
+    return '\"$field\" must be a number';
+  }
+
+  @override
   String get techPricingAllBrands => 'All';
 
   @override

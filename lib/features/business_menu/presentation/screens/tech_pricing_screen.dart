@@ -48,6 +48,12 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
   CatalogProductRef? _product;
   int? _conditionOptionId;
   bool _conditionSeeded = false;
+
+  /// What THIS unit states for the kind's `per_item` fields — a car's year,
+  /// mileage, gearbox, colour. Words/figures are typed, a choice is picked.
+  final Map<int, TextEditingController> _unitText = {};
+  final Map<int, int?> _unitOption = {};
+  bool _unitSeeded = false;
   bool _saving = false;
   String? _error;
   final _picker = MediaPickerService();
@@ -94,7 +100,54 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     _priceController.dispose();
     _stockController.dispose();
     _descController.dispose();
+    for (final c in _unitText.values) {
+      c.dispose();
+    }
     super.dispose();
+  }
+
+  /// The unit's own fields once the kind is known (the vocabulary loads after
+  /// the screen opens) — seeded from the item being edited, once.
+  void _seedUnitFields(DetailProfile? profile) {
+    if (_unitSeeded || profile == null) return;
+    _unitSeeded = true;
+    final saved = {for (final a in widget.existingItem?.attributes ?? const <ItemAttributeValue>[]) a.attributeId: a};
+    for (final f in profile.fields.where((f) => f.perItem)) {
+      final value = saved[f.id];
+      if (f.dataType == 'select') {
+        _unitOption[f.id] = value?.optionId;
+      } else {
+        final number = value?.number;
+        _unitText[f.id] = TextEditingController(
+          text: number != null
+              ? (number == number.roundToDouble() ? number.toInt().toString() : number.toString())
+              : (value?.text ?? ''),
+        );
+      }
+    }
+  }
+
+  /// attribute id -> value to send, for the kind's per-unit fields. A blank
+  /// sends '' so an edit can remove a value it once stated. null = nothing to
+  /// say (a basic menu, or a kind with no per-unit fields).
+  Map<int, String>? _unitValues(DetailProfile? profile) {
+    final fields = profile?.fields.where((f) => f.perItem).toList() ?? const <DetailField>[];
+    if (fields.isEmpty) return null;
+    return {
+      for (final f in fields)
+        f.id: f.dataType == 'select'
+            ? (_unitOption[f.id]?.toString() ?? '')
+            : (_unitText[f.id]?.text.trim() ?? ''),
+    };
+  }
+
+  /// The first per-unit figure that is not a number, as the field's name.
+  String? _badUnitNumber(DetailProfile? profile) {
+    for (final f in profile?.fields.where((f) => f.perItem && f.dataType == 'number') ?? const <DetailField>[]) {
+      final t = _unitText[f.id]?.text.trim() ?? '';
+      if (t.isNotEmpty && double.tryParse(t.replaceAll(',', '').replaceAll('٫', '.')) == null) return f.name;
+    }
+    return null;
   }
 
   /// Condition can only be matched against the vocabulary's own option ids
@@ -137,6 +190,13 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
       return;
     }
 
+    final profile = _profileFor(ref.read(menuVocabularyProvider).asData?.value);
+    final bad = _badUnitNumber(profile);
+    if (bad != null) {
+      setState(() => _error = l10n.techPricingFieldNotNumber(bad));
+      return;
+    }
+
     setState(() {
       _saving = true;
       _error = null;
@@ -144,6 +204,7 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
 
     try {
       final api = ref.read(businessMenuApiProvider);
+      final unitValues = _unitValues(profile);
       final stock = int.tryParse(_stockController.text.trim());
       final modifierIds = <int>[?_conditionOptionId];
       final desc = _descController.text.trim();
@@ -159,6 +220,7 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
           catalogProductId: _product!.id,
           lineOptionId: widget.lineOption.id,
           modifierOptionIds: modifierIds,
+          attributes: unitValues,
         )).id;
       } else {
         itemId = widget.existingItem!.id;
@@ -172,6 +234,7 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
           catalogProductId: _product!.id,
           lineOptionId: widget.lineOption.id,
           modifierOptionIds: modifierIds,
+          attributes: unitValues,
           sortOrder: widget.existingItem!.sortOrder,
           isActive: widget.existingItem!.isActive,
         );
@@ -194,9 +257,20 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
   List<CatalogSpecRow> _profileSpecs(List<CatalogSpecRow> specs, DetailProfile? profile) {
     if (profile == null || profile.fields.isEmpty) return specs;
     final byCode = {for (final s in specs) s.code: s};
-    final ordered = [for (final f in profile.fields) if (byCode[f.code] != null) byCode[f.code]!];
+    // The unit states its own per-unit fields below; the catalog's row for
+    // the same attribute would only contradict or repeat it.
+    final ordered = [
+      for (final f in profile.fields)
+        if (!f.perItem && byCode[f.code] != null) byCode[f.code]!,
+    ];
     return ordered.isEmpty ? specs : ordered;
   }
+
+  DetailProfile? _profileFor(MenuVocabulary? v) => v?.lines
+      .where((g) => g.options.any((o) => o.id == widget.lineOption.id))
+      .map((g) => g.detailProfile)
+      .whereType<DetailProfile>()
+      .firstOrNull;
 
   @override
   Widget build(BuildContext context) {
@@ -212,14 +286,8 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
 
     // The kind of details this branch's group is (mobiles, laptops, cars…) —
     // decided in the admin's «أشكال المنيو», never here.
-    final detailProfile = vocabAsync.maybeWhen(
-      data: (v) => v.lines
-          .where((g) => g.options.any((o) => o.id == widget.lineOption.id))
-          .map((g) => g.detailProfile)
-          .whereType<DetailProfile>()
-          .firstOrNull,
-      orElse: () => null,
-    );
+    final detailProfile = _profileFor(vocabAsync.asData?.value);
+    _seedUnitFields(detailProfile);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.techPricingTitle)),
@@ -237,6 +305,33 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
             Text(l10n.menuCardSpecsTitle, style: theme.textTheme.labelMedium),
             const SizedBox(height: 8),
             _SpecTable(specs: _profileSpecs(_product!.specs, detailProfile)),
+          ],
+          // «لهذه الوحدة بالذات» — what only THIS unit can say (a car's year,
+          // mileage, gearbox, colour); the catalog knows the model, not the unit.
+          if (detailProfile != null && detailProfile.fields.any((f) => f.perItem)) ...[
+            const SizedBox(height: 16),
+            Text(l10n.techPricingUnitDetails, style: theme.textTheme.labelMedium),
+            const SizedBox(height: 8),
+            for (final f in detailProfile.fields.where((f) => f.perItem)) ...[
+              if (f.dataType == 'select')
+                _UnitChoice(
+                  label: f.name,
+                  options: f.options,
+                  selectedId: _unitOption[f.id],
+                  onChanged: (id) => setState(() => _unitOption[f.id] = id),
+                )
+              else
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: TextField(
+                    controller: _unitText[f.id],
+                    keyboardType: f.dataType == 'number'
+                        ? const TextInputType.numberWithOptions(decimal: true)
+                        : TextInputType.text,
+                    decoration: InputDecoration(labelText: f.name, suffixText: f.unit),
+                  ),
+                ),
+            ],
           ],
           if (conditionGroup != null) ...[
             const SizedBox(height: 16),
@@ -1087,6 +1182,43 @@ class _PhotoStrip extends StatelessWidget {
             tile(NetworkImage(img.url), img.isFromCamera ? MediaSource.camera : MediaSource.gallery),
           for (var i = 0; i < picked.length; i++)
             tile(MemoryImage(picked[i].bytes), picked[i].media.source, onRemove: () => onRemovePicked(i)),
+        ],
+      ),
+    );
+  }
+}
+
+/// A per-unit choice (gearbox, fuel, colour) as chips — tap one to pick it,
+/// tap it again to clear. Nothing is typed.
+class _UnitChoice extends StatelessWidget {
+  final String label;
+  final List<DetailOption> options;
+  final int? selectedId;
+  final ValueChanged<int?> onChanged;
+  const _UnitChoice({required this.label, required this.options, required this.selectedId, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+          const SizedBox(height: 6),
+          Wrap(
+            spacing: 8,
+            runSpacing: 6,
+            children: [
+              for (final o in options)
+                ChoiceChip(
+                  label: Text(o.name),
+                  selected: selectedId == o.id,
+                  onSelected: (on) => onChanged(on ? o.id : null),
+                ),
+            ],
+          ),
         ],
       ),
     );

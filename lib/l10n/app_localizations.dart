@@ -7742,6 +7742,18 @@ abstract class AppLocalizations {
   /// **'إضافة منتج'**
   String get techPricingAddProduct;
 
+  /// No description provided for @techPricingUnitDetails.
+  ///
+  /// In ar, this message translates to:
+  /// **'لهذه الوحدة بالذات'**
+  String get techPricingUnitDetails;
+
+  /// No description provided for @techPricingFieldNotNumber.
+  ///
+  /// In ar, this message translates to:
+  /// **'«{field}» رقم صحيح'**
+  String techPricingFieldNotNumber(String field);
+
   /// No description provided for @techPricingAllBrands.
   ///
   /// In ar, this message translates to:

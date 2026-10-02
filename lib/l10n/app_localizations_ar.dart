@@ -4151,6 +4151,14 @@ class AppLocalizationsAr extends AppLocalizations {
   String get techPricingAddProduct => 'إضافة منتج';
 
   @override
+  String get techPricingUnitDetails => 'لهذه الوحدة بالذات';
+
+  @override
+  String techPricingFieldNotNumber(String field) {
+    return '«$field» رقم صحيح';
+  }
+
+  @override
   String get techPricingAllBrands => 'الكل';
 
   @override

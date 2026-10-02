@@ -111,6 +111,35 @@ class CatalogLookupResult {
   }
 }
 
+/// What the merchant stated for ONE unit — a car's year, mileage, gearbox,
+/// colour (see MenuItemAttributes on the backend). `optionId` for a choice,
+/// `number` for a figure, `text` for words.
+class ItemAttributeValue {
+  final int attributeId;
+  final String code;
+  final String value;
+  final int? optionId;
+  final double? number;
+  final String? text;
+  const ItemAttributeValue({
+    required this.attributeId,
+    required this.code,
+    required this.value,
+    this.optionId,
+    this.number,
+    this.text,
+  });
+
+  factory ItemAttributeValue.fromJson(Map<String, dynamic> json) => ItemAttributeValue(
+    attributeId: json['attribute_id'] as int,
+    code: json['code'] as String? ?? '',
+    value: json['value'] as String? ?? '',
+    optionId: json['option_id'] as int?,
+    number: (json['number'] as num?)?.toDouble(),
+    text: json['text'] as String?,
+  );
+}
+
 /// A business's own menu item — see Api\V2\BusinessMenuItemController /
 /// MenuItemResource. `images`/`variants`/`extras` are only populated when
 /// the backend eager-loads them (the list endpoint carries images only;
@@ -142,6 +171,8 @@ class BusinessMenuItem {
   /// What qualifies it — brand, condition... any number, from `modifier`
   /// groups in the merchant's vocabulary.
   final List<VocabularyOptionRef> modifierOptions;
+  /// The values this unit states itself — see [ItemAttributeValue].
+  final List<ItemAttributeValue> attributes;
   final List<MenuItemImage> images;
   final List<MenuVariant> variants;
   final List<MenuExtraGroup> extraGroups;
@@ -166,6 +197,7 @@ class BusinessMenuItem {
     this.catalogProduct,
     this.lineOption,
     this.modifierOptions = const [],
+    this.attributes = const [],
     this.images = const [],
     this.variants = const [],
     this.extraGroups = const [],
@@ -196,6 +228,10 @@ class BusinessMenuItem {
         : null,
     modifierOptions: (json['modifier_options'] as List<dynamic>?)
             ?.map((e) => VocabularyOptionRef.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        const [],
+    attributes: (json['attributes'] as List<dynamic>?)
+            ?.map((e) => ItemAttributeValue.fromJson(e as Map<String, dynamic>))
             .toList() ??
         const [],
     images: (json['images'] as List<dynamic>?)
