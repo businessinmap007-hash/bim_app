@@ -4102,6 +4102,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuItemsManageTypesAction => 'Manage types';
 
   @override
+  String get menuItemsManageSectionsAction => 'Manage sections';
+
+  @override
   String get menuTypeSelectionSubtitle =>
       'Pick the types your business carries — you can add more from here any time.';
 

@@ -1375,6 +1375,7 @@
   "menuItemsDisplayModeList": "قائمة",
   "menuItemsDisplayModeGrid": "شبكة",
   "menuItemsManageTypesAction": "إدارة الأصناف",
+  "menuItemsManageSectionsAction": "إدارة الأقسام",
   "menuTypeSelectionSubtitle": "اختر الأصناف التي تقدمها من نشاطك — تقدر تضيف أصناف تانية من هنا في أي وقت.",
   "menuTypeSelectionContinue": "متابعة ({count})",
   "@menuTypeSelectionContinue": {

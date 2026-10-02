@@ -379,6 +379,7 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
     List<String>? saleUnitCodes, {
     bool detailed = false,
     VocabularyOptionRef? branch,
+    bool showAdd = true,
   }) {
     VoidCallback tapFor(BusinessMenuItem item) => detailed
         ? () => _openTechPricing(branch!, existingItem: item)
@@ -405,7 +406,7 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
             ),
           // A detailed branch may carry several real models — unlike an
           // ordinary branch, "add" stays available even once it has items.
-          if (detailed && branch != null)
+          if (detailed && branch != null && showAdd)
             _EmptyBranchGridTile(
               branch: branch,
               onAddPrice: () => _openTechPricing(branch),
@@ -425,7 +426,7 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
               onTap: tapFor(item),
             ),
           ),
-        if (detailed && branch != null)
+        if (detailed && branch != null && showAdd)
           Align(
             alignment: AlignmentDirectional.centerStart,
             child: TextButton.icon(
@@ -502,6 +503,67 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
     );
   }
 
+  /// «الاقسام هى غرف نوم وسفرة وانتريه» — المالك، 2026-10-02: in a trade whose
+  /// group has a «شكل منيو» every BRANCH is a section of its own — its name as
+  /// the heading, its cards under it, and «إضافة منتج» under those cards. The
+  /// branch carries as many products as the merchant makes, so the button never
+  /// goes away once the section has some.
+  Widget _branchSection(
+    VocabularyGroup group,
+    VocabularyOptionRef branch,
+    List<BusinessMenuItem> items,
+    String displayMode,
+    bool isEnglish,
+  ) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+
+    return Padding(
+      key: _branchKey(branch.id),
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(produceEmoji(branch.nameEn ?? branch.nameAr), style: const TextStyle(fontSize: 20)),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  localizedName(branch.nameAr, branch.nameEn, isEnglish),
+                  style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
+                ),
+              ),
+              if (items.isNotEmpty)
+                Text('${items.length}', style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+            ],
+          ),
+          const SizedBox(height: 8),
+          if (items.isNotEmpty)
+            _itemsFor(
+              _sortedItems(items, isEnglish),
+              displayMode,
+              group.saleUnitCodes,
+              detailed: group.detailed,
+              branch: branch,
+              showAdd: false,
+            ),
+          // A detailed section carries as many products as the merchant makes, so
+          // its button never goes away; an ordinary one is one priced item and
+          // offers «إضافة» only while it has none (the rule it always followed).
+          if (group.detailed || items.isEmpty) ...[
+            const SizedBox(height: 4),
+            OutlinedButton.icon(
+              onPressed: group.detailed ? () => _openTechPricing(branch) : () => _quickAddPrice(branch, group.saleUnitCodes),
+              icon: const Icon(Icons.add, size: 18),
+              label: Text(group.detailed ? l10n.techPricingAddProduct : l10n.menuItemAdd),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
   Widget _buildList(BuildContext context, MenuItemsState state) {
     final vocabulary = _vocabularyForGrouping(state);
     final displayMode = ref.watch(menuDisplayModeControllerProvider).maybeWhen(data: (m) => m, orElse: () => 'list');
@@ -574,7 +636,9 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
               FilledButton.tonalIcon(
                 onPressed: () => _openTypeSelection(group.groupId, group.groupName),
                 icon: const Icon(Icons.tune, size: 16),
-                label: Text(AppLocalizations.of(context)!.menuItemsManageTypesAction),
+                label: Text(group.branchesAsSections
+                    ? AppLocalizations.of(context)!.menuItemsManageSectionsAction
+                    : AppLocalizations.of(context)!.menuItemsManageTypesAction),
                 style: FilledButton.styleFrom(
                   visualDensity: VisualDensity.compact,
                   padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -588,7 +652,10 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
           // المالك، 2026-09-29: priced branches first (A→Z among
           // themselves), then unpriced ones (A→Z among themselves) — never
           // interleaved by vocabulary order the way they used to be.
-          if (displayMode == 'grid')
+          if (group.branchesAsSections)
+            for (final branch in _sortedBranches(group.options, itemsByBranch, isEnglish))
+              _branchSection(group, branch, itemsByBranch[branch.id] ?? const [], displayMode, isEnglish)
+          else if (displayMode == 'grid')
             _groupGrid(
               _sortedBranches(group.options, itemsByBranch, isEnglish),
               itemsByBranch,
@@ -661,6 +728,13 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
     // and filtering into it silently dropped grid mode, since that path
     // never learned about displayMode at all.
     final hasLines = ref.watch(menuVocabularyProvider).maybeWhen(data: (v) => v.hasLines, orElse: () => false);
+    final onlySections = ref.watch(menuVocabularyProvider).maybeWhen(
+          data: (v) {
+            final groups = v.lines.where((g) => g.options.isNotEmpty);
+            return groups.isNotEmpty && groups.every((g) => g.branchesAsSections);
+          },
+          orElse: () => false,
+        );
 
     return Scaffold(
       appBar: AppBar(
@@ -675,11 +749,13 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _openCreate,
-        icon: const Icon(Icons.add),
-        label: Text(l10n.menuItemAdd),
-      ),
+      floatingActionButton: onlySections
+          ? null
+          : FloatingActionButton.extended(
+              onPressed: _openCreate,
+              icon: const Icon(Icons.add),
+              label: Text(l10n.menuItemAdd),
+            ),
       body: Column(
         children: [
           const _DisplayModeToggle(),

@@ -1375,6 +1375,7 @@
   "menuItemsDisplayModeList": "List",
   "menuItemsDisplayModeGrid": "Grid",
   "menuItemsManageTypesAction": "Manage types",
+  "menuItemsManageSectionsAction": "Manage sections",
   "menuTypeSelectionSubtitle": "Pick the types your business carries — you can add more from here any time.",
   "menuTypeSelectionContinue": "Continue ({count})",
   "@menuTypeSelectionContinue": {

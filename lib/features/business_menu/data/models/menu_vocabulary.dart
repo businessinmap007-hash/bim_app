@@ -37,6 +37,11 @@ class VocabularyGroup {
   /// item is for this trade («مودرن»، «زان» on a bedroom) — it is offered as a
   /// choice on the item, never as a second thing the item IS.
   final bool descriptive;
+  /// True when «مكونات الخدمة» → «فروع المجموعة أقسام» is ticked for this group:
+  /// «غرفة نوم»، «سفرة»، «أنتريه» are the merchant's SECTIONS — each its own
+  /// heading, its cards under it, «إضافة منتج» under those. The one switch that
+  /// decides it; never guessed from the kind of menu.
+  final bool branchesAsSections;
   const VocabularyGroup({
     required this.groupId,
     required this.groupName,
@@ -47,6 +52,7 @@ class VocabularyGroup {
     this.detailed = false,
     this.detailProfile,
     this.descriptive = false,
+    this.branchesAsSections = false,
   });
 
   factory VocabularyGroup.fromJson(Map<String, dynamic> json) => VocabularyGroup(
@@ -60,6 +66,7 @@ class VocabularyGroup {
     saleUnitCodes: (json['sale_unit_codes'] as List<dynamic>?)?.map((e) => e as String).toList(),
     detailed: json['detailed'] as bool? ?? false,
     descriptive: json['descriptive'] as bool? ?? false,
+    branchesAsSections: json['branches_as_sections'] as bool? ?? false,
     detailProfile: json['detail_profile'] is Map<String, dynamic>
         ? DetailProfile.fromJson(json['detail_profile'] as Map<String, dynamic>)
         : null,

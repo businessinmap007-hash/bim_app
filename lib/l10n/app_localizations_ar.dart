@@ -4100,6 +4100,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get menuItemsManageTypesAction => 'إدارة الأصناف';
 
   @override
+  String get menuItemsManageSectionsAction => 'إدارة الأقسام';
+
+  @override
   String get menuTypeSelectionSubtitle =>
       'اختر الأصناف التي تقدمها من نشاطك — تقدر تضيف أصناف تانية من هنا في أي وقت.';
 

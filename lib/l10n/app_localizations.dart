@@ -7646,6 +7646,12 @@ abstract class AppLocalizations {
   /// **'إدارة الأصناف'**
   String get menuItemsManageTypesAction;
 
+  /// No description provided for @menuItemsManageSectionsAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'إدارة الأقسام'**
+  String get menuItemsManageSectionsAction;
+
   /// No description provided for @menuTypeSelectionSubtitle.
   ///
   /// In ar, this message translates to:
