@@ -16,7 +16,6 @@ import '../../data/business_menu_api.dart' show SaleUnitOption;
 import '../../data/models/menu_item.dart';
 import '../../data/models/menu_vocabulary.dart';
 import 'menu_item_edit_screen.dart';
-import 'menu_sections_screen.dart';
 import 'menu_type_selection_screen.dart';
 import 'tech_pricing_screen.dart';
 
@@ -365,6 +364,11 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
     return sorted;
   }
 
+  /// What «إضافة منتج» does for a branch: a detailed one opens «التسعير
+  /// والتفاصيل», any other the quick name-is-the-branch price dialog.
+  VoidCallback _addFor(VocabularyOptionRef branch, bool detailed, List<String>? saleUnitCodes) =>
+      detailed ? () => _openTechPricing(branch) : () => _quickAddPrice(branch, saleUnitCodes);
+
   /// A [_ItemTile] column, or — once the merchant picked "Grid" for
   /// customer display — the SAME items as [_ItemGridTile] cards, so this
   /// screen actually shows what that toggle does instead of only ever
@@ -406,11 +410,11 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
             ),
           // A detailed branch may carry several real models — unlike an
           // ordinary branch, "add" stays available even once it has items.
-          if (detailed && branch != null && showAdd)
+          if (branch != null && showAdd)
             _EmptyBranchGridTile(
               branch: branch,
-              onAddPrice: () => _openTechPricing(branch),
-              label: '${AppLocalizations.of(context)!.techPricingAddAnother} · ${localizedName(branch.nameAr, branch.nameEn, Localizations.localeOf(context).languageCode == 'en')}',
+              onAddPrice: _addFor(branch, detailed, saleUnitCodes),
+              label: AppLocalizations.of(context)!.techPricingAddProduct,
             ),
         ],
       );
@@ -426,15 +430,13 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
               onTap: tapFor(item),
             ),
           ),
-        if (detailed && branch != null && showAdd)
+        if (branch != null && showAdd)
           Align(
             alignment: AlignmentDirectional.centerStart,
-            child: TextButton.icon(
-              onPressed: () => _openTechPricing(branch),
-              icon: const Icon(Icons.add, size: 16),
-              label: Text(
-                '${AppLocalizations.of(context)!.techPricingAddAnother} · ${localizedName(branch.nameAr, branch.nameEn, Localizations.localeOf(context).languageCode == 'en')}',
-              ),
+            child: OutlinedButton.icon(
+              onPressed: _addFor(branch, detailed, saleUnitCodes),
+              icon: const Icon(Icons.add, size: 18),
+              label: Text(AppLocalizations.of(context)!.techPricingAddProduct),
             ),
           ),
       ],
@@ -455,9 +457,34 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
     Map<int, List<BusinessMenuItem>> itemsByBranch,
     List<String>? saleUnitCodes, {
     bool detailed = false,
+    bool captions = false,
   }) {
     final columns = Breakpoints.sizeFor(MediaQuery.of(context).size.width) == ScreenSize.mobile ? 2 : 3;
+    final isEnglish = Localizations.localeOf(context).languageCode == 'en';
+    final theme = Theme.of(context);
     final tiles = <Widget>[];
+
+    // «اكمل الصف بالكروت الاخرى وفوقها اسم القسم ايضا» — المالك، 2026-10-02: a
+    // section of sections keeps ONE flowing grid (a lone card no longer sits in a
+    // row of its own) and every card carries its section's name above it.
+    Widget captioned(VocabularyOptionRef branch, Widget tile, {Key? key}) => captions
+        ? Column(
+            key: key,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Text(
+                  localizedName(branch.nameAr, branch.nameEn, isEnglish),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w800),
+                ),
+              ),
+              Expanded(child: tile),
+            ],
+          )
+        : tile;
 
     for (final branch in branches) {
       final items = itemsByBranch[branch.id];
@@ -465,23 +492,25 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
         for (var i = 0; i < items.length; i++) {
           final item = items[i];
           final isFirst = i == 0;
-          tiles.add(_ItemGridTile(
-            key: isFirst ? _branchKey(branch.id) : null,
+          final tile = _ItemGridTile(
+            key: captions ? null : (isFirst ? _branchKey(branch.id) : null),
             item: item,
             onTap: detailed
                 ? () => _openTechPricing(branch, existingItem: item)
                 : () => _quickEditPrice(item, saleUnitCodes),
-          ));
+          );
+          tiles.add(captioned(branch, tile, key: isFirst ? _branchKey(branch.id) : null));
         }
-        // A detailed branch may carry several real models — unlike an
-        // ordinary branch, "add" stays available even once it has items.
-        if (detailed) {
-          tiles.add(_EmptyBranchGridTile(
+        // «اذا كان للقسم منتجات اضف منتج تصبح تحت الكارت» — المالك، 2026-10-02:
+        // the rule for EVERY menu, not only a detailed one.
+        tiles.add(captioned(
+          branch,
+          _EmptyBranchGridTile(
             branch: branch,
-            onAddPrice: () => _openTechPricing(branch),
-            label: AppLocalizations.of(context)!.techPricingAddAnother,
-          ));
-        }
+            onAddPrice: _addFor(branch, detailed, saleUnitCodes),
+            label: AppLocalizations.of(context)!.techPricingAddProduct,
+          ),
+        ));
       } else {
         tiles.add(_EmptyBranchGridTile(
           key: _branchKey(branch.id),
@@ -548,20 +577,41 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
               branch: branch,
               showAdd: false,
             ),
-          // A detailed section carries as many products as the merchant makes, so
-          // its button never goes away; an ordinary one is one priced item and
-          // offers «إضافة» only while it has none (the rule it always followed).
-          if (group.detailed || items.isEmpty) ...[
-            const SizedBox(height: 4),
-            OutlinedButton.icon(
-              onPressed: group.detailed ? () => _openTechPricing(branch) : () => _quickAddPrice(branch, group.saleUnitCodes),
-              icon: const Icon(Icons.add, size: 18),
-              label: Text(group.detailed ? l10n.techPricingAddProduct : l10n.menuItemAdd),
-            ),
-          ],
+          const SizedBox(height: 4),
+          OutlinedButton.icon(
+            onPressed: _addFor(branch, group.detailed, group.saleUnitCodes),
+            icon: const Icon(Icons.add, size: 18),
+            label: Text(l10n.techPricingAddProduct),
+          ),
         ],
       ),
     );
+  }
+
+  /// The placeholder card of every branch with nothing yet — a grid of tiles in
+  /// grid mode, a column of cards in list mode.
+  List<Widget> _emptyBranchCards(
+    List<VocabularyOptionRef> branches,
+    VocabularyGroup group,
+    String displayMode,
+    Map<int, List<BusinessMenuItem>> itemsByBranch,
+  ) {
+    if (branches.isEmpty) return const [];
+    if (displayMode == 'grid') {
+      return [_groupGrid(branches, itemsByBranch, group.saleUnitCodes, detailed: group.detailed)];
+    }
+    return [
+      for (final branch in branches)
+        Padding(
+          key: _branchKey(branch.id),
+          padding: const EdgeInsets.only(bottom: 8),
+          child: _EmptyBranchCard(
+            branch: branch,
+            onAddPrice: _addFor(branch, group.detailed, group.saleUnitCodes),
+            label: group.detailed ? AppLocalizations.of(context)!.techPricingAddProduct : null,
+          ),
+        ),
+    ];
   }
 
   Widget _buildList(BuildContext context, MenuItemsState state) {
@@ -652,9 +702,30 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
           // المالك، 2026-09-29: priced branches first (A→Z among
           // themselves), then unpriced ones (A→Z among themselves) — never
           // interleaved by vocabulary order the way they used to be.
-          if (group.branchesAsSections)
+          if (group.branchesAsSections && displayMode == 'grid')
+            _groupGrid(
+              _sortedBranches(group.options, itemsByBranch, isEnglish),
+              itemsByBranch,
+              group.saleUnitCodes,
+              detailed: group.detailed,
+              captions: true,
+            )
+          else if (group.branchesAsSections) ...[
+            // A section with products: its name, its cards, «إضافة منتج» under them.
             for (final branch in _sortedBranches(group.options, itemsByBranch, isEnglish))
-              _branchSection(group, branch, itemsByBranch[branch.id] ?? const [], displayMode, isEnglish)
+              if (itemsByBranch[branch.id]?.isNotEmpty ?? false)
+                _branchSection(group, branch, itemsByBranch[branch.id]!, displayMode, isEnglish),
+            // An empty one keeps the card it always had — the emoji, its name and
+            // «إضافة منتج» on it.
+            ..._emptyBranchCards(
+              _sortedBranches(group.options, itemsByBranch, isEnglish)
+                  .where((b) => !(itemsByBranch[b.id]?.isNotEmpty ?? false))
+                  .toList(),
+              group,
+              displayMode,
+              itemsByBranch,
+            ),
+          ]
           else if (displayMode == 'grid')
             _groupGrid(
               _sortedBranches(group.options, itemsByBranch, isEnglish),
@@ -728,34 +799,16 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
     // and filtering into it silently dropped grid mode, since that path
     // never learned about displayMode at all.
     final hasLines = ref.watch(menuVocabularyProvider).maybeWhen(data: (v) => v.hasLines, orElse: () => false);
-    final onlySections = ref.watch(menuVocabularyProvider).maybeWhen(
-          data: (v) {
-            final groups = v.lines.where((g) => g.options.isNotEmpty);
-            return groups.isNotEmpty && groups.every((g) => g.branchesAsSections);
-          },
-          orElse: () => false,
-        );
 
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.menuItemsTitle),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.category_outlined),
-            tooltip: l10n.menuSectionsTitle,
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const MenuSectionsScreen()),
-            ),
-          ),
-        ],
       ),
-      floatingActionButton: onlySections
-          ? null
-          : FloatingActionButton.extended(
-              onPressed: _openCreate,
-              icon: const Icon(Icons.add),
-              label: Text(l10n.menuItemAdd),
-            ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _openCreate,
+        icon: const Icon(Icons.add),
+        label: Text(l10n.menuItemAdd),
+      ),
       body: Column(
         children: [
           const _DisplayModeToggle(),
