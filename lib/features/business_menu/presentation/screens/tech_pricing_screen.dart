@@ -389,7 +389,7 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
               final unitFields = detailProfile.fields
                   .where((f) => f.perItem && !(f.dataType == 'select' && f.options.isEmpty))
                   .toList();
-              if (unitFields.isEmpty) return const SizedBox.shrink();
+              if (unitFields.isEmpty && describing.isEmpty) return const SizedBox.shrink();
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -408,7 +408,7 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
                                 ? DropdownButtonFormField<int>(
                                     initialValue: _unitOption[f.id],
                                     isExpanded: true,
-                                    hint: Text(f.name),
+                                    decoration: InputDecoration(labelText: f.name),
                                     items: [
                                       for (final o in f.options) DropdownMenuItem(value: o.id, child: Text(o.name)),
                                     ],
@@ -422,29 +422,31 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
                                     decoration: InputDecoration(hintText: f.name, suffixText: f.unit),
                                   ),
                           ),
+                        // «اختيار الوصف ونوع الخشب من مجموعات الخيارات»: one
+                        // dropdown per describing group — the style, the wood —
+                        // never a wall of buttons, never typed.
+                        for (final g in describing)
+                          SizedBox(
+                            width: w,
+                            child: _MultiChoiceField(
+                              label: g.groupName,
+                              options: [
+                                for (final o in g.options)
+                                  (id: o.id, name: localizedName(o.nameAr, o.nameEn, isEnglish)),
+                              ],
+                              selected: _choiceIds,
+                              onChanged: (ids) => setState(() {
+                                _choiceIds.removeAll(g.options.map((o) => o.id));
+                                _choiceIds.addAll(ids);
+                              }),
+                            ),
+                          ),
                       ],
                     );
                   }),
                 ],
               );
             }),
-          // «اختيار الوصف ونوع الخشب من مجموعات الخيارات»: one row of chips per
-          // describing group — the style, the wood — never typed.
-          for (final g in describing) ...[
-            label(g.groupName),
-            Wrap(
-              spacing: 8,
-              runSpacing: 6,
-              children: [
-                for (final o in g.options)
-                  FilterChip(
-                    label: Text(localizedName(o.nameAr, o.nameEn, isEnglish)),
-                    selected: _choiceIds.contains(o.id),
-                    onSelected: (on) => setState(() => on ? _choiceIds.add(o.id) : _choiceIds.remove(o.id)),
-                  ),
-              ],
-            ),
-          ],
           if (conditionGroup != null) ...[
             label(l10n.techPricingConditionLabel),
             _ConditionToggle(
@@ -1285,6 +1287,105 @@ class _PhotoStrip extends StatelessWidget {
           for (var i = 0; i < picked.length; i++)
             tile(MemoryImage(picked[i].bytes), picked[i].media.source, onRemove: () => onRemovePicked(i)),
         ],
+      ),
+    );
+  }
+}
+
+/// A describing group («طراز الأثاث»، «أنواع الأخشاب») as ONE dropdown-looking
+/// field instead of a row of chips: tap it, tick what applies in a sheet, done.
+/// Several can be ticked (a bedroom may be beech AND MDF); the field shows them
+/// joined, under the group's name.
+class _MultiChoiceField extends StatelessWidget {
+  final String label;
+  final List<({int id, String name})> options;
+  final Set<int> selected;
+  final ValueChanged<Set<int>> onChanged;
+  const _MultiChoiceField({
+    required this.label,
+    required this.options,
+    required this.selected,
+    required this.onChanged,
+  });
+
+  Future<void> _open(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
+    final picked = {for (final o in options) if (selected.contains(o.id)) o.id};
+    final result = await showModalBottomSheet<Set<int>>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (sheetContext) => StatefulBuilder(
+        builder: (context, setSheet) => SafeArea(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.7),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                  child: Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: Text(label, style: Theme.of(context).textTheme.titleMedium),
+                  ),
+                ),
+                Flexible(
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      for (final o in options)
+                        CheckboxListTile(
+                          value: picked.contains(o.id),
+                          title: Text(o.name),
+                          activeColor: AppColors.primaryNavy,
+                          controlAffinity: ListTileControlAffinity.leading,
+                          onChanged: (on) => setSheet(() => on == true ? picked.add(o.id) : picked.remove(o.id)),
+                        ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                  child: Row(
+                    children: [
+                      TextButton(
+                        onPressed: () => setSheet(picked.clear),
+                        child: Text(l10n.commonClear),
+                      ),
+                      const Spacer(),
+                      FilledButton(
+                        onPressed: () => Navigator.of(sheetContext).pop(picked),
+                        child: Text(l10n.commonOk),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    if (result != null) onChanged(result);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final names = [for (final o in options) if (selected.contains(o.id)) o.name];
+    return InkWell(
+      onTap: () => _open(context),
+      borderRadius: BorderRadius.circular(12),
+      child: InputDecorator(
+        isEmpty: names.isEmpty,
+        decoration: InputDecoration(
+          labelText: label,
+          suffixIcon: const Icon(Icons.arrow_drop_down),
+        ),
+        child: Text(
+          names.join('، '),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
       ),
     );
   }

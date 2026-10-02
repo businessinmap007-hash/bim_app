@@ -25,11 +25,14 @@ import 'tech_pricing_screen.dart';
 /// back to its line option's name for the (usual) case where the item was
 /// created directly from that vocabulary branch and never got its own
 /// English name typed in.
-String _itemEmoji(BusinessMenuItem item) => produceEmoji(
-      // A catalog-linked device is named by its model («Oppo Reno 12F»),
-      // which no emoji matches — its branch («Mobile») does.
-      item.catalogProductId != null ? item.lineOption?.nameEn : (item.nameEn ?? item.lineOption?.nameEn),
-    );
+String _itemEmoji(BusinessMenuItem item) {
+  // A catalog-linked device is named by its model («Oppo Reno 12F»),
+  // which no emoji matches — its branch («Mobile») does.
+  if (item.catalogProductId != null) return produceEmoji(item.lineOption?.nameEn);
+  // A hand-named piece («غرفة نوم ماستر»): its own name first, else what it is.
+  final own = produceEmoji(item.nameEn ?? item.nameAr);
+  return own != '🧺' ? own : produceEmoji(item.lineOption?.nameEn ?? item.lineOption?.nameAr);
+}
 
 /// The merchant's own first photo, else the catalog model's photo.
 String? _itemImage(BusinessMenuItem item) =>

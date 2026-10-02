@@ -9,10 +9,54 @@
 /// the customer-facing menu card — a photo-less item should look the same
 /// (a 🥔, not a generic fork-and-knife icon) wherever it's shown.
 String produceEmoji(String? nameEn) {
-  final name = (nameEn ?? '').toLowerCase();
+  // Arabic spelled loosely («انتريه»/«أنتريه»، «ركنه»/«ركنة») still has to land.
+  final name = (nameEn ?? '')
+      .toLowerCase()
+      .replaceAll(RegExp('[أإآ]'), 'ا')
+      .replaceAll('ة', 'ه')
+      .replaceAll('ى', 'ي');
   if (name.isEmpty) return '🧺';
 
   const byMostSpecificFirst = <String, String>{
+    // Furniture (the «أثاث وتشطيب منزلي» branches) — first, because «Sitting
+    // Corner» would otherwise be read as corn. Both the English and the Arabic
+    // name of each, since a hand-typed item carries only the Arabic one.
+    'bed room': '🛏️',
+    'bedroom': '🛏️',
+    'غرفه نوم': '🛏️',
+    'سرير': '🛏️',
+    'مرتبه': '🛏️',
+    'children room': '🧸',
+    'غرفه اطفال': '🧸',
+    'dinning': '🍽️',
+    'dining': '🍽️',
+    'سفره': '🍽️',
+    'sitting corner': '🛋️',
+    'ركنه': '🛋️',
+    'armchair': '🛋️',
+    'فوتيه': '🛋️',
+    'salon': '🛋️',
+    'صالون': '🛋️',
+    'sofa': '🛋️',
+    'كنبه': '🛋️',
+    'انتريه': '🛋️',
+    'chair': '🪑',
+    'كرسي': '🪑',
+    'office furniture': '🖥️',
+    'اثاث مكتبي': '🖥️',
+    'مكتب': '🖥️',
+    'hotel furniture': '🏨',
+    'اثاث فندقي': '🏨',
+    'kitchen': '🍳',
+    'مطبخ': '🍳',
+    'carpet': '🧶',
+    'سجاد': '🧶',
+    'tableau': '🖼️',
+    'تابلوه': '🖼️',
+    'drawer': '🗄️',
+    'دولاب': '🗄️',
+    'furniture': '🪑',
+    'اثاث': '🪑',
     // Devices and their accessories (the «أجهزة الموبايل» / «اكسسوارات»
     // branches) — a phone with no photo showed a produce basket.
     'in-car': '🚗',
