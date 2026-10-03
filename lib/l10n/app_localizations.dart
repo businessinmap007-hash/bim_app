@@ -1928,6 +1928,24 @@ abstract class AppLocalizations {
   /// **'اختر النوع'**
   String get cartVariantChoose;
 
+  /// No description provided for @techPricingPriceBy.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر حسب {group}'**
+  String techPricingPriceBy(String group);
+
+  /// No description provided for @cartPaymentChoose.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر طريقة الدفع'**
+  String get cartPaymentChoose;
+
+  /// No description provided for @techPricingPriceFor.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر'**
+  String get techPricingPriceFor;
+
   /// No description provided for @cartExtrasChoose.
   ///
   /// In ar, this message translates to:

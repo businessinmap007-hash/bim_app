@@ -76,6 +76,14 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
     }
   }
 
+  /// The price of the picked variant (cash / instalments / a size), else the item's own.
+  double get _variantPrice {
+    for (final v in widget.item.variants) {
+      if (v.id == _variantId) return v.price;
+    }
+    return widget.item.basePrice;
+  }
+
   double get _unitPrice {
     var base = widget.item.basePrice;
     for (final v in widget.item.variants) {
@@ -299,7 +307,8 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
                 Row(
                   children: [
                     Text(
-                      '${NumberFormat.decimalPattern('en').format(item.basePrice.round())} ${l10n.pharmacyCurrencyLabel}',
+                      // «كاش» or «تقسيط»: the price on top follows the pick.
+                      '${NumberFormat.decimalPattern('en').format(_variantPrice.round())} ${l10n.pharmacyCurrencyLabel}',
                       style: theme.textTheme.headlineSmall?.copyWith(
                         color: AppColors.accentGold,
                         fontWeight: FontWeight.w700,
@@ -339,7 +348,10 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
                 ],
                 if (item.variants.isNotEmpty) ...[
                   const SizedBox(height: 18),
-                  Text(l10n.cartVariantChoose, style: theme.textTheme.titleSmall),
+                  Text(
+                    item.variants.every((v) => v.type == 'payment') ? l10n.cartPaymentChoose : l10n.cartVariantChoose,
+                    style: theme.textTheme.titleSmall,
+                  ),
                   ...item.variants.map(
                     (v) => RadioListTile<int>(
                       contentPadding: EdgeInsets.zero,

@@ -1012,6 +1012,17 @@ class AppLocalizationsAr extends AppLocalizations {
   String get cartVariantChoose => 'اختر النوع';
 
   @override
+  String techPricingPriceBy(String group) {
+    return 'السعر حسب $group';
+  }
+
+  @override
+  String get cartPaymentChoose => 'اختر طريقة الدفع';
+
+  @override
+  String get techPricingPriceFor => 'السعر';
+
+  @override
   String get cartExtrasChoose => 'إضافات';
 
   @override

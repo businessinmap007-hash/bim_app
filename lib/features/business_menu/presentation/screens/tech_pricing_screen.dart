@@ -11,6 +11,7 @@ import '../../../media/application/media_picker_service.dart';
 import '../../../media/data/picked_media.dart';
 import '../../../media/presentation/widgets/media_source_badge.dart';
 import '../../application/business_menu_providers.dart';
+import '../../data/business_menu_api.dart' show BusinessMenuApi;
 import '../../data/models/menu_item.dart';
 import '../../data/models/menu_item_image.dart';
 import '../../data/models/menu_vocabulary.dart';
@@ -45,6 +46,11 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
   final _priceController = TextEditingController();
   final _stockController = TextEditingController();
   final _descController = TextEditingController();
+  /// «كاش» / «تقسيط»: one price per option of the trade's price axis. The rows the
+  /// merchant switched on, each with its price; saved as the item's variants.
+  final Map<int, TextEditingController> _axisPrice = {};
+  final Set<int> _axisOn = {};
+  bool _axisSeeded = false;
   CatalogProductRef? _product;
   /// A kind with no catalog: the merchant names the item and picks, from the
   /// option groups that DESCRIBE it («مودرن»، «زان»), what it is made of.
@@ -107,6 +113,9 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     _stockController.dispose();
     _descController.dispose();
     _nameController.dispose();
+    for (final c in _axisPrice.values) {
+      c.dispose();
+    }
     for (final c in _unitText.values) {
       c.dispose();
     }
@@ -195,9 +204,17 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
       setState(() => _error = l10n.menuNameRequired);
       return;
     }
-    final price = double.tryParse(
-      _priceController.text.trim().replaceAll(',', '.').replaceAll('٫', '.'),
-    );
+    double? parse(String text) => double.tryParse(text.trim().replaceAll(',', '.').replaceAll('٫', '.'));
+    final axis = ref.read(menuVocabularyProvider).asData?.value.priceAxis;
+    // With a price axis each option offered has ITS OWN price; the item's own
+    // price is the first one offered (the default the customer sees first).
+    final axisRows = <({VocabularyOptionRef option, double price})>[
+      if (axis != null)
+        for (final o in axis.options)
+          if (_axisOn.contains(o.id) && (parse(_axisPrice[o.id]?.text ?? '') ?? 0) > 0)
+            (option: o, price: parse(_axisPrice[o.id]!.text)!),
+    ];
+    final price = axis != null ? (axisRows.isEmpty ? null : axisRows.first.price) : parse(_priceController.text);
     if (price == null || price < 0) {
       setState(() => _error = l10n.menuPriceRequired);
       return;
@@ -258,6 +275,7 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
           isActive: widget.existingItem!.isActive,
         );
       }
+      if (axis != null) await _syncAxisVariants(api, itemId, axis, axisRows);
       for (final p in _newPhotos) {
         await api.addPickedImage(itemId, p.media);
       }
@@ -267,6 +285,57 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     } finally {
       if (mounted) setState(() => _saving = false);
     }
+  }
+
+  /// Keeps the item's payment variants equal to what the merchant switched on:
+  /// a price per offered option (the first is the default), the rest removed.
+  Future<void> _syncAxisVariants(
+    BusinessMenuApi api,
+    int itemId,
+    PriceAxis axis,
+    List<({VocabularyOptionRef option, double price})> rows,
+  ) async {
+    final existing = (await api.item(itemId)).variants.where((v) => v.type == 'payment').toList();
+    final byName = {for (final v in existing) v.nameAr: v};
+    final onById = {for (final r in rows) r.option.id: r.price};
+    var first = true;
+
+    for (final o in axis.options) {
+      final current = byName[o.nameAr];
+      final price = onById[o.id];
+      if (price == null) {
+        if (current != null) await api.deleteVariant(itemId, current.id);
+        continue;
+      }
+      if (current == null) {
+        await api.addVariant(itemId, type: 'payment', nameAr: o.nameAr, nameEn: o.nameEn, price: price, isDefault: first);
+      } else {
+        await api.updateVariant(itemId, current.id, type: 'payment', nameAr: o.nameAr, nameEn: o.nameEn, price: price, isDefault: first);
+      }
+      first = false;
+    }
+  }
+
+  /// Fills the rows once: the options this item already has a price for.
+  void _seedAxis(PriceAxis axis) {
+    if (_axisSeeded) return;
+    _axisSeeded = true;
+    for (final o in axis.options) {
+      _axisPrice[o.id] ??= TextEditingController();
+    }
+    final item = widget.existingItem;
+    if (item == null) return;
+    ref.read(businessMenuApiProvider).item(item.id).then((full) {
+      if (!mounted) return;
+      setState(() {
+        for (final v in full.variants.where((v) => v.type == 'payment')) {
+          final o = axis.options.where((o) => o.nameAr == v.nameAr).firstOrNull;
+          if (o == null) continue;
+          _axisOn.add(o.id);
+          _axisPrice[o.id]!.text = (v.price ?? 0).toStringAsFixed(0);
+        }
+      });
+    });
   }
 
   /// The picked product's specs in the order its detail kind lists them,
@@ -307,6 +376,10 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     // decided in the admin's «أشكال المنيو», never here.
     final detailProfile = _profileFor(vocabAsync.asData?.value);
     _seedUnitFields(detailProfile);
+    // «طريقة السداد كاش وتقسيط وهم سعرين مختلفين» — المالك، 2026-10-03: a trade
+    // whose price axis is set in «مكونات الخدمة» asks for one price per option.
+    final priceAxis = vocabAsync.asData?.value.priceAxis;
+    if (priceAxis != null) _seedAxis(priceAxis);
     final usesCatalog = detailProfile?.usesCatalog ?? true;
     if (!_choicesSeeded && widget.existingItem != null) {
       _choicesSeeded = true;
@@ -478,10 +551,54 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
           ],
           // Price beside quantity, then the description — the preview's order;
           // the photos come last (the preview has no room for them).
+          if (priceAxis != null) ...[
+            label(l10n.techPricingPriceBy(priceAxis.groupName)),
+            for (final o in priceAxis.options)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Container(
+                  padding: const EdgeInsetsDirectional.fromSTEB(4, 2, 10, 2),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: _axisOn.contains(o.id) ? AppColors.accentGold : AppColors.primaryNavy.withValues(alpha: 0.18),
+                      width: _axisOn.contains(o.id) ? 1.5 : 1,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Checkbox(
+                        value: _axisOn.contains(o.id),
+                        activeColor: AppColors.primaryNavy,
+                        onChanged: (on) => setState(() => on == true ? _axisOn.add(o.id) : _axisOn.remove(o.id)),
+                      ),
+                      Expanded(
+                        child: Text(
+                          localizedName(o.nameAr, o.nameEn, isEnglish),
+                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.primaryNavy),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 150,
+                        child: TextField(
+                          controller: _axisPrice[o.id],
+                          enabled: _axisOn.contains(o.id),
+                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                          inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,٫]'))],
+                          decoration: InputDecoration(hintText: l10n.techPricingPriceFor),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+          ],
           const SizedBox(height: 12),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (priceAxis == null)
               Expanded(
                 child: TextField(
                   controller: _priceController,
@@ -503,7 +620,7 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
                   ),
                 ),
               ),
-              const SizedBox(width: 8),
+              if (priceAxis == null) const SizedBox(width: 8),
               Expanded(
                 child: TextField(
                   controller: _stockController,

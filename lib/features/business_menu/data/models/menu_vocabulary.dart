@@ -168,10 +168,33 @@ class DetailOption {
 /// IS (`lines`, grouped into what becomes its menu section) and what may
 /// qualify it (`modifiers` — brand, condition...), narrowed to this
 /// business's own catalog. See Api\V2\BusinessMenuItemController::vocabulary().
+/// A group «مكونات الخدمة» made a PRICE AXIS for the trade («الدفع والسداد»: كاش،
+/// تقسيط): the merchant gives each option he offers its own price, the customer
+/// picks one on the product page. Not a modifier — «كاش» is a business-level word.
+class PriceAxis {
+  final int groupId;
+  final String groupName;
+  final List<VocabularyOptionRef> options;
+  const PriceAxis({required this.groupId, required this.groupName, required this.options});
+
+  factory PriceAxis.fromJson(Map<String, dynamic> json) => PriceAxis(
+    groupId: (json['group_id'] as num).toInt(),
+    groupName: json['group_name'] as String? ?? '',
+    options: (json['options'] as List<dynamic>? ?? [])
+        .map((e) => VocabularyOptionRef.fromJson(e as Map<String, dynamic>))
+        .toList(),
+  );
+}
+
 class MenuVocabulary {
   final List<VocabularyGroup> lines;
   final List<VocabularyGroup> modifiers;
-  const MenuVocabulary({required this.lines, required this.modifiers});
+  final List<PriceAxis> priceAxes;
+  const MenuVocabulary({required this.lines, required this.modifiers, this.priceAxes = const []});
+
+  /// The one price axis the item form draws (the first, in the trade's order) —
+  /// a second axis would make the customer's pick ambiguous.
+  PriceAxis? get priceAxis => priceAxes.where((a) => a.options.isNotEmpty).firstOrNull;
 
   factory MenuVocabulary.fromJson(Map<String, dynamic> json) => MenuVocabulary(
     lines: (json['lines'] as List<dynamic>? ?? [])
@@ -179,6 +202,9 @@ class MenuVocabulary {
         .toList(),
     modifiers: (json['modifiers'] as List<dynamic>? ?? [])
         .map((e) => VocabularyGroup.fromJson(e as Map<String, dynamic>))
+        .toList(),
+    priceAxes: (json['price_axes'] as List<dynamic>? ?? [])
+        .map((e) => PriceAxis.fromJson(e as Map<String, dynamic>))
         .toList(),
   );
 

@@ -5,12 +5,15 @@ class MenuItemVariant {
   final String name;
   final double price;
   final bool isDefault;
+  /// 'payment' for «كاش» / «تقسيط» prices — the picker is then «اختر طريقة الدفع».
+  final String type;
 
   const MenuItemVariant({
     required this.id,
     required this.name,
     required this.price,
     required this.isDefault,
+    this.type = '',
   });
 
   factory MenuItemVariant.fromJson(Map<String, dynamic> json) => MenuItemVariant(
@@ -18,6 +21,7 @@ class MenuItemVariant {
     name: json['name'] as String? ?? '',
     price: (json['price'] as num?)?.toDouble() ?? 0,
     isDefault: json['is_default'] as bool? ?? false,
+    type: json['type'] as String? ?? '',
   );
 }
 

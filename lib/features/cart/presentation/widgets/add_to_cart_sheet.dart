@@ -208,7 +208,10 @@ class _AddToCartSheetState extends ConsumerState<_AddToCartSheet> {
               ],
               const SizedBox(height: 16),
               if (item.variants.isNotEmpty) ...[
-                Text(l10n.cartVariantChoose, style: Theme.of(context).textTheme.titleSmall),
+                Text(
+                  item.variants.every((v) => v.type == 'payment') ? l10n.cartPaymentChoose : l10n.cartVariantChoose,
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
                 ...item.variants.map(
                   (v) => RadioListTile<int>(
                     contentPadding: EdgeInsets.zero,
