@@ -692,13 +692,17 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 8),
-          TextField(
-            controller: _descController,
-            minLines: 2,
-            maxLines: 4,
-            decoration: InputDecoration(hintText: l10n.menuItemDescriptionArHint),
-          ),
+          // «الوصف» is a field the kind chooses in «أشكال المنيو»: ticked, this box
+          // shows; dropped, it is gone. A basic menu has no kind, so it always shows.
+          if (detailProfile == null || detailProfile.fields.any((f) => f.code == 'description')) ...[
+            const SizedBox(height: 8),
+            TextField(
+              controller: _descController,
+              minLines: 2,
+              maxLines: 4,
+              decoration: InputDecoration(hintText: l10n.menuItemDescriptionArHint),
+            ),
+          ],
           label(l10n.techPricingPhotosLabel),
           _PhotoStrip(
             existing: widget.existingItem?.images ?? const [],
