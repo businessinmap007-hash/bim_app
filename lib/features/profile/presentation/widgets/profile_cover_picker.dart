@@ -94,10 +94,10 @@ class ProfileCoverPicker extends StatelessWidget {
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.primaryNavy,
+                  color: Theme.of(context).colorScheme.primary,
                   border: Border.all(color: Theme.of(context).scaffoldBackgroundColor, width: 2),
                 ),
-                child: const Icon(Icons.edit, color: Colors.white, size: 16),
+                child: Icon(Icons.edit, color: Theme.of(context).colorScheme.onPrimary, size: 16),
               ),
             ),
           ],

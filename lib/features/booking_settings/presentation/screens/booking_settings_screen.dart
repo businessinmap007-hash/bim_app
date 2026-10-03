@@ -53,8 +53,6 @@ class _PricesTab extends ConsumerWidget {
 
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: AppColors.primaryNavy,
-        foregroundColor: Colors.white,
         onPressed: () => _showAddPriceSheet(context, ref),
         icon: const Icon(Icons.add),
         label: Text(l10n.bookingSettingsAddPrice),
@@ -252,8 +250,6 @@ class _UnitsTabState extends ConsumerState<_UnitsTab> {
 
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: AppColors.primaryNavy,
-        foregroundColor: Colors.white,
         onPressed: () => _showAddUnitSheet(context, ref),
         icon: const Icon(Icons.add),
         label: Text(l10n.bookingSettingsAddUnit),
@@ -267,12 +263,12 @@ class _UnitsTabState extends ConsumerState<_UnitsTab> {
               children: [
                 IconButton(
                   tooltip: l10n.bookingSettingsListView,
-                  icon: Icon(Icons.view_list_outlined, color: _gridView ? Theme.of(context).hintColor : AppColors.primaryNavy),
+                  icon: Icon(Icons.view_list_outlined, color: _gridView ? Theme.of(context).hintColor : Theme.of(context).colorScheme.primary),
                   onPressed: () => setState(() => _gridView = false),
                 ),
                 IconButton(
                   tooltip: l10n.bookingSettingsGridView,
-                  icon: Icon(Icons.grid_view_outlined, color: _gridView ? AppColors.primaryNavy : Theme.of(context).hintColor),
+                  icon: Icon(Icons.grid_view_outlined, color: _gridView ? Theme.of(context).colorScheme.primary : Theme.of(context).hintColor),
                   onPressed: () => setState(() => _gridView = true),
                 ),
               ],

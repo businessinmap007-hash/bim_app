@@ -291,7 +291,7 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: theme.textTheme.bodyMedium?.copyWith(
-                                color: AppColors.primaryNavy,
+                                color: theme.colorScheme.primary,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),

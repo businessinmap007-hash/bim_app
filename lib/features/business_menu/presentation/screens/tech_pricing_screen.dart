@@ -438,7 +438,7 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
             style: theme.textTheme.labelMedium?.copyWith(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: AppColors.primaryNavy.withValues(alpha: 0.6),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
             ),
           ),
         );
@@ -588,10 +588,11 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
                 child: Container(
                   padding: const EdgeInsetsDirectional.fromSTEB(4, 2, 10, 2),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    // The theme's field surface (white / the dark card), never a fixed white.
+                    color: theme.inputDecorationTheme.fillColor ?? theme.colorScheme.surface,
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(
-                      color: _axisOn.contains(o.id) ? AppColors.accentGold : AppColors.primaryNavy.withValues(alpha: 0.18),
+                      color: _axisOn.contains(o.id) ? AppColors.accentGold : theme.dividerColor,
                       width: _axisOn.contains(o.id) ? 1.5 : 1,
                     ),
                   ),
@@ -601,13 +602,12 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
                     children: [
                       Checkbox(
                         value: _axisOn.contains(o.id),
-                        activeColor: AppColors.primaryNavy,
                         onChanged: (on) => setState(() => on == true ? _axisOn.add(o.id) : _axisOn.remove(o.id)),
                       ),
                       Expanded(
                         child: Text(
                           localizedName(o.nameAr, o.nameEn, isEnglish),
-                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: AppColors.primaryNavy),
+                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
                         ),
                       ),
                       SizedBox(
@@ -959,7 +959,7 @@ class _ConditionToggle extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       decoration: BoxDecoration(
-                        color: selectedId == o.id ? Colors.white : null,
+                        color: selectedId == o.id ? AppColors.accentGold : null,
                         borderRadius: BorderRadius.circular(7),
                       ),
                       alignment: Alignment.center,
@@ -1532,8 +1532,7 @@ class _MultiChoiceField extends StatelessWidget {
                           CheckboxListTile(
                             value: picked.contains(o.id),
                             title: Text(o.name),
-                            activeColor: AppColors.primaryNavy,
-                            controlAffinity: ListTileControlAffinity.leading,
+                                controlAffinity: ListTileControlAffinity.leading,
                             onChanged: (on) => setSheet(() => on == true ? picked.add(o.id) : picked.remove(o.id)),
                           )
                         else

@@ -74,7 +74,7 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
                 child: Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: AppColors.primaryNavy,
+                    color: AppColors.heroSurface(context),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Column(

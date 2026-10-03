@@ -370,7 +370,7 @@ class _PhotoCountBadge extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: AppColors.primaryNavy,
+          color: Theme.of(context).colorScheme.primary,
           border: Border.all(
             color: Theme.of(context).scaffoldBackgroundColor,
             width: 1.5,
@@ -378,10 +378,10 @@ class _PhotoCountBadge extends StatelessWidget {
         ),
         child: Text(
           '$count',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 10,
             fontWeight: FontWeight.w700,
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
         ),
       ),

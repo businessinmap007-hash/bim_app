@@ -49,6 +49,11 @@ class AppColors {
     return theme.colorScheme.onSurface.withValues(alpha: 0.08);
   }
 
+  /// The big hero card (the wallet balance): the brand navy on light; on dark that navy is
+  /// the same as the page, so the card takes the lifted navy to stay a card.
+  static Color heroSurface(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark ? primaryNavyLight : primaryNavy;
+
   /// The brand mark's badge background — a subtle navy-to-navy-light
   /// diagonal gradient instead of a flat fill, used behind the pin logo.
   static const brandGradient = LinearGradient(
