@@ -135,6 +135,104 @@ class AppTheme {
           color: AppColors.primaryNavy,
         ),
       ),
+      // ── Phase 3: the surfaces and the small controls ──────────────────────────
+      // The canvas draws no dialogs or sheets, so these take its tokens: the surface
+      // colour (white / #11213B), the cards' 16 radius, Cairo type, and — the point of
+      // the explicit themes — NO Material-3 surface tint (the purple-ish overlay the
+      // card theme above already escapes).
+      dialogTheme: DialogThemeData(
+        backgroundColor: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+        surfaceTintColor: Colors.transparent,
+        elevation: 6,
+        shadowColor: AppColors.primaryNavy.withValues(alpha: 0.25),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        titleTextStyle: TextStyle(
+          fontFamily: _fontFamily,
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
+          color: isDark ? Colors.white : AppColors.primaryNavy,
+        ),
+        contentTextStyle: TextStyle(
+          fontFamily: _fontFamily,
+          fontSize: 14,
+          height: 1.5,
+          color: (isDark ? Colors.white : AppColors.primaryNavy).withValues(alpha: 0.85),
+        ),
+      ),
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+        modalBackgroundColor: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+        surfaceTintColor: Colors.transparent,
+        modalElevation: 8,
+        shadowColor: AppColors.primaryNavy.withValues(alpha: 0.25),
+        dragHandleColor: (isDark ? Colors.white : AppColors.primaryNavy).withValues(alpha: 0.25),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+      ),
+      // A floating pill in the brand's navy (dark: the lifted navy) with white text and a
+      // gold action — readable on both backgrounds, never the grey Material default.
+      snackBarTheme: SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: isDark ? AppColors.primaryNavyLight : AppColors.primaryNavy,
+        contentTextStyle: const TextStyle(
+          fontFamily: _fontFamily,
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
+        actionTextColor: AppColors.accentGold,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+      // The canvas's tick box: 6-radius, a 1.5 hairline when empty, solid GOLD with a navy
+      // tick when ticked — in light and dark alike (the screens that already tick in gold
+      // keep their look; navy ink on gold reads on both backgrounds).
+      checkboxTheme: CheckboxThemeData(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+        fillColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.disabled)
+              ? (isDark ? Colors.white : AppColors.primaryNavy).withValues(alpha: 0.2)
+              : states.contains(WidgetState.selected)
+              ? AppColors.accentGold
+              : Colors.transparent,
+        ),
+        checkColor: WidgetStateProperty.all(AppColors.primaryNavy),
+        side: WidgetStateBorderSide.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? BorderSide.none
+              : BorderSide(
+                  width: 1.5,
+                  color: (isDark ? Colors.white : AppColors.primaryNavy).withValues(alpha: 0.4),
+                ),
+        ),
+      ),
+      // The canvas's radio: a 1.5 muted ring, the chosen one in the interactive colour.
+      radioTheme: RadioThemeData(
+        fillColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.disabled)
+              ? (isDark ? Colors.white : AppColors.primaryNavy).withValues(alpha: 0.2)
+              : states.contains(WidgetState.selected)
+              ? interactive
+              : (isDark ? Colors.white : AppColors.primaryNavy).withValues(alpha: 0.4),
+        ),
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? onInteractive
+              : (isDark ? Colors.white : AppColors.primaryNavy).withValues(alpha: 0.55),
+        ),
+        trackColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? interactive
+              : (isDark ? Colors.white : AppColors.primaryNavy).withValues(alpha: 0.12),
+        ),
+        trackOutlineColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? Colors.transparent
+              : (isDark ? Colors.white : AppColors.primaryNavy).withValues(alpha: 0.25),
+        ),
+      ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: isDark
