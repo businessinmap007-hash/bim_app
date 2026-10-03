@@ -10,6 +10,11 @@ const _fontFamily = 'Cairo';
 class AppTheme {
   const AppTheme._();
 
+  static OutlineInputBorder _fieldBorder(Color colour, {double width = 1}) => OutlineInputBorder(
+    borderRadius: BorderRadius.circular(10),
+    borderSide: BorderSide(color: colour, width: width),
+  );
+
   static ThemeData light() => _base(Brightness.light);
   static ThemeData dark() => _base(Brightness.dark);
 
@@ -25,6 +30,9 @@ class AppTheme {
     // unaffected since they hardcode their own colors already.
     final interactive = isDark ? AppColors.accentGold : AppColors.primaryNavy;
     final onInteractive = isDark ? AppColors.primaryNavy : Colors.white;
+    // The ink the muted / hairline tokens are drawn in, and the canvas's hairline itself.
+    final muted = isDark ? Colors.white : AppColors.primaryNavy;
+    final hairline = isDark ? Colors.white.withValues(alpha: 0.14) : AppColors.primaryNavy.withValues(alpha: 0.18);
     final colorScheme = ColorScheme(
       brightness: brightness,
       primary: interactive,
@@ -269,27 +277,54 @@ class AppTheme {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         margin: EdgeInsets.zero,
       ),
+      // The canvas's field: a surface-coloured box, 10 radius, a hairline border (dark:
+      // white 14%, light: navy 18%), 12 × 12 inside; label / hint muted. Focus raises the
+      // border to the interactive colour (navy light, gold dark) at 1.5.
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: isDark ? AppColors.darkSurface : Colors.white,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey.shade300),
+        fillColor: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+        border: _fieldBorder(hairline),
+        enabledBorder: _fieldBorder(hairline),
+        disabledBorder: _fieldBorder(hairline.withValues(alpha: hairline.a * 0.5)),
+        focusedBorder: _fieldBorder(interactive, width: 1.5),
+        errorBorder: _fieldBorder(AppColors.error),
+        focusedErrorBorder: _fieldBorder(AppColors.error, width: 1.5),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        labelStyle: TextStyle(fontFamily: _fontFamily, color: muted.withValues(alpha: 0.6)),
+        floatingLabelStyle: TextStyle(fontFamily: _fontFamily, color: muted.withValues(alpha: 0.75)),
+        hintStyle: TextStyle(fontFamily: _fontFamily, color: muted.withValues(alpha: 0.4)),
+        helperStyle: TextStyle(fontFamily: _fontFamily, fontSize: 12, color: muted.withValues(alpha: 0.55)),
+        errorStyle: const TextStyle(fontFamily: _fontFamily, fontSize: 12, color: AppColors.error),
+        prefixIconColor: muted.withValues(alpha: 0.6),
+        suffixIconColor: muted.withValues(alpha: 0.6),
+      ),
+      // The canvas's hairline between rows: navy 8% (dark: white 8%) — not the solid navy
+      // line the colour scheme's outline would draw.
+      dividerTheme: DividerThemeData(
+        color: muted.withValues(alpha: 0.08),
+        thickness: 1,
+      ),
+      // The canvas's row: title 15 / 600, subtitle 12 muted, 14 side padding, icons in the
+      // interactive colour (navy light, gold dark).
+      listTileTheme: ListTileThemeData(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 14),
+        iconColor: interactive,
+        titleTextStyle: TextStyle(
+          fontFamily: _fontFamily,
+          fontSize: 15,
+          fontWeight: FontWeight.w600,
+          color: muted,
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey.shade300),
+        subtitleTextStyle: TextStyle(
+          fontFamily: _fontFamily,
+          fontSize: 12,
+          color: muted.withValues(alpha: 0.55),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: isDark ? AppColors.accentGold : AppColors.primaryNavy,
-            width: 1.5,
-          ),
-        ),
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 14,
+        leadingAndTrailingTextStyle: TextStyle(
+          fontFamily: _fontFamily,
+          fontSize: 13,
+          fontWeight: FontWeight.w600,
+          color: muted,
         ),
       ),
     );
