@@ -34,6 +34,19 @@ class AppColors {
     ),
   ];
 
+  /// The fill behind a product photo's stand-in (the emoji / icon shown when an item has
+  /// no picture) on a CARD whose top is that image. Light: a soft tint of the ink, so the
+  /// photo area reads against the white body. Dark: the card's own surface — a white tint
+  /// over the navy card made the picture area a second, greyer colour and the card read as
+  /// two blocks instead of one.
+  static Color photoPlaceholder(BuildContext context) {
+    final theme = Theme.of(context);
+    if (theme.brightness == Brightness.dark) {
+      return theme.cardTheme.color ?? theme.colorScheme.surface;
+    }
+    return theme.colorScheme.onSurface.withValues(alpha: 0.08);
+  }
+
   /// The brand mark's badge background — a subtle navy-to-navy-light
   /// diagonal gradient instead of a flat fill, used behind the pin logo.
   static const brandGradient = LinearGradient(

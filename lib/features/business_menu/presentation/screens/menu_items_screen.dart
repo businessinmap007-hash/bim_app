@@ -1288,7 +1288,7 @@ class _ItemGridTile extends ConsumerWidget {
                       )
                     : Container(
                         alignment: Alignment.center,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
+                        color: AppColors.photoPlaceholder(context),
                         child: Text(_itemEmoji(item), style: const TextStyle(fontSize: 36)),
                       ),
               ),
