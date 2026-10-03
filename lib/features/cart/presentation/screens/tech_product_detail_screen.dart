@@ -8,6 +8,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../business/data/models/menu_item_summary.dart';
 import '../../../media/data/picked_media.dart';
 import '../../../media/presentation/widgets/media_source_badge.dart';
+import '../../../../shared/utils/produce_emoji.dart';
 import '../../application/cart_controller.dart';
 import '../../application/shared_cart_providers.dart';
 import '../widgets/cart_action_bar.dart';
@@ -50,6 +51,14 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
   final Set<int> _extraIds = {};
   int _qty = 1;
   bool _submitting = false;
+  final _photos = PageController();
+  int _photo = 0;
+
+  @override
+  void dispose() {
+    _photos.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -147,7 +156,10 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final item = widget.item;
-    final imageUrl = item.imageUrl ?? (item.imageUrls.isNotEmpty ? item.imageUrls.first : null);
+    // Every photo the merchant uploaded, swipeable at the top; a catalog model's
+    // own photo (or nothing) when he uploaded none.
+    final photos = item.imageUrls.isNotEmpty ? item.imageUrls : [?item.imageUrl];
+    final imageUrl = photos.isEmpty ? null : photos[_photo.clamp(0, photos.length - 1)];
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.menuItemDetailTitle)),
@@ -166,20 +178,28 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
                   colors: [AppColors.primaryNavyLight, AppColors.primaryNavy],
                 ),
               ),
-              child: imageUrl != null
-                  // A catalog photo (it carries a credit) is a product shot of
-                  // any shape — shown whole rather than cropped.
-                  ? CachedNetworkImage(
-                      imageUrl: imageUrl,
-                      fit: item.imageCredit != null ? BoxFit.contain : BoxFit.cover,
+              child: photos.isNotEmpty
+                  ? PageView.builder(
+                      controller: _photos,
+                      itemCount: photos.length,
+                      onPageChanged: (i) => setState(() => _photo = i),
+                      // A catalog photo (it carries a credit) is a product shot of
+                      // any shape — shown whole rather than cropped.
+                      itemBuilder: (_, i) => CachedNetworkImage(
+                        imageUrl: photos[i],
+                        fit: item.imageCredit != null ? BoxFit.contain : BoxFit.cover,
+                      ),
                     )
-                  // No open-licensed photo of this model exists yet — show
-                  // what it is rather than a bare icon.
+                  // No photo yet — an emoji for what it IS («🛏️» a bedroom, «📱» a
+                  // phone) rather than one phone icon for everything.
                   : Center(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.smartphone_outlined, size: 64, color: AppColors.accentGold),
+                          Text(
+                            produceEmoji(item.lineOption?.nameEn ?? item.lineOption?.nameAr ?? item.name),
+                            style: const TextStyle(fontSize: 64),
+                          ),
                           if (item.brandName != null) ...[
                             const SizedBox(height: 10),
                             Text(
@@ -194,6 +214,27 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
                       ),
                     ),
                 ),
+                if (photos.length > 1)
+                  Positioned(
+                    bottom: 10,
+                    left: 0,
+                    right: 0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        for (var i = 0; i < photos.length; i++)
+                          Container(
+                            width: i == _photo ? 18 : 7,
+                            height: 7,
+                            margin: const EdgeInsets.symmetric(horizontal: 3),
+                            decoration: BoxDecoration(
+                              color: i == _photo ? AppColors.accentGold : Colors.white70,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
                 // A live camera shot of this very unit (required for a used
                 // one) — the same badge albums carry.
                 if (imageUrl != null && item.cameraImageUrls.contains(imageUrl))
