@@ -652,7 +652,17 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
 
   Widget _buildList(BuildContext context, MenuItemsState state) {
     final vocabulary = _vocabularyForGrouping(state);
-    final displayMode = ref.watch(menuDisplayModeControllerProvider).maybeWhen(data: (m) => m, orElse: () => 'list');
+    final vocabularyAsync = ref.watch(menuVocabularyProvider);
+    final modeAsync = ref.watch(menuDisplayModeControllerProvider);
+    // Until the vocabulary and the chosen display mode are known the screen cannot tell
+    // a plain list from a grouped grid — drawing a list first and flipping to the grid a
+    // second later was the flicker. Wait (only on a first load; a refresh keeps its value).
+    if (state.sectionId == null &&
+        ((vocabularyAsync.isLoading && !vocabularyAsync.hasValue) ||
+            (vocabulary != null && modeAsync.isLoading && !modeAsync.hasValue))) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    final displayMode = modeAsync.maybeWhen(data: (m) => m, orElse: () => 'list');
     final isEnglish = Localizations.localeOf(context).languageCode == 'en';
     if (vocabulary == null) {
       return ListView.separated(
