@@ -2,7 +2,7 @@ import 'package:bim_app/features/cart/presentation/screens/tech_product_detail_s
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// «حدد أقصى ارتفاع للصورة على الشاشات الكبيرة» — 16 : 10 of the width, capped at 360.
+/// «حدد أقصى ارتفاع للصورة على الشاشات الكبيرة» — 16 : 10 of the width, capped at 320.
 void main() {
   Future<double> heightAt(WidgetTester tester, double width) async {
     tester.view.physicalSize = Size(width, 1600);
@@ -21,13 +21,13 @@ void main() {
     expect(await heightAt(tester, 360), 225);
   });
 
-  testWidgets('a tablet / desktop is capped at 360', (tester) async {
+  testWidgets('a tablet / desktop is capped at 320', (tester) async {
     expect(await heightAt(tester, 1000), HeroImageBox.maxHeight);
     expect(await heightAt(tester, 1280), HeroImageBox.maxHeight);
   });
 
-  testWidgets('the width where 16:10 meets the cap is exactly 576', (tester) async {
-    expect(await heightAt(tester, 576), 360);
-    expect(await heightAt(tester, 577), 360);
+  testWidgets('the width where 16:10 meets the cap is exactly 512', (tester) async {
+    expect(await heightAt(tester, 512), 320);
+    expect(await heightAt(tester, 513), 320);
   });
 }

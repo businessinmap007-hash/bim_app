@@ -506,11 +506,11 @@ class _SpecTable extends StatelessWidget {
 /// − 1 + in one rounded pill, for the bottom bar.
 
 /// The product page's picture area: 16 : 10 of the screen's width — but never taller than
-/// [maxHeight]. On a tablet the full width at 16 : 10 is most of the screen and pushes the
+/// [maxHeight] (320). On a tablet the full width at 16 : 10 is most of the screen and pushes the
 /// specs and the price below the fold; a phone's width stays under the cap, so it is
 /// unchanged.
 class HeroImageBox extends StatelessWidget {
-  static const maxHeight = 360.0;
+  static const maxHeight = 320.0;
   static const _ratio = 16 / 10;
   final Widget child;
   const HeroImageBox({super.key, required this.child});
