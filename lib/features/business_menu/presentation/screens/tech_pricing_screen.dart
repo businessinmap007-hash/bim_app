@@ -412,8 +412,16 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
                       children: [
                         for (final f in unitFields)
                           SizedBox(
-                            width: w,
-                            child: f.dataType == 'select'
+                            width: f.dataType == 'select' && DetailDisplay.asChips(f.display, f.options.length) ? c.maxWidth : w,
+                            child: f.dataType == 'select' && DetailDisplay.asChips(f.display, f.options.length)
+                                ? _ChipsField(
+                                    label: f.name,
+                                    options: [for (final o in f.options) (id: o.id, name: o.name)],
+                                    selected: {if (_unitOption[f.id] != null) _unitOption[f.id]!},
+                                    multi: false,
+                                    onChanged: (ids) => setState(() => _unitOption[f.id] = ids.isEmpty ? null : ids.first),
+                                  )
+                                : f.dataType == 'select'
                                 ? DropdownButtonFormField<int>(
                                     initialValue: _unitOption[f.id],
                                     isExpanded: true,
@@ -436,19 +444,21 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
                         // never a wall of buttons, never typed.
                         for (final g in describing)
                           SizedBox(
-                            width: w,
-                            child: _MultiChoiceField(
-                              label: g.groupName,
-                              options: [
-                                for (final o in g.options)
-                                  (id: o.id, name: localizedName(o.nameAr, o.nameEn, isEnglish)),
-                              ],
-                              selected: _choiceIds,
-                              onChanged: (ids) => setState(() {
+                            width: DetailDisplay.asChips(detailProfile.descriptiveDisplays[g.groupId] ?? 'auto', g.options.length)
+                                ? c.maxWidth
+                                : w,
+                            child: () {
+                              final options = [
+                                for (final o in g.options) (id: o.id, name: localizedName(o.nameAr, o.nameEn, isEnglish)),
+                              ];
+                              void change(Set<int> ids) => setState(() {
                                 _choiceIds.removeAll(g.options.map((o) => o.id));
                                 _choiceIds.addAll(ids);
-                              }),
-                            ),
+                              });
+                              return DetailDisplay.asChips(detailProfile.descriptiveDisplays[g.groupId] ?? 'auto', g.options.length)
+                                  ? _ChipsField(label: g.groupName, options: options, selected: _choiceIds, multi: true, onChanged: change)
+                                  : _MultiChoiceField(label: g.groupName, options: options, selected: _choiceIds, onChanged: change);
+                            }(),
                           ),
                       ],
                     );
@@ -1396,6 +1406,66 @@ class _MultiChoiceField extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
       ),
+    );
+  }
+}
+
+/// A list field drawn as BUTTONS — the canvas's look: its label small above,
+/// every option a chip, one tap. [multi] false = pick one (tap it again to clear);
+/// true = tick as many as apply. The admin chooses buttons or a dropdown per field.
+class _ChipsField extends StatelessWidget {
+  final String label;
+  final List<({int id, String name})> options;
+  final Set<int> selected;
+  final bool multi;
+  final ValueChanged<Set<int>> onChanged;
+  const _ChipsField({
+    required this.label,
+    required this.options,
+    required this.selected,
+    required this.multi,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: theme.textTheme.labelMedium?.copyWith(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: AppColors.primaryNavy.withValues(alpha: 0.6),
+          ),
+        ),
+        const SizedBox(height: 6),
+        Wrap(
+          spacing: 8,
+          runSpacing: 6,
+          children: [
+            for (final o in options)
+              FilterChip(
+                label: Text(o.name),
+                selected: selected.contains(o.id),
+                showCheckmark: false,
+                onSelected: (on) {
+                  final next = {...selected};
+                  if (multi) {
+                    on ? next.add(o.id) : next.remove(o.id);
+                  } else {
+                    next
+                      ..removeAll(options.map((e) => e.id))
+                      ..addAll(on ? {o.id} : const {});
+                  }
+                  onChanged(next);
+                },
+              ),
+          ],
+        ),
+      ],
     );
   }
 }

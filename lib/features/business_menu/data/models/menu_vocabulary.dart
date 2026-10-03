@@ -88,12 +88,16 @@ class DetailProfile {
   /// المنيو», in its order. Empty = the kind never chose, so the form offers
   /// every group «مكونات الخدمة» made descriptive for the trade.
   final List<int> descriptiveGroupIds;
+  /// How the admin set each of those groups to be drawn: group id → 'auto' |
+  /// 'chips' | 'dropdown'.
+  final Map<int, String> descriptiveDisplays;
   const DetailProfile({
     required this.code,
     required this.name,
     required this.fields,
     this.usesCatalog = true,
     this.descriptiveGroupIds = const [],
+    this.descriptiveDisplays = const {},
   });
 
   factory DetailProfile.fromJson(Map<String, dynamic> json) => DetailProfile(
@@ -101,6 +105,10 @@ class DetailProfile {
     name: json['name'] as String? ?? '',
     usesCatalog: json['uses_catalog'] as bool? ?? true,
     descriptiveGroupIds: (json['descriptive_group_ids'] as List<dynamic>? ?? []).map((e) => (e as num).toInt()).toList(),
+    descriptiveDisplays: {
+      for (final g in (json['descriptive_groups'] as List<dynamic>? ?? []))
+        ((g as Map<String, dynamic>)['id'] as num).toInt(): g['display'] as String? ?? 'auto',
+    },
     fields: (json['fields'] as List<dynamic>? ?? [])
         .map((e) => DetailField.fromJson(e as Map<String, dynamic>))
         .toList(),
@@ -119,6 +127,9 @@ class DetailField {
   /// 'number' | 'select' | 'text'.
   final String dataType;
   final List<DetailOption> options;
+  /// How a list field is drawn, as the admin set it in «أشكال المنيو»:
+  /// 'chips' (buttons) | 'dropdown' | 'auto' (buttons up to [DetailDisplay.autoChipsMax]).
+  final String display;
   const DetailField({
     required this.id,
     required this.code,
@@ -128,6 +139,7 @@ class DetailField {
     this.perItem = false,
     this.dataType = 'text',
     this.options = const [],
+    this.display = 'auto',
   });
 
   factory DetailField.fromJson(Map<String, dynamic> json) => DetailField(
@@ -138,6 +150,7 @@ class DetailField {
     showOnCard: json['show_on_card'] as bool? ?? false,
     perItem: json['per_item'] as bool? ?? false,
     dataType: json['data_type'] as String? ?? 'text',
+    display: json['display'] as String? ?? 'auto',
     options: (json['options'] as List<dynamic>? ?? [])
         .map((e) => DetailOption.fromJson(e as Map<String, dynamic>))
         .toList(),
@@ -192,4 +205,14 @@ class MenuVocabulary {
     }
     return null;
   }
+}
+
+/// The one rule that turns the admin's «العرض» choice into a widget: buttons
+/// (everything in view, one tap) or a dropdown (compact, for many options).
+abstract final class DetailDisplay {
+  /// «auto» draws buttons up to this many options, a dropdown beyond.
+  static const autoChipsMax = 6;
+
+  static bool asChips(String display, int optionCount) =>
+      display == 'chips' || (display == 'auto' && optionCount <= autoChipsMax);
 }
