@@ -60,6 +60,9 @@ class AppTheme {
       textTheme: AppTextStyles.themed(
         isDark ? Colors.white : AppColors.primaryNavy,
       ),
+      // The line under every tab strip: the canvas hairline, not the scheme's full-strength
+      // outline (a bright white rule across the dark screens).
+      tabBarTheme: TabBarThemeData(dividerColor: hairline),
       appBarTheme: AppBarTheme(
         backgroundColor: isDark
             ? AppColors.darkBackground
