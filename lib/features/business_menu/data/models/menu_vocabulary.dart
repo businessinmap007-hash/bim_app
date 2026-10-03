@@ -91,6 +91,9 @@ class DetailProfile {
   /// How the admin set each of those groups to be drawn: group id → 'auto' |
   /// 'chips' | 'dropdown'.
   final Map<int, String> descriptiveDisplays;
+  /// One choice or several, per descriptive group: group id → allows several.
+  /// A group the admin said nothing about allows several.
+  final Map<int, bool> descriptiveMultiples;
   const DetailProfile({
     required this.code,
     required this.name,
@@ -98,6 +101,7 @@ class DetailProfile {
     this.usesCatalog = true,
     this.descriptiveGroupIds = const [],
     this.descriptiveDisplays = const {},
+    this.descriptiveMultiples = const {},
   });
 
   factory DetailProfile.fromJson(Map<String, dynamic> json) => DetailProfile(
@@ -108,6 +112,10 @@ class DetailProfile {
     descriptiveDisplays: {
       for (final g in (json['descriptive_groups'] as List<dynamic>? ?? []))
         ((g as Map<String, dynamic>)['id'] as num).toInt(): g['display'] as String? ?? 'auto',
+    },
+    descriptiveMultiples: {
+      for (final g in (json['descriptive_groups'] as List<dynamic>? ?? []))
+        ((g as Map<String, dynamic>)['id'] as num).toInt(): g['multiple'] as bool? ?? true,
     },
     fields: (json['fields'] as List<dynamic>? ?? [])
         .map((e) => DetailField.fromJson(e as Map<String, dynamic>))

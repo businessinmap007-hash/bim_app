@@ -451,13 +451,15 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
                               final options = [
                                 for (final o in g.options) (id: o.id, name: localizedName(o.nameAr, o.nameEn, isEnglish)),
                               ];
+                              // «اختيار متعدد ام واحد فقط» — set per group in «أشكال المنيو».
+                              final multi = detailProfile.descriptiveMultiples[g.groupId] ?? true;
                               void change(Set<int> ids) => setState(() {
                                 _choiceIds.removeAll(g.options.map((o) => o.id));
-                                _choiceIds.addAll(ids);
+                                _choiceIds.addAll(multi || ids.isEmpty ? ids : {ids.first});
                               });
                               return DetailDisplay.asChips(detailProfile.descriptiveDisplays[g.groupId] ?? 'auto', g.options.length)
-                                  ? _ChipsField(label: g.groupName, options: options, selected: _choiceIds, multi: true, onChanged: change)
-                                  : _MultiChoiceField(label: g.groupName, options: options, selected: _choiceIds, onChanged: change);
+                                  ? _ChipsField(label: g.groupName, options: options, selected: _choiceIds, multi: multi, onChanged: change)
+                                  : _MultiChoiceField(label: g.groupName, options: options, selected: _choiceIds, multi: multi, onChanged: change);
                             }(),
                           ),
                       ],
@@ -1319,11 +1321,14 @@ class _MultiChoiceField extends StatelessWidget {
   final String label;
   final List<({int id, String name})> options;
   final Set<int> selected;
+  /// false = one choice: tapping an option picks it and closes the sheet.
+  final bool multi;
   final ValueChanged<Set<int>> onChanged;
   const _MultiChoiceField({
     required this.label,
     required this.options,
     required this.selected,
+    this.multi = true,
     required this.onChanged,
   });
 
@@ -1353,13 +1358,20 @@ class _MultiChoiceField extends StatelessWidget {
                     shrinkWrap: true,
                     children: [
                       for (final o in options)
-                        CheckboxListTile(
-                          value: picked.contains(o.id),
-                          title: Text(o.name),
-                          activeColor: AppColors.primaryNavy,
-                          controlAffinity: ListTileControlAffinity.leading,
-                          onChanged: (on) => setSheet(() => on == true ? picked.add(o.id) : picked.remove(o.id)),
-                        ),
+                        if (multi)
+                          CheckboxListTile(
+                            value: picked.contains(o.id),
+                            title: Text(o.name),
+                            activeColor: AppColors.primaryNavy,
+                            controlAffinity: ListTileControlAffinity.leading,
+                            onChanged: (on) => setSheet(() => on == true ? picked.add(o.id) : picked.remove(o.id)),
+                          )
+                        else
+                          ListTile(
+                            title: Text(o.name),
+                            trailing: picked.contains(o.id) ? const Icon(Icons.check, color: AppColors.primaryNavy) : null,
+                            onTap: () => Navigator.of(sheetContext).pop({o.id}),
+                          ),
                     ],
                   ),
                 ),
@@ -1368,14 +1380,15 @@ class _MultiChoiceField extends StatelessWidget {
                   child: Row(
                     children: [
                       TextButton(
-                        onPressed: () => setSheet(picked.clear),
+                        onPressed: multi ? () => setSheet(picked.clear) : () => Navigator.of(sheetContext).pop(<int>{}),
                         child: Text(l10n.commonClear),
                       ),
                       const Spacer(),
-                      FilledButton(
-                        onPressed: () => Navigator.of(sheetContext).pop(picked),
-                        child: Text(l10n.commonOk),
-                      ),
+                      if (multi)
+                        FilledButton(
+                          onPressed: () => Navigator.of(sheetContext).pop(picked),
+                          child: Text(l10n.commonOk),
+                        ),
                     ],
                   ),
                 ),
