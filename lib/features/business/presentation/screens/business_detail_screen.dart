@@ -5,6 +5,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
+import '../../../../shared/widgets/equal_height_grid.dart';
 import '../../../../shared/widgets/post_share.dart';
 import '../../../../shared/widgets/profile_cover_header.dart';
 import '../../../../shared/widgets/sliver_tab_bar_delegate.dart';
@@ -469,74 +470,57 @@ class _SectionGrid extends StatelessWidget {
   final Future<void> Function(MenuItemSummary item, int qty)? onDirectAdd;
   const _SectionGrid({required this.entries, required this.onTap, this.onDirectAdd});
 
-  /// «الكارت طويل جدا قصره بحيث الصفحة تاخد كارتين ونص» — المالك، 2026-10-03: the photo is
-  /// 1.8 wide for 1 tall (not a square) and the cell is exactly the card's content tall.
-  static const _imageAspect = 1.8;
   static const _captionHeight = 20.0;
+  /// «قصره بحيث الصفحة تاخد كارتين ونص» — the photo is a little wider than tall; with the
+  /// empty band gone (EqualHeightGrid) that is what brings a screen to two and a half rows.
+  static const _imageAspect = 1.25;
 
   @override
   Widget build(BuildContext context) {
     // «اريده اثنين مثل صفحة التاجر واذا كان العرض على التاب يصير 3 فى الصف» —
     // المالك، 2026-10-03: two per row on a phone, three wider.
     final columns = Breakpoints.sizeFor(MediaQuery.of(context).size.width) == ScreenSize.mobile ? 2 : 3;
-    const gap = 10.0;
-    final hasCaptions = entries.any((e) => e.caption != null);
-    final detailLines = (entries.any((e) => e.item.offeringLabel != null) ? 1 : 0) +
-        (entries.any((e) => e.item.specSummary != null) ? 1 : 0);
-    final hasBrand = entries.any((e) => e.item.brandName != null);
-    final hasStepper = onDirectAdd != null && entries.any((e) => !e.item.hasChoices && e.item.saleUnitLabel != null);
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final cardWidth = (constraints.maxWidth - (columns - 1) * gap) / columns;
-        // The photo plus exactly the text the card lays out (and the section name above).
-        final extent = MenuItemGridCard.extentFor(
-          cardWidth,
-          imageAspect: _imageAspect,
-          caption: hasCaptions,
-          detailLines: detailLines,
-          hasBrand: hasBrand,
-          hasStepper: hasStepper,
-        );
+    // «اسفل الكارت مساحة كبيرة فارغة لا لازمة ليها» — المالك، 2026-10-03: every row is as
+    // tall as its own tallest card (EqualHeightGrid), not a fixed guess of the biggest one.
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: EqualHeightGrid(
+        columns: columns,
+        mainAxisSpacing: 6,
+        children: [
+          for (final entry in entries)
+            _cell(
+              context,
+              MenuItemGridCard(
+                imageAspect: _imageAspect,
+                item: entry.item,
+                onTap: () => onTap(entry.item),
+                onDirectAdd: onDirectAdd == null ? null : (qty) => onDirectAdd!(entry.item, qty),
+              ),
+              entry.caption,
+            ),
+        ],
+      ),
+    );
+  }
 
-        return GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          padding: const EdgeInsets.only(bottom: 8),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: columns,
-            mainAxisSpacing: 6,
-            crossAxisSpacing: gap,
-            mainAxisExtent: extent,
+  Widget _cell(BuildContext context, Widget card, String? caption) {
+    if (caption == null) return card;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: _captionHeight,
+          child: Text(
+            caption,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w800),
           ),
-          itemCount: entries.length,
-          itemBuilder: (context, index) {
-            final entry = entries[index];
-            final card = MenuItemGridCard(
-              imageAspect: _imageAspect,
-              item: entry.item,
-              onTap: () => onTap(entry.item),
-              onDirectAdd: onDirectAdd == null ? null : (qty) => onDirectAdd!(entry.item, qty),
-            );
-            if (entry.caption == null) return card;
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: _captionHeight,
-                  child: Text(
-                    entry.caption!,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w800),
-                  ),
-                ),
-                Expanded(child: card),
-              ],
-            );
-          },
-        );
-      },
+        ),
+        Expanded(child: card),
+      ],
     );
   }
 }

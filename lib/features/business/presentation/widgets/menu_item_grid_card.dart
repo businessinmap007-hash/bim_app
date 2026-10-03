@@ -22,9 +22,8 @@ class MenuItemGridCard extends StatefulWidget {
   final MenuItemSummary item;
   final VoidCallback? onTap;
   final Future<void> Function(int qty)? onDirectAdd;
-  /// Width ÷ height of the photo area: 1 (a square, what the merchant's grid draws) or a
-  /// wider, shorter picture — the customer's page uses 1.8 so two and a half rows of
-  /// cards fit one screen.
+  /// Width ÷ height of the photo area — 1 is a square (the merchant's grid); the customer's
+  /// page uses a slightly wider picture so two and a half rows fit one screen.
   final double imageAspect;
   const MenuItemGridCard({
     super.key,
@@ -33,26 +32,6 @@ class MenuItemGridCard extends StatefulWidget {
     this.onDirectAdd,
     this.imageAspect = 1,
   });
-
-  /// The height a grid cell must give this card: the photo, then exactly the text block
-  /// the card lays out (padding, name, up to two lines for each detail row it shows, the
-  /// available quantity, the price line — or the stepper row instead of it), plus the
-  /// section name above when the grid captions its cards. Used by the grid that sizes the
-  /// cells, and by the test that renders the worst case inside it.
-  static double extentFor(
-    double cardWidth, {
-    double imageAspect = 1,
-    bool caption = false,
-    int detailLines = 0,
-    bool hasBrand = false,
-    bool hasStepper = false,
-  }) {
-    const padding = 20.0, name = 22.0, quantity = 18.0, gap = 6.0, price = 22.0, stepper = 56.0, slack = 6.0;
-    const twoLines = 36.0, captionHeight = 20.0, brand = 18.0;
-    return cardWidth / imageAspect +
-        padding + name + detailLines * twoLines + (hasBrand ? brand : 0) + quantity + gap + (hasStepper ? stepper : price) + slack +
-        (caption ? captionHeight : 0);
-  }
 
   bool get _offersStepper =>
       onDirectAdd != null && !item.hasChoices && item.saleUnitLabel != null;
