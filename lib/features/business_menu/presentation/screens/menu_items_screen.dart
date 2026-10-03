@@ -737,6 +737,8 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
                     : AppLocalizations.of(context)!.menuItemsManageTypesAction),
                 style: FilledButton.styleFrom(
                   visualDensity: VisualDensity.compact,
+                  // A small pill beside a heading — not the full 52-tall slab of the theme.
+                  minimumSize: const Size(0, 40),
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                 ),
               ),
