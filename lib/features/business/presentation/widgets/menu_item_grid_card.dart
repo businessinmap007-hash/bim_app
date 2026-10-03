@@ -202,6 +202,29 @@ class _MenuItemGridCardState extends State<MenuItemGridCard> {
                         overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.titleSmall,
                       ),
+                    // «ينقصها التفاصيل كما فى كارت القائمة» — المالك، 2026-10-03: what
+                    // the item IS («غرفة نوم — ألترا كلاسيك — زان») and the kind's
+                    // one-line summary, as the list card shows them.
+                    if (item.offeringLabel != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2),
+                        child: Text(
+                          item.offeringLabel!,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
+                        ),
+                      ),
+                    if (item.specSummary != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2),
+                        child: Text(
+                          item.specSummary!,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
+                        ),
+                      ),
                     if (item.brandName != null)
                       Padding(
                         padding: const EdgeInsets.only(top: 2),

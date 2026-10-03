@@ -463,30 +463,71 @@ List<_SectionData> _prepareSections(List<MenuSectionGroup> sections, bool isEngl
 /// each came from — see the "grid mode drops branch headers" note where
 /// this is built.
 class _SectionGrid extends StatelessWidget {
-  final List<MenuItemSummary> items;
+  /// Each card with the name of the section it belongs to (null = no caption).
+  final List<({MenuItemSummary item, String? caption})> entries;
   final ValueChanged<MenuItemSummary> onTap;
   final Future<void> Function(MenuItemSummary item, int qty)? onDirectAdd;
-  const _SectionGrid({required this.items, required this.onTap, this.onDirectAdd});
+  const _SectionGrid({required this.entries, required this.onTap, this.onDirectAdd});
+
+  /// A card's own height beside its width — what the grid always used.
+  static const _cardAspect = 0.62;
+  static const _captionHeight = 24.0;
+  static const _detailLine = 34.0;
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.only(bottom: 8),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
-        childAspectRatio: 0.62,
-      ),
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        final item = items[index];
-        return MenuItemGridCard(
-          item: item,
-          onTap: () => onTap(item),
-          onDirectAdd: onDirectAdd == null ? null : (qty) => onDirectAdd!(item, qty),
+    // «اريده اثنين مثل صفحة التاجر واذا كان العرض على التاب يصير 3 فى الصف» —
+    // المالك، 2026-10-03: two per row on a phone, three wider.
+    final columns = Breakpoints.sizeFor(MediaQuery.of(context).size.width) == ScreenSize.mobile ? 2 : 3;
+    const gap = 10.0;
+    final hasCaptions = entries.any((e) => e.caption != null);
+    final detailLines = entries.any((e) => e.item.offeringLabel != null) ? 1 : 0;
+    final summaryLines = entries.any((e) => e.item.specSummary != null) ? 1 : 0;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final cardWidth = (constraints.maxWidth - (columns - 1) * gap) / columns;
+        // The details and the section name above make a card taller than the
+        // bare one — give the cell exactly that much more.
+        final extent = cardWidth / _cardAspect +
+            (hasCaptions ? _captionHeight : 0) +
+            (detailLines + summaryLines) * _detailLine;
+
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          padding: const EdgeInsets.only(bottom: 8),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: columns,
+            mainAxisSpacing: gap,
+            crossAxisSpacing: gap,
+            mainAxisExtent: extent,
+          ),
+          itemCount: entries.length,
+          itemBuilder: (context, index) {
+            final entry = entries[index];
+            final card = MenuItemGridCard(
+              item: entry.item,
+              onTap: () => onTap(entry.item),
+              onDirectAdd: onDirectAdd == null ? null : (qty) => onDirectAdd!(entry.item, qty),
+            );
+            if (entry.caption == null) return card;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: _captionHeight,
+                  child: Text(
+                    entry.caption!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w800),
+                  ),
+                ),
+                Expanded(child: card),
+              ],
+            );
+          },
         );
       },
     );
@@ -537,6 +578,59 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
   /// anything: two or more brands (and, once one is picked, two or more of
   /// its series), and two or more conditions. A restaurant section shows
   /// nothing.
+  /// Whether [_sectionFilter] draws anything for this section (≥2 brands or conditions).
+  bool _sectionHasFilter(_SectionData section) {
+    final items = section.branches.expand((b) => b.items).toList();
+    final brands = <String>{for (final i in items) ?i.filterBrand};
+    final conditions = <String>{
+      for (final i in items)
+        if (i.condition != null && i.condition!.name.isNotEmpty) i.condition!.name,
+    };
+    return brands.length >= 2 || conditions.length >= 2;
+  }
+
+  /// The grid view's blocks: consecutive filterless sections share one grid; a
+  /// section with brand/condition filters keeps its own heading, filter row and grid.
+  List<Widget> _gridBlocks(BuildContext context, List<_SectionData> sections) {
+    final blocks = <Widget>[];
+    var run = <({MenuItemSummary item, String? caption})>[];
+
+    void onTap(MenuItemSummary item) => showAddToCartSheet(context, item, sharedOrderId: widget.sharedOrderId);
+    Future<void> onDirectAdd(MenuItemSummary item, int qty) => _directAdd(context, item, qty);
+
+    void flush() {
+      if (run.isEmpty) return;
+      blocks.add(Padding(
+        padding: const EdgeInsets.only(bottom: 20),
+        child: _SectionGrid(entries: run, onTap: onTap, onDirectAdd: onDirectAdd),
+      ));
+      run = [];
+    }
+
+    for (final section in sections) {
+      final items = section.branches.expand((b) => b.items).where((i) => _passesFilter(section.group.name, i)).toList();
+      if (_sectionHasFilter(section)) {
+        flush();
+        blocks.add(Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(section.group.name, style: Theme.of(context).textTheme.titleSmall),
+              const SizedBox(height: 8),
+              _sectionFilter(context, section),
+              _SectionGrid(entries: [for (final i in items) (item: i, caption: null)], onTap: onTap, onDirectAdd: onDirectAdd),
+            ],
+          ),
+        ));
+      } else {
+        run.addAll([for (final i in items) (item: i, caption: section.group.name)]);
+      }
+    }
+    flush();
+    return blocks;
+  }
+
   Widget _sectionFilter(BuildContext context, _SectionData section) {
     final key = section.group.name;
     final items = section.branches.expand((b) => b.items).toList();
@@ -731,7 +825,12 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // Grid mode: sections WITHOUT filters flow into one shared grid
+                      // — a lone card is completed by the next section's — with the
+                      // section's name above each card.
+                      if (isGrid) ..._gridBlocks(context, visibleSections),
                       for (final section in visibleSections)
+                        if (!isGrid)
                         Padding(
                           padding: const EdgeInsets.only(bottom: 20),
                           child: Column(
@@ -740,24 +839,7 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
                               Text(section.group.name, style: Theme.of(context).textTheme.titleSmall),
                               const SizedBox(height: 8),
                               _sectionFilter(context, section),
-                              // Grid mode packs every item in the SECTION into
-                              // one flat, two-per-row grid — branch headers
-                              // are dropped here (not per LIST mode below):
-                              // keeping one branch's items in a grid of their
-                              // own left a branch with a single item taking a
-                              // whole row to itself, the exact "one product
-                              // per row" this mode exists to avoid whenever a
-                              // second card could sit right beside it.
-                              if (isGrid)
-                                _SectionGrid(
-                                  items: section.branches
-                                      .expand((b) => b.items)
-                                      .where((i) => _passesFilter(section.group.name, i))
-                                      .toList(),
-                                  onTap: (item) => showAddToCartSheet(context, item, sharedOrderId: widget.sharedOrderId),
-                                  onDirectAdd: (item, qty) => _directAdd(context, item, qty),
-                                )
-                              else
+                              if (!isGrid)
                                 for (final branch in section.branches)
                                   if (branch.items.any((i) => _passesFilter(section.group.name, i))) ...[
                                   // A split section IS its branch («تابلت» under
