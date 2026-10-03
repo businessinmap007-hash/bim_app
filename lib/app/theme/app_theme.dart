@@ -70,8 +70,10 @@ class AppTheme {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryNavy,
-          foregroundColor: Colors.white,
+          // The interactive colours, like the filled button: navy / white in light, gold /
+          // navy in dark (a navy button on the dark card was nearly invisible).
+          backgroundColor: interactive,
+          foregroundColor: onInteractive,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),

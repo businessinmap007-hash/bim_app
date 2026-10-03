@@ -3,8 +3,8 @@ import 'package:bim_app/app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// A product card's photo stand-in: a soft tint in light, the card's OWN surface in dark
-/// — so the dark card is one colour, not a grey top over a navy body.
+/// A product card's photo stand-in: a soft tint (a little darker than the body) in light, and
+/// in dark the card's surface two shades DARKER — the same relation, never a lighter grey.
 void main() {
   Future<Color> placeholder(WidgetTester tester, ThemeData theme) async {
     late Color colour;
@@ -23,8 +23,10 @@ void main() {
     return colour;
   }
 
-  testWidgets('dark: the card surface; light: the ink tint', (tester) async {
-    expect(await placeholder(tester, AppTheme.dark()), AppColors.darkSurface);
+  testWidgets('dark: the surface two shades darker; light: the ink tint', (tester) async {
+    final dark = await placeholder(tester, AppTheme.dark());
+    expect(dark, Color.lerp(AppColors.darkSurface, Colors.black, 0.22));
+    expect(dark.computeLuminance(), lessThan(AppColors.darkSurface.computeLuminance()), reason: 'darker than the card body, as light is');
     expect(await placeholder(tester, AppTheme.light()), AppColors.primaryNavy.withValues(alpha: 0.08));
   });
 }

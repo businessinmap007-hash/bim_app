@@ -35,14 +35,16 @@ class AppColors {
   ];
 
   /// The fill behind a product photo's stand-in (the emoji / icon shown when an item has
-  /// no picture) on a CARD whose top is that image. Light: a soft tint of the ink, so the
-  /// photo area reads against the white body. Dark: the card's own surface — a white tint
-  /// over the navy card made the picture area a second, greyer colour and the card read as
-  /// two blocks instead of one.
+  /// no picture) on a CARD whose top is that image — always a touch different from the
+  /// card's own body so the photo area reads as its own block. Light: a soft tint of the
+  /// ink (a little darker than the white body). Dark: the card surface two shades darker
+  /// («مكان الصورة اقل درجتين») — the white tint it used to get made it a greyer, LIGHTER
+  /// block than the navy body, the opposite of the light theme's relation.
   static Color photoPlaceholder(BuildContext context) {
     final theme = Theme.of(context);
     if (theme.brightness == Brightness.dark) {
-      return theme.cardTheme.color ?? theme.colorScheme.surface;
+      final surface = theme.cardTheme.color ?? theme.colorScheme.surface;
+      return Color.lerp(surface, Colors.black, 0.22)!;
     }
     return theme.colorScheme.onSurface.withValues(alpha: 0.08);
   }

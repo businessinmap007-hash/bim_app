@@ -46,4 +46,14 @@ void main() {
     expect(theme.filledButtonTheme.style!.backgroundColor, isNull);
     expect(theme.filledButtonTheme.style!.foregroundColor, isNull);
   });
+
+  testWidgets('the elevated button follows the same light / dark colours (never navy on a dark card)', (tester) async {
+    final light = AppTheme.light().elevatedButtonTheme.style!;
+    final dark = AppTheme.dark().elevatedButtonTheme.style!;
+
+    expect(light.backgroundColor!.resolve({}), AppColors.primaryNavy);
+    expect(light.foregroundColor!.resolve({}), Colors.white);
+    expect(dark.backgroundColor!.resolve({}), AppColors.accentGold);
+    expect(dark.foregroundColor!.resolve({}), AppColors.primaryNavy);
+  });
 }
