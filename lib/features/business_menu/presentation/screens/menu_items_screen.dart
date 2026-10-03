@@ -9,6 +9,7 @@ import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/utils/localized_name.dart';
 import '../../../../shared/utils/produce_emoji.dart';
+import '../../../../shared/widgets/equal_height_grid.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../../shared/widgets/view_mode_toggle.dart';
 import '../../../media/application/media_picker_service.dart';
@@ -396,13 +397,10 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
       // desktop, same tiers as Breakpoints.gridColumnsFor's own category
       // grid) gets 3.
       final columns = Breakpoints.sizeFor(MediaQuery.of(context).size.width) == ScreenSize.mobile ? 2 : 3;
-      return GridView.count(
-        crossAxisCount: columns,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
+      return EqualHeightGrid(
+        columns: columns,
         mainAxisSpacing: 8,
         crossAxisSpacing: 8,
-        childAspectRatio: 0.62,
         children: [
           for (final item in items)
             _ItemGridTile(
@@ -556,13 +554,11 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
       }
     }
 
-    return GridView.count(
-      crossAxisCount: columns,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+    // «اسفل الكارت مساحة فارغة» — every row is as tall as its tallest card, no taller.
+    return EqualHeightGrid(
+      columns: columns,
       mainAxisSpacing: 8,
       crossAxisSpacing: 8,
-      childAspectRatio: 0.62,
       children: tiles,
     );
   }
@@ -1137,7 +1133,7 @@ class _EmptyBranchGridTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             AspectRatio(
-              aspectRatio: 1,
+              aspectRatio: _gridPhotoAspect,
               child: Container(
                 alignment: Alignment.center,
                 color: AppColors.photoPlaceholder(context),
@@ -1240,6 +1236,10 @@ class _ItemTile extends ConsumerWidget {
 /// card, two per row, same tap-to-edit and delete actions. Merchants kept
 /// seeing a plain list here no matter which mode they picked, since this
 /// screen never actually rendered the mode it was letting them choose.
+/// Width ÷ height of a grid card's photo — the same wider-than-tall picture the customer's
+/// cards use (a square made every card too tall).
+const _gridPhotoAspect = 1.25;
+
 class _ItemGridTile extends ConsumerWidget {
   final BusinessMenuItem item;
   final VoidCallback onTap;
@@ -1279,7 +1279,7 @@ class _ItemGridTile extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               AspectRatio(
-                aspectRatio: 1,
+                aspectRatio: _gridPhotoAspect,
                 child: _itemImage(item) != null
                     ? Image.network(
                         _itemImage(item)!,
