@@ -25,6 +25,7 @@ import '../../../general_chat/presentation/screens/chat_thread_screen.dart';
 import '../../application/orders_providers.dart';
 import '../../data/models/placed_order.dart';
 import '../widgets/order_driver_card.dart';
+import '../widgets/installment_schedule.dart';
 import '../widgets/order_tracker_timeline.dart';
 import '../widgets/order_trust_section.dart';
 
@@ -582,32 +583,7 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
             ],
           ),
           // «تقسيط»: the payments by month, each with its date and amount.
-          if (order.installments.isNotEmpty) ...[
-            const SizedBox(height: 14),
-            Text(l10n.ordersInstallmentsTitle, style: Theme.of(context).textTheme.titleSmall),
-            const SizedBox(height: 6),
-            for (final p in order.installments)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 3),
-                child: Row(
-                  children: [
-                    SizedBox(width: 26, child: Text('${p.seq}', style: Theme.of(context).textTheme.bodySmall)),
-                    Expanded(
-                      child: Text(
-                        p.dueOn == null ? '' : p.dueOn!.toIso8601String().substring(0, 10),
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ),
-                    if (p.paidAt != null)
-                      Padding(
-                        padding: const EdgeInsetsDirectional.only(end: 8),
-                        child: Text(l10n.ordersInstallmentPaid, style: TextStyle(color: AppColors.success, fontSize: 12)),
-                      ),
-                    Text(p.amount.toStringAsFixed(0), style: Theme.of(context).textTheme.titleSmall),
-                  ],
-                ),
-              ),
-          ],
+          InstallmentSchedule(installments: order.installments),
           if (order.notes != null && order.notes!.isNotEmpty) ...[
             const SizedBox(height: 12),
             Text(order.notes!, style: Theme.of(context).textTheme.bodySmall),

@@ -11,6 +11,7 @@ import '../../application/business_orders_providers.dart';
 import '../../data/models/placed_order.dart';
 import '../../application/orders_providers.dart';
 import '../../../shipping/presentation/screens/shipping_company_picker_screen.dart';
+import '../widgets/installment_schedule.dart';
 import '../widgets/order_tracker_timeline.dart';
 import '../widgets/order_trust_section.dart';
 
@@ -581,6 +582,8 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                     Text(order.finalTotal.toStringAsFixed(2), style: Theme.of(context).textTheme.titleSmall),
                   ],
                 ),
+                // «تقسيط»: what the customer pays each month, and when.
+                InstallmentSchedule(installments: order.installments),
                 if (order.notes != null && order.notes!.isNotEmpty) ...[
                   const SizedBox(height: 12),
                   Text(l10n.businessOrdersNotes, style: Theme.of(context).textTheme.titleSmall),
