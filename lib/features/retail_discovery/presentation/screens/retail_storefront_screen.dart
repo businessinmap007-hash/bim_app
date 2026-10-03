@@ -176,7 +176,7 @@ class _StorefrontListingTile extends ConsumerWidget {
               child: listing.productImage != null
                   ? CachedNetworkImage(imageUrl: listing.productImage!, fit: BoxFit.cover)
                   : Container(
-                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.08),
+                      color: AppColors.photoPlaceholder(context),
                       alignment: Alignment.center,
                       child: Text(produceEmoji(listing.productNameEn), style: const TextStyle(fontSize: 20)),
                     ),

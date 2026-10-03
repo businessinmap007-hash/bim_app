@@ -92,7 +92,7 @@ class _LogoPlaceholder extends StatelessWidget {
     // mode, where onSurface resolves to white instead.
     final onSurface = Theme.of(context).colorScheme.onSurface;
     return Container(
-      color: onSurface.withValues(alpha: 0.08),
+      color: AppColors.photoPlaceholder(context),
       child: Icon(Icons.storefront_outlined, color: onSurface),
     );
   }

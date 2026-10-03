@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../application/retail_discovery_providers.dart';
@@ -196,7 +197,7 @@ class _ProductTile extends StatelessWidget {
             child: product.image != null
                 ? CachedNetworkImage(imageUrl: product.image!, fit: BoxFit.cover)
                 : Container(
-                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.08),
+                    color: AppColors.photoPlaceholder(context),
                     child: const Icon(Icons.inventory_2_outlined),
                   ),
           ),

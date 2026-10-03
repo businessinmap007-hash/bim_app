@@ -57,7 +57,7 @@ class _ImagePlaceholder extends StatelessWidget {
   Widget build(BuildContext context) {
     final onSurface = Theme.of(context).colorScheme.onSurface;
     return Container(
-      color: onSurface.withValues(alpha: 0.08),
+      color: AppColors.photoPlaceholder(context),
       child: Icon(Icons.sell_outlined, color: onSurface),
     );
   }

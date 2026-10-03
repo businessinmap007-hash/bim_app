@@ -1140,7 +1140,7 @@ class _EmptyBranchGridTile extends StatelessWidget {
               aspectRatio: 1,
               child: Container(
                 alignment: Alignment.center,
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.08),
+                color: AppColors.photoPlaceholder(context),
                 child: Text(produceEmoji(branch.nameEn ?? branch.nameAr), style: const TextStyle(fontSize: 36)),
               ),
             ),

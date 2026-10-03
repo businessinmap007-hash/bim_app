@@ -68,7 +68,7 @@ class RetailListingCardTile extends StatelessWidget {
                               height: 16,
                               child: listing.businessLogo != null
                                   ? CachedNetworkImage(imageUrl: listing.businessLogo!, fit: BoxFit.cover)
-                                  : Container(color: theme.colorScheme.onSurface.withValues(alpha: 0.08)),
+                                  : Container(color: AppColors.photoPlaceholder(context)),
                             ),
                           ),
                           const SizedBox(width: 6),
@@ -152,9 +152,8 @@ class _ProductPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final onSurface = Theme.of(context).colorScheme.onSurface;
     return Container(
-      color: onSurface.withValues(alpha: 0.08),
+      color: AppColors.photoPlaceholder(context),
       alignment: Alignment.center,
       child: Text(produceEmoji(nameEn), style: const TextStyle(fontSize: 28)),
     );

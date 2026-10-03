@@ -405,7 +405,7 @@ class _ImagePlaceholder extends StatelessWidget {
     final onSurface = Theme.of(context).colorScheme.onSurface;
     return Container(
       alignment: Alignment.center,
-      color: onSurface.withValues(alpha: 0.08),
+      color: AppColors.photoPlaceholder(context),
       child: emoji != null
           ? Text(emoji!, style: const TextStyle(fontSize: 28))
           : Icon(Icons.restaurant_menu_outlined, color: onSurface),
