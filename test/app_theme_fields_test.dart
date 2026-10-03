@@ -28,6 +28,7 @@ void main() {
 
     test('the divider is the canvas hairline and the list row its 15/600 title in $name', () {
       expect(theme.dividerTheme.color, ink.withValues(alpha: 0.08));
+      expect(theme.dividerColor, hairline, reason: 'the legacy theme.dividerColor borders are the canvas hairline');
       expect(theme.dividerTheme.thickness, 1);
 
       final tile = theme.listTileTheme;

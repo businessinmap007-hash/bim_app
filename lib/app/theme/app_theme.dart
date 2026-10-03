@@ -49,6 +49,10 @@ class AppTheme {
       useMaterial3: true,
       brightness: brightness,
       colorScheme: colorScheme,
+      // The legacy hairline colour that ~30 screens read as `theme.dividerColor` for their
+      // table / card borders: the canvas hairline, not the colour scheme's full-strength
+      // outline (which drew bright white lines around spec tables in dark).
+      dividerColor: hairline,
       scaffoldBackgroundColor: isDark
           ? AppColors.darkBackground
           : AppColors.lightBackground,
