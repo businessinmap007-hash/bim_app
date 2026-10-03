@@ -510,7 +510,7 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
                           SizedBox(
                             width: f.dataType == 'select' && DetailDisplay.asChips(f.display, f.options.length) ? c.maxWidth : w,
                             child: f.dataType == 'select' && DetailDisplay.asChips(f.display, f.options.length)
-                                ? _ChipsField(
+                                ? DetailChipsField(
                                     label: f.name,
                                     options: [for (final o in f.options) (id: o.id, name: o.name)],
                                     selected: {if (_unitOption[f.id] != null) _unitOption[f.id]!},
@@ -552,7 +552,7 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
                                 _choiceIds.addAll(multi || ids.isEmpty ? ids : {ids.first});
                               });
                               return DetailDisplay.asChips(g.display, g.options.length)
-                                  ? _ChipsField(label: g.groupName, options: options, selected: _choiceIds, multi: multi, onChanged: change)
+                                  ? DetailChipsField(label: g.groupName, options: options, selected: _choiceIds, multi: multi, onChanged: change)
                                   : _MultiChoiceField(label: g.groupName, options: options, selected: _choiceIds, multi: multi, onChanged: change);
                             }(),
                           ),
@@ -1596,13 +1596,15 @@ class _MultiChoiceField extends StatelessWidget {
 /// A list field drawn as BUTTONS — the canvas's look: its label small above,
 /// every option a chip, one tap. [multi] false = pick one (tap it again to clear);
 /// true = tick as many as apply. The admin chooses buttons or a dropdown per field.
-class _ChipsField extends StatelessWidget {
+@visibleForTesting
+class DetailChipsField extends StatelessWidget {
   final String label;
   final List<({int id, String name})> options;
   final Set<int> selected;
   final bool multi;
   final ValueChanged<Set<int>> onChanged;
-  const _ChipsField({
+  const DetailChipsField({
+    super.key,
     required this.label,
     required this.options,
     required this.selected,
@@ -1639,7 +1641,10 @@ class _ChipsField extends StatelessWidget {
                   child: InkWell(
                     borderRadius: BorderRadius.circular(14),
                     onTap: () {
-                      final next = {...selected};
+                      // Only THIS field's ids go back: [selected] may be the whole screen's
+                      // set (every describing group shares one), and another group's id
+                      // leaking into the result made the first tap look like it did nothing.
+                      final next = {for (final e in options) if (selected.contains(e.id)) e.id};
                       if (multi) {
                         on ? next.remove(o.id) : next.add(o.id);
                       } else {
