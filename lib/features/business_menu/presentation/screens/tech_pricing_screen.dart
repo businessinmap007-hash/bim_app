@@ -1623,59 +1623,36 @@ class DetailChipsField extends StatelessWidget {
           style: theme.textTheme.labelMedium?.copyWith(
             fontSize: 12,
             fontWeight: FontWeight.w600,
-            color: AppColors.primaryNavy.withValues(alpha: 0.6),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
           ),
         ),
         const SizedBox(height: 6),
-        // The canvas's buttons: roomy, softly rounded rectangles — the chosen one
-        // gold with bold navy text, the rest white with a thin border.
+        // The canvas's chips, from the app's chip theme (AppTheme.chipTheme): the chosen
+        // one a gold pill with bold navy text, the rest surface-coloured with a hairline.
         Wrap(
-          spacing: 10,
-          runSpacing: 10,
+          spacing: 8,
+          runSpacing: 8,
           children: [
             for (final o in options)
-              Builder(builder: (context) {
-                final on = selected.contains(o.id);
-                return Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(14),
-                    onTap: () {
-                      // Only THIS field's ids go back: [selected] may be the whole screen's
-                      // set (every describing group shares one), and another group's id
-                      // leaking into the result made the first tap look like it did nothing.
-                      final next = {for (final e in options) if (selected.contains(e.id)) e.id};
-                      if (multi) {
-                        on ? next.remove(o.id) : next.add(o.id);
-                      } else {
-                        next
-                          ..removeAll(options.map((e) => e.id))
-                          ..addAll(on ? const {} : {o.id});
-                      }
-                      onChanged(next);
-                    },
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 120),
-                      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 11),
-                      decoration: BoxDecoration(
-                        color: on ? AppColors.accentGold : Colors.white,
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(
-                          color: on ? AppColors.accentGold : AppColors.primaryNavy.withValues(alpha: 0.18),
-                        ),
-                      ),
-                      child: Text(
-                        o.name,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: on ? FontWeight.w800 : FontWeight.w600,
-                          color: AppColors.primaryNavy,
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              }),
+              ChoiceChip(
+                label: Text(o.name),
+                selected: selected.contains(o.id),
+                onSelected: (_) {
+                  final on = selected.contains(o.id);
+                  // Only THIS field's ids go back: [selected] may be the whole screen's
+                  // set (every describing group shares one), and another group's id
+                  // leaking into the result made the first tap look like it did nothing.
+                  final next = {for (final e in options) if (selected.contains(e.id)) e.id};
+                  if (multi) {
+                    on ? next.remove(o.id) : next.add(o.id);
+                  } else {
+                    next
+                      ..removeAll(options.map((e) => e.id))
+                      ..addAll(on ? const {} : {o.id});
+                  }
+                  onChanged(next);
+                },
+              ),
           ],
         ),
       ],
