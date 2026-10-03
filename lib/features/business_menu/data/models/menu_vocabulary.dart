@@ -42,6 +42,12 @@ class VocabularyGroup {
   /// heading, its cards under it, «إضافة منتج» under those. The one switch that
   /// decides it; never guessed from the kind of menu.
   final bool branchesAsSections;
+  /// For a DESCRIPTIVE group, as «مكونات الخدمة» set it for this trade: how it is
+  /// drawn ('auto' | 'chips' | 'dropdown'), one choice or several, and its place
+  /// among the other descriptive groups. Nothing here comes from the menu kind.
+  final String display;
+  final bool multiple;
+  final int descriptiveSort;
   const VocabularyGroup({
     required this.groupId,
     required this.groupName,
@@ -53,6 +59,9 @@ class VocabularyGroup {
     this.detailProfile,
     this.descriptive = false,
     this.branchesAsSections = false,
+    this.display = 'auto',
+    this.multiple = true,
+    this.descriptiveSort = 0,
   });
 
   factory VocabularyGroup.fromJson(Map<String, dynamic> json) => VocabularyGroup(
@@ -67,6 +76,9 @@ class VocabularyGroup {
     detailed: json['detailed'] as bool? ?? false,
     descriptive: json['descriptive'] as bool? ?? false,
     branchesAsSections: json['branches_as_sections'] as bool? ?? false,
+    display: json['display'] as String? ?? 'auto',
+    multiple: json['multiple'] as bool? ?? true,
+    descriptiveSort: (json['descriptive_sort'] as num?)?.toInt() ?? 0,
     detailProfile: json['detail_profile'] is Map<String, dynamic>
         ? DetailProfile.fromJson(json['detail_profile'] as Map<String, dynamic>)
         : null,
@@ -84,39 +96,17 @@ class DetailProfile {
   /// the merchant names the item himself and states every field. Set in the
   /// admin's «أشكال المنيو», never here.
   final bool usesCatalog;
-  /// The descriptive option groups the admin ticked for this kind in «أشكال
-  /// المنيو», in its order. Empty = the kind never chose, so the form offers
-  /// every group «مكونات الخدمة» made descriptive for the trade.
-  final List<int> descriptiveGroupIds;
-  /// How the admin set each of those groups to be drawn: group id → 'auto' |
-  /// 'chips' | 'dropdown'.
-  final Map<int, String> descriptiveDisplays;
-  /// One choice or several, per descriptive group: group id → allows several.
-  /// A group the admin said nothing about allows several.
-  final Map<int, bool> descriptiveMultiples;
   const DetailProfile({
     required this.code,
     required this.name,
     required this.fields,
     this.usesCatalog = true,
-    this.descriptiveGroupIds = const [],
-    this.descriptiveDisplays = const {},
-    this.descriptiveMultiples = const {},
   });
 
   factory DetailProfile.fromJson(Map<String, dynamic> json) => DetailProfile(
     code: json['code'] as String,
     name: json['name'] as String? ?? '',
     usesCatalog: json['uses_catalog'] as bool? ?? true,
-    descriptiveGroupIds: (json['descriptive_group_ids'] as List<dynamic>? ?? []).map((e) => (e as num).toInt()).toList(),
-    descriptiveDisplays: {
-      for (final g in (json['descriptive_groups'] as List<dynamic>? ?? []))
-        ((g as Map<String, dynamic>)['id'] as num).toInt(): g['display'] as String? ?? 'auto',
-    },
-    descriptiveMultiples: {
-      for (final g in (json['descriptive_groups'] as List<dynamic>? ?? []))
-        ((g as Map<String, dynamic>)['id'] as num).toInt(): g['multiple'] as bool? ?? true,
-    },
     fields: (json['fields'] as List<dynamic>? ?? [])
         .map((e) => DetailField.fromJson(e as Map<String, dynamic>))
         .toList(),

@@ -316,16 +316,10 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     final describing = vocabAsync.maybeWhen(
       data: (v) {
         final lineIds = v.lines.map((g) => g.groupId).toSet();
-        // The admin's choice for this kind («أشكال المنيو» → حقول وصفية), in its
-        // order; a kind that never chose offers every descriptive group.
-        final chosen = detailProfile?.descriptiveGroupIds ?? const <int>[];
-        if (chosen.isNotEmpty) {
-          return [
-            for (final id in chosen)
-              ...v.modifiers.where((g) => g.groupId == id && g.options.isNotEmpty && !lineIds.contains(g.groupId)),
-          ];
-        }
-        return v.modifiers.where((g) => g.descriptive && g.options.isNotEmpty && !lineIds.contains(g.groupId)).toList();
+        // «مكونات الخدمة» decides, per trade, which groups describe an item and in
+        // what order — nothing is chosen on the menu kind any more.
+        return v.modifiers.where((g) => g.descriptive && g.options.isNotEmpty && !lineIds.contains(g.groupId)).toList()
+          ..sort((a, b) => a.descriptiveSort.compareTo(b.descriptiveSort));
       },
       orElse: () => const <VocabularyGroup>[],
     );
@@ -444,20 +438,18 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
                         // never a wall of buttons, never typed.
                         for (final g in describing)
                           SizedBox(
-                            width: DetailDisplay.asChips(detailProfile.descriptiveDisplays[g.groupId] ?? 'auto', g.options.length)
-                                ? c.maxWidth
-                                : w,
+                            width: DetailDisplay.asChips(g.display, g.options.length) ? c.maxWidth : w,
                             child: () {
                               final options = [
                                 for (final o in g.options) (id: o.id, name: localizedName(o.nameAr, o.nameEn, isEnglish)),
                               ];
-                              // «اختيار متعدد ام واحد فقط» — set per group in «أشكال المنيو».
-                              final multi = detailProfile.descriptiveMultiples[g.groupId] ?? true;
+                              // «اختيار متعدد ام واحد فقط» — set per group in «مكونات الخدمة».
+                              final multi = g.multiple;
                               void change(Set<int> ids) => setState(() {
                                 _choiceIds.removeAll(g.options.map((o) => o.id));
                                 _choiceIds.addAll(multi || ids.isEmpty ? ids : {ids.first});
                               });
-                              return DetailDisplay.asChips(detailProfile.descriptiveDisplays[g.groupId] ?? 'auto', g.options.length)
+                              return DetailDisplay.asChips(g.display, g.options.length)
                                   ? _ChipsField(label: g.groupName, options: options, selected: _choiceIds, multi: multi, onChanged: change)
                                   : _MultiChoiceField(label: g.groupName, options: options, selected: _choiceIds, multi: multi, onChanged: change);
                             }(),
