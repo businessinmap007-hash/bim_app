@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../app/theme/app_colors.dart';
+import '../../../../app/theme/app_button_styles.dart';
 import '../../../../l10n/app_localizations.dart';
 
 /// The ONE add-to-cart / buy-now bar, under every service — the menu sheet,
@@ -44,19 +44,13 @@ class CartActionBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final shape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(14));
     final addOnly = sharedCart || onBuyNow == null;
 
     final primary = SizedBox(
       height: buttonHeight,
       child: FilledButton(
         onPressed: addOnly ? onAdd : onBuyNow,
-        style: FilledButton.styleFrom(
-          backgroundColor: AppColors.accentGold,
-          foregroundColor: AppColors.primaryNavy,
-          shape: shape,
-          textStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
-        ),
+        style: AppButtonStyles.buy,
         child: Text(addOnly ? l10n.cartAdd : l10n.cartBuyNow, maxLines: 1, overflow: TextOverflow.ellipsis),
       ),
     );
@@ -94,10 +88,7 @@ class CartActionBar extends StatelessWidget {
                     onPressed: onAdd,
                     icon: const Icon(Icons.add_shopping_cart_rounded, size: 20),
                     label: Text(l10n.cartAdd, maxLines: 1, overflow: TextOverflow.ellipsis),
-                    style: OutlinedButton.styleFrom(
-                      shape: shape,
-                      side: BorderSide(color: theme.colorScheme.primary, width: 1.4),
-                    ),
+                    style: AppButtonStyles.buyOutline(context),
                   ),
                 ),
               ),
