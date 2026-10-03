@@ -1455,27 +1455,52 @@ class _ChipsField extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 6),
+        // The canvas's buttons: roomy, softly rounded rectangles — the chosen one
+        // gold with bold navy text, the rest white with a thin border.
         Wrap(
-          spacing: 8,
-          runSpacing: 6,
+          spacing: 10,
+          runSpacing: 10,
           children: [
             for (final o in options)
-              FilterChip(
-                label: Text(o.name),
-                selected: selected.contains(o.id),
-                showCheckmark: false,
-                onSelected: (on) {
-                  final next = {...selected};
-                  if (multi) {
-                    on ? next.add(o.id) : next.remove(o.id);
-                  } else {
-                    next
-                      ..removeAll(options.map((e) => e.id))
-                      ..addAll(on ? {o.id} : const {});
-                  }
-                  onChanged(next);
-                },
-              ),
+              Builder(builder: (context) {
+                final on = selected.contains(o.id);
+                return Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(14),
+                    onTap: () {
+                      final next = {...selected};
+                      if (multi) {
+                        on ? next.remove(o.id) : next.add(o.id);
+                      } else {
+                        next
+                          ..removeAll(options.map((e) => e.id))
+                          ..addAll(on ? const {} : {o.id});
+                      }
+                      onChanged(next);
+                    },
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 120),
+                      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 11),
+                      decoration: BoxDecoration(
+                        color: on ? AppColors.accentGold : Colors.white,
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                          color: on ? AppColors.accentGold : AppColors.primaryNavy.withValues(alpha: 0.18),
+                        ),
+                      ),
+                      child: Text(
+                        o.name,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: on ? FontWeight.w800 : FontWeight.w600,
+                          color: AppColors.primaryNavy,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }),
           ],
         ),
       ],
