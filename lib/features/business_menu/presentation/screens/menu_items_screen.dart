@@ -494,9 +494,9 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
                         child: InkWell(
                           onTap: onAdd,
                           borderRadius: BorderRadius.circular(16),
-                          child: const Padding(
+                          child: Padding(
                             padding: EdgeInsets.all(2),
-                            child: Icon(Icons.add_circle_outline, size: 22, color: AppColors.primaryNavy),
+                            child: Icon(Icons.add_circle_outline, size: 22, color: theme.colorScheme.primary),
                           ),
                         ),
                       ),

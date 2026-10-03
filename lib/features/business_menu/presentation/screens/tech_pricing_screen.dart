@@ -1539,7 +1539,7 @@ class _MultiChoiceField extends StatelessWidget {
                         else
                           ListTile(
                             title: Text(o.name),
-                            trailing: picked.contains(o.id) ? const Icon(Icons.check, color: AppColors.primaryNavy) : null,
+                            trailing: picked.contains(o.id) ? Icon(Icons.check, color: Theme.of(context).colorScheme.primary) : null,
                             onTap: () => Navigator.of(sheetContext).pop({o.id}),
                           ),
                     ],
