@@ -34,13 +34,14 @@ void main() {
       expect(theme.chipTheme.selectedColor, AppColors.accentGold);
       expect(theme.chipTheme.backgroundColor, surface);
       expect((theme.chipTheme.shape as RoundedRectangleBorder).borderRadius, BorderRadius.circular(18));
-      expect(theme.chipTheme.padding, const EdgeInsets.symmetric(horizontal: 14, vertical: 8));
+      expect(theme.chipTheme.padding, const EdgeInsets.symmetric(horizontal: 14, vertical: 9));
 
       final label = theme.chipTheme.labelStyle!;
       final colour = label.color! as WidgetStateColor;
       expect(colour.resolve({WidgetState.selected}), AppColors.primaryNavy);
       expect(colour.resolve({}), muted.withValues(alpha: 0.7));
-      expect(label.fontSize, 13);
+      expect(label.fontSize, 15);
+      expect(label.leadingDistribution, TextLeadingDistribution.even, reason: 'the label sits in the middle of the pill');
       expect(theme.chipTheme.secondaryLabelStyle!.fontWeight, FontWeight.w700);
       expect(chosen.selected, isTrue);
       expect(other.selected, isFalse);

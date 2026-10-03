@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../app/theme/app_colors.dart';
+import '../../../../app/theme/app_text_styles.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/utils/produce_emoji.dart';
 import '../../../../shared/widgets/full_screen_gallery.dart';
@@ -216,7 +217,7 @@ class _MenuItemGridCardState extends State<MenuItemGridCard> {
                           item.offeringLabel!,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
+                          style: AppTextStyles.cardDetail(theme),
                         ),
                       ),
                     if (item.specSummary != null)
@@ -226,7 +227,7 @@ class _MenuItemGridCardState extends State<MenuItemGridCard> {
                           item.specSummary!,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
+                          style: AppTextStyles.cardDetail(theme),
                         ),
                       ),
                     if (item.brandName != null)
@@ -236,10 +237,7 @@ class _MenuItemGridCardState extends State<MenuItemGridCard> {
                           item.brandName!,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.hintColor,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: AppTextStyles.cardDetail(theme).copyWith(fontWeight: FontWeight.w600),
                         ),
                       ),
                     if (item.availableQuantity != null)
@@ -249,9 +247,7 @@ class _MenuItemGridCardState extends State<MenuItemGridCard> {
                           l10n.businessMenuAvailableQuantity(
                             item.availableQuantity!,
                           ),
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.hintColor,
-                          ),
+                          style: AppTextStyles.cardDetail(theme),
                         ),
                       ),
                     const SizedBox(height: 6),

@@ -59,6 +59,12 @@ class AppTextStyles {
     fontWeight: FontWeight.w400,
     height: 1.5,
   );
+  /// The detail lines on a product card (what it is, its specs, the brand, the stock):
+  /// 14, in the ink at 75% — «الخط صغير جدا». The 12-pt, hint-grey `bodySmall` they used
+  /// to take was hard to read, most of all in dark mode.
+  static TextStyle cardDetail(ThemeData theme) =>
+      bodyMedium.copyWith(color: theme.colorScheme.onSurface.withValues(alpha: 0.75), height: 1.35);
+
   static const bodySmall = TextStyle(
     fontFamily: _family,
     fontSize: 12,

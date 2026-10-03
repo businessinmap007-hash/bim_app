@@ -105,7 +105,7 @@ class AppTheme {
           elevation: 0,
         ),
       ),
-      // The canvas's chips («المعالج»، «الرام»، أقسام المتجر): soft pills, 13 / 8×14, the
+      // The canvas's chips («المعالج»، «الرام»، أقسام المتجر): soft pills, 15 / 9×14, the
       // chosen one a solid gold slab with bold navy text, the rest the surface colour with a
       // hairline border and muted text — no check mark. Surface, border and muted text
       // follow light/dark (dark = the canvas's #11213B / white 14% / white 70%).
@@ -117,7 +117,7 @@ class AppTheme {
         showCheckmark: false,
         elevation: 0,
         pressElevation: 0,
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
         labelPadding: EdgeInsets.zero,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
         side: WidgetStateBorderSide.resolveWith(
@@ -134,8 +134,12 @@ class AppTheme {
         // state-aware style). A ChoiceChip takes the bold secondaryLabelStyle when chosen.
         labelStyle: TextStyle(
           fontFamily: _fontFamily,
-          fontSize: 13,
+          fontSize: 15,
           fontWeight: FontWeight.w600,
+          // Cairo's tall ascent drew the label low in the pill; an even leading puts it in
+          // the middle of the chip.
+          height: 1.2,
+          leadingDistribution: TextLeadingDistribution.even,
           color: WidgetStateColor.resolveWith(
             (states) => states.contains(WidgetState.selected)
                 ? AppColors.primaryNavy
@@ -144,8 +148,10 @@ class AppTheme {
         ),
         secondaryLabelStyle: const TextStyle(
           fontFamily: _fontFamily,
-          fontSize: 13,
+          fontSize: 15,
           fontWeight: FontWeight.w700,
+          height: 1.2,
+          leadingDistribution: TextLeadingDistribution.even,
           color: AppColors.primaryNavy,
         ),
       ),
