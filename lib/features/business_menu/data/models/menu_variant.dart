@@ -11,6 +11,8 @@ class MenuVariant {
   final bool isActive;
   /// Over how many months an instalment price is paid; null for any other.
   final int? installmentMonths;
+  /// The down payment (per unit) paid with the first month, when there is one.
+  final double? installmentDown;
 
   const MenuVariant({
     required this.id,
@@ -22,6 +24,7 @@ class MenuVariant {
     required this.isDefault,
     required this.isActive,
     this.installmentMonths,
+    this.installmentDown,
   });
 
   factory MenuVariant.fromJson(Map<String, dynamic> json) => MenuVariant(
@@ -34,6 +37,7 @@ class MenuVariant {
     isDefault: json['is_default'] as bool,
     isActive: json['is_active'] as bool,
     installmentMonths: (json['installment_months'] as num?)?.toInt(),
+    installmentDown: (json['installment_down'] as num?)?.toDouble(),
   );
 }
 

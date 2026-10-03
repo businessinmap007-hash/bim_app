@@ -47,12 +47,15 @@ class CartItem {
 class InstallmentPlanPreview {
   final int count;
   final double monthly;
+  /// The first month: larger than [monthly] when there is a down payment.
+  final double firstAmount;
   final DateTime? firstDueOn;
-  const InstallmentPlanPreview({required this.count, required this.monthly, this.firstDueOn});
+  const InstallmentPlanPreview({required this.count, required this.monthly, required this.firstAmount, this.firstDueOn});
 
   factory InstallmentPlanPreview.fromJson(Map<String, dynamic> json) => InstallmentPlanPreview(
     count: (json['count'] as num?)?.toInt() ?? 0,
     monthly: (json['monthly'] as num?)?.toDouble() ?? 0,
+    firstAmount: (json['first_amount'] as num?)?.toDouble() ?? (json['monthly'] as num?)?.toDouble() ?? 0,
     firstDueOn: DateTime.tryParse(json['first_due_on'] as String? ?? ''),
   );
 }

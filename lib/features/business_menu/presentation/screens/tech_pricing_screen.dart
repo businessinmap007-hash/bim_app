@@ -52,11 +52,12 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
   final Set<int> _axisOn = {};
   /// «على كم شهر؟» — for an option that is an instalment plan.
   final Map<int, TextEditingController> _axisMonths = {};
+  final Map<int, TextEditingController> _axisDown = {};
   bool _axisSeeded = false;
 
-  /// An option the merchant sells on instalments («تقسيط»، «تقسيط بدون فوائد»).
-  bool _isInstalment(VocabularyOptionRef o) =>
-      o.nameAr.contains('تقسيط') || (o.nameEn ?? '').toLowerCase().contains('install');
+  /// An option of the payment group the merchant sells on instalments — the
+  /// server flags it («تقسيط»، «تقسيط بدون فوائد»).
+  bool _isInstalment(VocabularyOptionRef o) => o.isInstallment;
   CatalogProductRef? _product;
   /// A kind with no catalog: the merchant names the item and picks, from the
   /// option groups that DESCRIBE it («مودرن»، «زان»), what it is made of.
@@ -123,6 +124,9 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
       c.dispose();
     }
     for (final c in _axisMonths.values) {
+      c.dispose();
+    }
+    for (final c in _axisDown.values) {
       c.dispose();
     }
     for (final c in _unitText.values) {
@@ -217,11 +221,11 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     final axis = ref.read(menuVocabularyProvider).asData?.value.priceAxis;
     // With a price axis each option offered has ITS OWN price; the item's own
     // price is the first one offered (the default the customer sees first).
-    final axisRows = <({VocabularyOptionRef option, double price, int? months})>[
+    final axisRows = <({VocabularyOptionRef option, double price, int? months, double? down})>[
       if (axis != null)
         for (final o in axis.options)
           if (_axisOn.contains(o.id) && (parse(_axisPrice[o.id]?.text ?? '') ?? 0) > 0)
-            (option: o, price: parse(_axisPrice[o.id]!.text)!, months: int.tryParse((_axisMonths[o.id]?.text ?? '').trim())),
+            (option: o, price: parse(_axisPrice[o.id]!.text)!, months: int.tryParse((_axisMonths[o.id]?.text ?? '').trim()), down: parse(_axisDown[o.id]?.text ?? '')),
     ];
     final price = axis != null ? (axisRows.isEmpty ? null : axisRows.first.price) : parse(_priceController.text);
     if (price == null || price < 0) {
@@ -231,6 +235,11 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     // An instalment price must say over how many months it is paid.
     if (axisRows.any((r) => _isInstalment(r.option) && (r.months ?? 0) < 2)) {
       setState(() => _error = l10n.techPricingInstallmentMonthsRequired);
+      return;
+    }
+    // …and a down payment, when there is one, is less than the price.
+    if (axisRows.any((r) => _isInstalment(r.option) && (r.down ?? 0) >= r.price)) {
+      setState(() => _error = l10n.techPricingInstallmentDownInvalid);
       return;
     }
 
@@ -307,7 +316,7 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     BusinessMenuApi api,
     int itemId,
     PriceAxis axis,
-    List<({VocabularyOptionRef option, double price, int? months})> rows,
+    List<({VocabularyOptionRef option, double price, int? months, double? down})> rows,
   ) async {
     final existing = (await api.item(itemId)).variants.where((v) => v.type == 'payment').toList();
     final byName = {for (final v in existing) v.nameAr: v};
@@ -322,10 +331,11 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
         continue;
       }
       final months = _isInstalment(o) ? row.months : null;
+      final down = _isInstalment(o) && (row.down ?? 0) > 0 ? row.down : null;
       if (current == null) {
-        await api.addVariant(itemId, type: 'payment', nameAr: o.nameAr, nameEn: o.nameEn, price: row.price, isDefault: first, installmentMonths: months);
+        await api.addVariant(itemId, type: 'payment', nameAr: o.nameAr, nameEn: o.nameEn, price: row.price, isDefault: first, installmentMonths: months, installmentDown: down);
       } else {
-        await api.updateVariant(itemId, current.id, type: 'payment', nameAr: o.nameAr, nameEn: o.nameEn, price: row.price, isDefault: first, installmentMonths: months);
+        await api.updateVariant(itemId, current.id, type: 'payment', nameAr: o.nameAr, nameEn: o.nameEn, price: row.price, isDefault: first, installmentMonths: months, installmentDown: down);
       }
       first = false;
     }
@@ -338,6 +348,7 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     for (final o in axis.options) {
       _axisPrice[o.id] ??= TextEditingController();
       _axisMonths[o.id] ??= TextEditingController();
+      _axisDown[o.id] ??= TextEditingController();
     }
     final item = widget.existingItem;
     if (item == null) return;
@@ -350,6 +361,7 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
           _axisOn.add(o.id);
           _axisPrice[o.id]!.text = (v.price ?? 0).toStringAsFixed(0);
           _axisMonths[o.id]!.text = v.installmentMonths?.toString() ?? '';
+          _axisDown[o.id]!.text = v.installmentDown == null ? '' : v.installmentDown!.toStringAsFixed(0);
         }
       });
     });
@@ -613,14 +625,29 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
                   if (_isInstalment(o) && _axisOn.contains(o.id))
                     Padding(
                       padding: const EdgeInsetsDirectional.only(start: 12, end: 4, bottom: 8),
-                      child: TextField(
-                        controller: _axisMonths[o.id],
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                        decoration: InputDecoration(
-                          labelText: l10n.techPricingInstallmentMonths,
-                          hintText: '12',
-                        ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _axisMonths[o.id],
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                              decoration: InputDecoration(
+                                labelText: l10n.techPricingInstallmentMonths,
+                                hintText: '12',
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: TextField(
+                              controller: _axisDown[o.id],
+                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                              inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,٫]'))],
+                              decoration: InputDecoration(labelText: l10n.techPricingInstallmentDown),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     ],

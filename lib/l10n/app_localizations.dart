@@ -1931,8 +1931,37 @@ abstract class AppLocalizations {
   /// No description provided for @cartPaymentInstalments.
   ///
   /// In ar, this message translates to:
-  /// **'تقسيط على {count} دفعات شهرية — {monthly} شهريًا، أول دفعة {date}'**
+  /// **'تقسيط على {count} شهر — {monthly} شهريًا، أول دفعة {date}'**
   String cartPaymentInstalments(int count, String monthly, String date);
+
+  /// No description provided for @cartPaymentInstalmentsDown.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقسيط على {count} شهر — الدفعة الأولى {first} (بالمقدم) ثم {monthly} شهريًا، أول دفعة {date}'**
+  String cartPaymentInstalmentsDown(
+    int count,
+    String first,
+    String monthly,
+    String date,
+  );
+
+  /// No description provided for @variantInstallmentNoteDown.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقدم {down} + {months} شهر — {monthly} شهريًا'**
+  String variantInstallmentNoteDown(int months, String down, String monthly);
+
+  /// No description provided for @techPricingInstallmentDown.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدفعة المقدمة (اختياري)'**
+  String get techPricingInstallmentDown;
+
+  /// No description provided for @techPricingInstallmentDownInvalid.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدفعة المقدمة لازم تكون أقل من السعر.'**
+  String get techPricingInstallmentDownInvalid;
 
   /// No description provided for @ordersInstallmentsTitle.
   ///

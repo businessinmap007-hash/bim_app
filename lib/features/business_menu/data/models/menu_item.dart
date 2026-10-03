@@ -8,12 +8,15 @@ class VocabularyOptionRef {
   final int id;
   final String nameAr;
   final String? nameEn;
-  const VocabularyOptionRef({required this.id, required this.nameAr, this.nameEn});
+  /// An instalment option of the payment group — the server says so.
+  final bool isInstallment;
+  const VocabularyOptionRef({required this.id, required this.nameAr, this.nameEn, this.isInstallment = false});
 
   factory VocabularyOptionRef.fromJson(Map<String, dynamic> json) => VocabularyOptionRef(
     id: json['id'] as int,
     nameAr: json['name_ar'] as String,
     nameEn: json['name_en'] as String?,
+    isInstallment: json['is_installment'] as bool? ?? false,
   );
 }
 

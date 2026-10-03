@@ -9,6 +9,8 @@ class MenuItemVariant {
   final String type;
   /// An instalment price says over how many months it runs.
   final int? installmentMonths;
+  /// The down payment (per unit), paid with the first month.
+  final double? installmentDown;
 
   const MenuItemVariant({
     required this.id,
@@ -17,6 +19,7 @@ class MenuItemVariant {
     required this.isDefault,
     this.type = '',
     this.installmentMonths,
+    this.installmentDown,
   });
 
   factory MenuItemVariant.fromJson(Map<String, dynamic> json) => MenuItemVariant(
@@ -26,6 +29,7 @@ class MenuItemVariant {
     isDefault: json['is_default'] as bool? ?? false,
     type: json['type'] as String? ?? '',
     installmentMonths: (json['installment_months'] as num?)?.toInt(),
+    installmentDown: (json['installment_down'] as num?)?.toDouble(),
   );
 }
 

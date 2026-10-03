@@ -1006,6 +1006,28 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String cartPaymentInstalmentsDown(
+    int count,
+    String first,
+    String monthly,
+    String date,
+  ) {
+    return 'Instalments over $count months: first payment $first (down payment included), then $monthly a month, the first on $date';
+  }
+
+  @override
+  String variantInstallmentNoteDown(int months, String down, String monthly) {
+    return '$down down + $months months — $monthly a month';
+  }
+
+  @override
+  String get techPricingInstallmentDown => 'Down payment (optional)';
+
+  @override
+  String get techPricingInstallmentDownInvalid =>
+      'The down payment must be less than the price.';
+
+  @override
   String get ordersInstallmentsTitle => 'Payment schedule';
 
   @override

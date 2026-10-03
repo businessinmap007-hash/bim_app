@@ -1013,8 +1013,30 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String cartPaymentInstalments(int count, String monthly, String date) {
-    return 'تقسيط على $count دفعات شهرية — $monthly شهريًا، أول دفعة $date';
+    return 'تقسيط على $count شهر — $monthly شهريًا، أول دفعة $date';
   }
+
+  @override
+  String cartPaymentInstalmentsDown(
+    int count,
+    String first,
+    String monthly,
+    String date,
+  ) {
+    return 'تقسيط على $count شهر — الدفعة الأولى $first (بالمقدم) ثم $monthly شهريًا، أول دفعة $date';
+  }
+
+  @override
+  String variantInstallmentNoteDown(int months, String down, String monthly) {
+    return 'مقدم $down + $months شهر — $monthly شهريًا';
+  }
+
+  @override
+  String get techPricingInstallmentDown => 'الدفعة المقدمة (اختياري)';
+
+  @override
+  String get techPricingInstallmentDownInvalid =>
+      'الدفعة المقدمة لازم تكون أقل من السعر.';
 
   @override
   String get ordersInstallmentsTitle => 'جدول الدفعات';

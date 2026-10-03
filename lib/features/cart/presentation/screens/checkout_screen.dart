@@ -264,7 +264,16 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           // «خلي طريقة الدفع تقسم دفعات اذا كانت قسط»: the plan, by month, with the
           // day of the first payment — else the usual cash line.
           Text(
-            widget.cart.installmentPlan != null
+            widget.cart.installmentPlan != null && widget.cart.installmentPlan!.firstAmount > widget.cart.installmentPlan!.monthly
+                ? l10n.cartPaymentInstalmentsDown(
+                    widget.cart.installmentPlan!.count,
+                    widget.cart.installmentPlan!.firstAmount.round().toString(),
+                    widget.cart.installmentPlan!.monthly.round().toString(),
+                    widget.cart.installmentPlan!.firstDueOn == null
+                        ? ''
+                        : widget.cart.installmentPlan!.firstDueOn!.toIso8601String().substring(0, 10),
+                  )
+                : widget.cart.installmentPlan != null
                 ? l10n.cartPaymentInstalments(
                     widget.cart.installmentPlan!.count,
                     widget.cart.installmentPlan!.monthly.round().toString(),

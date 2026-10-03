@@ -360,7 +360,7 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
                       onChanged: (value) => setState(() => _variantId = value),
                       title: Text(v.name),
                       subtitle: v.installmentMonths != null && v.installmentMonths! > 1
-                          ? Text(l10n.variantInstallmentNote(v.installmentMonths!, (v.price / v.installmentMonths!).round().toString()))
+                          ? Text((v.installmentDown ?? 0) > 0 ? l10n.variantInstallmentNoteDown(v.installmentMonths!, v.installmentDown!.round().toString(), ((v.price - v.installmentDown!) / v.installmentMonths!).round().toString()) : l10n.variantInstallmentNote(v.installmentMonths!, (v.price / v.installmentMonths!).round().toString()))
                           : null,
                       secondary: Text(v.price.toStringAsFixed(0)),
                     ),
