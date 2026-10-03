@@ -69,6 +69,28 @@ class AppTheme {
           shadowColor: AppColors.primaryNavy.withValues(alpha: 0.35),
         ),
       ),
+      // The canvas's primary button («حفظ»، «شراء مباشر»): a flat 12-radius slab,
+      // 16 vertical / 24 horizontal padding, Cairo 16 bold. The COLOURS are not set
+      // here on purpose — they come from the colour scheme above, which already
+      // follows light/dark (light: navy fill + white text, dark: gold fill + navy
+      // text, exactly the canvas) and leaves FilledButton.tonal its own tonal colours.
+      // A screen that needs the gold buy-button look keeps its own styleFrom.
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          // The canvas slab is ~52+ tall whatever the font's own line height gives.
+          minimumSize: const Size(64, 52),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          textStyle: const TextStyle(
+            fontFamily: _fontFamily,
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+          ),
+          elevation: 0,
+        ),
+      ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: isDark
