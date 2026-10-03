@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../app/theme/app_colors.dart';
 import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/utils/localized_name.dart';
@@ -467,18 +468,42 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
     // «اكمل الصف بالكروت الاخرى وفوقها اسم القسم ايضا» — المالك، 2026-10-02: a
     // section of sections keeps ONE flowing grid (a lone card no longer sits in a
     // row of its own) and every card carries its section's name above it.
-    Widget captioned(VocabularyOptionRef branch, Widget tile, {Key? key}) => captions
+    final addLabel = AppLocalizations.of(context)!.techPricingAddProduct;
+    Widget captioned(VocabularyOptionRef branch, Widget tile, {Key? key, VoidCallback? onAdd}) => captions
         ? Column(
             key: key,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.only(bottom: 4),
-                child: Text(
-                  localizedName(branch.nameAr, branch.nameEn, isEnglish),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w800),
+                // A fixed height, so a caption with the «+» and one without line up.
+                child: SizedBox(
+                  height: 28,
+                  child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        localizedName(branch.nameAr, branch.nameEn, isEnglish),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w800),
+                      ),
+                    ),
+                    // «بجوار اسم القسم شبكة او قائمة» — المالك، 2026-10-03.
+                    if (onAdd != null)
+                      Tooltip(
+                        message: addLabel,
+                        child: InkWell(
+                          onTap: onAdd,
+                          borderRadius: BorderRadius.circular(16),
+                          child: const Padding(
+                            padding: EdgeInsets.all(2),
+                            child: Icon(Icons.add_circle_outline, size: 22, color: AppColors.primaryNavy),
+                          ),
+                        ),
+                      ),
+                  ],
+                  ),
                 ),
               ),
               Expanded(child: tile),
@@ -499,19 +524,23 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
                 ? () => _openTechPricing(branch, existingItem: item)
                 : () => _quickEditPrice(item, saleUnitCodes),
           );
-          tiles.add(captioned(branch, tile, key: isFirst ? _branchKey(branch.id) : null));
+          tiles.add(captioned(
+            branch,
+            tile,
+            key: isFirst ? _branchKey(branch.id) : null,
+            onAdd: isFirst ? _addFor(branch, detailed, saleUnitCodes) : null,
+          ));
         }
         // «اذا كان للقسم منتجات اضف منتج تصبح تحت الكارت» — المالك، 2026-10-02:
-        // the rule for EVERY menu, not only a detailed one.
-        tiles.add(captioned(
-          branch,
-          _EmptyBranchGridTile(
+        // the rule for EVERY menu, not only a detailed one. A section with a name
+        // above its cards keeps «إضافة منتج» beside that name instead (the caption).
+        if (!captions) {
+          tiles.add(_EmptyBranchGridTile(
             branch: branch,
             onAddPrice: _addFor(branch, detailed, saleUnitCodes),
             label: AppLocalizations.of(context)!.techPricingAddProduct,
-            showName: !captions,
-          ),
-        ));
+          ));
+        }
       } else {
         tiles.add(captioned(
           branch,
@@ -571,6 +600,12 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
               ),
               if (items.isNotEmpty)
                 Text('${items.length}', style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+              TextButton.icon(
+                onPressed: _addFor(branch, group.detailed, group.saleUnitCodes),
+                icon: const Icon(Icons.add, size: 18),
+                label: Text(l10n.techPricingAddProduct),
+                style: TextButton.styleFrom(visualDensity: VisualDensity.compact),
+              ),
             ],
           ),
           const SizedBox(height: 8),
@@ -583,12 +618,7 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
               branch: branch,
               showAdd: false,
             ),
-          const SizedBox(height: 4),
-          OutlinedButton.icon(
-            onPressed: _addFor(branch, group.detailed, group.saleUnitCodes),
-            icon: const Icon(Icons.add, size: 18),
-            label: Text(l10n.techPricingAddProduct),
-          ),
+
         ],
       ),
     );
