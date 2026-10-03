@@ -1598,8 +1598,6 @@
   "retailListingUnitLabel": "Unit (optional)",
   "retailListingUnitHint": "Type your own unit",
   "retailListingUnitOther": "Other...",
-  "categoriesMenuKindFood": "Restaurants",
-  "categoriesMenuKindMarket": "Market",
   "retailExtrasTitle": "Product add-ons",
   "retailExtrasHint": "e.g. 1-year warranty, 2-year warranty, installation",
   "retailExtrasName": "Add-on name",

@@ -4754,12 +4754,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get retailListingUnitOther => 'Other...';
 
   @override
-  String get categoriesMenuKindFood => 'Restaurants';
-
-  @override
-  String get categoriesMenuKindMarket => 'Market';
-
-  @override
   String get retailExtrasTitle => 'Product add-ons';
 
   @override

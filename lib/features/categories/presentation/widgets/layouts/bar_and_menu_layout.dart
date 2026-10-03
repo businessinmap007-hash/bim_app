@@ -12,7 +12,6 @@ import '../../../data/models/category_root.dart';
 import '../../../data/models/specialty.dart';
 import '../../category_icon_mapping.dart';
 import '../category_root_chips_row.dart';
-import '../menu_kind_chips_row.dart';
 import '../recommended_businesses_list.dart';
 import '../service_type_chips_row.dart';
 
@@ -89,7 +88,6 @@ class _BarAndMenuCategoriesLayoutState
         const Divider(height: 1),
         const SizedBox(height: 8),
         const ServiceTypeChipsRow(),
-        const MenuKindChipsRow(),
         const CategoryRootChipsRow(),
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),

@@ -8827,18 +8827,6 @@ abstract class AppLocalizations {
   /// **'أخرى...'**
   String get retailListingUnitOther;
 
-  /// No description provided for @categoriesMenuKindFood.
-  ///
-  /// In ar, this message translates to:
-  /// **'مطاعم'**
-  String get categoriesMenuKindFood;
-
-  /// No description provided for @categoriesMenuKindMarket.
-  ///
-  /// In ar, this message translates to:
-  /// **'ماركت'**
-  String get categoriesMenuKindMarket;
-
   /// No description provided for @retailExtrasTitle.
   ///
   /// In ar, this message translates to:

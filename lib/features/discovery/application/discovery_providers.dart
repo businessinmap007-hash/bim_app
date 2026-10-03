@@ -24,7 +24,7 @@ final attributeGroupsProvider =
 
 /// [categoryId]/[serviceId]: the two narrowing axes [recommendedBusinessesProvider]
 /// accepts — both null means platform-wide.
-typedef RecommendedFilter = ({int? categoryId, int? serviceId, String? menuKind});
+typedef RecommendedFilter = ({int? categoryId, int? serviceId});
 
 /// Businesses ranked by rating (see DiscoveryApi.recommended) — null fields
 /// in [filter] mean platform-wide/no filter on that axis. Used by all 3
@@ -38,7 +38,6 @@ final recommendedBusinessesProvider =
           .recommended(
             categoryId: filter.categoryId,
             serviceId: filter.serviceId,
-            menuKind: filter.menuKind,
             perPage: 12,
           );
       return result.items;
@@ -81,17 +80,6 @@ final selectedServiceTypeProvider = StateProvider<int?>((ref) => null);
 /// picks a fresh service is starting a fresh browse, not narrowing a stale
 /// root within it.
 final selectedCategoryRootIdProvider = StateProvider<int?>((ref) {
-  ref.watch(selectedServiceTypeProvider);
-  return null;
-});
-
-/// A THIRD chip row, shown only under the (still single) «menu» service chip
-/// — «مطاعم» vs «ماركت» (menu_items.item_type: menu_food/menu_market). A
-/// deliberately light split: no new platform_services row, just an extra
-/// filter dimension on the same service — see [[three-catalog-shapes]].
-/// Resets whenever the service choice changes, same reasoning as
-/// [selectedCategoryRootIdProvider].
-final selectedMenuKindProvider = StateProvider<String?>((ref) {
   ref.watch(selectedServiceTypeProvider);
   return null;
 });

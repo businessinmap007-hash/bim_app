@@ -4745,12 +4745,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get retailListingUnitOther => 'أخرى...';
 
   @override
-  String get categoriesMenuKindFood => 'مطاعم';
-
-  @override
-  String get categoriesMenuKindMarket => 'ماركت';
-
-  @override
   String get retailExtrasTitle => 'إضافات المنتج';
 
   @override

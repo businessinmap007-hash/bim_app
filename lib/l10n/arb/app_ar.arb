@@ -1598,8 +1598,6 @@
   "retailListingUnitLabel": "الوحدة (اختياري)",
   "retailListingUnitHint": "اكتب وحدتك الخاصة",
   "retailListingUnitOther": "أخرى...",
-  "categoriesMenuKindFood": "مطاعم",
-  "categoriesMenuKindMarket": "ماركت",
   "retailExtrasTitle": "إضافات المنتج",
   "retailExtrasHint": "مثل: ضمان سنة، ضمان سنتين، تركيب",
   "retailExtrasName": "اسم الإضافة",
