@@ -79,7 +79,7 @@ class _CarouselImage extends StatelessWidget {
         color: Theme.of(context).colorScheme.surface,
         child: Icon(
           Icons.broken_image_outlined,
-          color: Theme.of(context).dividerColor,
+          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.4),
         ),
       ),
     );

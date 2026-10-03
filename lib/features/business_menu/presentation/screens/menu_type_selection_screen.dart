@@ -178,7 +178,7 @@ class _TypeRow extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: selected ? AppColors.accentGold : Colors.transparent,
                 border: Border.all(
-                  color: selected ? AppColors.accentGold : theme.dividerColor.withValues(alpha: 0.6),
+                  color: selected ? AppColors.accentGold : theme.colorScheme.onSurface.withValues(alpha: 0.4),
                   width: 1.5,
                 ),
               ),

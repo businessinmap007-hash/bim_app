@@ -316,7 +316,7 @@ class _OptionRow extends StatelessWidget {
                   : Icons.radio_button_unchecked,
               color: selected
                   ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).dividerColor,
+                  : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.45),
             ),
           ],
         ),

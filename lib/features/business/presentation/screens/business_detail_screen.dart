@@ -469,10 +469,10 @@ class _SectionGrid extends StatelessWidget {
   final Future<void> Function(MenuItemSummary item, int qty)? onDirectAdd;
   const _SectionGrid({required this.entries, required this.onTap, this.onDirectAdd});
 
-  /// A card's own height beside its width — what the grid always used.
-  static const _cardAspect = 0.62;
-  static const _captionHeight = 24.0;
-  static const _detailLine = 34.0;
+  /// «الكارت طويل جدا قصره بحيث الصفحة تاخد كارتين ونص» — المالك، 2026-10-03: the photo is
+  /// 1.8 wide for 1 tall (not a square) and the cell is exactly the card's content tall.
+  static const _imageAspect = 1.8;
+  static const _captionHeight = 20.0;
 
   @override
   Widget build(BuildContext context) {
@@ -481,17 +481,23 @@ class _SectionGrid extends StatelessWidget {
     final columns = Breakpoints.sizeFor(MediaQuery.of(context).size.width) == ScreenSize.mobile ? 2 : 3;
     const gap = 10.0;
     final hasCaptions = entries.any((e) => e.caption != null);
-    final detailLines = entries.any((e) => e.item.offeringLabel != null) ? 1 : 0;
-    final summaryLines = entries.any((e) => e.item.specSummary != null) ? 1 : 0;
+    final detailLines = (entries.any((e) => e.item.offeringLabel != null) ? 1 : 0) +
+        (entries.any((e) => e.item.specSummary != null) ? 1 : 0);
+    final hasBrand = entries.any((e) => e.item.brandName != null);
+    final hasStepper = onDirectAdd != null && entries.any((e) => !e.item.hasChoices && e.item.saleUnitLabel != null);
 
     return LayoutBuilder(
       builder: (context, constraints) {
         final cardWidth = (constraints.maxWidth - (columns - 1) * gap) / columns;
-        // The details and the section name above make a card taller than the
-        // bare one — give the cell exactly that much more.
-        final extent = cardWidth / _cardAspect +
-            (hasCaptions ? _captionHeight : 0) +
-            (detailLines + summaryLines) * _detailLine;
+        // The photo plus exactly the text the card lays out (and the section name above).
+        final extent = MenuItemGridCard.extentFor(
+          cardWidth,
+          imageAspect: _imageAspect,
+          caption: hasCaptions,
+          detailLines: detailLines,
+          hasBrand: hasBrand,
+          hasStepper: hasStepper,
+        );
 
         return GridView.builder(
           shrinkWrap: true,
@@ -499,7 +505,7 @@ class _SectionGrid extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 8),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: columns,
-            mainAxisSpacing: gap,
+            mainAxisSpacing: 6,
             crossAxisSpacing: gap,
             mainAxisExtent: extent,
           ),
@@ -507,6 +513,7 @@ class _SectionGrid extends StatelessWidget {
           itemBuilder: (context, index) {
             final entry = entries[index];
             final card = MenuItemGridCard(
+              imageAspect: _imageAspect,
               item: entry.item,
               onTap: () => onTap(entry.item),
               onDirectAdd: onDirectAdd == null ? null : (qty) => onDirectAdd!(entry.item, qty),

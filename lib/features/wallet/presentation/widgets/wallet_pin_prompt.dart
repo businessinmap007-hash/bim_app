@@ -95,7 +95,7 @@ class _PinBoxesState extends State<_PinBoxes> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final filledColor = widget.error ? theme.colorScheme.error : AppColors.accentGold;
-    final emptyColor = widget.error ? theme.colorScheme.error : theme.dividerColor;
+    final emptyColor = widget.error ? theme.colorScheme.error : theme.colorScheme.onSurface.withValues(alpha: 0.3);
 
     return GestureDetector(
       onTap: () => _focusNode.requestFocus(),
