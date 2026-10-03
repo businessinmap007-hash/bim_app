@@ -510,8 +510,25 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
           const SizedBox(height: 16),
           OrderTrackerTimeline(order: order),
           const SizedBox(height: 8),
-          if (order.items.isEmpty)
+          // A list row carries no lines: spin only while the detail is really loading,
+          // say so when it failed (with a retry), and show nothing for a loaded order
+          // that has none — never an endless spinner.
+          if (order.items.isEmpty && _detail == null && _detailError == null)
             const Center(child: Padding(padding: EdgeInsets.all(16), child: CircularProgressIndicator()))
+          else if (order.items.isEmpty && _detail == null)
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(l10n.commonSomethingWentWrong),
+                    const SizedBox(height: 8),
+                    OutlinedButton(onPressed: _refreshDetail, child: Text(l10n.commonRetry)),
+                  ],
+                ),
+              ),
+            )
           else
             for (final item in order.items)
               Padding(

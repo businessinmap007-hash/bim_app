@@ -288,7 +288,7 @@ class PlacedOrder {
           ? DeliveryFeeQuote.fromJson(json['delivery_fee_quote'] as Map<String, dynamic>)
           : null,
       paymentSettledAt: DateTime.tryParse(paymentConfirmations['settled_at'] as String? ?? ''),
-      trust: (json['trust'] as Map<String, dynamic>?)?.map(
+      trust: (json['trust'] is Map ? json['trust'] as Map<String, dynamic> : null)?.map(
         (role, v) => MapEntry(role, (
           trustedByMe: (v as Map<String, dynamic>)['trusted_by_me'] as bool? ?? false,
           trustsMe: v['trusts_me'] as bool? ?? false,
