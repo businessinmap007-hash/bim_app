@@ -121,6 +121,22 @@ class OrderDriver {
 /// detail AND the business's incoming-order queue and detail (list
 /// responses omit `items`, matching `whenLoaded('items')` on the backend;
 /// `customer`/`table_label` are only ever loaded for the business side).
+/// One monthly payment of an order bought on instalments.
+class OrderInstallment {
+  final int seq;
+  final DateTime? dueOn;
+  final double amount;
+  final DateTime? paidAt;
+  const OrderInstallment({required this.seq, this.dueOn, required this.amount, this.paidAt});
+
+  factory OrderInstallment.fromJson(Map<String, dynamic> json) => OrderInstallment(
+    seq: (json['seq'] as num?)?.toInt() ?? 0,
+    dueOn: DateTime.tryParse(json['due_on'] as String? ?? ''),
+    amount: (json['amount'] as num?)?.toDouble() ?? 0,
+    paidAt: DateTime.tryParse(json['paid_at'] as String? ?? ''),
+  );
+}
+
 class PlacedOrder {
   final int id;
   final String status;
@@ -172,6 +188,8 @@ class PlacedOrder {
   // The viewer's "I trust" ticks toward the other parties of the order, keyed
   // by 'customer' / 'business' / 'driver'. Null on list rows.
   final Map<String, ({bool trustedByMe, bool trustsMe})>? trust;
+  /// The payments by month of an order bought on «تقسيط»; empty otherwise.
+  final List<OrderInstallment> installments;
 
   const PlacedOrder({
     required this.id,
@@ -213,6 +231,7 @@ class PlacedOrder {
     this.driver,
     this.paymentSettledAt,
     this.trust,
+    this.installments = const [],
   });
 
   /// Mirrors `OrderController::cancelPendingOrder` — pending and not yet
@@ -288,6 +307,9 @@ class PlacedOrder {
           ? DeliveryFeeQuote.fromJson(json['delivery_fee_quote'] as Map<String, dynamic>)
           : null,
       paymentSettledAt: DateTime.tryParse(paymentConfirmations['settled_at'] as String? ?? ''),
+      installments: (json['installments'] is List ? json['installments'] as List<dynamic> : const [])
+          .map((e) => OrderInstallment.fromJson(e as Map<String, dynamic>))
+          .toList(),
       trust: (json['trust'] is Map ? json['trust'] as Map<String, dynamic> : null)?.map(
         (role, v) => MapEntry(role, (
           trustedByMe: (v as Map<String, dynamic>)['trusted_by_me'] as bool? ?? false,

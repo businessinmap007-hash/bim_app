@@ -1928,6 +1928,42 @@ abstract class AppLocalizations {
   /// **'اختر النوع'**
   String get cartVariantChoose;
 
+  /// No description provided for @cartPaymentInstalments.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقسيط على {count} دفعات شهرية — {monthly} شهريًا، أول دفعة {date}'**
+  String cartPaymentInstalments(int count, String monthly, String date);
+
+  /// No description provided for @ordersInstallmentsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'جدول الدفعات'**
+  String get ordersInstallmentsTitle;
+
+  /// No description provided for @ordersInstallmentPaid.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم السداد'**
+  String get ordersInstallmentPaid;
+
+  /// No description provided for @techPricingInstallmentMonths.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد الأشهر'**
+  String get techPricingInstallmentMonths;
+
+  /// No description provided for @techPricingInstallmentMonthsRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب عدد أشهر التقسيط (شهران فأكثر).'**
+  String get techPricingInstallmentMonthsRequired;
+
+  /// No description provided for @variantInstallmentNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'{months} شهر — {monthly} شهريًا'**
+  String variantInstallmentNote(int months, String monthly);
+
   /// No description provided for @techPricingPriceBy.
   ///
   /// In ar, this message translates to:

@@ -42,6 +42,21 @@ class CartItem {
   }
 }
 
+/// What an order bought on instalments will cost by month — previewed in the
+/// cart before it is placed (`CartController::presentCart` → `installment_plan`).
+class InstallmentPlanPreview {
+  final int count;
+  final double monthly;
+  final DateTime? firstDueOn;
+  const InstallmentPlanPreview({required this.count, required this.monthly, this.firstDueOn});
+
+  factory InstallmentPlanPreview.fromJson(Map<String, dynamic> json) => InstallmentPlanPreview(
+    count: (json['count'] as num?)?.toInt() ?? 0,
+    monthly: (json['monthly'] as num?)?.toDouble() ?? 0,
+    firstDueOn: DateTime.tryParse(json['first_due_on'] as String? ?? ''),
+  );
+}
+
 class CartBill {
   final double menuSubtotal;
   final double retailSubtotal;
@@ -104,6 +119,7 @@ class Cart {
   final double deliveryFee;
   final double discount;
   final double finalTotal;
+  final InstallmentPlanPreview? installmentPlan;
 
   const Cart({
     required this.id,
@@ -117,6 +133,7 @@ class Cart {
     required this.deliveryFee,
     required this.discount,
     required this.finalTotal,
+    this.installmentPlan,
   });
 
   factory Cart.fromJson(Map<String, dynamic> json) => Cart(
@@ -131,5 +148,8 @@ class Cart {
     deliveryFee: (json['delivery_fee'] as num?)?.toDouble() ?? 0,
     discount: (json['discount'] as num?)?.toDouble() ?? 0,
     finalTotal: (json['final_total'] as num?)?.toDouble() ?? 0,
+    installmentPlan: json['installment_plan'] is Map
+        ? InstallmentPlanPreview.fromJson(json['installment_plan'] as Map<String, dynamic>)
+        : null,
   );
 }

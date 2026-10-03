@@ -359,6 +359,9 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
                       groupValue: _variantId,
                       onChanged: (value) => setState(() => _variantId = value),
                       title: Text(v.name),
+                      subtitle: v.installmentMonths != null && v.installmentMonths! > 1
+                          ? Text(l10n.variantInstallmentNote(v.installmentMonths!, (v.price / v.installmentMonths!).round().toString()))
+                          : null,
                       secondary: Text(v.price.toStringAsFixed(0)),
                     ),
                   ),

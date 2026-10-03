@@ -50,7 +50,13 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
   /// merchant switched on, each with its price; saved as the item's variants.
   final Map<int, TextEditingController> _axisPrice = {};
   final Set<int> _axisOn = {};
+  /// «على كم شهر؟» — for an option that is an instalment plan.
+  final Map<int, TextEditingController> _axisMonths = {};
   bool _axisSeeded = false;
+
+  /// An option the merchant sells on instalments («تقسيط»، «تقسيط بدون فوائد»).
+  bool _isInstalment(VocabularyOptionRef o) =>
+      o.nameAr.contains('تقسيط') || (o.nameEn ?? '').toLowerCase().contains('install');
   CatalogProductRef? _product;
   /// A kind with no catalog: the merchant names the item and picks, from the
   /// option groups that DESCRIBE it («مودرن»، «زان»), what it is made of.
@@ -114,6 +120,9 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     _descController.dispose();
     _nameController.dispose();
     for (final c in _axisPrice.values) {
+      c.dispose();
+    }
+    for (final c in _axisMonths.values) {
       c.dispose();
     }
     for (final c in _unitText.values) {
@@ -208,15 +217,20 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     final axis = ref.read(menuVocabularyProvider).asData?.value.priceAxis;
     // With a price axis each option offered has ITS OWN price; the item's own
     // price is the first one offered (the default the customer sees first).
-    final axisRows = <({VocabularyOptionRef option, double price})>[
+    final axisRows = <({VocabularyOptionRef option, double price, int? months})>[
       if (axis != null)
         for (final o in axis.options)
           if (_axisOn.contains(o.id) && (parse(_axisPrice[o.id]?.text ?? '') ?? 0) > 0)
-            (option: o, price: parse(_axisPrice[o.id]!.text)!),
+            (option: o, price: parse(_axisPrice[o.id]!.text)!, months: int.tryParse((_axisMonths[o.id]?.text ?? '').trim())),
     ];
     final price = axis != null ? (axisRows.isEmpty ? null : axisRows.first.price) : parse(_priceController.text);
     if (price == null || price < 0) {
       setState(() => _error = l10n.menuPriceRequired);
+      return;
+    }
+    // An instalment price must say over how many months it is paid.
+    if (axisRows.any((r) => _isInstalment(r.option) && (r.months ?? 0) < 2)) {
+      setState(() => _error = l10n.techPricingInstallmentMonthsRequired);
       return;
     }
 
@@ -293,24 +307,25 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     BusinessMenuApi api,
     int itemId,
     PriceAxis axis,
-    List<({VocabularyOptionRef option, double price})> rows,
+    List<({VocabularyOptionRef option, double price, int? months})> rows,
   ) async {
     final existing = (await api.item(itemId)).variants.where((v) => v.type == 'payment').toList();
     final byName = {for (final v in existing) v.nameAr: v};
-    final onById = {for (final r in rows) r.option.id: r.price};
+    final onById = {for (final r in rows) r.option.id: r};
     var first = true;
 
     for (final o in axis.options) {
       final current = byName[o.nameAr];
-      final price = onById[o.id];
-      if (price == null) {
+      final row = onById[o.id];
+      if (row == null) {
         if (current != null) await api.deleteVariant(itemId, current.id);
         continue;
       }
+      final months = _isInstalment(o) ? row.months : null;
       if (current == null) {
-        await api.addVariant(itemId, type: 'payment', nameAr: o.nameAr, nameEn: o.nameEn, price: price, isDefault: first);
+        await api.addVariant(itemId, type: 'payment', nameAr: o.nameAr, nameEn: o.nameEn, price: row.price, isDefault: first, installmentMonths: months);
       } else {
-        await api.updateVariant(itemId, current.id, type: 'payment', nameAr: o.nameAr, nameEn: o.nameEn, price: price, isDefault: first);
+        await api.updateVariant(itemId, current.id, type: 'payment', nameAr: o.nameAr, nameEn: o.nameEn, price: row.price, isDefault: first, installmentMonths: months);
       }
       first = false;
     }
@@ -322,6 +337,7 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     _axisSeeded = true;
     for (final o in axis.options) {
       _axisPrice[o.id] ??= TextEditingController();
+      _axisMonths[o.id] ??= TextEditingController();
     }
     final item = widget.existingItem;
     if (item == null) return;
@@ -333,6 +349,7 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
           if (o == null) continue;
           _axisOn.add(o.id);
           _axisPrice[o.id]!.text = (v.price ?? 0).toStringAsFixed(0);
+          _axisMonths[o.id]!.text = v.installmentMonths?.toString() ?? '';
         }
       });
     });
@@ -566,7 +583,9 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
                       width: _axisOn.contains(o.id) ? 1.5 : 1,
                     ),
                   ),
-                  child: Row(
+                  child: Column(
+                    children: [
+                  Row(
                     children: [
                       Checkbox(
                         value: _axisOn.contains(o.id),
@@ -589,6 +608,21 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
                           decoration: InputDecoration(hintText: l10n.techPricingPriceFor),
                         ),
                       ),
+                    ],
+                  ),
+                  if (_isInstalment(o) && _axisOn.contains(o.id))
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(start: 12, end: 4, bottom: 8),
+                      child: TextField(
+                        controller: _axisMonths[o.id],
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                        decoration: InputDecoration(
+                          labelText: l10n.techPricingInstallmentMonths,
+                          hintText: '12',
+                        ),
+                      ),
+                    ),
                     ],
                   ),
                 ),

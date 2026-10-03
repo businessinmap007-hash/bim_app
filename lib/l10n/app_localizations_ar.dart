@@ -1012,6 +1012,29 @@ class AppLocalizationsAr extends AppLocalizations {
   String get cartVariantChoose => 'اختر النوع';
 
   @override
+  String cartPaymentInstalments(int count, String monthly, String date) {
+    return 'تقسيط على $count دفعات شهرية — $monthly شهريًا، أول دفعة $date';
+  }
+
+  @override
+  String get ordersInstallmentsTitle => 'جدول الدفعات';
+
+  @override
+  String get ordersInstallmentPaid => 'تم السداد';
+
+  @override
+  String get techPricingInstallmentMonths => 'عدد الأشهر';
+
+  @override
+  String get techPricingInstallmentMonthsRequired =>
+      'اكتب عدد أشهر التقسيط (شهران فأكثر).';
+
+  @override
+  String variantInstallmentNote(int months, String monthly) {
+    return '$months شهر — $monthly شهريًا';
+  }
+
+  @override
   String techPricingPriceBy(String group) {
     return 'السعر حسب $group';
   }

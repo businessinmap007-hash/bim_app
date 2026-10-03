@@ -7,6 +7,8 @@ class MenuItemVariant {
   final bool isDefault;
   /// 'payment' for «كاش» / «تقسيط» prices — the picker is then «اختر طريقة الدفع».
   final String type;
+  /// An instalment price says over how many months it runs.
+  final int? installmentMonths;
 
   const MenuItemVariant({
     required this.id,
@@ -14,6 +16,7 @@ class MenuItemVariant {
     required this.price,
     required this.isDefault,
     this.type = '',
+    this.installmentMonths,
   });
 
   factory MenuItemVariant.fromJson(Map<String, dynamic> json) => MenuItemVariant(
@@ -22,6 +25,7 @@ class MenuItemVariant {
     price: (json['price'] as num?)?.toDouble() ?? 0,
     isDefault: json['is_default'] as bool? ?? false,
     type: json['type'] as String? ?? '',
+    installmentMonths: (json['installment_months'] as num?)?.toInt(),
   );
 }
 

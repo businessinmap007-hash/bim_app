@@ -413,6 +413,7 @@ class BusinessMenuApi {
     double? priceDelta,
     bool isDefault = false,
     bool isActive = true,
+    int? installmentMonths,
   }) async {
     await _client.post(
       '/business/menu/items/$itemId/variants',
@@ -424,6 +425,7 @@ class BusinessMenuApi {
         'price_delta': ?priceDelta,
         'is_default': isDefault,
         'is_active': isActive,
+        'installment_months': ?installmentMonths,
       },
     );
   }
@@ -438,6 +440,7 @@ class BusinessMenuApi {
     double? priceDelta,
     bool isDefault = false,
     bool isActive = true,
+    int? installmentMonths,
   }) async {
     await _client.put(
       '/business/menu/items/$itemId/variants/$variantId',
@@ -449,6 +452,7 @@ class BusinessMenuApi {
         'price_delta': ?priceDelta,
         'is_default': isDefault,
         'is_active': isActive,
+        'installment_months': ?installmentMonths,
       },
     );
   }

@@ -1001,6 +1001,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cartVariantChoose => 'Choose a type';
 
   @override
+  String cartPaymentInstalments(int count, String monthly, String date) {
+    return 'Instalments: $count monthly payments of $monthly, the first on $date';
+  }
+
+  @override
+  String get ordersInstallmentsTitle => 'Payment schedule';
+
+  @override
+  String get ordersInstallmentPaid => 'Paid';
+
+  @override
+  String get techPricingInstallmentMonths => 'Months';
+
+  @override
+  String get techPricingInstallmentMonthsRequired =>
+      'Enter the number of months (2 or more).';
+
+  @override
+  String variantInstallmentNote(int months, String monthly) {
+    return '$months months — $monthly a month';
+  }
+
+  @override
   String techPricingPriceBy(String group) {
     return 'Price by $group';
   }
