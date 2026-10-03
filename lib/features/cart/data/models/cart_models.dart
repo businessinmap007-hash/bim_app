@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import '../../../orders/data/models/placed_order.dart' show OrderInstallment;
 
 /// Mirrors `CartController::presentCart()` — one line already resolved to
 /// what the customer picked, not what the item is called today (the label
@@ -123,6 +124,8 @@ class Cart {
   final double discount;
   final double finalTotal;
   final InstallmentPlanPreview? installmentPlan;
+  /// A PLACED order's schedule — each payment with its date and amount.
+  final List<OrderInstallment> installments;
 
   const Cart({
     required this.id,
@@ -137,6 +140,7 @@ class Cart {
     required this.discount,
     required this.finalTotal,
     this.installmentPlan,
+    this.installments = const [],
   });
 
   factory Cart.fromJson(Map<String, dynamic> json) => Cart(
@@ -154,5 +158,8 @@ class Cart {
     installmentPlan: json['installment_plan'] is Map
         ? InstallmentPlanPreview.fromJson(json['installment_plan'] as Map<String, dynamic>)
         : null,
+    installments: (json['installments'] is List ? json['installments'] as List<dynamic> : const [])
+        .map((e) => OrderInstallment.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }

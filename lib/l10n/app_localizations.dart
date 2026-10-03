@@ -1963,6 +1963,102 @@ abstract class AppLocalizations {
   /// **'الدفعة المقدمة لازم تكون أقل من السعر.'**
   String get techPricingInstallmentDownInvalid;
 
+  /// No description provided for @ordersInstallmentsPaidSummary.
+  ///
+  /// In ar, this message translates to:
+  /// **'المدفوع {paid} · المتبقي {remaining}'**
+  String ordersInstallmentsPaidSummary(String paid, String remaining);
+
+  /// No description provided for @ordersInstallmentCollect.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحصيل'**
+  String get ordersInstallmentCollect;
+
+  /// No description provided for @ordersInstallmentUndo.
+  ///
+  /// In ar, this message translates to:
+  /// **'تراجع عن التحصيل'**
+  String get ordersInstallmentUndo;
+
+  /// No description provided for @cartOrderPlacedPaidNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'المدفوع الآن: {paid}'**
+  String cartOrderPlacedPaidNow(String paid);
+
+  /// No description provided for @businessReportsTabCash.
+  ///
+  /// In ar, this message translates to:
+  /// **'كاش'**
+  String get businessReportsTabCash;
+
+  /// No description provided for @businessReportsTabInstallments.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقسيط'**
+  String get businessReportsTabInstallments;
+
+  /// No description provided for @businessReportsInstOrders.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلبات التقسيط'**
+  String get businessReportsInstOrders;
+
+  /// No description provided for @businessReportsInstContractTotal.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي التقسيط'**
+  String get businessReportsInstContractTotal;
+
+  /// No description provided for @businessReportsInstCollected.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تحصيله'**
+  String get businessReportsInstCollected;
+
+  /// No description provided for @businessReportsInstRemaining.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتبقي للتحصيل'**
+  String get businessReportsInstRemaining;
+
+  /// No description provided for @businessReportsInstOverdue.
+  ///
+  /// In ar, this message translates to:
+  /// **'متأخر'**
+  String get businessReportsInstOverdue;
+
+  /// No description provided for @businessReportsInstByMonth.
+  ///
+  /// In ar, this message translates to:
+  /// **'المستحق بالشهر'**
+  String get businessReportsInstByMonth;
+
+  /// No description provided for @businessReportsInstUpcoming.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأقساط القادمة'**
+  String get businessReportsInstUpcoming;
+
+  /// No description provided for @businessReportsInstNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أقساط مستحقة.'**
+  String get businessReportsInstNone;
+
+  /// No description provided for @businessReportsInstPayments.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} دفعة'**
+  String businessReportsInstPayments(int count);
+
+  /// No description provided for @businessReportsInstLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'قسط {seq} من {count} · طلب #{order}'**
+  String businessReportsInstLine(int seq, int count, int order);
+
   /// No description provided for @ordersInstallmentsTitle.
   ///
   /// In ar, this message translates to:

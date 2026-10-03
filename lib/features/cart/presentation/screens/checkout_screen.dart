@@ -6,6 +6,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../addresses/application/addresses_providers.dart';
 import '../../../addresses/presentation/widgets/address_pick_sheet.dart';
 import '../../../business/application/business_page_providers.dart';
+import '../../../orders/presentation/widgets/installment_schedule.dart';
 import '../../application/cart_controller.dart';
 import '../../data/models/cart_models.dart';
 
@@ -95,7 +96,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
     setState(() => _submitting = true);
     try {
-      await ref.read(cartControllerProvider.notifier).checkout(
+      final placed = await ref.read(cartControllerProvider.notifier).checkout(
         widget.cart.business!.id,
         fulfillmentType: fulfillmentType,
         addressId: fulfillmentType == 'delivery' ? _selectedAddressId : null,
@@ -105,8 +106,30 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         pickupAt: fulfillmentType == 'pickup' ? _pickupAt : null,
       );
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.cartOrderPlaced)));
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        // Bought on instalments: say when each payment falls due and what is paid
+        // now, instead of a bare «تم» — the customer must know what they owe.
+        if (placed.installments.isNotEmpty) {
+          await showDialog<void>(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              title: Text(l10n.cartOrderPlaced),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(l10n.cartOrderPlacedPaidNow('0')),
+                    InstallmentSchedule(installments: placed.installments),
+                  ],
+                ),
+              ),
+              actions: [TextButton(onPressed: () => Navigator.of(ctx).pop(), child: Text(l10n.commonOk))],
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.cartOrderPlaced)));
+        }
+        if (mounted) Navigator.of(context).popUntil((route) => route.isFirst);
       }
     } catch (e) {
       if (mounted) {

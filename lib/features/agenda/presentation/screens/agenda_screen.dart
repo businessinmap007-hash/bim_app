@@ -520,6 +520,7 @@ class _AgendaTile extends ConsumerWidget {
     'appointment' => Icons.medical_services_outlined,
     'booking' => Icons.event_available_outlined,
     'medication' => Icons.medication_outlined,
+    'installment' => Icons.payments_outlined,
     _ => Icons.task_alt_outlined,
   };
 

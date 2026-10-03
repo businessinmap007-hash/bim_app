@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/business_orders_providers.dart';
+import '../../application/orders_providers.dart';
 import '../../data/models/order_reports.dart';
 
 /// Standalone analytics screen for a business's own orders -- separate from
@@ -26,61 +27,92 @@ class _BusinessOrderReportsScreenState extends ConsumerState<BusinessOrderReport
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(businessOrderReportsControllerProvider);
+    final reports = state.reports;
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.businessReportsTitle)),
-      body: RefreshIndicator(
-        onRefresh: () => ref.read(businessOrderReportsControllerProvider.notifier).load(),
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            Row(
-              children: [
-                for (final days in [7, 30, 90])
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: ChoiceChip(
-                      label: Text(switch (days) {
-                        7 => l10n.businessReportsRange7d,
-                        90 => l10n.businessReportsRange90d,
-                        _ => l10n.businessReportsRange30d,
-                      }),
-                      selected: _rangeDays == days,
-                      onSelected: (_) {
-                        setState(() => _rangeDays = days);
-                        ref.read(businessOrderReportsControllerProvider.notifier).setRangeDays(days);
-                      },
-                    ),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            if (state.isLoading && state.reports == null)
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 40),
-                child: Center(child: CircularProgressIndicator()),
-              )
-            else if (state.error != null && state.reports == null)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 40),
-                child: Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(l10n.commonSomethingWentWrong),
-                      const SizedBox(height: 8),
-                      OutlinedButton(
-                        onPressed: () => ref.read(businessOrderReportsControllerProvider.notifier).load(),
-                        child: Text(l10n.commonRetry),
-                      ),
-                    ],
+    // A business that sells on instalments gets the two views on one page; one
+    // that is cash only keeps the single page it always had.
+    if (reports != null && reports.hasInstallments) {
+      return DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(l10n.businessReportsTitle),
+            bottom: TabBar(tabs: [Tab(text: l10n.businessReportsTabCash), Tab(text: l10n.businessReportsTabInstallments)]),
+          ),
+          body: TabBarView(
+            children: [
+              _cashView(l10n, state),
+              RefreshIndicator(
+                onRefresh: () => ref.read(businessOrderReportsControllerProvider.notifier).load(),
+                child: _InstallmentsView(report: reports.installments!),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return Scaffold(appBar: AppBar(title: Text(l10n.businessReportsTitle)), body: _cashView(l10n, state));
+  }
+
+  Widget _cashView(AppLocalizations l10n, BusinessOrderReportsState state) {
+    return RefreshIndicator(
+      onRefresh: () => ref.read(businessOrderReportsControllerProvider.notifier).load(),
+      child: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          Row(
+            children: [
+              for (final days in [7, 30, 90])
+                Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: ChoiceChip(
+                    label: Text(switch (days) {
+                      7 => l10n.businessReportsRange7d,
+                      90 => l10n.businessReportsRange90d,
+                      _ => l10n.businessReportsRange30d,
+                    }),
+                    selected: _rangeDays == days,
+                    onSelected: (_) {
+                      setState(() => _rangeDays = days);
+                      ref.read(businessOrderReportsControllerProvider.notifier).setRangeDays(days);
+                    },
                   ),
                 ),
-              )
-            else if (state.reports != null)
-              _ReportsBody(reports: state.reports!),
-          ],
-        ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          if (state.isLoading && state.reports == null)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 40),
+              child: Center(child: CircularProgressIndicator()),
+            )
+          else if (state.error != null && state.reports == null)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 40),
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(l10n.commonSomethingWentWrong),
+                    const SizedBox(height: 8),
+                    OutlinedButton(
+                      onPressed: () => ref.read(businessOrderReportsControllerProvider.notifier).load(),
+                      child: Text(l10n.commonRetry),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          else if (state.reports != null)
+            _ReportsBody(
+              reports: state.reports!,
+              // With instalments on the side, THIS view counts only what was paid in one go.
+              summary: state.reports!.cash?.summary ?? state.reports!.summary,
+              daily: state.reports!.cash?.daily ?? state.reports!.daily,
+              showFulfillment: !state.reports!.hasInstallments,
+            ),
+        ],
       ),
     );
   }
@@ -88,13 +120,16 @@ class _BusinessOrderReportsScreenState extends ConsumerState<BusinessOrderReport
 
 class _ReportsBody extends StatelessWidget {
   final OrderReports reports;
-  const _ReportsBody({required this.reports});
+  final OrderReportsSummary summary;
+  final List<OrderReportsDailyPoint> daily;
+  final bool showFulfillment;
+  const _ReportsBody({required this.reports, required this.summary, required this.daily, required this.showFulfillment});
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    if (reports.summary.totalOrders == 0) {
+    if (summary.totalOrders == 0) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 40),
         child: Center(child: Text(l10n.businessReportsEmpty)),
@@ -104,49 +139,51 @@ class _ReportsBody extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        GridView.count(
-          crossAxisCount: 2,
+        GridView.extent(
+          maxCrossAxisExtent: 240,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           mainAxisSpacing: 10,
           crossAxisSpacing: 10,
           childAspectRatio: 1.8,
           children: [
-            _StatCard(label: l10n.businessReportsTotalOrders, value: '${reports.summary.totalOrders}'),
+            _StatCard(label: l10n.businessReportsTotalOrders, value: '${summary.totalOrders}'),
             _StatCard(
               label: l10n.businessReportsTotalRevenue,
-              value: reports.summary.totalRevenue.toStringAsFixed(0),
+              value: summary.totalRevenue.toStringAsFixed(0),
               color: AppColors.accentGold,
             ),
             _StatCard(
               label: l10n.businessReportsCompleted,
-              value: '${reports.summary.completedOrders}',
+              value: '${summary.completedOrders}',
               color: AppColors.success,
             ),
             _StatCard(
               label: l10n.businessReportsCancelled,
-              value: '${reports.summary.cancelledOrders}',
+              value: '${summary.cancelledOrders}',
               color: AppColors.error,
             ),
-            _StatCard(label: l10n.businessReportsPending, value: '${reports.summary.pendingOrders}'),
+            _StatCard(label: l10n.businessReportsPending, value: '${summary.pendingOrders}'),
             _StatCard(
               label: l10n.businessReportsAverageOrderValue,
-              value: reports.summary.averageOrderValue.toStringAsFixed(0),
+              value: summary.averageOrderValue.toStringAsFixed(0),
             ),
           ],
         ),
         const SizedBox(height: 24),
         Text(l10n.businessReportsDailyOrdersChartTitle, style: Theme.of(context).textTheme.titleSmall),
         const SizedBox(height: 8),
-        SizedBox(height: 160, child: _DailyBarChart(daily: reports.daily, useRevenue: false)),
+        SizedBox(height: 160, child: _DailyBarChart(daily: daily, useRevenue: false)),
         const SizedBox(height: 24),
         Text(l10n.businessReportsDailyRevenueChartTitle, style: Theme.of(context).textTheme.titleSmall),
         const SizedBox(height: 8),
-        SizedBox(height: 160, child: _DailyBarChart(daily: reports.daily, useRevenue: true)),
-        const SizedBox(height: 24),
-        Text(l10n.businessReportsByFulfillmentType, style: Theme.of(context).textTheme.titleSmall),
-        const SizedBox(height: 12),
-        _FulfillmentTypeBars(reports: reports),
+        SizedBox(height: 160, child: _DailyBarChart(daily: daily, useRevenue: true)),
+        if (showFulfillment) ...[
+          const SizedBox(height: 24),
+          Text(l10n.businessReportsByFulfillmentType, style: Theme.of(context).textTheme.titleSmall),
+          const SizedBox(height: 12),
+          _FulfillmentTypeBars(reports: reports),
+        ],
       ],
     );
   }
@@ -293,6 +330,114 @@ class _FulfillmentTypeBars extends StatelessWidget {
               ],
             ),
           ),
+      ],
+    );
+  }
+}
+
+/// «تقسيط»: what the business is owed, what it has collected, and the payments still to
+/// collect by date — each one can be recorded as collected from the order it belongs to.
+class _InstallmentsView extends ConsumerWidget {
+  final InstallmentReport report;
+  const _InstallmentsView({required this.report});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context).toString();
+
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        GridView.extent(
+          maxCrossAxisExtent: 240,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          childAspectRatio: 1.8,
+          children: [
+            _StatCard(label: l10n.businessReportsInstOrders, value: '${report.ordersCount}'),
+            _StatCard(
+              label: l10n.businessReportsInstContractTotal,
+              value: report.contractTotal.toStringAsFixed(0),
+              color: AppColors.accentGold,
+            ),
+            _StatCard(
+              label: l10n.businessReportsInstCollected,
+              value: report.collected.toStringAsFixed(0),
+              color: AppColors.success,
+            ),
+            _StatCard(label: l10n.businessReportsInstRemaining, value: report.remaining.toStringAsFixed(0)),
+            if (report.overdue > 0)
+              _StatCard(
+                label: l10n.businessReportsInstOverdue,
+                value: report.overdue.toStringAsFixed(0),
+                color: AppColors.error,
+              ),
+          ],
+        ),
+        if (report.byMonth.isNotEmpty) ...[
+          const SizedBox(height: 24),
+          Text(l10n.businessReportsInstByMonth, style: Theme.of(context).textTheme.titleSmall),
+          const SizedBox(height: 8),
+          for (final m in report.byMonth)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      DateFormat.yMMMM(locale).format(DateTime.parse('${m.month}-01')),
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ),
+                  Text(l10n.businessReportsInstPayments(m.count), style: Theme.of(context).textTheme.bodySmall),
+                  const SizedBox(width: 12),
+                  Text(m.amount.toStringAsFixed(0), style: Theme.of(context).textTheme.titleSmall),
+                ],
+              ),
+            ),
+        ],
+        const SizedBox(height: 24),
+        Text(l10n.businessReportsInstUpcoming, style: Theme.of(context).textTheme.titleSmall),
+        const SizedBox(height: 8),
+        if (report.upcoming.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 24),
+            child: Center(child: Text(l10n.businessReportsInstNone)),
+          )
+        else
+          for (final d in report.upcoming)
+            Card(
+              margin: const EdgeInsets.only(bottom: 8),
+              child: ListTile(
+                title: Text(
+                  '${d.dueOn.toIso8601String().substring(0, 10)} · ${d.customer}',
+                  style: d.overdue ? TextStyle(color: AppColors.error) : null,
+                ),
+                subtitle: Text(l10n.businessReportsInstLine(d.seq, d.count, d.orderId)),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(d.amount.toStringAsFixed(0), style: Theme.of(context).textTheme.titleSmall),
+                    TextButton(
+                      onPressed: () async {
+                        try {
+                          await ref.read(ordersApiProvider).collectInstallment(d.orderId, d.seq, paid: true);
+                          await ref.read(businessOrderReportsControllerProvider.notifier).load();
+                        } catch (_) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+                          }
+                        }
+                      },
+                      child: Text(l10n.ordersInstallmentCollect),
+                    ),
+                  ],
+                ),
+              ),
+            ),
       ],
     );
   }

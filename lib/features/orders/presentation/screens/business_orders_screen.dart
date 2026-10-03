@@ -583,7 +583,21 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                   ],
                 ),
                 // «تقسيط»: what the customer pays each month, and when.
-                InstallmentSchedule(installments: order.installments),
+                InstallmentSchedule(
+                  installments: order.installments,
+                  onCollect: (p, paid) async {
+                    try {
+                      await ref.read(ordersApiProvider).collectInstallment(orderId, p.seq, paid: paid, businessId: businessId);
+                      ref.read(businessOrderDetailControllerProvider(_key).notifier).load();
+                    } catch (e) {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(e is ApiException ? e.message : l10n.commonSomethingWentWrong)),
+                        );
+                      }
+                    }
+                  },
+                ),
                 if (order.notes != null && order.notes!.isNotEmpty) ...[
                   const SizedBox(height: 12),
                   Text(l10n.businessOrdersNotes, style: Theme.of(context).textTheme.titleSmall),

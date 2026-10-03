@@ -132,6 +132,11 @@ class OrdersApi {
     return OrderReports.fromJson(data);
   }
 
+  /// The business records an instalment payment it received (or takes it back).
+  Future<void> collectInstallment(int orderId, int seq, {required bool paid, int? businessId}) async {
+    await _client.post(_biz('/business/orders/$orderId/installments/$seq/collect', businessId), data: {'paid': paid});
+  }
+
   Future<PlacedOrder> businessReject(int id, {String? reason, int? businessId}) async {
     final data =
         await _client.post(

@@ -1028,6 +1028,62 @@ class AppLocalizationsEn extends AppLocalizations {
       'The down payment must be less than the price.';
 
   @override
+  String ordersInstallmentsPaidSummary(String paid, String remaining) {
+    return 'Paid $paid · Remaining $remaining';
+  }
+
+  @override
+  String get ordersInstallmentCollect => 'Collect';
+
+  @override
+  String get ordersInstallmentUndo => 'Undo collection';
+
+  @override
+  String cartOrderPlacedPaidNow(String paid) {
+    return 'Paid now: $paid';
+  }
+
+  @override
+  String get businessReportsTabCash => 'Cash';
+
+  @override
+  String get businessReportsTabInstallments => 'Instalments';
+
+  @override
+  String get businessReportsInstOrders => 'Instalment orders';
+
+  @override
+  String get businessReportsInstContractTotal => 'Total on instalments';
+
+  @override
+  String get businessReportsInstCollected => 'Collected';
+
+  @override
+  String get businessReportsInstRemaining => 'Left to collect';
+
+  @override
+  String get businessReportsInstOverdue => 'Overdue';
+
+  @override
+  String get businessReportsInstByMonth => 'Due by month';
+
+  @override
+  String get businessReportsInstUpcoming => 'Upcoming payments';
+
+  @override
+  String get businessReportsInstNone => 'No payments due.';
+
+  @override
+  String businessReportsInstPayments(int count) {
+    return '$count payments';
+  }
+
+  @override
+  String businessReportsInstLine(int seq, int count, int order) {
+    return 'Payment $seq of $count · order #$order';
+  }
+
+  @override
   String get ordersInstallmentsTitle => 'Payment schedule';
 
   @override

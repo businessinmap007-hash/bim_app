@@ -1039,6 +1039,62 @@ class AppLocalizationsAr extends AppLocalizations {
       'الدفعة المقدمة لازم تكون أقل من السعر.';
 
   @override
+  String ordersInstallmentsPaidSummary(String paid, String remaining) {
+    return 'المدفوع $paid · المتبقي $remaining';
+  }
+
+  @override
+  String get ordersInstallmentCollect => 'تحصيل';
+
+  @override
+  String get ordersInstallmentUndo => 'تراجع عن التحصيل';
+
+  @override
+  String cartOrderPlacedPaidNow(String paid) {
+    return 'المدفوع الآن: $paid';
+  }
+
+  @override
+  String get businessReportsTabCash => 'كاش';
+
+  @override
+  String get businessReportsTabInstallments => 'تقسيط';
+
+  @override
+  String get businessReportsInstOrders => 'طلبات التقسيط';
+
+  @override
+  String get businessReportsInstContractTotal => 'إجمالي التقسيط';
+
+  @override
+  String get businessReportsInstCollected => 'تم تحصيله';
+
+  @override
+  String get businessReportsInstRemaining => 'المتبقي للتحصيل';
+
+  @override
+  String get businessReportsInstOverdue => 'متأخر';
+
+  @override
+  String get businessReportsInstByMonth => 'المستحق بالشهر';
+
+  @override
+  String get businessReportsInstUpcoming => 'الأقساط القادمة';
+
+  @override
+  String get businessReportsInstNone => 'لا توجد أقساط مستحقة.';
+
+  @override
+  String businessReportsInstPayments(int count) {
+    return '$count دفعة';
+  }
+
+  @override
+  String businessReportsInstLine(int seq, int count, int order) {
+    return 'قسط $seq من $count · طلب #$order';
+  }
+
+  @override
   String get ordersInstallmentsTitle => 'جدول الدفعات';
 
   @override
