@@ -703,46 +703,63 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
             const SizedBox(height: 8),
             for (var i = 0; i < _plans.length; i++)
               Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _plans[i].months,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                        decoration: InputDecoration(labelText: l10n.techPricingInstallmentMonths, hintText: '12'),
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 4, 6),
+                  decoration: BoxDecoration(
+                    color: theme.inputDecorationTheme.fillColor ?? theme.colorScheme.surface,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: theme.dividerColor),
+                  ),
+                  child: Column(
+                    children: [
+                      // Months and the down payment side by side; what a unit costs on the plan below, whole.
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _plans[i].months,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                              decoration: InputDecoration(labelText: l10n.techPricingInstallmentMonths, hintText: '12'),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: TextField(
+                              controller: _plans[i].down,
+                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                              inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,٫]'))],
+                              decoration: InputDecoration(labelText: l10n.techPricingInstallmentDown),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: TextField(
-                        controller: _plans[i].down,
-                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                        inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,٫]'))],
-                        decoration: InputDecoration(labelText: l10n.techPricingInstallmentDown),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _plans[i].total,
+                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                              inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,٫]'))],
+                              decoration: InputDecoration(labelText: l10n.techPricingPlanTotal),
+                            ),
+                          ),
+                          IconButton(
+                            visualDensity: VisualDensity.compact,
+                            onPressed: () => setState(() {
+                              final p = _plans.removeAt(i);
+                              p.months.dispose();
+                              p.down.dispose();
+                              p.total.dispose();
+                            }),
+                            icon: const Icon(Icons.delete_outline, size: 22),
+                          ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: TextField(
-                        controller: _plans[i].total,
-                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                        inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,٫]'))],
-                        decoration: InputDecoration(labelText: l10n.techPricingPlanTotal),
-                      ),
-                    ),
-                    IconButton(
-                      visualDensity: VisualDensity.compact,
-                      onPressed: () => setState(() {
-                        final p = _plans.removeAt(i);
-                        p.months.dispose();
-                        p.down.dispose();
-                        p.total.dispose();
-                      }),
-                      icon: const Icon(Icons.delete_outline, size: 20),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             Align(
