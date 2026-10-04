@@ -11508,6 +11508,42 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لا توجد شروط مطلوبة لنشاطك.'**
   String get storeTermsEmpty;
+
+  /// No description provided for @shopAddonsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدمات المحل'**
+  String get shopAddonsTitle;
+
+  /// No description provided for @shopAddonsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشاطك لا يقدّم خدمات إضافية.'**
+  String get shopAddonsEmpty;
+
+  /// No description provided for @shopAddonsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعّر خدمات المحل مرة واحدة (مثل المشوى والمقلى والصينية). السعر لكل وحدة بيع (للكيلو مثلًا)، وتظهر لكل أصنافك ويختار العميل واحدة منها، وتظهر فى الفاتورة سطرًا مستقلًا. اترك الخانة فارغة لو لا تقدّم الخدمة.'**
+  String get shopAddonsHint;
+
+  /// No description provided for @shopAddonPriceHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر'**
+  String get shopAddonPriceHint;
+
+  /// No description provided for @shopAddonsSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ أسعار الخدمات.'**
+  String get shopAddonsSaved;
+
+  /// No description provided for @cartLineBase.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصنف'**
+  String get cartLineBase;
 }
 
 class _AppLocalizationsDelegate

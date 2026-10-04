@@ -158,9 +158,11 @@ class _CartItemRow extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    // A line with services reads as separate amounts — «سمك 450» then «صينية 150» — not one blended price.
+    final hasServices = item.extrasDetail.isNotEmpty;
     final optionParts = [
       if (item.sizeName != null) item.sizeName!,
-      ...item.extraNames,
+      if (!hasServices) ...item.extraNames,
     ];
 
     return Padding(
@@ -175,6 +177,11 @@ class _CartItemRow extends ConsumerWidget {
                 Text(item.name, style: theme.textTheme.bodyMedium),
                 if (optionParts.isNotEmpty)
                   Text(optionParts.join(' · '), style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+                if (hasServices) ...[
+                  Text('${l10n.cartLineBase}  ${item.baseTotal.toStringAsFixed(0)}', style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+                  for (final extra in item.extrasDetail)
+                    Text('${extra.name}  ${extra.total.toStringAsFixed(0)}', style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+                ],
               ],
             ),
           ),

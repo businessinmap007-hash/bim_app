@@ -6204,4 +6204,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get storeTermsEmpty => 'No terms are required for your business.';
+
+  @override
+  String get shopAddonsTitle => 'Shop services';
+
+  @override
+  String get shopAddonsEmpty => 'Your business offers no extra services.';
+
+  @override
+  String get shopAddonsHint =>
+      'Price your shop\'s services once (grilled, fried, baked tray…). The price is per unit sold (per kg, for example); every item carries them, the customer picks one, and the invoice lists it as its own line. Leave a field empty if you do not offer the service.';
+
+  @override
+  String get shopAddonPriceHint => 'Price';
+
+  @override
+  String get shopAddonsSaved => 'Service prices saved.';
+
+  @override
+  String get cartLineBase => 'Item';
 }

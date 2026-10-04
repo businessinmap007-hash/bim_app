@@ -1,3 +1,5 @@
+import '../../../business_menu/application/business_menu_providers.dart';
+import '../../../business_menu/presentation/screens/shop_addons_screen.dart';
 import '../../../business_menu/presentation/screens/store_terms_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -56,6 +58,8 @@ class ServicesSettingsScreen extends ConsumerWidget {
     // keysAsync's own error branch below) rather than gating the whole
     // screen behind a second spinner for what's a narrow, secondary filter.
     final menuKinds = ref.watch(myMenuKindsProvider).valueOrNull;
+    // «خدمات المحل» (cooking method…) only for a trade that offers services.
+    final hasShopAddons = ref.watch(shopAddonsProvider).valueOrNull?.isNotEmpty ?? false;
     final authState = ref.watch(authControllerProvider);
     final isCarrier =
         authState is AuthSignedIn && authState.user.isShippingCarrier;
@@ -69,11 +73,13 @@ class ServicesSettingsScreen extends ConsumerWidget {
           keys: null,
           menuKinds: menuKinds,
           isCarrier: isCarrier,
+          hasShopAddons: hasShopAddons,
         ),
         data: (keys) => _ServiceList(
           keys: keys,
           menuKinds: menuKinds,
           isCarrier: isCarrier,
+          hasShopAddons: hasShopAddons,
         ),
       ),
     );
@@ -91,10 +97,14 @@ class _ServiceList extends StatelessWidget {
 
   /// Shipping & Delivery accounts run deliveries from here (and only they do).
   final bool isCarrier;
+
+  /// The trade offers priced services («طريقة الطهي») — the shop prices them here.
+  final bool hasShopAddons;
   const _ServiceList({
     required this.keys,
     required this.menuKinds,
     required this.isCarrier,
+    this.hasShopAddons = false,
   });
 
   bool _has(String key) => keys == null || keys!.contains(key);
@@ -116,6 +126,12 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.restaurant_menu_outlined,
         title: l10n.menuManagementTitle,
         builder: (_) => const MenuItemsScreen(),
+      ),
+      _Tile(
+        show: _has('menu') && hasShopAddons,
+        leading: Icons.local_dining_outlined,
+        title: l10n.shopAddonsTitle,
+        builder: (_) => const ShopAddonsScreen(),
       ),
       _Tile(
         show: _has('menu'),

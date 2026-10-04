@@ -2115,5 +2115,11 @@
   "storeTermsHint": "Set your store's policies once (returns, minimum order, delivery…). Customers see them on your page and at checkout, and every order keeps the terms it was placed under.",
   "storeTermsSave": "Save",
   "storeTermsSaved": "Store terms saved.",
-  "storeTermsEmpty": "No terms are required for your business."
+  "storeTermsEmpty": "No terms are required for your business.",
+  "shopAddonsTitle": "Shop services",
+  "shopAddonsEmpty": "Your business offers no extra services.",
+  "shopAddonsHint": "Price your shop's services once (grilled, fried, baked tray…). The price is per unit sold (per kg, for example); every item carries them, the customer picks one, and the invoice lists it as its own line. Leave a field empty if you do not offer the service.",
+  "shopAddonPriceHint": "Price",
+  "shopAddonsSaved": "Service prices saved.",
+  "cartLineBase": "Item"
 }

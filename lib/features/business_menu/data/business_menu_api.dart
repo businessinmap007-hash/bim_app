@@ -6,6 +6,7 @@ import 'models/menu_available_types.dart';
 import 'models/menu_item.dart';
 import 'models/menu_section.dart';
 import 'models/menu_vocabulary.dart';
+import 'models/shop_addons.dart';
 import 'models/store_terms.dart';
 
 class MenuItemsPage {
@@ -98,6 +99,19 @@ class BusinessMenuApi {
   Future<MenuVocabulary> vocabulary() async {
     final body = await _client.getForBody('/business/menu/vocabulary');
     return MenuVocabulary.fromJson(body['data'] as Map<String, dynamic>);
+  }
+
+  /// «خدمات المحل» — the services this trade adds on top of an item, with the shop's price for each.
+  Future<List<ShopAddonGroup>> shopAddons() async {
+    final body = await _client.getForBody('/business/menu/addons');
+    return ShopAddonGroup.listFrom((body['data'] as Map<String, dynamic>)['addons']);
+  }
+
+  /// Price the shop's services once — option id -> price (0 = not offered).
+  Future<void> saveShopAddons(Map<int, double> prices) async {
+    await _client.put('/business/menu/addons', data: {
+      'prices': {for (final e in prices.entries) '${e.key}': e.value},
+    });
   }
 
   /// «شروط المتجر» — every policy the store's trade asks, each option flagged `selected`.

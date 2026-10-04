@@ -6182,4 +6182,23 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get storeTermsEmpty => 'لا توجد شروط مطلوبة لنشاطك.';
+
+  @override
+  String get shopAddonsTitle => 'خدمات المحل';
+
+  @override
+  String get shopAddonsEmpty => 'نشاطك لا يقدّم خدمات إضافية.';
+
+  @override
+  String get shopAddonsHint =>
+      'سعّر خدمات المحل مرة واحدة (مثل المشوى والمقلى والصينية). السعر لكل وحدة بيع (للكيلو مثلًا)، وتظهر لكل أصنافك ويختار العميل واحدة منها، وتظهر فى الفاتورة سطرًا مستقلًا. اترك الخانة فارغة لو لا تقدّم الخدمة.';
+
+  @override
+  String get shopAddonPriceHint => 'السعر';
+
+  @override
+  String get shopAddonsSaved => 'تم حفظ أسعار الخدمات.';
+
+  @override
+  String get cartLineBase => 'الصنف';
 }

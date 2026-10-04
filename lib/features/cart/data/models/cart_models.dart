@@ -5,6 +5,16 @@ import '../../../orders/data/models/placed_order.dart' show OrderInstallment;
 /// Mirrors `CartController::presentCart()` — one line already resolved to
 /// what the customer picked, not what the item is called today (the label
 /// is frozen at add-to-cart time).
+/// One service added on top of a line («صينية بالفرن»): its name and what it adds to THIS line.
+class CartExtraLine {
+  final String name;
+  final double total;
+  const CartExtraLine({required this.name, required this.total});
+
+  factory CartExtraLine.fromJson(Map<String, dynamic> json) =>
+      CartExtraLine(name: json['name'] as String? ?? '', total: (json['total'] as num?)?.toDouble() ?? 0);
+}
+
 class CartItem {
   final int id;
   final String kind; // 'retail' | 'menu'
@@ -16,6 +26,13 @@ class CartItem {
   final double price;
   final double totalPrice;
 
+  /// What the item itself costs per unit, apart from its extras — and each extra with its total.
+  final double basePrice;
+  final List<CartExtraLine> extrasDetail;
+
+  /// The item's own amount on this line (before its extras).
+  double get baseTotal => basePrice * qty;
+
   const CartItem({
     required this.id,
     required this.kind,
@@ -26,6 +43,8 @@ class CartItem {
     required this.qty,
     required this.price,
     required this.totalPrice,
+    this.basePrice = 0,
+    this.extrasDetail = const [],
   });
 
   factory CartItem.fromJson(Map<String, dynamic> json) {
@@ -40,6 +59,10 @@ class CartItem {
       qty: json['qty'] as int? ?? 0,
       price: (json['price'] as num?)?.toDouble() ?? 0,
       totalPrice: (json['total_price'] as num?)?.toDouble() ?? 0,
+      basePrice: (json['base_price'] as num?)?.toDouble() ?? (json['price'] as num?)?.toDouble() ?? 0,
+      extrasDetail: (json['extras_detail'] as List<dynamic>? ?? [])
+          .map((e) => CartExtraLine.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
   }
 }
