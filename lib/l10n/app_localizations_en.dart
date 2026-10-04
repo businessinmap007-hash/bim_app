@@ -6443,4 +6443,73 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get medicalShareNothing =>
       'Your file is empty — add what you want to share first.';
+
+  @override
+  String get medicalBackupTitle => 'Encrypted backup';
+
+  @override
+  String get medicalBackupNone =>
+      'No backup yet — if you lose or change your phone, your file is gone.';
+
+  @override
+  String medicalBackupLast(String time) {
+    return 'Last backup: $time';
+  }
+
+  @override
+  String get medicalBackupChanged =>
+      'The file changed after the last backup — make a new one.';
+
+  @override
+  String get medicalBackupNow => 'Back up now';
+
+  @override
+  String get medicalBackupRestore => 'Restore from a backup';
+
+  @override
+  String get medicalBackupDelete => 'Delete the backup';
+
+  @override
+  String get medicalBackupPassphrase => 'Backup passphrase';
+
+  @override
+  String get medicalBackupPassphraseAgain => 'Repeat the passphrase';
+
+  @override
+  String get medicalBackupWarning =>
+      'This passphrase is stored nowhere and cannot be recovered. If you forget it nobody can open the backup — not even us.';
+
+  @override
+  String get medicalBackupTooShort =>
+      'The passphrase needs at least 8 characters.';
+
+  @override
+  String get medicalBackupMismatch => 'The two passphrases do not match.';
+
+  @override
+  String get medicalBackupWorking => 'Encrypting… this takes a few seconds.';
+
+  @override
+  String get medicalBackupDone => 'Backup made.';
+
+  @override
+  String get medicalBackupRestored => 'Restored.';
+
+  @override
+  String get medicalBackupNothing => 'This account has no backup.';
+
+  @override
+  String get medicalBackupWrong =>
+      'Wrong passphrase, or the backup is damaged.';
+
+  @override
+  String get medicalBackupReplace =>
+      'This phone\'s current file will be replaced by the backup. Continue?';
+
+  @override
+  String get medicalBackupDeleted => 'The backup was deleted.';
+
+  @override
+  String get medicalBackupDeleteConfirm =>
+      'Delete the backup from the server? Your file on this phone is not affected.';
 }

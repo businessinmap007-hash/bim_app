@@ -20,4 +20,11 @@ class MedicalFileStore {
   }
 
   Future<void> write(int userId, MedicalFile file) => _storage.write(key: _key(userId), value: jsonEncode(file.toJson()));
+
+  /// When this phone last made (or restored) a backup — only a date, never the passphrase.
+  Future<DateTime?> readBackupAt(int userId) async =>
+      DateTime.tryParse(await _storage.read(key: 'bim_medical_backup_at_$userId') ?? '');
+
+  Future<void> writeBackupAt(int userId, DateTime at) =>
+      _storage.write(key: 'bim_medical_backup_at_$userId', value: at.toIso8601String());
 }

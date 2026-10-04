@@ -11928,6 +11928,126 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'ملفك فارغ — أضف ما تريد مشاركته أولًا.'**
   String get medicalShareNothing;
+
+  /// No description provided for @medicalBackupTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسخة احتياطية مشفّرة'**
+  String get medicalBackupTitle;
+
+  /// No description provided for @medicalBackupNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد نسخة احتياطية — لو ضاع هاتفك أو بدّلته يضيع ملفك.'**
+  String get medicalBackupNone;
+
+  /// No description provided for @medicalBackupLast.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر نسخة احتياطية: {time}'**
+  String medicalBackupLast(String time);
+
+  /// No description provided for @medicalBackupChanged.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغيّر الملف بعد آخر نسخة — خُذ نسخة جديدة.'**
+  String get medicalBackupChanged;
+
+  /// No description provided for @medicalBackupNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسخ احتياطي الآن'**
+  String get medicalBackupNow;
+
+  /// No description provided for @medicalBackupRestore.
+  ///
+  /// In ar, this message translates to:
+  /// **'استعادة من نسخة احتياطية'**
+  String get medicalBackupRestore;
+
+  /// No description provided for @medicalBackupDelete.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف النسخة الاحتياطية'**
+  String get medicalBackupDelete;
+
+  /// No description provided for @medicalBackupPassphrase.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمة سر النسخة الاحتياطية'**
+  String get medicalBackupPassphrase;
+
+  /// No description provided for @medicalBackupPassphraseAgain.
+  ///
+  /// In ar, this message translates to:
+  /// **'أعد كتابة كلمة السر'**
+  String get medicalBackupPassphraseAgain;
+
+  /// No description provided for @medicalBackupWarning.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذه الكلمة لا تُحفظ في أي مكان ولا يمكن استرجاعها. لو نسيتها لن يستطيع أحد فتح النسخة، ولا حتى نحن.'**
+  String get medicalBackupWarning;
+
+  /// No description provided for @medicalBackupTooShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمة السر 8 أحرف على الأقل.'**
+  String get medicalBackupTooShort;
+
+  /// No description provided for @medicalBackupMismatch.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمتا السر غير متطابقتين.'**
+  String get medicalBackupMismatch;
+
+  /// No description provided for @medicalBackupWorking.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ التشفير… قد يستغرق بضع ثوانٍ.'**
+  String get medicalBackupWorking;
+
+  /// No description provided for @medicalBackupDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم أخذ النسخة الاحتياطية.'**
+  String get medicalBackupDone;
+
+  /// No description provided for @medicalBackupRestored.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت الاستعادة.'**
+  String get medicalBackupRestored;
+
+  /// No description provided for @medicalBackupNothing.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد نسخة احتياطية لهذا الحساب.'**
+  String get medicalBackupNothing;
+
+  /// No description provided for @medicalBackupWrong.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمة السر خاطئة أو النسخة تالفة.'**
+  String get medicalBackupWrong;
+
+  /// No description provided for @medicalBackupReplace.
+  ///
+  /// In ar, this message translates to:
+  /// **'الملف الحالي على هذا الموبايل سيُستبدل بالنسخة الاحتياطية. متابعة؟'**
+  String get medicalBackupReplace;
+
+  /// No description provided for @medicalBackupDeleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'حُذفت النسخة الاحتياطية.'**
+  String get medicalBackupDeleted;
+
+  /// No description provided for @medicalBackupDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف النسخة الاحتياطية من السيرفر؟ ملفك على هذا الموبايل لا يتأثر.'**
+  String get medicalBackupDeleteConfirm;
 }
 
 class _AppLocalizationsDelegate

@@ -6418,4 +6418,71 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get medicalShareNothing => 'ملفك فارغ — أضف ما تريد مشاركته أولًا.';
+
+  @override
+  String get medicalBackupTitle => 'نسخة احتياطية مشفّرة';
+
+  @override
+  String get medicalBackupNone =>
+      'لا توجد نسخة احتياطية — لو ضاع هاتفك أو بدّلته يضيع ملفك.';
+
+  @override
+  String medicalBackupLast(String time) {
+    return 'آخر نسخة احتياطية: $time';
+  }
+
+  @override
+  String get medicalBackupChanged =>
+      'تغيّر الملف بعد آخر نسخة — خُذ نسخة جديدة.';
+
+  @override
+  String get medicalBackupNow => 'نسخ احتياطي الآن';
+
+  @override
+  String get medicalBackupRestore => 'استعادة من نسخة احتياطية';
+
+  @override
+  String get medicalBackupDelete => 'حذف النسخة الاحتياطية';
+
+  @override
+  String get medicalBackupPassphrase => 'كلمة سر النسخة الاحتياطية';
+
+  @override
+  String get medicalBackupPassphraseAgain => 'أعد كتابة كلمة السر';
+
+  @override
+  String get medicalBackupWarning =>
+      'هذه الكلمة لا تُحفظ في أي مكان ولا يمكن استرجاعها. لو نسيتها لن يستطيع أحد فتح النسخة، ولا حتى نحن.';
+
+  @override
+  String get medicalBackupTooShort => 'كلمة السر 8 أحرف على الأقل.';
+
+  @override
+  String get medicalBackupMismatch => 'كلمتا السر غير متطابقتين.';
+
+  @override
+  String get medicalBackupWorking => 'جارٍ التشفير… قد يستغرق بضع ثوانٍ.';
+
+  @override
+  String get medicalBackupDone => 'تم أخذ النسخة الاحتياطية.';
+
+  @override
+  String get medicalBackupRestored => 'تمت الاستعادة.';
+
+  @override
+  String get medicalBackupNothing => 'لا توجد نسخة احتياطية لهذا الحساب.';
+
+  @override
+  String get medicalBackupWrong => 'كلمة السر خاطئة أو النسخة تالفة.';
+
+  @override
+  String get medicalBackupReplace =>
+      'الملف الحالي على هذا الموبايل سيُستبدل بالنسخة الاحتياطية. متابعة؟';
+
+  @override
+  String get medicalBackupDeleted => 'حُذفت النسخة الاحتياطية.';
+
+  @override
+  String get medicalBackupDeleteConfirm =>
+      'حذف النسخة الاحتياطية من السيرفر؟ ملفك على هذا الموبايل لا يتأثر.';
 }

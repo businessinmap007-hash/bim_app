@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bim_app/features/medical_file/data/medical_file.dart';
+import 'package:bim_app/features/medical_file/data/medical_backup_crypto.dart';
 import 'package:bim_app/features/medical_file/data/medical_share_crypto.dart';
 
 /// «الملف الطبي على الموبايل» — what is shared is only what was chosen, and only the code's key opens it.
@@ -45,5 +46,27 @@ void main() {
     final qr = MedicalShareCrypto.qrPayload('6f1c2c9e-1111-2222-3333-444455556666', 'abcDEF_-123');
     expect(MedicalShareCrypto.parseQr(qr), (id: '6f1c2c9e-1111-2222-3333-444455556666', key: 'abcDEF_-123'));
     expect(MedicalShareCrypto.parseQr('https://bim/cart/join/abc'), isNull);
+  });
+
+  test('a backup opens with its passphrase only, and the blob says nothing', () async {
+    final blob = await MedicalBackupCrypto.seal(file, 'correct horse battery');
+
+    expect(blob.contains('بنسلين'), isFalse);
+    expect(blob.contains('correct horse'), isFalse, reason: 'the passphrase is not in it');
+    final restored = await MedicalBackupCrypto.open(blob, 'correct horse battery');
+    expect(restored.bloodType, 'O+');
+    expect(restored.entries(MedicalSection.allergies).single.title, 'بنسلين');
+    expect(restored.notes, 'ملاحظة خاصة');
+
+    await expectLater(MedicalBackupCrypto.open(blob, 'wrong passphrase!'), throwsA(anything));
+  });
+
+  test('every backup has its own salt, and a changed blob is refused', () async {
+    final a = await MedicalBackupCrypto.seal(file, 'same passphrase 1');
+    final b = await MedicalBackupCrypto.seal(file, 'same passphrase 1');
+    expect(a == b, isFalse, reason: 'random salt and nonce: the same file never looks the same twice');
+
+    final tampered = a.replaceFirst('"data":"', '"data":"AAAA');
+    await expectLater(MedicalBackupCrypto.open(tampered, 'same passphrase 1'), throwsA(anything));
   });
 }

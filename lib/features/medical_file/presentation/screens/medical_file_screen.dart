@@ -5,6 +5,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../application/medical_file_providers.dart';
 import '../../data/medical_file.dart';
 import '../medical_labels.dart';
+import '../widgets/medical_backup_section.dart';
 import 'medical_scan_screen.dart';
 import 'medical_share_screen.dart';
 
@@ -53,6 +54,8 @@ class MedicalFileScreen extends ConsumerWidget {
                   Expanded(child: Text(l10n.medicalFileLocalNote, style: theme.textTheme.bodySmall)),
                 ],
               ),
+              const SizedBox(height: 12),
+              MedicalBackupSection(file: file),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
                 initialValue: file.bloodType,
