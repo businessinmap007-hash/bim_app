@@ -82,7 +82,7 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
     final result = await showModalBottomSheet<Set<int>>(
       context: context,
       isScrollControlled: true,
-      builder: (_) => _AttributesFilterSheet(childId: widget.childId, initial: current),
+      builder: (_) => _AttributesFilterSheet(childId: widget.childId, categoryId: widget.categoryId, initial: current),
     );
     if (result == null || !mounted) return;
     ref.read(businessListControllerProvider(_scope).notifier).setOptions(result);
@@ -415,8 +415,9 @@ class _CityFilterList extends ConsumerWidget {
 /// child actually carries ever reach this list at all.
 class _AttributesFilterSheet extends ConsumerStatefulWidget {
   final int childId;
+  final int? categoryId;
   final Set<int> initial;
-  const _AttributesFilterSheet({required this.childId, required this.initial});
+  const _AttributesFilterSheet({required this.childId, this.categoryId, required this.initial});
 
   @override
   ConsumerState<_AttributesFilterSheet> createState() => _AttributesFilterSheetState();
@@ -428,7 +429,7 @@ class _AttributesFilterSheetState extends ConsumerState<_AttributesFilterSheet> 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final groupsAsync = ref.watch(attributeGroupsProvider(widget.childId));
+    final groupsAsync = ref.watch(attributeGroupsProvider((childId: widget.childId, categoryId: widget.categoryId)));
 
     return DraggableScrollableSheet(
       initialChildSize: 0.75,

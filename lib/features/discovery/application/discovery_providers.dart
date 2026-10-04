@@ -17,10 +17,12 @@ final discoveryApiProvider = Provider<DiscoveryApi>((ref) {
 /// The filterable options for one child — only options a real business
 /// actually carries (see DiscoveryApi.attributes). Cached per child for the
 /// life of the filter sheet.
+///
+/// Keyed by (child, root): the counts are the root's own, like the list the filter narrows.
 final attributeGroupsProvider =
-    FutureProvider.family<List<AttributeGroup>, int>((ref, childId) {
+    FutureProvider.family<List<AttributeGroup>, ({int childId, int? categoryId})>((ref, q) {
       ref.watch(localeEpochProvider);
-      return ref.watch(discoveryApiProvider).attributes(childId: childId);
+      return ref.watch(discoveryApiProvider).attributes(childId: q.childId, categoryId: q.categoryId);
     });
 
 /// [categoryId]/[serviceId]: the two narrowing axes [recommendedBusinessesProvider]
