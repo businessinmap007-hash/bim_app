@@ -20,11 +20,13 @@ const _kEgyptCountryId = 1;
 
 class BusinessListScreen extends ConsumerStatefulWidget {
   final int childId;
+  final int? categoryId;
   final String title;
 
   const BusinessListScreen({
     super.key,
     required this.childId,
+    this.categoryId,
     required this.title,
   });
 
@@ -33,6 +35,8 @@ class BusinessListScreen extends ConsumerStatefulWidget {
 }
 
 class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
+  ({int childId, int? categoryId}) get _scope => (childId: widget.childId, categoryId: widget.categoryId);
+
   final _scrollController = ScrollController();
   final _searchController = TextEditingController();
   Timer? _debounce;
@@ -47,7 +51,7 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
       ref
-          .read(businessListControllerProvider(widget.childId).notifier)
+          .read(businessListControllerProvider(_scope).notifier)
           .loadMore();
     }
   }
@@ -56,7 +60,7 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
     _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 400), () {
       ref
-          .read(businessListControllerProvider(widget.childId).notifier)
+          .read(businessListControllerProvider(_scope).notifier)
           .search(value);
     });
   }
@@ -69,7 +73,7 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
     );
     if (result == null || !mounted) return;
     ref
-        .read(businessListControllerProvider(widget.childId).notifier)
+        .read(businessListControllerProvider(_scope).notifier)
         .setLocation(governorateId: result.governorateId, cityId: result.cityId, label: result.label);
   }
 
@@ -80,7 +84,7 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
       builder: (_) => _AttributesFilterSheet(childId: widget.childId, initial: current),
     );
     if (result == null || !mounted) return;
-    ref.read(businessListControllerProvider(widget.childId).notifier).setOptions(result);
+    ref.read(businessListControllerProvider(_scope).notifier).setOptions(result);
   }
 
   @override
@@ -94,7 +98,7 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final state = ref.watch(businessListControllerProvider(widget.childId));
+    final state = ref.watch(businessListControllerProvider(_scope));
 
     return Scaffold(
       appBar: AppBar(
@@ -139,7 +143,7 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
                     ),
                     onPressed: () => _openLocationPicker(context),
                     onDeleted: state.locationLabel != null
-                        ? () => ref.read(businessListControllerProvider(widget.childId).notifier).clearLocation()
+                        ? () => ref.read(businessListControllerProvider(_scope).notifier).clearLocation()
                         : null,
                   ),
                   InputChip(
@@ -151,7 +155,7 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
                     ),
                     onPressed: () => _openAttributesFilter(context, state.optionIds),
                     onDeleted: state.optionIds.isNotEmpty
-                        ? () => ref.read(businessListControllerProvider(widget.childId).notifier).setOptions({})
+                        ? () => ref.read(businessListControllerProvider(_scope).notifier).setOptions({})
                         : null,
                   ),
                 ],
@@ -174,7 +178,7 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
                             onPressed: () => ref
                                 .read(
                                   businessListControllerProvider(
-                                    widget.childId,
+                                    _scope,
                                   ).notifier,
                                 )
                                 .load(),
@@ -191,7 +195,7 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
                     onRefresh: () => ref
                         .read(
                           businessListControllerProvider(
-                            widget.childId,
+                            _scope,
                           ).notifier,
                         )
                         .load(),

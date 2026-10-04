@@ -211,9 +211,10 @@ class BusinessListState {
 class BusinessListController extends StateNotifier<BusinessListState> {
   final DiscoveryApi _api;
   final int childId;
+  final int? categoryId;
   int _page = 1;
 
-  BusinessListController(this._api, this.childId, {int? governorateId, int? cityId})
+  BusinessListController(this._api, this.childId, {this.categoryId, int? governorateId, int? cityId})
     : super(
         BusinessListState(
           governorateId: governorateId,
@@ -230,6 +231,7 @@ class BusinessListController extends StateNotifier<BusinessListState> {
     try {
       final result = await _api.businesses(
         childId: childId,
+        categoryId: categoryId,
         q: state.query,
         governorateId: state.governorateId,
         cityId: state.cityId,
@@ -252,6 +254,7 @@ class BusinessListController extends StateNotifier<BusinessListState> {
     try {
       final result = await _api.businesses(
         childId: childId,
+        categoryId: categoryId,
         q: state.query,
         governorateId: state.governorateId,
         cityId: state.cityId,
@@ -311,9 +314,9 @@ final businessListControllerProvider =
     StateNotifierProvider.family<
       BusinessListController,
       BusinessListState,
-      int
+      ({int childId, int? categoryId})
     >(
-      (ref, childId) {
+      (ref, scope) {
         ref.watch(localeEpochProvider);
         // Start from where the customer is: someone in Ras El Bar looking for
         // a fish restaurant should not be shown ones in Alexandria.
@@ -321,7 +324,8 @@ final businessListControllerProvider =
         final user = auth is AuthSignedIn ? auth.user : null;
         return BusinessListController(
           ref.watch(discoveryApiProvider),
-          childId,
+          scope.childId,
+          categoryId: scope.categoryId,
           governorateId: user?.governorateId,
           cityId: user?.cityId,
         );

@@ -118,6 +118,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           final extra = state.extra as Map<String, Object?>;
           return BusinessListScreen(
             childId: extra['childId'] as int,
+            categoryId: extra['categoryId'] as int?,
             title: extra['title'] as String,
           );
         },

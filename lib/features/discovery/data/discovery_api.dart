@@ -17,6 +17,9 @@ class DiscoveryApi {
 
   Future<Paginated<BusinessSummary>> businesses({
     required int childId,
+    // The root the customer came in through: a child shared by several roots lists only the accounts
+    // filed under THIS one.
+    int? categoryId,
     String? q,
     bool openNow = false,
     int? governorateId,
@@ -29,6 +32,7 @@ class DiscoveryApi {
       '/discovery/businesses',
       query: {
         'child_id': childId,
+        'category_id': ?categoryId,
         if (q != null && q.isNotEmpty) 'q': q,
         if (openNow) 'open_now': true,
         'governorate_id': ?governorateId,

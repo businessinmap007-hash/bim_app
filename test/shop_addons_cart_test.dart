@@ -16,9 +16,9 @@ void main() {
       'price': 400,
       'total_price': 800,
       'base_price': 300,
-      'options': {'extras': ['سينية بالفرن']},
+      'options': {'extras': ['صنية بالفرن']},
       'extras_detail': [
-        {'name': 'سينية بالفرن', 'unit_price': 100, 'qty': 1, 'total': 200},
+        {'name': 'صنية بالفرن', 'unit_price': 100, 'qty': 1, 'total': 200},
       ],
     });
 

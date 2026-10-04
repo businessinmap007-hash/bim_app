@@ -195,7 +195,7 @@ class _SpecialtiesPanel extends ConsumerWidget {
                   onPicked();
                   context.push(
                     '/discovery',
-                    extra: {'childId': specialty.id, 'title': displayName},
+                    extra: {'childId': specialty.id, 'categoryId': categoryId, 'title': displayName},
                   );
                 },
               );
