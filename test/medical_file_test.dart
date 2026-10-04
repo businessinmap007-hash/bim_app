@@ -53,7 +53,7 @@ void main() {
 
     expect(blob.contains('بنسلين'), isFalse);
     expect(blob.contains('correct horse'), isFalse, reason: 'the passphrase is not in it');
-    final restored = await MedicalBackupCrypto.open(blob, 'correct horse battery');
+    final restored = (await MedicalBackupCrypto.open(blob, 'correct horse battery')).file;
     expect(restored.bloodType, 'O+');
     expect(restored.entries(MedicalSection.allergies).single.title, 'بنسلين');
     expect(restored.notes, 'ملاحظة خاصة');

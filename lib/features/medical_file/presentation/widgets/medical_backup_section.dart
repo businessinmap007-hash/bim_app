@@ -5,6 +5,7 @@ import 'package:intl/intl.dart' show DateFormat;
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/medical_file_providers.dart';
+import '../../application/prescription_archive_providers.dart';
 import '../../data/medical_backup_crypto.dart';
 import '../../data/medical_file.dart';
 
@@ -36,7 +37,11 @@ class _MedicalBackupSectionState extends ConsumerState<MedicalBackupSection> {
     if (pass == null || !mounted) return;
     setState(() => _busy = true);
     try {
-      final blob = await MedicalBackupCrypto.seal(widget.file, pass);
+      final blob = await MedicalBackupCrypto.seal(
+        widget.file,
+        pass,
+        prescriptions: ref.read(prescriptionArchiveProvider.notifier).rawList,
+      );
       final at = await ref.read(medicalBackupApiProvider).put(blob);
       await ref.read(medicalFileControllerProvider.notifier).markBackedUp(at);
       if (mounted) _say(l10n.medicalBackupDone);
@@ -72,8 +77,9 @@ class _MedicalBackupSectionState extends ConsumerState<MedicalBackupSection> {
         if (mounted) _say(l10n.medicalBackupNothing);
         return;
       }
-      final file = await MedicalBackupCrypto.open(stored.blob, pass);
-      await controller.restore(file, stored.updatedAt);
+      final backup = await MedicalBackupCrypto.open(stored.blob, pass);
+      await controller.restore(backup.file, stored.updatedAt);
+      await ref.read(prescriptionArchiveProvider.notifier).restore(backup.prescriptions);
       if (mounted) _say(l10n.medicalBackupRestored);
     } on ApiException catch (e) {
       if (mounted) _say(e.message);
@@ -146,7 +152,7 @@ class _MedicalBackupSectionState extends ConsumerState<MedicalBackupSection> {
                 runSpacing: 8,
                 children: [
                   FilledButton.icon(
-                    onPressed: widget.file.isEmpty ? null : _backup,
+                    onPressed: widget.file.isEmpty && ref.read(prescriptionArchiveProvider.notifier).rawList.isEmpty ? null : _backup,
                     icon: const Icon(Icons.backup_outlined, size: 18),
                     label: Text(l10n.medicalBackupNow),
                   ),

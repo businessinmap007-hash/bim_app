@@ -4,6 +4,7 @@ import '../../../core/providers/core_providers.dart';
 import '../data/medicines_api.dart';
 import '../data/models/prescription.dart';
 import '../data/prescriptions_api.dart';
+import '../../medical_file/application/prescription_archive_providers.dart';
 
 final prescriptionsApiProvider = Provider<PrescriptionsApi>((ref) {
   return PrescriptionsApi(ref.watch(apiClientProvider));
@@ -48,9 +49,14 @@ class MyPrescriptionsState {
 
 class MyPrescriptionsController extends StateNotifier<MyPrescriptionsState> {
   final PrescriptionsApi _api;
+
+  /// Every page the server sends is also kept in the phone's archive («روشتاتي المحفوظة على الهاتف»).
+  final void Function(List<Prescription> fetched)? _onFetched;
   int _page = 1;
 
-  MyPrescriptionsController(this._api) : super(const MyPrescriptionsState()) {
+  MyPrescriptionsController(this._api, {void Function(List<Prescription>)? onFetched})
+    : _onFetched = onFetched,
+      super(const MyPrescriptionsState()) {
     load();
   }
 
@@ -59,6 +65,7 @@ class MyPrescriptionsController extends StateNotifier<MyPrescriptionsState> {
     _page = 1;
     try {
       final result = await _api.myPrescriptions(page: _page);
+      _onFetched?.call(result.items);
       state = state.copyWith(items: result.items, isLoading: false, hasMore: result.hasMore);
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
@@ -70,6 +77,7 @@ class MyPrescriptionsController extends StateNotifier<MyPrescriptionsState> {
     state = state.copyWith(isLoadingMore: true);
     try {
       final result = await _api.myPrescriptions(page: _page + 1);
+      _onFetched?.call(result.items);
       _page += 1;
       state = state.copyWith(
         items: [...state.items, ...result.items],
@@ -84,7 +92,10 @@ class MyPrescriptionsController extends StateNotifier<MyPrescriptionsState> {
 
 final myPrescriptionsControllerProvider =
     StateNotifierProvider<MyPrescriptionsController, MyPrescriptionsState>((ref) {
-      return MyPrescriptionsController(ref.watch(prescriptionsApiProvider));
+      return MyPrescriptionsController(
+        ref.watch(prescriptionsApiProvider),
+        onFetched: (fetched) => ref.read(prescriptionArchiveProvider.notifier).remember(fetched),
+      );
     });
 
 /// One prescription in full — callers invalidate this after send/cancel/

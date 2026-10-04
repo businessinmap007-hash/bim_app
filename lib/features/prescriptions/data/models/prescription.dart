@@ -104,6 +104,12 @@ class Prescription {
   final DateTime? issuedAt;
   final DateTime? dispensedAt;
 
+  /// What the doctor wrote in the form its fingerprint covers — kept on the patient's phone and shown at a
+  /// pharmacy, which checks it against the server's fingerprint. Null for a prescription with none (a customer
+  /// request quoted by a pharmacy). The JSON as the server sent it is kept in [raw], for the phone's archive.
+  final Map<String, dynamic>? verifiableContent;
+  final Map<String, dynamic> raw;
+
   const Prescription({
     required this.id,
     required this.status,
@@ -128,6 +134,8 @@ class Prescription {
     this.items = const [],
     this.issuedAt,
     this.dispensedAt,
+    this.verifiableContent,
+    this.raw = const {},
   });
 
   bool get canSend => status == 'issued';
@@ -172,5 +180,9 @@ class Prescription {
         .toList(),
     issuedAt: json['issued_at'] != null ? DateTime.tryParse(json['issued_at'] as String) : null,
     dispensedAt: json['dispensed_at'] != null ? DateTime.tryParse(json['dispensed_at'] as String) : null,
+    verifiableContent: json['verifiable'] is Map<String, dynamic>
+        ? Map<String, dynamic>.from((json['verifiable'] as Map<String, dynamic>)['content'] as Map)
+        : null,
+    raw: json,
   );
 }

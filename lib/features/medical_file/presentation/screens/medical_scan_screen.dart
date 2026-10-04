@@ -7,6 +7,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../application/medical_file_providers.dart';
 import '../../data/medical_file.dart';
 import '../../data/medical_share_crypto.dart';
+import 'prescription_shown_screen.dart';
 import '../medical_labels.dart';
 
 /// The doctor's or pharmacist's side: scan the patient's code, fetch the ciphertext, open it HERE with the key
@@ -42,10 +43,13 @@ class _MedicalScanScreenState extends ConsumerState<MedicalScanScreen> {
     _handled = true;
     try {
       final shared = await ref.read(medicalShareApiProvider).fetch(code.id);
-      final file = MedicalFile.fromJson(await MedicalShareCrypto.open(shared.ciphertext, code.key));
+      final opened = await MedicalShareCrypto.open(shared.ciphertext, code.key);
       if (!mounted) return;
+      // The same code carries a medical file or ONE prescription: the payload says which.
       await Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (_) => MedicalFileViewScreen(file: file, sharedBy: shared.sharedBy, sharedAt: shared.createdAt),
+        builder: (_) => opened['kind'] == 'prescription'
+            ? PrescriptionShownScreen(payload: opened, sharedBy: shared.sharedBy)
+            : MedicalFileViewScreen(file: MedicalFile.fromJson(opened), sharedBy: shared.sharedBy, sharedAt: shared.createdAt),
       ));
     } catch (_) {
       _handled = false;

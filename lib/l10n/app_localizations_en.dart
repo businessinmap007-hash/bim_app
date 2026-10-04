@@ -6512,4 +6512,103 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get medicalBackupDeleteConfirm =>
       'Delete the backup from the server? Your file on this phone is not affected.';
+
+  @override
+  String get rxArchiveTitle => 'My prescriptions on this phone';
+
+  @override
+  String get rxArchiveNote =>
+      'A copy of every prescription a doctor wrote for you is kept here automatically and stays with you even if the server drops it. It is part of the encrypted backup.';
+
+  @override
+  String get rxArchiveEmpty =>
+      'No prescriptions yet — they appear here after you open \"My prescriptions\".';
+
+  @override
+  String get rxArchiveOpen => 'Prescriptions on this phone';
+
+  @override
+  String get rxShowPharmacist => 'Show to a pharmacist (QR)';
+
+  @override
+  String get rxShowTitle => 'Show the prescription to the pharmacist';
+
+  @override
+  String get rxShowHint =>
+      'The pharmacist scans the code in the app, sees the prescription and checks it is exactly what the doctor wrote. It reaches them encrypted and ends in minutes.';
+
+  @override
+  String get rxShowCreate => 'Create the code';
+
+  @override
+  String get rxNoCopy =>
+      'There is no verifiable copy of this prescription on this phone.';
+
+  @override
+  String get rxShownTitle => 'A prescription shown to you';
+
+  @override
+  String rxShownBy(String name) {
+    return 'Shown by $name';
+  }
+
+  @override
+  String rxIssuedBy(String name) {
+    return 'Doctor: $name';
+  }
+
+  @override
+  String get rxVerifyWorking => 'Checking the prescription…';
+
+  @override
+  String get rxVerified => 'Verified — exactly what the doctor wrote';
+
+  @override
+  String get rxNotVerified =>
+      'Not verified — it does not match what the doctor wrote. Do not dispense.';
+
+  @override
+  String get rxCanDispense => 'Not dispensed yet — it can be dispensed.';
+
+  @override
+  String get rxAlreadyDispensed =>
+      'Already dispensed — do not dispense it again.';
+
+  @override
+  String get rxCancelledOrOther =>
+      'It cannot be dispensed: cancelled, or sent to another pharmacy.';
+
+  @override
+  String get rxSuperseded =>
+      'The doctor replaced it with a newer one — this copy is no longer valid.';
+
+  @override
+  String get rxDispenseNow => 'Record this prescription as dispensed';
+
+  @override
+  String get rxDispenseConfirm =>
+      'You record that your pharmacy handed the medicine over just now. It cannot be undone, and no other pharmacy can dispense it.';
+
+  @override
+  String get rxDispensed => 'Recorded as dispensed.';
+
+  @override
+  String get rxCheckUnavailable =>
+      'Verification is for pharmacy accounts only — this shows what the patient sent, unverified.';
+
+  @override
+  String rxItemDosage(String value) {
+    return 'Dose: $value';
+  }
+
+  @override
+  String rxItemQuantity(String value) {
+    return 'Quantity: $value';
+  }
+
+  @override
+  String get rxDiagnosis => 'Diagnosis';
+
+  @override
+  String get rxNotes => 'Doctor\'s notes';
 }

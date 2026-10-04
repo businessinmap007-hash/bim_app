@@ -12048,6 +12048,168 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'حذف النسخة الاحتياطية من السيرفر؟ ملفك على هذا الموبايل لا يتأثر.'**
   String get medicalBackupDeleteConfirm;
+
+  /// No description provided for @rxArchiveTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'روشتاتي المحفوظة على الهاتف'**
+  String get rxArchiveTitle;
+
+  /// No description provided for @rxArchiveNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسخة من كل روشتة كتبها لك طبيب تُحفظ هنا تلقائيًا، وتبقى معك حتى لو اختفت من السيرفر. تُضاف للنسخة الاحتياطية المشفّرة.'**
+  String get rxArchiveNote;
+
+  /// No description provided for @rxArchiveEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد روشتات محفوظة بعد — تظهر هنا بعد أن تفتح «وصفاتي».'**
+  String get rxArchiveEmpty;
+
+  /// No description provided for @rxArchiveOpen.
+  ///
+  /// In ar, this message translates to:
+  /// **'روشتاتي على الهاتف'**
+  String get rxArchiveOpen;
+
+  /// No description provided for @rxShowPharmacist.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض على صيدلي (QR)'**
+  String get rxShowPharmacist;
+
+  /// No description provided for @rxShowTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعرض الروشتة على الصيدلي'**
+  String get rxShowTitle;
+
+  /// No description provided for @rxShowHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يقرأ الصيدلي الرمز من تطبيقه فيرى الروشتة ويتأكد أنها من الطبيب نفسه. الروشتة تصل إليه مشفّرة وتنتهي بعد دقائق.'**
+  String get rxShowHint;
+
+  /// No description provided for @rxShowCreate.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء رمز العرض'**
+  String get rxShowCreate;
+
+  /// No description provided for @rxNoCopy.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد نسخة موثّقة من هذه الروشتة على الهاتف.'**
+  String get rxNoCopy;
+
+  /// No description provided for @rxShownTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'روشتة معروضة عليك'**
+  String get rxShownTitle;
+
+  /// No description provided for @rxShownBy.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرضها {name}'**
+  String rxShownBy(String name);
+
+  /// No description provided for @rxIssuedBy.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطبيب: {name}'**
+  String rxIssuedBy(String name);
+
+  /// No description provided for @rxVerifyWorking.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ التحقق من الروشتة…'**
+  String get rxVerifyWorking;
+
+  /// No description provided for @rxVerified.
+  ///
+  /// In ar, this message translates to:
+  /// **'موثّقة — مطابقة تمامًا لما كتبه الطبيب'**
+  String get rxVerified;
+
+  /// No description provided for @rxNotVerified.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير موثّقة — لا تطابق ما كتبه الطبيب. لا تصرفها.'**
+  String get rxNotVerified;
+
+  /// No description provided for @rxCanDispense.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تُصرف بعد ويمكن صرفها.'**
+  String get rxCanDispense;
+
+  /// No description provided for @rxAlreadyDispensed.
+  ///
+  /// In ar, this message translates to:
+  /// **'صُرفت من قبل — لا تصرفها مرة أخرى.'**
+  String get rxAlreadyDispensed;
+
+  /// No description provided for @rxCancelledOrOther.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يمكن صرفها: ملغاة أو أُرسلت لصيدلية أخرى.'**
+  String get rxCancelledOrOther;
+
+  /// No description provided for @rxSuperseded.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدّلها الطبيب بروشتة أحدث — هذه النسخة لم تعد صالحة.'**
+  String get rxSuperseded;
+
+  /// No description provided for @rxDispenseNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل صرف الروشتة'**
+  String get rxDispenseNow;
+
+  /// No description provided for @rxDispenseConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجّل أن صيدليتك سلّمت الدواء للمريض الآن. لا يمكن التراجع، ولن تُصرف الروشتة من صيدلية أخرى.'**
+  String get rxDispenseConfirm;
+
+  /// No description provided for @rxDispensed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تسجيل الصرف.'**
+  String get rxDispensed;
+
+  /// No description provided for @rxCheckUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'التحقق متاح لحسابات الصيدليات فقط — تعرض هنا ما أرسله المريض دون توثيق.'**
+  String get rxCheckUnavailable;
+
+  /// No description provided for @rxItemDosage.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجرعة: {value}'**
+  String rxItemDosage(String value);
+
+  /// No description provided for @rxItemQuantity.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكمية: {value}'**
+  String rxItemQuantity(String value);
+
+  /// No description provided for @rxDiagnosis.
+  ///
+  /// In ar, this message translates to:
+  /// **'التشخيص'**
+  String get rxDiagnosis;
+
+  /// No description provided for @rxNotes.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات الطبيب'**
+  String get rxNotes;
 }
 
 class _AppLocalizationsDelegate

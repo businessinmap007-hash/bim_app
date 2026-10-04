@@ -6485,4 +6485,101 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get medicalBackupDeleteConfirm =>
       'حذف النسخة الاحتياطية من السيرفر؟ ملفك على هذا الموبايل لا يتأثر.';
+
+  @override
+  String get rxArchiveTitle => 'روشتاتي المحفوظة على الهاتف';
+
+  @override
+  String get rxArchiveNote =>
+      'نسخة من كل روشتة كتبها لك طبيب تُحفظ هنا تلقائيًا، وتبقى معك حتى لو اختفت من السيرفر. تُضاف للنسخة الاحتياطية المشفّرة.';
+
+  @override
+  String get rxArchiveEmpty =>
+      'لا توجد روشتات محفوظة بعد — تظهر هنا بعد أن تفتح «وصفاتي».';
+
+  @override
+  String get rxArchiveOpen => 'روشتاتي على الهاتف';
+
+  @override
+  String get rxShowPharmacist => 'عرض على صيدلي (QR)';
+
+  @override
+  String get rxShowTitle => 'اعرض الروشتة على الصيدلي';
+
+  @override
+  String get rxShowHint =>
+      'يقرأ الصيدلي الرمز من تطبيقه فيرى الروشتة ويتأكد أنها من الطبيب نفسه. الروشتة تصل إليه مشفّرة وتنتهي بعد دقائق.';
+
+  @override
+  String get rxShowCreate => 'إنشاء رمز العرض';
+
+  @override
+  String get rxNoCopy => 'لا توجد نسخة موثّقة من هذه الروشتة على الهاتف.';
+
+  @override
+  String get rxShownTitle => 'روشتة معروضة عليك';
+
+  @override
+  String rxShownBy(String name) {
+    return 'عرضها $name';
+  }
+
+  @override
+  String rxIssuedBy(String name) {
+    return 'الطبيب: $name';
+  }
+
+  @override
+  String get rxVerifyWorking => 'جارٍ التحقق من الروشتة…';
+
+  @override
+  String get rxVerified => 'موثّقة — مطابقة تمامًا لما كتبه الطبيب';
+
+  @override
+  String get rxNotVerified =>
+      'غير موثّقة — لا تطابق ما كتبه الطبيب. لا تصرفها.';
+
+  @override
+  String get rxCanDispense => 'لم تُصرف بعد ويمكن صرفها.';
+
+  @override
+  String get rxAlreadyDispensed => 'صُرفت من قبل — لا تصرفها مرة أخرى.';
+
+  @override
+  String get rxCancelledOrOther =>
+      'لا يمكن صرفها: ملغاة أو أُرسلت لصيدلية أخرى.';
+
+  @override
+  String get rxSuperseded =>
+      'عدّلها الطبيب بروشتة أحدث — هذه النسخة لم تعد صالحة.';
+
+  @override
+  String get rxDispenseNow => 'تسجيل صرف الروشتة';
+
+  @override
+  String get rxDispenseConfirm =>
+      'تسجّل أن صيدليتك سلّمت الدواء للمريض الآن. لا يمكن التراجع، ولن تُصرف الروشتة من صيدلية أخرى.';
+
+  @override
+  String get rxDispensed => 'تم تسجيل الصرف.';
+
+  @override
+  String get rxCheckUnavailable =>
+      'التحقق متاح لحسابات الصيدليات فقط — تعرض هنا ما أرسله المريض دون توثيق.';
+
+  @override
+  String rxItemDosage(String value) {
+    return 'الجرعة: $value';
+  }
+
+  @override
+  String rxItemQuantity(String value) {
+    return 'الكمية: $value';
+  }
+
+  @override
+  String get rxDiagnosis => 'التشخيص';
+
+  @override
+  String get rxNotes => 'ملاحظات الطبيب';
 }

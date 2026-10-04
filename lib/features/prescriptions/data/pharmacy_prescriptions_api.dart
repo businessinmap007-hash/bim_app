@@ -50,9 +50,51 @@ class MedicineQuoteLineInput {
 /// patient. See Api\V2\PharmacyPrescriptionController. Detail/single-fetch
 /// reuses PrescriptionsApi.prescription() — the pharmacy is a valid party
 /// on the general show() endpoint too.
+/// What the server says of a prescription SHOWN on a patient's phone (POST /pharmacy/prescriptions/verify).
+class PrescriptionCheck {
+  final bool authentic;
+  final String status;
+  final bool canDispense;
+  final bool superseded;
+  final String? doctorName;
+  final DateTime? issuedAt;
+  final DateTime? dispensedAt;
+
+  const PrescriptionCheck({
+    required this.authentic,
+    this.status = '',
+    this.canDispense = false,
+    this.superseded = false,
+    this.doctorName,
+    this.issuedAt,
+    this.dispensedAt,
+  });
+
+  factory PrescriptionCheck.fromJson(Map<String, dynamic> json) => PrescriptionCheck(
+    authentic: json['authentic'] as bool? ?? false,
+    status: json['status'] as String? ?? '',
+    canDispense: json['can_dispense'] as bool? ?? false,
+    superseded: json['superseded'] as bool? ?? false,
+    doctorName: (json['doctor'] as Map<String, dynamic>?)?['name'] as String?,
+    issuedAt: DateTime.tryParse('${json['issued_at'] ?? ''}')?.toLocal(),
+    dispensedAt: DateTime.tryParse('${json['dispensed_at'] ?? ''}')?.toLocal(),
+  );
+}
+
 class PharmacyPrescriptionsApi {
   final ApiClient _client;
   const PharmacyPrescriptionsApi(this._client);
+
+  /// A prescription the patient showed on his phone: authentic = exactly what the doctor wrote.
+  Future<PrescriptionCheck> verify(int id, Map<String, dynamic> content) async {
+    final data = await _client.post('/pharmacy/prescriptions/verify', data: {'id': id, 'content': content}) as Map<String, dynamic>;
+    return PrescriptionCheck.fromJson(data);
+  }
+
+  /// Hand the medicine over against a shown prescription — once; the server re-verifies.
+  Future<void> dispenseInPerson(int id, Map<String, dynamic> content) async {
+    await _client.post('/pharmacy/prescriptions/dispense-in-person', data: {'id': id, 'content': content});
+  }
 
   Future<Paginated<Prescription>> incoming({String? status, int page = 1}) async {
     final data = await _client.get(

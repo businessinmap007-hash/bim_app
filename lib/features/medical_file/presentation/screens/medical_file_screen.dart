@@ -7,6 +7,7 @@ import '../../data/medical_file.dart';
 import '../medical_labels.dart';
 import '../widgets/medical_backup_section.dart';
 import 'medical_scan_screen.dart';
+import 'prescription_archive_screen.dart';
 import 'medical_share_screen.dart';
 
 /// «ملفي الطبي» — المالك، 2026-10-05: «التاريخ المرضى يحفظ على الفون وعند مشاركته يقرأ ويعرض للطبيب او
@@ -53,6 +54,16 @@ class MedicalFileScreen extends ConsumerWidget {
                   const SizedBox(width: 8),
                   Expanded(child: Text(l10n.medicalFileLocalNote, style: theme.textTheme.bodySmall)),
                 ],
+              ),
+              const SizedBox(height: 12),
+              Card(
+                margin: EdgeInsets.zero,
+                child: ListTile(
+                  leading: const Icon(Icons.receipt_long_outlined),
+                  title: Text(l10n.rxArchiveOpen),
+                  trailing: const Icon(Icons.chevron_left),
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const PrescriptionArchiveScreen())),
+                ),
               ),
               const SizedBox(height: 12),
               MedicalBackupSection(file: file),
