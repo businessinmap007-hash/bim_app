@@ -2145,7 +2145,7 @@
   "menuSheetExportItems": "تصدير أصنافي (Excel)",
   "menuSheetExportTemplate": "نموذج فارغ (Excel)",
   "menuSheetImport": "اختيار ملف للاستيراد",
-  "menuSheetImportHint": "ملف Excel أو CSV بنفس أعمدة النموذج. «النوع» من أنواع نشاطك (في الورقة الثانية من النموذج). ترى معاينة قبل أي تغيير.",
+  "menuSheetImportHint": "ملف Excel أو CSV بنفس أعمدة النموذج. «النوع» من أنواع نشاطك، والمقاسات والإضافات والصور والباركود اختيارية — طريقة كتابتها في الورقة الثانية من النموذج. ترى معاينة قبل أي تغيير.",
   "menuSheetPreviewTitle": "معاينة — لم يتغير شيء بعد",
   "menuSheetDoneTitle": "تم الاستيراد",
   "menuSheetSummary": "جديد: {created} — تحديث: {updated} — أخطاء: {errors}",
@@ -2160,5 +2160,6 @@
   "menuSheetListsSheet": "الأنواع والوحدات",
   "menuSheetTypes": "النوع",
   "menuSheetGroup": "المجموعة",
-  "menuSheetUnits": "الوحدات"
+  "menuSheetUnits": "الوحدات",
+  "menuSheetHowTo": "طريقة الكتابة"
 }

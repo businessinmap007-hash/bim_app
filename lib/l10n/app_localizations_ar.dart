@@ -6273,7 +6273,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get menuSheetImportHint =>
-      'ملف Excel أو CSV بنفس أعمدة النموذج. «النوع» من أنواع نشاطك (في الورقة الثانية من النموذج). ترى معاينة قبل أي تغيير.';
+      'ملف Excel أو CSV بنفس أعمدة النموذج. «النوع» من أنواع نشاطك، والمقاسات والإضافات والصور والباركود اختيارية — طريقة كتابتها في الورقة الثانية من النموذج. ترى معاينة قبل أي تغيير.';
 
   @override
   String get menuSheetPreviewTitle => 'معاينة — لم يتغير شيء بعد';
@@ -6317,4 +6317,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get menuSheetUnits => 'الوحدات';
+
+  @override
+  String get menuSheetHowTo => 'طريقة الكتابة';
 }

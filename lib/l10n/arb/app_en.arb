@@ -2145,7 +2145,7 @@
   "menuSheetExportItems": "Export my items (Excel)",
   "menuSheetExportTemplate": "Empty template (Excel)",
   "menuSheetImport": "Choose a file to import",
-  "menuSheetImportHint": "An Excel or CSV file with the template columns. «Type» is one of your trade types (second sheet of the template). You see a preview before anything changes.",
+  "menuSheetImportHint": "An Excel or CSV file with the template columns. «Type» is one of your trade types; sizes, extras, photos and barcode are optional — how to write them is on the template's second sheet. You see a preview before anything changes.",
   "menuSheetPreviewTitle": "Preview — nothing changed yet",
   "menuSheetDoneTitle": "Imported",
   "menuSheetSummary": "New: {created} — Updated: {updated} — Errors: {errors}",
@@ -2160,5 +2160,6 @@
   "menuSheetListsSheet": "Types and units",
   "menuSheetTypes": "Type",
   "menuSheetGroup": "Group",
-  "menuSheetUnits": "Units"
+  "menuSheetUnits": "Units",
+  "menuSheetHowTo": "How to write"
 }

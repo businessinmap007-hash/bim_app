@@ -6296,7 +6296,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get menuSheetImportHint =>
-      'An Excel or CSV file with the template columns. «Type» is one of your trade types (second sheet of the template). You see a preview before anything changes.';
+      'An Excel or CSV file with the template columns. «Type» is one of your trade types; sizes, extras, photos and barcode are optional — how to write them is on the template\'s second sheet. You see a preview before anything changes.';
 
   @override
   String get menuSheetPreviewTitle => 'Preview — nothing changed yet';
@@ -6340,4 +6340,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get menuSheetUnits => 'Units';
+
+  @override
+  String get menuSheetHowTo => 'How to write';
 }

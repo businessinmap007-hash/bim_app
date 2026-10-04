@@ -48,4 +48,29 @@ void main() {
     expect(report.created, 1);
     expect(report.rows.last.errors.single, contains('صاروخ'));
   });
+
+  test('a row that went in with a note keeps its warnings, and the template carries the how-to lines', () {
+    final row = MenuImportRow.fromJson({
+      'row': 2,
+      'name': 'برجر',
+      'action': 'create',
+      'errors': [],
+      'warnings': ['تعذّر تحميل الصورة: https://x'],
+    });
+    expect(row.warnings.single, contains('تعذّر'));
+
+    final sheet = MenuSheetData.fromJson({
+      'columns': [
+        {'key': 'name_ar', 'label': 'الاسم عربي'},
+      ],
+      'rows': [],
+      'vocabulary': {
+        'lines': [],
+        'units': [],
+        'help': ['المقاسات: صغير=50'],
+      },
+    });
+    expect(sheet.help.single, startsWith('المقاسات'));
+    expect(sheet.toXlsx(listsSheetName: 'L', typeHeader: 't', groupHeader: 'g', unitsHeader: 'u', howToHeader: 'h'), isNotEmpty);
+  });
 }

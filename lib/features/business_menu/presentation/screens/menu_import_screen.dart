@@ -43,6 +43,7 @@ class _MenuImportScreenState extends ConsumerState<MenuImportScreen> {
         typeHeader: l10n.menuSheetTypes,
         groupHeader: l10n.menuSheetGroup,
         unitsHeader: l10n.menuSheetUnits,
+        howToHeader: l10n.menuSheetHowTo,
       );
       final name = template ? 'menu-template.xlsx' : 'menu.xlsx';
       await SharePlus.instance.share(ShareParams(
@@ -166,7 +167,7 @@ class _MenuImportScreenState extends ConsumerState<MenuImportScreen> {
                 child: ListTile(
                   dense: true,
                   title: Text(row.name.isEmpty ? l10n.menuSheetRow(row.row) : row.name),
-                  subtitle: Text(row.errors.isEmpty ? l10n.menuSheetRow(row.row) : '${l10n.menuSheetRow(row.row)} — ${row.errors.join(' — ')}'),
+                  subtitle: Text([l10n.menuSheetRow(row.row), ...row.errors, ...row.warnings].join(' — ')),
                   trailing: Text(
                     switch (row.action) {
                       'create' => l10n.menuSheetActionCreate,

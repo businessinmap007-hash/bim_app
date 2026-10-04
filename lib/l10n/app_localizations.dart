@@ -11668,7 +11668,7 @@ abstract class AppLocalizations {
   /// No description provided for @menuSheetImportHint.
   ///
   /// In ar, this message translates to:
-  /// **'ملف Excel أو CSV بنفس أعمدة النموذج. «النوع» من أنواع نشاطك (في الورقة الثانية من النموذج). ترى معاينة قبل أي تغيير.'**
+  /// **'ملف Excel أو CSV بنفس أعمدة النموذج. «النوع» من أنواع نشاطك، والمقاسات والإضافات والصور والباركود اختيارية — طريقة كتابتها في الورقة الثانية من النموذج. ترى معاينة قبل أي تغيير.'**
   String get menuSheetImportHint;
 
   /// No description provided for @menuSheetPreviewTitle.
@@ -11748,6 +11748,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الوحدات'**
   String get menuSheetUnits;
+
+  /// No description provided for @menuSheetHowTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة الكتابة'**
+  String get menuSheetHowTo;
 }
 
 class _AppLocalizationsDelegate

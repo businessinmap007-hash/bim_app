@@ -9,7 +9,10 @@ class MenuSheetData {
   final List<({String name, String group})> lines;
   final List<String> units;
 
-  const MenuSheetData({required this.columns, required this.rows, required this.lines, required this.units});
+  /// How the cells that hold more than one thing are written (sizes, extras, photos, barcode).
+  final List<String> help;
+
+  const MenuSheetData({required this.columns, required this.rows, required this.lines, required this.units, this.help = const []});
 
   factory MenuSheetData.fromJson(Map<String, dynamic> json) {
     final vocabulary = json['vocabulary'] as Map<String, dynamic>? ?? const {};
@@ -24,12 +27,19 @@ class MenuSheetData {
           (name: '${(l as Map<String, dynamic>)['name']}', group: '${l['group']}'),
       ],
       units: [for (final u in vocabulary['units'] as List<dynamic>? ?? const []) '$u'],
+      help: [for (final h in vocabulary['help'] as List<dynamic>? ?? const []) '$h'],
     );
   }
 
   /// An .xlsx: the items on the first sheet, and a second sheet listing the types and units the merchant may
   /// write — so a sheet filled on a computer speaks the merchant's own vocabulary.
-  List<int> toXlsx({required String listsSheetName, required String typeHeader, required String groupHeader, required String unitsHeader}) {
+  List<int> toXlsx({
+    required String listsSheetName,
+    required String typeHeader,
+    required String groupHeader,
+    required String unitsHeader,
+    String howToHeader = '',
+  }) {
     final excel = Excel.createExcel();
     final first = excel.getDefaultSheet() ?? 'Sheet1';
     excel.rename(first, 'menu');
@@ -47,13 +57,14 @@ class MenuSheetData {
     }
 
     final lists = excel[listsSheetName];
-    lists.appendRow([TextCellValue(typeHeader), TextCellValue(groupHeader), TextCellValue(unitsHeader)]);
-    final n = lines.length > units.length ? lines.length : units.length;
+    lists.appendRow([TextCellValue(typeHeader), TextCellValue(groupHeader), TextCellValue(unitsHeader), TextCellValue(howToHeader)]);
+    final n = [lines.length, units.length, help.length].reduce((a, b) => a > b ? a : b);
     for (var i = 0; i < n; i++) {
       lists.appendRow([
         TextCellValue(i < lines.length ? lines[i].name : ''),
         TextCellValue(i < lines.length ? lines[i].group : ''),
         TextCellValue(i < units.length ? units[i] : ''),
+        TextCellValue(i < help.length ? help[i] : ''),
       ]);
     }
 
@@ -120,12 +131,16 @@ class MenuImportRow {
   final String action;
   final List<String> errors;
 
-  const MenuImportRow({required this.row, required this.name, required this.action, required this.errors});
+  /// The row went in, with a note: a photo that could not be fetched, a barcode not in the catalog…
+  final List<String> warnings;
+
+  const MenuImportRow({required this.row, required this.name, required this.action, required this.errors, this.warnings = const []});
 
   factory MenuImportRow.fromJson(Map<String, dynamic> json) => MenuImportRow(
     row: (json['row'] as num?)?.toInt() ?? 0,
     name: json['name'] as String? ?? '',
     action: json['action'] as String? ?? '',
     errors: [for (final e in json['errors'] as List<dynamic>? ?? const []) '$e'],
+    warnings: [for (final w in json['warnings'] as List<dynamic>? ?? const []) '$w'],
   );
 }
