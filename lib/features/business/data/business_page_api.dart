@@ -2,6 +2,7 @@ import '../../../core/network/api_client.dart';
 import 'models/business_post.dart';
 import 'models/business_profile.dart';
 import 'models/menu_section_group.dart';
+import '../../business_menu/data/models/store_terms.dart';
 import 'models/offering_item.dart';
 
 /// One post page: the items plus whether another page exists — read off
@@ -22,7 +23,10 @@ class MenuPageData {
   /// 'list' (the default, a plain row per item) or 'grid' (a photo-first
   /// 2-column card grid) — see BusinessMenuSetting::DISPLAY_MODES.
   final String displayMode;
-  const MenuPageData({required this.sections, required this.displayMode});
+
+  /// What the store promises (returns, minimum order…) — only what it answered.
+  final List<StoreTermGroup> terms;
+  const MenuPageData({required this.sections, required this.displayMode, this.terms = const []});
 
   bool get isGrid => displayMode == 'grid';
 }
@@ -61,6 +65,7 @@ class BusinessPageApi {
     return MenuPageData(
       sections: sections.map((e) => MenuSectionGroup.fromJson(e as Map<String, dynamic>)).toList(),
       displayMode: business['menu_display_mode'] as String? ?? 'list',
+      terms: StoreTermGroup.listFrom(data['terms']),
     );
   }
 

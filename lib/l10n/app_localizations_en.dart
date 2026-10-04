@@ -6185,4 +6185,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trainingBodyReportsSection => 'Body composition';
+
+  @override
+  String get storeTermsTitle => 'Store terms';
+
+  @override
+  String get storeTermsCustomerTitle => 'Store terms';
+
+  @override
+  String get storeTermsHint =>
+      'Set your store\'s policies once (returns, minimum order, delivery…). Customers see them on your page and at checkout, and every order keeps the terms it was placed under.';
+
+  @override
+  String get storeTermsSave => 'Save';
+
+  @override
+  String get storeTermsSaved => 'Store terms saved.';
+
+  @override
+  String get storeTermsEmpty => 'No terms are required for your business.';
 }

@@ -6,6 +6,7 @@ import '../data/models/menu_available_types.dart';
 import '../data/models/menu_item.dart';
 import '../data/models/menu_section.dart';
 import '../data/models/menu_vocabulary.dart';
+import '../data/models/store_terms.dart';
 
 final businessMenuApiProvider = Provider<BusinessMenuApi>((ref) {
   return BusinessMenuApi(ref.watch(apiClientProvider));
@@ -25,6 +26,12 @@ final saleUnitOptionsProvider = FutureProvider<List<SaleUnitOption>>((ref) {
 final menuVocabularyProvider = FutureProvider<MenuVocabulary>((ref) {
   ref.watch(localeEpochProvider);
   return ref.watch(businessMenuApiProvider).vocabulary();
+});
+
+/// «شروط المتجر» of this business — autoDispose so the screen always edits the saved state.
+final storeTermsProvider = FutureProvider.autoDispose<List<StoreTermGroup>>((ref) {
+  ref.watch(localeEpochProvider);
+  return ref.watch(businessMenuApiProvider).storeTerms();
 });
 
 /// The FULL `line` catalog (not narrowed by ticks) — autoDispose so the

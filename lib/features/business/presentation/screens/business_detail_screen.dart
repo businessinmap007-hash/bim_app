@@ -1,3 +1,4 @@
+import '../../../business_menu/presentation/widgets/store_terms_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -856,6 +857,7 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
                             ],
                           ),
                         ),
+                      StoreTermsView(terms: page.terms),
                     ],
                   ),
                 ),

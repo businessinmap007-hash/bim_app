@@ -1,3 +1,4 @@
+import '../../../business_menu/presentation/screens/store_terms_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -115,6 +116,12 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.restaurant_menu_outlined,
         title: l10n.menuManagementTitle,
         builder: (_) => const MenuItemsScreen(),
+      ),
+      _Tile(
+        show: _has('menu'),
+        leading: Icons.policy_outlined,
+        title: l10n.storeTermsTitle,
+        builder: (_) => const StoreTermsScreen(),
       ),
       _Tile(
         show: _has('menu') && _isFoodShaped,

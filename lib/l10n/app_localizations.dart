@@ -11472,6 +11472,42 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تركيب الجسم'**
   String get trainingBodyReportsSection;
+
+  /// No description provided for @storeTermsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'شروط المتجر'**
+  String get storeTermsTitle;
+
+  /// No description provided for @storeTermsCustomerTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'شروط المتجر'**
+  String get storeTermsCustomerTitle;
+
+  /// No description provided for @storeTermsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدّد سياسات متجرك مرة واحدة (الاستبدال، الحد الأدنى للطلب، التسليم…). تظهر للعميل فى صفحتك وعند الشراء، ويحتفظ كل طلب بالشروط وقت إتمامه.'**
+  String get storeTermsHint;
+
+  /// No description provided for @storeTermsSave.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ'**
+  String get storeTermsSave;
+
+  /// No description provided for @storeTermsSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ شروط المتجر.'**
+  String get storeTermsSaved;
+
+  /// No description provided for @storeTermsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد شروط مطلوبة لنشاطك.'**
+  String get storeTermsEmpty;
 }
 
 class _AppLocalizationsDelegate

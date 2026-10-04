@@ -6,6 +6,7 @@ import 'models/menu_available_types.dart';
 import 'models/menu_item.dart';
 import 'models/menu_section.dart';
 import 'models/menu_vocabulary.dart';
+import 'models/store_terms.dart';
 
 class MenuItemsPage {
   final List<BusinessMenuItem> items;
@@ -97,6 +98,19 @@ class BusinessMenuApi {
   Future<MenuVocabulary> vocabulary() async {
     final body = await _client.getForBody('/business/menu/vocabulary');
     return MenuVocabulary.fromJson(body['data'] as Map<String, dynamic>);
+  }
+
+  /// «شروط المتجر» — every policy the store's trade asks, each option flagged `selected`.
+  Future<List<StoreTermGroup>> storeTerms() async {
+    final body = await _client.getForBody('/business/menu/terms');
+    return StoreTermGroup.listFrom((body['data'] as Map<String, dynamic>)['terms']);
+  }
+
+  /// Answer the terms once: group id -> the option ids chosen (an empty list clears that policy).
+  Future<void> saveStoreTerms(Map<int, List<int>> chosen) async {
+    await _client.put('/business/menu/terms', data: {
+      'groups': {for (final e in chosen.entries) '${e.key}': e.value},
+    });
   }
 
   /// 'list' (the default) or 'grid' — how this business's menu renders for a

@@ -1,3 +1,4 @@
+import '../../../business_menu/presentation/widgets/store_terms_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -307,6 +308,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                 : (selected == 'delivery' ? l10n.cartPaymentCash : l10n.cartPaymentCashInStore),
             style: Theme.of(context).textTheme.bodyMedium,
           ),
+          // What the store promises — frozen on the order the moment it is placed.
+          StoreTermsView(terms: widget.cart.terms),
           const SizedBox(height: 24),
           // The business's flat delivery charge is added when the order is
           // placed; show it here, before the total, so the customer isn't

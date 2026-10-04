@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import '../../../business_menu/data/models/store_terms.dart';
 import '../../../orders/data/models/placed_order.dart' show OrderInstallment;
 
 /// Mirrors `CartController::presentCart()` — one line already resolved to
@@ -124,6 +125,9 @@ class Cart {
   final double discount;
   final double finalTotal;
   final InstallmentPlanPreview? installmentPlan;
+
+  /// The store's terms: live in a cart, frozen on a placed order.
+  final List<StoreTermGroup> terms;
   /// A PLACED order's schedule — each payment with its date and amount.
   final List<OrderInstallment> installments;
 
@@ -141,6 +145,7 @@ class Cart {
     required this.finalTotal,
     this.installmentPlan,
     this.installments = const [],
+    this.terms = const [],
   });
 
   factory Cart.fromJson(Map<String, dynamic> json) => Cart(
@@ -161,5 +166,6 @@ class Cart {
     installments: (json['installments'] is List ? json['installments'] as List<dynamic> : const [])
         .map((e) => OrderInstallment.fromJson(e as Map<String, dynamic>))
         .toList(),
+    terms: StoreTermGroup.listFrom(json['terms']),
   );
 }

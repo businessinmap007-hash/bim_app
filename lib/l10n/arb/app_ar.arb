@@ -2109,5 +2109,11 @@
   "trainingMealsSection": "الوجبات",
   "trainingMealsEmpty": "لا توجد وجبات بعد.",
   "trainingBodyReportsSection": "تركيب الجسم",
-  "trainingBodyReportsEmpty": "لا توجد قراءات مسجلة بعد."
+  "trainingBodyReportsEmpty": "لا توجد قراءات مسجلة بعد.",
+  "storeTermsTitle": "شروط المتجر",
+  "storeTermsCustomerTitle": "شروط المتجر",
+  "storeTermsHint": "حدّد سياسات متجرك مرة واحدة (الاستبدال، الحد الأدنى للطلب، التسليم…). تظهر للعميل فى صفحتك وعند الشراء، ويحتفظ كل طلب بالشروط وقت إتمامه.",
+  "storeTermsSave": "حفظ",
+  "storeTermsSaved": "تم حفظ شروط المتجر.",
+  "storeTermsEmpty": "لا توجد شروط مطلوبة لنشاطك."
 }

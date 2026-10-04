@@ -6163,4 +6163,23 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get trainingBodyReportsSection => 'تركيب الجسم';
+
+  @override
+  String get storeTermsTitle => 'شروط المتجر';
+
+  @override
+  String get storeTermsCustomerTitle => 'شروط المتجر';
+
+  @override
+  String get storeTermsHint =>
+      'حدّد سياسات متجرك مرة واحدة (الاستبدال، الحد الأدنى للطلب، التسليم…). تظهر للعميل فى صفحتك وعند الشراء، ويحتفظ كل طلب بالشروط وقت إتمامه.';
+
+  @override
+  String get storeTermsSave => 'حفظ';
+
+  @override
+  String get storeTermsSaved => 'تم حفظ شروط المتجر.';
+
+  @override
+  String get storeTermsEmpty => 'لا توجد شروط مطلوبة لنشاطك.';
 }
