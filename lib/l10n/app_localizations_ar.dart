@@ -6254,4 +6254,67 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get menuInstalmentsOnly => 'بالتقسيط';
+
+  @override
+  String get menuSheetTitle => 'استيراد وتصدير المنيو';
+
+  @override
+  String get menuSheetExportHint =>
+      'نزّل أصنافك في ملف Excel، عدّلها أو أضف عليها على الكمبيوتر أو الموبايل، ثم ارفع الملف هنا. الملف فيه رقم كل صنف: لو عدّلته يتحدث الصنف نفسه.';
+
+  @override
+  String get menuSheetExportItems => 'تصدير أصنافي (Excel)';
+
+  @override
+  String get menuSheetExportTemplate => 'نموذج فارغ (Excel)';
+
+  @override
+  String get menuSheetImport => 'اختيار ملف للاستيراد';
+
+  @override
+  String get menuSheetImportHint =>
+      'ملف Excel أو CSV بنفس أعمدة النموذج. «النوع» من أنواع نشاطك (في الورقة الثانية من النموذج). ترى معاينة قبل أي تغيير.';
+
+  @override
+  String get menuSheetPreviewTitle => 'معاينة — لم يتغير شيء بعد';
+
+  @override
+  String get menuSheetDoneTitle => 'تم الاستيراد';
+
+  @override
+  String menuSheetSummary(int created, int updated, int errors) {
+    return 'جديد: $created — تحديث: $updated — أخطاء: $errors';
+  }
+
+  @override
+  String get menuSheetConfirm => 'تأكيد الاستيراد';
+
+  @override
+  String menuSheetRow(int row) {
+    return 'صف $row';
+  }
+
+  @override
+  String get menuSheetActionCreate => 'جديد';
+
+  @override
+  String get menuSheetActionUpdate => 'تحديث';
+
+  @override
+  String get menuSheetActionError => 'خطأ';
+
+  @override
+  String get menuSheetEmpty => 'الملف فارغ أو بلا صفوف مقروءة.';
+
+  @override
+  String get menuSheetListsSheet => 'الأنواع والوحدات';
+
+  @override
+  String get menuSheetTypes => 'النوع';
+
+  @override
+  String get menuSheetGroup => 'المجموعة';
+
+  @override
+  String get menuSheetUnits => 'الوحدات';
 }

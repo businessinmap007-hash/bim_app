@@ -11634,6 +11634,120 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'بالتقسيط'**
   String get menuInstalmentsOnly;
+
+  /// No description provided for @menuSheetTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'استيراد وتصدير المنيو'**
+  String get menuSheetTitle;
+
+  /// No description provided for @menuSheetExportHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'نزّل أصنافك في ملف Excel، عدّلها أو أضف عليها على الكمبيوتر أو الموبايل، ثم ارفع الملف هنا. الملف فيه رقم كل صنف: لو عدّلته يتحدث الصنف نفسه.'**
+  String get menuSheetExportHint;
+
+  /// No description provided for @menuSheetExportItems.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصدير أصنافي (Excel)'**
+  String get menuSheetExportItems;
+
+  /// No description provided for @menuSheetExportTemplate.
+  ///
+  /// In ar, this message translates to:
+  /// **'نموذج فارغ (Excel)'**
+  String get menuSheetExportTemplate;
+
+  /// No description provided for @menuSheetImport.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيار ملف للاستيراد'**
+  String get menuSheetImport;
+
+  /// No description provided for @menuSheetImportHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملف Excel أو CSV بنفس أعمدة النموذج. «النوع» من أنواع نشاطك (في الورقة الثانية من النموذج). ترى معاينة قبل أي تغيير.'**
+  String get menuSheetImportHint;
+
+  /// No description provided for @menuSheetPreviewTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'معاينة — لم يتغير شيء بعد'**
+  String get menuSheetPreviewTitle;
+
+  /// No description provided for @menuSheetDoneTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الاستيراد'**
+  String get menuSheetDoneTitle;
+
+  /// No description provided for @menuSheetSummary.
+  ///
+  /// In ar, this message translates to:
+  /// **'جديد: {created} — تحديث: {updated} — أخطاء: {errors}'**
+  String menuSheetSummary(int created, int updated, int errors);
+
+  /// No description provided for @menuSheetConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد الاستيراد'**
+  String get menuSheetConfirm;
+
+  /// No description provided for @menuSheetRow.
+  ///
+  /// In ar, this message translates to:
+  /// **'صف {row}'**
+  String menuSheetRow(int row);
+
+  /// No description provided for @menuSheetActionCreate.
+  ///
+  /// In ar, this message translates to:
+  /// **'جديد'**
+  String get menuSheetActionCreate;
+
+  /// No description provided for @menuSheetActionUpdate.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديث'**
+  String get menuSheetActionUpdate;
+
+  /// No description provided for @menuSheetActionError.
+  ///
+  /// In ar, this message translates to:
+  /// **'خطأ'**
+  String get menuSheetActionError;
+
+  /// No description provided for @menuSheetEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'الملف فارغ أو بلا صفوف مقروءة.'**
+  String get menuSheetEmpty;
+
+  /// No description provided for @menuSheetListsSheet.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأنواع والوحدات'**
+  String get menuSheetListsSheet;
+
+  /// No description provided for @menuSheetTypes.
+  ///
+  /// In ar, this message translates to:
+  /// **'النوع'**
+  String get menuSheetTypes;
+
+  /// No description provided for @menuSheetGroup.
+  ///
+  /// In ar, this message translates to:
+  /// **'المجموعة'**
+  String get menuSheetGroup;
+
+  /// No description provided for @menuSheetUnits.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوحدات'**
+  String get menuSheetUnits;
 }
 
 class _AppLocalizationsDelegate

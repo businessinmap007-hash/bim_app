@@ -1,4 +1,5 @@
 import '../../../business_menu/application/business_menu_providers.dart';
+import '../../../business_menu/presentation/screens/menu_import_screen.dart';
 import '../../../business_menu/presentation/screens/shop_addons_screen.dart';
 import '../../../business_menu/presentation/screens/store_terms_screen.dart';
 import 'package:flutter/material.dart';
@@ -132,6 +133,12 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.local_dining_outlined,
         title: l10n.shopAddonsTitle,
         builder: (_) => const ShopAddonsScreen(),
+      ),
+      _Tile(
+        show: _has('menu'),
+        leading: Icons.import_export_outlined,
+        title: l10n.menuSheetTitle,
+        builder: (_) => const MenuImportScreen(),
       ),
       _Tile(
         show: _has('menu'),

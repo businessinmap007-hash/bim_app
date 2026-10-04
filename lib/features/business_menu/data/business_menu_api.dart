@@ -8,6 +8,7 @@ import 'models/menu_section.dart';
 import 'models/menu_vocabulary.dart';
 import 'models/shop_addons.dart';
 import 'models/store_terms.dart';
+import 'menu_sheet.dart';
 
 class MenuItemsPage {
   final List<BusinessMenuItem> items;
@@ -390,6 +391,29 @@ class BusinessMenuApi {
   }
 
   Future<void> deleteItem(int id) => _client.delete('/business/menu/items/$id');
+
+  // ─────────────────────────── Import / export ───────────────────────────
+
+  /// «استيراد وتصدير المنيو»: the menu as a sheet, or two example rows when [template].
+  Future<MenuSheetData> menuSheet({bool template = false}) async {
+    final data = await _client.get('/business/menu/sheet', query: {if (template) 'template': true});
+    return MenuSheetData.fromJson(data as Map<String, dynamic>);
+  }
+
+  /// Rows read from an Excel file on the phone. [dryRun]: a preview that changes nothing.
+  Future<MenuImportReport> importMenuRows(List<Map<String, String>> rows, {required bool dryRun}) async {
+    final data = await _client.post('/business/menu/import', data: {'rows': rows, 'dry_run': dryRun ? 1 : 0});
+    return MenuImportReport.fromJson(data as Map<String, dynamic>);
+  }
+
+  /// A CSV file, read by the server.
+  Future<MenuImportReport> importMenuCsv(List<int> bytes, String filename, {required bool dryRun}) async {
+    final data = await _client.post(
+      '/business/menu/import',
+      data: FormData.fromMap({'file': MultipartFile.fromBytes(bytes, filename: filename), 'dry_run': dryRun ? 1 : 0}),
+    );
+    return MenuImportReport.fromJson(data as Map<String, dynamic>);
+  }
 
   // ─────────────────────────── Images ───────────────────────────
 

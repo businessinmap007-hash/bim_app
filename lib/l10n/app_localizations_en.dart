@@ -6277,4 +6277,67 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get menuInstalmentsOnly => 'On instalments';
+
+  @override
+  String get menuSheetTitle => 'Menu import & export';
+
+  @override
+  String get menuSheetExportHint =>
+      'Download your items as an Excel file, edit or add to them on a computer or phone, then upload it here. Each item keeps its ID: editing it updates the same item.';
+
+  @override
+  String get menuSheetExportItems => 'Export my items (Excel)';
+
+  @override
+  String get menuSheetExportTemplate => 'Empty template (Excel)';
+
+  @override
+  String get menuSheetImport => 'Choose a file to import';
+
+  @override
+  String get menuSheetImportHint =>
+      'An Excel or CSV file with the template columns. «Type» is one of your trade types (second sheet of the template). You see a preview before anything changes.';
+
+  @override
+  String get menuSheetPreviewTitle => 'Preview — nothing changed yet';
+
+  @override
+  String get menuSheetDoneTitle => 'Imported';
+
+  @override
+  String menuSheetSummary(int created, int updated, int errors) {
+    return 'New: $created — Updated: $updated — Errors: $errors';
+  }
+
+  @override
+  String get menuSheetConfirm => 'Confirm import';
+
+  @override
+  String menuSheetRow(int row) {
+    return 'Row $row';
+  }
+
+  @override
+  String get menuSheetActionCreate => 'New';
+
+  @override
+  String get menuSheetActionUpdate => 'Update';
+
+  @override
+  String get menuSheetActionError => 'Error';
+
+  @override
+  String get menuSheetEmpty => 'The file is empty or has no readable rows.';
+
+  @override
+  String get menuSheetListsSheet => 'Types and units';
+
+  @override
+  String get menuSheetTypes => 'Type';
+
+  @override
+  String get menuSheetGroup => 'Group';
+
+  @override
+  String get menuSheetUnits => 'Units';
 }
