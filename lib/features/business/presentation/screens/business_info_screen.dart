@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
+import '../../../../shared/widgets/full_screen_gallery.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../albums/application/albums_controller.dart';
 import '../../../albums/data/models/album.dart';
@@ -345,12 +346,13 @@ class BusinessAlbumViewerScreen extends ConsumerWidget {
             itemCount: album.photos.length,
             itemBuilder: (context, index) {
               final photo = album.photos[index];
+              // «افتح كل صورة واغلقها حتى افتح التالية» — one swipeable, pinch-to-zoom viewer for the whole
+              // album, the same as a post's photos: left and right move between them.
               return GestureDetector(
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => _FullScreenPhoto(urls: album.photos.map((p) => p.imageUrl).toList(), initialIndex: index),
-                    fullscreenDialog: true,
-                  ),
+                onTap: () => FullScreenGallery.show(
+                  context,
+                  urls: album.photos.map((p) => p.imageUrl).toList(),
+                  initialIndex: index,
                 ),
                 child: CachedNetworkImage(imageUrl: photo.imageUrl, fit: BoxFit.cover),
               );
@@ -362,25 +364,3 @@ class BusinessAlbumViewerScreen extends ConsumerWidget {
   }
 }
 
-class _FullScreenPhoto extends StatelessWidget {
-  final List<String> urls;
-  final int initialIndex;
-  const _FullScreenPhoto({required this.urls, required this.initialIndex});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(backgroundColor: Colors.black, foregroundColor: Colors.white, elevation: 0),
-      body: PageView.builder(
-        controller: PageController(initialPage: initialIndex),
-        itemCount: urls.length,
-        itemBuilder: (context, index) => InteractiveViewer(
-          child: SizedBox.expand(
-            child: Image(image: CachedNetworkImageProvider(urls[index]), fit: BoxFit.contain),
-          ),
-        ),
-      ),
-    );
-  }
-}

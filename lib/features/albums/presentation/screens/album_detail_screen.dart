@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../shared/widgets/full_screen_gallery.dart';
 import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/adaptive_image_box.dart';
@@ -173,6 +174,13 @@ class _AlbumDetailScreenState extends ConsumerState<AlbumDetailScreen> {
                                   imageProvider: NetworkImage(photo.imageUrl),
                                   borderRadius: BorderRadius.circular(12),
                                   overlays: [
+                                    GestureDetector(
+                                      onTap: () => FullScreenGallery.show(
+                                        context,
+                                        urls: album.photos.map((p) => p.imageUrl).toList(),
+                                        initialIndex: index,
+                                      ),
+                                    ),
                                     MediaSourceBadge(
                                       source: photo.isFromCamera
                                           ? MediaSource.camera
