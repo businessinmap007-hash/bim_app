@@ -6343,4 +6343,104 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get menuSheetHowTo => 'How to write';
+
+  @override
+  String get medicalFileTitle => 'My medical file';
+
+  @override
+  String get medicalFileLocalNote =>
+      'Kept on this phone only, encrypted — never uploaded. You share it with a doctor or pharmacist by a QR code for a few minutes.';
+
+  @override
+  String get medicalBloodType => 'Blood type';
+
+  @override
+  String get medicalBloodUnknown => 'Unknown';
+
+  @override
+  String get medicalSectionConditions => 'Chronic conditions';
+
+  @override
+  String get medicalSectionAllergies => 'Allergies';
+
+  @override
+  String get medicalSectionMedications => 'Current medications';
+
+  @override
+  String get medicalSectionSurgeries => 'Past surgeries';
+
+  @override
+  String get medicalNotes => 'Notes';
+
+  @override
+  String get medicalAdd => 'Add';
+
+  @override
+  String get medicalEntryTitle => 'Name';
+
+  @override
+  String get medicalEntryDetail => 'Details (optional)';
+
+  @override
+  String get medicalEmptySection => 'Nothing yet';
+
+  @override
+  String get medicalShare => 'Share with a doctor or pharmacist';
+
+  @override
+  String get medicalScan => 'Read a patient\'s file';
+
+  @override
+  String get medicalShareChoose => 'Choose what to share';
+
+  @override
+  String medicalShareMinutes(int minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String get medicalShareCreate => 'Create the share code';
+
+  @override
+  String get medicalShareShowCode =>
+      'Show this code to the doctor or pharmacist to scan in their app.';
+
+  @override
+  String medicalShareExpires(String time) {
+    return 'Ends $time';
+  }
+
+  @override
+  String get medicalShareEnd => 'End the share now';
+
+  @override
+  String get medicalShareEnded => 'The share has ended.';
+
+  @override
+  String get medicalScanHint =>
+      'Point the camera at the medical file code on the patient\'s phone';
+
+  @override
+  String medicalSharedBy(String name) {
+    return '$name\'s medical file';
+  }
+
+  @override
+  String medicalSharedAt(String time) {
+    return 'Shared $time';
+  }
+
+  @override
+  String get medicalViewNote => 'Shown here only; not saved on this phone.';
+
+  @override
+  String get medicalShareInvalid => 'This is not a medical file code.';
+
+  @override
+  String get medicalShareUnreadable =>
+      'Could not open the file — the share may have ended.';
+
+  @override
+  String get medicalShareNothing =>
+      'Your file is empty — add what you want to share first.';
 }

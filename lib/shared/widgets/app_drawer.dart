@@ -13,6 +13,7 @@ import '../../features/menu_search/presentation/screens/menu_search_screen.dart'
 import '../../features/offers/presentation/screens/offers_screen.dart';
 import '../../features/posts/presentation/screens/my_follows_screen.dart';
 import '../../features/posts/presentation/screens/my_jobs_screen.dart';
+import '../../features/medical_file/presentation/screens/medical_file_screen.dart';
 import '../../features/profile/presentation/screens/my_profile_screen.dart';
 import '../../features/settings/presentation/screens/services_settings_screen.dart';
 import '../../features/staff/presentation/screens/my_work_screen.dart';
@@ -194,6 +195,17 @@ class _AppDrawerContent extends ConsumerWidget {
                   onTap: () {
                     close();
                     context.push('/settings');
+                  },
+                ),
+                // «ملفي الطبي» — on this phone only, for every account.
+                ListTile(
+                  leading: const Icon(Icons.medical_information_outlined),
+                  title: Text(l10n.medicalFileTitle),
+                  onTap: () {
+                    close();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const MedicalFileScreen()),
+                    );
                   },
                 ),
                 ListTile(

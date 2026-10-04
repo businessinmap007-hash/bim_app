@@ -6320,4 +6320,102 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get menuSheetHowTo => 'طريقة الكتابة';
+
+  @override
+  String get medicalFileTitle => 'ملفي الطبي';
+
+  @override
+  String get medicalFileLocalNote =>
+      'محفوظ على هذا الموبايل فقط ومشفّر — لا يُرفع على السيرفر. تشاركه أنت مع الطبيب أو الصيدلي برمز QR لدقائق.';
+
+  @override
+  String get medicalBloodType => 'فصيلة الدم';
+
+  @override
+  String get medicalBloodUnknown => 'غير معروفة';
+
+  @override
+  String get medicalSectionConditions => 'أمراض مزمنة';
+
+  @override
+  String get medicalSectionAllergies => 'حساسية';
+
+  @override
+  String get medicalSectionMedications => 'أدوية أتناولها';
+
+  @override
+  String get medicalSectionSurgeries => 'عمليات سابقة';
+
+  @override
+  String get medicalNotes => 'ملاحظات';
+
+  @override
+  String get medicalAdd => 'إضافة';
+
+  @override
+  String get medicalEntryTitle => 'الاسم';
+
+  @override
+  String get medicalEntryDetail => 'تفاصيل (اختياري)';
+
+  @override
+  String get medicalEmptySection => 'لا شيء بعد';
+
+  @override
+  String get medicalShare => 'مشاركة مع طبيب أو صيدلي';
+
+  @override
+  String get medicalScan => 'قراءة ملف مريض';
+
+  @override
+  String get medicalShareChoose => 'اختر ما تشاركه';
+
+  @override
+  String medicalShareMinutes(int minutes) {
+    return '$minutes دقيقة';
+  }
+
+  @override
+  String get medicalShareCreate => 'إنشاء رمز المشاركة';
+
+  @override
+  String get medicalShareShowCode =>
+      'اعرض هذا الرمز على الطبيب أو الصيدلي ليقرأه من تطبيقه.';
+
+  @override
+  String medicalShareExpires(String time) {
+    return 'ينتهي $time';
+  }
+
+  @override
+  String get medicalShareEnd => 'إنهاء المشاركة الآن';
+
+  @override
+  String get medicalShareEnded => 'انتهت المشاركة.';
+
+  @override
+  String get medicalScanHint =>
+      'وجّه الكاميرا إلى رمز الملف الطبي على موبايل المريض';
+
+  @override
+  String medicalSharedBy(String name) {
+    return 'الملف الطبي لـ $name';
+  }
+
+  @override
+  String medicalSharedAt(String time) {
+    return 'شاركه $time';
+  }
+
+  @override
+  String get medicalViewNote => 'يُعرض هنا فقط ولا يُحفظ على هذا الموبايل.';
+
+  @override
+  String get medicalShareInvalid => 'هذا ليس رمز ملف طبي.';
+
+  @override
+  String get medicalShareUnreadable => 'تعذّر فتح الملف — ربما انتهت المشاركة.';
+
+  @override
+  String get medicalShareNothing => 'ملفك فارغ — أضف ما تريد مشاركته أولًا.';
 }

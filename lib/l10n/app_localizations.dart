@@ -11754,6 +11754,180 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'طريقة الكتابة'**
   String get menuSheetHowTo;
+
+  /// No description provided for @medicalFileTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملفي الطبي'**
+  String get medicalFileTitle;
+
+  /// No description provided for @medicalFileLocalNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'محفوظ على هذا الموبايل فقط ومشفّر — لا يُرفع على السيرفر. تشاركه أنت مع الطبيب أو الصيدلي برمز QR لدقائق.'**
+  String get medicalFileLocalNote;
+
+  /// No description provided for @medicalBloodType.
+  ///
+  /// In ar, this message translates to:
+  /// **'فصيلة الدم'**
+  String get medicalBloodType;
+
+  /// No description provided for @medicalBloodUnknown.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير معروفة'**
+  String get medicalBloodUnknown;
+
+  /// No description provided for @medicalSectionConditions.
+  ///
+  /// In ar, this message translates to:
+  /// **'أمراض مزمنة'**
+  String get medicalSectionConditions;
+
+  /// No description provided for @medicalSectionAllergies.
+  ///
+  /// In ar, this message translates to:
+  /// **'حساسية'**
+  String get medicalSectionAllergies;
+
+  /// No description provided for @medicalSectionMedications.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدوية أتناولها'**
+  String get medicalSectionMedications;
+
+  /// No description provided for @medicalSectionSurgeries.
+  ///
+  /// In ar, this message translates to:
+  /// **'عمليات سابقة'**
+  String get medicalSectionSurgeries;
+
+  /// No description provided for @medicalNotes.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات'**
+  String get medicalNotes;
+
+  /// No description provided for @medicalAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة'**
+  String get medicalAdd;
+
+  /// No description provided for @medicalEntryTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم'**
+  String get medicalEntryTitle;
+
+  /// No description provided for @medicalEntryDetail.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل (اختياري)'**
+  String get medicalEntryDetail;
+
+  /// No description provided for @medicalEmptySection.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا شيء بعد'**
+  String get medicalEmptySection;
+
+  /// No description provided for @medicalShare.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشاركة مع طبيب أو صيدلي'**
+  String get medicalShare;
+
+  /// No description provided for @medicalScan.
+  ///
+  /// In ar, this message translates to:
+  /// **'قراءة ملف مريض'**
+  String get medicalScan;
+
+  /// No description provided for @medicalShareChoose.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر ما تشاركه'**
+  String get medicalShareChoose;
+
+  /// No description provided for @medicalShareMinutes.
+  ///
+  /// In ar, this message translates to:
+  /// **'{minutes} دقيقة'**
+  String medicalShareMinutes(int minutes);
+
+  /// No description provided for @medicalShareCreate.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء رمز المشاركة'**
+  String get medicalShareCreate;
+
+  /// No description provided for @medicalShareShowCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعرض هذا الرمز على الطبيب أو الصيدلي ليقرأه من تطبيقه.'**
+  String get medicalShareShowCode;
+
+  /// No description provided for @medicalShareExpires.
+  ///
+  /// In ar, this message translates to:
+  /// **'ينتهي {time}'**
+  String medicalShareExpires(String time);
+
+  /// No description provided for @medicalShareEnd.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنهاء المشاركة الآن'**
+  String get medicalShareEnd;
+
+  /// No description provided for @medicalShareEnded.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتهت المشاركة.'**
+  String get medicalShareEnded;
+
+  /// No description provided for @medicalScanHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'وجّه الكاميرا إلى رمز الملف الطبي على موبايل المريض'**
+  String get medicalScanHint;
+
+  /// No description provided for @medicalSharedBy.
+  ///
+  /// In ar, this message translates to:
+  /// **'الملف الطبي لـ {name}'**
+  String medicalSharedBy(String name);
+
+  /// No description provided for @medicalSharedAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'شاركه {time}'**
+  String medicalSharedAt(String time);
+
+  /// No description provided for @medicalViewNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُعرض هنا فقط ولا يُحفظ على هذا الموبايل.'**
+  String get medicalViewNote;
+
+  /// No description provided for @medicalShareInvalid.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا ليس رمز ملف طبي.'**
+  String get medicalShareInvalid;
+
+  /// No description provided for @medicalShareUnreadable.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر فتح الملف — ربما انتهت المشاركة.'**
+  String get medicalShareUnreadable;
+
+  /// No description provided for @medicalShareNothing.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملفك فارغ — أضف ما تريد مشاركته أولًا.'**
+  String get medicalShareNothing;
 }
 
 class _AppLocalizationsDelegate

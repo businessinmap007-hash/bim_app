@@ -93,6 +93,7 @@ dependencies:
   firebase_messaging: 15.2.0
   excel: ^4.0.6
   file_picker: ^11.0.3
+  cryptography: ^2.9.0
 
   # NOTE: google_fonts was removed on purpose. On Flutter Web it never
   # actually fetches the font bytes for the CanvasKit/Skwasm renderer (only a
