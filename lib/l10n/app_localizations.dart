@@ -11592,6 +11592,18 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'سعر التقسيط لا يقل عن سعر الكاش.'**
   String get techPricingPlanBelowCash;
+
+  /// No description provided for @itemAddonsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدمات المحل على هذا الصنف'**
+  String get itemAddonsTitle;
+
+  /// No description provided for @itemAddonsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'فعّل الخدمة (مثل طريقة الطهي) على الأصناف التى تقدّمها فقط. الأسعار تُحدَّد مرة واحدة من «خدمات المحل».'**
+  String get itemAddonsHint;
 }
 
 class _AppLocalizationsDelegate

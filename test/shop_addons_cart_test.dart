@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bim_app/features/business_menu/data/models/shop_addons.dart';
+import 'package:bim_app/features/business_menu/data/models/menu_item.dart';
 import 'package:bim_app/features/cart/data/models/cart_models.dart';
 
 /// «سمك 450 + صينية 150 = 600 فى الفاتورة» — a service is its own line, priced once by the shop per
@@ -47,5 +48,13 @@ void main() {
     ]);
 
     expect(groups.single.options.map((o) => o.price), [null, 50.0, 80.5]);
+  });
+
+  test('an item reads which of the shop services it offers (a restaurant grill yes, its salad no)', () {
+    final grill = AddonChoice.fromJson({'group_id': 5, 'group_name': 'طريقة الطهي', 'enabled': true});
+    final salad = AddonChoice.fromJson({'group_id': 5, 'group_name': 'طريقة الطهي'});
+
+    expect(grill.enabled, isTrue);
+    expect(salad.enabled, isFalse, reason: 'nothing said = not offered');
   });
 }

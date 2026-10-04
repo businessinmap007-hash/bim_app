@@ -460,6 +460,11 @@ class BusinessMenuApi {
     );
   }
 
+  /// Which of the shop's per-item services this item offers — the group ids switched on (others off).
+  Future<void> saveItemAddons(int itemId, List<int> groupIds) async {
+    await _client.put('/business/menu/items/$itemId/addons', data: {'group_ids': groupIds});
+  }
+
   /// Replace the item's instalment plans — `months`, `down?`, `total_price` (what one unit costs on the
   /// plan). An empty list = cash only. Refused by the server for a kind that does not sell on instalments.
   Future<void> savePaymentPlans(int itemId, List<({int months, double? down, double total})> plans) async {

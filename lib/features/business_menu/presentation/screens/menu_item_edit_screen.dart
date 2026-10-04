@@ -214,6 +214,10 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
               _buildFormFields(context, l10n, sectionsState.items),
               const SizedBox(height: 24),
               _VariantsSection(item: item),
+              if (item.addonChoices.isNotEmpty) ...[
+                const SizedBox(height: 24),
+                _AddonChoicesSection(item: item),
+              ],
               const SizedBox(height: 24),
               _ExtraGroupsSection(item: item),
               const SizedBox(height: 24),
@@ -401,6 +405,49 @@ class _ActiveToggleCard extends StatelessWidget {
 /// The save action, pinned to the bottom of the screen instead of scrolling
 /// away at the end of a long form — the one action every visit to this
 /// screen ends with.
+/// «طريقة الطهي» and the shop's other services a restaurant offers PER ITEM: a switch on the grill, none on
+/// the salad. The prices are the shop's own («خدمات المحل»); this only says which dishes offer them.
+class _AddonChoicesSection extends ConsumerWidget {
+  final BusinessMenuItem item;
+  const _AddonChoicesSection({required this.item});
+
+  Future<void> _set(BuildContext context, WidgetRef ref, AddonChoice choice, bool on) async {
+    final l10n = AppLocalizations.of(context)!;
+    final enabled = {for (final c in item.addonChoices) if (c.enabled) c.groupId};
+    on ? enabled.add(choice.groupId) : enabled.remove(choice.groupId);
+    try {
+      await ref.read(businessMenuApiProvider).saveItemAddons(item.id, enabled.toList());
+      ref.invalidate(menuItemEditControllerProvider(item.id));
+    } catch (_) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(l10n.itemAddonsTitle, style: theme.textTheme.titleSmall),
+        const SizedBox(height: 4),
+        Text(l10n.itemAddonsHint, style: theme.textTheme.bodySmall),
+        for (final choice in item.addonChoices)
+          SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            value: choice.enabled,
+            onChanged: (on) => _set(context, ref, choice, on),
+            title: Text(choice.name),
+          ),
+      ],
+    );
+  }
+}
+
 class _SaveBar extends StatelessWidget {
   final bool saving;
   final VoidCallback onSave;

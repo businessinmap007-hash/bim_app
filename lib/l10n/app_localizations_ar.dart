@@ -6228,4 +6228,11 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get techPricingPlanBelowCash => 'سعر التقسيط لا يقل عن سعر الكاش.';
+
+  @override
+  String get itemAddonsTitle => 'خدمات المحل على هذا الصنف';
+
+  @override
+  String get itemAddonsHint =>
+      'فعّل الخدمة (مثل طريقة الطهي) على الأصناف التى تقدّمها فقط. الأسعار تُحدَّد مرة واحدة من «خدمات المحل».';
 }

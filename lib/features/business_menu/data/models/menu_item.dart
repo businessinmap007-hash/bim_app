@@ -181,6 +181,10 @@ class BusinessMenuItem {
 
   /// «كاش أو أقساط» — what one unit costs on each instalment plan (cash is [basePrice]).
   final List<PaymentPlanRow> paymentPlans;
+
+  /// The shop's services this merchant switches on per item («طريقة الطهي» on the grill, not on the salad).
+  /// Empty when the shop carries its services on every item.
+  final List<AddonChoice> addonChoices;
   final List<MenuExtraGroup> extraGroups;
   final List<MenuExtra> extras;
 
@@ -207,6 +211,7 @@ class BusinessMenuItem {
     this.images = const [],
     this.variants = const [],
     this.paymentPlans = const [],
+    this.addonChoices = const [],
     this.extraGroups = const [],
     this.extras = const [],
   });
@@ -253,6 +258,10 @@ class BusinessMenuItem {
             ?.map((e) => PaymentPlanRow.fromJson(e as Map<String, dynamic>))
             .toList() ??
         const [],
+    addonChoices: (json['addon_choices'] as List<dynamic>?)
+            ?.map((e) => AddonChoice.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        const [],
     extraGroups: (json['extra_groups'] as List<dynamic>?)
             ?.map((e) => MenuExtraGroup.fromJson(e as Map<String, dynamic>))
             .toList() ??
@@ -278,3 +287,18 @@ class PaymentPlanRow {
     totalPrice: (json['unit_price'] as num?)?.toDouble() ?? 0,
   );
 }
+
+/// One of the shop's services an item may offer, and whether THIS item does.
+class AddonChoice {
+  final int groupId;
+  final String name;
+  final bool enabled;
+  const AddonChoice({required this.groupId, required this.name, required this.enabled});
+
+  factory AddonChoice.fromJson(Map<String, dynamic> json) => AddonChoice(
+    groupId: (json['group_id'] as num).toInt(),
+    name: json['group_name'] as String? ?? '',
+    enabled: json['enabled'] as bool? ?? false,
+  );
+}
+

@@ -6251,4 +6251,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get techPricingPlanBelowCash =>
       'The instalment price cannot be below the cash price.';
+
+  @override
+  String get itemAddonsTitle => 'Shop services on this item';
+
+  @override
+  String get itemAddonsHint =>
+      'Switch a service (like the cooking method) on only for the items that offer it. Prices are set once in «Shop services».';
 }

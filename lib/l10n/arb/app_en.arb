@@ -2130,5 +2130,7 @@
   "techPricingPlansHint": "The price above is the cash price. Add an instalment plan: the months, a down payment if any, and what one unit costs on it. The customer picks cash or a plan.",
   "techPricingPlanTotal": "Unit price on the plan",
   "techPricingAddPlan": "Add an instalment plan",
-  "techPricingPlanBelowCash": "The instalment price cannot be below the cash price."
+  "techPricingPlanBelowCash": "The instalment price cannot be below the cash price.",
+  "itemAddonsTitle": "Shop services on this item",
+  "itemAddonsHint": "Switch a service (like the cooking method) on only for the items that offer it. Prices are set once in «Shop services»."
 }
