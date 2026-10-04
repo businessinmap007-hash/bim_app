@@ -216,6 +216,7 @@ class AuthController extends StateNotifier<AuthState> {
     _ref.invalidate(retailListingsControllerProvider);
     _ref.invalidate(tripSearchControllerProvider);
     _ref.invalidate(staffControllerProvider);
+    _ref.invalidate(menuItemsControllerProvider);
   }
 }
 

@@ -11,7 +11,9 @@ import '../../../../shared/widgets/notification_bell_button.dart';
 import '../../../../shared/widgets/profile_cover_header.dart';
 import '../../../../shared/widgets/sliver_tab_bar_delegate.dart';
 import '../../../auth/application/auth_controller.dart';
+import '../../../business_menu/presentation/widgets/my_menu_tab.dart';
 import '../../../posts/presentation/screens/my_posts_screen.dart';
+import '../../../staff/application/staff_providers.dart';
 
 /// The business owner's landing screen: its own cover/logo, then its posts
 /// activity right under it — followed accounts and my posts, so the
@@ -42,9 +44,12 @@ class BusinessHomeScreen extends ConsumerWidget {
         : '';
 
     final business = state is AuthSignedIn ? state.user : null;
+    // «المنيو بجوار منشوراتي»: a business whose trade sells from a menu sees its products on its own
+    // page. Unknown (still loading / failed) is read as «no menu tab yet», never as an empty one.
+    final hasMenu = ref.watch(myServiceKeysProvider).valueOrNull?.contains('menu') ?? false;
 
     return DefaultTabController(
-      length: 2,
+      length: hasMenu ? 3 : 2,
       child: Scaffold(
         key: scaffoldKey,
         appBar: AppBar(
@@ -75,14 +80,19 @@ class BusinessHomeScreen extends ConsumerWidget {
                     tabs: [
                       Tab(text: l10n.postsTabFollowing),
                       Tab(text: l10n.postsTabMine),
+                      if (hasMenu) Tab(text: l10n.businessTabMenu),
                     ],
                   ),
                 ),
               ),
             ),
           ],
-          body: const TabBarView(
-            children: [FollowedFeedTab(), MyPostsTab()],
+          body: TabBarView(
+            children: [
+              const FollowedFeedTab(),
+              const MyPostsTab(),
+              if (hasMenu) const MyMenuTab(),
+            ],
           ),
         ),
       ),
