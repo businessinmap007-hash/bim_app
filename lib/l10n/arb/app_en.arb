@@ -2219,6 +2219,7 @@
   "rxShowTitle": "Show the prescription to the pharmacist",
   "rxShowHint": "The pharmacist scans the code in the app, sees the prescription and checks it is exactly what the doctor wrote. It reaches them encrypted and ends in minutes.",
   "rxShowCreate": "Create the code",
+  "rxPurgedNote": "The server no longer keeps the diagnosis and notes of this finished prescription — the copy on this phone is now the only one. Keep an encrypted backup.",
   "rxNoCopy": "There is no verifiable copy of this prescription on this phone.",
   "rxShownTitle": "A prescription shown to you",
   "rxShownBy": "Shown by {name}",

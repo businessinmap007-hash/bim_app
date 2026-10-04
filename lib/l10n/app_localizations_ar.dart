@@ -6514,6 +6514,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get rxShowCreate => 'إنشاء رمز العرض';
 
   @override
+  String get rxPurgedNote =>
+      'لم يعد السيرفر يحتفظ بالتشخيص والملاحظات لهذه الروشتة المنتهية — نسختك على هذا الهاتف هي الوحيدة الآن. احتفظ بنسخة احتياطية مشفّرة.';
+
+  @override
   String get rxNoCopy => 'لا توجد نسخة موثّقة من هذه الروشتة على الهاتف.';
 
   @override

@@ -59,6 +59,12 @@ class PrescriptionsApi {
     return Paginated.fromJson(data, Prescription.fromJson);
   }
 
+  /// The phone says «I hold this exact copy» — the server fingerprints [content] and, if it is what the doctor
+  /// wrote, marks the prescription as held by the patient (which is what lets it drop the sensitive fields later).
+  Future<void> confirmArchived(int id, Map<String, dynamic> content) async {
+    await _client.post('/prescriptions/archived', data: {'id': id, 'content': content});
+  }
+
   /// A doctor's own issued prescriptions.
   Future<Paginated<Prescription>> issuedPrescriptions({int page = 1}) async {
     final data =

@@ -80,6 +80,10 @@ class PrescriptionCopyScreen extends StatelessWidget {
         children: [
           if (p.doctor?.name != null) Text(l10n.rxIssuedBy(p.doctor!.name!), style: theme.textTheme.titleSmall),
           if (p.issuedAt != null) Text(DateFormat.yMMMd().add_Hm().format(p.issuedAt!.toLocal()), style: theme.textTheme.bodySmall),
+          if (p.contentPurged) ...[
+            const SizedBox(height: 8),
+            Text(l10n.rxPurgedNote, style: theme.textTheme.bodySmall),
+          ],
           if ((p.diagnosis ?? '').isNotEmpty) ...[
             const SizedBox(height: 12),
             Text(l10n.rxDiagnosis, style: theme.textTheme.labelLarge),

@@ -662,6 +662,10 @@ class PrescriptionDetailScreen extends ConsumerWidget {
                   children: [
                     Text(statusLabel(p.status, l10n), style: Theme.of(context).textTheme.titleSmall),
                     if (p.superseded) Text(l10n.prescriptionSupersededLabel),
+                    if (p.contentPurged) ...[
+                      const SizedBox(height: 6),
+                      Text(l10n.rxPurgedNote, style: Theme.of(context).textTheme.bodySmall),
+                    ],
                     if (p.diagnosis != null && p.diagnosis!.isNotEmpty) ...[
                       const SizedBox(height: 6),
                       Text(l10n.prescriptionDiagnosisLabel, style: Theme.of(context).textTheme.labelMedium),

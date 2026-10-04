@@ -12097,6 +12097,12 @@ abstract class AppLocalizations {
   /// **'إنشاء رمز العرض'**
   String get rxShowCreate;
 
+  /// No description provided for @rxPurgedNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يعد السيرفر يحتفظ بالتشخيص والملاحظات لهذه الروشتة المنتهية — نسختك على هذا الهاتف هي الوحيدة الآن. احتفظ بنسخة احتياطية مشفّرة.'**
+  String get rxPurgedNote;
+
   /// No description provided for @rxNoCopy.
   ///
   /// In ar, this message translates to:

@@ -6541,6 +6541,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get rxShowCreate => 'Create the code';
 
   @override
+  String get rxPurgedNote =>
+      'The server no longer keeps the diagnosis and notes of this finished prescription — the copy on this phone is now the only one. Keep an encrypted backup.';
+
+  @override
   String get rxNoCopy =>
       'There is no verifiable copy of this prescription on this phone.';
 

@@ -110,6 +110,11 @@ class Prescription {
   final Map<String, dynamic>? verifiableContent;
   final Map<String, dynamic> raw;
 
+  /// The server dropped the diagnosis/condition/notes of this finished prescription (the phone's copy is the one
+  /// that holds them now), and whether the phone has already confirmed holding the exact copy.
+  final bool contentPurged;
+  final bool archivedByPatient;
+
   const Prescription({
     required this.id,
     required this.status,
@@ -136,6 +141,8 @@ class Prescription {
     this.dispensedAt,
     this.verifiableContent,
     this.raw = const {},
+    this.contentPurged = false,
+    this.archivedByPatient = false,
   });
 
   bool get canSend => status == 'issued';
@@ -184,5 +191,7 @@ class Prescription {
         ? Map<String, dynamic>.from((json['verifiable'] as Map<String, dynamic>)['content'] as Map)
         : null,
     raw: json,
+    contentPurged: json['content_purged'] as bool? ?? false,
+    archivedByPatient: json['archived_by_patient'] as bool? ?? false,
   );
 }
