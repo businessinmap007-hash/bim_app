@@ -148,8 +148,8 @@ final searchControllerProvider =
     });
 
 /// «زر شبكة وقائمة» on the activities list and on the priced items list: one choice for both screens
-/// (true = grid), kept for the session.
-final discoveryGridProvider = StateProvider<bool>((ref) => false);
+/// (true = grid, the default), kept for the session.
+final discoveryGridProvider = StateProvider<bool>((ref) => true);
 
 class BusinessListState {
   final List<BusinessSummary> items;

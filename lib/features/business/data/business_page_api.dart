@@ -20,7 +20,7 @@ class BusinessPostsPage {
 /// MenuDiscoveryController::show()'s `business.menu_display_mode`.
 class MenuPageData {
   final List<MenuSectionGroup> sections;
-  /// 'list' (the default, a plain row per item) or 'grid' (a photo-first
+  /// 'grid' (the default, a photo-first
   /// 2-column card grid) — see BusinessMenuSetting::DISPLAY_MODES.
   final String displayMode;
 
@@ -64,7 +64,7 @@ class BusinessPageApi {
     final business = data['business'] as Map<String, dynamic>? ?? const {};
     return MenuPageData(
       sections: sections.map((e) => MenuSectionGroup.fromJson(e as Map<String, dynamic>)).toList(),
-      displayMode: business['menu_display_mode'] as String? ?? 'list',
+      displayMode: business['menu_display_mode'] as String? ?? 'grid',
       terms: StoreTermGroup.listFrom(data['terms']),
     );
   }

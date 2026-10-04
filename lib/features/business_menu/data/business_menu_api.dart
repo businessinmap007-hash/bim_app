@@ -127,11 +127,11 @@ class BusinessMenuApi {
     });
   }
 
-  /// 'list' (the default) or 'grid' — how this business's menu renders for a
+  /// 'grid' (the default) or 'list' — how this business's menu renders for a
   /// customer. See Api\V2\BusinessMenuItemController::displayMode().
   Future<String> displayMode() async {
     final body = await _client.getForBody('/business/menu/display-mode');
-    return body['data']['display_mode'] as String? ?? 'list';
+    return body['data']['display_mode'] as String? ?? 'grid';
   }
 
   Future<void> setDisplayMode(String mode) async {

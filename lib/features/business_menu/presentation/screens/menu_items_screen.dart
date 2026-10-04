@@ -658,7 +658,7 @@ class _MenuItemsScreenState extends ConsumerState<MenuItemsScreen> {
             (vocabulary != null && modeAsync.isLoading && !modeAsync.hasValue))) {
       return const Center(child: CircularProgressIndicator());
     }
-    final displayMode = modeAsync.maybeWhen(data: (m) => m, orElse: () => 'list');
+    final displayMode = modeAsync.maybeWhen(data: (m) => m, orElse: () => 'grid');
     final isEnglish = Localizations.localeOf(context).languageCode == 'en';
     if (vocabulary == null) {
       return ListView.separated(
