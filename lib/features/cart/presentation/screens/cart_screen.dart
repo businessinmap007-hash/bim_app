@@ -1,3 +1,4 @@
+import '../widgets/weight_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -160,6 +161,7 @@ class _CartItemRow extends ConsumerWidget {
     final theme = Theme.of(context);
     // A line with services reads as separate amounts — «سمك 450» then «صينية 150» — not one blended price.
     final hasServices = item.extrasDetail.isNotEmpty;
+    final step = item.fractional ? 0.25 : 1.0;
     final optionParts = [
       if (item.sizeName != null) item.sizeName!,
       if (!hasServices) ...item.extraNames,
@@ -187,15 +189,16 @@ class _CartItemRow extends ConsumerWidget {
           ),
           IconButton(
             visualDensity: VisualDensity.compact,
-            onPressed: item.qty > 1
-                ? () => ref.read(cartControllerProvider.notifier).updateItemQty(item.id, item.qty - 1)
+            // A weighed line moves by a quarter of a kilo, a counted one by one.
+            onPressed: item.qty > step
+                ? () => ref.read(cartControllerProvider.notifier).updateItemQty(item.id, item.qty - step)
                 : () => ref.read(cartControllerProvider.notifier).removeItem(item.id),
             icon: const Icon(Icons.remove_circle_outline, size: 20),
           ),
-          Text('${item.qty}'),
+          Text(item.unit == null ? formatQty(item.qty) : '${formatQty(item.qty)} ${item.unit}'),
           IconButton(
             visualDensity: VisualDensity.compact,
-            onPressed: () => ref.read(cartControllerProvider.notifier).updateItemQty(item.id, item.qty + 1),
+            onPressed: () => ref.read(cartControllerProvider.notifier).updateItemQty(item.id, item.qty + step),
             icon: const Icon(Icons.add_circle_outline, size: 20),
           ),
           SizedBox(

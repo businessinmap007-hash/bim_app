@@ -2132,5 +2132,12 @@
   "techPricingAddPlan": "Add an instalment plan",
   "techPricingPlanBelowCash": "The instalment price cannot be below the cash price.",
   "itemAddonsTitle": "Shop services on this item",
-  "itemAddonsHint": "Switch a service (like the cooking method) on only for the items that offer it. Prices are set once in «Shop services»."
+  "itemAddonsHint": "Switch a service (like the cooking method) on only for the items that offer it. Prices are set once in «Shop services».",
+  "weightGramsChip": "{grams} g",
+  "weightKilo": "kg",
+  "weightChoose": "Quantity (weight)",
+  "cardInstalment": "Instalments from {monthly} a month over {months} months",
+  "@weightGramsChip": {"placeholders": {"grams": {"type": "int"}}},
+  "@cardInstalment": {"placeholders": {"monthly": {"type": "String"}, "months": {"type": "int"}}},
+  "menuInstalmentsOnly": "On instalments"
 }

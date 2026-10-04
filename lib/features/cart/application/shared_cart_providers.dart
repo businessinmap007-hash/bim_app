@@ -48,7 +48,7 @@ class SharedCartController extends StateNotifier<SharedCartState> {
   Future<void> addItem({
     required String kind,
     required int offeringId,
-    int qty = 1,
+    double qty = 1,
     int? sizeId,
     int? planId,
     List<int> extras = const [],
@@ -65,7 +65,7 @@ class SharedCartController extends StateNotifier<SharedCartState> {
     state = state.copyWith(cart: cart);
   }
 
-  Future<void> updateItemQty(int itemId, int qty) async {
+  Future<void> updateItemQty(int itemId, double qty) async {
     final cart = await _api.updateItemQty(orderId, itemId, qty);
     state = state.copyWith(cart: cart);
   }

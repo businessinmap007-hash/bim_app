@@ -36,7 +36,7 @@ class SharedCartApi {
     required int orderId,
     required String kind,
     required int offeringId,
-    int qty = 1,
+    double qty = 1,
     int? sizeId,
     int? planId,
     List<int> extras = const [],
@@ -57,7 +57,7 @@ class SharedCartApi {
     return SharedCart.fromJson(data['cart'] as Map<String, dynamic>);
   }
 
-  Future<SharedCart> updateItemQty(int orderId, int itemId, int qty) async {
+  Future<SharedCart> updateItemQty(int orderId, int itemId, double qty) async {
     final data =
         await _client.patch(
               '/cart/shared/$orderId/items/$itemId',

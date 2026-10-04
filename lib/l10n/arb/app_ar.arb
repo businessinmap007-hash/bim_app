@@ -2132,5 +2132,12 @@
   "techPricingAddPlan": "إضافة خطة تقسيط",
   "techPricingPlanBelowCash": "سعر التقسيط لا يقل عن سعر الكاش.",
   "itemAddonsTitle": "خدمات المحل على هذا الصنف",
-  "itemAddonsHint": "فعّل الخدمة (مثل طريقة الطهي) على الأصناف التى تقدّمها فقط. الأسعار تُحدَّد مرة واحدة من «خدمات المحل»."
+  "itemAddonsHint": "فعّل الخدمة (مثل طريقة الطهي) على الأصناف التى تقدّمها فقط. الأسعار تُحدَّد مرة واحدة من «خدمات المحل».",
+  "weightGramsChip": "{grams} جم",
+  "weightKilo": "كجم",
+  "weightChoose": "الكمية (الوزن)",
+  "cardInstalment": "تقسيط من {monthly} شهريًا على {months} شهر",
+  "@weightGramsChip": {"placeholders": {"grams": {"type": "int"}}},
+  "@cardInstalment": {"placeholders": {"monthly": {"type": "String"}, "months": {"type": "int"}}},
+  "menuInstalmentsOnly": "بالتقسيط"
 }

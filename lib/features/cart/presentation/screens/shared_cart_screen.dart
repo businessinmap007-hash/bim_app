@@ -1,3 +1,4 @@
+import '../widgets/weight_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -477,7 +478,7 @@ class _SharedItemRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('${item.qty}× ${item.name}'),
+                Text('${formatQty(item.qty)}× ${item.name}'),
                 Text(
                   item.addedByName,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),

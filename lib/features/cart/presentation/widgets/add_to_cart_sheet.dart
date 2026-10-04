@@ -1,3 +1,4 @@
+import 'weight_picker.dart';
 import 'payment_plan_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -55,7 +56,8 @@ class _AddToCartSheetState extends ConsumerState<_AddToCartSheet> {
   /// The payment plan picked on the line; null = cash.
   int? _planId;
   final Set<int> _extraIds = {};
-  int _qty = 1;
+  /// Pieces, or — for food sold by the kilo — kilos (1.5 = a kilo and a half).
+  double _qty = 1;
   bool _submitting = false;
 
   @override
@@ -302,6 +304,13 @@ class _AddToCartSheetState extends ConsumerState<_AddToCartSheet> {
                 ),
                 const SizedBox(height: 8),
               ],
+              // «كيلو وربع ونص»: how much — grams as chips, kilos as a stepper — right beside the cooking method.
+              if (item.fractional) ...[
+                Text(l10n.weightChoose, style: Theme.of(context).textTheme.titleSmall),
+                const SizedBox(height: 6),
+                WeightPicker(value: _qty, onChanged: (v) => setState(() => _qty = v)),
+                const SizedBox(height: 8),
+              ],
               const SizedBox(height: 4),
               // The one bar every service draws — see CartActionBar.
               CartActionBar(
@@ -310,11 +319,13 @@ class _AddToCartSheetState extends ConsumerState<_AddToCartSheet> {
                 sharedCart: widget.sharedOrderId != null,
                 onAdd: () => _confirm(buyNow: false),
                 onBuyNow: () => _confirm(buyNow: true),
-                leading: CartQtyStepper(
-                  qty: _qty,
-                  onMinus: _qty > 1 ? () => setState(() => _qty--) : null,
-                  onPlus: () => setState(() => _qty++),
-                ),
+                leading: item.fractional
+                    ? null
+                    : CartQtyStepper(
+                        qty: _qty.round(),
+                        onMinus: _qty > 1 ? () => setState(() => _qty--) : null,
+                        onPlus: () => setState(() => _qty++),
+                      ),
               ),
             ],
           ),

@@ -28,7 +28,7 @@ import 'menu_card_stepper.dart';
 class MenuItemTile extends StatefulWidget {
   final MenuItemSummary item;
   final VoidCallback? onTap;
-  final Future<void> Function(int qty)? onDirectAdd;
+  final Future<void> Function(double qty)? onDirectAdd;
 
   const MenuItemTile({
     super.key,
@@ -45,12 +45,14 @@ class MenuItemTile extends StatefulWidget {
 }
 
 class _MenuItemTileState extends State<MenuItemTile> {
-  int _qty = 1;
+  double _qty = 1;
   bool _adding = false;
 
   MenuItemSummary get item => widget.item;
 
   void _inc() => setState(() => _qty++);
+
+  void _setWeight(double kg) => setState(() => _qty = kg);
 
   /// Clamped at 1 for now — a real fraction-of-a-unit ("نص كيلو") needs the
   /// cart to carry a non-integer qty end to end (backend `qty` is `integer`
@@ -222,6 +224,16 @@ class _MenuItemTileState extends State<MenuItemTile> {
                             style: AppTextStyles.cardDetail(theme),
                           ),
                         ),
+                      if (item.installment != null)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 4),
+                          child: Text(
+                            l10n.cardInstalment(item.installment!.monthly.round().toString(), item.installment!.months),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.bodySmall?.copyWith(color: AppColors.accentGold, fontWeight: FontWeight.w700),
+                          ),
+                        ),
                       const SizedBox(height: 8),
                       if (!offersStepper)
                         Row(
@@ -266,6 +278,7 @@ class _MenuItemTileState extends State<MenuItemTile> {
                           adding: _adding,
                           onInc: _inc,
                           onDec: _qty > 1 ? _dec : null,
+                          onWeightChanged: item.fractional ? _setWeight : null,
                           onAdd: _add,
                           addLabel: l10n.menuCardAddShort,
                         ),

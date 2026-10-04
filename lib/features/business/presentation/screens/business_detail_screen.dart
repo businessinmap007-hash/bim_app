@@ -469,7 +469,7 @@ class _SectionGrid extends StatelessWidget {
   /// Each card with the name of the section it belongs to (null = no caption).
   final List<({MenuItemSummary item, String? caption})> entries;
   final ValueChanged<MenuItemSummary> onTap;
-  final Future<void> Function(MenuItemSummary item, int qty)? onDirectAdd;
+  final Future<void> Function(MenuItemSummary item, double qty)? onDirectAdd;
   const _SectionGrid({required this.entries, required this.onTap, this.onDirectAdd});
 
   static const _captionHeight = 20.0;
@@ -547,6 +547,9 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
   // customer actually asked to see.
   int? _activeSectionIndex;
 
+  /// «غرف نوم — قسط»: only what can be bought on instalments.
+  bool _installmentsOnly = false;
+
   /// The brand → series chip filter, per section (keyed by section name):
   /// «اختار الماركة اوبو يظهر كل الموبايلات … لو اخترت F يظهر كل الموديلات
   /// F» — المالك، 2026-10-01. null = no filter.
@@ -558,6 +561,7 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
   final Map<String, String?> _conditionBySection = {};
 
   bool _passesFilter(String section, MenuItemSummary item) {
+    if (_installmentsOnly && item.installment == null) return false;
     final brand = _brandBySection[section];
     final series = _seriesBySection[section];
     final condition = _conditionBySection[section];
@@ -589,7 +593,7 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
     var run = <({MenuItemSummary item, String? caption})>[];
 
     void onTap(MenuItemSummary item) => showAddToCartSheet(context, item, sharedOrderId: widget.sharedOrderId);
-    Future<void> onDirectAdd(MenuItemSummary item, int qty) => _directAdd(context, item, qty);
+    Future<void> onDirectAdd(MenuItemSummary item, double qty) => _directAdd(context, item, qty);
 
     void flush() {
       if (run.isEmpty) return;
@@ -712,7 +716,7 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
   /// for a plain item (no variant/extras to send), just without opening a
   /// sheet first. Routed through the shared cart when this tab is one, same
   /// as every other add-to-cart path in this screen.
-  Future<void> _directAdd(BuildContext context, MenuItemSummary item, int qty) async {
+  Future<void> _directAdd(BuildContext context, MenuItemSummary item, double qty) async {
     final l10n = AppLocalizations.of(context)!;
     try {
       final sharedOrderId = widget.sharedOrderId;
@@ -777,6 +781,15 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
                           selected: _activeSectionIndex == null,
                           onSelected: (_) => setState(() => _activeSectionIndex = null),
                         ),
+                      // «غرف نوم — قسط»: shown only when the shop sells something on instalments.
+                      if (sections.any((s) => s.branches.any((b) => b.items.any((i) => i.installment != null)))) ...[
+                        const SizedBox(width: 6),
+                        FilterChip(
+                          label: Text(l10n.menuInstalmentsOnly),
+                          selected: _installmentsOnly,
+                          onSelected: (on) => setState(() => _installmentsOnly = on),
+                        ),
+                      ],
                       const Spacer(),
                       ViewModeToggle(
                         isGrid: isGrid,

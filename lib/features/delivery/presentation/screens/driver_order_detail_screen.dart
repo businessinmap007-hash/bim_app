@@ -1,3 +1,4 @@
+import '../../../cart/presentation/widgets/weight_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
@@ -271,7 +272,7 @@ class _DriverOrderDetailScreenState extends ConsumerState<DriverOrderDetailScree
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: Row(
                 children: [
-                  Text('${item.qty}×'),
+                  Text('${formatQty(item.qty)}×'),
                   const SizedBox(width: 8),
                   Expanded(child: Text(item.name)),
                   Text(item.totalPrice.toStringAsFixed(0)),

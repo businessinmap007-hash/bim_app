@@ -22,7 +22,7 @@ import 'menu_card_stepper.dart';
 class MenuItemGridCard extends StatefulWidget {
   final MenuItemSummary item;
   final VoidCallback? onTap;
-  final Future<void> Function(int qty)? onDirectAdd;
+  final Future<void> Function(double qty)? onDirectAdd;
   /// Width ÷ height of the photo area — 1 is a square (the merchant's grid); the customer's
   /// page uses a slightly wider picture so two and a half rows fit one screen.
   final double imageAspect;
@@ -42,12 +42,14 @@ class MenuItemGridCard extends StatefulWidget {
 }
 
 class _MenuItemGridCardState extends State<MenuItemGridCard> {
-  int _qty = 1;
+  double _qty = 1;
   bool _adding = false;
 
   MenuItemSummary get item => widget.item;
 
   void _inc() => setState(() => _qty++);
+
+  void _setWeight(double kg) => setState(() => _qty = kg);
 
   /// See MenuItemTile's identical method for why this stays clamped at 1.
   void _dec() {
@@ -267,6 +269,16 @@ class _MenuItemGridCardState extends State<MenuItemGridCard> {
                           color: AppColors.accentGold,
                         ),
                       ),
+                    if (item.installment != null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2),
+                        child: Text(
+                          l10n.cardInstalment(item.installment!.monthly.round().toString(), item.installment!.months),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.bodySmall?.copyWith(color: AppColors.accentGold, fontWeight: FontWeight.w700),
+                        ),
+                      ),
                     if (offersStepper && !item.isOutOfStock) ...[
                       Divider(height: 1, color: theme.dividerColor),
                       const SizedBox(height: 8),
@@ -275,6 +287,7 @@ class _MenuItemGridCardState extends State<MenuItemGridCard> {
                         adding: _adding,
                         onInc: _inc,
                         onDec: _qty > 1 ? _dec : null,
+                        onWeightChanged: item.fractional ? _setWeight : null,
                         onAdd: _add,
                         addLabel: l10n.menuCardAddShort,
                       ),

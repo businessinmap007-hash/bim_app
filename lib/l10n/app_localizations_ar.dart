@@ -6235,4 +6235,23 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get itemAddonsHint =>
       'فعّل الخدمة (مثل طريقة الطهي) على الأصناف التى تقدّمها فقط. الأسعار تُحدَّد مرة واحدة من «خدمات المحل».';
+
+  @override
+  String weightGramsChip(int grams) {
+    return '$grams جم';
+  }
+
+  @override
+  String get weightKilo => 'كجم';
+
+  @override
+  String get weightChoose => 'الكمية (الوزن)';
+
+  @override
+  String cardInstalment(String monthly, int months) {
+    return 'تقسيط من $monthly شهريًا على $months شهر';
+  }
+
+  @override
+  String get menuInstalmentsOnly => 'بالتقسيط';
 }

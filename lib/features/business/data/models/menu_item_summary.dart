@@ -58,6 +58,18 @@ class MenuItemPaymentPlan {
   double monthly(double cash) => (unitPrice(cash) - (down ?? 0)) / months;
 }
 
+/// What a card says about instalments: the lowest month and over how many.
+class CardInstalment {
+  final int months;
+  final double monthly;
+  const CardInstalment({required this.months, required this.monthly});
+
+  factory CardInstalment.fromJson(Map<String, dynamic> json) => CardInstalment(
+    months: (json['months'] as num).toInt(),
+    monthly: (json['monthly'] as num?)?.toDouble() ?? 0,
+  );
+}
+
 /// A group of extras deciding how they're picked — see
 /// MenuDiscoveryController's `extra_groups`.
 class MenuItemExtraGroup {
@@ -169,6 +181,12 @@ class MenuItemSummary {
   final Set<String> cameraImageUrls;
   final double basePrice;
   final String? saleUnitLabel;
+
+  /// «كيلو وربع ونص»: true for food sold by the kilo or the litre — a part of the unit may be ordered.
+  final bool fractional;
+
+  /// «تقسيط من 2500 شهريًا على 12 شهر» — the one line a card says about instalments; null = cash only.
+  final CardInstalment? installment;
   final int? availableQuantity;
   final bool isFeatured;
   final MenuItemCondition? condition;
@@ -208,6 +226,8 @@ class MenuItemSummary {
     this.cameraImageUrls = const {},
     required this.basePrice,
     this.saleUnitLabel,
+    this.fractional = false,
+    this.installment,
     this.availableQuantity,
     this.isFeatured = false,
     this.condition,
@@ -280,6 +300,8 @@ class MenuItemSummary {
         .toSet(),
     basePrice: (json['base_price'] as num?)?.toDouble() ?? 0,
     saleUnitLabel: json['sale_unit_label'] as String?,
+    fractional: json['fractional'] as bool? ?? false,
+    installment: json['installment'] is Map<String, dynamic> ? CardInstalment.fromJson(json['installment'] as Map<String, dynamic>) : null,
     availableQuantity: (json['available_quantity'] as num?)?.toInt(),
     isFeatured: json['is_featured'] as bool? ?? false,
     condition: json['condition'] != null

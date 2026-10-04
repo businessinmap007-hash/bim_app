@@ -50,7 +50,7 @@ class TechProductDetailScreen extends ConsumerStatefulWidget {
 class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScreen> {
   int? _variantId;
   final Set<int> _extraIds = {};
-  int _qty = 1;
+  double _qty = 1;
 
   /// The payment plan picked on the line; null = cash.
   int? _planId;
@@ -442,7 +442,7 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
           onAdd: () => _confirm(buyNow: false),
           onBuyNow: () => _confirm(buyNow: true),
           leading: CartQtyStepper(
-            qty: _qty,
+            qty: _qty.round(),
             onMinus: _qty > 1 ? () => setState(() => _qty--) : null,
             onPlus: () => setState(() => _qty++),
           ),

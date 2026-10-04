@@ -6258,4 +6258,23 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get itemAddonsHint =>
       'Switch a service (like the cooking method) on only for the items that offer it. Prices are set once in «Shop services».';
+
+  @override
+  String weightGramsChip(int grams) {
+    return '$grams g';
+  }
+
+  @override
+  String get weightKilo => 'kg';
+
+  @override
+  String get weightChoose => 'Quantity (weight)';
+
+  @override
+  String cardInstalment(String monthly, int months) {
+    return 'Instalments from $monthly a month over $months months';
+  }
+
+  @override
+  String get menuInstalmentsOnly => 'On instalments';
 }

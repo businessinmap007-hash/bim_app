@@ -11604,6 +11604,36 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'فعّل الخدمة (مثل طريقة الطهي) على الأصناف التى تقدّمها فقط. الأسعار تُحدَّد مرة واحدة من «خدمات المحل».'**
   String get itemAddonsHint;
+
+  /// No description provided for @weightGramsChip.
+  ///
+  /// In ar, this message translates to:
+  /// **'{grams} جم'**
+  String weightGramsChip(int grams);
+
+  /// No description provided for @weightKilo.
+  ///
+  /// In ar, this message translates to:
+  /// **'كجم'**
+  String get weightKilo;
+
+  /// No description provided for @weightChoose.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكمية (الوزن)'**
+  String get weightChoose;
+
+  /// No description provided for @cardInstalment.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقسيط من {monthly} شهريًا على {months} شهر'**
+  String cardInstalment(String monthly, int months);
+
+  /// No description provided for @menuInstalmentsOnly.
+  ///
+  /// In ar, this message translates to:
+  /// **'بالتقسيط'**
+  String get menuInstalmentsOnly;
 }
 
 class _AppLocalizationsDelegate

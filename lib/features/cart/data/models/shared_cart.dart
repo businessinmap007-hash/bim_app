@@ -11,7 +11,7 @@ class SharedCartItem {
   final List<String> extraNames;
   final int addedByUserId;
   final String addedByName;
-  final int qty;
+  final double qty;
   final double price;
   final double totalPrice;
 
@@ -41,7 +41,7 @@ class SharedCartItem {
       extraNames: (options['extras'] as List<dynamic>? ?? []).map((e) => e as String).toList(),
       addedByUserId: addedBy['id'] as int? ?? 0,
       addedByName: addedBy['name'] as String? ?? '',
-      qty: json['qty'] as int? ?? 0,
+      qty: (json['qty'] as num?)?.toDouble() ?? 0,
       price: (json['price'] as num?)?.toDouble() ?? 0,
       totalPrice: (json['total_price'] as num?)?.toDouble() ?? 0,
     );

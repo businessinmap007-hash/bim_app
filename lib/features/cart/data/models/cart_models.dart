@@ -22,9 +22,13 @@ class CartItem {
   final String name;
   final String? sizeName;
   final List<String> extraNames;
-  final int qty;
+  final double qty;
   final double price;
   final double totalPrice;
+
+  /// «كجم» / «لتر» when the line is measured; whether a part of the unit may be ordered.
+  final String? unit;
+  final bool fractional;
 
   /// What the item itself costs per unit, apart from its extras — and each extra with its total.
   final double basePrice;
@@ -45,6 +49,8 @@ class CartItem {
     required this.totalPrice,
     this.basePrice = 0,
     this.extrasDetail = const [],
+    this.unit,
+    this.fractional = false,
   });
 
   factory CartItem.fromJson(Map<String, dynamic> json) {
@@ -56,9 +62,11 @@ class CartItem {
       name: json['name'] as String? ?? '',
       sizeName: options['size'] as String?,
       extraNames: (options['extras'] as List<dynamic>? ?? []).map((e) => e as String).toList(),
-      qty: json['qty'] as int? ?? 0,
+      qty: (json['qty'] as num?)?.toDouble() ?? 0,
       price: (json['price'] as num?)?.toDouble() ?? 0,
       totalPrice: (json['total_price'] as num?)?.toDouble() ?? 0,
+      unit: json['unit'] as String?,
+      fractional: json['fractional'] as bool? ?? false,
       basePrice: (json['base_price'] as num?)?.toDouble() ?? (json['price'] as num?)?.toDouble() ?? 0,
       extrasDetail: (json['extras_detail'] as List<dynamic>? ?? [])
           .map((e) => CartExtraLine.fromJson(e as Map<String, dynamic>))

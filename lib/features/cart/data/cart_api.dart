@@ -17,7 +17,7 @@ class CartApi {
   Future<Cart> addItem({
     required String kind,
     required int offeringId,
-    int qty = 1,
+    double qty = 1,
     int? sizeId,
     int? planId,
     List<int> extras = const [],
@@ -38,7 +38,7 @@ class CartApi {
     return Cart.fromJson(data['cart'] as Map<String, dynamic>);
   }
 
-  Future<Cart> updateItemQty(int itemId, int qty) async {
+  Future<Cart> updateItemQty(int itemId, double qty) async {
     final data =
         await _client.patch('/cart/items/$itemId', data: {'qty': qty})
             as Map<String, dynamic>;

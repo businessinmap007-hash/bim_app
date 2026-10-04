@@ -1,3 +1,5 @@
+import '../../../cart/presentation/widgets/weight_picker.dart';
+import '../widgets/order_line_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -541,7 +543,7 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
                       children: [
                         Expanded(
                           child: Text(
-                            '${item.qty}× ${item.name}',
+                            '${formatQty(item.qty)}${item.unit == null ? '' : ' ${item.unit}'}× ${item.name}',
                             style: item.isRemoved
                                 ? TextStyle(
                                     decoration: TextDecoration.lineThrough,
@@ -550,9 +552,11 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
                                 : null,
                           ),
                         ),
-                        if (!item.isRemoved) Text(item.totalPrice.toStringAsFixed(0)),
+                        // With services the line reads «سمك 450» and each service below — not one blended number.
+                        if (!item.isRemoved) Text((item.services.isEmpty ? item.totalPrice : item.baseTotal).toStringAsFixed(0)),
                       ],
                     ),
+                    OrderLineServices(item: item),
                     if (item.isRemoved)
                       Text(l10n.orderLineRemoved, style: TextStyle(color: AppColors.error, fontSize: 12))
                     else if (item.isSubstituted)

@@ -1,12 +1,31 @@
 import '../../../../core/env/env.dart';
 
+/// A service added on top of a line («الطهى مشوى») and what it adds to THAT line — its own row of the invoice.
+class OrderLineService {
+  final String name;
+  final double total;
+  const OrderLineService({required this.name, required this.total});
+}
+
 /// One line on a placed order — mirrors `OrderItemResource`.
 class OrderLineItem {
   final int id;
   final String name;
-  final int qty;
+
+  /// 2 pieces, or 1.5 kilos — a weighed line is a decimal.
+  final double qty;
   final double price;
   final double totalPrice;
+
+  /// «كجم» / «لتر» when the line is measured.
+  final String? unit;
+
+  /// What the item itself costs per unit, apart from its services — and each service with its total.
+  final double basePrice;
+  final List<OrderLineService> services;
+
+  /// The item's own amount on this line (before its services).
+  double get baseTotal => basePrice * qty;
   final List<String> addonNames;
 
   /// Set once a business marks this line unavailable — 'substituted' (kept,
@@ -21,6 +40,9 @@ class OrderLineItem {
     required this.qty,
     required this.price,
     required this.totalPrice,
+    this.unit,
+    this.basePrice = 0,
+    this.services = const [],
     required this.addonNames,
     this.resolution,
     this.resolutionNote,
@@ -34,9 +56,15 @@ class OrderLineItem {
     return OrderLineItem(
       id: json['id'] as int,
       name: json['name'] as String? ?? '',
-      qty: (json['qty'] as num?)?.toInt() ?? 0,
+      qty: (json['qty'] as num?)?.toDouble() ?? 0,
       price: (json['price'] as num?)?.toDouble() ?? 0,
       totalPrice: (json['total_price'] as num?)?.toDouble() ?? 0,
+      unit: json['unit'] as String?,
+      basePrice: (json['base_price'] as num?)?.toDouble() ?? (json['price'] as num?)?.toDouble() ?? 0,
+      services: (json['extras_detail'] as List<dynamic>? ?? [])
+          .whereType<Map<String, dynamic>>()
+          .map((e) => OrderLineService(name: e['name'] as String? ?? '', total: (e['total'] as num?)?.toDouble() ?? 0))
+          .toList(),
       addonNames: addons
           .whereType<Map<String, dynamic>>()
           .map((a) => a['name'] as String? ?? '')

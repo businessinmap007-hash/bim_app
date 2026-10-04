@@ -133,7 +133,7 @@ Future<void> _openQuantitySheet(BuildContext context, WidgetRef ref, RetailStore
   try {
     final cart = await ref
         .read(cartControllerProvider.notifier)
-        .addItem(kind: 'retail', offeringId: listing.listingId, qty: result.qty, extras: result.extras);
+        .addItem(kind: 'retail', offeringId: listing.listingId, qty: result.qty.toDouble(), extras: result.extras);
     if (!context.mounted) return;
 
     // Adding to cart only ever reserves a spot in line — checkout is what

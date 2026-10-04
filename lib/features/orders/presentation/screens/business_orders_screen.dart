@@ -1,3 +1,5 @@
+import '../../../cart/presentation/widgets/weight_picker.dart';
+import '../widgets/order_line_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -528,7 +530,7 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                       children: [
                         Row(
                           children: [
-                            Text('${item.qty}×'),
+                            Text('${formatQty(item.qty)}${item.unit == null ? '' : ' ${item.unit}'}×'),
                             const SizedBox(width: 8),
                             Expanded(
                               child: Text(
@@ -541,7 +543,7 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                                     : null,
                               ),
                             ),
-                            if (!item.isRemoved) Text(item.totalPrice.toStringAsFixed(2)),
+                            if (!item.isRemoved) Text((item.services.isEmpty ? item.totalPrice : item.baseTotal).toStringAsFixed(2)),
                             if (item.resolution == null &&
                                 order.status == 'pending' &&
                                 order.prepStatus != 'ready' &&
@@ -553,6 +555,7 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                               ),
                           ],
                         ),
+                        OrderLineServices(item: item, decimals: 2),
                         if (item.isRemoved)
                           Text(l10n.orderLineRemoved, style: TextStyle(color: AppColors.error, fontSize: 12))
                         else if (item.isSubstituted)
