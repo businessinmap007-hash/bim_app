@@ -51,6 +51,66 @@ class BusinessCard extends StatelessWidget {
   }
 }
 
+/// [BusinessCard]'s grid counterpart: the logo on top, then the name, the rating (or «تفاصيل أكثر») and
+/// whether it is open now.
+class BusinessGridCard extends StatelessWidget {
+  final BusinessSummary business;
+  final VoidCallback onTap;
+
+  const BusinessGridCard({super.key, required this.business, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Card(
+      margin: EdgeInsets.zero,
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            AspectRatio(
+              aspectRatio: 1.4,
+              child: business.logoUrl != null
+                  ? CachedNetworkImage(
+                      imageUrl: business.logoUrl!,
+                      fit: BoxFit.cover,
+                      errorWidget: (context, url, error) => const _LogoPlaceholder(),
+                    )
+                  : const _LogoPlaceholder(),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    business.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 4),
+                  business.reviewCount > 0
+                      ? _RatingLine(stars: business.starsAverage ?? 0, reviewCount: business.reviewCount)
+                      : Text(
+                          l10n.businessCallForPrice,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                  const SizedBox(height: 6),
+                  _OpenBadge(isOpenNow: business.isOpenNow),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _RatingLine extends StatelessWidget {
   final double stars;
   final int reviewCount;

@@ -283,7 +283,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get businessClosedNow => 'Closed now';
 
   @override
-  String get businessCallForPrice => 'Call for price';
+  String get businessCallForPrice => 'More details';
 
   @override
   String get businessFollow => 'Follow';

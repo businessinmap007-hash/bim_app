@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import '../../../../shared/widgets/view_mode_toggle.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -99,6 +100,7 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(businessListControllerProvider(_scope));
+    final isGrid = ref.watch(discoveryGridProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -154,6 +156,12 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
                         ? () => ref.read(businessListControllerProvider(_scope).notifier).setOptions({})
                         : null,
                   ),
+                  ViewModeToggle(
+                    isGrid: isGrid,
+                    listLabel: l10n.menuItemsDisplayModeList,
+                    gridLabel: l10n.menuItemsDisplayModeGrid,
+                    onChanged: (grid) => ref.read(discoveryGridProvider.notifier).state = grid,
+                  ),
                 ],
               ),
             ),
@@ -195,7 +203,26 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
                           ).notifier,
                         )
                         .load(),
-                    child: ListView.separated(
+                    child: isGrid
+                        ? GridView.builder(
+                            controller: _scrollController,
+                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 10,
+                              crossAxisSpacing: 10,
+                              mainAxisExtent: 224,
+                            ),
+                            itemCount: state.items.length,
+                            itemBuilder: (context, index) {
+                              final business = state.items[index];
+                              return BusinessGridCard(
+                                business: business,
+                                onTap: () => context.push('/business/${business.id}'),
+                              );
+                            },
+                          )
+                        : ListView.separated(
                       controller: _scrollController,
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                       itemCount:

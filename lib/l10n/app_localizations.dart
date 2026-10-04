@@ -593,7 +593,7 @@ abstract class AppLocalizations {
   /// No description provided for @businessCallForPrice.
   ///
   /// In ar, this message translates to:
-  /// **'اتصل للسعر'**
+  /// **'تفاصيل أكثر'**
   String get businessCallForPrice;
 
   /// No description provided for @businessFollow.

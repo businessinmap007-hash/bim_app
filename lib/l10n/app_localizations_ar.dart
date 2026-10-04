@@ -287,7 +287,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get businessClosedNow => 'مغلق الآن';
 
   @override
-  String get businessCallForPrice => 'اتصل للسعر';
+  String get businessCallForPrice => 'تفاصيل أكثر';
 
   @override
   String get businessFollow => 'متابعة';
