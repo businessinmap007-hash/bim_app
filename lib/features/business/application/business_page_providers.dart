@@ -22,11 +22,8 @@ final businessPageApiProvider = Provider<BusinessPageApi>((ref) {
 /// checkout API expects via `BusinessFulfillment.typeOfSelection`.
 final businessFulfillmentChoiceProvider = StateProvider.family<String?, int>((ref, businessId) => null);
 
-/// A customer's own list/grid preference, persisted across EVERY business's
-/// menu — once they pick one, it overrides that specific merchant's stored
-/// `display_mode` default from then on, everywhere. Null until they touch
-/// the toggle for the first time, in which case each business's own default
-/// still applies.
+/// The phone's list/grid preference for every menu (a customer browsing any shop, a merchant on his own
+/// screens) — kept on the device, never on the server. Null until someone touches a toggle: grid.
 class CustomerMenuDisplayModeController extends StateNotifier<String?> {
   final Ref _ref;
 

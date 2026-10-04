@@ -752,7 +752,8 @@ class _MenuTabState extends ConsumerState<_MenuTab> {
         if (_activeSectionIndex != null && _activeSectionIndex! >= sections.length) _activeSectionIndex = null;
         final visibleSections = _activeSectionIndex != null ? [sections[_activeSectionIndex!]] : sections;
         final displayModeOverride = ref.watch(customerMenuDisplayModeControllerProvider);
-        final isGrid = (displayModeOverride ?? page.displayMode) == 'grid';
+        // The phone's own choice; grid until someone picks list (المالك، 2026-10-05).
+        final isGrid = (displayModeOverride ?? 'grid') == 'grid';
 
         return Builder(
           builder: (context) => CustomScrollView(

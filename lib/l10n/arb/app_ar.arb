@@ -1409,7 +1409,7 @@
   "@menuItemsQuantityShort": {
     "placeholders": { "quantity": { "type": "int" } }
   },
-  "menuItemsDisplayModeLabel": "طريقة العرض للعميل",
+  "menuItemsDisplayModeLabel": "طريقة العرض",
   "menuItemsDisplayModeList": "قائمة",
   "menuItemsDisplayModeGrid": "شبكة",
   "menuItemsManageTypesAction": "إدارة الأصناف",

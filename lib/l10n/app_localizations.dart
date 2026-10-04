@@ -7804,7 +7804,7 @@ abstract class AppLocalizations {
   /// No description provided for @menuItemsDisplayModeLabel.
   ///
   /// In ar, this message translates to:
-  /// **'طريقة العرض للعميل'**
+  /// **'طريقة العرض'**
   String get menuItemsDisplayModeLabel;
 
   /// No description provided for @menuItemsDisplayModeList.

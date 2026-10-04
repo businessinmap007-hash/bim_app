@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../business/application/business_page_providers.dart' show customerMenuDisplayModeControllerProvider;
 import '../../../core/providers/core_providers.dart';
 import '../data/business_menu_api.dart';
 import '../data/models/menu_available_types.dart';
@@ -50,40 +51,21 @@ final menuAvailableTypesProvider = FutureProvider.autoDispose<List<AvailableType
   return ref.watch(businessMenuApiProvider).availableTypes();
 });
 
-/// 'list' or 'grid' — this business's own choice for how customers see the
-/// menu. A StateNotifier (not a plain FutureProvider) since the settings
-/// screen changes it in place and every reader should see that change
-/// immediately, without waiting for a refetch.
+/// 'list' or 'grid' on the merchant's own menu screens. «أزرار قائمة/شبكة والافتراضى شبكة فى التطبيق وليس
+/// حفظ فى الداتا بيز» — المالك، 2026-10-05: it is the PHONE's choice, the same one the customer's menu
+/// toggle keeps (one device, one preference), grid until someone picks list. Nothing goes to the server.
 class MenuDisplayModeController extends StateNotifier<AsyncValue<String>> {
-  final BusinessMenuApi _api;
-  MenuDisplayModeController(this._api) : super(const AsyncValue.loading()) {
-    _load();
+  final Ref _ref;
+  MenuDisplayModeController(this._ref)
+    : super(AsyncValue.data(_ref.read(customerMenuDisplayModeControllerProvider) ?? 'grid')) {
+    _ref.listen<String?>(customerMenuDisplayModeControllerProvider, (_, next) => state = AsyncValue.data(next ?? 'grid'));
   }
 
-  Future<void> _load() async {
-    try {
-      state = AsyncValue.data(await _api.displayMode());
-    } catch (e, st) {
-      state = AsyncValue.error(e, st);
-    }
-  }
-
-  Future<void> setMode(String mode) async {
-    final previous = state;
-    state = AsyncValue.data(mode);
-    try {
-      await _api.setDisplayMode(mode);
-    } catch (e, st) {
-      state = previous;
-      state = AsyncValue.error(e, st);
-    }
-  }
+  Future<void> setMode(String mode) => _ref.read(customerMenuDisplayModeControllerProvider.notifier).setMode(mode);
 }
 
 final menuDisplayModeControllerProvider =
-    StateNotifierProvider<MenuDisplayModeController, AsyncValue<String>>((ref) {
-      return MenuDisplayModeController(ref.watch(businessMenuApiProvider));
-    });
+    StateNotifierProvider<MenuDisplayModeController, AsyncValue<String>>((ref) => MenuDisplayModeController(ref));
 
 // ─────────────────────────── Sections ───────────────────────────
 

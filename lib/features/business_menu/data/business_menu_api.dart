@@ -127,17 +127,6 @@ class BusinessMenuApi {
     });
   }
 
-  /// 'grid' (the default) or 'list' — how this business's menu renders for a
-  /// customer. See Api\V2\BusinessMenuItemController::displayMode().
-  Future<String> displayMode() async {
-    final body = await _client.getForBody('/business/menu/display-mode');
-    return body['data']['display_mode'] as String? ?? 'grid';
-  }
-
-  Future<void> setDisplayMode(String mode) async {
-    await _client.put('/business/menu/display-mode', data: {'display_mode': mode});
-  }
-
   /// The FULL `line` catalog for this business's specialty (not narrowed by
   /// ticks) — powers the "which types do you carry" checklist.
   Future<List<AvailableTypeGroup>> availableTypes() async {

@@ -4202,7 +4202,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get menuItemsDisplayModeLabel => 'Customer display';
+  String get menuItemsDisplayModeLabel => 'Display';
 
   @override
   String get menuItemsDisplayModeList => 'List';

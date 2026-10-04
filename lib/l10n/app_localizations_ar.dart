@@ -4200,7 +4200,7 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get menuItemsDisplayModeLabel => 'طريقة العرض للعميل';
+  String get menuItemsDisplayModeLabel => 'طريقة العرض';
 
   @override
   String get menuItemsDisplayModeList => 'قائمة';

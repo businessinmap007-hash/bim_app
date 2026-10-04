@@ -1409,7 +1409,7 @@
   "@menuItemsQuantityShort": {
     "placeholders": { "quantity": { "type": "int" } }
   },
-  "menuItemsDisplayModeLabel": "Customer display",
+  "menuItemsDisplayModeLabel": "Display",
   "menuItemsDisplayModeList": "List",
   "menuItemsDisplayModeGrid": "Grid",
   "menuItemsManageTypesAction": "Manage types",
