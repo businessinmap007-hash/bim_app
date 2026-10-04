@@ -52,6 +52,51 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
   late int? _lineOptionId = widget.initialLineOptionId;
   Set<int> _modifierOptionIds = {};
 
+  /// The form as last saved (or as loaded) — «تم الحفظ» shows while nothing differs from it, and the
+  /// button goes back to «حفظ» the moment anything changes. Replaces the snackbar.
+  String? _savedSignature;
+
+  String get _signature => [
+    _nameArController.text.trim(),
+    _nameEnController.text.trim(),
+    _descArController.text.trim(),
+    _descEnController.text.trim(),
+    _priceController.text.trim(),
+    _supplyPriceController.text.trim(),
+    _brandController.text.trim(),
+    _availableQuantityController.text.trim(),
+    _sortController.text.trim(),
+    _sectionId,
+    _saleUnit,
+    _lineOptionId,
+    (_modifierOptionIds.toList()..sort()).join(','),
+    _isActive,
+  ].join('|');
+
+  bool get _isSaved => _initialized && _savedSignature == _signature;
+
+  void _onFieldChanged() {
+    if (_initialized && mounted) setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    for (final c in [
+      _nameArController,
+      _nameEnController,
+      _descArController,
+      _descEnController,
+      _priceController,
+      _supplyPriceController,
+      _brandController,
+      _availableQuantityController,
+      _sortController,
+    ]) {
+      c.addListener(_onFieldChanged);
+    }
+  }
+
   @override
   void dispose() {
     _nameArController.dispose();
@@ -68,7 +113,6 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
 
   void _seedFrom(BusinessMenuItem item) {
     if (_initialized) return;
-    _initialized = true;
     _nameArController.text = item.nameAr;
     _nameEnController.text = item.nameEn ?? '';
     _descArController.text = item.descriptionAr ?? '';
@@ -82,6 +126,8 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
     _saleUnit = item.saleUnit;
     _lineOptionId = item.lineOption?.id;
     _modifierOptionIds = item.modifierOptions.map((o) => o.id).toSet();
+    _initialized = true;
+    _savedSignature = _signature;
   }
 
   Future<void> _save() async {
@@ -153,15 +199,13 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
           sortOrder: int.tryParse(_sortController.text.trim()) ?? 0,
           isActive: _isActive,
         );
-        ref.invalidate(menuItemEditControllerProvider(widget.itemId!));
+        _savedSignature = _signature;
+        await ref.read(menuItemEditControllerProvider(widget.itemId!).notifier).reloadQuietly();
         // A save here can change anything the LIST screen already rendered
         // for this item (name, price, type, brand...) — refresh it too, or
         // the merchant sees the old values until they leave and come back.
         ref.read(menuItemsControllerProvider.notifier).load();
         ref.invalidate(menuVocabularyProvider);
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSave)));
-        }
       }
     } catch (_) {
       if (mounted) setState(() => _error = l10n.commonSomethingWentWrong);
@@ -182,7 +226,7 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
           padding: const EdgeInsets.all(16),
           children: [_buildFormFields(context, l10n, sectionsState.items)],
         ),
-        bottomNavigationBar: _SaveBar(saving: _saving, onSave: _save),
+        bottomNavigationBar: _SaveBar(saving: _saving, saved: false, onSave: _save),
       );
     }
 
@@ -227,7 +271,7 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
         },
       ),
       bottomNavigationBar: async.maybeWhen(
-        data: (_) => _SaveBar(saving: _saving, onSave: _save),
+        data: (_) => _SaveBar(saving: _saving, saved: _isSaved, onSave: _save),
         orElse: () => null,
       ),
     );
@@ -461,8 +505,9 @@ class _AddonServicesSection extends ConsumerWidget {
 
 class _SaveBar extends StatelessWidget {
   final bool saving;
+  final bool saved;
   final VoidCallback onSave;
-  const _SaveBar({required this.saving, required this.onSave});
+  const _SaveBar({required this.saving, required this.saved, required this.onSave});
 
   @override
   Widget build(BuildContext context) {
@@ -472,10 +517,10 @@ class _SaveBar extends StatelessWidget {
       child: SizedBox(
         width: double.infinity,
         child: FilledButton(
-          onPressed: saving ? null : onSave,
+          onPressed: saving || saved ? null : onSave,
           child: saving
               ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
-              : Text(l10n.commonSave),
+              : Text(saved ? l10n.storeTermsSavedDone : l10n.commonSave),
         ),
       ),
     );
