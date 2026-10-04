@@ -51,8 +51,13 @@ class ApiClient {
 
   Dio get raw => _dio;
 
+  /// Laravel's `boolean` rule refuses the string «true» Dio writes for a Dart bool, so a flag goes out
+  /// as 1 / 0 — one place, instead of every caller remembering it (`open_now`, `installments`…).
+  static Map<String, dynamic>? _flags(Map<String, dynamic>? query) =>
+      query?.map((k, v) => MapEntry(k, v is bool ? (v ? 1 : 0) : v));
+
   Future<dynamic> get(String path, {Map<String, dynamic>? query}) =>
-      _unwrap(() => _dio.get(path, queryParameters: query));
+      _unwrap(() => _dio.get(path, queryParameters: _flags(query)));
 
   /// For an endpoint whose body isn't the `{success, data}` envelope — e.g. a
   /// Laravel resource collection response (`{data: [...], links, meta}`),
@@ -61,7 +66,7 @@ class ApiClient {
   /// [get], but returns the full raw body un-unwrapped.
   Future<Map<String, dynamic>> getForBody(String path, {Map<String, dynamic>? query}) async {
     try {
-      final response = await _dio.get(path, queryParameters: query);
+      final response = await _dio.get(path, queryParameters: _flags(query));
       return response.data as Map<String, dynamic>;
     } on DioException catch (e) {
       throw _toApiException(e);
