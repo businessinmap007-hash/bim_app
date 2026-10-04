@@ -147,9 +147,6 @@ final searchControllerProvider =
       return SearchController(ref.watch(searchApiProvider));
     });
 
-/// Marks the location filter that was applied automatically from the account's own city.
-const kMyLocationLabel = '\u0000my-location';
-
 class BusinessListState {
   final List<BusinessSummary> items;
   final bool isLoading;
@@ -212,16 +209,15 @@ class BusinessListController extends StateNotifier<BusinessListState> {
   final DiscoveryApi _api;
   final int childId;
   final int? categoryId;
+
+  /// Where the customer is — it ORDERS the list (their city first); it is not a filter, so a count of 35
+  /// activities never opens onto 2.
+  final int? nearGovernorateId;
+  final int? nearCityId;
   int _page = 1;
 
-  BusinessListController(this._api, this.childId, {this.categoryId, int? governorateId, int? cityId})
-    : super(
-        BusinessListState(
-          governorateId: governorateId,
-          cityId: cityId,
-          locationLabel: governorateId != null ? kMyLocationLabel : null,
-        ),
-      ) {
+  BusinessListController(this._api, this.childId, {this.categoryId, this.nearGovernorateId, this.nearCityId})
+    : super(const BusinessListState()) {
     load();
   }
 
@@ -235,6 +231,8 @@ class BusinessListController extends StateNotifier<BusinessListState> {
         q: state.query,
         governorateId: state.governorateId,
         cityId: state.cityId,
+        nearGovernorateId: nearGovernorateId,
+        nearCityId: nearCityId,
         optionIds: state.optionIds.toList(),
         page: _page,
       );
@@ -258,6 +256,8 @@ class BusinessListController extends StateNotifier<BusinessListState> {
         q: state.query,
         governorateId: state.governorateId,
         cityId: state.cityId,
+        nearGovernorateId: nearGovernorateId,
+        nearCityId: nearCityId,
         optionIds: state.optionIds.toList(),
         page: _page + 1,
       );
@@ -326,8 +326,8 @@ final businessListControllerProvider =
           ref.watch(discoveryApiProvider),
           scope.childId,
           categoryId: scope.categoryId,
-          governorateId: user?.governorateId,
-          cityId: user?.cityId,
+          nearGovernorateId: user?.governorateId,
+          nearCityId: user?.cityId,
         );
       },
     );

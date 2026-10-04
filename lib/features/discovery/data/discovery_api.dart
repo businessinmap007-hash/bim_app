@@ -24,6 +24,9 @@ class DiscoveryApi {
     bool openNow = false,
     int? governorateId,
     int? cityId,
+    // Where the customer is: the server lists the nearest first and hides nobody.
+    int? nearGovernorateId,
+    int? nearCityId,
     List<int> optionIds = const [],
     int page = 1,
     int perPage = 20,
@@ -37,6 +40,8 @@ class DiscoveryApi {
         if (openNow) 'open_now': true,
         'governorate_id': ?governorateId,
         'city_id': ?cityId,
+        'near_governorate_id': ?nearGovernorateId,
+        'near_city_id': ?nearCityId,
         // Dio's default list encoding repeats the bare key with no `[]`
         // (`option_ids=1&option_ids=2`), which PHP's query parser reads as
         // a scalar (last value wins), not an array — Laravel's `array`

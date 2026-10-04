@@ -52,6 +52,10 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
   late int? _lineOptionId = widget.initialLineOptionId;
   Set<int> _modifierOptionIds = {};
 
+  /// The shop services ticked on this item (option ids) — part of the form: a tick turns «حفظ» on and is
+  /// sent with it, like every other field. Null until the item is loaded.
+  Set<int>? _addonOptionIds;
+
   /// The form as last saved (or as loaded) — «تم الحفظ» shows while nothing differs from it, and the
   /// button goes back to «حفظ» the moment anything changes. Replaces the snackbar.
   String? _savedSignature;
@@ -70,6 +74,7 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
     _saleUnit,
     _lineOptionId,
     (_modifierOptionIds.toList()..sort()).join(','),
+    ((_addonOptionIds ?? const <int>{}).toList()..sort()).join(','),
     _isActive,
   ].join('|');
 
@@ -126,6 +131,11 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
     _saleUnit = item.saleUnit;
     _lineOptionId = item.lineOption?.id;
     _modifierOptionIds = item.modifierOptions.map((o) => o.id).toSet();
+    _addonOptionIds = {
+      for (final g in item.addonServices)
+        for (final o in g.options)
+          if (o.enabled) o.id,
+    };
     _initialized = true;
     _savedSignature = _signature;
   }
@@ -199,6 +209,9 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
           sortOrder: int.tryParse(_sortController.text.trim()) ?? 0,
           isActive: _isActive,
         );
+        if (_addonOptionIds != null) {
+          await api.saveItemAddonOptions(widget.itemId!, _addonOptionIds!.toList());
+        }
         _savedSignature = _signature;
         await ref.read(menuItemEditControllerProvider(widget.itemId!).notifier).reloadQuietly();
         // A save here can change anything the LIST screen already rendered
@@ -260,7 +273,15 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
               _VariantsSection(item: item),
               if (item.addonServices.isNotEmpty) ...[
                 const SizedBox(height: 24),
-                _AddonServicesSection(item: item),
+                _AddonServicesSection(
+                  item: item,
+                  ticked: _addonOptionIds ?? const {},
+                  onChanged: (optionId, on) => setState(() {
+                    final next = {...?_addonOptionIds};
+                    on ? next.add(optionId) : next.remove(optionId);
+                    _addonOptionIds = next;
+                  }),
+                ),
               ],
               const SizedBox(height: 24),
               _ExtraGroupsSection(item: item),
@@ -450,32 +471,16 @@ class _ActiveToggleCard extends StatelessWidget {
 /// away at the end of a long form — the one action every visit to this
 /// screen ends with.
 /// «اجعل الإضافات تشيك بوكس، اختار منها ما هو متاح لهذا النوع» — المالك، 2026-10-05. The shop prices its
-/// services once («خدمات المحل»: طريقة الطهي، التجهيز…); here each item ticks the ones it offers. A tick is
-/// saved at once, like the switches that used to stand here.
-class _AddonServicesSection extends ConsumerWidget {
+/// services once («خدمات المحل»: طريقة الطهي، التجهيز…); here each item ticks the ones it offers. The ticks
+/// belong to the form: ticking one turns «حفظ» on, and the save sends them with everything else.
+class _AddonServicesSection extends StatelessWidget {
   final BusinessMenuItem item;
-  const _AddonServicesSection({required this.item});
-
-  Future<void> _toggle(BuildContext context, WidgetRef ref, int optionId, bool on) async {
-    final l10n = AppLocalizations.of(context)!;
-    final ticked = {
-      for (final g in item.addonServices)
-        for (final o in g.options)
-          if (o.enabled) o.id,
-    };
-    on ? ticked.add(optionId) : ticked.remove(optionId);
-    try {
-      await ref.read(businessMenuApiProvider).saveItemAddonOptions(item.id, ticked.toList());
-      await ref.read(menuItemEditControllerProvider(item.id).notifier).reloadQuietly();
-    } catch (_) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
-      }
-    }
-  }
+  final Set<int> ticked;
+  final void Function(int optionId, bool on) onChanged;
+  const _AddonServicesSection({required this.item, required this.ticked, required this.onChanged});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
@@ -492,8 +497,8 @@ class _AddonServicesSection extends ConsumerWidget {
             CheckboxListTile(
               contentPadding: EdgeInsets.zero,
               controlAffinity: ListTileControlAffinity.leading,
-              value: option.enabled,
-              onChanged: (on) => _toggle(context, ref, option.id, on ?? false),
+              value: ticked.contains(option.id),
+              onChanged: (on) => onChanged(option.id, on ?? false),
               title: Text(option.name),
               secondary: Text(option.price.toStringAsFixed(option.price == option.price.roundToDouble() ? 0 : 2)),
             ),
