@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/storage/discovery_view_mode_storage.dart';
 import '../../../core/providers/core_providers.dart';
 import '../../auth/application/auth_controller.dart';
 import '../data/discovery_api.dart';
@@ -44,19 +45,23 @@ final recommendedBusinessesProvider =
     });
 
 /// The «line — modifiers» combinations one specialty sells.
-final offeringLinesProvider = FutureProvider.autoDispose.family<List<OfferingLine>, int>((ref, childId) {
+typedef OfferingLinesQuery = ({int childId, int? categoryId});
+
+final offeringLinesProvider = FutureProvider.autoDispose.family<List<OfferingLine>, OfferingLinesQuery>((ref, q) {
   ref.watch(localeEpochProvider);
-  return ref.watch(discoveryApiProvider).offeringLines(childId: childId);
+  return ref.watch(discoveryApiProvider).offeringLines(childId: q.childId, categoryId: q.categoryId);
 });
 
-typedef ChildOfferingsQuery = ({int childId, String optionKey});
+typedef ChildOfferingsQuery = ({int childId, int? categoryId, String optionKey, bool installments});
 
 /// Priced rows of a specialty; [ChildOfferingsQuery.optionKey] is the comma-joined
 /// option ids of the chosen line ('' = every row).
 final childOfferingsProvider = FutureProvider.autoDispose.family<List<ChildOffering>, ChildOfferingsQuery>((ref, q) {
   ref.watch(localeEpochProvider);
   final ids = q.optionKey.isEmpty ? <int>[] : q.optionKey.split(',').map(int.parse).toList();
-  return ref.watch(discoveryApiProvider).offerings(childId: q.childId, optionIds: ids);
+  return ref
+      .watch(discoveryApiProvider)
+      .offerings(childId: q.childId, categoryId: q.categoryId, installments: q.installments, optionIds: ids);
 });
 
 /// The platform's own service vocabulary (see DiscoveryApi.serviceTypes) —
@@ -148,8 +153,36 @@ final searchControllerProvider =
     });
 
 /// «زر شبكة وقائمة» on the activities list and on the priced items list: one choice for both screens
-/// (true = grid, the default), kept for the session.
-final discoveryGridProvider = StateProvider<bool>((ref) => true);
+/// (true = grid, the default), remembered across restarts once the customer picks one.
+class DiscoveryGridController extends StateNotifier<bool> {
+  final DiscoveryViewModeStorage _storage;
+
+  DiscoveryGridController(this._storage) : super(true) {
+    _load();
+  }
+
+  Future<void> _load() async {
+    try {
+      final stored = await _storage.read();
+      if (stored != null) state = stored;
+    } catch (_) {
+      // storage unavailable: the grid default stands
+    }
+  }
+
+  Future<void> set(bool grid) async {
+    state = grid;
+    try {
+      await _storage.write(grid);
+    } catch (_) {
+      // best-effort; the in-memory switch already took effect
+    }
+  }
+}
+
+final discoveryGridProvider = StateNotifierProvider<DiscoveryGridController, bool>(
+  (ref) => DiscoveryGridController(DiscoveryViewModeStorage()),
+);
 
 class BusinessListState {
   final List<BusinessSummary> items;

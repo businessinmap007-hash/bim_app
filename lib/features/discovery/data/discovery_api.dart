@@ -116,18 +116,27 @@ class DiscoveryApi {
 
   /// GET /discovery/offering-lines — the «line — modifiers» combinations a
   /// specialty sells, each with its priced-row count.
-  Future<List<OfferingLine>> offeringLines({required int childId}) async {
-    final data = await _client.get('/discovery/offering-lines', query: {'child_id': childId}) as Map<String, dynamic>;
+  Future<List<OfferingLine>> offeringLines({required int childId, int? categoryId}) async {
+    final data = await _client.get('/discovery/offering-lines', query: {'child_id': childId, 'category_id': ?categoryId})
+        as Map<String, dynamic>;
     return (data['lines'] as List<dynamic>? ?? []).map((e) => OfferingLine.fromJson(e as Map<String, dynamic>)).toList();
   }
 
   /// GET /discovery/offerings — the priced rows themselves, across shops.
-  Future<List<ChildOffering>> offerings({required int childId, List<int> optionIds = const [], int perPage = 50}) async {
+  Future<List<ChildOffering>> offerings({
+    required int childId,
+    int? categoryId,
+    bool installments = false,
+    List<int> optionIds = const [],
+    int perPage = 50,
+  }) async {
     final data =
         await _client.get(
               '/discovery/offerings',
               query: {
                 'child_id': childId,
+                'category_id': ?categoryId,
+                if (installments) 'installments': true,
                 if (optionIds.isNotEmpty) 'option_ids': ListParam(optionIds, ListFormat.multiCompatible),
                 'per_page': perPage,
               },

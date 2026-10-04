@@ -11,22 +11,30 @@ import '../../application/discovery_providers.dart';
 /// sells; tapping one narrows the list, tapping a row opens the shop.
 class ChildOfferingsScreen extends ConsumerStatefulWidget {
   final int childId;
+  final int? categoryId;
   final String title;
 
-  const ChildOfferingsScreen({super.key, required this.childId, required this.title});
+  const ChildOfferingsScreen({super.key, required this.childId, this.categoryId, required this.title});
 
   @override
   ConsumerState<ChildOfferingsScreen> createState() => _ChildOfferingsScreenState();
 }
 
+String _plain(double v) => v == v.roundToDouble() ? v.toStringAsFixed(0) : v.toStringAsFixed(2);
+
 class _ChildOfferingsScreenState extends ConsumerState<ChildOfferingsScreen> {
   String _optionKey = '';
+
+  /// «غرف نوم — قسط»: only what is bought on instalments.
+  bool _installments = false;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final lines = ref.watch(offeringLinesProvider(widget.childId));
-    final rows = ref.watch(childOfferingsProvider((childId: widget.childId, optionKey: _optionKey)));
+    final lines = ref.watch(offeringLinesProvider((childId: widget.childId, categoryId: widget.categoryId)));
+    final rows = ref.watch(
+      childOfferingsProvider((childId: widget.childId, categoryId: widget.categoryId, optionKey: _optionKey, installments: _installments)),
+    );
     final isGrid = ref.watch(discoveryGridProvider);
 
     return Scaffold(
@@ -35,14 +43,21 @@ class _ChildOfferingsScreenState extends ConsumerState<ChildOfferingsScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-            child: Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: ViewModeToggle(
-                isGrid: isGrid,
-                listLabel: l10n.menuItemsDisplayModeList,
-                gridLabel: l10n.menuItemsDisplayModeGrid,
-                onChanged: (grid) => ref.read(discoveryGridProvider.notifier).state = grid,
-              ),
+            child: Row(
+              children: [
+                ViewModeToggle(
+                  isGrid: isGrid,
+                  listLabel: l10n.menuItemsDisplayModeList,
+                  gridLabel: l10n.menuItemsDisplayModeGrid,
+                  onChanged: (grid) => ref.read(discoveryGridProvider.notifier).set(grid),
+                ),
+                const SizedBox(width: 8),
+                FilterChip(
+                  label: Text(l10n.menuInstalmentsOnly),
+                  selected: _installments,
+                  onSelected: (on) => setState(() => _installments = on),
+                ),
+              ],
             ),
           ),
           SizedBox(
@@ -131,6 +146,13 @@ class _ChildOfferingsScreenState extends ConsumerState<ChildOfferingsScreen> {
                                     style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
                                   ),
                                   const Spacer(),
+                                  if (o.installment != null)
+                                    Text(
+                                      l10n.cardInstalment(_plain(o.installment!.monthly), o.installment!.months),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.primary),
+                                    ),
                                   Text(
                                     '${o.price.toStringAsFixed(o.price == o.price.roundToDouble() ? 0 : 2)} ${o.currency}',
                                     style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
@@ -157,7 +179,11 @@ class _ChildOfferingsScreenState extends ConsumerState<ChildOfferingsScreen> {
                               child: o.businessLogoUrl == null ? const Icon(Icons.storefront_outlined) : null,
                             ),
                             title: Text(o.label),
-                            subtitle: Text(o.businessName),
+                            subtitle: Text(
+                              o.installment == null
+                                  ? o.businessName
+                                  : '${o.businessName}\n${l10n.cardInstalment(_plain(o.installment!.monthly), o.installment!.months)}',
+                            ),
                             trailing: Text(
                               '${o.price.toStringAsFixed(o.price == o.price.roundToDouble() ? 0 : 2)} ${o.currency}',
                               style: Theme.of(context).textTheme.titleSmall,

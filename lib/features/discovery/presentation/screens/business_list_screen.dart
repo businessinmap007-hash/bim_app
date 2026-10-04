@@ -110,7 +110,9 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
             icon: const Icon(Icons.sell_outlined),
             tooltip: l10n.childOfferingsTitle,
             onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => ChildOfferingsScreen(childId: widget.childId, title: widget.title)),
+              MaterialPageRoute(
+                builder: (_) => ChildOfferingsScreen(childId: widget.childId, categoryId: widget.categoryId, title: widget.title),
+              ),
             ),
           ),
         ],
@@ -160,7 +162,7 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
                     isGrid: isGrid,
                     listLabel: l10n.menuItemsDisplayModeList,
                     gridLabel: l10n.menuItemsDisplayModeGrid,
-                    onChanged: (grid) => ref.read(discoveryGridProvider.notifier).state = grid,
+                    onChanged: (grid) => ref.read(discoveryGridProvider.notifier).set(grid),
                   ),
                 ],
               ),

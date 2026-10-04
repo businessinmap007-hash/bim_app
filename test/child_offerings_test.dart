@@ -11,16 +11,24 @@ import 'package:bim_app/l10n/app_localizations.dart';
 
 class _FakeDiscoveryApi implements DiscoveryApi {
   final asked = <List<int>>[];
+  final askedInstalments = <bool>[];
 
   @override
-  Future<List<OfferingLine>> offeringLines({required int childId}) async => const [
+  Future<List<OfferingLine>> offeringLines({required int childId, int? categoryId}) async => const [
     OfferingLine(key: '7', label: 'X-ray', optionIds: [7], offerings: 2),
     OfferingLine(key: '8:9', label: 'Scan — Full', optionIds: [8, 9], offerings: 1),
   ];
 
   @override
-  Future<List<ChildOffering>> offerings({required int childId, List<int> optionIds = const [], int perPage = 50}) async {
+  Future<List<ChildOffering>> offerings({
+    required int childId,
+    int? categoryId,
+    bool installments = false,
+    List<int> optionIds = const [],
+    int perPage = 50,
+  }) async {
     asked.add(optionIds);
+    askedInstalments.add(installments);
     return [
       ChildOffering(
         id: 1,
@@ -68,5 +76,32 @@ void main() {
 
     expect(api.asked.last, [8, 9]);
     expect(find.text('Bone X-ray'), findsOneWidget);
+  });
+
+  testWidgets('the instalments chip asks the server for what is bought on instalments', (tester) async {
+    final api = _FakeDiscoveryApi();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [discoveryApiProvider.overrideWithValue(api)],
+        child: MaterialApp(
+          locale: const Locale('en'),
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          home: const ChildOfferingsScreen(childId: 4, categoryId: 22, title: 'Furniture'),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(api.askedInstalments.last, isFalse);
+
+    await tester.tap(find.byType(FilterChip));
+    await tester.pumpAndSettle();
+
+    expect(api.askedInstalments.last, isTrue);
   });
 }

@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import '../../../business/data/models/menu_item_summary.dart' show CardInstalment;
 
 /// One tappable «line — modifiers» combination a specialty sells, with how many
 /// priced rows carry it (`GET /discovery/offering-lines`). [optionIds] go
@@ -31,6 +32,9 @@ class ChildOffering {
   final String businessName;
   final String? businessLogoUrl;
 
+  /// «تقسيط من … شهريًا» when this row can be bought on instalments.
+  final CardInstalment? installment;
+
   const ChildOffering({
     required this.id,
     required this.source,
@@ -41,6 +45,7 @@ class ChildOffering {
     required this.businessId,
     required this.businessName,
     this.businessLogoUrl,
+    this.installment,
   });
 
   factory ChildOffering.fromJson(Map<String, dynamic> json) {
@@ -57,6 +62,9 @@ class ChildOffering {
       businessId: (business['id'] as num?)?.toInt() ?? 0,
       businessName: business['name'] as String? ?? '',
       businessLogoUrl: Env.assetUrl(business['logo'] as String?),
+      installment: json['installment'] is Map<String, dynamic>
+          ? CardInstalment.fromJson(json['installment'] as Map<String, dynamic>)
+          : null,
     );
   }
 }

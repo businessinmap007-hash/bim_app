@@ -28,13 +28,38 @@ class _TrainingTemplateEditScreenState extends ConsumerState<TrainingTemplateEdi
   bool _saving = false;
   String? _error;
 
+  /// The form as last saved (or loaded): «تم الحفظ» shows while nothing differs, «حفظ» the moment it does.
+  String? _savedSignature;
+
+  String get _signature => [
+    _titleController.text.trim(),
+    _goalController.text.trim(),
+    _notesController.text.trim(),
+    _weeksController.text.trim(),
+  ].join('|');
+
+  bool get _isSaved => _initialized && _savedSignature == _signature;
+
+  void _onFieldChanged() {
+    if (_initialized && mounted) setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    for (final c in [_titleController, _goalController, _notesController, _weeksController]) {
+      c.addListener(_onFieldChanged);
+    }
+  }
+
   void _seedFrom(TrainingTemplate t) {
     if (_initialized) return;
-    _initialized = true;
     _titleController.text = t.title;
     _goalController.text = t.goal ?? '';
     _notesController.text = t.notes ?? '';
     _weeksController.text = t.durationWeeks?.toString() ?? '';
+    _initialized = true;
+    _savedSignature = _signature;
   }
 
   @override
@@ -65,9 +90,7 @@ class _TrainingTemplateEditScreenState extends ConsumerState<TrainingTemplateEdi
             notes: _notesController.text.trim(),
             durationWeeks: int.tryParse(_weeksController.text.trim()),
           );
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSave)));
-      }
+      _savedSignature = _signature;
     } catch (e) {
       if (mounted) {
         setState(() => _error = e is ApiException ? e.message : l10n.commonSomethingWentWrong);
@@ -150,10 +173,10 @@ class _TrainingTemplateEditScreenState extends ConsumerState<TrainingTemplateEdi
               ],
               const SizedBox(height: 12),
               FilledButton(
-                onPressed: _saving ? null : _save,
+                onPressed: _saving || _isSaved ? null : _save,
                 child: _saving
                     ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                    : Text(l10n.commonSave),
+                    : Text(_isSaved ? l10n.storeTermsSavedDone : l10n.commonSave),
               ),
               const SizedBox(height: 24),
               _ExercisesSection(template: template),
