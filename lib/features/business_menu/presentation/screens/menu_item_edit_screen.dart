@@ -214,9 +214,9 @@ class _MenuItemEditScreenState extends ConsumerState<MenuItemEditScreen> {
               _buildFormFields(context, l10n, sectionsState.items),
               const SizedBox(height: 24),
               _VariantsSection(item: item),
-              if (item.addonChoices.isNotEmpty) ...[
+              if (item.addonServices.isNotEmpty) ...[
                 const SizedBox(height: 24),
-                _AddonChoicesSection(item: item),
+                _AddonServicesSection(item: item),
               ],
               const SizedBox(height: 24),
               _ExtraGroupsSection(item: item),
@@ -405,19 +405,24 @@ class _ActiveToggleCard extends StatelessWidget {
 /// The save action, pinned to the bottom of the screen instead of scrolling
 /// away at the end of a long form — the one action every visit to this
 /// screen ends with.
-/// «طريقة الطهي» and the shop's other services a restaurant offers PER ITEM: a switch on the grill, none on
-/// the salad. The prices are the shop's own («خدمات المحل»); this only says which dishes offer them.
-class _AddonChoicesSection extends ConsumerWidget {
+/// «اجعل الإضافات تشيك بوكس، اختار منها ما هو متاح لهذا النوع» — المالك، 2026-10-05. The shop prices its
+/// services once («خدمات المحل»: طريقة الطهي، التجهيز…); here each item ticks the ones it offers. A tick is
+/// saved at once, like the switches that used to stand here.
+class _AddonServicesSection extends ConsumerWidget {
   final BusinessMenuItem item;
-  const _AddonChoicesSection({required this.item});
+  const _AddonServicesSection({required this.item});
 
-  Future<void> _set(BuildContext context, WidgetRef ref, AddonChoice choice, bool on) async {
+  Future<void> _toggle(BuildContext context, WidgetRef ref, int optionId, bool on) async {
     final l10n = AppLocalizations.of(context)!;
-    final enabled = {for (final c in item.addonChoices) if (c.enabled) c.groupId};
-    on ? enabled.add(choice.groupId) : enabled.remove(choice.groupId);
+    final ticked = {
+      for (final g in item.addonServices)
+        for (final o in g.options)
+          if (o.enabled) o.id,
+    };
+    on ? ticked.add(optionId) : ticked.remove(optionId);
     try {
-      await ref.read(businessMenuApiProvider).saveItemAddons(item.id, enabled.toList());
-      ref.invalidate(menuItemEditControllerProvider(item.id));
+      await ref.read(businessMenuApiProvider).saveItemAddonOptions(item.id, ticked.toList());
+      await ref.read(menuItemEditControllerProvider(item.id).notifier).reloadQuietly();
     } catch (_) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
@@ -436,13 +441,19 @@ class _AddonChoicesSection extends ConsumerWidget {
         Text(l10n.itemAddonsTitle, style: theme.textTheme.titleSmall),
         const SizedBox(height: 4),
         Text(l10n.itemAddonsHint, style: theme.textTheme.bodySmall),
-        for (final choice in item.addonChoices)
-          SwitchListTile(
-            contentPadding: EdgeInsets.zero,
-            value: choice.enabled,
-            onChanged: (on) => _set(context, ref, choice, on),
-            title: Text(choice.name),
-          ),
+        for (final group in item.addonServices) ...[
+          const SizedBox(height: 12),
+          Text(group.name, style: theme.textTheme.labelLarge),
+          for (final option in group.options)
+            CheckboxListTile(
+              contentPadding: EdgeInsets.zero,
+              controlAffinity: ListTileControlAffinity.leading,
+              value: option.enabled,
+              onChanged: (on) => _toggle(context, ref, option.id, on ?? false),
+              title: Text(option.name),
+              secondary: Text(option.price.toStringAsFixed(option.price == option.price.roundToDouble() ? 0 : 2)),
+            ),
+        ],
       ],
     );
   }
@@ -1159,7 +1170,7 @@ class _ExtraGroupsSection extends ConsumerWidget {
             ),
           ],
         ),
-        for (final g in item.extraGroups)
+        for (final g in item.extraGroups.where((g) => g.sourceGroupId == null))
           Card(
             margin: const EdgeInsets.only(top: 8),
             child: ListTile(
@@ -1317,7 +1328,7 @@ class _ExtrasSection extends ConsumerWidget {
             ),
           ],
         ),
-        for (final e in item.extras)
+        for (final e in item.extras.where((e) => e.sourceOptionId == null))
           () {
             final group = e.extraGroupId == null
                 ? null

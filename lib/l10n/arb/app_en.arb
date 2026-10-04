@@ -2132,7 +2132,7 @@
   "techPricingAddPlan": "Add an instalment plan",
   "techPricingPlanBelowCash": "The instalment price cannot be below the cash price.",
   "itemAddonsTitle": "Shop services on this item",
-  "itemAddonsHint": "Switch a service (like the cooking method) on only for the items that offer it. Prices are set once in «Shop services».",
+  "itemAddonsHint": "Tick what this item offers from the shop services (cooking method, preparation…). Prices are set once in «Shop services».",
   "weightGramsChip": "{grams} g",
   "weightKilo": "kg",
   "weightChoose": "Quantity (weight)",

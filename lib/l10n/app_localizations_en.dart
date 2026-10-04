@@ -6257,7 +6257,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get itemAddonsHint =>
-      'Switch a service (like the cooking method) on only for the items that offer it. Prices are set once in «Shop services».';
+      'Tick what this item offers from the shop services (cooking method, preparation…). Prices are set once in «Shop services».';
 
   @override
   String weightGramsChip(int grams) {

@@ -11602,7 +11602,7 @@ abstract class AppLocalizations {
   /// No description provided for @itemAddonsHint.
   ///
   /// In ar, this message translates to:
-  /// **'فعّل الخدمة (مثل طريقة الطهي) على الأصناف التى تقدّمها فقط. الأسعار تُحدَّد مرة واحدة من «خدمات المحل».'**
+  /// **'اختر ما يتوفر لهذا الصنف من خدمات المحل (طريقة الطهي، التجهيز…). الأسعار تُحدَّد مرة واحدة من «خدمات المحل».'**
   String get itemAddonsHint;
 
   /// No description provided for @weightGramsChip.

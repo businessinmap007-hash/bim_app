@@ -270,6 +270,16 @@ class MenuItemEditController extends StateNotifier<AsyncValue<BusinessMenuItem>>
     }
   }
 
+  /// Fetch the item again WITHOUT flashing the loading state, so the form keeps its scroll position
+  /// (a tick on a checkbox must not throw the merchant back to the top).
+  Future<void> reloadQuietly() async {
+    try {
+      state = AsyncValue.data(await _api.item(itemId));
+    } catch (_) {
+      // keep what is on screen
+    }
+  }
+
   Future<void> addImage(String filePath) async {
     await _api.addImage(itemId, filePath);
     await load();

@@ -185,6 +185,9 @@ class BusinessMenuItem {
   /// The shop's services this merchant switches on per item («طريقة الطهي» on the grill, not on the salad).
   /// Empty when the shop carries its services on every item.
   final List<AddonChoice> addonChoices;
+
+  /// The shop's priced services as checkboxes: which of them THIS item offers.
+  final List<AddonServiceGroup> addonServices;
   final List<MenuExtraGroup> extraGroups;
   final List<MenuExtra> extras;
 
@@ -212,6 +215,7 @@ class BusinessMenuItem {
     this.variants = const [],
     this.paymentPlans = const [],
     this.addonChoices = const [],
+    this.addonServices = const [],
     this.extraGroups = const [],
     this.extras = const [],
   });
@@ -262,6 +266,10 @@ class BusinessMenuItem {
             ?.map((e) => AddonChoice.fromJson(e as Map<String, dynamic>))
             .toList() ??
         const [],
+    addonServices: (json['addon_services'] as List<dynamic>?)
+            ?.map((e) => AddonServiceGroup.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        const [],
     extraGroups: (json['extra_groups'] as List<dynamic>?)
             ?.map((e) => MenuExtraGroup.fromJson(e as Map<String, dynamic>))
             .toList() ??
@@ -285,6 +293,37 @@ class PaymentPlanRow {
     months: (json['months'] as num).toInt(),
     down: (json['down'] as num?)?.toDouble(),
     totalPrice: (json['unit_price'] as num?)?.toDouble() ?? 0,
+  );
+}
+
+/// A shop service («طريقة الطهي») with its priced options, each ticked or not on THIS item.
+class AddonServiceGroup {
+  final int groupId;
+  final String name;
+  final List<AddonServiceOption> options;
+  const AddonServiceGroup({required this.groupId, required this.name, required this.options});
+
+  factory AddonServiceGroup.fromJson(Map<String, dynamic> json) => AddonServiceGroup(
+    groupId: (json['group_id'] as num).toInt(),
+    name: json['group_name'] as String? ?? '',
+    options: (json['options'] as List<dynamic>? ?? const [])
+        .map((e) => AddonServiceOption.fromJson(e as Map<String, dynamic>))
+        .toList(),
+  );
+}
+
+class AddonServiceOption {
+  final int id;
+  final String name;
+  final double price;
+  final bool enabled;
+  const AddonServiceOption({required this.id, required this.name, required this.price, required this.enabled});
+
+  factory AddonServiceOption.fromJson(Map<String, dynamic> json) => AddonServiceOption(
+    id: (json['id'] as num).toInt(),
+    name: json['name'] as String? ?? '',
+    price: (json['price'] as num?)?.toDouble() ?? 0,
+    enabled: json['enabled'] as bool? ?? false,
   );
 }
 

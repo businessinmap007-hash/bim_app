@@ -460,6 +460,11 @@ class BusinessMenuApi {
     );
   }
 
+  /// Tick the shop's priced services this item offers — the option ids ticked (every other one is off here).
+  Future<void> saveItemAddonOptions(int itemId, List<int> optionIds) async {
+    await _client.put('/business/menu/items/$itemId/addon-options', data: {'option_ids': optionIds});
+  }
+
   /// Which of the shop's per-item services this item offers — the group ids switched on (others off).
   Future<void> saveItemAddons(int itemId, List<int> groupIds) async {
     await _client.put('/business/menu/items/$itemId/addons', data: {'group_ids': groupIds});

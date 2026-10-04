@@ -6234,7 +6234,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get itemAddonsHint =>
-      'فعّل الخدمة (مثل طريقة الطهي) على الأصناف التى تقدّمها فقط. الأسعار تُحدَّد مرة واحدة من «خدمات المحل».';
+      'اختر ما يتوفر لهذا الصنف من خدمات المحل (طريقة الطهي، التجهيز…). الأسعار تُحدَّد مرة واحدة من «خدمات المحل».';
 
   @override
   String weightGramsChip(int grams) {

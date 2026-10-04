@@ -54,12 +54,16 @@ class MenuExtraGroup {
   final String selectionType;
   final bool isActive;
 
+  /// Set when the group comes from the shop's services («طريقة الطهي»): it is ticked on the item, not edited.
+  final int? sourceGroupId;
+
   const MenuExtraGroup({
     required this.id,
     required this.nameAr,
     this.nameEn,
     required this.selectionType,
     required this.isActive,
+    this.sourceGroupId,
   });
 
   bool get isSingle => selectionType == selectionSingle;
@@ -70,6 +74,7 @@ class MenuExtraGroup {
     nameEn: json['name_en'] as String?,
     selectionType: json['selection_type'] as String? ?? selectionMultiple,
     isActive: json['is_active'] as bool,
+    sourceGroupId: (json['source_group_id'] as num?)?.toInt(),
   );
 }
 
@@ -84,6 +89,9 @@ class MenuExtra {
   final int maxQty;
   final bool isActive;
 
+  /// Set when the extra comes from a priced shop service: ticked on the item, not edited.
+  final int? sourceOptionId;
+
   const MenuExtra({
     required this.id,
     this.extraGroupId,
@@ -92,6 +100,7 @@ class MenuExtra {
     required this.price,
     required this.maxQty,
     required this.isActive,
+    this.sourceOptionId,
   });
 
   factory MenuExtra.fromJson(Map<String, dynamic> json) => MenuExtra(
@@ -102,5 +111,6 @@ class MenuExtra {
     price: (json['price'] as num).toDouble(),
     maxQty: json['max_qty'] as int,
     isActive: json['is_active'] as bool,
+    sourceOptionId: (json['source_option_id'] as num?)?.toInt(),
   );
 }
