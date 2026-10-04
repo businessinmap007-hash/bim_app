@@ -11544,6 +11544,54 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الصنف'**
   String get cartLineBase;
+
+  /// No description provided for @paymentPlanCash.
+  ///
+  /// In ar, this message translates to:
+  /// **'كاش'**
+  String get paymentPlanCash;
+
+  /// No description provided for @paymentPlanMonths.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقسيط على {months} شهر'**
+  String paymentPlanMonths(int months);
+
+  /// No description provided for @storeTermsSavedDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الحفظ'**
+  String get storeTermsSavedDone;
+
+  /// No description provided for @techPricingPlansTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'خطط الدفع (أقساط)'**
+  String get techPricingPlansTitle;
+
+  /// No description provided for @techPricingPlansHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر أعلاه هو سعر الكاش. أضف خطة تقسيط: عدد الأشهر، والمقدم إن وجد، وسعر الوحدة بالتقسيط. العميل يختار كاش أو إحدى الخطط.'**
+  String get techPricingPlansHint;
+
+  /// No description provided for @techPricingPlanTotal.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر الوحدة بالتقسيط'**
+  String get techPricingPlanTotal;
+
+  /// No description provided for @techPricingAddPlan.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة خطة تقسيط'**
+  String get techPricingAddPlan;
+
+  /// No description provided for @techPricingPlanBelowCash.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر التقسيط لا يقل عن سعر الكاش.'**
+  String get techPricingPlanBelowCash;
 }
 
 class _AppLocalizationsDelegate

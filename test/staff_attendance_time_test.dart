@@ -3,7 +3,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:bim_app/features/staff/application/staff_groups_providers.dart';
 import 'package:bim_app/features/staff/application/staff_providers.dart';
 import 'package:bim_app/features/staff/data/models/staff_group.dart';
 import 'package:bim_app/features/staff/data/models/staff_membership.dart';
@@ -16,7 +15,8 @@ import 'package:bim_app/l10n/app_localizations.dart';
 // this raw UTC one, to the manager reading it.
 const _checkedInIso = '2026-01-01T09:00:00.000000Z';
 
-String _hhmm(DateTime dt) => '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+String _hhmm(DateTime dt) =>
+    '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
 
 class _FakeStaffApi implements StaffApi {
   @override
@@ -31,7 +31,11 @@ class _FakeStaffApi implements StaffApi {
           'name': 'Ali',
           'is_active': true,
           'operations_today': 2,
-          'attendance': {'is_present': true, 'checked_in_at': _checkedInIso, 'checked_out_at': null},
+          'attendance': {
+            'is_present': true,
+            'checked_in_at': _checkedInIso,
+            'checked_out_at': null,
+          },
         },
       ],
     }),
@@ -42,27 +46,54 @@ class _FakeStaffApi implements StaffApi {
 }
 
 void main() {
-  test('a genuine UTC checked_in_at converts to local, keeping the same instant', () {
-    final member = StaffGroupMember.fromJson({
-      'user_id': 1,
-      'name': 'Ali',
-      'is_active': true,
-      'operations_today': 0,
-      'attendance': {'is_present': true, 'checked_in_at': _checkedInIso, 'checked_out_at': null},
-    });
+  test(
+    'a genuine UTC checked_in_at converts to local, keeping the same instant',
+    () {
+      final member = StaffGroupMember.fromJson({
+        'user_id': 1,
+        'name': 'Ali',
+        'is_active': true,
+        'operations_today': 0,
+        'attendance': {
+          'is_present': true,
+          'checked_in_at': _checkedInIso,
+          'checked_out_at': null,
+        },
+      });
 
-    expect(member.checkedInAt, isNotNull);
-    expect(member.checkedInAt!.isUtc, isFalse, reason: 'must be converted to local, not left as UTC');
-    expect(member.checkedInAt!.toUtc(), DateTime.parse(_checkedInIso).toUtc(), reason: 'same instant, only the representation changes');
-  });
+      expect(member.checkedInAt, isNotNull);
+      expect(
+        member.checkedInAt!.isUtc,
+        isFalse,
+        reason: 'must be converted to local, not left as UTC',
+      );
+      expect(
+        member.checkedInAt!.toUtc(),
+        DateTime.parse(_checkedInIso).toUtc(),
+        reason: 'same instant, only the representation changes',
+      );
+    },
+  );
 
-  test('the parallel AttendanceStatus model (my_work_screen) does the same conversion', () {
-    final status = AttendanceStatus.fromJson({'is_present': true, 'checked_in_at': _checkedInIso, 'checked_out_at': null});
-    expect(status.checkedInAt!.isUtc, isFalse);
-    expect(status.checkedInAt!.toUtc(), DateTime.parse(_checkedInIso).toUtc());
-  });
+  test(
+    'the parallel AttendanceStatus model (my_work_screen) does the same conversion',
+    () {
+      final status = AttendanceStatus.fromJson({
+        'is_present': true,
+        'checked_in_at': _checkedInIso,
+        'checked_out_at': null,
+      });
+      expect(status.checkedInAt!.isUtc, isFalse);
+      expect(
+        status.checkedInAt!.toUtc(),
+        DateTime.parse(_checkedInIso).toUtc(),
+      );
+    },
+  );
 
-  testWidgets('the manager sees the check-in time, in local wall-clock time', (tester) async {
+  testWidgets('the manager sees the check-in time, in local wall-clock time', (
+    tester,
+  ) async {
     final expectedLocal = _hhmm(DateTime.parse(_checkedInIso).toLocal());
 
     await tester.pumpWidget(

@@ -6223,4 +6223,32 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cartLineBase => 'Item';
+
+  @override
+  String get paymentPlanCash => 'Cash';
+
+  @override
+  String paymentPlanMonths(int months) {
+    return 'Instalments over $months months';
+  }
+
+  @override
+  String get storeTermsSavedDone => 'Saved';
+
+  @override
+  String get techPricingPlansTitle => 'Payment plans (instalments)';
+
+  @override
+  String get techPricingPlansHint =>
+      'The price above is the cash price. Add an instalment plan: the months, a down payment if any, and what one unit costs on it. The customer picks cash or a plan.';
+
+  @override
+  String get techPricingPlanTotal => 'Unit price on the plan';
+
+  @override
+  String get techPricingAddPlan => 'Add an instalment plan';
+
+  @override
+  String get techPricingPlanBelowCash =>
+      'The instalment price cannot be below the cash price.';
 }

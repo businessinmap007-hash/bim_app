@@ -22,6 +22,16 @@ class AppButtonStyles {
     padding: _padding,
   );
 
+  /// A small button for a secondary action beside a title («متابعة»): the theme's full-size slab is
+  /// meant for the page's primary action, not for a row of icons.
+  static const ButtonStyle small = ButtonStyle(
+    minimumSize: WidgetStatePropertyAll(Size(0, 34)),
+    padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 14, vertical: 4)),
+    textStyle: WidgetStatePropertyAll(TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    visualDensity: VisualDensity.compact,
+  );
+
   /// The outlined partner: a 1.5 ring and text in the interactive colour — navy on
   /// light, gold on dark (the canvas's gold ring would vanish on the cream background).
   static ButtonStyle buyOutline(BuildContext context) {

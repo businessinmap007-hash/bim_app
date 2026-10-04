@@ -50,6 +50,7 @@ class SharedCartController extends StateNotifier<SharedCartState> {
     required int offeringId,
     int qty = 1,
     int? sizeId,
+    int? planId,
     List<int> extras = const [],
   }) async {
     final cart = await _api.addItem(
@@ -58,6 +59,7 @@ class SharedCartController extends StateNotifier<SharedCartState> {
       offeringId: offeringId,
       qty: qty,
       sizeId: sizeId,
+      planId: planId,
       extras: extras,
     );
     state = state.copyWith(cart: cart);

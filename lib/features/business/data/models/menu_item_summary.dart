@@ -33,6 +33,31 @@ class MenuItemVariant {
   );
 }
 
+/// One way of paying an item on instalments («كاش» is the item's own price and has no row): over
+/// [months] months, [down] paid with the first one (per unit), at [markupPercent] over the cash price.
+/// See `payment_plans` in MenuDiscoveryController::itemPayload().
+class MenuItemPaymentPlan {
+  final int id;
+  final int months;
+  final double? down;
+  final double markupPercent;
+
+  const MenuItemPaymentPlan({required this.id, required this.months, this.down, required this.markupPercent});
+
+  factory MenuItemPaymentPlan.fromJson(Map<String, dynamic> json) => MenuItemPaymentPlan(
+    id: (json['id'] as num).toInt(),
+    months: (json['months'] as num).toInt(),
+    down: (json['down'] as num?)?.toDouble(),
+    markupPercent: (json['markup_percent'] as num?)?.toDouble() ?? 0,
+  );
+
+  /// What ONE unit costs on this plan, given what it costs in cash.
+  double unitPrice(double cash) => (cash * (1 + markupPercent / 100) * 100).round() / 100;
+
+  /// The regular month, per unit: what is left after the down payment, over the months.
+  double monthly(double cash) => (unitPrice(cash) - (down ?? 0)) / months;
+}
+
 /// A group of extras deciding how they're picked — see
 /// MenuDiscoveryController's `extra_groups`.
 class MenuItemExtraGroup {
@@ -149,6 +174,9 @@ class MenuItemSummary {
   final MenuItemCondition? condition;
   final MenuItemBranch? lineOption;
   final List<MenuItemVariant> variants;
+
+  /// «كاش أو أقساط» — only for the kinds that sell on instalments; empty = cash only.
+  final List<MenuItemPaymentPlan> paymentPlans;
   final List<MenuItemExtraGroup> extraGroups;
   final List<MenuItemExtra> extras;
   final List<MenuItemSpec> specs;
@@ -185,6 +213,7 @@ class MenuItemSummary {
     this.condition,
     this.lineOption,
     required this.variants,
+    this.paymentPlans = const [],
     this.extraGroups = const [],
     required this.extras,
     this.specs = const [],
@@ -224,7 +253,7 @@ class MenuItemSummary {
   /// A catalog-linked item (real specs) always counts as one even with no
   /// variants/extras of its own — a real device deserves its full detail
   /// page (see TechProductDetailScreen), never a bare quantity stepper.
-  bool get hasChoices => variants.isNotEmpty || extras.isNotEmpty || specs.isNotEmpty;
+  bool get hasChoices => variants.isNotEmpty || paymentPlans.isNotEmpty || extras.isNotEmpty || specs.isNotEmpty;
 
   /// The lowest variant price, when there's more than one size/price to
   /// choose from — the card shows "From X" instead of a single price.
@@ -261,6 +290,9 @@ class MenuItemSummary {
         : null,
     variants: (json['variants'] as List<dynamic>? ?? [])
         .map((e) => MenuItemVariant.fromJson(e as Map<String, dynamic>))
+        .toList(),
+    paymentPlans: (json['payment_plans'] as List<dynamic>? ?? [])
+        .map((e) => MenuItemPaymentPlan.fromJson(e as Map<String, dynamic>))
         .toList(),
     extraGroups: (json['extra_groups'] as List<dynamic>? ?? [])
         .map((e) => MenuItemExtraGroup.fromJson(e as Map<String, dynamic>))

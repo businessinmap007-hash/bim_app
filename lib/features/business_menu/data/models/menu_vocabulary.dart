@@ -48,6 +48,10 @@ class VocabularyGroup {
   final String display;
   final bool multiple;
   final int descriptiveSort;
+
+  /// What kind of product this group sells («أنواع التفاصيل»): the type decides the units and whether
+  /// payment plans («كاش / أقساط») exist — only for phones and computers, cars and furniture.
+  final bool allowsPaymentPlans;
   const VocabularyGroup({
     required this.groupId,
     required this.groupName,
@@ -62,6 +66,7 @@ class VocabularyGroup {
     this.display = 'auto',
     this.multiple = true,
     this.descriptiveSort = 0,
+    this.allowsPaymentPlans = false,
   });
 
   factory VocabularyGroup.fromJson(Map<String, dynamic> json) => VocabularyGroup(
@@ -79,6 +84,7 @@ class VocabularyGroup {
     display: json['display'] as String? ?? 'auto',
     multiple: json['multiple'] as bool? ?? true,
     descriptiveSort: (json['descriptive_sort'] as num?)?.toInt() ?? 0,
+    allowsPaymentPlans: (json['detail_type'] as Map<String, dynamic>?)?['allows_payment_plans'] as bool? ?? false,
     detailProfile: json['detail_profile'] is Map<String, dynamic>
         ? DetailProfile.fromJson(json['detail_profile'] as Map<String, dynamic>)
         : null,

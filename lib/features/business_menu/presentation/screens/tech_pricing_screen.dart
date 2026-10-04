@@ -1,3 +1,4 @@
+import '../../../../app/theme/app_button_styles.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -51,13 +52,14 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
   final Map<int, TextEditingController> _axisPrice = {};
   final Set<int> _axisOn = {};
   /// «على كم شهر؟» — for an option that is an instalment plan.
-  final Map<int, TextEditingController> _axisMonths = {};
-  final Map<int, TextEditingController> _axisDown = {};
+
+  /// «كاش أو أقساط» — the instalment plans being edited (cash is the price above).
+  final List<({TextEditingController months, TextEditingController down, TextEditingController total})> _plans = [];
+  bool _plansSeeded = false;
   bool _axisSeeded = false;
 
   /// An option of the payment group the merchant sells on instalments — the
   /// server flags it («تقسيط»، «تقسيط بدون فوائد»).
-  bool _isInstalment(VocabularyOptionRef o) => o.isInstallment;
   CatalogProductRef? _product;
   /// A kind with no catalog: the merchant names the item and picks, from the
   /// option groups that DESCRIBE it («مودرن»، «زان»), what it is made of.
@@ -123,11 +125,10 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     for (final c in _axisPrice.values) {
       c.dispose();
     }
-    for (final c in _axisMonths.values) {
-      c.dispose();
-    }
-    for (final c in _axisDown.values) {
-      c.dispose();
+    for (final p in _plans) {
+      p.months.dispose();
+      p.down.dispose();
+      p.total.dispose();
     }
     for (final c in _unitText.values) {
       c.dispose();
@@ -221,24 +222,32 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     final axis = ref.read(menuVocabularyProvider).asData?.value.priceAxis;
     // With a price axis each option offered has ITS OWN price; the item's own
     // price is the first one offered (the default the customer sees first).
-    final axisRows = <({VocabularyOptionRef option, double price, int? months, double? down})>[
+    final axisRows = <({VocabularyOptionRef option, double price})>[
       if (axis != null)
         for (final o in axis.options)
           if (_axisOn.contains(o.id) && (parse(_axisPrice[o.id]?.text ?? '') ?? 0) > 0)
-            (option: o, price: parse(_axisPrice[o.id]!.text)!, months: int.tryParse((_axisMonths[o.id]?.text ?? '').trim()), down: parse(_axisDown[o.id]?.text ?? '')),
+            (option: o, price: parse(_axisPrice[o.id]!.text)!),
     ];
     final price = axis != null ? (axisRows.isEmpty ? null : axisRows.first.price) : parse(_priceController.text);
     if (price == null || price < 0) {
       setState(() => _error = l10n.menuPriceRequired);
       return;
     }
-    // An instalment price must say over how many months it is paid.
-    if (axisRows.any((r) => _isInstalment(r.option) && (r.months ?? 0) < 2)) {
+    // «كاش أو أقساط»: each plan says its months, what a unit costs on it (never below cash) and a down
+    // payment less than that.
+    final plans = <({int months, double? down, double total})>[
+      for (final p in _plans)
+        (months: int.tryParse(p.months.text.trim()) ?? 0, down: parse(p.down.text), total: parse(p.total.text) ?? 0),
+    ];
+    if (plans.any((p) => p.months < 2)) {
       setState(() => _error = l10n.techPricingInstallmentMonthsRequired);
       return;
     }
-    // …and a down payment, when there is one, is less than the price.
-    if (axisRows.any((r) => _isInstalment(r.option) && (r.down ?? 0) >= r.price)) {
+    if (plans.any((p) => p.total < price)) {
+      setState(() => _error = l10n.techPricingPlanBelowCash);
+      return;
+    }
+    if (plans.any((p) => (p.down ?? 0) >= p.total)) {
       setState(() => _error = l10n.techPricingInstallmentDownInvalid);
       return;
     }
@@ -299,6 +308,8 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
         );
       }
       if (axis != null) await _syncAxisVariants(api, itemId, axis, axisRows);
+      // Only a kind that sells on instalments takes plans; an empty list clears them.
+      if (_allowsPlans(ref.read(menuVocabularyProvider).asData?.value)) await api.savePaymentPlans(itemId, plans);
       for (final p in _newPhotos) {
         await api.addPickedImage(itemId, p.media);
       }
@@ -310,15 +321,15 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     }
   }
 
-  /// Keeps the item's payment variants equal to what the merchant switched on:
+  /// Keeps the item's price-axis variants equal to what the merchant switched on:
   /// a price per offered option (the first is the default), the rest removed.
   Future<void> _syncAxisVariants(
     BusinessMenuApi api,
     int itemId,
     PriceAxis axis,
-    List<({VocabularyOptionRef option, double price, int? months, double? down})> rows,
+    List<({VocabularyOptionRef option, double price})> rows,
   ) async {
-    final existing = (await api.item(itemId)).variants.where((v) => v.type == 'payment').toList();
+    final existing = (await api.item(itemId)).variants.where((v) => v.type == 'axis').toList();
     final byName = {for (final v in existing) v.nameAr: v};
     final onById = {for (final r in rows) r.option.id: r};
     var first = true;
@@ -330,12 +341,10 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
         if (current != null) await api.deleteVariant(itemId, current.id);
         continue;
       }
-      final months = _isInstalment(o) ? row.months : null;
-      final down = _isInstalment(o) && (row.down ?? 0) > 0 ? row.down : null;
       if (current == null) {
-        await api.addVariant(itemId, type: 'payment', nameAr: o.nameAr, nameEn: o.nameEn, price: row.price, isDefault: first, installmentMonths: months, installmentDown: down);
+        await api.addVariant(itemId, type: 'axis', nameAr: o.nameAr, nameEn: o.nameEn, price: row.price, isDefault: first);
       } else {
-        await api.updateVariant(itemId, current.id, type: 'payment', nameAr: o.nameAr, nameEn: o.nameEn, price: row.price, isDefault: first, installmentMonths: months, installmentDown: down);
+        await api.updateVariant(itemId, current.id, type: 'axis', nameAr: o.nameAr, nameEn: o.nameEn, price: row.price, isDefault: first);
       }
       first = false;
     }
@@ -347,21 +356,17 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     _axisSeeded = true;
     for (final o in axis.options) {
       _axisPrice[o.id] ??= TextEditingController();
-      _axisMonths[o.id] ??= TextEditingController();
-      _axisDown[o.id] ??= TextEditingController();
     }
     final item = widget.existingItem;
     if (item == null) return;
     ref.read(businessMenuApiProvider).item(item.id).then((full) {
       if (!mounted) return;
       setState(() {
-        for (final v in full.variants.where((v) => v.type == 'payment')) {
+        for (final v in full.variants.where((v) => v.type == 'axis')) {
           final o = axis.options.where((o) => o.nameAr == v.nameAr).firstOrNull;
           if (o == null) continue;
           _axisOn.add(o.id);
           _axisPrice[o.id]!.text = (v.price ?? 0).toStringAsFixed(0);
-          _axisMonths[o.id]!.text = v.installmentMonths?.toString() ?? '';
-          _axisDown[o.id]!.text = v.installmentDown == null ? '' : v.installmentDown!.toStringAsFixed(0);
         }
       });
     });
@@ -381,6 +386,30 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
         if (!f.perItem && byCode[f.code] != null) byCode[f.code]!,
     ];
     return ordered.isEmpty ? specs : ordered;
+  }
+
+  /// «كاش أو أقساط» exists only for the kinds that sell on instalments (phones, computers, cars, furniture).
+  bool _allowsPlans(MenuVocabulary? v) =>
+      v?.lines.any((g) => g.allowsPaymentPlans && g.options.any((o) => o.id == widget.lineOption.id)) ?? false;
+
+  /// Fills the plan rows once from the item being edited.
+  void _seedPlans() {
+    if (_plansSeeded) return;
+    _plansSeeded = true;
+    final item = widget.existingItem;
+    if (item == null) return;
+    ref.read(businessMenuApiProvider).item(item.id).then((full) {
+      if (!mounted) return;
+      setState(() {
+        for (final p in full.paymentPlans) {
+          _plans.add((
+            months: TextEditingController(text: '${p.months}'),
+            down: TextEditingController(text: p.down == null ? '' : p.down!.toStringAsFixed(0)),
+            total: TextEditingController(text: p.totalPrice.toStringAsFixed(0)),
+          ));
+        }
+      });
+    });
   }
 
   DetailProfile? _profileFor(MenuVocabulary? v) => v?.lines
@@ -405,6 +434,8 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     // decided in the admin's «أشكال المنيو», never here.
     final detailProfile = _profileFor(vocabAsync.asData?.value);
     _seedUnitFields(detailProfile);
+    final allowsPlans = _allowsPlans(vocabAsync.asData?.value);
+    if (allowsPlans) _seedPlans();
     // «طريقة السداد كاش وتقسيط وهم سعرين مختلفين» — المالك، 2026-10-03: a trade
     // whose price axis is set in «مكونات الخدمة» asks for one price per option.
     final priceAxis = vocabAsync.asData?.value.priceAxis;
@@ -622,34 +653,6 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
                       ),
                     ],
                   ),
-                  if (_isInstalment(o) && _axisOn.contains(o.id))
-                    Padding(
-                      padding: const EdgeInsetsDirectional.only(start: 12, end: 4, bottom: 8),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: _axisMonths[o.id],
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                              decoration: InputDecoration(
-                                labelText: l10n.techPricingInstallmentMonths,
-                                hintText: '12',
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: TextField(
-                              controller: _axisDown[o.id],
-                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                              inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,٫]'))],
-                              decoration: InputDecoration(labelText: l10n.techPricingInstallmentDown),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                     ],
                   ),
                 ),
@@ -692,6 +695,69 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
               ),
             ],
           ),
+          // «كاش أو أقساط»: the price above is cash; each plan says over how many months, a down payment and
+          // what ONE unit costs on it. Only for the kinds that sell on instalments — never for food.
+          if (allowsPlans) ...[
+            label(l10n.techPricingPlansTitle),
+            Text(l10n.techPricingPlansHint, style: theme.textTheme.bodySmall),
+            const SizedBox(height: 8),
+            for (var i = 0; i < _plans.length; i++)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _plans[i].months,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                        decoration: InputDecoration(labelText: l10n.techPricingInstallmentMonths, hintText: '12'),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: TextField(
+                        controller: _plans[i].down,
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,٫]'))],
+                        decoration: InputDecoration(labelText: l10n.techPricingInstallmentDown),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: TextField(
+                        controller: _plans[i].total,
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,٫]'))],
+                        decoration: InputDecoration(labelText: l10n.techPricingPlanTotal),
+                      ),
+                    ),
+                    IconButton(
+                      visualDensity: VisualDensity.compact,
+                      onPressed: () => setState(() {
+                        final p = _plans.removeAt(i);
+                        p.months.dispose();
+                        p.down.dispose();
+                        p.total.dispose();
+                      }),
+                      icon: const Icon(Icons.delete_outline, size: 20),
+                    ),
+                  ],
+                ),
+              ),
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: OutlinedButton.icon(
+                style: AppButtonStyles.small,
+                onPressed: () => setState(
+                  () => _plans.add((months: TextEditingController(), down: TextEditingController(), total: TextEditingController())),
+                ),
+                icon: const Icon(Icons.add, size: 18),
+                label: Text(l10n.techPricingAddPlan),
+              ),
+            ),
+            const SizedBox(height: 12),
+          ],
           // «الوصف» is a field the kind chooses in «أشكال المنيو»: ticked, this box
           // shows; dropped, it is gone. A basic menu has no kind, so it always shows.
           if (detailProfile == null || detailProfile.fields.any((f) => f.code == 'description')) ...[

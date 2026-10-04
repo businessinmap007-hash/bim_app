@@ -2121,5 +2121,14 @@
   "shopAddonsHint": "Price your shop's services once (grilled, fried, baked tray…). The price is per unit sold (per kg, for example); every item carries them, the customer picks one, and the invoice lists it as its own line. Leave a field empty if you do not offer the service.",
   "shopAddonPriceHint": "Price",
   "shopAddonsSaved": "Service prices saved.",
-  "cartLineBase": "Item"
+  "cartLineBase": "Item",
+  "paymentPlanCash": "Cash",
+  "paymentPlanMonths": "Instalments over {months} months",
+  "@paymentPlanMonths": {"placeholders": {"months": {"type": "int"}}},
+  "storeTermsSavedDone": "Saved",
+  "techPricingPlansTitle": "Payment plans (instalments)",
+  "techPricingPlansHint": "The price above is the cash price. Add an instalment plan: the months, a down payment if any, and what one unit costs on it. The customer picks cash or a plan.",
+  "techPricingPlanTotal": "Unit price on the plan",
+  "techPricingAddPlan": "Add an instalment plan",
+  "techPricingPlanBelowCash": "The instalment price cannot be below the cash price."
 }

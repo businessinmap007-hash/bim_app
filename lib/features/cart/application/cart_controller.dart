@@ -55,9 +55,10 @@ class CartController extends StateNotifier<CartState> {
     required int offeringId,
     int qty = 1,
     int? sizeId,
+    int? planId,
     List<int> extras = const [],
   }) async {
-    final updated = await _api.addItem(kind: kind, offeringId: offeringId, qty: qty, sizeId: sizeId, extras: extras);
+    final updated = await _api.addItem(kind: kind, offeringId: offeringId, qty: qty, sizeId: sizeId, planId: planId, extras: extras);
     _mergeCart(updated);
     return updated;
   }

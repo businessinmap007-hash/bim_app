@@ -6201,4 +6201,31 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get cartLineBase => 'الصنف';
+
+  @override
+  String get paymentPlanCash => 'كاش';
+
+  @override
+  String paymentPlanMonths(int months) {
+    return 'تقسيط على $months شهر';
+  }
+
+  @override
+  String get storeTermsSavedDone => 'تم الحفظ';
+
+  @override
+  String get techPricingPlansTitle => 'خطط الدفع (أقساط)';
+
+  @override
+  String get techPricingPlansHint =>
+      'السعر أعلاه هو سعر الكاش. أضف خطة تقسيط: عدد الأشهر، والمقدم إن وجد، وسعر الوحدة بالتقسيط. العميل يختار كاش أو إحدى الخطط.';
+
+  @override
+  String get techPricingPlanTotal => 'سعر الوحدة بالتقسيط';
+
+  @override
+  String get techPricingAddPlan => 'إضافة خطة تقسيط';
+
+  @override
+  String get techPricingPlanBelowCash => 'سعر التقسيط لا يقل عن سعر الكاش.';
 }

@@ -17,7 +17,23 @@ class StoreTermsScreen extends ConsumerStatefulWidget {
 class _StoreTermsScreenState extends ConsumerState<StoreTermsScreen> {
   /// group id -> chosen option ids; null until the first load seeds it.
   Map<int, Set<int>>? _chosen;
+
+  /// What was last saved — «تم الحفظ» shows while nothing differs from it.
+  Map<int, Set<int>>? _saved;
   bool _saving = false;
+
+  Map<int, Set<int>> _copy(Map<int, Set<int>> m) => {for (final e in m.entries) e.key: {...e.value}};
+
+  /// False until the first save of this visit — an untouched screen offers «حفظ», not «تم الحفظ».
+  bool get _isSaved {
+    final saved = _saved, chosen = _chosen;
+    if (saved == null || chosen == null) return false;
+    for (final e in chosen.entries) {
+      final was = saved[e.key] ?? const <int>{};
+      if (was.length != e.value.length || !was.containsAll(e.value)) return false;
+    }
+    return true;
+  }
 
   Map<int, Set<int>> _seed(List<StoreTermGroup> groups) => {
     for (final g in groups) g.groupId: {for (final o in g.options.where((o) => o.selected)) o.id},
@@ -31,8 +47,7 @@ class _StoreTermsScreenState extends ConsumerState<StoreTermsScreen> {
       await ref.read(businessMenuApiProvider).saveStoreTerms({
         for (final e in _chosen!.entries) e.key: e.value.toList(),
       });
-      ref.invalidate(storeTermsProvider);
-      messenger.showSnackBar(SnackBar(content: Text(l10n.storeTermsSaved)));
+      _saved = _copy(_chosen!);
     } catch (_) {
       messenger.showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
     } finally {
@@ -93,8 +108,9 @@ class _StoreTermsScreenState extends ConsumerState<StoreTermsScreen> {
                   child: SizedBox(
                     width: double.infinity,
                     child: FilledButton(
-                      onPressed: _saving ? null : _save,
-                      child: Text(l10n.storeTermsSave),
+                      // «تم الحفظ» while nothing differs from what was saved; «حفظ» again on any change.
+                      onPressed: _saving || _isSaved ? null : _save,
+                      child: Text(_isSaved ? l10n.storeTermsSavedDone : l10n.storeTermsSave),
                     ),
                   ),
                 ),

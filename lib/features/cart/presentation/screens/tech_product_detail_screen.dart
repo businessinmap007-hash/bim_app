@@ -1,3 +1,4 @@
+import '../widgets/payment_plan_picker.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -50,6 +51,9 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
   int? _variantId;
   final Set<int> _extraIds = {};
   int _qty = 1;
+
+  /// The payment plan picked on the line; null = cash.
+  int? _planId;
   bool _submitting = false;
   final _photos = PageController();
   int _photo = 0;
@@ -85,12 +89,9 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
   }
 
   double get _unitPrice {
-    var base = widget.item.basePrice;
-    for (final v in widget.item.variants) {
-      if (v.id == _variantId) {
-        base = v.price;
-        break;
-      }
+    var base = _variantPrice;
+    for (final plan in widget.item.paymentPlans) {
+      if (plan.id == _planId) base = plan.unitPrice(base);
     }
     final extrasSum = widget.item.extras.where((e) => _extraIds.contains(e.id)).fold(0.0, (sum, e) => sum + e.price);
     return base + extrasSum;
@@ -122,6 +123,7 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
           offeringId: widget.item.id,
           qty: _qty,
           sizeId: _variantId,
+          planId: _planId,
           extras: _extraIds.toList(),
         );
         if (mounted) {
@@ -137,6 +139,7 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
         offeringId: widget.item.id,
         qty: _qty,
         sizeId: _variantId,
+        planId: _planId,
         extras: _extraIds.toList(),
       );
       if (!mounted) return;
@@ -363,6 +366,15 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
                           : null,
                       secondary: Text(v.price.toStringAsFixed(0)),
                     ),
+                  ),
+                ],
+                if (item.paymentPlans.isNotEmpty) ...[
+                  const SizedBox(height: 18),
+                  PaymentPlanPicker(
+                    cashUnitPrice: _variantPrice,
+                    plans: item.paymentPlans,
+                    selectedPlanId: _planId,
+                    onChanged: (id) => setState(() => _planId = id),
                   ),
                 ],
                 for (final group in item.extraGroups) ...[

@@ -1,3 +1,4 @@
+import 'payment_plan_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -50,6 +51,9 @@ class _AddToCartSheet extends ConsumerStatefulWidget {
 
 class _AddToCartSheetState extends ConsumerState<_AddToCartSheet> {
   int? _variantId;
+
+  /// The payment plan picked on the line; null = cash.
+  int? _planId;
   final Set<int> _extraIds = {};
   int _qty = 1;
   bool _submitting = false;
@@ -70,13 +74,22 @@ class _AddToCartSheetState extends ConsumerState<_AddToCartSheet> {
     }
   }
 
-  double get _unitPrice {
+  /// What ONE unit costs in cash: the item's price, or the picked size/condition's.
+  double get _cashUnitPrice {
     var base = widget.item.basePrice;
     for (final v in widget.item.variants) {
       if (v.id == _variantId) {
         base = v.price;
         break;
       }
+    }
+    return base;
+  }
+
+  double get _unitPrice {
+    var base = _cashUnitPrice;
+    for (final plan in widget.item.paymentPlans) {
+      if (plan.id == _planId) base = plan.unitPrice(base);
     }
     final extrasSum = widget.item.extras.where((e) => _extraIds.contains(e.id)).fold(0.0, (sum, e) => sum + e.price);
     return base + extrasSum;
@@ -111,6 +124,7 @@ class _AddToCartSheetState extends ConsumerState<_AddToCartSheet> {
           offeringId: widget.item.id,
           qty: _qty,
           sizeId: _variantId,
+          planId: _planId,
           extras: _extraIds.toList(),
         );
         if (mounted) {
@@ -126,6 +140,7 @@ class _AddToCartSheetState extends ConsumerState<_AddToCartSheet> {
         offeringId: widget.item.id,
         qty: _qty,
         sizeId: _variantId,
+        planId: _planId,
         extras: _extraIds.toList(),
       );
       if (!mounted) return;
@@ -227,6 +242,12 @@ class _AddToCartSheetState extends ConsumerState<_AddToCartSheet> {
                 ),
                 const SizedBox(height: 8),
               ],
+              PaymentPlanPicker(
+                cashUnitPrice: _cashUnitPrice,
+                plans: item.paymentPlans,
+                selectedPlanId: _planId,
+                onChanged: (id) => setState(() => _planId = id),
+              ),
               // Grouped extras first — each group is either a radio (one
               // pick, e.g. «المقاس») or a checkbox list (any number, e.g.
               // «الصوصات»), per the group's own selection_type. Extras with

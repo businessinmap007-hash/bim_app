@@ -18,7 +18,16 @@ class ShopAddonsScreen extends ConsumerStatefulWidget {
 class _ShopAddonsScreenState extends ConsumerState<ShopAddonsScreen> {
   /// option id -> its price field, seeded once from the first load.
   Map<int, TextEditingController>? _fields;
+
+  /// The prices as last saved (text per option) — «تم الحفظ» shows while nothing differs from them.
+  Map<int, String>? _saved;
   bool _saving = false;
+
+  bool get _isSaved {
+    final saved = _saved, fields = _fields;
+    if (saved == null || fields == null) return false;
+    return fields.entries.every((e) => (saved[e.key] ?? '') == e.value.text.trim());
+  }
 
   @override
   void dispose() {
@@ -44,8 +53,7 @@ class _ShopAddonsScreenState extends ConsumerState<ShopAddonsScreen> {
       await ref.read(businessMenuApiProvider).saveShopAddons({
         for (final e in _fields!.entries) e.key: double.tryParse(e.value.text.replaceAll(',', '.').trim()) ?? 0,
       });
-      ref.invalidate(shopAddonsProvider);
-      messenger.showSnackBar(SnackBar(content: Text(l10n.shopAddonsSaved)));
+      _saved = {for (final e in _fields!.entries) e.key: e.value.text.trim()};
     } catch (_) {
       messenger.showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
     } finally {
@@ -90,6 +98,7 @@ class _ShopAddonsScreenState extends ConsumerState<ShopAddonsScreen> {
                                 width: 130,
                                 child: TextField(
                                   controller: _fields![option.id],
+                                  onChanged: (_) => setState(() {}),
                                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                   inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]'))],
                                   decoration: InputDecoration(hintText: l10n.shopAddonPriceHint),
@@ -108,7 +117,10 @@ class _ShopAddonsScreenState extends ConsumerState<ShopAddonsScreen> {
                   padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
                   child: SizedBox(
                     width: double.infinity,
-                    child: FilledButton(onPressed: _saving ? null : _save, child: Text(l10n.storeTermsSave)),
+                    child: FilledButton(
+                      onPressed: _saving || _isSaved ? null : _save,
+                      child: Text(_isSaved ? l10n.storeTermsSavedDone : l10n.storeTermsSave),
+                    ),
                   ),
                 ),
               ),

@@ -1,3 +1,4 @@
+import '../../../../app/theme/app_button_styles.dart';
 import '../../../business_menu/presentation/widgets/store_terms_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -333,8 +334,8 @@ class _FollowButton extends ConsumerWidget {
     }
 
     return isFollowing
-        ? OutlinedButton(onPressed: toggle, child: Text(l10n.businessUnfollow))
-        : FilledButton(onPressed: toggle, child: Text(l10n.businessFollow));
+        ? OutlinedButton(style: AppButtonStyles.small, onPressed: toggle, child: Text(l10n.businessUnfollow))
+        : FilledButton(style: AppButtonStyles.small, onPressed: toggle, child: Text(l10n.businessFollow));
   }
 }
 

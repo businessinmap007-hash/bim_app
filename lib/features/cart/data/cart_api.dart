@@ -19,6 +19,7 @@ class CartApi {
     required int offeringId,
     int qty = 1,
     int? sizeId,
+    int? planId,
     List<int> extras = const [],
   }) async {
     final data =
@@ -29,6 +30,7 @@ class CartApi {
                 'offering_id': offeringId,
                 'qty': qty,
                 'size_id': ?sizeId,
+                'plan_id': ?planId,
                 if (extras.isNotEmpty) 'extras': extras,
               },
             )

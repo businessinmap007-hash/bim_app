@@ -178,6 +178,9 @@ class BusinessMenuItem {
   final List<ItemAttributeValue> attributes;
   final List<MenuItemImage> images;
   final List<MenuVariant> variants;
+
+  /// «كاش أو أقساط» — what one unit costs on each instalment plan (cash is [basePrice]).
+  final List<PaymentPlanRow> paymentPlans;
   final List<MenuExtraGroup> extraGroups;
   final List<MenuExtra> extras;
 
@@ -203,6 +206,7 @@ class BusinessMenuItem {
     this.attributes = const [],
     this.images = const [],
     this.variants = const [],
+    this.paymentPlans = const [],
     this.extraGroups = const [],
     this.extras = const [],
   });
@@ -245,6 +249,10 @@ class BusinessMenuItem {
             ?.map((e) => MenuVariant.fromJson(e as Map<String, dynamic>))
             .toList() ??
         const [],
+    paymentPlans: (json['payment_plans'] as List<dynamic>?)
+            ?.map((e) => PaymentPlanRow.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        const [],
     extraGroups: (json['extra_groups'] as List<dynamic>?)
             ?.map((e) => MenuExtraGroup.fromJson(e as Map<String, dynamic>))
             .toList() ??
@@ -253,5 +261,20 @@ class BusinessMenuItem {
             ?.map((e) => MenuExtra.fromJson(e as Map<String, dynamic>))
             .toList() ??
         const [],
+  );
+}
+
+/// One instalment plan of an item as the merchant wrote it: [months], the [down] payment paid with the
+/// first month, and what ONE unit costs in total on the plan ([totalPrice]).
+class PaymentPlanRow {
+  final int months;
+  final double? down;
+  final double totalPrice;
+  const PaymentPlanRow({required this.months, this.down, required this.totalPrice});
+
+  factory PaymentPlanRow.fromJson(Map<String, dynamic> json) => PaymentPlanRow(
+    months: (json['months'] as num).toInt(),
+    down: (json['down'] as num?)?.toDouble(),
+    totalPrice: (json['unit_price'] as num?)?.toDouble() ?? 0,
   );
 }

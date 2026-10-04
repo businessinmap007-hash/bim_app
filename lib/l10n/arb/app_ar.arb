@@ -2121,5 +2121,14 @@
   "shopAddonsHint": "سعّر خدمات المحل مرة واحدة (مثل المشوى والمقلى والصينية). السعر لكل وحدة بيع (للكيلو مثلًا)، وتظهر لكل أصنافك ويختار العميل واحدة منها، وتظهر فى الفاتورة سطرًا مستقلًا. اترك الخانة فارغة لو لا تقدّم الخدمة.",
   "shopAddonPriceHint": "السعر",
   "shopAddonsSaved": "تم حفظ أسعار الخدمات.",
-  "cartLineBase": "الصنف"
+  "cartLineBase": "الصنف",
+  "paymentPlanCash": "كاش",
+  "paymentPlanMonths": "تقسيط على {months} شهر",
+  "@paymentPlanMonths": {"placeholders": {"months": {"type": "int"}}},
+  "storeTermsSavedDone": "تم الحفظ",
+  "techPricingPlansTitle": "خطط الدفع (أقساط)",
+  "techPricingPlansHint": "السعر أعلاه هو سعر الكاش. أضف خطة تقسيط: عدد الأشهر، والمقدم إن وجد، وسعر الوحدة بالتقسيط. العميل يختار كاش أو إحدى الخطط.",
+  "techPricingPlanTotal": "سعر الوحدة بالتقسيط",
+  "techPricingAddPlan": "إضافة خطة تقسيط",
+  "techPricingPlanBelowCash": "سعر التقسيط لا يقل عن سعر الكاش."
 }
