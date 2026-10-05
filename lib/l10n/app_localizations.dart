@@ -12157,6 +12157,54 @@ abstract class AppLocalizations {
   /// **'لم يعد السيرفر يحتفظ بالتشخيص والملاحظات لهذه الروشتة المنتهية — نسختك على هذا الهاتف هي الوحيدة الآن. احتفظ بنسخة احتياطية مشفّرة.'**
   String get rxPurgedNote;
 
+  /// No description provided for @rxControlledBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'دواء مخدر'**
+  String get rxControlledBadge;
+
+  /// No description provided for @rxHandwrittenTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'في الروشتة دواء مخدر'**
+  String get rxHandwrittenTitle;
+
+  /// No description provided for @rxHandwrittenHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'منعًا للاحتيال صوّر الروشتة المكتوبة بخط يدك على الورق. الصيدلية تقارنها بالورقة التي مع المريض.'**
+  String get rxHandwrittenHint;
+
+  /// No description provided for @rxHandwrittenTake.
+  ///
+  /// In ar, this message translates to:
+  /// **'صوّر الروشتة المكتوبة بخط يدك'**
+  String get rxHandwrittenTake;
+
+  /// No description provided for @rxHandwrittenRetake.
+  ///
+  /// In ar, this message translates to:
+  /// **'أعد التصوير'**
+  String get rxHandwrittenRetake;
+
+  /// No description provided for @rxHandwrittenRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف صورة الروشتة المكتوبة بخط اليد أولًا.'**
+  String get rxHandwrittenRequired;
+
+  /// No description provided for @rxControlledComparePaper.
+  ///
+  /// In ar, this message translates to:
+  /// **'دواء مخدر — قارن هذه الصورة بالروشتة الورقية التي مع المريض قبل الصرف.'**
+  String get rxControlledComparePaper;
+
+  /// No description provided for @rxControlledNoPaper.
+  ///
+  /// In ar, this message translates to:
+  /// **'دواء مخدر وليس معه صورة روشتة بخط الطبيب — لا يمكن صرفه.'**
+  String get rxControlledNoPaper;
+
   /// No description provided for @rxNoCopy.
   ///
   /// In ar, this message translates to:

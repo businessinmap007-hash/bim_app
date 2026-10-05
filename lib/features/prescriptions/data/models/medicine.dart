@@ -8,6 +8,9 @@ class Medicine {
   final String? manufacturer;
   final String? drugClass;
   final String? route;
+
+  /// Narcotic / psychotropic: a prescription with it needs a photo of the doctor's handwritten paper.
+  final bool isControlled;
   final double? priceEgp;
   final String? priceCapturedAt;
   final int usesCount;
@@ -20,12 +23,14 @@ class Medicine {
     this.manufacturer,
     this.drugClass,
     this.route,
+    this.isControlled = false,
     this.priceEgp,
     this.priceCapturedAt,
     this.usesCount = 0,
   });
 
-  String get displayName => strength != null && strength!.isNotEmpty ? '$name — $strength' : name;
+  String get displayName =>
+      strength != null && strength!.isNotEmpty ? '$name — $strength' : name;
 
   factory Medicine.fromJson(Map<String, dynamic> json) => Medicine(
     id: (json['id'] as num).toInt(),
@@ -35,6 +40,7 @@ class Medicine {
     manufacturer: json['manufacturer'] as String?,
     drugClass: json['drug_class'] as String?,
     route: json['route'] as String?,
+    isControlled: json['is_controlled'] as bool? ?? false,
     priceEgp: (json['price_egp'] as num?)?.toDouble(),
     priceCapturedAt: json['price_captured_at'] as String?,
     usesCount: (json['uses_count'] as num?)?.toInt() ?? 0,

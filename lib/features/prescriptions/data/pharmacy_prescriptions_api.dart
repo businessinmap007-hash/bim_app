@@ -1,3 +1,4 @@
+import '../../../core/env/env.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/network/paginated.dart';
 import 'models/prescription.dart';
@@ -60,6 +61,11 @@ class PrescriptionCheck {
   final DateTime? issuedAt;
   final DateTime? dispensedAt;
 
+  /// A narcotic / psychotropic drug is on it: the photo of the doctor's handwritten paper is what the pharmacist
+  /// compares with the paper in the patient's hand (null = none on file, so it cannot be dispensed).
+  final bool controlled;
+  final String? handwrittenImage;
+
   const PrescriptionCheck({
     required this.authentic,
     this.status = '',
@@ -68,9 +74,13 @@ class PrescriptionCheck {
     this.doctorName,
     this.issuedAt,
     this.dispensedAt,
+    this.controlled = false,
+    this.handwrittenImage,
   });
 
-  factory PrescriptionCheck.fromJson(Map<String, dynamic> json) => PrescriptionCheck(
+  factory PrescriptionCheck.fromJson(
+    Map<String, dynamic> json,
+  ) => PrescriptionCheck(
     authentic: json['authentic'] as bool? ?? false,
     status: json['status'] as String? ?? '',
     canDispense: json['can_dispense'] as bool? ?? false,
@@ -78,6 +88,8 @@ class PrescriptionCheck {
     doctorName: (json['doctor'] as Map<String, dynamic>?)?['name'] as String?,
     issuedAt: DateTime.tryParse('${json['issued_at'] ?? ''}')?.toLocal(),
     dispensedAt: DateTime.tryParse('${json['dispensed_at'] ?? ''}')?.toLocal(),
+    controlled: json['controlled'] as bool? ?? false,
+    handwrittenImage: Env.assetUrl(json['handwritten_image'] as String?),
   );
 }
 
@@ -87,66 +99,98 @@ class PharmacyPrescriptionsApi {
 
   /// A prescription the patient showed on his phone: authentic = exactly what the doctor wrote.
   Future<PrescriptionCheck> verify(int id, Map<String, dynamic> content) async {
-    final data = await _client.post('/pharmacy/prescriptions/verify', data: {'id': id, 'content': content}) as Map<String, dynamic>;
+    final data =
+        await _client.post(
+              '/pharmacy/prescriptions/verify',
+              data: {'id': id, 'content': content},
+            )
+            as Map<String, dynamic>;
     return PrescriptionCheck.fromJson(data);
   }
 
   /// Hand the medicine over against a shown prescription — once; the server re-verifies.
   Future<void> dispenseInPerson(int id, Map<String, dynamic> content) async {
-    await _client.post('/pharmacy/prescriptions/dispense-in-person', data: {'id': id, 'content': content});
+    await _client.post(
+      '/pharmacy/prescriptions/dispense-in-person',
+      data: {'id': id, 'content': content},
+    );
   }
 
-  Future<Paginated<Prescription>> incoming({String? status, int page = 1}) async {
-    final data = await _client.get(
-      '/pharmacy/prescriptions',
-      query: {if (status != null && status.isNotEmpty) 'status': status, 'page': page},
-    ) as Map<String, dynamic>;
+  Future<Paginated<Prescription>> incoming({
+    String? status,
+    int page = 1,
+  }) async {
+    final data =
+        await _client.get(
+              '/pharmacy/prescriptions',
+              query: {
+                if (status != null && status.isNotEmpty) 'status': status,
+                'page': page,
+              },
+            )
+            as Map<String, dynamic>;
     return Paginated.fromJson(data, Prescription.fromJson);
   }
 
   Future<Prescription> price(int id, List<PricedItemInput> items) async {
-    final data = await _client.post(
-      '/pharmacy/prescriptions/$id/price',
-      data: {'items': items.map((i) => i.toJson()).toList()},
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.post(
+              '/pharmacy/prescriptions/$id/price',
+              data: {'items': items.map((i) => i.toJson()).toList()},
+            )
+            as Map<String, dynamic>;
     return Prescription.fromJson(data['prescription'] as Map<String, dynamic>);
   }
 
   Future<Prescription> prepare(int id) async {
-    final data = await _client.post('/pharmacy/prescriptions/$id/prepare') as Map<String, dynamic>;
+    final data =
+        await _client.post('/pharmacy/prescriptions/$id/prepare')
+            as Map<String, dynamic>;
     return Prescription.fromJson(data['prescription'] as Map<String, dynamic>);
   }
 
   Future<Prescription> ready(int id) async {
-    final data = await _client.post('/pharmacy/prescriptions/$id/ready') as Map<String, dynamic>;
+    final data =
+        await _client.post('/pharmacy/prescriptions/$id/ready')
+            as Map<String, dynamic>;
     return Prescription.fromJson(data['prescription'] as Map<String, dynamic>);
   }
 
   Future<Prescription> dispense(int id) async {
-    final data = await _client.post('/pharmacy/prescriptions/$id/dispense') as Map<String, dynamic>;
+    final data =
+        await _client.post('/pharmacy/prescriptions/$id/dispense')
+            as Map<String, dynamic>;
     return Prescription.fromJson(data['prescription'] as Map<String, dynamic>);
   }
 
   Future<Prescription> reject(int id) async {
-    final data = await _client.post('/pharmacy/prescriptions/$id/reject') as Map<String, dynamic>;
+    final data =
+        await _client.post('/pharmacy/prescriptions/$id/reject')
+            as Map<String, dynamic>;
     return Prescription.fromJson(data['prescription'] as Map<String, dynamic>);
   }
 
   /// Reply to a direct customer request with real, priced items.
   Future<Prescription> quote(int id, List<MedicineQuoteLineInput> items) async {
-    final data = await _client.post(
-      '/pharmacy/prescriptions/$id/quote',
-      data: {'items': items.map((i) => i.toJson()).toList()},
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.post(
+              '/pharmacy/prescriptions/$id/quote',
+              data: {'items': items.map((i) => i.toJson()).toList()},
+            )
+            as Map<String, dynamic>;
     return Prescription.fromJson(data['prescription'] as Map<String, dynamic>);
   }
 
   /// Cannot fulfil a direct customer request (unreadable photo, out of stock...).
   Future<Prescription> decline(int id, {String? note}) async {
-    final data = await _client.post(
-      '/pharmacy/prescriptions/$id/decline',
-      data: {if (note != null && note.trim().isNotEmpty) 'note': note.trim()},
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.post(
+              '/pharmacy/prescriptions/$id/decline',
+              data: {
+                if (note != null && note.trim().isNotEmpty) 'note': note.trim(),
+              },
+            )
+            as Map<String, dynamic>;
     return Prescription.fromJson(data['prescription'] as Map<String, dynamic>);
   }
 }

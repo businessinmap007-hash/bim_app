@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -37,18 +40,24 @@ class IssuePrescriptionScreen extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<IssuePrescriptionScreen> createState() => _IssuePrescriptionScreenState();
+  ConsumerState<IssuePrescriptionScreen> createState() =>
+      _IssuePrescriptionScreenState();
 }
 
-class _IssuePrescriptionScreenState extends ConsumerState<IssuePrescriptionScreen> {
+class _IssuePrescriptionScreenState
+    extends ConsumerState<IssuePrescriptionScreen> {
   final _diagnosisController = TextEditingController();
   final _conditionController = TextEditingController();
   final _notesController = TextEditingController();
   final List<_DraftItem> _items = [];
+
+  /// «لا بد من صورة روشتة بخط الطبيب»: the photo of the paper prescription, taken live, when a controlled drug is on it.
+  String? _paperPath;
   bool _saving = false;
   String? _error;
 
   bool get _isRevise => widget.existing != null;
+  bool get _needsPaper => _items.any((d) => d.medicine.isControlled);
 
   @override
   void initState() {
@@ -65,7 +74,11 @@ class _IssuePrescriptionScreenState extends ConsumerState<IssuePrescriptionScree
         if (medicineId == null) continue;
         _items.add(
           _DraftItem(
-            medicine: Medicine(id: medicineId, name: item.name ?? ''),
+            medicine: Medicine(
+              id: medicineId,
+              name: item.name ?? '',
+              isControlled: item.isControlled,
+            ),
             input: PrescriptionItemInput(
               medicineId: medicineId,
               dosage: item.dosage,
@@ -113,7 +126,9 @@ class _IssuePrescriptionScreenState extends ConsumerState<IssuePrescriptionScree
             }
             setSheetState(() => loading = true);
             try {
-              final found = await ref.read(medicinesApiProvider).search(q.trim());
+              final found = await ref
+                  .read(medicinesApiProvider)
+                  .search(q.trim());
               setSheetState(() {
                 results = found;
                 loading = false;
@@ -125,28 +140,42 @@ class _IssuePrescriptionScreenState extends ConsumerState<IssuePrescriptionScree
           }
 
           Future<void> addNew() async {
-            final nameController = TextEditingController(text: searchController.text.trim());
+            final nameController = TextEditingController(
+              text: searchController.text.trim(),
+            );
             final strengthController = TextEditingController();
             final added = await showModalBottomSheet<bool>(
               context: sheetContext,
               isScrollControlled: true,
               builder: (addContext) => Padding(
-                padding: EdgeInsets.fromLTRB(20, 20, 20, 20 + MediaQuery.of(addContext).viewInsets.bottom),
+                padding: EdgeInsets.fromLTRB(
+                  20,
+                  20,
+                  20,
+                  20 + MediaQuery.of(addContext).viewInsets.bottom,
+                ),
                 child: SafeArea(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(l10n.medicineAddTitle, style: Theme.of(addContext).textTheme.titleMedium),
+                      Text(
+                        l10n.medicineAddTitle,
+                        style: Theme.of(addContext).textTheme.titleMedium,
+                      ),
                       const SizedBox(height: 16),
                       TextField(
                         controller: nameController,
-                        decoration: InputDecoration(labelText: l10n.medicineNameHint),
+                        decoration: InputDecoration(
+                          labelText: l10n.medicineNameHint,
+                        ),
                       ),
                       const SizedBox(height: 12),
                       TextField(
                         controller: strengthController,
-                        decoration: InputDecoration(labelText: l10n.medicineStrengthHint),
+                        decoration: InputDecoration(
+                          labelText: l10n.medicineStrengthHint,
+                        ),
                       ),
                       const SizedBox(height: 16),
                       FilledButton(
@@ -162,36 +191,64 @@ class _IssuePrescriptionScreenState extends ConsumerState<IssuePrescriptionScree
             try {
               final medicine = await ref
                   .read(medicinesApiProvider)
-                  .add(name: nameController.text.trim(), strength: strengthController.text.trim());
-              if (sheetContext.mounted) Navigator.of(sheetContext).pop(medicine);
+                  .add(
+                    name: nameController.text.trim(),
+                    strength: strengthController.text.trim(),
+                  );
+              if (sheetContext.mounted) {
+                Navigator.of(sheetContext).pop(medicine);
+              }
             } catch (e) {
               if (sheetContext.mounted) {
                 ScaffoldMessenger.of(sheetContext).showSnackBar(
-                  SnackBar(content: Text(e is ApiException ? e.message : l10n.commonSomethingWentWrong)),
+                  SnackBar(
+                    content: Text(
+                      e is ApiException
+                          ? e.message
+                          : l10n.commonSomethingWentWrong,
+                    ),
+                  ),
                 );
               }
             }
           }
 
           return Padding(
-            padding: EdgeInsets.fromLTRB(20, 20, 20, 20 + MediaQuery.of(sheetContext).viewInsets.bottom),
+            padding: EdgeInsets.fromLTRB(
+              20,
+              20,
+              20,
+              20 + MediaQuery.of(sheetContext).viewInsets.bottom,
+            ),
             child: SafeArea(
               child: ConstrainedBox(
-                constraints: BoxConstraints(maxHeight: MediaQuery.of(sheetContext).size.height * 0.75),
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(sheetContext).size.height * 0.75,
+                ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(l10n.medicineSearchTitle, style: Theme.of(sheetContext).textTheme.titleMedium),
+                    Text(
+                      l10n.medicineSearchTitle,
+                      style: Theme.of(sheetContext).textTheme.titleMedium,
+                    ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: searchController,
                       autofocus: true,
-                      decoration: InputDecoration(hintText: l10n.medicineSearchHint, prefixIcon: const Icon(Icons.search)),
+                      decoration: InputDecoration(
+                        hintText: l10n.medicineSearchHint,
+                        prefixIcon: const Icon(Icons.search),
+                      ),
                       onChanged: runSearch,
                     ),
                     const SizedBox(height: 8),
-                    if (loading) const Padding(padding: EdgeInsets.all(16), child: Center(child: CircularProgressIndicator())),
+                    if (loading)
+                      const Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
                     if (!loading)
                       Flexible(
                         child: ListView(
@@ -200,12 +257,22 @@ class _IssuePrescriptionScreenState extends ConsumerState<IssuePrescriptionScree
                             for (final m in results)
                               ListTile(
                                 title: Text(m.displayName),
-                                subtitle: m.manufacturer != null ? Text(m.manufacturer!) : null,
+                                subtitle: Text(
+                                  [
+                                    if (m.isControlled) l10n.rxControlledBadge,
+                                    if (m.scientificName != null &&
+                                        m.scientificName!.isNotEmpty)
+                                      m.scientificName!,
+                                    if (m.manufacturer != null) m.manufacturer!,
+                                  ].join(' · '),
+                                ),
                                 onTap: () => Navigator.of(sheetContext).pop(m),
                               ),
                             if (searched && results.isEmpty)
                               Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                ),
                                 child: Text(l10n.medicineNoResults),
                               ),
                           ],
@@ -227,14 +294,24 @@ class _IssuePrescriptionScreenState extends ConsumerState<IssuePrescriptionScree
     );
   }
 
-  Future<void> _addOrEditItem({Medicine? medicine, _DraftItem? existingDraft, int? editIndex}) async {
+  Future<void> _addOrEditItem({
+    Medicine? medicine,
+    _DraftItem? existingDraft,
+    int? editIndex,
+  }) async {
     final l10n = AppLocalizations.of(context)!;
     final chosenMedicine = medicine ?? existingDraft?.medicine;
     if (chosenMedicine == null) return;
 
-    final dosageController = TextEditingController(text: existingDraft?.input.dosage ?? '');
-    final quantityController = TextEditingController(text: existingDraft?.input.quantity ?? '');
-    final instructionsController = TextEditingController(text: existingDraft?.input.instructions ?? '');
+    final dosageController = TextEditingController(
+      text: existingDraft?.input.dosage ?? '',
+    );
+    final quantityController = TextEditingController(
+      text: existingDraft?.input.quantity ?? '',
+    );
+    final instructionsController = TextEditingController(
+      text: existingDraft?.input.instructions ?? '',
+    );
     final durationController = TextEditingController(
       text: existingDraft?.input.durationValue?.toString() ?? '',
     );
@@ -248,22 +325,42 @@ class _IssuePrescriptionScreenState extends ConsumerState<IssuePrescriptionScree
       isScrollControlled: true,
       builder: (sheetContext) => StatefulBuilder(
         builder: (sheetContext, setSheetState) => Padding(
-          padding: EdgeInsets.fromLTRB(20, 20, 20, 20 + MediaQuery.of(sheetContext).viewInsets.bottom),
+          padding: EdgeInsets.fromLTRB(
+            20,
+            20,
+            20,
+            20 + MediaQuery.of(sheetContext).viewInsets.bottom,
+          ),
           child: SafeArea(
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(chosenMedicine.displayName, style: Theme.of(sheetContext).textTheme.titleMedium),
+                  Text(
+                    chosenMedicine.displayName,
+                    style: Theme.of(sheetContext).textTheme.titleMedium,
+                  ),
                   const SizedBox(height: 16),
-                  TextField(controller: dosageController, decoration: InputDecoration(labelText: l10n.prescriptionDosageLabel)),
+                  TextField(
+                    controller: dosageController,
+                    decoration: InputDecoration(
+                      labelText: l10n.prescriptionDosageLabel,
+                    ),
+                  ),
                   const SizedBox(height: 12),
-                  TextField(controller: quantityController, decoration: InputDecoration(labelText: l10n.prescriptionQuantityLabel)),
+                  TextField(
+                    controller: quantityController,
+                    decoration: InputDecoration(
+                      labelText: l10n.prescriptionQuantityLabel,
+                    ),
+                  ),
                   const SizedBox(height: 12),
                   TextField(
                     controller: instructionsController,
-                    decoration: InputDecoration(labelText: l10n.medicineInstructionsHint),
+                    decoration: InputDecoration(
+                      labelText: l10n.medicineInstructionsHint,
+                    ),
                     maxLines: 2,
                   ),
                   const SizedBox(height: 12),
@@ -272,19 +369,32 @@ class _IssuePrescriptionScreenState extends ConsumerState<IssuePrescriptionScree
                       Expanded(child: Text(l10n.medicineFrequencyLabel)),
                       IconButton(
                         onPressed: (frequency ?? 0) > 0
-                            ? () => setSheetState(() => frequency = (frequency! - 1))
+                            ? () => setSheetState(
+                                () => frequency = (frequency! - 1),
+                              )
                             : null,
                         icon: const Icon(Icons.remove_circle_outline),
                       ),
-                      SizedBox(width: 24, child: Text('${frequency ?? 0}', textAlign: TextAlign.center)),
+                      SizedBox(
+                        width: 24,
+                        child: Text(
+                          '${frequency ?? 0}',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                       IconButton(
-                        onPressed: () => setSheetState(() => frequency = (frequency ?? 0) + 1),
+                        onPressed: () => setSheetState(
+                          () => frequency = (frequency ?? 0) + 1,
+                        ),
                         icon: const Icon(Icons.add_circle_outline),
                       ),
                     ],
                   ),
                   const SizedBox(height: 8),
-                  Text(l10n.medicineFoodTimingLabel, style: Theme.of(sheetContext).textTheme.labelLarge),
+                  Text(
+                    l10n.medicineFoodTimingLabel,
+                    style: Theme.of(sheetContext).textTheme.labelLarge,
+                  ),
                   const SizedBox(height: 4),
                   Wrap(
                     spacing: 8,
@@ -293,17 +403,28 @@ class _IssuePrescriptionScreenState extends ConsumerState<IssuePrescriptionScree
                         ChoiceChip(
                           label: Text(_foodTimingLabel(v, l10n)),
                           selected: foodTiming == v,
-                          onSelected: (_) => setSheetState(() => foodTiming = foodTiming == v ? null : v),
+                          onSelected: (_) => setSheetState(
+                            () => foodTiming = foodTiming == v ? null : v,
+                          ),
                         ),
                     ],
                   ),
                   const SizedBox(height: 12),
-                  Text(l10n.medicineTimeSlotsLabel, style: Theme.of(sheetContext).textTheme.labelLarge),
+                  Text(
+                    l10n.medicineTimeSlotsLabel,
+                    style: Theme.of(sheetContext).textTheme.labelLarge,
+                  ),
                   const SizedBox(height: 4),
                   Wrap(
                     spacing: 8,
                     children: [
-                      for (final v in const ['breakfast', 'lunch', 'dinner', 'morning', 'evening'])
+                      for (final v in const [
+                        'breakfast',
+                        'lunch',
+                        'dinner',
+                        'morning',
+                        'evening',
+                      ])
                         FilterChip(
                           label: Text(_slotLabel(v, l10n)),
                           selected: timeSlots.contains(v),
@@ -324,36 +445,54 @@ class _IssuePrescriptionScreenState extends ConsumerState<IssuePrescriptionScree
                         child: TextField(
                           controller: durationController,
                           keyboardType: TextInputType.number,
-                          decoration: InputDecoration(labelText: l10n.medicineDurationLabel),
+                          decoration: InputDecoration(
+                            labelText: l10n.medicineDurationLabel,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 12),
                       DropdownButton<String>(
                         value: durationUnit,
                         items: [
-                          DropdownMenuItem(value: 'days', child: Text(l10n.prescriptionDurationDays)),
-                          DropdownMenuItem(value: 'weeks', child: Text(l10n.prescriptionDurationWeeks)),
-                          DropdownMenuItem(value: 'months', child: Text(l10n.prescriptionDurationMonths)),
+                          DropdownMenuItem(
+                            value: 'days',
+                            child: Text(l10n.prescriptionDurationDays),
+                          ),
+                          DropdownMenuItem(
+                            value: 'weeks',
+                            child: Text(l10n.prescriptionDurationWeeks),
+                          ),
+                          DropdownMenuItem(
+                            value: 'months',
+                            child: Text(l10n.prescriptionDurationMonths),
+                          ),
                         ],
-                        onChanged: (v) => setSheetState(() => durationUnit = v ?? 'days'),
+                        onChanged: (v) =>
+                            setSheetState(() => durationUnit = v ?? 'days'),
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
                   FilledButton(
                     onPressed: () {
-                      final durationValue = int.tryParse(durationController.text.trim());
+                      final durationValue = int.tryParse(
+                        durationController.text.trim(),
+                      );
                       Navigator.of(sheetContext).pop(
                         PrescriptionItemInput(
                           medicineId: chosenMedicine.id,
                           dosage: dosageController.text.trim(),
                           quantity: quantityController.text.trim(),
                           instructions: instructionsController.text.trim(),
-                          frequencyPerDay: (frequency ?? 0) > 0 ? frequency : null,
+                          frequencyPerDay: (frequency ?? 0) > 0
+                              ? frequency
+                              : null,
                           foodTiming: foodTiming,
                           timeSlots: timeSlots.toList(),
                           durationValue: durationValue,
-                          durationUnit: durationValue != null ? durationUnit : null,
+                          durationUnit: durationValue != null
+                              ? durationUnit
+                              : null,
                         ),
                       );
                     },
@@ -384,10 +523,24 @@ class _IssuePrescriptionScreenState extends ConsumerState<IssuePrescriptionScree
     await _addOrEditItem(medicine: medicine);
   }
 
+  /// The doctor's own handwriting, photographed live — never picked from the gallery.
+  Future<void> _takePaperPhoto() async {
+    final photo = await ImagePicker().pickImage(
+      source: ImageSource.camera,
+      imageQuality: 85,
+      maxWidth: 2000,
+    );
+    if (photo != null && mounted) setState(() => _paperPath = photo.path);
+  }
+
   Future<void> _submit() async {
     final l10n = AppLocalizations.of(context)!;
     if (_items.isEmpty) {
       setState(() => _error = l10n.medicineAtLeastOneItem);
+      return;
+    }
+    if (_needsPaper && _paperPath == null) {
+      setState(() => _error = l10n.rxHandwrittenRequired);
       return;
     }
     setState(() {
@@ -403,6 +556,7 @@ class _IssuePrescriptionScreenState extends ConsumerState<IssuePrescriptionScree
           patientCondition: _conditionController.text.trim(),
           notes: _notesController.text.trim(),
           items: _items.map((d) => d.input).toList(),
+          handwrittenPhotoPath: _needsPaper ? _paperPath : null,
         );
       } else {
         await api.issue(
@@ -412,6 +566,7 @@ class _IssuePrescriptionScreenState extends ConsumerState<IssuePrescriptionScree
           patientCondition: _conditionController.text.trim(),
           notes: _notesController.text.trim(),
           items: _items.map((d) => d.input).toList(),
+          handwrittenPhotoPath: _needsPaper ? _paperPath : null,
         );
       }
       if (mounted) Navigator.of(context).pop(true);
@@ -428,22 +583,35 @@ class _IssuePrescriptionScreenState extends ConsumerState<IssuePrescriptionScree
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: Text(_isRevise ? l10n.prescriptionReviseTitle : l10n.prescriptionIssueTitle)),
+      appBar: AppBar(
+        title: Text(
+          _isRevise
+              ? l10n.prescriptionReviseTitle
+              : l10n.prescriptionIssueTitle,
+        ),
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           if (widget.patientName != null) ...[
-            Text(widget.patientName!, style: Theme.of(context).textTheme.titleMedium),
+            Text(
+              widget.patientName!,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             const SizedBox(height: 16),
           ],
           TextField(
             controller: _diagnosisController,
-            decoration: InputDecoration(labelText: l10n.prescriptionDiagnosisLabel),
+            decoration: InputDecoration(
+              labelText: l10n.prescriptionDiagnosisLabel,
+            ),
           ),
           const SizedBox(height: 12),
           TextField(
             controller: _conditionController,
-            decoration: InputDecoration(labelText: l10n.prescriptionConditionLabel),
+            decoration: InputDecoration(
+              labelText: l10n.prescriptionConditionLabel,
+            ),
           ),
           const SizedBox(height: 12),
           TextField(
@@ -455,27 +623,111 @@ class _IssuePrescriptionScreenState extends ConsumerState<IssuePrescriptionScree
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(l10n.prescriptionItemsTitle, style: Theme.of(context).textTheme.titleSmall),
-              TextButton.icon(onPressed: _addMedicine, icon: const Icon(Icons.add), label: Text(l10n.medicineAddItem)),
+              Text(
+                l10n.prescriptionItemsTitle,
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              TextButton.icon(
+                onPressed: _addMedicine,
+                icon: const Icon(Icons.add),
+                label: Text(l10n.medicineAddItem),
+              ),
             ],
           ),
-          for (var i = 0; i < _items.length; i++) _DraftItemCard(
-            draft: _items[i],
-            onTap: () => _addOrEditItem(existingDraft: _items[i], editIndex: i),
-            onRemove: () => setState(() => _items.removeAt(i)),
-          ),
+          for (var i = 0; i < _items.length; i++)
+            _DraftItemCard(
+              draft: _items[i],
+              onTap: () =>
+                  _addOrEditItem(existingDraft: _items[i], editIndex: i),
+              onRemove: () => setState(() => _items.removeAt(i)),
+            ),
+          if (_needsPaper)
+            _HandwrittenCard(path: _paperPath, onTake: _takePaperPhoto),
           if (_error != null) ...[
             const SizedBox(height: 12),
-            Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+            Text(
+              _error!,
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
           ],
           const SizedBox(height: 20),
           FilledButton(
             onPressed: _saving ? null : _submit,
             child: _saving
-                ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                : Text(_isRevise ? l10n.prescriptionReviseSubmit : l10n.prescriptionIssueSubmit),
+                ? const SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : Text(
+                    _isRevise
+                        ? l10n.prescriptionReviseSubmit
+                        : l10n.prescriptionIssueSubmit,
+                  ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// «لا بد من صورة روشتة بخط الطبيب منعًا للاحتيال» — shown when a controlled drug is on the prescription.
+class _HandwrittenCard extends StatelessWidget {
+  final String? path;
+  final VoidCallback onTake;
+  const _HandwrittenCard({required this.path, required this.onTake});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
+    return Card(
+      margin: const EdgeInsets.only(top: 12),
+      color: theme.colorScheme.errorContainer.withValues(alpha: 0.35),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.gpp_maybe_outlined, color: theme.colorScheme.error),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    l10n.rxHandwrittenTitle,
+                    style: theme.textTheme.titleSmall,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            Text(l10n.rxHandwrittenHint, style: theme.textTheme.bodySmall),
+            if (path != null) ...[
+              const SizedBox(height: 8),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.file(
+                  File(path!),
+                  height: 180,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ],
+            const SizedBox(height: 8),
+            OutlinedButton.icon(
+              onPressed: onTake,
+              icon: const Icon(Icons.photo_camera_outlined),
+              label: Text(
+                path == null
+                    ? l10n.rxHandwrittenTake
+                    : l10n.rxHandwrittenRetake,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -485,7 +737,11 @@ class _DraftItemCard extends StatelessWidget {
   final _DraftItem draft;
   final VoidCallback onTap;
   final VoidCallback onRemove;
-  const _DraftItemCard({required this.draft, required this.onTap, required this.onRemove});
+  const _DraftItemCard({
+    required this.draft,
+    required this.onTap,
+    required this.onRemove,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -494,13 +750,25 @@ class _DraftItemCard extends StatelessWidget {
       child: ListTile(
         onTap: onTap,
         title: Text(draft.medicine.displayName),
+        leading: draft.medicine.isControlled
+            ? Icon(
+                Icons.gpp_maybe_outlined,
+                color: Theme.of(context).colorScheme.error,
+              )
+            : null,
         subtitle: Text(
           [
-            if (draft.input.dosage != null && draft.input.dosage!.isNotEmpty) draft.input.dosage,
-            if (draft.input.quantity != null && draft.input.quantity!.isNotEmpty) draft.input.quantity,
+            if (draft.input.dosage != null && draft.input.dosage!.isNotEmpty)
+              draft.input.dosage,
+            if (draft.input.quantity != null &&
+                draft.input.quantity!.isNotEmpty)
+              draft.input.quantity,
           ].whereType<String>().join(' · '),
         ),
-        trailing: IconButton(icon: const Icon(Icons.delete_outline), onPressed: onRemove),
+        trailing: IconButton(
+          icon: const Icon(Icons.delete_outline),
+          onPressed: onRemove,
+        ),
       ),
     );
   }

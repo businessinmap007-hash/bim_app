@@ -15,13 +15,19 @@ import '../../../prescriptions/data/pharmacy_prescriptions_api.dart';
 class PrescriptionShownScreen extends ConsumerStatefulWidget {
   final Map<String, dynamic> payload;
   final String sharedBy;
-  const PrescriptionShownScreen({super.key, required this.payload, required this.sharedBy});
+  const PrescriptionShownScreen({
+    super.key,
+    required this.payload,
+    required this.sharedBy,
+  });
 
   @override
-  ConsumerState<PrescriptionShownScreen> createState() => _PrescriptionShownScreenState();
+  ConsumerState<PrescriptionShownScreen> createState() =>
+      _PrescriptionShownScreenState();
 }
 
-class _PrescriptionShownScreenState extends ConsumerState<PrescriptionShownScreen> {
+class _PrescriptionShownScreenState
+    extends ConsumerState<PrescriptionShownScreen> {
   PrescriptionCheck? _check;
   bool _checking = false;
   bool _unavailable = false;
@@ -30,7 +36,8 @@ class _PrescriptionShownScreenState extends ConsumerState<PrescriptionShownScree
   bool _done = false;
 
   int get _id => (widget.payload['id'] as num).toInt();
-  Map<String, dynamic> get _content => Map<String, dynamic>.from(widget.payload['content'] as Map);
+  Map<String, dynamic> get _content =>
+      Map<String, dynamic>.from(widget.payload['content'] as Map);
 
   @override
   void initState() {
@@ -46,13 +53,19 @@ class _PrescriptionShownScreenState extends ConsumerState<PrescriptionShownScree
   Future<void> _verify() async {
     setState(() => _checking = true);
     try {
-      final check = await ref.read(pharmacyPrescriptionsApiProvider).verify(_id, _content);
+      final check = await ref
+          .read(pharmacyPrescriptionsApiProvider)
+          .verify(_id, _content);
       if (mounted) setState(() => _check = check);
     } on ApiException catch (e) {
       // A business that is not a pharmacy has no door here (403): show the content unverified.
-      if (mounted) setState(() => e.statusCode == 403 ? _unavailable = true : _error = e.message);
+      if (mounted) {
+        setState(() => e.statusCode == 403 ? _unavailable = true : _error = e.message);
+      }
     } catch (_) {
-      if (mounted) setState(() => _error = AppLocalizations.of(context)!.commonSomethingWentWrong);
+      if (mounted) {
+        setState(() => _error = AppLocalizations.of(context)!.commonSomethingWentWrong);
+      }
     } finally {
       if (mounted) setState(() => _checking = false);
     }
@@ -65,8 +78,14 @@ class _PrescriptionShownScreenState extends ConsumerState<PrescriptionShownScree
       builder: (context) => AlertDialog(
         content: Text(l10n.rxDispenseConfirm),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l10n.commonCancel)),
-          FilledButton(onPressed: () => Navigator.pop(context, true), child: Text(l10n.rxDispenseNow)),
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.commonCancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(l10n.rxDispenseNow),
+          ),
         ],
       ),
     );
@@ -76,7 +95,9 @@ class _PrescriptionShownScreenState extends ConsumerState<PrescriptionShownScree
       _error = null;
     });
     try {
-      await ref.read(pharmacyPrescriptionsApiProvider).dispenseInPerson(_id, _content);
+      await ref
+          .read(pharmacyPrescriptionsApiProvider)
+          .dispenseInPerson(_id, _content);
       if (mounted) setState(() => _done = true);
       await _verify();
     } on ApiException catch (e) {
@@ -92,13 +113,31 @@ class _PrescriptionShownScreenState extends ConsumerState<PrescriptionShownScree
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final items = [for (final i in _content['items'] as List<dynamic>? ?? const []) Map<String, dynamic>.from(i as Map)];
+    final items = [
+      for (final i in _content['items'] as List<dynamic>? ?? const [])
+        Map<String, dynamic>.from(i as Map),
+    ];
     final check = _check;
 
     Widget banner(Color color, IconData icon, String text) => Container(
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(color: color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(12), border: Border.all(color: color)),
-      child: Row(children: [Icon(icon, color: color), const SizedBox(width: 10), Expanded(child: Text(text, style: TextStyle(color: color, fontWeight: FontWeight.w600)))]),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: color),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(color: color, fontWeight: FontWeight.w600),
+            ),
+          ),
+        ],
+      ),
     );
 
     return Scaffold(
@@ -106,29 +145,102 @@ class _PrescriptionShownScreenState extends ConsumerState<PrescriptionShownScree
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          Text(l10n.rxShownBy(widget.sharedBy), style: theme.textTheme.bodySmall),
+          Text(
+            l10n.rxShownBy(widget.sharedBy),
+            style: theme.textTheme.bodySmall,
+          ),
           const SizedBox(height: 12),
-          if (_checking) Row(children: [const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2)), const SizedBox(width: 10), Text(l10n.rxVerifyWorking)]),
-          if (_unavailable) Text(l10n.rxCheckUnavailable, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
-          if (check != null && !check.authentic) banner(AppColors.error, Icons.gpp_bad_outlined, l10n.rxNotVerified),
+          if (_checking)
+            Row(
+              children: [
+                const SizedBox(
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+                const SizedBox(width: 10),
+                Text(l10n.rxVerifyWorking),
+              ],
+            ),
+          if (_unavailable)
+            Text(
+              l10n.rxCheckUnavailable,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.hintColor,
+              ),
+            ),
+          if (check != null && !check.authentic)
+            banner(AppColors.error, Icons.gpp_bad_outlined, l10n.rxNotVerified),
           if (check != null && check.authentic) ...[
             banner(AppColors.success, Icons.verified_outlined, l10n.rxVerified),
             const SizedBox(height: 8),
-            if (check.doctorName != null) Text(l10n.rxIssuedBy(check.doctorName!), style: theme.textTheme.titleSmall),
-            if (check.issuedAt != null) Text(DateFormat.yMMMd().add_Hm().format(check.issuedAt!), style: theme.textTheme.bodySmall),
+            if (check.doctorName != null)
+              Text(
+                l10n.rxIssuedBy(check.doctorName!),
+                style: theme.textTheme.titleSmall,
+              ),
+            if (check.issuedAt != null)
+              Text(
+                DateFormat.yMMMd().add_Hm().format(check.issuedAt!),
+                style: theme.textTheme.bodySmall,
+              ),
             const SizedBox(height: 8),
+            if (check.controlled) ...[
+              banner(
+                AppColors.error,
+                Icons.gpp_maybe_outlined,
+                check.handwrittenImage == null
+                    ? l10n.rxControlledNoPaper
+                    : l10n.rxControlledComparePaper,
+              ),
+              if (check.handwrittenImage != null) ...[
+                const SizedBox(height: 8),
+                GestureDetector(
+                  onTap: () => showDialog<void>(
+                    context: context,
+                    builder: (_) => Dialog(
+                      child: InteractiveViewer(
+                        child: Image.network(check.handwrittenImage!),
+                      ),
+                    ),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.network(
+                      check.handwrittenImage!,
+                      height: 200,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ],
+              const SizedBox(height: 8),
+            ],
             if (check.superseded)
               banner(AppColors.error, Icons.update_disabled, l10n.rxSuperseded)
             else if (check.status == 'dispensed')
               banner(AppColors.error, Icons.block, l10n.rxAlreadyDispensed)
             else if (check.canDispense)
-              banner(AppColors.success, Icons.check_circle_outline, l10n.rxCanDispense)
+              banner(
+                AppColors.success,
+                Icons.check_circle_outline,
+                l10n.rxCanDispense,
+              )
             else
               banner(AppColors.error, Icons.block, l10n.rxCancelledOrOther),
           ],
-          if (_done) ...[const SizedBox(height: 8), banner(AppColors.success, Icons.task_alt, l10n.rxDispensed)],
-          if (_error != null) ...[const SizedBox(height: 8), Text(_error!, style: TextStyle(color: theme.colorScheme.error))],
-          if (((_content['diagnosis'] ?? '') as Object).toString().isNotEmpty) ...[
+          if (_done) ...[
+            const SizedBox(height: 8),
+            banner(AppColors.success, Icons.task_alt, l10n.rxDispensed),
+          ],
+          if (_error != null) ...[
+            const SizedBox(height: 8),
+            Text(_error!, style: TextStyle(color: theme.colorScheme.error)),
+          ],
+          if (((_content['diagnosis'] ?? '') as Object)
+              .toString()
+              .isNotEmpty) ...[
             const SizedBox(height: 16),
             Text(l10n.rxDiagnosis, style: theme.textTheme.labelLarge),
             Text('${_content['diagnosis']}'),
@@ -139,11 +251,16 @@ class _PrescriptionShownScreenState extends ConsumerState<PrescriptionShownScree
               margin: const EdgeInsets.only(bottom: 8),
               child: ListTile(
                 title: Text('${i['name'] ?? ''}'),
-                subtitle: Text([
-                  if ('${i['dosage'] ?? ''}'.isNotEmpty) l10n.rxItemDosage('${i['dosage']}'),
-                  if ('${i['quantity'] ?? ''}'.isNotEmpty) l10n.rxItemQuantity('${i['quantity']}'),
-                  if ('${i['instructions'] ?? ''}'.isNotEmpty) '${i['instructions']}',
-                ].join(' — ')),
+                subtitle: Text(
+                  [
+                    if ('${i['dosage'] ?? ''}'.isNotEmpty)
+                      l10n.rxItemDosage('${i['dosage']}'),
+                    if ('${i['quantity'] ?? ''}'.isNotEmpty)
+                      l10n.rxItemQuantity('${i['quantity']}'),
+                    if ('${i['instructions'] ?? ''}'.isNotEmpty)
+                      '${i['instructions']}',
+                  ].join(' — '),
+                ),
               ),
             ),
           if ('${_content['notes'] ?? ''}'.isNotEmpty) ...[
@@ -152,7 +269,8 @@ class _PrescriptionShownScreenState extends ConsumerState<PrescriptionShownScree
           ],
         ],
       ),
-      bottomNavigationBar: check != null && check.authentic && check.canDispense && !_done
+      bottomNavigationBar:
+          check != null && check.authentic && check.canDispense && !_done
           ? SafeArea(
               minimum: const EdgeInsets.fromLTRB(16, 12, 16, 12),
               child: FilledButton.icon(

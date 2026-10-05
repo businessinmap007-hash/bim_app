@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 
 import '../../../core/network/api_client.dart';
@@ -62,7 +64,10 @@ class PrescriptionsApi {
   /// The phone says «I hold this exact copy» — the server fingerprints [content] and, if it is what the doctor
   /// wrote, marks the prescription as held by the patient (which is what lets it drop the sensitive fields later).
   Future<void> confirmArchived(int id, Map<String, dynamic> content) async {
-    await _client.post('/prescriptions/archived', data: {'id': id, 'content': content});
+    await _client.post(
+      '/prescriptions/archived',
+      data: {'id': id, 'content': content},
+    );
   }
 
   /// A doctor's own issued prescriptions.
@@ -83,23 +88,40 @@ class PrescriptionsApi {
     String? patientCondition,
     String? notes,
     required List<PrescriptionItemInput> items,
+    String? handwrittenPhotoPath,
   }) async {
+    final fields = <String, dynamic>{
+      'patient_id': patientId,
+      'appointment_id': ?appointmentId,
+      if (diagnosis != null && diagnosis.isNotEmpty) 'diagnosis': diagnosis,
+      if (patientCondition != null && patientCondition.isNotEmpty)
+        'patient_condition': patientCondition,
+      if (notes != null && notes.isNotEmpty) 'notes': notes,
+    };
     final data =
         await _client.post(
               '/prescriptions',
-              data: {
-                'patient_id': patientId,
-                'appointment_id': ?appointmentId,
-                if (diagnosis != null && diagnosis.isNotEmpty)
-                  'diagnosis': diagnosis,
-                if (patientCondition != null && patientCondition.isNotEmpty)
-                  'patient_condition': patientCondition,
-                if (notes != null && notes.isNotEmpty) 'notes': notes,
-                'items': items.map((i) => i.toJson()).toList(),
-              },
+              data: await _withPaper(fields, items, handwrittenPhotoPath),
             )
             as Map<String, dynamic>;
     return Prescription.fromJson(data['prescription'] as Map<String, dynamic>);
+  }
+
+  /// «لا بد من صورة روشتة بخط الطبيب» — with a photo of the doctor's handwritten paper (a controlled drug is on the
+  /// prescription) the request is multipart and the items travel as a JSON string; without one it stays plain JSON.
+  Future<Object> _withPaper(
+    Map<String, dynamic> fields,
+    List<PrescriptionItemInput> items,
+    String? photoPath,
+  ) async {
+    final lines = items.map((i) => i.toJson()).toList();
+    if (photoPath == null) return {...fields, 'items': lines};
+    return FormData.fromMap({
+      for (final e in fields.entries) e.key: '${e.value}',
+      'items': jsonEncode(lines),
+      'handwritten_image': await MultipartFile.fromFile(photoPath),
+      'handwritten_source': 'camera',
+    });
   }
 
   /// The original doctor amends a prescription. Never in place — the server
@@ -110,18 +132,18 @@ class PrescriptionsApi {
     String? patientCondition,
     String? notes,
     required List<PrescriptionItemInput> items,
+    String? handwrittenPhotoPath,
   }) async {
+    final fields = <String, dynamic>{
+      if (diagnosis != null && diagnosis.isNotEmpty) 'diagnosis': diagnosis,
+      if (patientCondition != null && patientCondition.isNotEmpty)
+        'patient_condition': patientCondition,
+      if (notes != null && notes.isNotEmpty) 'notes': notes,
+    };
     final data =
         await _client.post(
               '/prescriptions/$id/revise',
-              data: {
-                if (diagnosis != null && diagnosis.isNotEmpty)
-                  'diagnosis': diagnosis,
-                if (patientCondition != null && patientCondition.isNotEmpty)
-                  'patient_condition': patientCondition,
-                if (notes != null && notes.isNotEmpty) 'notes': notes,
-                'items': items.map((i) => i.toJson()).toList(),
-              },
+              data: await _withPaper(fields, items, handwrittenPhotoPath),
             )
             as Map<String, dynamic>;
     return Prescription.fromJson(data['prescription'] as Map<String, dynamic>);
@@ -152,7 +174,8 @@ class PrescriptionsApi {
   /// The customer accepts the pharmacy's quote on a direct request.
   Future<Prescription> confirmQuote(int id) async {
     final data =
-        await _client.post('/prescriptions/$id/confirm-quote') as Map<String, dynamic>;
+        await _client.post('/prescriptions/$id/confirm-quote')
+            as Map<String, dynamic>;
     return Prescription.fromJson(data['prescription'] as Map<String, dynamic>);
   }
 

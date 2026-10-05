@@ -6577,6 +6577,34 @@ class AppLocalizationsEn extends AppLocalizations {
       'The server no longer keeps the diagnosis and notes of this finished prescription — the copy on this phone is now the only one. Keep an encrypted backup.';
 
   @override
+  String get rxControlledBadge => 'Controlled drug';
+
+  @override
+  String get rxHandwrittenTitle => 'A controlled drug is on this prescription';
+
+  @override
+  String get rxHandwrittenHint =>
+      'To prevent fraud, take a photo of the prescription written by your own hand on paper. The pharmacy compares it with the paper the patient holds.';
+
+  @override
+  String get rxHandwrittenTake => 'Photograph the handwritten prescription';
+
+  @override
+  String get rxHandwrittenRetake => 'Take it again';
+
+  @override
+  String get rxHandwrittenRequired =>
+      'Add the photo of the handwritten prescription first.';
+
+  @override
+  String get rxControlledComparePaper =>
+      'Controlled drug — compare this photo with the paper prescription in the patient\'s hand before dispensing.';
+
+  @override
+  String get rxControlledNoPaper =>
+      'Controlled drug with no handwritten prescription on file — it cannot be dispensed.';
+
+  @override
   String get rxNoCopy =>
       'There is no verifiable copy of this prescription on this phone.';
 

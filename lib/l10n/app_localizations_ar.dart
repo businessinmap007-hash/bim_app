@@ -6550,6 +6550,34 @@ class AppLocalizationsAr extends AppLocalizations {
       'لم يعد السيرفر يحتفظ بالتشخيص والملاحظات لهذه الروشتة المنتهية — نسختك على هذا الهاتف هي الوحيدة الآن. احتفظ بنسخة احتياطية مشفّرة.';
 
   @override
+  String get rxControlledBadge => 'دواء مخدر';
+
+  @override
+  String get rxHandwrittenTitle => 'في الروشتة دواء مخدر';
+
+  @override
+  String get rxHandwrittenHint =>
+      'منعًا للاحتيال صوّر الروشتة المكتوبة بخط يدك على الورق. الصيدلية تقارنها بالورقة التي مع المريض.';
+
+  @override
+  String get rxHandwrittenTake => 'صوّر الروشتة المكتوبة بخط يدك';
+
+  @override
+  String get rxHandwrittenRetake => 'أعد التصوير';
+
+  @override
+  String get rxHandwrittenRequired =>
+      'أضف صورة الروشتة المكتوبة بخط اليد أولًا.';
+
+  @override
+  String get rxControlledComparePaper =>
+      'دواء مخدر — قارن هذه الصورة بالروشتة الورقية التي مع المريض قبل الصرف.';
+
+  @override
+  String get rxControlledNoPaper =>
+      'دواء مخدر وليس معه صورة روشتة بخط الطبيب — لا يمكن صرفه.';
+
+  @override
   String get rxNoCopy => 'لا توجد نسخة موثّقة من هذه الروشتة على الهاتف.';
 
   @override

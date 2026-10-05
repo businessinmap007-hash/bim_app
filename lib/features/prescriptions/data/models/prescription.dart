@@ -6,10 +6,11 @@ class PrescriptionImage {
   final String url;
   const PrescriptionImage({required this.id, required this.url});
 
-  factory PrescriptionImage.fromJson(Map<String, dynamic> json) => PrescriptionImage(
-    id: json['id'] as int,
-    url: Env.assetUrl(json['image'] as String?) ?? '',
-  );
+  factory PrescriptionImage.fromJson(Map<String, dynamic> json) =>
+      PrescriptionImage(
+        id: json['id'] as int,
+        url: Env.assetUrl(json['image'] as String?) ?? '',
+      );
 }
 
 /// One of the prescription's parties (doctor/patient/pharmacy/a shared-in
@@ -27,6 +28,7 @@ class PrescriptionParty {
 class PrescriptionItem {
   final int id;
   final int? medicineId;
+  final bool isControlled;
   final String? name;
   final String? dosage;
   final String? quantity;
@@ -44,6 +46,7 @@ class PrescriptionItem {
   const PrescriptionItem({
     required this.id,
     this.medicineId,
+    this.isControlled = false,
     this.name,
     this.dosage,
     this.quantity,
@@ -59,23 +62,27 @@ class PrescriptionItem {
     this.lineTotal,
   });
 
-  factory PrescriptionItem.fromJson(Map<String, dynamic> json) => PrescriptionItem(
-    id: json['id'] as int,
-    medicineId: (json['medicine_id'] as num?)?.toInt(),
-    name: json['name'] as String?,
-    dosage: json['dosage'] as String?,
-    quantity: json['quantity'] as String?,
-    instructions: json['instructions'] as String?,
-    frequencyPerDay: (json['frequency_per_day'] as num?)?.toInt(),
-    foodTiming: json['food_timing'] as String?,
-    timeSlots: (json['time_slots'] as List<dynamic>? ?? []).map((e) => e.toString()).toList(),
-    durationDays: (json['duration_days'] as num?)?.toInt(),
-    durationValue: (json['duration_value'] as num?)?.toInt(),
-    durationUnit: json['duration_unit'] as String?,
-    unitPrice: (json['unit_price'] as num?)?.toDouble(),
-    billedQuantity: (json['billed_quantity'] as num?)?.toInt(),
-    lineTotal: (json['line_total'] as num?)?.toDouble(),
-  );
+  factory PrescriptionItem.fromJson(Map<String, dynamic> json) =>
+      PrescriptionItem(
+        id: json['id'] as int,
+        medicineId: (json['medicine_id'] as num?)?.toInt(),
+        isControlled: json['is_controlled'] as bool? ?? false,
+        name: json['name'] as String?,
+        dosage: json['dosage'] as String?,
+        quantity: json['quantity'] as String?,
+        instructions: json['instructions'] as String?,
+        frequencyPerDay: (json['frequency_per_day'] as num?)?.toInt(),
+        foodTiming: json['food_timing'] as String?,
+        timeSlots: (json['time_slots'] as List<dynamic>? ?? [])
+            .map((e) => e.toString())
+            .toList(),
+        durationDays: (json['duration_days'] as num?)?.toInt(),
+        durationValue: (json['duration_value'] as num?)?.toInt(),
+        durationUnit: json['duration_unit'] as String?,
+        unitPrice: (json['unit_price'] as num?)?.toDouble(),
+        billedQuantity: (json['billed_quantity'] as num?)?.toInt(),
+        lineTotal: (json['line_total'] as num?)?.toDouble(),
+      );
 }
 
 /// Mirrors `PrescriptionController::serialize()`.
@@ -115,6 +122,10 @@ class Prescription {
   final bool contentPurged;
   final bool archivedByPatient;
 
+  /// A narcotic / psychotropic drug is on it, and the photo of the doctor's handwritten paper (when on file).
+  final bool controlled;
+  final String? handwrittenImage;
+
   const Prescription({
     required this.id,
     required this.status,
@@ -143,15 +154,21 @@ class Prescription {
     this.raw = const {},
     this.contentPurged = false,
     this.archivedByPatient = false,
+    this.controlled = false,
+    this.handwrittenImage,
   });
 
   bool get canSend => status == 'issued';
   bool get canCancel => status != 'dispensed' && status != 'cancelled';
   bool get isCustomerRequest => origin == 'customer';
+
   /// Pharmacy: this direct request has no items yet and needs a price.
   bool get needsQuote => isCustomerRequest && status == 'requested';
+
   /// Pharmacy: still allowed to walk away from a direct request.
-  bool get canDeclineRequest => isCustomerRequest && (status == 'requested' || status == 'quoted');
+  bool get canDeclineRequest =>
+      isCustomerRequest && (status == 'requested' || status == 'quoted');
+
   /// Customer: the pharmacy replied — accept or decline (decline reuses cancel).
   bool get canConfirmQuote => isCustomerRequest && status == 'quoted';
 
@@ -170,12 +187,18 @@ class Prescription {
     deliveryAddress: json['delivery_address'] as String?,
     deliveryAddressId: (json['delivery_address_id'] as num?)?.toInt(),
     medicineTotal: (json['medicine_total'] as num?)?.toDouble(),
-    pricedAt: json['priced_at'] != null ? DateTime.tryParse(json['priced_at'] as String) : null,
+    pricedAt: json['priced_at'] != null
+        ? DateTime.tryParse(json['priced_at'] as String)
+        : null,
     images: (json['images'] as List<dynamic>? ?? [])
         .map((e) => PrescriptionImage.fromJson(e as Map<String, dynamic>))
         .toList(),
-    doctor: json['doctor'] != null ? PrescriptionParty.fromJson(json['doctor'] as Map<String, dynamic>) : null,
-    patient: PrescriptionParty.fromJson(json['patient'] as Map<String, dynamic>),
+    doctor: json['doctor'] != null
+        ? PrescriptionParty.fromJson(json['doctor'] as Map<String, dynamic>)
+        : null,
+    patient: PrescriptionParty.fromJson(
+      json['patient'] as Map<String, dynamic>,
+    ),
     pharmacy: json['pharmacy'] != null
         ? PrescriptionParty.fromJson(json['pharmacy'] as Map<String, dynamic>)
         : null,
@@ -185,13 +208,21 @@ class Prescription {
     items: (json['items'] as List<dynamic>? ?? [])
         .map((e) => PrescriptionItem.fromJson(e as Map<String, dynamic>))
         .toList(),
-    issuedAt: json['issued_at'] != null ? DateTime.tryParse(json['issued_at'] as String) : null,
-    dispensedAt: json['dispensed_at'] != null ? DateTime.tryParse(json['dispensed_at'] as String) : null,
+    issuedAt: json['issued_at'] != null
+        ? DateTime.tryParse(json['issued_at'] as String)
+        : null,
+    dispensedAt: json['dispensed_at'] != null
+        ? DateTime.tryParse(json['dispensed_at'] as String)
+        : null,
     verifiableContent: json['verifiable'] is Map<String, dynamic>
-        ? Map<String, dynamic>.from((json['verifiable'] as Map<String, dynamic>)['content'] as Map)
+        ? Map<String, dynamic>.from(
+            (json['verifiable'] as Map<String, dynamic>)['content'] as Map,
+          )
         : null,
     raw: json,
     contentPurged: json['content_purged'] as bool? ?? false,
     archivedByPatient: json['archived_by_patient'] as bool? ?? false,
+    controlled: json['controlled'] as bool? ?? false,
+    handwrittenImage: Env.assetUrl(json['handwritten_image'] as String?),
   );
 }

@@ -11,6 +11,7 @@ import 'package:bim_app/features/medical_file/data/medical_file.dart';
 import 'package:bim_app/features/medical_file/data/prescription_archive_store.dart';
 import 'package:bim_app/features/medical_file/presentation/screens/prescription_shown_screen.dart';
 import 'package:bim_app/features/prescriptions/application/pharmacy_prescriptions_providers.dart';
+import 'package:bim_app/features/prescriptions/data/models/medicine.dart';
 import 'package:bim_app/features/prescriptions/data/models/prescription.dart';
 import 'package:bim_app/features/prescriptions/data/pharmacy_prescriptions_api.dart';
 import 'package:bim_app/l10n/app_localizations.dart';
@@ -360,4 +361,33 @@ void main() {
       expect(Prescription.fromJson(store.saved[7]!).verifiableContent, isNull);
     },
   );
+
+  testWidgets('a controlled prescription with no handwritten paper on file is flagged and cannot be dispensed', (tester) async {
+    final api = _FakePharmacyApi(const PrescriptionCheck(authentic: true, status: 'issued', canDispense: false, controlled: true));
+    await tester.pumpWidget(_app(api, business: true));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Controlled drug with no handwritten prescription on file — it cannot be dispensed.'), findsOneWidget);
+    expect(find.text('Record this prescription as dispensed'), findsNothing);
+  });
+
+  test('a controlled drug and the handwritten paper read from the server', () {
+    expect(Medicine.fromJson({'id': 1, 'name': 'Tramal', 'is_controlled': true}).isControlled, isTrue);
+    expect(Medicine.fromJson({'id': 2, 'name': 'Panadol'}).isControlled, isFalse);
+
+    final p = Prescription.fromJson({
+      'id': 3,
+      'status': 'issued',
+      'patient': {'id': 1},
+      'controlled': true,
+      'handwritten_image': 'files/uploads/paper.png',
+      'items': [
+        {'id': 1, 'name': 'Tramal', 'is_controlled': true},
+      ],
+    });
+    expect(p.controlled, isTrue);
+    expect(p.handwrittenImage, contains('paper.png'));
+    expect(p.items.single.isControlled, isTrue);
+    expect(Prescription.fromJson({'id': 4, 'status': 'issued', 'patient': {'id': 1}}).controlled, isFalse);
+  });
 }
