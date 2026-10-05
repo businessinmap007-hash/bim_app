@@ -4,6 +4,7 @@ import 'package:intl/intl.dart' show DateFormat;
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../agenda/application/agenda_providers.dart';
 import '../../application/medical_file_providers.dart';
 import '../../application/prescription_archive_providers.dart';
 import '../../data/medical_backup_crypto.dart';
@@ -41,6 +42,7 @@ class _MedicalBackupSectionState extends ConsumerState<MedicalBackupSection> {
         widget.file,
         pass,
         prescriptions: ref.read(prescriptionArchiveProvider.notifier).rawList,
+        agenda: await ref.read(privateAgendaProvider).toJson(),
       );
       final at = await ref.read(medicalBackupApiProvider).put(blob);
       await ref.read(medicalFileControllerProvider.notifier).markBackedUp(at);
@@ -80,6 +82,9 @@ class _MedicalBackupSectionState extends ConsumerState<MedicalBackupSection> {
       final backup = await MedicalBackupCrypto.open(stored.blob, pass);
       await controller.restore(backup.file, stored.updatedAt);
       await ref.read(prescriptionArchiveProvider.notifier).restore(backup.prescriptions);
+      await ref.read(privateAgendaProvider).restore(backup.agenda);
+      ref.invalidate(agendaDayControllerProvider);
+      ref.invalidate(agendaWeekProvider);
       if (mounted) _say(l10n.medicalBackupRestored);
     } on ApiException catch (e) {
       if (mounted) _say(e.message);

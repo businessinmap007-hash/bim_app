@@ -25,24 +25,27 @@ class AgendaApi {
     return AgendaWeek.fromJson(data);
   }
 
+  /// A personal task: only WHEN is sent — what it says stays on this phone ([PrivateAgenda]).
   Future<AgendaItem> addTask({
-    required String title,
     required DateTime startsAt,
     DateTime? endsAt,
-    String? notes,
     bool remind = false,
   }) async {
     final data = await _client.post(
       '/agenda',
       data: {
-        'title': title,
+        'private': true,
         'starts_at': startsAt.toIso8601String(),
         if (endsAt != null) 'ends_at': endsAt.toIso8601String(),
-        if (notes != null && notes.isNotEmpty) 'notes': notes,
         'remind': remind,
       },
     ) as Map<String, dynamic>;
     return AgendaItem.fromJson(data['item'] as Map<String, dynamic>);
+  }
+
+  /// The phone now holds the words of these tasks: the server drops its copy and keeps the time.
+  Future<void> scrub(List<int> ids) async {
+    await _client.post('/agenda/scrub', data: {'ids': ids});
   }
 
   Future<void> delete(int id) => _client.delete('/agenda/$id');
@@ -50,32 +53,30 @@ class AgendaApi {
   /// POST /agenda/recurring — a repeating personal task, from today.
   /// `weekdays` is 0=Sun..6=Sat and only applies to weekly. Days that clash
   /// with an existing commitment are skipped by the server, not failed.
-  Future<({int created, int skipped})> addRecurring({
-    required String title,
+  Future<({int created, int skipped, List<int> ids})> addRecurring({
     required String startTime,
     required int durationMinutes,
     required String frequency,
     List<int> weekdays = const [],
     int weeks = 4,
-    String? notes,
     bool remind = false,
   }) async {
     final data = await _client.post(
       '/agenda/recurring',
       data: {
-        'title': title,
+        'private': true,
         'start_time': startTime,
         'duration_minutes': durationMinutes,
         'frequency': frequency,
         if (frequency == 'weekly') 'weekdays': weekdays,
         'weeks': weeks,
-        if (notes != null && notes.isNotEmpty) 'notes': notes,
         'remind': remind,
       },
     ) as Map<String, dynamic>;
     return (
       created: (data['created'] as num?)?.toInt() ?? 0,
       skipped: (data['skipped'] as num?)?.toInt() ?? 0,
+      ids: [for (final id in data['ids'] as List<dynamic>? ?? const []) (id as num).toInt()],
     );
   }
 

@@ -12,6 +12,9 @@ class AgendaItem {
   final DateTime? endsAt;
   final bool blocking;
 
+  /// A personal task whose title and notes are kept on this phone — the server's copy is the neutral one.
+  final bool isPrivate;
+
   const AgendaItem({
     required this.id,
     required this.kind,
@@ -20,7 +23,19 @@ class AgendaItem {
     this.startsAt,
     this.endsAt,
     required this.blocking,
+    this.isPrivate = false,
   });
+
+  AgendaItem copyWith({String? title, String? notes}) => AgendaItem(
+    id: id,
+    kind: kind,
+    title: title ?? this.title,
+    notes: notes ?? this.notes,
+    startsAt: startsAt,
+    endsAt: endsAt,
+    blocking: blocking,
+    isPrivate: isPrivate,
+  );
 
   bool get isPersonal => kind == 'personal';
 
@@ -32,6 +47,7 @@ class AgendaItem {
     startsAt: json['starts_at'] != null ? DateTime.tryParse(json['starts_at'] as String) : null,
     endsAt: json['ends_at'] != null ? DateTime.tryParse(json['ends_at'] as String) : null,
     blocking: json['blocking'] as bool? ?? false,
+    isPrivate: json['private'] as bool? ?? false,
   );
 }
 

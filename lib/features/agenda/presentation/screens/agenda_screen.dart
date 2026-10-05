@@ -293,16 +293,16 @@ class _AgendaScreenState extends ConsumerState<AgendaScreen> {
       final result = await ref
           .read(agendaApiProvider)
           .addRecurring(
-            title: title,
             startTime:
                 '${start.hour.toString().padLeft(2, '0')}:${start.minute.toString().padLeft(2, '0')}',
             durationMinutes: duration.clamp(5, 480),
             frequency: frequency,
             weekdays: weekdays,
             weeks: weeks,
-            notes: notes,
             remind: remind,
           );
+      // What the repeating task says stays on this phone; the server holds only its times.
+      await ref.read(privateAgendaProvider).remember(result.ids, title, notes);
       ref.invalidate(agendaDayControllerProvider);
       ref.invalidate(agendaWeekProvider);
       messenger.showSnackBar(
