@@ -181,7 +181,10 @@ void main() {
       await tester.pumpWidget(_app(const AgendaSettingsScreen(), api));
       await tester.pumpAndSettle();
 
+      // the new «reminders on this phone» switch sits above the calendar link: scroll the whole card into view
       await tester.scrollUntilVisible(find.text('Copy link'), 300);
+      await tester.ensureVisible(find.text('Create a new link'));
+      await tester.pumpAndSettle();
       expect(
         find.text('https://example.test/api/v2/agenda/feed/OLD.ics'),
         findsOneWidget,

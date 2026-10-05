@@ -5,7 +5,11 @@ class MealTimes {
   final String lunchAt;
   final String dinnerAt;
 
-  const MealTimes({required this.breakfastAt, required this.lunchAt, required this.dinnerAt});
+  const MealTimes({
+    required this.breakfastAt,
+    required this.lunchAt,
+    required this.dinnerAt,
+  });
 
   factory MealTimes.fromJson(Map<String, dynamic> json) => MealTimes(
     breakfastAt: json['breakfast_at'] as String,
@@ -28,9 +32,12 @@ class ReminderPreferences {
     required this.agendaLeadMinutes,
   });
 
-  factory ReminderPreferences.fromJson(Map<String, dynamic> json) => ReminderPreferences(
-    appointmentFirstLeadMinutes: json['appointment_first_lead_minutes'] as int,
-    appointmentSecondLeadMinutes: json['appointment_second_lead_minutes'] as int?,
-    agendaLeadMinutes: json['agenda_lead_minutes'] as int,
-  );
+  factory ReminderPreferences.fromJson(Map<String, dynamic> json) =>
+      ReminderPreferences(
+        appointmentFirstLeadMinutes:
+            json['appointment_first_lead_minutes'] as int,
+        appointmentSecondLeadMinutes:
+            json['appointment_second_lead_minutes'] as int?,
+        agendaLeadMinutes: json['agenda_lead_minutes'] as int,
+      );
 }

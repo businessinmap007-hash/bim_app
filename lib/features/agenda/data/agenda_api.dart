@@ -10,10 +10,19 @@ class AgendaApi {
   const AgendaApi(this._client);
 
   Future<List<AgendaItem>> day(DateTime date) async {
-    final data = await _client.get(
-      '/agenda',
-      query: {'date': _dateOnly(date)},
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.get('/agenda', query: {'date': _dateOnly(date)})
+            as Map<String, dynamic>;
+    return (data['items'] as List<dynamic>? ?? [])
+        .map((e) => AgendaItem.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
+  /// The coming items that ask to be reminded of (next 14 days) — the phone schedules its own notifications from them.
+  Future<List<AgendaItem>> upcoming({int days = 14}) async {
+    final data =
+        await _client.get('/agenda/upcoming', query: {'days': days})
+            as Map<String, dynamic>;
     return (data['items'] as List<dynamic>? ?? [])
         .map((e) => AgendaItem.fromJson(e as Map<String, dynamic>))
         .toList();
@@ -21,7 +30,9 @@ class AgendaApi {
 
   /// The seven days around [date] (Saturday to Friday), empty days included.
   Future<AgendaWeek> week(DateTime date) async {
-    final data = await _client.get('/agenda/week', query: {'date': _dateOnly(date)}) as Map<String, dynamic>;
+    final data =
+        await _client.get('/agenda/week', query: {'date': _dateOnly(date)})
+            as Map<String, dynamic>;
     return AgendaWeek.fromJson(data);
   }
 
@@ -31,15 +42,17 @@ class AgendaApi {
     DateTime? endsAt,
     bool remind = false,
   }) async {
-    final data = await _client.post(
-      '/agenda',
-      data: {
-        'private': true,
-        'starts_at': startsAt.toIso8601String(),
-        if (endsAt != null) 'ends_at': endsAt.toIso8601String(),
-        'remind': remind,
-      },
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.post(
+              '/agenda',
+              data: {
+                'private': true,
+                'starts_at': startsAt.toIso8601String(),
+                if (endsAt != null) 'ends_at': endsAt.toIso8601String(),
+                'remind': remind,
+              },
+            )
+            as Map<String, dynamic>;
     return AgendaItem.fromJson(data['item'] as Map<String, dynamic>);
   }
 
@@ -61,22 +74,27 @@ class AgendaApi {
     int weeks = 4,
     bool remind = false,
   }) async {
-    final data = await _client.post(
-      '/agenda/recurring',
-      data: {
-        'private': true,
-        'start_time': startTime,
-        'duration_minutes': durationMinutes,
-        'frequency': frequency,
-        if (frequency == 'weekly') 'weekdays': weekdays,
-        'weeks': weeks,
-        'remind': remind,
-      },
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.post(
+              '/agenda/recurring',
+              data: {
+                'private': true,
+                'start_time': startTime,
+                'duration_minutes': durationMinutes,
+                'frequency': frequency,
+                if (frequency == 'weekly') 'weekdays': weekdays,
+                'weeks': weeks,
+                'remind': remind,
+              },
+            )
+            as Map<String, dynamic>;
     return (
       created: (data['created'] as num?)?.toInt() ?? 0,
       skipped: (data['skipped'] as num?)?.toInt() ?? 0,
-      ids: [for (final id in data['ids'] as List<dynamic>? ?? const []) (id as num).toInt()],
+      ids: [
+        for (final id in data['ids'] as List<dynamic>? ?? const [])
+          (id as num).toInt(),
+      ],
     );
   }
 
@@ -88,7 +106,8 @@ class AgendaApi {
 
   /// POST /me/agenda-feed/rotate — a new URL; the old one stops working.
   Future<String> rotateFeedUrl() async {
-    final data = await _client.post('/me/agenda-feed/rotate') as Map<String, dynamic>;
+    final data =
+        await _client.post('/me/agenda-feed/rotate') as Map<String, dynamic>;
     return data['url'] as String;
   }
 
@@ -102,16 +121,25 @@ class AgendaApi {
     required String lunchAt,
     required String dinnerAt,
   }) async {
-    final data = await _client.put(
-      '/me/meal-times',
-      data: {'breakfast_at': breakfastAt, 'lunch_at': lunchAt, 'dinner_at': dinnerAt},
-    ) as Map<String, dynamic>;
+    final data =
+        await _client.put(
+              '/me/meal-times',
+              data: {
+                'breakfast_at': breakfastAt,
+                'lunch_at': lunchAt,
+                'dinner_at': dinnerAt,
+              },
+            )
+            as Map<String, dynamic>;
     return MealTimes.fromJson(data['meal_times'] as Map<String, dynamic>);
   }
 
   Future<ReminderPreferences> reminderPreferences() async {
-    final data = await _client.get('/me/reminder-preferences') as Map<String, dynamic>;
-    return ReminderPreferences.fromJson(data['reminder_preferences'] as Map<String, dynamic>);
+    final data =
+        await _client.get('/me/reminder-preferences') as Map<String, dynamic>;
+    return ReminderPreferences.fromJson(
+      data['reminder_preferences'] as Map<String, dynamic>,
+    );
   }
 
   Future<ReminderPreferences> updateReminderPreferences({
@@ -119,15 +147,19 @@ class AgendaApi {
     required int? appointmentSecondLeadMinutes,
     required int agendaLeadMinutes,
   }) async {
-    final data = await _client.put(
-      '/me/reminder-preferences',
-      data: {
-        'appointment_first_lead_minutes': appointmentFirstLeadMinutes,
-        'appointment_second_lead_minutes': appointmentSecondLeadMinutes,
-        'agenda_lead_minutes': agendaLeadMinutes,
-      },
-    ) as Map<String, dynamic>;
-    return ReminderPreferences.fromJson(data['reminder_preferences'] as Map<String, dynamic>);
+    final data =
+        await _client.put(
+              '/me/reminder-preferences',
+              data: {
+                'appointment_first_lead_minutes': appointmentFirstLeadMinutes,
+                'appointment_second_lead_minutes': appointmentSecondLeadMinutes,
+                'agenda_lead_minutes': agendaLeadMinutes,
+              },
+            )
+            as Map<String, dynamic>;
+    return ReminderPreferences.fromJson(
+      data['reminder_preferences'] as Map<String, dynamic>,
+    );
   }
 
   String _dateOnly(DateTime d) =>

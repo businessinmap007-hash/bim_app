@@ -24,11 +24,35 @@ class AgendaSettingsScreen extends StatelessWidget {
         children: const [
           _MealTimesSection(),
           SizedBox(height: 24),
+          _LocalRemindersSection(),
+          SizedBox(height: 24),
           _ReminderPreferencesSection(),
           SizedBox(height: 24),
           _CalendarFeedSection(),
         ],
       ),
+    );
+  }
+}
+
+/// «الإشعارات المحلية للتذكيرات» — this phone shows the reminders itself, with the words you wrote.
+class _LocalRemindersSection extends ConsumerWidget {
+  const _LocalRemindersSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final on = ref.watch(agendaLocalRemindersProvider);
+
+    return SwitchListTile(
+      contentPadding: EdgeInsets.zero,
+      title: Text(l10n.agendaLocalRemindersTitle),
+      subtitle: Text(l10n.agendaLocalRemindersHint),
+      value: on,
+      onChanged: (value) async {
+        await ref.read(agendaLocalRemindersProvider.notifier).set(value);
+        await ref.read(agendaRemindersProvider).sync();
+      },
     );
   }
 }
@@ -51,8 +75,14 @@ class _CalendarFeedSection extends ConsumerWidget {
         builder: (context) => AlertDialog(
           content: Text(l10n.agendaFeedRotateConfirm),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l10n.commonCancel)),
-            TextButton(onPressed: () => Navigator.pop(context, true), child: Text(l10n.agendaFeedRotate)),
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(l10n.commonCancel),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: Text(l10n.agendaFeedRotate),
+            ),
           ],
         ),
       );
@@ -61,7 +91,9 @@ class _CalendarFeedSection extends ConsumerWidget {
         await ref.read(agendaApiProvider).rotateFeedUrl();
         ref.invalidate(agendaFeedUrlProvider);
       } catch (_) {
-        messenger.showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+        messenger.showSnackBar(
+          SnackBar(content: Text(l10n.commonSomethingWentWrong)),
+        );
       }
     }
 
@@ -70,7 +102,10 @@ class _CalendarFeedSection extends ConsumerWidget {
       children: [
         Text(l10n.agendaFeedTitle, style: theme.textTheme.titleSmall),
         const SizedBox(height: 4),
-        Text(l10n.agendaFeedHint, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+        Text(
+          l10n.agendaFeedHint,
+          style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
+        ),
         const SizedBox(height: 12),
         url.when(
           loading: () => const Center(child: CircularProgressIndicator()),
@@ -82,7 +117,11 @@ class _CalendarFeedSection extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SelectableText(value, textDirection: TextDirection.ltr, style: theme.textTheme.bodySmall),
+                  SelectableText(
+                    value,
+                    textDirection: TextDirection.ltr,
+                    style: theme.textTheme.bodySmall,
+                  ),
                   const SizedBox(height: 8),
                   Wrap(
                     spacing: 8,
@@ -91,12 +130,17 @@ class _CalendarFeedSection extends ConsumerWidget {
                         onPressed: () async {
                           final messenger = ScaffoldMessenger.of(context);
                           await Clipboard.setData(ClipboardData(text: value));
-                          messenger.showSnackBar(SnackBar(content: Text(l10n.agendaFeedCopied)));
+                          messenger.showSnackBar(
+                            SnackBar(content: Text(l10n.agendaFeedCopied)),
+                          );
                         },
                         icon: const Icon(Icons.copy, size: 18),
                         label: Text(l10n.agendaFeedCopy),
                       ),
-                      OutlinedButton(onPressed: rotate, child: Text(l10n.agendaFeedRotate)),
+                      OutlinedButton(
+                        onPressed: rotate,
+                        child: Text(l10n.agendaFeedRotate),
+                      ),
                     ],
                   ),
                 ],
@@ -110,8 +154,12 @@ class _CalendarFeedSection extends ConsumerWidget {
 }
 
 String _formatMinutes(AppLocalizations l10n, int minutes) {
-  if (minutes % 1440 == 0 && minutes >= 1440) return l10n.durationDays(minutes ~/ 1440);
-  if (minutes % 60 == 0 && minutes >= 60) return l10n.durationHours(minutes ~/ 60);
+  if (minutes % 1440 == 0 && minutes >= 1440) {
+    return l10n.durationDays(minutes ~/ 1440);
+  }
+  if (minutes % 60 == 0 && minutes >= 60) {
+    return l10n.durationHours(minutes ~/ 60);
+  }
   return l10n.durationMinutes(minutes);
 }
 
@@ -135,13 +183,18 @@ Future<int?> _pickDuration(
     isScrollControlled: true,
     builder: (sheetContext) => SafeArea(
       child: ConstrainedBox(
-        constraints: BoxConstraints(maxHeight: MediaQuery.of(sheetContext).size.height * 0.7),
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(sheetContext).size.height * 0.7,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
               padding: const EdgeInsets.all(16),
-              child: Text(title, style: Theme.of(sheetContext).textTheme.titleMedium),
+              child: Text(
+                title,
+                style: Theme.of(sheetContext).textTheme.titleMedium,
+              ),
             ),
             Flexible(
               child: ListView(
@@ -152,7 +205,8 @@ Future<int?> _pickDuration(
                       value: option,
                       groupValue: selected,
                       title: Text(label(option)),
-                      onChanged: (v) => Navigator.of(sheetContext).pop(_DurationPick(v)),
+                      onChanged: (v) =>
+                          Navigator.of(sheetContext).pop(_DurationPick(v)),
                     ),
                 ],
               ),
@@ -179,9 +233,15 @@ class _MealTimesSection extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(l10n.agendaSettingsMealTimesSection, style: Theme.of(context).textTheme.titleMedium),
+            Text(
+              l10n.agendaSettingsMealTimesSection,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             const SizedBox(height: 4),
-            Text(l10n.agendaSettingsMealTimesHint, style: Theme.of(context).textTheme.bodySmall),
+            Text(
+              l10n.agendaSettingsMealTimesHint,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
             const SizedBox(height: 8),
             async.when(
               loading: () => const Padding(
@@ -228,7 +288,10 @@ class _MealTimesFormState extends ConsumerState<_MealTimesForm> {
   String _serialize(TimeOfDay t) =>
       '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}';
 
-  Future<void> _pickTime(TimeOfDay current, ValueChanged<TimeOfDay> onPicked) async {
+  Future<void> _pickTime(
+    TimeOfDay current,
+    ValueChanged<TimeOfDay> onPicked,
+  ) async {
     final picked = await showTimePicker(context: context, initialTime: current);
     if (picked != null) onPicked(picked);
   }
@@ -245,13 +308,15 @@ class _MealTimesFormState extends ConsumerState<_MealTimesForm> {
             dinnerAt: _serialize(_dinner),
           );
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(l10n.agendaSettingsMealTimesSaved)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.agendaSettingsMealTimesSaved)),
+        );
       }
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
       }
     } finally {
       if (mounted) setState(() => _saving = false);
@@ -267,7 +332,8 @@ class _MealTimesFormState extends ConsumerState<_MealTimesForm> {
           contentPadding: EdgeInsets.zero,
           title: Text(l10n.agendaSettingsBreakfast),
           trailing: Text(_breakfast.format(context)),
-          onTap: () => _pickTime(_breakfast, (v) => setState(() => _breakfast = v)),
+          onTap: () =>
+              _pickTime(_breakfast, (v) => setState(() => _breakfast = v)),
         ),
         ListTile(
           contentPadding: EdgeInsets.zero,
@@ -287,7 +353,11 @@ class _MealTimesFormState extends ConsumerState<_MealTimesForm> {
           child: FilledButton(
             onPressed: _saving ? null : _save,
             child: _saving
-                ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2))
+                ? const SizedBox(
+                    height: 18,
+                    width: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
                 : Text(l10n.commonSave),
           ),
         ),
@@ -314,9 +384,15 @@ class _ReminderPreferencesSection extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(l10n.agendaSettingsRemindersSection, style: Theme.of(context).textTheme.titleMedium),
+            Text(
+              l10n.agendaSettingsRemindersSection,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             const SizedBox(height: 4),
-            Text(l10n.agendaSettingsRemindersHint, style: Theme.of(context).textTheme.bodySmall),
+            Text(
+              l10n.agendaSettingsRemindersHint,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
             const SizedBox(height: 8),
             async.when(
               loading: () => const Padding(
@@ -327,7 +403,8 @@ class _ReminderPreferencesSection extends ConsumerWidget {
                 children: [
                   Text(l10n.commonSomethingWentWrong),
                   OutlinedButton(
-                    onPressed: () => ref.invalidate(reminderPreferencesProvider),
+                    onPressed: () =>
+                        ref.invalidate(reminderPreferencesProvider),
                     child: Text(l10n.commonRetry),
                   ),
                 ],
@@ -346,10 +423,12 @@ class _ReminderPreferencesForm extends ConsumerStatefulWidget {
   const _ReminderPreferencesForm({required this.initial});
 
   @override
-  ConsumerState<_ReminderPreferencesForm> createState() => _ReminderPreferencesFormState();
+  ConsumerState<_ReminderPreferencesForm> createState() =>
+      _ReminderPreferencesFormState();
 }
 
-class _ReminderPreferencesFormState extends ConsumerState<_ReminderPreferencesForm> {
+class _ReminderPreferencesFormState
+    extends ConsumerState<_ReminderPreferencesForm> {
   late int _firstLead = widget.initial.appointmentFirstLeadMinutes;
   late int? _secondLead = widget.initial.appointmentSecondLeadMinutes;
   late int _agendaLead = widget.initial.agendaLeadMinutes;
@@ -358,9 +437,9 @@ class _ReminderPreferencesFormState extends ConsumerState<_ReminderPreferencesFo
   Future<void> _save() async {
     final l10n = AppLocalizations.of(context)!;
     if (_secondLead != null && _secondLead! >= _firstLead) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.agendaSettingsSecondLeadError)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.agendaSettingsSecondLeadError)),
+      );
       return;
     }
     setState(() => _saving = true);
@@ -372,14 +451,18 @@ class _ReminderPreferencesFormState extends ConsumerState<_ReminderPreferencesFo
             appointmentSecondLeadMinutes: _secondLead,
             agendaLeadMinutes: _agendaLead,
           );
+      // the lead time moves every reminder on this phone
+      await ref.read(agendaRemindersProvider).sync();
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(l10n.agendaSettingsRemindersSaved)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.agendaSettingsRemindersSaved)),
+        );
       }
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
       }
     } finally {
       if (mounted) setState(() => _saving = false);
@@ -409,13 +492,19 @@ class _ReminderPreferencesFormState extends ConsumerState<_ReminderPreferencesFo
         ListTile(
           contentPadding: EdgeInsets.zero,
           title: Text(l10n.agendaSettingsSecondLead),
-          trailing: Text(_secondLead == null ? l10n.agendaSettingsSecondLeadNone : _formatMinutes(l10n, _secondLead!)),
+          trailing: Text(
+            _secondLead == null
+                ? l10n.agendaSettingsSecondLeadNone
+                : _formatMinutes(l10n, _secondLead!),
+          ),
           onTap: () async {
             final picked = await _pickDuration(
               context,
               title: l10n.agendaSettingsSecondLead,
               options: _secondLeadOptions,
-              label: (v) => v == null ? l10n.agendaSettingsSecondLeadNone : _formatMinutes(l10n, v),
+              label: (v) => v == null
+                  ? l10n.agendaSettingsSecondLeadNone
+                  : _formatMinutes(l10n, v),
               selected: _secondLead,
             );
             setState(() => _secondLead = picked);
@@ -424,13 +513,19 @@ class _ReminderPreferencesFormState extends ConsumerState<_ReminderPreferencesFo
         ListTile(
           contentPadding: EdgeInsets.zero,
           title: Text(l10n.agendaSettingsAgendaLead),
-          trailing: Text(_agendaLead == 0 ? l10n.agendaSettingsAgendaLeadNone : _formatMinutes(l10n, _agendaLead)),
+          trailing: Text(
+            _agendaLead == 0
+                ? l10n.agendaSettingsAgendaLeadNone
+                : _formatMinutes(l10n, _agendaLead),
+          ),
           onTap: () async {
             final picked = await _pickDuration(
               context,
               title: l10n.agendaSettingsAgendaLead,
               options: _agendaLeadOptions,
-              label: (v) => v == 0 ? l10n.agendaSettingsAgendaLeadNone : _formatMinutes(l10n, v!),
+              label: (v) => v == 0
+                  ? l10n.agendaSettingsAgendaLeadNone
+                  : _formatMinutes(l10n, v!),
               selected: _agendaLead,
             );
             setState(() => _agendaLead = picked!);
@@ -442,7 +537,11 @@ class _ReminderPreferencesFormState extends ConsumerState<_ReminderPreferencesFo
           child: FilledButton(
             onPressed: _saving ? null : _save,
             child: _saving
-                ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2))
+                ? const SizedBox(
+                    height: 18,
+                    width: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
                 : Text(l10n.commonSave),
           ),
         ),

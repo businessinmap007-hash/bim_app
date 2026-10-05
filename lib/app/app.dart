@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/responsive/breakpoints.dart';
+import '../features/agenda/application/agenda_providers.dart';
 import '../features/settings/application/locale_controller.dart';
 import '../features/settings/application/theme_mode_controller.dart';
 import '../l10n/app_localizations.dart';
@@ -17,6 +18,8 @@ class BimApp extends ConsumerWidget {
     final router = ref.watch(routerProvider);
     final locale = ref.watch(localeControllerProvider);
     final themeMode = ref.watch(themeModeControllerProvider);
+    // the phone's own agenda reminders follow the signed-in account
+    ref.watch(agendaRemindersAutoSyncProvider);
 
     return MaterialApp.router(
       title: 'BIM',

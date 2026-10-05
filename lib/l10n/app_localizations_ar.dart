@@ -3834,6 +3834,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get jobFollowed => 'تمت متابعة هذا المجال.';
 
   @override
+  String get agendaLocalRemindersTitle => 'تذكيرات على هذا الهاتف';
+
+  @override
+  String get agendaLocalRemindersHint =>
+      'يعرض هاتفك تذكيرات مهامك وجرعات أدويتك بنفسه وبكلماتك أنت — لا تخرج منه.';
+
+  @override
+  String agendaReminderBody(String time) {
+    return 'الساعة $time';
+  }
+
+  @override
   String get agendaSettingsTitle => 'التذكيرات ومواعيد الوجبات';
 
   @override

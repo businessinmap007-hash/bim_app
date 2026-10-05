@@ -33,7 +33,9 @@ class _AgendaScreenState extends ConsumerState<AgendaScreen> {
   bool _week = false;
 
   void _shiftDay(int delta) {
-    setState(() => _date = _date.add(Duration(days: _week ? delta * 7 : delta)));
+    setState(
+      () => _date = _date.add(Duration(days: _week ? delta * 7 : delta)),
+    );
   }
 
   Future<void> _addTask() async {
@@ -303,6 +305,7 @@ class _AgendaScreenState extends ConsumerState<AgendaScreen> {
           );
       // What the repeating task says stays on this phone; the server holds only its times.
       await ref.read(privateAgendaProvider).remember(result.ids, title, notes);
+      await ref.read(agendaRemindersProvider).sync();
       ref.invalidate(agendaDayControllerProvider);
       ref.invalidate(agendaWeekProvider);
       messenger.showSnackBar(
@@ -328,7 +331,9 @@ class _AgendaScreenState extends ConsumerState<AgendaScreen> {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(agendaDayControllerProvider(_date));
     final isToday = _date == _dateOnly(DateTime.now());
-    final weekData = _week ? ref.watch(agendaWeekProvider(_date)).asData?.value : null;
+    final weekData = _week
+        ? ref.watch(agendaWeekProvider(_date)).asData?.value
+        : null;
 
     return Scaffold(
       appBar: AppBar(
@@ -346,7 +351,11 @@ class _AgendaScreenState extends ConsumerState<AgendaScreen> {
               ),
             ),
           IconButton(
-            icon: Icon(_week ? Icons.calendar_view_day_outlined : Icons.calendar_view_week_outlined),
+            icon: Icon(
+              _week
+                  ? Icons.calendar_view_day_outlined
+                  : Icons.calendar_view_week_outlined,
+            ),
             tooltip: _week ? l10n.agendaDayView : l10n.agendaWeekView,
             onPressed: () => setState(() => _week = !_week),
           ),
@@ -454,7 +463,10 @@ class _WeekGrid extends ConsumerWidget {
           children: [
             Text(l10n.commonSomethingWentWrong),
             const SizedBox(height: 8),
-            OutlinedButton(onPressed: () => ref.invalidate(agendaWeekProvider(date)), child: Text(l10n.commonRetry)),
+            OutlinedButton(
+              onPressed: () => ref.invalidate(agendaWeekProvider(date)),
+              child: Text(l10n.commonRetry),
+            ),
           ],
         ),
       ),
@@ -469,7 +481,10 @@ class _WeekGrid extends ConsumerWidget {
                 shape: _dateOnly(day.date) == today
                     ? RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
-                        side: BorderSide(color: theme.colorScheme.primary, width: 1.5),
+                        side: BorderSide(
+                          color: theme.colorScheme.primary,
+                          width: 1.5,
+                        ),
                       )
                     : null,
                 child: InkWell(
@@ -486,7 +501,12 @@ class _WeekGrid extends ConsumerWidget {
                         ),
                         const SizedBox(height: 6),
                         if (day.items.isEmpty)
-                          Text(l10n.agendaNothing, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor))
+                          Text(
+                            l10n.agendaNothing,
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.hintColor,
+                            ),
+                          )
                         else
                           for (final item in day.items)
                             Padding(

@@ -3840,6 +3840,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get jobFollowed => 'Following this field.';
 
   @override
+  String get agendaLocalRemindersTitle => 'Reminders on this phone';
+
+  @override
+  String get agendaLocalRemindersHint =>
+      'This phone shows your task and medicine reminders itself, with the words you wrote — they never leave it.';
+
+  @override
+  String agendaReminderBody(String time) {
+    return 'At $time';
+  }
+
+  @override
   String get agendaSettingsTitle => 'Reminders & meal times';
 
   @override

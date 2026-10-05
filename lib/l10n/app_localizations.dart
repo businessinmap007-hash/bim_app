@@ -7171,6 +7171,24 @@ abstract class AppLocalizations {
   /// **'تمت متابعة هذا المجال.'**
   String get jobFollowed;
 
+  /// No description provided for @agendaLocalRemindersTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تذكيرات على هذا الهاتف'**
+  String get agendaLocalRemindersTitle;
+
+  /// No description provided for @agendaLocalRemindersHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يعرض هاتفك تذكيرات مهامك وجرعات أدويتك بنفسه وبكلماتك أنت — لا تخرج منه.'**
+  String get agendaLocalRemindersHint;
+
+  /// No description provided for @agendaReminderBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'الساعة {time}'**
+  String agendaReminderBody(String time);
+
   /// No description provided for @agendaSettingsTitle.
   ///
   /// In ar, this message translates to:

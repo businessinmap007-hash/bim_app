@@ -44,8 +44,12 @@ class AgendaItem {
     kind: json['kind'] as String? ?? 'personal',
     title: json['title'] as String? ?? '',
     notes: json['notes'] as String?,
-    startsAt: json['starts_at'] != null ? DateTime.tryParse(json['starts_at'] as String) : null,
-    endsAt: json['ends_at'] != null ? DateTime.tryParse(json['ends_at'] as String) : null,
+    startsAt: json['starts_at'] != null
+        ? DateTime.tryParse(json['starts_at'] as String)
+        : null,
+    endsAt: json['ends_at'] != null
+        ? DateTime.tryParse(json['ends_at'] as String)
+        : null,
     blocking: json['blocking'] as bool? ?? false,
     isPrivate: json['private'] as bool? ?? false,
   );
@@ -60,7 +64,9 @@ class AgendaWeekDay {
 
   factory AgendaWeekDay.fromJson(Map<String, dynamic> json) => AgendaWeekDay(
     date: DateTime.parse(json['date'] as String),
-    items: (json['items'] as List<dynamic>? ?? []).map((e) => AgendaItem.fromJson(e as Map<String, dynamic>)).toList(),
+    items: (json['items'] as List<dynamic>? ?? [])
+        .map((e) => AgendaItem.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
@@ -71,11 +77,17 @@ class AgendaWeek {
   final DateTime to;
   final List<AgendaWeekDay> days;
 
-  const AgendaWeek({required this.from, required this.to, this.days = const []});
+  const AgendaWeek({
+    required this.from,
+    required this.to,
+    this.days = const [],
+  });
 
   factory AgendaWeek.fromJson(Map<String, dynamic> json) => AgendaWeek(
     from: DateTime.parse(json['from'] as String),
     to: DateTime.parse(json['to'] as String),
-    days: (json['days'] as List<dynamic>? ?? []).map((e) => AgendaWeekDay.fromJson(e as Map<String, dynamic>)).toList(),
+    days: (json['days'] as List<dynamic>? ?? [])
+        .map((e) => AgendaWeekDay.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
