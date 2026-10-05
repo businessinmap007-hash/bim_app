@@ -139,9 +139,14 @@ class IssuedPrescriptionsState {
 
 class IssuedPrescriptionsController extends StateNotifier<IssuedPrescriptionsState> {
   final PrescriptionsApi _api;
+
+  /// «نسخة الطبيب على الهاتف»: every page the server sends is also kept on the doctor's phone.
+  final void Function(List<Prescription> fetched)? _onFetched;
   int _page = 1;
 
-  IssuedPrescriptionsController(this._api) : super(const IssuedPrescriptionsState()) {
+  IssuedPrescriptionsController(this._api, {void Function(List<Prescription>)? onFetched})
+    : _onFetched = onFetched,
+      super(const IssuedPrescriptionsState()) {
     load();
   }
 
@@ -150,6 +155,7 @@ class IssuedPrescriptionsController extends StateNotifier<IssuedPrescriptionsSta
     _page = 1;
     try {
       final result = await _api.issuedPrescriptions(page: _page);
+      _onFetched?.call(result.items);
       state = state.copyWith(items: result.items, isLoading: false, hasMore: result.hasMore);
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
@@ -161,6 +167,7 @@ class IssuedPrescriptionsController extends StateNotifier<IssuedPrescriptionsSta
     state = state.copyWith(isLoadingMore: true);
     try {
       final result = await _api.issuedPrescriptions(page: _page + 1);
+      _onFetched?.call(result.items);
       _page += 1;
       state = state.copyWith(
         items: [...state.items, ...result.items],
@@ -175,5 +182,8 @@ class IssuedPrescriptionsController extends StateNotifier<IssuedPrescriptionsSta
 
 final issuedPrescriptionsControllerProvider =
     StateNotifierProvider<IssuedPrescriptionsController, IssuedPrescriptionsState>((ref) {
-      return IssuedPrescriptionsController(ref.watch(prescriptionsApiProvider));
+      return IssuedPrescriptionsController(
+        ref.watch(prescriptionsApiProvider),
+        onFetched: (fetched) => ref.read(prescriptionArchiveProvider.notifier).remember(fetched),
+      );
     });

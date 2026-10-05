@@ -70,6 +70,12 @@ class PrescriptionsApi {
     );
   }
 
+  /// The DOCTOR's phone says «I hold this exact copy» (the issuing clinic's own account) — the other half of what
+  /// lets the server drop the sensitive fields.
+  Future<void> confirmArchivedByDoctor(int id, Map<String, dynamic> content) async {
+    await _client.post('/prescriptions/issued/archived', data: {'id': id, 'content': content});
+  }
+
   /// A doctor's own issued prescriptions.
   Future<Paginated<Prescription>> issuedPrescriptions({int page = 1}) async {
     final data =

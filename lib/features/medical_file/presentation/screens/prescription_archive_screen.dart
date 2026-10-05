@@ -7,8 +7,10 @@ import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../auth/application/auth_controller.dart';
 import '../../../prescriptions/data/models/prescription.dart';
-import '../../../prescriptions/presentation/screens/prescriptions_screen.dart' show statusLabel;
+import '../../../prescriptions/presentation/screens/prescriptions_screen.dart'
+    show statusLabel;
 import '../../application/medical_file_providers.dart';
 import '../../application/prescription_archive_providers.dart';
 import '../../data/medical_share_crypto.dart';
@@ -24,6 +26,8 @@ class PrescriptionArchiveScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final async = ref.watch(prescriptionArchiveProvider);
+    final auth = ref.watch(authControllerProvider);
+    final me = auth is AuthSignedIn ? auth.user.id : null;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.rxArchiveTitle)),
@@ -33,26 +37,64 @@ class PrescriptionArchiveScreen extends ConsumerWidget {
         data: (items) => ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Icon(Icons.lock_outline, size: 18, color: theme.colorScheme.primary),
-              const SizedBox(width: 8),
-              Expanded(child: Text(l10n.rxArchiveNote, style: theme.textTheme.bodySmall)),
-            ]),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.lock_outline,
+                  size: 18,
+                  color: theme.colorScheme.primary,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    l10n.rxArchiveNote,
+                    style: theme.textTheme.bodySmall,
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(height: 12),
             if (items.isEmpty)
-              Padding(padding: const EdgeInsets.only(top: 40), child: Center(child: Text(l10n.rxArchiveEmpty, textAlign: TextAlign.center)))
+              Padding(
+                padding: const EdgeInsets.only(top: 40),
+                child: Center(
+                  child: Text(l10n.rxArchiveEmpty, textAlign: TextAlign.center),
+                ),
+              )
             else
               for (final p in items)
                 Card(
                   margin: const EdgeInsets.only(bottom: 8),
                   child: ListTile(
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => PrescriptionCopyScreen(prescription: p))),
-                    title: Text(p.items.map((i) => i.name ?? '').where((n) => n.isNotEmpty).join('، ')),
-                    subtitle: Text([
-                      if (p.doctor?.name != null) p.doctor!.name!,
-                      if (p.issuedAt != null) DateFormat.yMMMd().format(p.issuedAt!.toLocal()),
-                    ].join(' — ')),
-                    trailing: Text(statusLabel(p.status, l10n), style: theme.textTheme.bodySmall),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => PrescriptionCopyScreen(prescription: p),
+                      ),
+                    ),
+                    title: Text(
+                      p.items
+                          .map((i) => i.name ?? '')
+                          .where((n) => n.isNotEmpty)
+                          .join('، '),
+                    ),
+                    subtitle: Text(
+                      [
+                        // the doctor sees the patient; the patient sees the doctor
+                        if (p.patient.id == me
+                            ? p.doctor?.name != null
+                            : p.patient.name != null)
+                          p.patient.id == me
+                              ? p.doctor!.name!
+                              : p.patient.name!,
+                        if (p.issuedAt != null)
+                          DateFormat.yMMMd().format(p.issuedAt!.toLocal()),
+                      ].join(' — '),
+                    ),
+                    trailing: Text(
+                      statusLabel(p.status, l10n),
+                      style: theme.textTheme.bodySmall,
+                    ),
                   ),
                 ),
           ],
@@ -63,23 +105,33 @@ class PrescriptionArchiveScreen extends ConsumerWidget {
 }
 
 /// One archived prescription, read from the phone, with «عرض على صيدلي».
-class PrescriptionCopyScreen extends StatelessWidget {
+class PrescriptionCopyScreen extends ConsumerWidget {
   final Prescription prescription;
   const PrescriptionCopyScreen({super.key, required this.prescription});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final p = prescription;
+    final auth = ref.watch(authControllerProvider);
+    final isPatient = auth is AuthSignedIn && auth.user.id == p.patient.id;
 
     return Scaffold(
       appBar: AppBar(title: Text('#${p.id}')),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          if (p.doctor?.name != null) Text(l10n.rxIssuedBy(p.doctor!.name!), style: theme.textTheme.titleSmall),
-          if (p.issuedAt != null) Text(DateFormat.yMMMd().add_Hm().format(p.issuedAt!.toLocal()), style: theme.textTheme.bodySmall),
+          if (p.doctor?.name != null)
+            Text(
+              l10n.rxIssuedBy(p.doctor!.name!),
+              style: theme.textTheme.titleSmall,
+            ),
+          if (p.issuedAt != null)
+            Text(
+              DateFormat.yMMMd().add_Hm().format(p.issuedAt!.toLocal()),
+              style: theme.textTheme.bodySmall,
+            ),
           if (p.contentPurged) ...[
             const SizedBox(height: 8),
             Text(l10n.rxPurgedNote, style: theme.textTheme.bodySmall),
@@ -95,11 +147,15 @@ class PrescriptionCopyScreen extends StatelessWidget {
               margin: const EdgeInsets.only(bottom: 8),
               child: ListTile(
                 title: Text(i.name ?? ''),
-                subtitle: Text([
-                  if ((i.dosage ?? '').isNotEmpty) l10n.rxItemDosage(i.dosage!),
-                  if ((i.quantity ?? '').isNotEmpty) l10n.rxItemQuantity(i.quantity!),
-                  if ((i.instructions ?? '').isNotEmpty) i.instructions!,
-                ].join(' — ')),
+                subtitle: Text(
+                  [
+                    if ((i.dosage ?? '').isNotEmpty)
+                      l10n.rxItemDosage(i.dosage!),
+                    if ((i.quantity ?? '').isNotEmpty)
+                      l10n.rxItemQuantity(i.quantity!),
+                    if ((i.instructions ?? '').isNotEmpty) i.instructions!,
+                  ].join(' — '),
+                ),
               ),
             ),
           if ((p.notes ?? '').isNotEmpty) ...[
@@ -108,16 +164,26 @@ class PrescriptionCopyScreen extends StatelessWidget {
           ],
         ],
       ),
-      bottomNavigationBar: SafeArea(
-        minimum: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-        child: FilledButton.icon(
-          onPressed: p.verifiableContent == null
-              ? () => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.rxNoCopy)))
-              : () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => PrescriptionShowScreen(prescription: p))),
-          icon: const Icon(Icons.qr_code_2),
-          label: Text(l10n.rxShowPharmacist),
-        ),
-      ),
+      // Showing it to a pharmacist is the PATIENT's act; the doctor's copy is for the doctor's own records.
+      bottomNavigationBar: !isPatient
+          ? null
+          : SafeArea(
+              minimum: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+              child: FilledButton.icon(
+                onPressed: p.verifiableContent == null
+                    ? () => ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(l10n.rxNoCopy)))
+                    : () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              PrescriptionShowScreen(prescription: p),
+                        ),
+                      ),
+                icon: const Icon(Icons.qr_code_2),
+                label: Text(l10n.rxShowPharmacist),
+              ),
+            ),
     );
   }
 }
@@ -128,10 +194,12 @@ class PrescriptionShowScreen extends ConsumerStatefulWidget {
   const PrescriptionShowScreen({super.key, required this.prescription});
 
   @override
-  ConsumerState<PrescriptionShowScreen> createState() => _PrescriptionShowScreenState();
+  ConsumerState<PrescriptionShowScreen> createState() =>
+      _PrescriptionShowScreenState();
 }
 
-class _PrescriptionShowScreenState extends ConsumerState<PrescriptionShowScreen> {
+class _PrescriptionShowScreenState
+    extends ConsumerState<PrescriptionShowScreen> {
   ({String id, String qr, DateTime expiresAt})? _share;
   bool _busy = false;
   String? _error;
@@ -156,8 +224,16 @@ class _PrescriptionShowScreenState extends ConsumerState<PrescriptionShowScreen>
         'content': widget.prescription.verifiableContent,
         'doctor_name': widget.prescription.doctor?.name,
       });
-      final created = await ref.read(medicalShareApiProvider).create(sealed.ciphertext, minutes: 15);
-      setState(() => _share = (id: created.id, qr: MedicalShareCrypto.qrPayload(created.id, sealed.key), expiresAt: created.expiresAt));
+      final created = await ref
+          .read(medicalShareApiProvider)
+          .create(sealed.ciphertext, minutes: 15);
+      setState(
+        () => _share = (
+          id: created.id,
+          qr: MedicalShareCrypto.qrPayload(created.id, sealed.key),
+          expiresAt: created.expiresAt,
+        ),
+      );
       _ticker = Timer.periodic(const Duration(seconds: 15), (_) {
         if (!mounted) return;
         if (_share != null && DateTime.now().isAfter(_share!.expiresAt)) {
@@ -168,7 +244,11 @@ class _PrescriptionShowScreenState extends ConsumerState<PrescriptionShowScreen>
         }
       });
     } catch (e) {
-      setState(() => _error = e is ApiException ? e.message : l10n.commonSomethingWentWrong);
+      setState(
+        () => _error = e is ApiException
+            ? e.message
+            : l10n.commonSomethingWentWrong,
+      );
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -199,9 +279,19 @@ class _PrescriptionShowScreenState extends ConsumerState<PrescriptionShowScreen>
         children: share == null
             ? [
                 Text(l10n.rxShowHint, style: theme.textTheme.bodyMedium),
-                if (_error != null) ...[const SizedBox(height: 12), Text(_error!, style: TextStyle(color: theme.colorScheme.error))],
+                if (_error != null) ...[
+                  const SizedBox(height: 12),
+                  Text(
+                    _error!,
+                    style: TextStyle(color: theme.colorScheme.error),
+                  ),
+                ],
                 const SizedBox(height: 20),
-                FilledButton.icon(onPressed: _busy ? null : _create, icon: const Icon(Icons.qr_code_2), label: Text(l10n.rxShowCreate)),
+                FilledButton.icon(
+                  onPressed: _busy ? null : _create,
+                  icon: const Icon(Icons.qr_code_2),
+                  label: Text(l10n.rxShowCreate),
+                ),
               ]
             : [
                 Text(l10n.medicalShareShowCode, textAlign: TextAlign.center),
@@ -210,13 +300,27 @@ class _PrescriptionShowScreenState extends ConsumerState<PrescriptionShowScreen>
                   child: Container(
                     padding: const EdgeInsets.all(12),
                     color: Colors.white,
-                    child: QrImageView(data: share.qr, size: 260, backgroundColor: Colors.white),
+                    child: QrImageView(
+                      data: share.qr,
+                      size: 260,
+                      backgroundColor: Colors.white,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 12),
-                Text(l10n.medicalShareExpires(DateFormat.Hm().format(share.expiresAt)), textAlign: TextAlign.center, style: theme.textTheme.titleSmall),
+                Text(
+                  l10n.medicalShareExpires(
+                    DateFormat.Hm().format(share.expiresAt),
+                  ),
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.titleSmall,
+                ),
                 const SizedBox(height: 16),
-                OutlinedButton.icon(onPressed: _end, icon: const Icon(Icons.stop_circle_outlined), label: Text(l10n.medicalShareEnd)),
+                OutlinedButton.icon(
+                  onPressed: _end,
+                  icon: const Icon(Icons.stop_circle_outlined),
+                  label: Text(l10n.medicalShareEnd),
+                ),
               ],
       ),
     );

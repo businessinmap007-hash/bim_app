@@ -121,6 +121,7 @@ class Prescription {
   /// that holds them now), and whether the phone has already confirmed holding the exact copy.
   final bool contentPurged;
   final bool archivedByPatient;
+  final bool archivedByDoctor;
 
   /// A narcotic / psychotropic drug is on it, and the photo of the doctor's handwritten paper (when on file).
   final bool controlled;
@@ -154,6 +155,7 @@ class Prescription {
     this.raw = const {},
     this.contentPurged = false,
     this.archivedByPatient = false,
+    this.archivedByDoctor = false,
     this.controlled = false,
     this.handwrittenImage,
   });
@@ -222,6 +224,7 @@ class Prescription {
     raw: json,
     contentPurged: json['content_purged'] as bool? ?? false,
     archivedByPatient: json['archived_by_patient'] as bool? ?? false,
+    archivedByDoctor: json['archived_by_doctor'] as bool? ?? false,
     controlled: json['controlled'] as bool? ?? false,
     handwrittenImage: Env.assetUrl(json['handwritten_image'] as String?),
   );

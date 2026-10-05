@@ -286,7 +286,7 @@ void main() {
       final c = PrescriptionArchiveController(
         store,
         5,
-        confirm: (id, content) async => confirmed.add(id),
+        confirm: (p, content) async => confirmed.add(p.id),
       );
 
       await c.remember([Prescription.fromJson(_serverJson())]);
@@ -303,7 +303,7 @@ void main() {
     final c = PrescriptionArchiveController(
       store,
       5,
-      confirm: (id, content) async => throw Exception('offline'),
+      confirm: (p, content) async => throw Exception('offline'),
     );
 
     await c.remember([Prescription.fromJson(_serverJson())]);
@@ -318,7 +318,7 @@ void main() {
       final c = PrescriptionArchiveController(
         store,
         5,
-        confirm: (id, content) async {},
+        confirm: (p, content) async {},
       );
       await c.remember([Prescription.fromJson(_serverJson())]);
 
@@ -351,7 +351,7 @@ void main() {
       final c = PrescriptionArchiveController(
         store,
         5,
-        confirm: (id, content) async {},
+        confirm: (p, content) async {},
       );
 
       await c.remember([
@@ -362,18 +362,43 @@ void main() {
     },
   );
 
-  testWidgets('a controlled prescription with no handwritten paper on file is flagged and cannot be dispensed', (tester) async {
-    final api = _FakePharmacyApi(const PrescriptionCheck(authentic: true, status: 'issued', canDispense: false, controlled: true));
-    await tester.pumpWidget(_app(api, business: true));
-    await tester.pumpAndSettle();
+  testWidgets(
+    'a controlled prescription with no handwritten paper on file is flagged and cannot be dispensed',
+    (tester) async {
+      final api = _FakePharmacyApi(
+        const PrescriptionCheck(
+          authentic: true,
+          status: 'issued',
+          canDispense: false,
+          controlled: true,
+        ),
+      );
+      await tester.pumpWidget(_app(api, business: true));
+      await tester.pumpAndSettle();
 
-    expect(find.text('Controlled drug with no handwritten prescription on file — it cannot be dispensed.'), findsOneWidget);
-    expect(find.text('Record this prescription as dispensed'), findsNothing);
-  });
+      expect(
+        find.text(
+          'Controlled drug with no handwritten prescription on file — it cannot be dispensed.',
+        ),
+        findsOneWidget,
+      );
+      expect(find.text('Record this prescription as dispensed'), findsNothing);
+    },
+  );
 
   test('a controlled drug and the handwritten paper read from the server', () {
-    expect(Medicine.fromJson({'id': 1, 'name': 'Tramal', 'is_controlled': true}).isControlled, isTrue);
-    expect(Medicine.fromJson({'id': 2, 'name': 'Panadol'}).isControlled, isFalse);
+    expect(
+      Medicine.fromJson({
+        'id': 1,
+        'name': 'Tramal',
+        'is_controlled': true,
+      }).isControlled,
+      isTrue,
+    );
+    expect(
+      Medicine.fromJson({'id': 2, 'name': 'Panadol'}).isControlled,
+      isFalse,
+    );
 
     final p = Prescription.fromJson({
       'id': 3,
@@ -388,6 +413,65 @@ void main() {
     expect(p.controlled, isTrue);
     expect(p.handwrittenImage, contains('paper.png'));
     expect(p.items.single.isControlled, isTrue);
-    expect(Prescription.fromJson({'id': 4, 'status': 'issued', 'patient': {'id': 1}}).controlled, isFalse);
+    expect(
+      Prescription.fromJson({
+        'id': 4,
+        'status': 'issued',
+        'patient': {'id': 1},
+      }).controlled,
+      isFalse,
+    );
   });
+
+  test(
+    'a clinic account keeps the prescriptions it issued and confirms them through the doctor door',
+    () async {
+      final confirmed = <String>[];
+      final store = _MemoryStore();
+      // this phone is the DOCTOR's (user 9): the patient is someone else
+      final c = PrescriptionArchiveController(
+        store,
+        9,
+        confirm: (p, content) async => confirmed.add(
+          '${p.id}:${p.patient.id == 9 ? 'patient' : 'doctor'}',
+        ),
+      );
+      final json = _serverJson()..['doctor'] = {'id': 9, 'name': 'Dr. Salma'};
+
+      await c.remember([Prescription.fromJson(json)]);
+
+      expect(
+        store.saved[7],
+        isNotNull,
+        reason: 'the doctor keeps a copy of what he issued',
+      );
+      expect(confirmed, ['7:doctor']);
+
+      await c.remember([
+        Prescription.fromJson({...json, 'archived_by_doctor': true}),
+      ]);
+      expect(confirmed, ['7:doctor'], reason: 'the server already knows');
+    },
+  );
+
+  test(
+    'a prescription that is neither mine as a patient nor as the issuing doctor is not kept',
+    () async {
+      final store = _MemoryStore();
+      final c = PrescriptionArchiveController(
+        store,
+        42,
+        confirm: (p, content) async {},
+      );
+
+      await c.remember([
+        Prescription.fromJson({
+          ..._serverJson(),
+          'doctor': {'id': 9, 'name': 'Dr. Salma'},
+        }),
+      ]);
+
+      expect(store.saved, isEmpty);
+    },
+  );
 }

@@ -21,14 +21,18 @@ class PrescriptionArchiveController
 
   /// Tells the server this phone now holds the exact copy (so it may later drop the sensitive fields). Best effort:
   /// a failed call is simply repeated the next time the list is fetched.
-  final Future<void> Function(int id, Map<String, dynamic> content)? _confirm;
+  final Future<void> Function(
+    Prescription prescription,
+    Map<String, dynamic> content,
+  )?
+  _confirm;
   Map<int, Map<String, dynamic>> _raw = {};
   late final Future<void> _ready;
 
   PrescriptionArchiveController(
     this._store,
     this._userId, {
-    Future<void> Function(int, Map<String, dynamic>)? confirm,
+    Future<void> Function(Prescription, Map<String, dynamic>)? confirm,
   }) : _confirm = confirm,
        super(const AsyncValue.loading()) {
     _ready = _load();
@@ -83,7 +87,15 @@ class PrescriptionArchiveController
     return merged;
   }
 
-  /// Remember what the server just sent (only this account's own prescriptions).
+  /// Mine = the patient's own, or — for a clinic's account — the ones this doctor issued.
+  bool _isMine(Prescription p, int id) =>
+      p.patient.id == id || p.doctor?.id == id;
+
+  /// Has the server been told this phone holds it (by the party this account is)?
+  bool _alreadyConfirmed(Prescription p, int id) =>
+      p.patient.id == id ? p.archivedByPatient : p.archivedByDoctor;
+
+  /// Remember what the server just sent (this account's own prescriptions, as a patient or as the issuing doctor).
   Future<void> remember(Iterable<Prescription> fresh) async {
     final id = _userId;
     if (id == null) return;
@@ -91,10 +103,12 @@ class PrescriptionArchiveController
     var changed = false;
     final toConfirm = <Prescription>[];
     for (final p in fresh) {
-      if (p.patient.id != id || p.raw.isEmpty) continue;
+      if (!_isMine(p, id) || p.raw.isEmpty) continue;
       _raw[p.id] = _merged(p.raw, _raw[p.id]);
       changed = true;
-      if (p.verifiableContent != null && !p.archivedByPatient) toConfirm.add(p);
+      if (p.verifiableContent != null && !_alreadyConfirmed(p, id)) {
+        toConfirm.add(p);
+      }
     }
     if (!changed) return;
     await _store.write(id, _raw);
@@ -103,7 +117,7 @@ class PrescriptionArchiveController
     // Only after the copy is durably on this phone is the server told so.
     for (final p in toConfirm) {
       try {
-        await _confirm?.call(p.id, p.verifiableContent!);
+        await _confirm?.call(p, p.verifiableContent!);
       } catch (_) {
         // tried again on the next fetch
       }
@@ -132,9 +146,14 @@ final prescriptionArchiveProvider =
       AsyncValue<List<Prescription>>
     >((ref) {
       final auth = ref.watch(authControllerProvider);
+      final userId = auth is AuthSignedIn ? auth.user.id : null;
+      final api = ref.read(prescriptionsApiProvider);
       return PrescriptionArchiveController(
         ref.watch(prescriptionArchiveStoreProvider),
-        auth is AuthSignedIn ? auth.user.id : null,
-        confirm: ref.read(prescriptionsApiProvider).confirmArchived,
+        userId,
+        // The patient and the issuing doctor each confirm their own copy, through their own door.
+        confirm: (p, content) => p.patient.id == userId
+            ? api.confirmArchived(p.id, content)
+            : api.confirmArchivedByDoctor(p.id, content),
       );
     });
