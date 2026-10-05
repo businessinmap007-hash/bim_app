@@ -6256,6 +6256,38 @@ class AppLocalizationsAr extends AppLocalizations {
   String get menuInstalmentsOnly => 'بالتقسيط';
 
   @override
+  String get menuSheetMapTitle => 'ربط الأعمدة';
+
+  @override
+  String get menuSheetMapHint =>
+      'لكل عمود عندنا اختر رقم العمود المقابل له في ملفك. ما تتركه «بدون» لا يُقرأ، ولا يغيّر شيئًا في صنف موجود.';
+
+  @override
+  String get menuSheetMapFileColumns => 'أعمدة ملفك';
+
+  @override
+  String get menuSheetMapOurColumns => 'أعمدة التطبيق';
+
+  @override
+  String get menuSheetMapNone => '— بدون —';
+
+  @override
+  String menuSheetMapColumn(int n) {
+    return 'عمود $n';
+  }
+
+  @override
+  String get menuSheetMapPreview => 'معاينة بهذا الربط';
+
+  @override
+  String get menuSheetMapReset => 'الربط التلقائي';
+
+  @override
+  String menuSheetMapRows(int count) {
+    return '$count صف في الملف';
+  }
+
+  @override
   String get menuSheetTitle => 'استيراد وتصدير المنيو';
 
   @override

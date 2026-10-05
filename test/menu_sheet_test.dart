@@ -23,7 +23,12 @@ void main() {
       },
     });
 
-    final bytes = sheet.toXlsx(listsSheetName: 'الأنواع والوحدات', typeHeader: 'النوع', groupHeader: 'المجموعة', unitsHeader: 'الوحدات');
+    final bytes = sheet.toXlsx(
+      listsSheetName: 'الأنواع والوحدات',
+      typeHeader: 'النوع',
+      groupHeader: 'المجموعة',
+      unitsHeader: 'الوحدات',
+    );
     final rows = readXlsxRows(bytes);
 
     expect(rows, hasLength(2));
@@ -40,7 +45,12 @@ void main() {
       'summary': {'create': 1, 'update': 0, 'error': 1},
       'rows': [
         {'row': 2, 'name': 'غرفة', 'action': 'create', 'errors': []},
-        {'row': 3, 'name': 'خطأ', 'action': 'error', 'errors': ['النوع «صاروخ» ليس من أنواع نشاطك.']},
+        {
+          'row': 3,
+          'name': 'خطأ',
+          'action': 'error',
+          'errors': ['النوع «صاروخ» ليس من أنواع نشاطك.'],
+        },
       ],
     });
 
@@ -49,28 +59,95 @@ void main() {
     expect(report.rows.last.errors.single, contains('صاروخ'));
   });
 
-  test('a row that went in with a note keeps its warnings, and the template carries the how-to lines', () {
-    final row = MenuImportRow.fromJson({
-      'row': 2,
-      'name': 'برجر',
-      'action': 'create',
-      'errors': [],
-      'warnings': ['تعذّر تحميل الصورة: https://x'],
-    });
-    expect(row.warnings.single, contains('تعذّر'));
+  test(
+    'a row that went in with a note keeps its warnings, and the template carries the how-to lines',
+    () {
+      final row = MenuImportRow.fromJson({
+        'row': 2,
+        'name': 'برجر',
+        'action': 'create',
+        'errors': [],
+        'warnings': ['تعذّر تحميل الصورة: https://x'],
+      });
+      expect(row.warnings.single, contains('تعذّر'));
 
-    final sheet = MenuSheetData.fromJson({
-      'columns': [
-        {'key': 'name_ar', 'label': 'الاسم عربي'},
-      ],
-      'rows': [],
-      'vocabulary': {
-        'lines': [],
-        'units': [],
-        'help': ['المقاسات: صغير=50'],
-      },
-    });
-    expect(sheet.help.single, startsWith('المقاسات'));
-    expect(sheet.toXlsx(listsSheetName: 'L', typeHeader: 't', groupHeader: 'g', unitsHeader: 'u', howToHeader: 'h'), isNotEmpty);
-  });
+      final sheet = MenuSheetData.fromJson({
+        'columns': [
+          {'key': 'name_ar', 'label': 'الاسم عربي'},
+        ],
+        'rows': [],
+        'vocabulary': {
+          'lines': [],
+          'units': [],
+          'help': ['المقاسات: صغير=50'],
+        },
+      });
+      expect(sheet.help.single, startsWith('المقاسات'));
+      expect(
+        sheet.toXlsx(
+          listsSheetName: 'L',
+          typeHeader: 't',
+          groupHeader: 'g',
+          unitsHeader: 'u',
+          howToHeader: 'h',
+        ),
+        isNotEmpty,
+      );
+    },
+  );
+
+  test(
+    'an Excel file reads as a grid, header row first, empty rows dropped',
+    () {
+      final sheet = MenuSheetData.fromJson({
+        'columns': [
+          {'key': 'name_ar', 'label': 'الاسم عربي'},
+          {'key': 'price', 'label': 'السعر'},
+        ],
+        'rows': [
+          {'name_ar': 'برجر', 'price': 55},
+          {'name_ar': '', 'price': ''},
+          {'name_ar': 'بيتزا', 'price': 80.5},
+        ],
+      });
+
+      final grid = readXlsxGrid(
+        sheet.toXlsx(
+          listsSheetName: 'lists',
+          typeHeader: 'a',
+          groupHeader: 'b',
+          unitsHeader: 'c',
+        ),
+      );
+
+      expect(grid.first, ['الاسم عربي', 'السعر']);
+      expect(grid, hasLength(3), reason: 'the empty row is dropped');
+      expect(grid[1], ['برجر', '55']);
+      expect(grid[2], ['بيتزا', '80.5']);
+    },
+  );
+
+  test(
+    'an inspected file reads its numbered headers and the suggested mapping',
+    () {
+      final inspect = MenuFileInspect.fromJson({
+        'headers': ['كود', 'المنتج', 'بيع'],
+        'sample': [
+          ['', 'غرفة', '30000'],
+        ],
+        'total_rows': 4,
+        'mapping': {'name_ar': null, 'price': 3, 'line': null},
+        'columns': [
+          {'key': 'name_ar', 'label': 'الاسم عربي'},
+          {'key': 'price', 'label': 'السعر'},
+        ],
+      });
+
+      expect(inspect.headers[1], 'المنتج');
+      expect(inspect.totalRows, 4);
+      expect(inspect.mapping['price'], 3);
+      expect(inspect.mapping['name_ar'], isNull);
+      expect(inspect.columns.last.label, 'السعر');
+    },
+  );
 }

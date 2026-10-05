@@ -11635,6 +11635,60 @@ abstract class AppLocalizations {
   /// **'بالتقسيط'**
   String get menuInstalmentsOnly;
 
+  /// No description provided for @menuSheetMapTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ربط الأعمدة'**
+  String get menuSheetMapTitle;
+
+  /// No description provided for @menuSheetMapHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'لكل عمود عندنا اختر رقم العمود المقابل له في ملفك. ما تتركه «بدون» لا يُقرأ، ولا يغيّر شيئًا في صنف موجود.'**
+  String get menuSheetMapHint;
+
+  /// No description provided for @menuSheetMapFileColumns.
+  ///
+  /// In ar, this message translates to:
+  /// **'أعمدة ملفك'**
+  String get menuSheetMapFileColumns;
+
+  /// No description provided for @menuSheetMapOurColumns.
+  ///
+  /// In ar, this message translates to:
+  /// **'أعمدة التطبيق'**
+  String get menuSheetMapOurColumns;
+
+  /// No description provided for @menuSheetMapNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'— بدون —'**
+  String get menuSheetMapNone;
+
+  /// No description provided for @menuSheetMapColumn.
+  ///
+  /// In ar, this message translates to:
+  /// **'عمود {n}'**
+  String menuSheetMapColumn(int n);
+
+  /// No description provided for @menuSheetMapPreview.
+  ///
+  /// In ar, this message translates to:
+  /// **'معاينة بهذا الربط'**
+  String get menuSheetMapPreview;
+
+  /// No description provided for @menuSheetMapReset.
+  ///
+  /// In ar, this message translates to:
+  /// **'الربط التلقائي'**
+  String get menuSheetMapReset;
+
+  /// No description provided for @menuSheetMapRows.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} صف في الملف'**
+  String menuSheetMapRows(int count);
+
   /// No description provided for @menuSheetTitle.
   ///
   /// In ar, this message translates to:

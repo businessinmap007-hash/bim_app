@@ -6279,6 +6279,38 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuInstalmentsOnly => 'On instalments';
 
   @override
+  String get menuSheetMapTitle => 'Match the columns';
+
+  @override
+  String get menuSheetMapHint =>
+      'Pick, for each of our columns, the number of the matching column in your file. What you leave on «None» is not read — and changes nothing on an existing item.';
+
+  @override
+  String get menuSheetMapFileColumns => 'Your file\'s columns';
+
+  @override
+  String get menuSheetMapOurColumns => 'Our columns';
+
+  @override
+  String get menuSheetMapNone => '— None —';
+
+  @override
+  String menuSheetMapColumn(int n) {
+    return 'Column $n';
+  }
+
+  @override
+  String get menuSheetMapPreview => 'Preview with this matching';
+
+  @override
+  String get menuSheetMapReset => 'Automatic matching';
+
+  @override
+  String menuSheetMapRows(int count) {
+    return '$count rows in the file';
+  }
+
+  @override
   String get menuSheetTitle => 'Menu import & export';
 
   @override

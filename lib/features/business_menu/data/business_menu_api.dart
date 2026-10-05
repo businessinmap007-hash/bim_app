@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 
 import '../../../core/network/api_client.dart';
@@ -23,8 +25,10 @@ class SaleUnitOption {
   final String label;
   const SaleUnitOption({required this.code, required this.label});
 
-  factory SaleUnitOption.fromJson(Map<String, dynamic> json) =>
-      SaleUnitOption(code: json['code'] as String, label: json['label'] as String);
+  factory SaleUnitOption.fromJson(Map<String, dynamic> json) => SaleUnitOption(
+    code: json['code'] as String,
+    label: json['label'] as String,
+  );
 }
 
 /// /business/menu/... — see Api\V2\BusinessMenuSectionController /
@@ -105,27 +109,37 @@ class BusinessMenuApi {
   /// «خدمات المحل» — the services this trade adds on top of an item, with the shop's price for each.
   Future<List<ShopAddonGroup>> shopAddons() async {
     final body = await _client.getForBody('/business/menu/addons');
-    return ShopAddonGroup.listFrom((body['data'] as Map<String, dynamic>)['addons']);
+    return ShopAddonGroup.listFrom(
+      (body['data'] as Map<String, dynamic>)['addons'],
+    );
   }
 
   /// Price the shop's services once — option id -> price (0 = not offered).
   Future<void> saveShopAddons(Map<int, double> prices) async {
-    await _client.put('/business/menu/addons', data: {
-      'prices': {for (final e in prices.entries) '${e.key}': e.value},
-    });
+    await _client.put(
+      '/business/menu/addons',
+      data: {
+        'prices': {for (final e in prices.entries) '${e.key}': e.value},
+      },
+    );
   }
 
   /// «شروط المتجر» — every policy the store's trade asks, each option flagged `selected`.
   Future<List<StoreTermGroup>> storeTerms() async {
     final body = await _client.getForBody('/business/menu/terms');
-    return StoreTermGroup.listFrom((body['data'] as Map<String, dynamic>)['terms']);
+    return StoreTermGroup.listFrom(
+      (body['data'] as Map<String, dynamic>)['terms'],
+    );
   }
 
   /// Answer the terms once: group id -> the option ids chosen (an empty list clears that policy).
   Future<void> saveStoreTerms(Map<int, List<int>> chosen) async {
-    await _client.put('/business/menu/terms', data: {
-      'groups': {for (final e in chosen.entries) '${e.key}': e.value},
-    });
+    await _client.put(
+      '/business/menu/terms',
+      data: {
+        'groups': {for (final e in chosen.entries) '${e.key}': e.value},
+      },
+    );
   }
 
   /// The FULL `line` catalog for this business's specialty (not narrowed by
@@ -139,7 +153,10 @@ class BusinessMenuApi {
 
   /// Sets exactly which options WITHIN one group this business carries —
   /// every other group's ticks are left untouched server-side.
-  Future<void> updateAvailableTypes({required int groupId, required List<int> optionIds}) async {
+  Future<void> updateAvailableTypes({
+    required int groupId,
+    required List<int> optionIds,
+  }) async {
     await _client.put(
       '/business/menu/available-types',
       data: {'group_id': groupId, 'option_ids': optionIds},
@@ -206,7 +223,9 @@ class BusinessMenuApi {
         'battery_mah': ?batteryMah,
       },
     );
-    return CatalogProductRef.fromJson(body['data']['product'] as Map<String, dynamic>);
+    return CatalogProductRef.fromJson(
+      body['data']['product'] as Map<String, dynamic>,
+    );
   }
 
   // ─────────────────────────── Items ───────────────────────────
@@ -379,7 +398,8 @@ class BusinessMenuApi {
       if (brandName != null && brandName.isNotEmpty) 'brand_name': brandName,
       'available_quantity': ?availableQuantity,
       'catalog_product_id': ?catalogProductId,
-      if (attributes != null) 'attributes': {for (final e in attributes.entries) '${e.key}': e.value},
+      if (attributes != null)
+        'attributes': {for (final e in attributes.entries) '${e.key}': e.value},
       // What this item IS/what qualifies it — see HasOfferingOptions. Always
       // sent (even empty) so clearing a pick on a resubmit actually clears it.
       'line_option_id': lineOptionId ?? 0,
@@ -396,21 +416,78 @@ class BusinessMenuApi {
 
   /// «استيراد وتصدير المنيو»: the menu as a sheet, or two example rows when [template].
   Future<MenuSheetData> menuSheet({bool template = false}) async {
-    final data = await _client.get('/business/menu/sheet', query: {if (template) 'template': true});
+    final data = await _client.get(
+      '/business/menu/sheet',
+      query: {if (template) 'template': true},
+    );
     return MenuSheetData.fromJson(data as Map<String, dynamic>);
   }
 
   /// Rows read from an Excel file on the phone. [dryRun]: a preview that changes nothing.
-  Future<MenuImportReport> importMenuRows(List<Map<String, String>> rows, {required bool dryRun}) async {
-    final data = await _client.post('/business/menu/import', data: {'rows': rows, 'dry_run': dryRun ? 1 : 0});
+  Future<MenuImportReport> importMenuRows(
+    List<Map<String, String>> rows, {
+    required bool dryRun,
+  }) async {
+    final data = await _client.post(
+      '/business/menu/import',
+      data: {'rows': rows, 'dry_run': dryRun ? 1 : 0},
+    );
     return MenuImportReport.fromJson(data as Map<String, dynamic>);
   }
 
   /// A CSV file, read by the server.
-  Future<MenuImportReport> importMenuCsv(List<int> bytes, String filename, {required bool dryRun}) async {
+  Future<MenuImportReport> importMenuCsv(
+    List<int> bytes,
+    String filename, {
+    required bool dryRun,
+  }) async {
     final data = await _client.post(
       '/business/menu/import',
-      data: FormData.fromMap({'file': MultipartFile.fromBytes(bytes, filename: filename), 'dry_run': dryRun ? 1 : 0}),
+      data: FormData.fromMap({
+        'file': MultipartFile.fromBytes(bytes, filename: filename),
+        'dry_run': dryRun ? 1 : 0,
+      }),
+    );
+    return MenuImportReport.fromJson(data as Map<String, dynamic>);
+  }
+
+  /// «ربط الأعمدة»: the file's numbered headers, a few rows and the suggested mapping — from an Excel file read on
+  /// the phone ([grid], header row first) or from a CSV the server reads ([csv]).
+  Future<MenuFileInspect> inspectMenuFile({
+    List<List<String>>? grid,
+    ({List<int> bytes, String name})? csv,
+  }) async {
+    final data = await _client.post(
+      '/business/menu/inspect',
+      data: csv != null
+          ? FormData.fromMap({
+              'file': MultipartFile.fromBytes(csv.bytes, filename: csv.name),
+            })
+          : {'grid': grid},
+    );
+    return MenuFileInspect.fromJson(data as Map<String, dynamic>);
+  }
+
+  /// An import through a column [mapping] (our key → the file's column number): an Excel [grid] or a [csv] file.
+  Future<MenuImportReport> importMenuMapped({
+    List<List<String>>? grid,
+    ({List<int> bytes, String name})? csv,
+    required Map<String, int?> mapping,
+    required bool dryRun,
+  }) async {
+    final chosen = {
+      for (final e in mapping.entries)
+        if (e.value != null) e.key: e.value,
+    };
+    final data = await _client.post(
+      '/business/menu/import',
+      data: csv != null
+          ? FormData.fromMap({
+              'file': MultipartFile.fromBytes(csv.bytes, filename: csv.name),
+              'mapping': jsonEncode(chosen),
+              'dry_run': dryRun ? 1 : 0,
+            })
+          : {'grid': grid, 'mapping': chosen, 'dry_run': dryRun ? 1 : 0},
     );
     return MenuImportReport.fromJson(data as Map<String, dynamic>);
   }
@@ -475,23 +552,36 @@ class BusinessMenuApi {
 
   /// Tick the shop's priced services this item offers — the option ids ticked (every other one is off here).
   Future<void> saveItemAddonOptions(int itemId, List<int> optionIds) async {
-    await _client.put('/business/menu/items/$itemId/addon-options', data: {'option_ids': optionIds});
+    await _client.put(
+      '/business/menu/items/$itemId/addon-options',
+      data: {'option_ids': optionIds},
+    );
   }
 
   /// Which of the shop's per-item services this item offers — the group ids switched on (others off).
   Future<void> saveItemAddons(int itemId, List<int> groupIds) async {
-    await _client.put('/business/menu/items/$itemId/addons', data: {'group_ids': groupIds});
+    await _client.put(
+      '/business/menu/items/$itemId/addons',
+      data: {'group_ids': groupIds},
+    );
   }
 
   /// Replace the item's instalment plans — `months`, `down?`, `total_price` (what one unit costs on the
   /// plan). An empty list = cash only. Refused by the server for a kind that does not sell on instalments.
-  Future<void> savePaymentPlans(int itemId, List<({int months, double? down, double total})> plans) async {
+  Future<void> savePaymentPlans(
+    int itemId,
+    List<({int months, double? down, double total})> plans,
+  ) async {
     await _client.put(
       '/business/menu/items/$itemId/payment-plans',
       data: {
         'plans': [
           for (final p in plans)
-            {'months': p.months, if ((p.down ?? 0) > 0) 'down': p.down, 'total_price': p.total},
+            {
+              'months': p.months,
+              if ((p.down ?? 0) > 0) 'down': p.down,
+              'total_price': p.total,
+            },
         ],
       },
     );
