@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/full_screen_gallery.dart';
+import '../../../../shared/widgets/profile_cover_header.dart' show kCoverAspect;
 
 /// A full-width cover banner with a small edit badge — same take-photo/
 /// gallery/remove sheet as [ProfileAvatarPicker], just shaped for a banner
@@ -13,7 +14,9 @@ class ProfileCoverPicker extends StatelessWidget {
   final VoidCallback onCamera;
   final VoidCallback onGallery;
   final VoidCallback? onRemove;
-  final double height;
+
+  /// Re-frame the cover that is already there (opens the crop screen on it).
+  final VoidCallback? onAdjust;
 
   const ProfileCoverPicker({
     super.key,
@@ -21,7 +24,7 @@ class ProfileCoverPicker extends StatelessWidget {
     required this.onCamera,
     required this.onGallery,
     this.onRemove,
-    this.height = 140,
+    this.onAdjust,
   });
 
   void _openSheet(BuildContext context) {
@@ -40,6 +43,15 @@ class ProfileCoverPicker extends StatelessWidget {
                 onTap: () {
                   Navigator.pop(context);
                   FullScreenGallery.show(context, urls: [imageUrl!]);
+                },
+              ),
+            if (imageUrl != null && onAdjust != null)
+              ListTile(
+                leading: const Icon(Icons.crop_outlined),
+                title: Text(l10n.profileCoverAdjust),
+                onTap: () {
+                  Navigator.pop(context);
+                  onAdjust!();
                 },
               ),
             ListTile(
@@ -84,19 +96,21 @@ class ProfileCoverPicker extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: Stack(
           children: [
-            Container(
-              width: double.infinity,
-              height: height,
-              color: AppColors.accentGold.withValues(alpha: 0.1),
-              child: imageUrl != null
-                  ? CachedNetworkImage(
-                      imageUrl: imageUrl!,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: height,
-                      errorWidget: (context, url, error) => const Icon(Icons.image_outlined),
-                    )
-                  : const Center(child: Icon(Icons.image_outlined)),
+            // the cover's own shape — what is seen here is how it shows on the profile
+            AspectRatio(
+              aspectRatio: kCoverAspect,
+              child: Container(
+                width: double.infinity,
+                color: AppColors.accentGold.withValues(alpha: 0.1),
+                child: imageUrl != null
+                    ? CachedNetworkImage(
+                        imageUrl: imageUrl!,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        errorWidget: (context, url, error) => const Icon(Icons.image_outlined),
+                      )
+                    : const Center(child: Icon(Icons.image_outlined)),
+              ),
             ),
             PositionedDirectional(
               end: 10,

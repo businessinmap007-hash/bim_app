@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import '../../app/theme/app_colors.dart';
 import 'full_screen_gallery.dart';
 
+/// The shape of a profile cover — width over height. The header draws the cover in it, the edit screen's preview is it,
+/// and the cover crop screen frames it: what is framed is what shows. (2.5 : 1 — about 160dp tall on a phone.)
+const kCoverAspect = 2.5;
+
 /// Cover photo with a circular avatar overlapping its bottom edge — the
 /// standard profile header (Facebook/Twitter-style). Used for both business
 /// and (later) customer profile screens so the look stays consistent.
@@ -15,7 +19,8 @@ class ProfileCoverHeader extends StatelessWidget {
   final String? avatarImageUrl;
   final String title;
   final String? subtitle;
-  final double coverHeight;
+  /// Fixed height; by default the cover keeps the shape [kCoverAspect] at the width it is given (capped on wide screens).
+  final double? coverHeight;
   final double avatarRadius;
 
   const ProfileCoverHeader({
@@ -24,7 +29,7 @@ class ProfileCoverHeader extends StatelessWidget {
     required this.avatarImageUrl,
     required this.title,
     this.subtitle,
-    this.coverHeight = 160,
+    this.coverHeight,
     this.avatarRadius = 40,
   });
 
@@ -36,6 +41,16 @@ class ProfileCoverHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth.isFinite ? constraints.maxWidth : 400.0;
+
+        return _buildHeader(context, coverHeight ?? (width / kCoverAspect).clamp(110.0, 240.0).toDouble());
+      },
+    );
+  }
+
+  Widget _buildHeader(BuildContext context, double coverHeight) {
     final overlap = avatarRadius * 0.7;
 
     return Padding(

@@ -1256,6 +1256,30 @@ abstract class AppLocalizations {
   /// **'عرض الصورة'**
   String get profilePhotoView;
 
+  /// No description provided for @coverCropTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضبط صورة الغلاف'**
+  String get coverCropTitle;
+
+  /// No description provided for @coverCropHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسحب وكبّر لتضع الجزء المطلوب داخل الإطار — هكذا سيظهر الغلاف بالضبط. العلامة الحمراء هي المنتصف.'**
+  String get coverCropHint;
+
+  /// No description provided for @coverCropCentre.
+  ///
+  /// In ar, this message translates to:
+  /// **'توسيط الصورة'**
+  String get coverCropCentre;
+
+  /// No description provided for @profileCoverAdjust.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضبط الغلاف الحالي'**
+  String get profileCoverAdjust;
+
   /// No description provided for @profilePhotoRemove.
   ///
   /// In ar, this message translates to:
@@ -4894,7 +4918,7 @@ abstract class AppLocalizations {
   /// No description provided for @staffTeamSettingsTitle.
   ///
   /// In ar, this message translates to:
-  /// **'إعدادات فريق العمل'**
+  /// **'إعدادات الموظفين'**
   String get staffTeamSettingsTitle;
 
   /// No description provided for @staffTitle.
@@ -7792,7 +7816,7 @@ abstract class AppLocalizations {
   /// No description provided for @merchantAccountTitle.
   ///
   /// In ar, this message translates to:
-  /// **'حساب Merchant'**
+  /// **'حساب التاجر'**
   String get merchantAccountTitle;
 
   /// No description provided for @merchantAccountHint.

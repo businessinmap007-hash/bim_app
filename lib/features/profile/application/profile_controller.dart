@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/core_providers.dart';
@@ -74,6 +76,12 @@ class ProfileController {
 
   Future<AuthUser> uploadCover(String filePath) async {
     final user = await _api.uploadCover(filePath);
+    _ref.read(authControllerProvider.notifier).setUser(user);
+    return user;
+  }
+
+  Future<AuthUser> uploadCoverBytes(Uint8List bytes) async {
+    final user = await _api.uploadCoverBytes(bytes);
     _ref.read(authControllerProvider.notifier).setUser(user);
     return user;
   }

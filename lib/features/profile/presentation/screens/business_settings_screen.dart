@@ -228,8 +228,11 @@ class _OptionsSection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _FieldLabel(l10n.profileOptionsTitle),
-        const SizedBox(height: 8),
+        // with store terms above, the groups below carry their own «خصائص النشاط» heading — one heading, not two
+        if (state.terms.isEmpty) ...[
+          _FieldLabel(l10n.profileOptionsTitle),
+          const SizedBox(height: 8),
+        ],
         if (state.error != null) ...[
           Text(
             state.error!,

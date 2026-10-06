@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
 
 import '../../../core/network/api_client.dart';
@@ -75,7 +77,7 @@ class ProfileApi {
   Future<AuthUser> removeImage() async {
     final data = await _client.post(
       '/profile/image',
-      data: FormData.fromMap({'remove': true}),
+      data: FormData.fromMap({'remove': 1}),
     );
     return AuthUser.fromJson(data as Map<String, dynamic>);
   }
@@ -88,10 +90,19 @@ class ProfileApi {
     return AuthUser.fromJson(data as Map<String, dynamic>);
   }
 
+  /// The cover as framed on the crop screen (already cut to the cover's shape), sent as bytes so it works on web too.
+  Future<AuthUser> uploadCoverBytes(Uint8List bytes) async {
+    final data = await _client.post(
+      '/profile/cover',
+      data: FormData.fromMap({'cover': MultipartFile.fromBytes(bytes, filename: 'cover.png')}),
+    );
+    return AuthUser.fromJson(data as Map<String, dynamic>);
+  }
+
   Future<AuthUser> removeCover() async {
     final data = await _client.post(
       '/profile/cover',
-      data: FormData.fromMap({'remove': true}),
+      data: FormData.fromMap({'remove': 1}),
     );
     return AuthUser.fromJson(data as Map<String, dynamic>);
   }

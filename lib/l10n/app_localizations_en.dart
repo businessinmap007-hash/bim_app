@@ -657,6 +657,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profilePhotoView => 'View photo';
 
   @override
+  String get coverCropTitle => 'Frame the cover';
+
+  @override
+  String get coverCropHint =>
+      'Drag and zoom so the part you want is inside the frame — this is exactly how the cover will look. The red cross marks the centre.';
+
+  @override
+  String get coverCropCentre => 'Centre the photo';
+
+  @override
+  String get profileCoverAdjust => 'Adjust the current cover';
+
+  @override
   String get profilePhotoRemove => 'Remove photo';
 
   @override
@@ -2675,7 +2688,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get retailListingBusinessGroupPickerEmpty => 'No business groups yet.';
 
   @override
-  String get staffTeamSettingsTitle => 'Team Settings';
+  String get staffTeamSettingsTitle => 'Staff settings';
 
   @override
   String get staffTitle => 'Staff';

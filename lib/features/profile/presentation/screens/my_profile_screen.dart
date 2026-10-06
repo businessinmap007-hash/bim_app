@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show NetworkAssetBundle;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,6 +16,8 @@ import '../../../albums/presentation/screens/albums_screen.dart';
 import '../../../location/application/location_providers.dart';
 import '../../../location/data/models/location_models.dart';
 import '../../../location/presentation/widgets/location_picker_field.dart';
+import '../../../media/presentation/screens/image_cropper_screen.dart';
+import '../../../../shared/widgets/profile_cover_header.dart' show kCoverAspect;
 import '../../application/profile_controller.dart';
 import '../widgets/profile_avatar_picker.dart';
 import '../widgets/profile_cover_picker.dart';
@@ -321,14 +326,36 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
     }
   }
 
+  /// A new cover: pick it, then frame it in the cover's own shape (drag/zoom under a guide grid) before it is uploaded.
   Future<void> _pickCover(ImageSource source) async {
-    final picked = await ImagePicker().pickImage(
-      source: source,
-      imageQuality: 85,
-    );
+    final picked = await ImagePicker().pickImage(source: source, imageQuality: 90);
     if (picked == null) return;
+    await _frameAndUploadCover(await picked.readAsBytes());
+  }
+
+  /// Re-frame the cover that is already there.
+  Future<void> _adjustCover() async {
+    final url = ref.read(authControllerProvider) is AuthSignedIn ? (ref.read(authControllerProvider) as AuthSignedIn).user.coverUrl : null;
+    if (url == null) return;
     try {
-      await ref.read(profileControllerProvider).uploadCover(picked.path);
+      final data = await NetworkAssetBundle(Uri.parse(url)).load(url);
+      await _frameAndUploadCover(data.buffer.asUint8List());
+    } catch (_) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.commonSomethingWentWrong)));
+    }
+  }
+
+  Future<void> _frameAndUploadCover(Uint8List bytes) async {
+    final l10n = AppLocalizations.of(context)!;
+    final framed = await Navigator.of(context).push<Uint8List>(
+      MaterialPageRoute(
+        builder: (_) => ImageCropperScreen(imageBytes: bytes, fixedAspect: kCoverAspect, title: l10n.coverCropTitle, maxExportWidth: 1200),
+        fullscreenDialog: true,
+      ),
+    );
+    if (framed == null) return;
+    try {
+      await ref.read(profileControllerProvider).uploadCoverBytes(framed);
     } on ApiException catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(
@@ -359,7 +386,7 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.profileTitle),
+        title: Text(l10n.accountInfoTitle),
         actions: [
           TextButton(
             onPressed: _saving ? null : _save,
@@ -390,6 +417,7 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
             onCamera: () => _pickCover(ImageSource.camera),
             onGallery: () => _pickCover(ImageSource.gallery),
             onRemove: user?.coverUrl != null ? _removeCover : null,
+            onAdjust: user?.coverUrl != null ? _adjustCover : null,
           ),
           const SizedBox(height: 16),
           Center(

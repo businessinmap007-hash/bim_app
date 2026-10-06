@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/crop_grid.dart';
 import '../../../../shared/widgets/cropped_network_image.dart';
 import '../../application/business_menu_providers.dart';
 import '../../data/models/menu_item_image.dart';
@@ -151,7 +152,7 @@ class _PhotoCropDialogState extends State<_PhotoCropDialog> {
                       children: [
                         CroppedNetworkImage(url: widget.url, crop: _crop),
                         // a light grid — five lines each way, the middle one is the exact centre
-                        const IgnorePointer(child: CustomPaint(painter: _CropGridPainter())),
+                        const CropGrid(),
                       ],
                     ),
                   ),
@@ -192,44 +193,4 @@ class _PhotoCropDialogState extends State<_PhotoCropDialog> {
       ],
     );
   }
-}
-
-/// Five lines across and five down, evenly spaced: the third of each is the centre of the window.
-class _CropGridPainter extends CustomPainter {
-  const _CropGridPainter();
-
-  static const lines = 5;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final light = Paint()
-      ..color = Colors.white.withValues(alpha: 0.55)
-      ..strokeWidth = 0.8;
-    final shade = Paint()
-      ..color = Colors.black.withValues(alpha: 0.25)
-      ..strokeWidth = 0.8;
-    // the middle line each way — a different colour from the rest, so the exact centre is unmistakable
-    final centreLine = Paint()
-      ..color = const Color(0xFFFF2D55)
-      ..strokeWidth = 1.5;
-
-    for (var i = 1; i <= lines; i++) {
-      final x = size.width * i / (lines + 1);
-      final y = size.height * i / (lines + 1);
-      final centre = i == (lines + 1) ~/ 2;
-      if (centre) {
-        canvas.drawLine(Offset(x, 0), Offset(x, size.height), centreLine);
-        canvas.drawLine(Offset(0, y), Offset(size.width, y), centreLine);
-        continue;
-      }
-      // a thin dark twin under each white line so the grid reads on a light photo too
-      canvas.drawLine(Offset(x + 0.8, 0), Offset(x + 0.8, size.height), shade);
-      canvas.drawLine(Offset(0, y + 0.8), Offset(size.width, y + 0.8), shade);
-      canvas.drawLine(Offset(x, 0), Offset(x, size.height), light);
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), light);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant _CropGridPainter oldDelegate) => false;
 }

@@ -664,6 +664,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profilePhotoView => 'عرض الصورة';
 
   @override
+  String get coverCropTitle => 'ضبط صورة الغلاف';
+
+  @override
+  String get coverCropHint =>
+      'اسحب وكبّر لتضع الجزء المطلوب داخل الإطار — هكذا سيظهر الغلاف بالضبط. العلامة الحمراء هي المنتصف.';
+
+  @override
+  String get coverCropCentre => 'توسيط الصورة';
+
+  @override
+  String get profileCoverAdjust => 'ضبط الغلاف الحالي';
+
+  @override
   String get profilePhotoRemove => 'إزالة الصورة';
 
   @override
@@ -2678,7 +2691,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get retailListingBusinessGroupPickerEmpty => 'لا توجد مجموعات بعد.';
 
   @override
-  String get staffTeamSettingsTitle => 'إعدادات فريق العمل';
+  String get staffTeamSettingsTitle => 'إعدادات الموظفين';
 
   @override
   String get staffTitle => 'الموظفون';
@@ -4183,7 +4196,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get myRatingHiddenHint => 'مخفي أثناء إغلاق تقييمك.';
 
   @override
-  String get merchantAccountTitle => 'حساب Merchant';
+  String get merchantAccountTitle => 'حساب التاجر';
 
   @override
   String get merchantAccountHint =>
