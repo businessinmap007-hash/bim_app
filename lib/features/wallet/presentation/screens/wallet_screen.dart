@@ -127,8 +127,13 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
               child: Text(l10n.walletTransactionsTitle, style: Theme.of(context).textTheme.titleSmall),
+            ),
+            // «داخل المحفظة تابات لكل نوع من الحركات، أولها الكل» — المالك، 2026-10-06
+            _TypeTabs(
+              selected: txState.type,
+              onSelected: (type) => ref.read(walletTransactionsControllerProvider.notifier).setType(type),
             ),
             if (txState.isLoading)
               const Padding(
@@ -165,6 +170,44 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
   }
 }
 
+/// One tab per kind of movement; «الكل» first. Scrolls sideways when they do not fit.
+class _TypeTabs extends StatelessWidget {
+  final String? selected;
+  final ValueChanged<String?> onSelected;
+  const _TypeTabs({required this.selected, required this.onSelected});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final types = <String?>[null, ...walletTransactionTypes];
+
+    return DefaultTabController(
+      key: ValueKey(selected),
+      length: types.length,
+      initialIndex: types.indexOf(selected).clamp(0, types.length - 1),
+      child: TabBar(
+        isScrollable: true,
+        tabAlignment: TabAlignment.start,
+        onTap: (i) => onSelected(types[i]),
+        tabs: [for (final t in types) Tab(text: t == null ? l10n.walletTabAll : walletTypeLabel(l10n, t))],
+      ),
+    );
+  }
+}
+
+/// The wallet's words for a kind of movement; an unknown kind shows as it is.
+String walletTypeLabel(AppLocalizations l10n, String type) => switch (type) {
+  'deposit' => l10n.walletTypeDeposit,
+  'withdraw' => l10n.walletTypeWithdraw,
+  'transfer' => l10n.walletTypeTransfer,
+  'hold' => l10n.walletTypeHold,
+  'release' => l10n.walletTypeRelease,
+  'refund' => l10n.walletTypeRefund,
+  'platform_fee' => l10n.walletTypePlatformFee,
+  'adjustment' => l10n.walletTypeAdjustment,
+  _ => type,
+};
+
 class _TransactionTile extends StatelessWidget {
   final WalletTransaction tx;
   const _TransactionTile({required this.tx});
@@ -183,7 +226,7 @@ class _TransactionTile extends StatelessWidget {
         ),
       ),
       title: Text(
-        tx.note?.isNotEmpty == true ? tx.note! : tx.type,
+        tx.note?.isNotEmpty == true ? tx.note! : walletTypeLabel(AppLocalizations.of(context)!, tx.type),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),

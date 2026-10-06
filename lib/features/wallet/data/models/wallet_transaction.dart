@@ -3,6 +3,10 @@
 /// manual top-ups, ...) with no fixed enum on the backend, so this app shows
 /// `note` (the human-readable line the backend already wrote) rather than
 /// trying to localize every possible `type` value itself.
+/// The kinds of movement the ledger knows (`WalletTransaction::TYPE_*` on the backend), in the order the wallet's tabs
+/// show them after «الكل». A type outside this list still shows in «الكل» with its note.
+const walletTransactionTypes = ['deposit', 'withdraw', 'transfer', 'hold', 'release', 'refund', 'platform_fee', 'adjustment'];
+
 class WalletTransaction {
   final int id;
   final String status;

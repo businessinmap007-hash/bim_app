@@ -3835,6 +3835,60 @@ abstract class AppLocalizations {
   /// **'الحركات'**
   String get walletTransactionsTitle;
 
+  /// No description provided for @walletTabAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get walletTabAll;
+
+  /// No description provided for @walletTypeDeposit.
+  ///
+  /// In ar, this message translates to:
+  /// **'إيداع'**
+  String get walletTypeDeposit;
+
+  /// No description provided for @walletTypeWithdraw.
+  ///
+  /// In ar, this message translates to:
+  /// **'سحب'**
+  String get walletTypeWithdraw;
+
+  /// No description provided for @walletTypeTransfer.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحويل'**
+  String get walletTypeTransfer;
+
+  /// No description provided for @walletTypeHold.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجز'**
+  String get walletTypeHold;
+
+  /// No description provided for @walletTypeRelease.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحرير'**
+  String get walletTypeRelease;
+
+  /// No description provided for @walletTypeRefund.
+  ///
+  /// In ar, this message translates to:
+  /// **'استرداد'**
+  String get walletTypeRefund;
+
+  /// No description provided for @walletTypePlatformFee.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسوم'**
+  String get walletTypePlatformFee;
+
+  /// No description provided for @walletTypeAdjustment.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسوية'**
+  String get walletTypeAdjustment;
+
   /// No description provided for @walletTransactionsEmpty.
   ///
   /// In ar, this message translates to:

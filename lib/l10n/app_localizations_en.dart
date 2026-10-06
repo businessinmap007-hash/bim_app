@@ -2069,6 +2069,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletTransactionsTitle => 'Transactions';
 
   @override
+  String get walletTabAll => 'All';
+
+  @override
+  String get walletTypeDeposit => 'Top-ups';
+
+  @override
+  String get walletTypeWithdraw => 'Withdrawals';
+
+  @override
+  String get walletTypeTransfer => 'Transfers';
+
+  @override
+  String get walletTypeHold => 'Holds';
+
+  @override
+  String get walletTypeRelease => 'Releases';
+
+  @override
+  String get walletTypeRefund => 'Refunds';
+
+  @override
+  String get walletTypePlatformFee => 'Fees';
+
+  @override
+  String get walletTypeAdjustment => 'Adjustments';
+
+  @override
   String get walletTransactionsEmpty => 'No transactions yet.';
 
   @override

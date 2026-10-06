@@ -2071,6 +2071,33 @@ class AppLocalizationsAr extends AppLocalizations {
   String get walletTransactionsTitle => 'الحركات';
 
   @override
+  String get walletTabAll => 'الكل';
+
+  @override
+  String get walletTypeDeposit => 'إيداع';
+
+  @override
+  String get walletTypeWithdraw => 'سحب';
+
+  @override
+  String get walletTypeTransfer => 'تحويل';
+
+  @override
+  String get walletTypeHold => 'حجز';
+
+  @override
+  String get walletTypeRelease => 'تحرير';
+
+  @override
+  String get walletTypeRefund => 'استرداد';
+
+  @override
+  String get walletTypePlatformFee => 'رسوم';
+
+  @override
+  String get walletTypeAdjustment => 'تسوية';
+
+  @override
   String get walletTransactionsEmpty => 'لا توجد حركات بعد.';
 
   @override

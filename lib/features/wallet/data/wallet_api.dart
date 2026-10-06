@@ -34,10 +34,11 @@ class WalletApi {
         data: {'pin': pin, 'pin_confirmation': pin, 'current_pin': ?currentPin},
       );
 
-  Future<WalletTransactionsPage> transactions({int page = 1, int perPage = 20}) async {
+  /// [type] narrows the ledger to one kind of movement (the wallet's tabs); null = all of them.
+  Future<WalletTransactionsPage> transactions({int page = 1, int perPage = 20, String? type}) async {
     final body = await _client.getForBody(
       '/wallet/transactions',
-      query: {'page': page, 'per_page': perPage},
+      query: {'page': page, 'per_page': perPage, 'type': ?type},
     );
     final items = (body['data'] as List<dynamic>? ?? [])
         .map((e) => WalletTransaction.fromJson(e as Map<String, dynamic>))

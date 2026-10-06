@@ -20,12 +20,16 @@ class WalletTransactionsState {
   final bool hasMore;
   final String? error;
 
+  /// The tab: one kind of movement, or null = all (الكل).
+  final String? type;
+
   const WalletTransactionsState({
     this.items = const [],
     this.isLoading = false,
     this.isLoadingMore = false,
     this.hasMore = false,
     this.error,
+    this.type,
   });
 
   WalletTransactionsState copyWith({
@@ -35,6 +39,8 @@ class WalletTransactionsState {
     bool? hasMore,
     String? error,
     bool clearError = false,
+    String? type,
+    bool clearType = false,
   }) {
     return WalletTransactionsState(
       items: items ?? this.items,
@@ -42,6 +48,7 @@ class WalletTransactionsState {
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
       hasMore: hasMore ?? this.hasMore,
       error: clearError ? null : (error ?? this.error),
+      type: clearType ? null : (type ?? this.type),
     );
   }
 }
@@ -54,11 +61,17 @@ class WalletTransactionsController extends StateNotifier<WalletTransactionsState
     load();
   }
 
+  /// Switches the tab (null = الكل) and reloads that kind of movement from the server.
+  Future<void> setType(String? type) {
+    state = WalletTransactionsState(isLoading: true, type: type);
+    return load();
+  }
+
   Future<void> load() async {
     state = state.copyWith(isLoading: true, clearError: true);
     _page = 1;
     try {
-      final result = await _api.transactions(page: _page);
+      final result = await _api.transactions(page: _page, type: state.type);
       state = state.copyWith(items: result.items, isLoading: false, hasMore: result.hasMore);
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
@@ -69,7 +82,7 @@ class WalletTransactionsController extends StateNotifier<WalletTransactionsState
     if (state.isLoadingMore || !state.hasMore) return;
     state = state.copyWith(isLoadingMore: true);
     try {
-      final result = await _api.transactions(page: _page + 1);
+      final result = await _api.transactions(page: _page + 1, type: state.type);
       _page += 1;
       state = state.copyWith(
         items: [...state.items, ...result.items],
