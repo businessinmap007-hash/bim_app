@@ -3,13 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/screen_frame.dart';
 import '../../application/wallet_providers.dart';
 import '../../data/models/wallet_transaction.dart';
 
 /// Balance + ledger, read-only — see WalletApi's doc comment for why
 /// deposit/withdraw/transfer/PIN aren't wired up here.
 class WalletScreen extends ConsumerStatefulWidget {
-  const WalletScreen({super.key});
+  /// Inside «الأمور المالية» it is a tab: no app bar of its own.
+  final bool embedded;
+  const WalletScreen({super.key, this.embedded = false});
 
   @override
   ConsumerState<WalletScreen> createState() => _WalletScreenState();
@@ -52,17 +55,16 @@ class _WalletScreenState extends ConsumerState<WalletScreen> {
     final summaryAsync = ref.watch(walletSummaryProvider);
     final txState = ref.watch(walletTransactionsControllerProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.walletTitle),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            tooltip: l10n.commonRefresh,
-            onPressed: _refresh,
-          ),
-        ],
-      ),
+    return ScreenFrame(
+      embedded: widget.embedded,
+      title: l10n.walletTitle,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.refresh),
+          tooltip: l10n.commonRefresh,
+          onPressed: _refresh,
+        ),
+      ],
       body: RefreshIndicator(
         onRefresh: _refresh,
         child: ListView(

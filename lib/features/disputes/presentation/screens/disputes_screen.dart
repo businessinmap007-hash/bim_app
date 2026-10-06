@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/screen_frame.dart';
 import '../../application/disputes_providers.dart';
 import '../../data/models/dispute.dart';
 import 'dispute_detail_screen.dart';
 import 'dispute_obligations_screen.dart';
 
 class DisputesScreen extends ConsumerStatefulWidget {
-  const DisputesScreen({super.key});
+  final bool embedded;
+  const DisputesScreen({super.key, this.embedded = false});
 
   @override
   ConsumerState<DisputesScreen> createState() => _DisputesScreenState();
@@ -40,19 +42,18 @@ class _DisputesScreenState extends ConsumerState<DisputesScreen> {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(myDisputesControllerProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.disputesTitle),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.account_balance_wallet_outlined),
-            tooltip: l10n.disputeObligationsTitle,
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const DisputeObligationsScreen()),
-            ),
+    return ScreenFrame(
+      embedded: widget.embedded,
+      title: l10n.disputesTitle,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.account_balance_wallet_outlined),
+          tooltip: l10n.disputeObligationsTitle,
+          onPressed: () => Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => const DisputeObligationsScreen()),
           ),
-        ],
-      ),
+        ),
+      ],
       body: state.isLoading
           ? const Center(child: CircularProgressIndicator())
           : state.error != null

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/screen_frame.dart';
 import '../../../wallet/presentation/widgets/wallet_pin_prompt.dart';
 import '../../application/guarantee_providers.dart';
 import '../../data/models/guarantee_level.dart';
@@ -14,7 +15,8 @@ import 'guarantee_transactions_screen.dart';
 /// against the guarantee happens elsewhere (disputes) — this screen only
 /// manages the coverage itself.
 class GuaranteeScreen extends ConsumerStatefulWidget {
-  const GuaranteeScreen({super.key});
+  final bool embedded;
+  const GuaranteeScreen({super.key, this.embedded = false});
 
   @override
   ConsumerState<GuaranteeScreen> createState() => _GuaranteeScreenState();
@@ -85,18 +87,17 @@ class _GuaranteeScreenState extends ConsumerState<GuaranteeScreen> {
     final meAsync = ref.watch(guaranteeMeProvider);
     final levelsAsync = ref.watch(guaranteeLevelsProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.guaranteeTitle),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.receipt_long_outlined),
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const GuaranteeTransactionsScreen()),
-            ),
+    return ScreenFrame(
+      embedded: widget.embedded,
+      title: l10n.guaranteeTitle,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.receipt_long_outlined),
+          onPressed: () => Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => const GuaranteeTransactionsScreen()),
           ),
-        ],
-      ),
+        ),
+      ],
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [

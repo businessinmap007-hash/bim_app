@@ -24,11 +24,15 @@ class ProfileOption {
 class ProfileOptionGroup {
   final int? id;
   final String name;
+
+  /// The account is not complete until at least one option of this group is ticked (delivery & pickup).
+  final bool required;
   final List<ProfileOption> options;
 
   const ProfileOptionGroup({
     required this.id,
     required this.name,
+    this.required = false,
     required this.options,
   });
 
@@ -36,6 +40,7 @@ class ProfileOptionGroup {
       ProfileOptionGroup(
         id: json['id'] as int?,
         name: json['name'] as String? ?? '',
+        required: json['required'] as bool? ?? false,
         options: (json['options'] as List<dynamic>? ?? [])
             .map((e) => ProfileOption.fromJson(e as Map<String, dynamic>))
             .toList(),

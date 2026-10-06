@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/screen_frame.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../application/deposits_providers.dart';
 import '../../data/models/deposit.dart';
@@ -13,7 +14,8 @@ const _statuses = ['frozen', 'in_progress', 'released', 'refunded', 'split'];
 /// to each. Read-only: release/refund/split are BookingDepositService's and
 /// DisputeService's own actions, never triggered from here.
 class DepositsScreen extends ConsumerStatefulWidget {
-  const DepositsScreen({super.key});
+  final bool embedded;
+  const DepositsScreen({super.key, this.embedded = false});
 
   @override
   ConsumerState<DepositsScreen> createState() => _DepositsScreenState();
@@ -45,8 +47,9 @@ class _DepositsScreenState extends ConsumerState<DepositsScreen> {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(depositsControllerProvider);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.depositsTitle)),
+    return ScreenFrame(
+      embedded: widget.embedded,
+      title: l10n.depositsTitle,
       body: Column(
         children: [
           Padding(

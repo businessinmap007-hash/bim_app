@@ -620,6 +620,138 @@ abstract class AppLocalizations {
   /// **'{count, plural, =0{لا يوجد نشاط} one{نشاط واحد} two{نشاطان} few{{count} أنشطة} many{{count} نشاطًا} other{{count} نشاط}}'**
   String businessCount(int count);
 
+  /// No description provided for @settingsAppSettings.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعدادات التطبيق'**
+  String get settingsAppSettings;
+
+  /// No description provided for @settingsAccountSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المعلومات، البزنس، الخدمات، الموظفون، العلامة المائية، الأمان'**
+  String get settingsAccountSubtitle;
+
+  /// No description provided for @settingsAppSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللغة، المظهر، الشكل، الإشعارات'**
+  String get settingsAppSubtitle;
+
+  /// No description provided for @accountInfoTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'معلومات الحساب'**
+  String get accountInfoTitle;
+
+  /// No description provided for @accountInfoSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم، البريد، الهاتف، العنوان، الموقع، التواصل الاجتماعي'**
+  String get accountInfoSubtitle;
+
+  /// No description provided for @businessSettingsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعدادات البزنس'**
+  String get businessSettingsTitle;
+
+  /// No description provided for @businessSettingsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'التصنيف، شروط المتجر، التسليم والاستلام، الخصائص'**
+  String get businessSettingsSubtitle;
+
+  /// No description provided for @servicesSettingsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدماتك وتسعير التوصيل والموصّلون'**
+  String get servicesSettingsSubtitle;
+
+  /// No description provided for @staffSettingsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعدادات الموظفين'**
+  String get staffSettingsTitle;
+
+  /// No description provided for @accountSecuritySection.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأمان والحساب'**
+  String get accountSecuritySection;
+
+  /// No description provided for @setupRequiredBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'مطلوب'**
+  String get setupRequiredBadge;
+
+  /// No description provided for @setupIncompleteTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكمل إعداد حسابك'**
+  String get setupIncompleteTitle;
+
+  /// No description provided for @setupIncompleteBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'لن تظهر منتجاتك للعملاء حتى تحدد كيف تسلّم الطلبات وكيف تُستلم (شروط المتجر ← التسليم والاستلام).'**
+  String get setupIncompleteBody;
+
+  /// No description provided for @settingsMenuDisplay.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة عرض المنيو'**
+  String get settingsMenuDisplay;
+
+  /// No description provided for @notificationSettingsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإشعارات'**
+  String get notificationSettingsTitle;
+
+  /// No description provided for @notificationSettingsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما هو فعّال وما هو صامت'**
+  String get notificationSettingsSubtitle;
+
+  /// No description provided for @notificationSettingsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'أوقف نوعًا من الإشعارات ليصير صامتًا: يصلك في صندوق الإشعارات لكن لا يظهر على الشاشة ولا يصدر صوتًا.'**
+  String get notificationSettingsHint;
+
+  /// No description provided for @notificationActive.
+  ///
+  /// In ar, this message translates to:
+  /// **'فعّال'**
+  String get notificationActive;
+
+  /// No description provided for @notificationSilent.
+  ///
+  /// In ar, this message translates to:
+  /// **'صامت'**
+  String get notificationSilent;
+
+  /// No description provided for @notificationLockedNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنبيهات الأموال ورسائل المنصّة لا تُكتم أبدًا.'**
+  String get notificationLockedNote;
+
+  /// No description provided for @notificationOnThisPhone.
+  ///
+  /// In ar, this message translates to:
+  /// **'على هذا الهاتف'**
+  String get notificationOnThisPhone;
+
+  /// No description provided for @setupChooseAtLeastOne.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر خيارًا واحدًا على الأقل في «{group}».'**
+  String setupChooseAtLeastOne(String group);
+
   /// No description provided for @settingsTitle.
   ///
   /// In ar, this message translates to:
@@ -3672,6 +3804,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'اختر عدد النجوم أولًا.'**
   String get ratingsSelectStarsError;
+
+  /// No description provided for @financeTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأمور المالية'**
+  String get financeTitle;
 
   /// No description provided for @walletTitle.
   ///

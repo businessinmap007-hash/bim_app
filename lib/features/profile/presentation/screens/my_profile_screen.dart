@@ -5,22 +5,15 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/network/api_exception.dart';
-import '../../../../shared/widgets/scrolling_chip_row.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/application/auth_controller.dart';
 import '../../../auth/data/models/auth_user.dart';
-import '../../../categories/application/categories_providers.dart';
-import '../../../categories/data/models/category_root.dart';
-import '../../../categories/data/models/specialty.dart';
 import '../../../categories/presentation/widgets/category_picker_field.dart';
 import '../../../albums/presentation/screens/albums_screen.dart';
 import '../../../location/application/location_providers.dart';
 import '../../../location/data/models/location_models.dart';
 import '../../../location/presentation/widgets/location_picker_field.dart';
-import '../../../settings/presentation/screens/services_settings_screen.dart';
 import '../../application/profile_controller.dart';
-import '../../application/profile_options_controller.dart';
-import '../../data/models/profile_options.dart';
 import '../widgets/profile_avatar_picker.dart';
 import '../widgets/profile_cover_picker.dart';
 
@@ -251,12 +244,6 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
             youtube: isBusiness ? _youtubeController.text.trim() : null,
             linkedin: isBusiness ? _linkedinController.text.trim() : null,
           );
-      // «حفظ» is ONE button: the store's terms and attributes are saved with the rest of the profile — they used to
-      // have a button of their own further down, and a tick saved with the top «حفظ» silently never reached the server.
-      if (isBusiness && !await ref.read(profileOptionsControllerProvider.notifier).save()) {
-        final loaded = ref.read(profileOptionsControllerProvider).loaded;
-        if (loaded) throw const FormatException('options');
-      }
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(AppLocalizations.of(context)!.profileSaved)),
@@ -598,42 +585,6 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
                   )
                 : Text(l10n.profileSave),
           ),
-          if (isBusiness) ...[
-            const SizedBox(height: 32),
-            _SectionHeader(l10n.profileActivitySettingsSection),
-            const SizedBox(height: 8),
-            _FieldLabel(l10n.profileCategory),
-            const SizedBox(height: 6),
-            _RootCategoryLabel(categoryId: user?.categoryId),
-            const SizedBox(height: 16),
-            _FieldLabel(l10n.profileSpecialty),
-            const SizedBox(height: 6),
-            _SpecialtyLabel(
-              categoryId: user?.categoryId,
-              categoryChildId: user?.categoryChildId,
-            ),
-            if (user?.categoryChildId != null) ...[
-              const SizedBox(height: 16),
-              _OptionsSection(onSave: _save, saving: _saving),
-            ],
-            const SizedBox(height: 32),
-            _SectionHeader(l10n.settingsServicesSection),
-            const SizedBox(height: 8),
-            Card(
-              margin: EdgeInsets.zero,
-              clipBehavior: Clip.antiAlias,
-              child: ListTile(
-                leading: const Icon(Icons.storefront_outlined),
-                title: Text(l10n.settingsServicesSection),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => const ServicesSettingsScreen(),
-                  ),
-                ),
-              ),
-            ),
-          ],
           if (!isBusiness) ...[
             const SizedBox(height: 32),
             const Divider(),
@@ -694,218 +645,6 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
           ],
         ],
       ),
-    );
-  }
-}
-
-/// Resolves a specialty id to its display name for the profile's read-only
-/// summary — there's no "look up one specialty by id" endpoint, so this
-/// re-reads the root's already-cached specialty list (the same data the
-/// category picker itself uses) and finds the match locally.
-class _SpecialtyLabel extends ConsumerWidget {
-  final int? categoryId;
-  final int? categoryChildId;
-
-  const _SpecialtyLabel({
-    required this.categoryId,
-    required this.categoryChildId,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
-    final style = Theme.of(context).textTheme.bodyMedium;
-
-    if (categoryChildId == null) {
-      return Text(l10n.profileSpecialtyNotSet, style: style);
-    }
-    if (categoryId == null) {
-      return Text('#$categoryChildId', style: style);
-    }
-
-    final specialtiesAsync = ref.watch(specialtiesProvider(categoryId!));
-    return specialtiesAsync.when(
-      data: (specialties) {
-        final languageCode = Localizations.localeOf(context).languageCode;
-        Specialty? match;
-        for (final specialty in specialties) {
-          if (specialty.id == categoryChildId) {
-            match = specialty;
-            break;
-          }
-        }
-        return Text(
-          match?.localizedName(languageCode) ?? '#$categoryChildId',
-          style: style,
-        );
-      },
-      loading: () => const SizedBox(
-        height: 16,
-        width: 16,
-        child: CircularProgressIndicator(strokeWidth: 2),
-      ),
-      error: (error, stack) => Text('#$categoryChildId', style: style),
-    );
-  }
-}
-
-/// The root category name («عقارات و أراضي») above the specialty — there's
-/// no "one root by id" endpoint either, so this matches against the same
-/// cached root list the home grid and category picker already use.
-class _RootCategoryLabel extends ConsumerWidget {
-  final int? categoryId;
-  const _RootCategoryLabel({required this.categoryId});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
-    final style = Theme.of(context).textTheme.bodyMedium;
-
-    if (categoryId == null) {
-      return Text(l10n.profileCategoryNotSet, style: style);
-    }
-
-    final rootsAsync = ref.watch(categoryRootsProvider);
-    return rootsAsync.when(
-      data: (roots) {
-        final languageCode = Localizations.localeOf(context).languageCode;
-        CategoryRoot? match;
-        for (final root in roots) {
-          if (root.id == categoryId) {
-            match = root;
-            break;
-          }
-        }
-        return Text(
-          match?.localizedName(languageCode) ?? '#$categoryId',
-          style: style,
-        );
-      },
-      loading: () => const SizedBox(
-        height: 16,
-        width: 16,
-        child: CircularProgressIndicator(strokeWidth: 2),
-      ),
-      error: (error, stack) => Text('#$categoryId', style: style),
-    );
-  }
-}
-
-/// A business's self-service attribute picks — every option for its
-/// specialty, grouped, as checkboxes. Saved on its own ("حفظ الخصائص"),
-/// separate from the main profile Save, since it's a different backend
-/// endpoint (PATCH /profile/options replaces the whole set, not a diff).
-class _OptionsSection extends ConsumerWidget {
-  const _OptionsSection({required this.onSave, required this.saving});
-
-  final Future<void> Function() onSave;
-  final bool saving;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
-    final state = ref.watch(profileOptionsControllerProvider);
-    final notifier = ref.read(profileOptionsControllerProvider.notifier);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _FieldLabel(l10n.profileOptionsTitle),
-        const SizedBox(height: 8),
-        if (state.error != null) ...[
-          Text(
-            state.error!,
-            style: TextStyle(color: Theme.of(context).colorScheme.error),
-          ),
-          const SizedBox(height: 8),
-        ],
-        if (state.isLoading)
-          const Center(child: CircularProgressIndicator())
-        else if (state.groups.isEmpty && state.terms.isEmpty)
-          Text(
-            l10n.profileOptionsEmpty,
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),
-          )
-        else ...[
-          // «شروط المتجر» — set once, here: what is ticked is what customers read on the store page and at checkout.
-          if (state.terms.isNotEmpty) ...[
-            Text(
-              l10n.storeTermsTitle,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              l10n.storeTermsHint,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            const SizedBox(height: 12),
-            for (final group in state.terms)
-              _OptionGroupChips(group: group, state: state, notifier: notifier),
-            const SizedBox(height: 8),
-            if (state.groups.isNotEmpty)
-              Text(
-                l10n.profileOptionsTitle,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-            if (state.groups.isNotEmpty) const SizedBox(height: 12),
-          ],
-          for (final group in state.groups)
-            _OptionGroupChips(group: group, state: state, notifier: notifier),
-          Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: ElevatedButton(
-              onPressed: state.isSaving || saving ? null : onSave,
-              child: state.isSaving || saving
-                  ? const SizedBox(
-                      height: 18,
-                      width: 18,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: Colors.white,
-                      ),
-                    )
-                  : Text(l10n.profileSave),
-            ),
-          ),
-        ],
-      ],
-    );
-  }
-}
-
-/// One group of options as chips — a store term or a business attribute, ticked the same way.
-class _OptionGroupChips extends StatelessWidget {
-  final ProfileOptionGroup group;
-  final ProfileOptionsState state;
-  final ProfileOptionsController notifier;
-  const _OptionGroupChips({
-    required this.group,
-    required this.state,
-    required this.notifier,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(group.name, style: Theme.of(context).textTheme.titleSmall),
-        ScrollingChipRow(
-          spacing: 4,
-          children: [
-            for (final option in group.options)
-              FilterChip(
-                label: Text(option.name),
-                selected: state.selectedIds.contains(option.id),
-                onSelected: (value) => notifier.toggle(option.id, value),
-                selectedColor: AppColors.accentGold.withValues(alpha: 0.3),
-              ),
-          ],
-        ),
-        const SizedBox(height: 12),
-      ],
     );
   }
 }

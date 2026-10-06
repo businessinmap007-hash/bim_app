@@ -25,6 +25,11 @@ class AuthUser {
   final String? categorySlug;
   final SocialLinks? social;
 
+  /// Business only: false until the account has said how it delivers and hands over orders — until then its
+  /// products are not shown to customers. `setupMissing` names what is left (today: `fulfillment`).
+  final bool setupComplete;
+  final List<String> setupMissing;
+
   const AuthUser({
     required this.id,
     required this.name,
@@ -45,6 +50,8 @@ class AuthUser {
     this.categoryChildId,
     this.categorySlug,
     this.social,
+    this.setupComplete = true,
+    this.setupMissing = const [],
   });
 
   bool get isBusiness => type == 'business';
@@ -74,5 +81,7 @@ class AuthUser {
     categoryChildId: (json['category_child_id'] as num?)?.toInt(),
     categorySlug: json['category_slug'] as String?,
     social: SocialLinks.fromJsonOrNull(json['social']),
+    setupComplete: (json['setup'] as Map<String, dynamic>?)?['complete'] as bool? ?? true,
+    setupMissing: [for (final m in ((json['setup'] as Map<String, dynamic>?)?['missing'] as List<dynamic>? ?? const [])) '$m'],
   );
 }

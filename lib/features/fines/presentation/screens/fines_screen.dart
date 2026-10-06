@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/screen_frame.dart';
 import '../../application/fines_providers.dart';
 import '../../data/models/fine.dart';
 
@@ -10,7 +11,8 @@ import '../../data/models/fine.dart';
 /// while its window is open. Read-only otherwise: levying/deciding a fine
 /// is admin-only.
 class FinesScreen extends ConsumerStatefulWidget {
-  const FinesScreen({super.key});
+  final bool embedded;
+  const FinesScreen({super.key, this.embedded = false});
 
   @override
   ConsumerState<FinesScreen> createState() => _FinesScreenState();
@@ -43,8 +45,9 @@ class _FinesScreenState extends ConsumerState<FinesScreen> {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(finesControllerProvider);
 
-    return Scaffold(
-      appBar: AppBar(title: Text(l10n.finesTitle)),
+    return ScreenFrame(
+      embedded: widget.embedded,
+      title: l10n.finesTitle,
       body: state.isLoading
           ? const Center(child: CircularProgressIndicator())
           : state.error != null

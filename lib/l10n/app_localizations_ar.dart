@@ -326,6 +326,80 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get settingsAppSettings => 'إعدادات التطبيق';
+
+  @override
+  String get settingsAccountSubtitle =>
+      'المعلومات، البزنس، الخدمات، الموظفون، العلامة المائية، الأمان';
+
+  @override
+  String get settingsAppSubtitle => 'اللغة، المظهر، الشكل، الإشعارات';
+
+  @override
+  String get accountInfoTitle => 'معلومات الحساب';
+
+  @override
+  String get accountInfoSubtitle =>
+      'الاسم، البريد، الهاتف، العنوان، الموقع، التواصل الاجتماعي';
+
+  @override
+  String get businessSettingsTitle => 'إعدادات البزنس';
+
+  @override
+  String get businessSettingsSubtitle =>
+      'التصنيف، شروط المتجر، التسليم والاستلام، الخصائص';
+
+  @override
+  String get servicesSettingsSubtitle => 'خدماتك وتسعير التوصيل والموصّلون';
+
+  @override
+  String get staffSettingsTitle => 'إعدادات الموظفين';
+
+  @override
+  String get accountSecuritySection => 'الأمان والحساب';
+
+  @override
+  String get setupRequiredBadge => 'مطلوب';
+
+  @override
+  String get setupIncompleteTitle => 'أكمل إعداد حسابك';
+
+  @override
+  String get setupIncompleteBody =>
+      'لن تظهر منتجاتك للعملاء حتى تحدد كيف تسلّم الطلبات وكيف تُستلم (شروط المتجر ← التسليم والاستلام).';
+
+  @override
+  String get settingsMenuDisplay => 'طريقة عرض المنيو';
+
+  @override
+  String get notificationSettingsTitle => 'الإشعارات';
+
+  @override
+  String get notificationSettingsSubtitle => 'ما هو فعّال وما هو صامت';
+
+  @override
+  String get notificationSettingsHint =>
+      'أوقف نوعًا من الإشعارات ليصير صامتًا: يصلك في صندوق الإشعارات لكن لا يظهر على الشاشة ولا يصدر صوتًا.';
+
+  @override
+  String get notificationActive => 'فعّال';
+
+  @override
+  String get notificationSilent => 'صامت';
+
+  @override
+  String get notificationLockedNote =>
+      'تنبيهات الأموال ورسائل المنصّة لا تُكتم أبدًا.';
+
+  @override
+  String get notificationOnThisPhone => 'على هذا الهاتف';
+
+  @override
+  String setupChooseAtLeastOne(String group) {
+    return 'اختر خيارًا واحدًا على الأقل في «$group».';
+  }
+
+  @override
   String get settingsTitle => 'الإعدادات';
 
   @override
@@ -1980,6 +2054,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get ratingsSelectStarsError => 'اختر عدد النجوم أولًا.';
+
+  @override
+  String get financeTitle => 'الأمور المالية';
 
   @override
   String get walletTitle => 'المحفظة';

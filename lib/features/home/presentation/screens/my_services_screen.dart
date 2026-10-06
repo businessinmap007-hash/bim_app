@@ -6,18 +6,14 @@ import '../../../../shared/widgets/app_drawer.dart';
 import '../../../addresses/presentation/screens/addresses_screen.dart';
 import '../../../agenda/presentation/screens/agenda_screen.dart';
 import '../../../clinic/presentation/screens/my_clinic_appointments_screen.dart';
-import '../../../deposits/presentation/screens/deposits_screen.dart';
-import '../../../disputes/presentation/screens/disputes_screen.dart';
-import '../../../fines/presentation/screens/fines_screen.dart';
 import '../../../general_chat/presentation/screens/chats_list_screen.dart';
-import '../../../guarantee/presentation/screens/guarantee_screen.dart';
 import '../../../orders/presentation/screens/orders_and_bookings_screen.dart';
 import '../../../prescriptions/presentation/screens/prescriptions_screen.dart';
 import '../../../retail_discovery/presentation/screens/shop_products_screen.dart';
 import '../../../schedules/presentation/screens/trip_search_screen.dart';
 import '../../../table/presentation/screens/table_scan_screen.dart';
 import '../../../training/presentation/screens/training_plans_screen.dart';
-import '../../../wallet/presentation/screens/wallet_screen.dart';
+import '../../../finance/presentation/screens/finance_screen.dart';
 
 /// Every service a person has actually USED on the platform, one primary
 /// destination instead of buried 15 items deep in the drawer — table
@@ -122,10 +118,10 @@ class MyServicesScreen extends StatelessWidget {
                 const Divider(height: 1),
                 ListTile(
                   leading: const Icon(Icons.account_balance_wallet_outlined),
-                  title: Text(l10n.walletTitle),
+                  title: Text(l10n.financeTitle),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const WalletScreen()),
+                    MaterialPageRoute(builder: (_) => const FinanceScreen()),
                   ),
                 ),
                 const Divider(height: 1),
@@ -144,42 +140,6 @@ class MyServicesScreen extends StatelessWidget {
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => const TripSearchScreen()),
-                  ),
-                ),
-                const Divider(height: 1),
-                ListTile(
-                  leading: const Icon(Icons.lock_outline),
-                  title: Text(l10n.depositsTitle),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const DepositsScreen()),
-                  ),
-                ),
-                const Divider(height: 1),
-                ListTile(
-                  leading: const Icon(Icons.verified_user_outlined),
-                  title: Text(l10n.guaranteeTitle),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const GuaranteeScreen()),
-                  ),
-                ),
-                const Divider(height: 1),
-                ListTile(
-                  leading: const Icon(Icons.gavel_outlined),
-                  title: Text(l10n.finesTitle),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const FinesScreen()),
-                  ),
-                ),
-                const Divider(height: 1),
-                ListTile(
-                  leading: const Icon(Icons.gavel_outlined),
-                  title: Text(l10n.disputesTitle),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const DisputesScreen()),
                   ),
                 ),
                 const Divider(height: 1),

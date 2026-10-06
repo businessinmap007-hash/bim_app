@@ -8,6 +8,8 @@ import '../../../booking/application/booking_providers.dart';
 import '../../../booking/presentation/screens/pending_settlement_gate.dart';
 import '../../../categories/presentation/screens/all_categories_screen.dart';
 import '../../../notifications/application/notifications_providers.dart';
+import '../../../profile/presentation/screens/business_settings_screen.dart';
+import '../../../../l10n/app_localizations.dart';
 import 'business_home_screen.dart';
 import 'customer_home_screen.dart';
 import 'my_services_screen.dart';
@@ -65,6 +67,15 @@ class _HomeShellState extends ConsumerState<HomeShell> with WidgetsBindingObserv
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) => _checkPendingSettlements());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _promptSetupIfNeeded());
+  }
+
+  /// «في اعدادات الحساب بعد إنشائه مباشرة لا يكتمل إلا بعد التحديد» — a business account that has not yet said how it
+  /// delivers and hands over orders lands on its business settings, once per launch, instead of on an empty shop.
+  void _promptSetupIfNeeded() {
+    final auth = ref.read(authControllerProvider);
+    if (!mounted || auth is! AuthSignedIn || !auth.user.isBusiness || auth.user.setupComplete) return;
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const BusinessSettingsScreen()));
   }
 
   @override
@@ -125,9 +136,39 @@ class _HomeShellState extends ConsumerState<HomeShell> with WidgetsBindingObserv
       MyServicesScreen(scaffoldKey: _scaffoldKeys[2]),
     ];
 
+    final needsSetup = authState is AuthSignedIn && authState.user.isBusiness && !authState.user.setupComplete;
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       body: IndexedStack(index: _index, children: tabs),
-      bottomNavigationBar: NavigationBar(
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // The account is incomplete: its products are hidden from customers until it says how it delivers.
+          if (needsSetup)
+            Material(
+              color: Theme.of(context).colorScheme.errorContainer,
+              child: InkWell(
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const BusinessSettingsScreen())),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  child: Row(
+                    children: [
+                      Icon(Icons.info_outline, size: 18, color: Theme.of(context).colorScheme.onErrorContainer),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          l10n.setupIncompleteTitle,
+                          style: TextStyle(color: Theme.of(context).colorScheme.onErrorContainer, fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                      Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.onErrorContainer),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          NavigationBar(
         selectedIndex: _index,
         onDestinationSelected: _selectTab,
         indicatorColor: AppColors.accentGold.withValues(alpha: 0.2),
@@ -147,6 +188,8 @@ class _HomeShellState extends ConsumerState<HomeShell> with WidgetsBindingObserv
             selectedIcon: Icon(Icons.grid_view_rounded, size: 28),
             label: '',
           ),
+        ],
+      ),
         ],
       ),
     );

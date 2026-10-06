@@ -316,6 +316,82 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get settingsAppSettings => 'App settings';
+
+  @override
+  String get settingsAccountSubtitle =>
+      'Information, business, services, staff, watermark, security';
+
+  @override
+  String get settingsAppSubtitle => 'Language, theme, layout, notifications';
+
+  @override
+  String get accountInfoTitle => 'Account information';
+
+  @override
+  String get accountInfoSubtitle =>
+      'Name, e-mail, phone, address, location, social links';
+
+  @override
+  String get businessSettingsTitle => 'Business settings';
+
+  @override
+  String get businessSettingsSubtitle =>
+      'Category, store terms, delivery & pickup, attributes';
+
+  @override
+  String get servicesSettingsSubtitle =>
+      'Your services, delivery pricing and drivers';
+
+  @override
+  String get staffSettingsTitle => 'Staff settings';
+
+  @override
+  String get accountSecuritySection => 'Security & account';
+
+  @override
+  String get setupRequiredBadge => 'Required';
+
+  @override
+  String get setupIncompleteTitle => 'Finish setting up your account';
+
+  @override
+  String get setupIncompleteBody =>
+      'Your products are not shown to customers until you choose how you deliver and hand over orders (Store terms → Delivery & pickup).';
+
+  @override
+  String get settingsMenuDisplay => 'How menus are shown';
+
+  @override
+  String get notificationSettingsTitle => 'Notifications';
+
+  @override
+  String get notificationSettingsSubtitle =>
+      'Which are active and which are silent';
+
+  @override
+  String get notificationSettingsHint =>
+      'Switch a kind of notification off to make it silent: it still arrives in your inbox, but nothing pops up and there is no sound.';
+
+  @override
+  String get notificationActive => 'Active';
+
+  @override
+  String get notificationSilent => 'Silent';
+
+  @override
+  String get notificationLockedNote =>
+      'Money alerts and announcements from the platform are never silenced.';
+
+  @override
+  String get notificationOnThisPhone => 'On this phone';
+
+  @override
+  String setupChooseAtLeastOne(String group) {
+    return 'Choose at least one option in «$group».';
+  }
+
+  @override
   String get settingsTitle => 'Settings';
 
   @override
@@ -1976,6 +2052,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ratingsSelectStarsError => 'Choose a star rating first.';
+
+  @override
+  String get financeTitle => 'Financial affairs';
 
   @override
   String get walletTitle => 'Wallet';

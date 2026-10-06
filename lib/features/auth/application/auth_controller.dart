@@ -142,6 +142,16 @@ class AuthController extends StateNotifier<AuthState> {
     }
   }
 
+  /// Reads the account again (the server's word on whether its setup is complete, and anything else that changed on
+  /// the server side) — best effort: a failure leaves what is on screen.
+  Future<void> refreshUser() async {
+    try {
+      setUser(await _authApi.me());
+    } catch (_) {
+      // keep the current user
+    }
+  }
+
   /// Restore an account soft-deleted within its grace window. `cancel()`
   /// only returns a token (the account had none while deleted) — fetch the
   /// user separately, same as session restore on launch.
