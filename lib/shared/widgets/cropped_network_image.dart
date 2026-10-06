@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 
 import '../../features/business_menu/data/models/menu_item_image.dart';
 
-/// The shape of an item card's photo (merchant and customer grids alike) — the crop editor previews exactly this.
-const itemCardPhotoAspect = 1.25;
+/// The shape of an item card's photo (merchant and customer grids alike): a SQUARE, which takes about two thirds of
+/// the card's height — «اجعل الصورة في الكارت مربعة تأخذ 2/3 من ارتفاع الكارت» — المالك، 2026-10-06. The crop editor
+/// previews exactly this.
+const itemCardPhotoAspect = 1.0;
 
 /// A network photo filling its box, showing the part the merchant chose: the point [crop] keeps in the middle, and
 /// how far in it goes — so the empty part of a photo is not what a card shows, and the product is not cut off.

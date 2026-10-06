@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -85,6 +86,36 @@ class _PhotoCropDialogState extends State<_PhotoCropDialog> {
 
   PhotoCrop get _crop => PhotoCrop(x: _x, y: _y, zoom: _zoom);
 
+  /// The photo's own pixel size, once it has loaded (null until then).
+  Size? _photoSize;
+  ImageStream? _stream;
+  ImageStreamListener? _listener;
+
+  @override
+  void initState() {
+    super.initState();
+    _stream = CachedNetworkImageProvider(widget.url).resolve(ImageConfiguration.empty);
+    _listener = ImageStreamListener((info, _) {
+      if (mounted) setState(() => _photoSize = Size(info.image.width.toDouble(), info.image.height.toDouble()));
+    });
+    _stream!.addListener(_listener!);
+  }
+
+  @override
+  void dispose() {
+    if (_listener != null) _stream?.removeListener(_listener!);
+    super.dispose();
+  }
+
+  /// The photo as the window draws it before zooming: cover-fitted into the window.
+  Size get _shownPhotoSize {
+    final photo = _photoSize;
+    if (photo == null || photo.isEmpty) return const Size(_window, _windowHeight);
+    final scale = (_window / photo.width) > (_windowHeight / photo.height) ? _window / photo.width : _windowHeight / photo.height;
+
+    return Size(photo.width * scale, photo.height * scale);
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -101,16 +132,29 @@ class _PhotoCropDialogState extends State<_PhotoCropDialog> {
             Center(
               child: GestureDetector(
                 // Dragging the picture right moves the window left over it: the point kept in the middle goes left.
+                // The photo follows the finger one-to-one: the focus moves by the finger's distance over the photo's own
+                // size on screen (its cover-fitted size × the zoom), so a tall photo is not flung about.
                 onPanUpdate: (d) => setState(() {
-                  _x = (_x - d.delta.dx / (_window * _zoom)).clamp(0.0, 1.0);
-                  _y = (_y - d.delta.dy / (_windowHeight * _zoom)).clamp(0.0, 1.0);
+                  final shown = _shownPhotoSize;
+                  _x = (_x - d.delta.dx / (shown.width * _zoom)).clamp(0.0, 1.0);
+                  _y = (_y - d.delta.dy / (shown.height * _zoom)).clamp(0.0, 1.0);
                 }),
                 // the window is the card's own shape, so what is seen here is what the card shows
                 child: Container(
                   width: _window,
                   height: _windowHeight,
                   decoration: BoxDecoration(border: Border.all(color: AppColors.accentGold, width: 2), borderRadius: BorderRadius.circular(12)),
-                  child: ClipRRect(borderRadius: BorderRadius.circular(10), child: CroppedNetworkImage(url: widget.url, crop: _crop)),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        CroppedNetworkImage(url: widget.url, crop: _crop),
+                        // a light grid — five lines each way, the middle one is the exact centre
+                        const IgnorePointer(child: CustomPaint(painter: _CropGridPainter())),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -148,4 +192,35 @@ class _PhotoCropDialogState extends State<_PhotoCropDialog> {
       ],
     );
   }
+}
+
+/// Five lines across and five down, evenly spaced: the third of each is the centre of the window.
+class _CropGridPainter extends CustomPainter {
+  const _CropGridPainter();
+
+  static const lines = 5;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final light = Paint()
+      ..color = Colors.white.withValues(alpha: 0.55)
+      ..strokeWidth = 0.8;
+    final shade = Paint()
+      ..color = Colors.black.withValues(alpha: 0.25)
+      ..strokeWidth = 0.8;
+
+    for (var i = 1; i <= lines; i++) {
+      final x = size.width * i / (lines + 1);
+      final y = size.height * i / (lines + 1);
+      final centre = i == (lines + 1) ~/ 2;
+      // a thin dark twin under each white line so the grid reads on a light photo too
+      canvas.drawLine(Offset(x + 0.8, 0), Offset(x + 0.8, size.height), shade);
+      canvas.drawLine(Offset(0, y + 0.8), Offset(size.width, y + 0.8), shade);
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), centre ? (Paint.from(light)..strokeWidth = 1.4) : light);
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), centre ? (Paint.from(light)..strokeWidth = 1.4) : light);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _CropGridPainter oldDelegate) => false;
 }
