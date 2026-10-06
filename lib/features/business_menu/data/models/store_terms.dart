@@ -1,6 +1,6 @@
 /// «شروط المتجر» — a policy of the store (returns, minimum order, delivery, trade scope), answered
 /// once in its profile. The merchant's copy lists every option with `selected`; the customer's copy
-/// (menu page, cart, order) lists only what the store answered. See Api\\V2\\BusinessTermsController.
+/// (menu page, cart, order) lists only what the store answered. Edited in the profile (GET/PATCH /profile/options).
 class StoreTermOption {
   final int id;
   final String name;

@@ -11515,18 +11515,6 @@ abstract class AppLocalizations {
   /// **'حفظ'**
   String get storeTermsSave;
 
-  /// No description provided for @storeTermsSaved.
-  ///
-  /// In ar, this message translates to:
-  /// **'تم حفظ شروط المتجر.'**
-  String get storeTermsSaved;
-
-  /// No description provided for @storeTermsEmpty.
-  ///
-  /// In ar, this message translates to:
-  /// **'لا توجد شروط مطلوبة لنشاطك.'**
-  String get storeTermsEmpty;
-
   /// No description provided for @shopAddonsTitle.
   ///
   /// In ar, this message translates to:

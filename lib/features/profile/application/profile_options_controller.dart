@@ -5,6 +5,7 @@ import '../data/profile_api.dart';
 import 'profile_controller.dart';
 
 class ProfileOptionsState {
+  final List<ProfileOptionGroup> terms;
   final List<ProfileOptionGroup> groups;
   final Set<int> selectedIds;
   final bool isLoading;
@@ -12,6 +13,7 @@ class ProfileOptionsState {
   final String? error;
 
   const ProfileOptionsState({
+    this.terms = const [],
     this.groups = const [],
     this.selectedIds = const {},
     this.isLoading = false,
@@ -20,6 +22,7 @@ class ProfileOptionsState {
   });
 
   ProfileOptionsState copyWith({
+    List<ProfileOptionGroup>? terms,
     List<ProfileOptionGroup>? groups,
     Set<int>? selectedIds,
     bool? isLoading,
@@ -28,6 +31,7 @@ class ProfileOptionsState {
     bool clearError = false,
   }) {
     return ProfileOptionsState(
+      terms: terms ?? this.terms,
       groups: groups ?? this.groups,
       selectedIds: selectedIds ?? this.selectedIds,
       isLoading: isLoading ?? this.isLoading,
@@ -53,6 +57,7 @@ class ProfileOptionsController extends StateNotifier<ProfileOptionsState> {
     try {
       final payload = await _api.showOptions();
       state = state.copyWith(
+        terms: payload.terms,
         groups: payload.groups,
         selectedIds: payload.selectedIds.toSet(),
         isLoading: false,
@@ -76,7 +81,12 @@ class ProfileOptionsController extends StateNotifier<ProfileOptionsState> {
     state = state.copyWith(isSaving: true, clearError: true);
     try {
       final payload = await _api.updateOptions(state.selectedIds.toList());
-      state = state.copyWith(groups: payload.groups, selectedIds: payload.selectedIds.toSet(), isSaving: false);
+      state = state.copyWith(
+        terms: payload.terms,
+        groups: payload.groups,
+        selectedIds: payload.selectedIds.toSet(),
+        isSaving: false,
+      );
     } catch (e) {
       state = state.copyWith(isSaving: false, error: e.toString());
     }

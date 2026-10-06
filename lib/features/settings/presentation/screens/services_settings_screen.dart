@@ -1,7 +1,6 @@
 import '../../../business_menu/application/business_menu_providers.dart';
 import '../../../business_menu/presentation/screens/menu_import_screen.dart';
 import '../../../business_menu/presentation/screens/shop_addons_screen.dart';
-import '../../../business_menu/presentation/screens/store_terms_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -139,12 +138,6 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.import_export_outlined,
         title: l10n.menuSheetTitle,
         builder: (_) => const MenuImportScreen(),
-      ),
-      _Tile(
-        show: _has('menu'),
-        leading: Icons.policy_outlined,
-        title: l10n.storeTermsTitle,
-        builder: (_) => const StoreTermsScreen(),
       ),
       _Tile(
         show: _has('menu') && _isFoodShaped,

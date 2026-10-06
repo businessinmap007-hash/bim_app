@@ -6212,12 +6212,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get storeTermsSave => 'Save';
 
   @override
-  String get storeTermsSaved => 'Store terms saved.';
-
-  @override
-  String get storeTermsEmpty => 'No terms are required for your business.';
-
-  @override
   String get shopAddonsTitle => 'Shop services';
 
   @override

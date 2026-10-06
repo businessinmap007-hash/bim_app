@@ -19,6 +19,7 @@ import '../../../location/presentation/widgets/location_picker_field.dart';
 import '../../../settings/presentation/screens/services_settings_screen.dart';
 import '../../application/profile_controller.dart';
 import '../../application/profile_options_controller.dart';
+import '../../data/models/profile_options.dart';
 import '../widgets/profile_avatar_picker.dart';
 import '../widgets/profile_cover_picker.dart';
 
@@ -64,7 +65,8 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
   bool _showConvertPanel = false;
   bool _converting = false;
 
-  AuthUser? _userAt(AuthState state) => state is AuthSignedIn ? state.user : null;
+  AuthUser? _userAt(AuthState state) =>
+      state is AuthSignedIn ? state.user : null;
 
   @override
   void initState() {
@@ -74,11 +76,21 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
     _nameEnController = TextEditingController(text: user?.nameEn ?? '');
     _phoneController = TextEditingController(text: user?.phone ?? '');
     _aboutController = TextEditingController(text: user?.about ?? '');
-    _facebookController = TextEditingController(text: user?.social?.facebook ?? '');
-    _instagramController = TextEditingController(text: user?.social?.instagram ?? '');
-    _twitterController = TextEditingController(text: user?.social?.twitter ?? '');
-    _youtubeController = TextEditingController(text: user?.social?.youtube ?? '');
-    _linkedinController = TextEditingController(text: user?.social?.linkedin ?? '');
+    _facebookController = TextEditingController(
+      text: user?.social?.facebook ?? '',
+    );
+    _instagramController = TextEditingController(
+      text: user?.social?.instagram ?? '',
+    );
+    _twitterController = TextEditingController(
+      text: user?.social?.twitter ?? '',
+    );
+    _youtubeController = TextEditingController(
+      text: user?.social?.youtube ?? '',
+    );
+    _linkedinController = TextEditingController(
+      text: user?.social?.linkedin ?? '',
+    );
     _latitude = user?.latitude;
     _longitude = user?.longitude;
     _resolveSavedLocation(user);
@@ -98,7 +110,9 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
 
     try {
       final languageCode = Localizations.localeOf(context).languageCode;
-      final governorates = await ref.read(locationApiProvider).governorates(countryId);
+      final governorates = await ref
+          .read(locationApiProvider)
+          .governorates(countryId);
       final cities = await ref.read(locationApiProvider).cities(governorateId);
 
       LocationGovernorate? governorate;
@@ -126,7 +140,8 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
           countryId: countryId,
           governorateId: governorateId,
           cityId: cityId,
-          label: '${resolvedGovernorate.localizedName(languageCode)} — ${resolvedCity.localizedName(languageCode)}',
+          label:
+              '${resolvedGovernorate.localizedName(languageCode)} — ${resolvedCity.localizedName(languageCode)}',
         );
       });
     } catch (_) {
@@ -157,11 +172,12 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
       }
-      if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
         if (mounted) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(l10n.profileLocationPermissionDenied)));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(l10n.profileLocationPermissionDenied)),
+          );
         }
         return;
       }
@@ -176,7 +192,9 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
       // below before saving. A miss (nothing confidently close enough) must
       // say so out loud: silently leaving the picker unchanged here used to
       // look exactly like the button did nothing at all.
-      final match = await ref.read(locationApiProvider).nearest(latitude: position.latitude, longitude: position.longitude);
+      final match = await ref
+          .read(locationApiProvider)
+          .nearest(latitude: position.latitude, longitude: position.longitude);
       if (!mounted) return;
       if (match != null) {
         final languageCode = Localizations.localeOf(context).languageCode;
@@ -191,11 +209,15 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
           );
         });
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.profileLocationNoMatch)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.profileLocationNoMatch)));
       }
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
       }
     } finally {
       if (mounted) setState(() => _locating = false);
@@ -203,7 +225,8 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
   }
 
   Future<void> _save() async {
-    final isBusiness = _userAt(ref.read(authControllerProvider))?.isBusiness ?? false;
+    final isBusiness =
+        _userAt(ref.read(authControllerProvider))?.isBusiness ?? false;
     setState(() {
       _saving = true;
       _error = null;
@@ -228,18 +251,22 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
             linkedin: isBusiness ? _linkedinController.text.trim() : null,
           );
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.profileSaved)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(AppLocalizations.of(context)!.profileSaved)),
+        );
       }
     } catch (e) {
       // Catches more than ApiException on purpose: a save that silently
       // failed with no visible feedback is exactly what looked like "I
       // picked everything and it just didn't save" before this.
       if (!mounted) return;
-      final message = e is ApiException ? e.message : AppLocalizations.of(context)!.commonSomethingWentWrong;
+      final message = e is ApiException
+          ? e.message
+          : AppLocalizations.of(context)!.commonSomethingWentWrong;
       setState(() => _error = message);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -259,9 +286,11 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
           .update(type: 'business', categoryChildId: specialty.childId);
       if (!mounted) return;
       setState(() => _showConvertPanel = false);
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.profileConvertSuccess)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.profileConvertSuccess),
+        ),
+      );
     } on ApiException catch (e) {
       setState(() => _error = e.message);
     } finally {
@@ -270,13 +299,18 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
   }
 
   Future<void> _pickImage(ImageSource source) async {
-    final picked = await ImagePicker().pickImage(source: source, imageQuality: 85);
+    final picked = await ImagePicker().pickImage(
+      source: source,
+      imageQuality: 85,
+    );
     if (picked == null) return;
     try {
       await ref.read(profileControllerProvider).uploadImage(picked.path);
     } on ApiException catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(e.message)));
       }
     }
   }
@@ -286,19 +320,26 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
       await ref.read(profileControllerProvider).removeImage();
     } on ApiException catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(e.message)));
       }
     }
   }
 
   Future<void> _pickCover(ImageSource source) async {
-    final picked = await ImagePicker().pickImage(source: source, imageQuality: 85);
+    final picked = await ImagePicker().pickImage(
+      source: source,
+      imageQuality: 85,
+    );
     if (picked == null) return;
     try {
       await ref.read(profileControllerProvider).uploadCover(picked.path);
     } on ApiException catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(e.message)));
       }
     }
   }
@@ -308,7 +349,9 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
       await ref.read(profileControllerProvider).removeCover();
     } on ApiException catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(e.message)));
       }
     }
   }
@@ -365,7 +408,9 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
               imageUrl: user?.logoUrl ?? user?.imageUrl,
               onCamera: () => _pickImage(ImageSource.camera),
               onGallery: () => _pickImage(ImageSource.gallery),
-              onRemove: (user?.logoUrl ?? user?.imageUrl) != null ? _removeImage : null,
+              onRemove: (user?.logoUrl ?? user?.imageUrl) != null
+                  ? _removeImage
+                  : null,
             ),
           ),
           const SizedBox(height: 24),
@@ -380,17 +425,27 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.shield_outlined, color: AppColors.accentGold, size: 20),
+                const Icon(
+                  Icons.shield_outlined,
+                  color: AppColors.accentGold,
+                  size: 20,
+                ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Text(l10n.profilePrivacyNote, style: Theme.of(context).textTheme.bodySmall),
+                  child: Text(
+                    l10n.profilePrivacyNote,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
                 ),
               ],
             ),
           ),
           const SizedBox(height: 24),
           if (_error != null) ...[
-            Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+            Text(
+              _error!,
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
             const SizedBox(height: 12),
           ],
           _FieldLabel(l10n.profileAccountType),
@@ -409,11 +464,17 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
           const SizedBox(height: 16),
           _FieldLabel(l10n.profileEmail),
           const SizedBox(height: 6),
-          Text(user?.email ?? '', style: Theme.of(context).textTheme.bodyMedium),
+          Text(
+            user?.email ?? '',
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
           const SizedBox(height: 16),
           _FieldLabel(l10n.profilePhone),
           const SizedBox(height: 6),
-          TextField(controller: _phoneController, keyboardType: TextInputType.phone),
+          TextField(
+            controller: _phoneController,
+            keyboardType: TextInputType.phone,
+          ),
           if (isBusiness) ...[
             const SizedBox(height: 16),
             _FieldLabel(l10n.profileAbout),
@@ -436,7 +497,11 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
               OutlinedButton.icon(
                 onPressed: _locating ? null : _useCurrentLocation,
                 icon: _locating
-                    ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                    ? const SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
                     : const Icon(Icons.my_location, size: 18),
                 label: Text(l10n.profileUseCurrentLocation),
               ),
@@ -447,7 +512,8 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
           const SizedBox(height: 6),
           LocationPickerField(
             value: _locationSelection,
-            onChanged: (selection) => setState(() => _locationSelection = selection),
+            onChanged: (selection) =>
+                setState(() => _locationSelection = selection),
           ),
           if (isBusiness) ...[
             const SizedBox(height: 24),
@@ -455,27 +521,42 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
             const SizedBox(height: 6),
             TextField(
               controller: _facebookController,
-              decoration: const InputDecoration(prefixIcon: Icon(Icons.facebook), hintText: 'facebook.com/...'),
+              decoration: const InputDecoration(
+                prefixIcon: Icon(Icons.facebook),
+                hintText: 'facebook.com/...',
+              ),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: _instagramController,
-              decoration: const InputDecoration(prefixIcon: Icon(Icons.camera_alt_outlined), hintText: 'instagram.com/...'),
+              decoration: const InputDecoration(
+                prefixIcon: Icon(Icons.camera_alt_outlined),
+                hintText: 'instagram.com/...',
+              ),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: _twitterController,
-              decoration: const InputDecoration(prefixIcon: Icon(Icons.alternate_email), hintText: 'x.com/...'),
+              decoration: const InputDecoration(
+                prefixIcon: Icon(Icons.alternate_email),
+                hintText: 'x.com/...',
+              ),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: _youtubeController,
-              decoration: const InputDecoration(prefixIcon: Icon(Icons.play_circle_outline), hintText: 'youtube.com/...'),
+              decoration: const InputDecoration(
+                prefixIcon: Icon(Icons.play_circle_outline),
+                hintText: 'youtube.com/...',
+              ),
             ),
             const SizedBox(height: 10),
             TextField(
               controller: _linkedinController,
-              decoration: const InputDecoration(prefixIcon: Icon(Icons.business_center_outlined), hintText: 'linkedin.com/...'),
+              decoration: const InputDecoration(
+                prefixIcon: Icon(Icons.business_center_outlined),
+                hintText: 'linkedin.com/...',
+              ),
             ),
           ],
           // A client account has no photo album at all — only a business
@@ -490,9 +571,9 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
                 leading: const Icon(Icons.photo_album_outlined),
                 title: Text(l10n.profileAlbumsTitle),
                 trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const AlbumsScreen()),
-                ),
+                onTap: () => Navigator.of(
+                  context,
+                ).push(MaterialPageRoute(builder: (_) => const AlbumsScreen())),
               ),
             ),
           ],
@@ -503,7 +584,10 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
                 ? const SizedBox(
                     height: 20,
                     width: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Colors.white,
+                    ),
                   )
                 : Text(l10n.profileSave),
           ),
@@ -517,7 +601,10 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
             const SizedBox(height: 16),
             _FieldLabel(l10n.profileSpecialty),
             const SizedBox(height: 6),
-            _SpecialtyLabel(categoryId: user?.categoryId, categoryChildId: user?.categoryChildId),
+            _SpecialtyLabel(
+              categoryId: user?.categoryId,
+              categoryChildId: user?.categoryChildId,
+            ),
             if (user?.categoryChildId != null) ...[
               const SizedBox(height: 16),
               const _OptionsSection(),
@@ -533,7 +620,9 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
                 title: Text(l10n.settingsServicesSection),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const ServicesSettingsScreen()),
+                  MaterialPageRoute(
+                    builder: (_) => const ServicesSettingsScreen(),
+                  ),
                 ),
               ),
             ),
@@ -552,30 +641,41 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(l10n.profileConvertToBusinessHint, style: Theme.of(context).textTheme.bodySmall),
+                  Text(
+                    l10n.profileConvertToBusinessHint,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
                   const SizedBox(height: 12),
                   CategoryPickerField(
                     value: _newSpecialty,
-                    onChanged: (selection) => setState(() => _newSpecialty = selection),
+                    onChanged: (selection) =>
+                        setState(() => _newSpecialty = selection),
                   ),
                   const SizedBox(height: 12),
                   Row(
                     children: [
                       Expanded(
                         child: OutlinedButton(
-                          onPressed: _converting ? null : () => setState(() => _showConvertPanel = false),
+                          onPressed: _converting
+                              ? null
+                              : () => setState(() => _showConvertPanel = false),
                           child: Text(l10n.commonCancel),
                         ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: (_converting || _newSpecialty == null) ? null : _confirmConvertToBusiness,
+                          onPressed: (_converting || _newSpecialty == null)
+                              ? null
+                              : _confirmConvertToBusiness,
                           child: _converting
                               ? const SizedBox(
                                   height: 18,
                                   width: 18,
-                                  child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
                                 )
                               : Text(l10n.profileConvertConfirm),
                         ),
@@ -599,7 +699,10 @@ class _SpecialtyLabel extends ConsumerWidget {
   final int? categoryId;
   final int? categoryChildId;
 
-  const _SpecialtyLabel({required this.categoryId, required this.categoryChildId});
+  const _SpecialtyLabel({
+    required this.categoryId,
+    required this.categoryChildId,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -624,7 +727,10 @@ class _SpecialtyLabel extends ConsumerWidget {
             break;
           }
         }
-        return Text(match?.localizedName(languageCode) ?? '#$categoryChildId', style: style);
+        return Text(
+          match?.localizedName(languageCode) ?? '#$categoryChildId',
+          style: style,
+        );
       },
       loading: () => const SizedBox(
         height: 16,
@@ -663,9 +769,16 @@ class _RootCategoryLabel extends ConsumerWidget {
             break;
           }
         }
-        return Text(match?.localizedName(languageCode) ?? '#$categoryId', style: style);
+        return Text(
+          match?.localizedName(languageCode) ?? '#$categoryId',
+          style: style,
+        );
       },
-      loading: () => const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2)),
+      loading: () => const SizedBox(
+        height: 16,
+        width: 16,
+        child: CircularProgressIndicator(strokeWidth: 2),
+      ),
       error: (error, stack) => Text('#$categoryId', style: style),
     );
   }
@@ -690,33 +803,46 @@ class _OptionsSection extends ConsumerWidget {
         _FieldLabel(l10n.profileOptionsTitle),
         const SizedBox(height: 8),
         if (state.error != null) ...[
-          Text(state.error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+          Text(
+            state.error!,
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
+          ),
           const SizedBox(height: 8),
         ],
         if (state.isLoading)
           const Center(child: CircularProgressIndicator())
-        else if (state.groups.isEmpty)
+        else if (state.groups.isEmpty && state.terms.isEmpty)
           Text(
             l10n.profileOptionsEmpty,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),
           )
         else ...[
-          for (final group in state.groups) ...[
-            Text(group.name, style: Theme.of(context).textTheme.titleSmall),
-            Wrap(
-              spacing: 4,
-              children: [
-                for (final option in group.options)
-                  FilterChip(
-                    label: Text(option.name),
-                    selected: state.selectedIds.contains(option.id),
-                    onSelected: (value) => notifier.toggle(option.id, value),
-                    selectedColor: AppColors.accentGold.withValues(alpha: 0.3),
-                  ),
-              ],
+          // «شروط المتجر» — set once, here: what is ticked is what customers read on the store page and at checkout.
+          if (state.terms.isNotEmpty) ...[
+            Text(
+              l10n.storeTermsTitle,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              l10n.storeTermsHint,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(height: 12),
+            for (final group in state.terms)
+              _OptionGroupChips(group: group, state: state, notifier: notifier),
+            const SizedBox(height: 8),
+            if (state.groups.isNotEmpty)
+              Text(
+                l10n.profileOptionsTitle,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            if (state.groups.isNotEmpty) const SizedBox(height: 12),
           ],
+          for (final group in state.groups)
+            _OptionGroupChips(group: group, state: state, notifier: notifier),
           Align(
             alignment: AlignmentDirectional.centerStart,
             child: ElevatedButton(
@@ -725,12 +851,50 @@ class _OptionsSection extends ConsumerWidget {
                   ? const SizedBox(
                       height: 18,
                       width: 18,
-                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
                     )
                   : Text(l10n.profileOptionsSave),
             ),
           ),
         ],
+      ],
+    );
+  }
+}
+
+/// One group of options as chips — a store term or a business attribute, ticked the same way.
+class _OptionGroupChips extends StatelessWidget {
+  final ProfileOptionGroup group;
+  final ProfileOptionsState state;
+  final ProfileOptionsController notifier;
+  const _OptionGroupChips({
+    required this.group,
+    required this.state,
+    required this.notifier,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(group.name, style: Theme.of(context).textTheme.titleSmall),
+        Wrap(
+          spacing: 4,
+          children: [
+            for (final option in group.options)
+              FilterChip(
+                label: Text(option.name),
+                selected: state.selectedIds.contains(option.id),
+                onSelected: (value) => notifier.toggle(option.id, value),
+                selectedColor: AppColors.accentGold.withValues(alpha: 0.3),
+              ),
+          ],
+        ),
+        const SizedBox(height: 12),
       ],
     );
   }
@@ -758,9 +922,10 @@ class _SectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       label,
-      style: Theme.of(
-        context,
-      ).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.w700),
+      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+        color: Theme.of(context).colorScheme.primary,
+        fontWeight: FontWeight.w700,
+      ),
     );
   }
 }
@@ -772,16 +937,27 @@ class _AccountTypeBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final color = isBusiness ? Theme.of(context).colorScheme.onSurface : AppColors.accentGold;
+    final color = isBusiness
+        ? Theme.of(context).colorScheme.onSurface
+        : AppColors.accentGold;
 
     return Align(
       alignment: AlignmentDirectional.centerStart,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration: BoxDecoration(color: color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(20)),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.12),
+          borderRadius: BorderRadius.circular(20),
+        ),
         child: Text(
-          isBusiness ? l10n.profileAccountTypeBusiness : l10n.profileAccountTypeClient,
-          style: TextStyle(color: color, fontWeight: FontWeight.w700, fontSize: 12),
+          isBusiness
+              ? l10n.profileAccountTypeBusiness
+              : l10n.profileAccountTypeClient,
+          style: TextStyle(
+            color: color,
+            fontWeight: FontWeight.w700,
+            fontSize: 12,
+          ),
         ),
       ),
     );

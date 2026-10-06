@@ -6190,12 +6190,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get storeTermsSave => 'حفظ';
 
   @override
-  String get storeTermsSaved => 'تم حفظ شروط المتجر.';
-
-  @override
-  String get storeTermsEmpty => 'لا توجد شروط مطلوبة لنشاطك.';
-
-  @override
   String get shopAddonsTitle => 'خدمات المحل';
 
   @override
