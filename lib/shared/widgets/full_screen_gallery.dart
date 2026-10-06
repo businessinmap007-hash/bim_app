@@ -4,6 +4,15 @@ import '../../app/theme/app_colors.dart';
 import '../../l10n/app_localizations.dart';
 import 'photo_source_badge.dart';
 
+/// One photo of the viewer: how to load it, and where it came from (`camera` / `upload`; null = not said).
+class ViewerPhoto {
+  final ImageProvider image;
+  final String? source;
+  const ViewerPhoto(this.image, {this.source});
+
+  factory ViewerPhoto.network(String url, {String? source}) => ViewerPhoto(NetworkImage(url), source: source);
+}
+
 /// A full-screen, swipeable, pinch-to-zoom photo viewer for any screen that just needs to show a set of photos
 /// starting at one of them (a product's photos, an album).
 ///
@@ -12,19 +21,44 @@ import 'photo_source_badge.dart';
 ///  * the top tenth: close, the «2 / 5» counter, and where the photo came from (camera / gallery);
 ///  * the middle eight tenths: the photo itself (swipe, pinch to zoom, swipe down to close);
 ///  * the bottom tenth: a strip of thumbnails to jump between the photos.
+///
+/// THE one photo viewer of the app — posts, albums, products, chat, prescriptions, a profile's picture and cover all open
+/// it, so every setting of how photos are viewed (the layout, the badge, zoom, thumbnails) is changed here and only here.
+/// Give it network [urls] (with optional per-photo [sources]) or ready [photos] for an image that is not a plain URL
+/// (a chat attachment read with the account's token).
 class FullScreenGallery extends StatefulWidget {
   final List<String> urls;
   final int initialIndex;
 
   /// Per photo: `camera` (a live shot) or `upload` (from the gallery); null = not said. Same length as [urls].
   final List<String?>? sources;
-  const FullScreenGallery({super.key, required this.urls, this.initialIndex = 0, this.sources});
+
+  /// Ready-made photos — used instead of [urls] when given.
+  final List<ViewerPhoto>? photos;
+
+  /// A post's «comments» button in the top bar: closes the viewer and calls this.
+  final VoidCallback? onOpenComments;
+
+  const FullScreenGallery({super.key, this.urls = const [], this.initialIndex = 0, this.sources, this.photos, this.onOpenComments});
+
+  List<ViewerPhoto> get items =>
+      photos ??
+      [
+        for (var i = 0; i < urls.length; i++) ViewerPhoto.network(urls[i], source: sources != null && i < sources!.length ? sources![i] : null),
+      ];
 
   /// Opens the viewer as a full-screen route.
-  static Future<void> show(BuildContext context, {required List<String> urls, int initialIndex = 0, List<String?>? sources}) {
+  static Future<void> show(
+    BuildContext context, {
+    List<String> urls = const [],
+    int initialIndex = 0,
+    List<String?>? sources,
+    List<ViewerPhoto>? photos,
+    VoidCallback? onOpenComments,
+  }) {
     return Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => FullScreenGallery(urls: urls, initialIndex: initialIndex, sources: sources),
+        builder: (_) => FullScreenGallery(urls: urls, initialIndex: initialIndex, sources: sources, photos: photos, onOpenComments: onOpenComments),
         fullscreenDialog: true,
       ),
     );
@@ -41,8 +75,9 @@ class _FullScreenGalleryState extends State<FullScreenGallery> {
   double _dragOffset = 0;
   static const _dismissThreshold = 80.0;
   static const _thumbSize = 44.0;
+  late final List<ViewerPhoto> _items = widget.items;
   late final List<TransformationController> _transformControllers = List.generate(
-    widget.urls.length,
+    _items.length,
     (_) => TransformationController(),
   );
 
@@ -58,10 +93,7 @@ class _FullScreenGalleryState extends State<FullScreenGallery> {
 
   bool get _currentPageZoomed => _transformControllers[_index].value.getMaxScaleOnAxis() > 1.01;
 
-  String? _sourceOf(int i) {
-    final sources = widget.sources;
-    return sources != null && i < sources.length ? sources[i] : null;
-  }
+  String? _sourceOf(int i) => i < _items.length ? _items[i].source : null;
 
   void _onVerticalDragUpdate(DragUpdateDetails details) {
     if (_currentPageZoomed) return;
@@ -103,12 +135,20 @@ class _FullScreenGalleryState extends State<FullScreenGallery> {
                     tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
                     onPressed: () => Navigator.of(context).pop(),
                   ),
-                  if (widget.urls.length > 1)
+                  if (_items.length > 1)
                     Directionality(
                       textDirection: TextDirection.ltr,
-                      child: Text('${_index + 1} / ${widget.urls.length}', style: const TextStyle(color: Colors.white, fontSize: 16)),
+                      child: Text('${_index + 1} / ${_items.length}', style: const TextStyle(color: Colors.white, fontSize: 16)),
                     ),
                   const Spacer(),
+                  if (widget.onOpenComments != null)
+                    IconButton(
+                      icon: const Icon(Icons.mode_comment_outlined, color: Colors.white),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        widget.onOpenComments!.call();
+                      },
+                    ),
                   // camera or gallery — the customer is told which this photo is
                   if (source != null) ...[
                     Text(
@@ -134,7 +174,7 @@ class _FullScreenGalleryState extends State<FullScreenGallery> {
                     opacity: (1 - (_dragOffset.abs() / 400)).clamp(0.3, 1.0),
                     child: PageView.builder(
                       controller: _controller,
-                      itemCount: widget.urls.length,
+                      itemCount: _items.length,
                       onPageChanged: (i) {
                         setState(() => _index = i);
                         _scrollThumbsTo(i);
@@ -148,7 +188,7 @@ class _FullScreenGalleryState extends State<FullScreenGallery> {
                         ),
                         child: SizedBox.expand(
                           child: Image(
-                            image: NetworkImage(widget.urls[i]),
+                            image: _items[i].image,
                             fit: BoxFit.contain,
                             errorBuilder: (_, _, _) => const Center(child: Icon(Icons.broken_image_outlined, color: Colors.white54, size: 48)),
                           ),
@@ -162,7 +202,7 @@ class _FullScreenGalleryState extends State<FullScreenGallery> {
             // ── the bottom tenth: thumbnails ─────────────────────────────────
             Expanded(
               flex: 1,
-              child: widget.urls.length < 2
+              child: _items.length < 2
                   ? const SizedBox.shrink()
                   : Center(
                       child: SizedBox(
@@ -171,7 +211,7 @@ class _FullScreenGalleryState extends State<FullScreenGallery> {
                           controller: _thumbs,
                           scrollDirection: Axis.horizontal,
                           padding: const EdgeInsets.symmetric(horizontal: 12),
-                          itemCount: widget.urls.length,
+                          itemCount: _items.length,
                           separatorBuilder: (_, _) => const SizedBox(width: 8),
                           itemBuilder: (context, i) => GestureDetector(
                             onTap: () => _controller.animateToPage(i, duration: const Duration(milliseconds: 250), curve: Curves.easeOut),
@@ -187,7 +227,7 @@ class _FullScreenGalleryState extends State<FullScreenGallery> {
                                 borderRadius: BorderRadius.circular(6),
                                 child: Opacity(
                                   opacity: i == _index ? 1 : 0.55,
-                                  child: Image(image: NetworkImage(widget.urls[i]), fit: BoxFit.cover, errorBuilder: (_, _, _) => const ColoredBox(color: Colors.white12)),
+                                  child: Image(image: _items[i].image, fit: BoxFit.cover, errorBuilder: (_, _, _) => const ColoredBox(color: Colors.white12)),
                                 ),
                               ),
                             ),

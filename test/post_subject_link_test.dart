@@ -22,6 +22,7 @@ class _FakePostsApi implements PostsApi {
     String? subjectType,
     int? subjectId,
     List<dynamic> images = const [],
+    List<String> sources = const [],
   }) async {
     sent = {'title': title, 'body': body, 'subjectType': subjectType, 'subjectId': subjectId};
   }

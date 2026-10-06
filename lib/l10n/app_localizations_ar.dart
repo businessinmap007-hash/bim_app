@@ -661,6 +661,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profilePhotoGallery => 'اختيار من المعرض';
 
   @override
+  String get profilePhotoView => 'عرض الصورة';
+
+  @override
   String get profilePhotoRemove => 'إزالة الصورة';
 
   @override

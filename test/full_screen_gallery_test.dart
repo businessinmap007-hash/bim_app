@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -58,5 +60,37 @@ void main() {
     expect(find.textContaining('/'), findsNothing);
     expect(find.byType(PhotoSourceBadge), findsNothing);
     expect(find.byType(ListView), findsNothing);
+  });
+
+  testWidgets('one viewer for every kind of photo: ready-made images and the post comments button', (tester) async {
+    var opened = false;
+    // a 1x1 transparent PNG — an image that is not a URL (a chat attachment read with the account's token)
+    final bytes = base64Decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==');
+
+    await tester.pumpWidget(
+      app(
+        Builder(
+          builder: (context) => TextButton(
+            onPressed: () => FullScreenGallery.show(
+              context,
+              photos: [ViewerPhoto(MemoryImage(bytes), source: 'camera')],
+              onOpenComments: () => opened = true,
+            ),
+            child: const Text('open'),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(FullScreenGallery), findsOneWidget);
+    expect(find.byIcon(Icons.photo_camera_rounded), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.mode_comment_outlined));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(FullScreenGallery), findsNothing, reason: 'the comments button closes the viewer…');
+    expect(opened, isTrue, reason: '…and opens the comments of the post');
   });
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../shared/widgets/adaptive_image_box.dart';
+import '../../../../shared/widgets/full_screen_gallery.dart';
 import '../../data/models/business_post.dart';
 
 /// A post's photo(s), edge-to-edge like [AdaptiveImageBox] for a single
@@ -34,15 +35,13 @@ class _PostImageCarouselState extends State<PostImageCarousel> {
   }
 
   void _openFullScreen(int initialIndex) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => _FullScreenGallery(
-          urls: widget.images.map((e) => e.url).toList(),
-          initialIndex: initialIndex,
-          onOpenComments: widget.onOpenComments,
-        ),
-        fullscreenDialog: true,
-      ),
+    // the app's one photo viewer — shared with albums, products, chat… (see FullScreenGallery)
+    FullScreenGallery.show(
+      context,
+      urls: widget.images.map((e) => e.url).toList(),
+      sources: widget.images.map((e) => e.source).toList(),
+      initialIndex: initialIndex,
+      onOpenComments: widget.onOpenComments,
     );
   }
 
@@ -116,122 +115,6 @@ class _PostImageCarouselState extends State<PostImageCarousel> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _FullScreenGallery extends StatefulWidget {
-  final List<String> urls;
-  final int initialIndex;
-  final VoidCallback? onOpenComments;
-  const _FullScreenGallery({required this.urls, required this.initialIndex, this.onOpenComments});
-
-  @override
-  State<_FullScreenGallery> createState() => _FullScreenGalleryState();
-}
-
-class _FullScreenGalleryState extends State<_FullScreenGallery> {
-  late final PageController _controller = PageController(initialPage: widget.initialIndex);
-  late int _index = widget.initialIndex;
-  double _dragOffset = 0;
-  // A vertical swipe — either direction — closes the viewer, the same
-  // dismiss gesture every full-screen photo view uses. Only free to fire
-  // when the current page isn't zoomed in (see panEnabled below): otherwise
-  // a pinch-pan would trigger it by accident.
-  static const _dismissThreshold = 80.0;
-  // One per page, so pinch-zooming one photo doesn't leave the next one
-  // pre-zoomed. Its own listener toggles panEnabled below — an
-  // InteractiveViewer that's always pan-enabled fights the PageView for
-  // every horizontal drag and wins, so swiping between photos silently
-  // stops working the moment there's more than one. Panning only turns on
-  // once the user has actually zoomed in past 1x.
-  late final List<TransformationController> _transformControllers = List.generate(
-    widget.urls.length,
-    (_) => TransformationController(),
-  );
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    for (final controller in _transformControllers) {
-      controller.dispose();
-    }
-    super.dispose();
-  }
-
-  bool get _currentPageZoomed => _transformControllers[_index].value.getMaxScaleOnAxis() > 1.01;
-
-  void _onVerticalDragUpdate(DragUpdateDetails details) {
-    if (_currentPageZoomed) return;
-    setState(() => _dragOffset += details.delta.dy);
-  }
-
-  void _onVerticalDragEnd(DragEndDetails details) {
-    if (_dragOffset.abs() > _dismissThreshold) {
-      Navigator.of(context).pop();
-    } else if (_dragOffset != 0) {
-      setState(() => _dragOffset = 0);
-    }
-  }
-
-  void _openComments() {
-    Navigator.of(context).pop();
-    widget.onOpenComments?.call();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
-        elevation: 0,
-        // Forced LTR — see the same fix on the inline carousel badge above.
-        title: widget.urls.length > 1
-            ? Directionality(
-                textDirection: TextDirection.ltr,
-                child: Text('${_index + 1} / ${widget.urls.length}'),
-              )
-            : null,
-      ),
-      body: GestureDetector(
-        onVerticalDragUpdate: _onVerticalDragUpdate,
-        onVerticalDragEnd: _onVerticalDragEnd,
-        child: Transform.translate(
-          offset: Offset(0, _dragOffset),
-          child: Opacity(
-            opacity: (1 - (_dragOffset.abs() / 400)).clamp(0.3, 1.0),
-            child: PageView.builder(
-              controller: _controller,
-              itemCount: widget.urls.length,
-              onPageChanged: (i) => setState(() => _index = i),
-              itemBuilder: (context, i) => AnimatedBuilder(
-                animation: _transformControllers[i],
-                builder: (context, child) => InteractiveViewer(
-                  transformationController: _transformControllers[i],
-                  panEnabled: _transformControllers[i].value.getMaxScaleOnAxis() > 1.01,
-                  child: child!,
-                ),
-                child: SizedBox.expand(
-                  child: Image(image: NetworkImage(widget.urls[i]), fit: BoxFit.contain),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-      bottomNavigationBar: widget.onOpenComments == null
-          ? null
-          : SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: IconButton(
-                  icon: const Icon(Icons.mode_comment_outlined, color: Colors.white),
-                  onPressed: _openComments,
-                ),
-              ),
-            ),
     );
   }
 }

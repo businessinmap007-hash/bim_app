@@ -14,6 +14,7 @@ import '../../../../shared/widgets/message_read_receipt.dart';
 import '../../../../shared/widgets/thread_access_banner.dart';
 import '../../application/chat_providers.dart';
 import '../../data/models/thread_message.dart';
+import '../../../../shared/widgets/full_screen_gallery.dart';
 
 /// The customer↔business chat on one order or booking. [operationType] is
 /// 'order' | 'booking'.
@@ -366,18 +367,8 @@ class _AttachmentView extends ConsumerWidget {
         return ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: GestureDetector(
-            onTap: () => showDialog(
-              context: context,
-              builder: (context) => Dialog(
-                insetPadding: const EdgeInsets.all(12),
-                backgroundColor: Colors.black,
-                child: SizedBox.expand(
-                  child: InteractiveViewer(
-                    child: Image.memory(snapshot.data!, fit: BoxFit.contain),
-                  ),
-                ),
-              ),
-            ),
+            // an attachment is read with the account's token, so it goes in as bytes — the same viewer as every photo
+            onTap: () => FullScreenGallery.show(context, photos: [ViewerPhoto(MemoryImage(snapshot.data!))]),
             child: Image.memory(snapshot.data!, height: 160, width: 200, fit: BoxFit.cover),
           ),
         );

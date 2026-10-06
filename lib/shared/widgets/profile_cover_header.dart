@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../app/theme/app_colors.dart';
+import 'full_screen_gallery.dart';
 
 /// Cover photo with a circular avatar overlapping its bottom edge — the
 /// standard profile header (Facebook/Twitter-style). Used for both business
@@ -27,6 +28,12 @@ class ProfileCoverHeader extends StatelessWidget {
     this.avatarRadius = 40,
   });
 
+  Widget _opens(BuildContext context, String? url, Widget child) {
+    if (url == null) return child;
+
+    return GestureDetector(onTap: () => FullScreenGallery.show(context, urls: [url]), child: child);
+  }
+
   @override
   Widget build(BuildContext context) {
     final overlap = avatarRadius * 0.7;
@@ -36,11 +43,12 @@ class ProfileCoverHeader extends StatelessWidget {
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          _Cover(imageUrl: coverImageUrl, height: coverHeight),
+          // Tapping the cover or the picture opens it in the app's one photo viewer.
+          _opens(context, coverImageUrl, _Cover(imageUrl: coverImageUrl, height: coverHeight)),
           PositionedDirectional(
             start: 20,
             top: coverHeight - avatarRadius,
-            child: _Avatar(imageUrl: avatarImageUrl, radius: avatarRadius),
+            child: _opens(context, avatarImageUrl, _Avatar(imageUrl: avatarImageUrl, radius: avatarRadius)),
           ),
           PositionedDirectional(
             start: 20 + avatarRadius * 2 + 16,

@@ -105,6 +105,8 @@ class PostsApi {
     String? subjectType,
     int? subjectId,
     List<Uint8List> images = const [],
+    // `camera` / `upload` per photo, same order — the photo viewer's badge
+    List<String> sources = const [],
   }) async {
     await _client.post(
       '/posts',
@@ -118,6 +120,7 @@ class PostsApi {
             images[i],
             filename: 'photo_$i.png',
           ),
+        for (var i = 0; i < sources.length; i++) 'sources[$i]': sources[i],
       }),
     );
   }
@@ -131,6 +134,7 @@ class PostsApi {
     required String title,
     required String body,
     List<Uint8List>? replaceImages,
+    List<String> replaceSources = const [],
   }) async {
     await _client.post(
       '/posts/$postId',
@@ -141,6 +145,7 @@ class PostsApi {
           'replace_images': true,
           for (var i = 0; i < replaceImages.length; i++)
             'images[$i]': MultipartFile.fromBytes(replaceImages[i], filename: 'photo_$i.png'),
+          for (var i = 0; i < replaceSources.length; i++) 'sources[$i]': replaceSources[i],
         },
       }),
     );

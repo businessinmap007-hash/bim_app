@@ -8,6 +8,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../auth/application/auth_controller.dart';
 import '../../../prescriptions/application/pharmacy_prescriptions_providers.dart';
 import '../../../prescriptions/data/pharmacy_prescriptions_api.dart';
+import '../../../../shared/widgets/full_screen_gallery.dart';
 
 /// The pharmacist's side of a shown prescription (what the patient's QR carried). The content is read from
 /// the code; when the viewer is a business account the server is asked whether it is EXACTLY what the doctor
@@ -196,14 +197,7 @@ class _PrescriptionShownScreenState
               if (check.handwrittenImage != null) ...[
                 const SizedBox(height: 8),
                 GestureDetector(
-                  onTap: () => showDialog<void>(
-                    context: context,
-                    builder: (_) => Dialog(
-                      child: InteractiveViewer(
-                        child: Image.network(check.handwrittenImage!),
-                      ),
-                    ),
-                  ),
+                  onTap: () => FullScreenGallery.show(context, urls: [check.handwrittenImage!]),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: Image.network(

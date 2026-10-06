@@ -214,6 +214,7 @@
   "profileLocationNoMatch": "We couldn't determine your governorate and city from your location — please choose them manually.",
   "profilePhotoCamera": "Take a photo",
   "profilePhotoGallery": "Choose from gallery",
+  "profilePhotoView": "View photo",
   "profilePhotoRemove": "Remove photo",
   "profileSaved": "Changes saved.",
   "profilePrivacyNote": "Your phone and location are never shown publicly — a business only sees them once you actually use one of its services, like a booking or an order.",

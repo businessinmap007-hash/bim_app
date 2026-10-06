@@ -654,6 +654,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profilePhotoGallery => 'Choose from gallery';
 
   @override
+  String get profilePhotoView => 'View photo';
+
+  @override
   String get profilePhotoRemove => 'Remove photo';
 
   @override

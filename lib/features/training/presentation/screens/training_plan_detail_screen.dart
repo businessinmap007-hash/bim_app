@@ -12,6 +12,7 @@ import '../../data/models/weekly_summary.dart';
 import '../widgets/set_log_sheet.dart';
 import 'training_chat_screen.dart';
 import 'training_monthly_summary_screen.dart';
+import '../../../../shared/widgets/full_screen_gallery.dart';
 
 class TrainingPlanDetailScreen extends ConsumerWidget {
   final int planId;
@@ -388,12 +389,7 @@ class _ExerciseCard extends StatelessWidget {
                   itemCount: exercise.libraryImageUrls.length,
                   separatorBuilder: (context, index) => const SizedBox(width: 6),
                   itemBuilder: (context, index) => GestureDetector(
-                    onTap: () => showDialog<void>(
-                      context: context,
-                      builder: (_) => Dialog(
-                        child: InteractiveViewer(child: Image.network(exercise.libraryImageUrls[index])),
-                      ),
-                    ),
+                    onTap: () => FullScreenGallery.show(context, urls: exercise.libraryImageUrls, initialIndex: index),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image.network(

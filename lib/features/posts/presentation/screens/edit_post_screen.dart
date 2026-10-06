@@ -84,15 +84,17 @@ class _EditPostScreenState extends ConsumerState<EditPostScreen> {
     setState(() => _busy = true);
     try {
       List<Uint8List>? replaceImages;
+      final replaceSources = <String>[];
       if (_replacingPhotos) {
         replaceImages = [];
         for (final item in _newItems) {
           replaceImages.add(item.processedBytes ?? await item.file.readAsBytes());
+          replaceSources.add(item.source == MediaSource.camera ? 'camera' : 'upload');
         }
       }
       await ref
           .read(postsApiProvider)
-          .updatePost(widget.post.id, title: title, body: body, replaceImages: replaceImages);
+          .updatePost(widget.post.id, title: title, body: body, replaceImages: replaceImages, replaceSources: replaceSources);
       ref.read(myPostsControllerProvider.notifier).load();
       if (mounted) Navigator.of(context).pop(true);
     } catch (e) {

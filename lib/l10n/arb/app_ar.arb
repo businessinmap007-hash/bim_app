@@ -214,6 +214,7 @@
   "profileLocationNoMatch": "لم نتمكن من تحديد المحافظة والمدينة من موقعك، برجاء الاختيار يدويًا.",
   "profilePhotoCamera": "التقاط بالكاميرا",
   "profilePhotoGallery": "اختيار من المعرض",
+  "profilePhotoView": "عرض الصورة",
   "profilePhotoRemove": "إزالة الصورة",
   "profileSaved": "تم حفظ التغييرات.",
   "profilePrivacyNote": "بياناتك دي (رقمك وموقعك) متتشافش لحد — بتظهر بس للنشاط التجاري وقت ما تستخدم خدمة فعلية معاه، زي الحجز أو الطلب.",

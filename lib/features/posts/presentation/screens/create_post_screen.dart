@@ -116,8 +116,10 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
     setState(() => _busy = true);
     try {
       final images = <Uint8List>[];
+      final sources = <String>[];
       for (final item in _items) {
         images.add(item.processedBytes ?? await item.file.readAsBytes());
+        sources.add(item.source == MediaSource.camera ? 'camera' : 'upload');
       }
       await ref.read(postsApiProvider).createPost(
             title: title,
@@ -125,6 +127,7 @@ class _CreatePostScreenState extends ConsumerState<CreatePostScreen> {
             subjectType: _subjectType,
             subjectId: _subjectId,
             images: images,
+            sources: sources,
           );
       if (mounted) Navigator.of(context).pop(true);
     } catch (e) {

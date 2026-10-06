@@ -5,11 +5,15 @@ class PostImage {
   final int id;
   final String url;
 
-  const PostImage({required this.id, required this.url});
+  /// `camera` (a live shot) or `upload` (from the gallery) — what the photo viewer's badge says; null when unknown.
+  final String? source;
+
+  const PostImage({required this.id, required this.url, this.source});
 
   factory PostImage.fromJson(Map<String, dynamic> json) => PostImage(
     id: json['id'] as int,
     url: Env.assetUrl(json['image'] as String?) ?? '',
+    source: json['source'] as String?,
   );
 }
 

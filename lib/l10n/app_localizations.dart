@@ -1250,6 +1250,12 @@ abstract class AppLocalizations {
   /// **'اختيار من المعرض'**
   String get profilePhotoGallery;
 
+  /// No description provided for @profilePhotoView.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض الصورة'**
+  String get profilePhotoView;
+
   /// No description provided for @profilePhotoRemove.
   ///
   /// In ar, this message translates to:

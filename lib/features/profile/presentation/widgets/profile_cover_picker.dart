@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/full_screen_gallery.dart';
 
 /// A full-width cover banner with a small edit badge — same take-photo/
 /// gallery/remove sheet as [ProfileAvatarPicker], just shaped for a banner
@@ -31,6 +32,16 @@ class ProfileCoverPicker extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            // see it in the app's one photo viewer before deciding to change it
+            if (imageUrl != null)
+              ListTile(
+                leading: const Icon(Icons.visibility_outlined),
+                title: Text(l10n.profilePhotoView),
+                onTap: () {
+                  Navigator.pop(context);
+                  FullScreenGallery.show(context, urls: [imageUrl!]);
+                },
+              ),
             ListTile(
               leading: const Icon(Icons.photo_camera_outlined),
               title: Text(l10n.profilePhotoCamera),
