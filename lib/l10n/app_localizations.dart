@@ -2173,6 +2173,12 @@ abstract class AppLocalizations {
   /// **'إتمام الطلب'**
   String get cartCheckoutTitle;
 
+  /// No description provided for @cartStoreNotReady.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يحدد هذا المتجر طريقة التسليم والاستلام بعد، فلا يمكنك إتمام طلب منه الآن.'**
+  String get cartStoreNotReady;
+
   /// No description provided for @cartFulfillmentType.
   ///
   /// In ar, this message translates to:

@@ -5,6 +5,8 @@ import '../data/profile_api.dart';
 import 'profile_controller.dart';
 
 class ProfileOptionsState {
+  /// True once the catalog has really been read: a screen that failed to load must never save an empty set over the server's.
+  final bool loaded;
   final List<ProfileOptionGroup> terms;
   final List<ProfileOptionGroup> groups;
   final Set<int> selectedIds;
@@ -13,6 +15,7 @@ class ProfileOptionsState {
   final String? error;
 
   const ProfileOptionsState({
+    this.loaded = false,
     this.terms = const [],
     this.groups = const [],
     this.selectedIds = const {},
@@ -22,6 +25,7 @@ class ProfileOptionsState {
   });
 
   ProfileOptionsState copyWith({
+    bool? loaded,
     List<ProfileOptionGroup>? terms,
     List<ProfileOptionGroup>? groups,
     Set<int>? selectedIds,
@@ -31,6 +35,7 @@ class ProfileOptionsState {
     bool clearError = false,
   }) {
     return ProfileOptionsState(
+      loaded: loaded ?? this.loaded,
       terms: terms ?? this.terms,
       groups: groups ?? this.groups,
       selectedIds: selectedIds ?? this.selectedIds,
@@ -57,6 +62,7 @@ class ProfileOptionsController extends StateNotifier<ProfileOptionsState> {
     try {
       final payload = await _api.showOptions();
       state = state.copyWith(
+        loaded: true,
         terms: payload.terms,
         groups: payload.groups,
         selectedIds: payload.selectedIds.toSet(),
@@ -77,7 +83,10 @@ class ProfileOptionsController extends StateNotifier<ProfileOptionsState> {
     state = state.copyWith(selectedIds: updated);
   }
 
-  Future<void> save() async {
+  /// Saves the whole set (the server replaces it). Returns false when it did not go through — and never runs
+  /// before the catalog was read, so a screen that failed to load cannot wipe what the store already ticked.
+  Future<bool> save() async {
+    if (!state.loaded) return false;
     state = state.copyWith(isSaving: true, clearError: true);
     try {
       final payload = await _api.updateOptions(state.selectedIds.toList());
@@ -87,8 +96,10 @@ class ProfileOptionsController extends StateNotifier<ProfileOptionsState> {
         selectedIds: payload.selectedIds.toSet(),
         isSaving: false,
       );
+      return true;
     } catch (e) {
       state = state.copyWith(isSaving: false, error: e.toString());
+      return false;
     }
   }
 }

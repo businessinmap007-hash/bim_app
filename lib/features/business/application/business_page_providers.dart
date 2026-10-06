@@ -81,7 +81,16 @@ class BusinessProfileController extends StateNotifier<AsyncValue<BusinessProfile
     }
   }
 
-  Future<void> refresh() => _load();
+  /// Reads the page again WITHOUT blanking it: what is on screen stays until the fresh answer arrives (checkout
+  /// reads the store's delivery methods from here, and a copy cached before the store changed them was wrong).
+  Future<void> refresh() async {
+    state = const AsyncLoading<BusinessProfile>().copyWithPrevious(state);
+    try {
+      state = AsyncValue.data(await _api.profile(businessId));
+    } catch (e, st) {
+      state = AsyncValue<BusinessProfile>.error(e, st).copyWithPrevious(state);
+    }
+  }
 
   Future<void> toggleFollow() async {
     final current = state.valueOrNull;

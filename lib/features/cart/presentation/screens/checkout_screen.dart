@@ -40,6 +40,18 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   final _notesController = TextEditingController();
   int? _selectedAddressId;
   bool _addressPreselected = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // The methods offered are what the store ticked IN ITS PROFILE, as it stands now — not a copy cached earlier.
+    final id = widget.cart.business?.id;
+    if (id != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) ref.read(businessProfileProvider(id).notifier).refresh();
+      });
+    }
+  }
   DateTime? _pickupAt;
   bool _submitting = false;
 
@@ -156,13 +168,15 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     final businessId = widget.cart.business?.id;
     final fulfillment = businessId != null ? ref.watch(businessProfileProvider(businessId)).valueOrNull?.fulfillment : null;
     final keys = fulfillment?.selectionKeys ?? const ['delivery', 'pickup', 'dine_in'];
+    // «امنع الطلب حتى يختار»: a store that has not said how it delivers or hands over cannot be ordered from yet.
+    final storeNotReady = fulfillment != null && fulfillment.methods.isEmpty && !fulfillment.dineIn;
     final locale = Localizations.localeOf(context).languageCode;
     // Preference order: the user's own tap here > the choice already made
     // above the menu > whatever the business offers first — always clamped
     // to what this business actually supports.
     final preferred =
         _fulfillmentKeyOverride ?? (businessId != null ? ref.watch(businessFulfillmentChoiceProvider(businessId)) : null);
-    final selectedKey = (preferred != null && keys.contains(preferred)) ? preferred : keys.first;
+    final selectedKey = (preferred != null && keys.contains(preferred)) ? preferred : (keys.isEmpty ? '' : keys.first);
     final selected = fulfillment?.typeOfSelection(selectedKey) ?? selectedKey;
 
     // Only a delivery order carries it, and only while the cart itself hasn't
@@ -216,11 +230,30 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         children: [
           Text(l10n.cartFulfillmentType, style: Theme.of(context).textTheme.titleSmall),
           const SizedBox(height: 8),
-          SegmentedButton<String>(
-            segments: keys.map((k) => ButtonSegment(value: k, label: Text(labelFor(k)))).toList(),
-            selected: {selectedKey},
-            onSelectionChanged: (value) => setState(() => _fulfillmentKeyOverride = value.first),
-          ),
+          if (storeNotReady)
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.errorContainer.withValues(alpha: 0.4),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(l10n.cartStoreNotReady),
+            )
+          else
+            // More choices than the width allows scroll sideways — they never wrap to a second line.
+            LayoutBuilder(
+              builder: (context, constraints) => SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                  child: SegmentedButton<String>(
+                    segments: keys.map((k) => ButtonSegment(value: k, label: Text(labelFor(k)))).toList(),
+                    selected: {selectedKey},
+                    onSelectionChanged: (value) => setState(() => _fulfillmentKeyOverride = value.first),
+                  ),
+                ),
+              ),
+            ),
           if (selected == 'delivery') ...[
             const SizedBox(height: 16),
             TextField(
@@ -344,7 +377,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           ),
           const SizedBox(height: 16),
           FilledButton(
-            onPressed: _submitting ? null : () => _placeOrder(selected),
+            onPressed: _submitting || storeNotReady ? null : () => _placeOrder(selected),
             child: _submitting
                 ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
                 : Text(l10n.cartPlaceOrder),

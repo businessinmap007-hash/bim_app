@@ -1169,6 +1169,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get cartCheckoutTitle => 'إتمام الطلب';
 
   @override
+  String get cartStoreNotReady =>
+      'لم يحدد هذا المتجر طريقة التسليم والاستلام بعد، فلا يمكنك إتمام طلب منه الآن.';
+
+  @override
   String get cartFulfillmentType => 'طريقة الاستلام';
 
   @override

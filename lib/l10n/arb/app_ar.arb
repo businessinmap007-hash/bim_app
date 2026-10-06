@@ -386,6 +386,7 @@
   "cartFinalTotal": "الإجمالي",
   "cartCheckout": "إتمام الطلب",
   "cartCheckoutTitle": "إتمام الطلب",
+  "cartStoreNotReady": "لم يحدد هذا المتجر طريقة التسليم والاستلام بعد، فلا يمكنك إتمام طلب منه الآن.",
   "cartFulfillmentType": "طريقة الاستلام",
   "cartFulfillmentDelivery": "توصيل",
   "cartFulfillmentPickup": "استلام من المكان",

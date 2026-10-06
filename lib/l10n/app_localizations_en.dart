@@ -1155,6 +1155,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cartCheckoutTitle => 'Checkout';
 
   @override
+  String get cartStoreNotReady =>
+      'This store hasn\'t set how it delivers or hands over orders yet, so you can\'t place an order with it for now.';
+
+  @override
   String get cartFulfillmentType => 'Fulfillment';
 
   @override

@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/network/api_exception.dart';
+import '../../../../shared/widgets/scrolling_chip_row.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../auth/application/auth_controller.dart';
 import '../../../auth/data/models/auth_user.dart';
@@ -250,6 +251,12 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
             youtube: isBusiness ? _youtubeController.text.trim() : null,
             linkedin: isBusiness ? _linkedinController.text.trim() : null,
           );
+      // «حفظ» is ONE button: the store's terms and attributes are saved with the rest of the profile — they used to
+      // have a button of their own further down, and a tick saved with the top «حفظ» silently never reached the server.
+      if (isBusiness && !await ref.read(profileOptionsControllerProvider.notifier).save()) {
+        final loaded = ref.read(profileOptionsControllerProvider).loaded;
+        if (loaded) throw const FormatException('options');
+      }
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(AppLocalizations.of(context)!.profileSaved)),
@@ -607,7 +614,7 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
             ),
             if (user?.categoryChildId != null) ...[
               const SizedBox(height: 16),
-              const _OptionsSection(),
+              _OptionsSection(onSave: _save, saving: _saving),
             ],
             const SizedBox(height: 32),
             _SectionHeader(l10n.settingsServicesSection),
@@ -789,7 +796,10 @@ class _RootCategoryLabel extends ConsumerWidget {
 /// separate from the main profile Save, since it's a different backend
 /// endpoint (PATCH /profile/options replaces the whole set, not a diff).
 class _OptionsSection extends ConsumerWidget {
-  const _OptionsSection();
+  const _OptionsSection({required this.onSave, required this.saving});
+
+  final Future<void> Function() onSave;
+  final bool saving;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -846,8 +856,8 @@ class _OptionsSection extends ConsumerWidget {
           Align(
             alignment: AlignmentDirectional.centerStart,
             child: ElevatedButton(
-              onPressed: state.isSaving ? null : notifier.save,
-              child: state.isSaving
+              onPressed: state.isSaving || saving ? null : onSave,
+              child: state.isSaving || saving
                   ? const SizedBox(
                       height: 18,
                       width: 18,
@@ -856,7 +866,7 @@ class _OptionsSection extends ConsumerWidget {
                         color: Colors.white,
                       ),
                     )
-                  : Text(l10n.profileOptionsSave),
+                  : Text(l10n.profileSave),
             ),
           ),
         ],
@@ -882,7 +892,7 @@ class _OptionGroupChips extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(group.name, style: Theme.of(context).textTheme.titleSmall),
-        Wrap(
+        ScrollingChipRow(
           spacing: 4,
           children: [
             for (final option in group.options)
