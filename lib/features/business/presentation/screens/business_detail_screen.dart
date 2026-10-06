@@ -7,6 +7,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
+import '../../../../shared/widgets/cropped_network_image.dart';
 import '../../../../shared/widgets/equal_height_grid.dart';
 import '../../../../shared/widgets/post_share.dart';
 import '../../../../shared/widgets/profile_cover_header.dart';
@@ -475,7 +476,7 @@ class _SectionGrid extends StatelessWidget {
   static const _captionHeight = 20.0;
   /// «قصره بحيث الصفحة تاخد كارتين ونص» — the photo is a little wider than tall; with the
   /// empty band gone (EqualHeightGrid) that is what brings a screen to two and a half rows.
-  static const _imageAspect = 1.25;
+  static const _imageAspect = itemCardPhotoAspect;
 
   @override
   Widget build(BuildContext context) {

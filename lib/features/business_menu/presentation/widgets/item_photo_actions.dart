@@ -81,6 +81,7 @@ class _PhotoCropDialogState extends State<_PhotoCropDialog> {
   late double _zoom = widget.initial.zoom;
 
   static const _window = 260.0;
+  static const _windowHeight = _window / itemCardPhotoAspect;
 
   PhotoCrop get _crop => PhotoCrop(x: _x, y: _y, zoom: _zoom);
 
@@ -102,14 +103,25 @@ class _PhotoCropDialogState extends State<_PhotoCropDialog> {
                 // Dragging the picture right moves the window left over it: the point kept in the middle goes left.
                 onPanUpdate: (d) => setState(() {
                   _x = (_x - d.delta.dx / (_window * _zoom)).clamp(0.0, 1.0);
-                  _y = (_y - d.delta.dy / (_window * _zoom)).clamp(0.0, 1.0);
+                  _y = (_y - d.delta.dy / (_windowHeight * _zoom)).clamp(0.0, 1.0);
                 }),
+                // the window is the card's own shape, so what is seen here is what the card shows
                 child: Container(
                   width: _window,
-                  height: _window,
+                  height: _windowHeight,
                   decoration: BoxDecoration(border: Border.all(color: AppColors.accentGold, width: 2), borderRadius: BorderRadius.circular(12)),
                   child: ClipRRect(borderRadius: BorderRadius.circular(10), child: CroppedNetworkImage(url: widget.url, crop: _crop)),
                 ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            // …and the small square the item has in a list
+            Text(l10n.itemPhotoCropListPreview, style: theme.textTheme.bodySmall),
+            const SizedBox(height: 4),
+            Center(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: SizedBox(width: 64, height: 64, child: CroppedNetworkImage(url: widget.url, crop: _crop)),
               ),
             ),
             const SizedBox(height: 12),

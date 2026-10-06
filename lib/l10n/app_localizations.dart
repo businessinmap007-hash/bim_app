@@ -8707,6 +8707,12 @@ abstract class AppLocalizations {
   /// **'اسحب الصورة لتضع المنتج في المنتصف، وكبّر لتترك الجزء الفارغ خارج الكارت. هكذا ستظهر على الكارت.'**
   String get itemPhotoCropHint;
 
+  /// No description provided for @itemPhotoCropListPreview.
+  ///
+  /// In ar, this message translates to:
+  /// **'في القائمة'**
+  String get itemPhotoCropListPreview;
+
   /// No description provided for @itemPhotoCropReset.
   ///
   /// In ar, this message translates to:

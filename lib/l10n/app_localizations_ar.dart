@@ -4684,6 +4684,9 @@ class AppLocalizationsAr extends AppLocalizations {
       'اسحب الصورة لتضع المنتج في المنتصف، وكبّر لتترك الجزء الفارغ خارج الكارت. هكذا ستظهر على الكارت.';
 
   @override
+  String get itemPhotoCropListPreview => 'في القائمة';
+
+  @override
   String get itemPhotoCropReset => 'الصورة كاملة';
 
   @override

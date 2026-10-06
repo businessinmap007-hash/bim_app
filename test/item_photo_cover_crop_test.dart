@@ -82,4 +82,23 @@ void main() {
     expect(find.descendant(of: find.byType(CroppedNetworkImage), matching: find.byType(Transform)), findsWidgets);
     expect(find.descendant(of: find.byType(ClipRect), matching: find.byType(Transform)), findsOneWidget);
   });
+
+  testWidgets('zooming puts the chosen point in the middle of the box (clamped to the photo edges)', (tester) async {
+    Future<Offset> where(PhotoCrop crop, Offset point) async {
+      await tester.pumpWidget(
+        MaterialApp(home: Center(child: SizedBox(width: 100, height: 100, child: CroppedNetworkImage(url: 'https://example.test/a.png', crop: crop)))),
+      );
+      final matrix = tester.widget<Transform>(find.descendant(of: find.byType(ClipRect), matching: find.byType(Transform))).transform;
+      return MatrixUtils.transformPoint(matrix, point);
+    }
+
+    // the point (40, 60) of the box lands at the centre
+    final centred = await where(const PhotoCrop(x: 0.4, y: 0.6, zoom: 2), const Offset(40, 60));
+    expect(centred.dx, closeTo(50, 0.001));
+    expect(centred.dy, closeTo(50, 0.001));
+
+    // a point near the edge cannot be centred without showing blank: the window stops at the photo's edge
+    final edge = await where(const PhotoCrop(x: 0.05, y: 0.5, zoom: 2), const Offset(0, 50));
+    expect(edge.dx, closeTo(0, 0.001));
+  });
 }

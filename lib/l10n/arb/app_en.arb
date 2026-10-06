@@ -1571,6 +1571,7 @@
   "itemPhotoCropAdjust": "Adjust the part that shows",
   "itemPhotoCropTitle": "The part of the photo that shows",
   "itemPhotoCropHint": "Drag the photo to put the product in the middle, and zoom in to leave out the empty part. This is how it will look on the card.",
+  "itemPhotoCropListPreview": "In a list",
   "itemPhotoCropReset": "Whole photo",
   "menuItemImagesSection": "Photos",
   "menuItemAddImage": "Add photo",

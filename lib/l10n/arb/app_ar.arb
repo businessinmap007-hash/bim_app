@@ -1571,6 +1571,7 @@
   "itemPhotoCropAdjust": "اضبط الجزء الظاهر منها",
   "itemPhotoCropTitle": "الجزء الظاهر من الصورة",
   "itemPhotoCropHint": "اسحب الصورة لتضع المنتج في المنتصف، وكبّر لتترك الجزء الفارغ خارج الكارت. هكذا ستظهر على الكارت.",
+  "itemPhotoCropListPreview": "في القائمة",
   "itemPhotoCropReset": "الصورة كاملة",
   "menuItemImagesSection": "الصور",
   "menuItemAddImage": "إضافة صورة",

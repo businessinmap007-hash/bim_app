@@ -4691,6 +4691,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Drag the photo to put the product in the middle, and zoom in to leave out the empty part. This is how it will look on the card.';
 
   @override
+  String get itemPhotoCropListPreview => 'In a list';
+
+  @override
   String get itemPhotoCropReset => 'Whole photo';
 
   @override

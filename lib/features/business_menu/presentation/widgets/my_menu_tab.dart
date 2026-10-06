@@ -197,7 +197,7 @@ class _MyMenuGridTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               AspectRatio(
-                aspectRatio: 1.25,
+                aspectRatio: itemCardPhotoAspect,
                 child: image != null
                     ? CroppedNetworkImage(url: image, crop: item.coverImage?.crop ?? PhotoCrop.whole, fit: item.images.isNotEmpty ? BoxFit.cover : BoxFit.contain)
                     : Container(

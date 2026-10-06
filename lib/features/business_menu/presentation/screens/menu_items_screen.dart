@@ -1240,7 +1240,7 @@ class _ItemTile extends ConsumerWidget {
 /// screen never actually rendered the mode it was letting them choose.
 /// Width ÷ height of a grid card's photo — the same wider-than-tall picture the customer's
 /// cards use (a square made every card too tall).
-const _gridPhotoAspect = 1.25;
+const _gridPhotoAspect = itemCardPhotoAspect;
 
 class _ItemGridTile extends ConsumerWidget {
   final BusinessMenuItem item;
