@@ -4638,6 +4638,28 @@ class AppLocalizationsAr extends AppLocalizations {
   String get menuItemActiveLabel => 'نشط';
 
   @override
+  String get itemPhotoSetCover => 'اعرض هذه الصورة على الكارت';
+
+  @override
+  String get itemPhotoIsCover => 'هذه صورة الكارت';
+
+  @override
+  String get itemPhotoCoverBadge => 'صورة الكارت';
+
+  @override
+  String get itemPhotoCropAdjust => 'اضبط الجزء الظاهر منها';
+
+  @override
+  String get itemPhotoCropTitle => 'الجزء الظاهر من الصورة';
+
+  @override
+  String get itemPhotoCropHint =>
+      'اسحب الصورة لتضع المنتج في المنتصف، وكبّر لتترك الجزء الفارغ خارج الكارت. هكذا ستظهر على الكارت.';
+
+  @override
+  String get itemPhotoCropReset => 'الصورة كاملة';
+
+  @override
   String get menuItemImagesSection => 'الصور';
 
   @override

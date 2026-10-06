@@ -1,10 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_text_styles.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/utils/produce_emoji.dart';
+import '../../../../shared/widgets/cropped_network_image.dart';
+import '../../../../shared/widgets/photo_source_badge.dart';
 import '../../../../shared/widgets/full_screen_gallery.dart';
 import '../../data/models/menu_item_summary.dart';
 import 'menu_card_stepper.dart';
@@ -127,15 +128,21 @@ class _MenuItemTileState extends State<MenuItemTile> {
                         width: 88,
                         height: 88,
                         child: imageUrl != null
-                            ? CachedNetworkImage(
-                                imageUrl: imageUrl,
-                                fit: BoxFit.cover,
+                            ? CroppedNetworkImage(
+                                url: imageUrl,
+                                crop: item.cardCrop,
                                 errorWidget: (context, url, error) =>
                                     _ImagePlaceholder(emoji: _placeholderEmoji),
                               )
                             : _ImagePlaceholder(emoji: _placeholderEmoji),
                       ),
                     ),
+                    if (item.cardSource != null)
+                      PositionedDirectional(
+                        top: 4,
+                        end: 4,
+                        child: PhotoSourceBadge(source: item.cardSource!, size: 11),
+                      ),
                     if (item.isFeatured)
                       PositionedDirectional(
                         top: 6,

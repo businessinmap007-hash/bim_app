@@ -8617,6 +8617,48 @@ abstract class AppLocalizations {
   /// **'نشط'**
   String get menuItemActiveLabel;
 
+  /// No description provided for @itemPhotoSetCover.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعرض هذه الصورة على الكارت'**
+  String get itemPhotoSetCover;
+
+  /// No description provided for @itemPhotoIsCover.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذه صورة الكارت'**
+  String get itemPhotoIsCover;
+
+  /// No description provided for @itemPhotoCoverBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'صورة الكارت'**
+  String get itemPhotoCoverBadge;
+
+  /// No description provided for @itemPhotoCropAdjust.
+  ///
+  /// In ar, this message translates to:
+  /// **'اضبط الجزء الظاهر منها'**
+  String get itemPhotoCropAdjust;
+
+  /// No description provided for @itemPhotoCropTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجزء الظاهر من الصورة'**
+  String get itemPhotoCropTitle;
+
+  /// No description provided for @itemPhotoCropHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسحب الصورة لتضع المنتج في المنتصف، وكبّر لتترك الجزء الفارغ خارج الكارت. هكذا ستظهر على الكارت.'**
+  String get itemPhotoCropHint;
+
+  /// No description provided for @itemPhotoCropReset.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصورة كاملة'**
+  String get itemPhotoCropReset;
+
   /// No description provided for @menuItemImagesSection.
   ///
   /// In ar, this message translates to:

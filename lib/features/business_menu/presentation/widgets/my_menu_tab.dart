@@ -6,11 +6,13 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/utils/localized_name.dart';
+import '../../../../shared/widgets/cropped_network_image.dart';
 import '../../../../shared/widgets/equal_height_grid.dart';
 import '../../../../shared/widgets/view_mode_toggle.dart';
 import '../../application/business_menu_providers.dart';
 import '../../data/models/menu_item.dart';
-import '../screens/menu_item_edit_screen.dart';
+import '../../data/models/menu_item_image.dart';
+import '../open_item_editor.dart';
 import '../screens/menu_items_screen.dart';
 
 /// «المنيو مختفية من صفحتي — لا أستطيع رؤية منتجاتي مع أنني أضفت منتجًا» — المالك، 2026-10-05. The owner's own
@@ -33,10 +35,8 @@ class MyMenuTab extends ConsumerWidget {
     final mode = ref.watch(menuDisplayModeControllerProvider).valueOrNull;
     final isGrid = mode == 'grid';
 
-    Future<void> openItem(BusinessMenuItem item) async {
-      await Navigator.of(context).push(MaterialPageRoute(builder: (_) => MenuItemEditScreen(itemId: item.id)));
-      ref.read(menuItemsControllerProvider.notifier).load();
-    }
+    // The same page the management screen opens: «التسعير والتفاصيل» for a detailed item, the full form otherwise.
+    Future<void> openItem(BusinessMenuItem item) => openMenuItemEditor(context, ref, item);
 
     if (state.isLoading && state.items.isEmpty) {
       return const Center(child: CircularProgressIndicator());
@@ -149,7 +149,7 @@ class _MyMenuItemTile extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final isEnglish = Localizations.localeOf(context).languageCode == 'en';
     final title = localizedName(item.nameAr, item.nameEn, isEnglish);
-    final image = item.images.isNotEmpty ? item.images.first.url : item.catalogProduct?.image;
+    final image = item.coverImage?.url ?? item.catalogProduct?.image;
     final hint = Theme.of(context).hintColor;
     final price = item.basePrice.toStringAsFixed(item.basePrice == item.basePrice.roundToDouble() ? 0 : 2);
 
@@ -183,7 +183,7 @@ class _MyMenuGridTile extends StatelessWidget {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     final isEnglish = Localizations.localeOf(context).languageCode == 'en';
-    final image = item.images.isNotEmpty ? item.images.first.url : item.catalogProduct?.image;
+    final image = item.coverImage?.url ?? item.catalogProduct?.image;
     final price = item.basePrice.toStringAsFixed(item.basePrice == item.basePrice.roundToDouble() ? 0 : 2);
 
     return Opacity(
@@ -199,7 +199,7 @@ class _MyMenuGridTile extends StatelessWidget {
               AspectRatio(
                 aspectRatio: 1.25,
                 child: image != null
-                    ? Image.network(image, fit: item.images.isNotEmpty ? BoxFit.cover : BoxFit.contain)
+                    ? CroppedNetworkImage(url: image, crop: item.coverImage?.crop ?? PhotoCrop.whole, fit: item.images.isNotEmpty ? BoxFit.cover : BoxFit.contain)
                     : Container(
                         alignment: Alignment.center,
                         color: AppColors.photoPlaceholder(context),

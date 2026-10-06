@@ -1,10 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_text_styles.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/utils/produce_emoji.dart';
+import '../../../../shared/widgets/cropped_network_image.dart';
+import '../../../../shared/widgets/photo_source_badge.dart';
 import '../../../../shared/widgets/full_screen_gallery.dart';
 import '../../data/models/menu_item_summary.dart';
 import 'menu_card_stepper.dart';
@@ -104,14 +105,22 @@ class _MenuItemGridCardState extends State<MenuItemGridCard> {
                   children: [
                     Positioned.fill(
                       child: imageUrl != null
-                          ? CachedNetworkImage(
-                              imageUrl: imageUrl,
-                              fit: BoxFit.cover,
+                          ? CroppedNetworkImage(
+                              url: imageUrl,
+                              // the part the merchant chose to show — not the empty part, not the product cut off
+                              crop: item.cardCrop,
                               errorWidget: (context, url, error) =>
                                   _ImagePlaceholder(emoji: _placeholderEmoji),
                             )
                           : _ImagePlaceholder(emoji: _placeholderEmoji),
                     ),
+                    // taken live, or picked from the gallery — the customer is told which
+                    if (item.cardSource != null)
+                      PositionedDirectional(
+                        top: 6,
+                        end: 6,
+                        child: PhotoSourceBadge(source: item.cardSource!),
+                      ),
                     if (item.isFeatured)
                       PositionedDirectional(
                         top: 6,

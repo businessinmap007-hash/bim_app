@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import '../../../business_menu/data/models/menu_item_image.dart';
 import '../../../business_menu/data/models/menu_vocabulary.dart';
 import '../../../business/data/models/menu_item_summary.dart' show MenuItemSpec;
 
@@ -41,6 +42,9 @@ class SearchItem {
   final String name;
   final double price;
   final String? imageUrl;
+
+  /// Which part of the photo the card shows — the merchant's crop (the whole photo by default).
+  final PhotoCrop imageCrop;
   final int? catalogProductId;
   final int? availableQuantity;
   final List<MenuItemSpec> specs;
@@ -52,6 +56,7 @@ class SearchItem {
     required this.name,
     required this.price,
     this.imageUrl,
+    this.imageCrop = PhotoCrop.whole,
     this.catalogProductId,
     this.availableQuantity,
     this.specs = const [],
@@ -64,6 +69,7 @@ class SearchItem {
     name: json['name'] as String? ?? '',
     price: (json['price'] as num?)?.toDouble() ?? 0,
     imageUrl: Env.assetUrl(json['image'] as String?),
+    imageCrop: PhotoCrop.fromJson(json['image_crop']),
     catalogProductId: (json['catalog_product_id'] as num?)?.toInt(),
     availableQuantity: (json['available_quantity'] as num?)?.toInt(),
     specs: (json['specs'] as List<dynamic>? ?? [])

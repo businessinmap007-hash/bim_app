@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import '../../../business_menu/data/models/menu_item_image.dart';
 
 class MenuItemVariant {
   final int id;
@@ -179,6 +180,10 @@ class MenuItemSummary {
   /// The gallery photos that are live camera shots (`source: camera`) —
   /// badged with the camera icon wherever they show.
   final Set<String> cameraImageUrls;
+
+  /// Every photo the merchant uploaded, each with where it came from (camera / gallery — the customer sees the badge),
+  /// whether it is the CARD's photo, and which part of it the card shows.
+  final List<MenuItemImage> photos;
   final double basePrice;
   final String? saleUnitLabel;
 
@@ -224,6 +229,7 @@ class MenuItemSummary {
     this.imageCredit,
     required this.imageUrls,
     this.cameraImageUrls = const {},
+    this.photos = const [],
     required this.basePrice,
     this.saleUnitLabel,
     this.fractional = false,
@@ -265,6 +271,36 @@ class MenuItemSummary {
     return rows.isEmpty ? null : rows.map((v) => '\u2068$v\u2069').join(' · ');
   }
 
+  /// The merchant's photo the card draws (null when the card shows a catalog master's photo instead).
+  MenuItemImage? get cardPhoto {
+    for (final p in photos) {
+      if (p.url == imageUrl) return p;
+    }
+    return null;
+  }
+
+  /// Which part of the card's photo to show — the merchant's crop, or the whole photo.
+  PhotoCrop get cardCrop => cardPhoto?.crop ?? PhotoCrop.whole;
+
+  /// `camera` / `upload` for the card's own photo — what the card's corner badge says; null for a catalog photo.
+  String? get cardSource => cardPhoto?.source;
+
+  /// The crop of ANY of this item's photos by its url (the detail page's pager).
+  PhotoCrop cropOf(String url) {
+    for (final p in photos) {
+      if (p.url == url) return p.crop;
+    }
+    return PhotoCrop.whole;
+  }
+
+  /// `camera` / `upload` of any of this item's photos by its url; null for a photo that is not the merchant's.
+  String? sourceOf(String url) {
+    for (final p in photos) {
+      if (p.url == url) return p.source;
+    }
+    return null;
+  }
+
   /// `null` = not tracked (always orderable); `0` = tracked and out of stock.
   bool get isOutOfStock => availableQuantity == 0;
 
@@ -298,6 +334,10 @@ class MenuItemSummary {
         .map((e) => Env.assetUrl(e['image'] as String?))
         .whereType<String>()
         .toSet(),
+    photos: [
+      for (final e in json['images'] as List<dynamic>? ?? const [])
+        if ((e as Map<String, dynamic>)['image'] is String) MenuItemImage.fromJson(e),
+    ],
     basePrice: (json['base_price'] as num?)?.toDouble() ?? 0,
     saleUnitLabel: json['sale_unit_label'] as String?,
     fractional: json['fractional'] as bool? ?? false,

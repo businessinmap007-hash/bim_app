@@ -14,7 +14,9 @@ void main() {
     'features/business/presentation/widgets/menu_card_stepper.dart': 1,
     'features/business/presentation/widgets/menu_item_grid_card.dart': 1,
     'features/business/presentation/widgets/menu_item_tile.dart': 1,
-    'features/business_menu/presentation/screens/tech_pricing_screen.dart': 2,
+    // navy ink on the gold «صورة الكارت» badge
+    'features/business_menu/presentation/screens/menu_item_edit_screen.dart': 1,
+    'features/business_menu/presentation/screens/tech_pricing_screen.dart': 3,
     // the product page's own navy-to-navy hero gradient (a dark block in both themes)
     'features/cart/presentation/screens/tech_product_detail_screen.dart': 1,
     'features/disputes/presentation/screens/dispute_room_screen.dart': 1,

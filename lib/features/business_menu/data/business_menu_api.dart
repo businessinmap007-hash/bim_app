@@ -6,6 +6,7 @@ import '../../../core/network/api_client.dart';
 import '../../media/data/picked_media.dart';
 import 'models/menu_available_types.dart';
 import 'models/menu_item.dart';
+import 'models/menu_item_image.dart';
 import 'models/menu_section.dart';
 import 'models/menu_vocabulary.dart';
 import 'models/shop_addons.dart';
@@ -500,6 +501,16 @@ class BusinessMenuApi {
 
   Future<void> deleteImage(int itemId, int imageId) =>
       _client.delete('/business/menu/items/$itemId/images/$imageId');
+
+  /// Which photo the item's CARD shows (null = the first one).
+  Future<void> setItemCover(int itemId, int? imageId) async {
+    await _client.put('/business/menu/items/$itemId/cover', data: {'image_id': imageId});
+  }
+
+  /// Which part of a photo the card shows: the point kept in the middle and how far in.
+  Future<void> cropItemImage(int itemId, int imageId, PhotoCrop crop) async {
+    await _client.put('/business/menu/items/$itemId/images/$imageId/crop', data: {'x': crop.x, 'y': crop.y, 'zoom': crop.zoom});
+  }
 
   // ─────────────────────────── Variants ───────────────────────────
 

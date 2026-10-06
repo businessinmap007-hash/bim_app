@@ -1,5 +1,4 @@
 import '../widgets/payment_plan_picker.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -7,8 +6,8 @@ import 'package:intl/intl.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../business/data/models/menu_item_summary.dart';
-import '../../../media/data/picked_media.dart';
-import '../../../media/presentation/widgets/media_source_badge.dart';
+import '../../../../shared/widgets/cropped_network_image.dart';
+import '../../../../shared/widgets/photo_source_badge.dart';
 import '../../../../shared/utils/produce_emoji.dart';
 import '../../application/cart_controller.dart';
 import '../../application/shared_cart_providers.dart';
@@ -195,8 +194,9 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
                       onPageChanged: (i) => setState(() => _photo = i),
                       // A catalog photo (it carries a credit) is a product shot of
                       // any shape — shown whole rather than cropped.
-                      itemBuilder: (_, i) => CachedNetworkImage(
-                        imageUrl: photos[i],
+                      itemBuilder: (_, i) => CroppedNetworkImage(
+                        url: photos[i],
+                        crop: item.cropOf(photos[i]),
                         fit: item.imageCredit != null ? BoxFit.contain : BoxFit.cover,
                       ),
                     )
@@ -245,10 +245,14 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
                       ],
                     ),
                   ),
-                // A live camera shot of this very unit (required for a used
-                // one) — the same badge albums carry.
-                if (imageUrl != null && item.cameraImageUrls.contains(imageUrl))
-                  const MediaSourceBadge(source: MediaSource.camera),
+                // Taken live, or picked from the gallery — the customer is told which (a camera shot of this very
+                // unit is what a used one requires).
+                if (imageUrl != null && item.sourceOf(imageUrl) != null)
+                  PositionedDirectional(
+                    top: 8,
+                    end: 8,
+                    child: PhotoSourceBadge(source: item.sourceOf(imageUrl)!, size: 16),
+                  ),
               ],
             ),
           ),

@@ -9,6 +9,7 @@ import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/utils/localized_name.dart';
 import '../../../../shared/utils/produce_emoji.dart';
+import '../../../../shared/widgets/cropped_network_image.dart';
 import '../../../../shared/widgets/equal_height_grid.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../../shared/widgets/view_mode_toggle.dart';
@@ -16,6 +17,7 @@ import '../../../media/application/media_picker_service.dart';
 import '../../application/business_menu_providers.dart';
 import '../../data/business_menu_api.dart' show SaleUnitOption;
 import '../../data/models/menu_item.dart';
+import '../../data/models/menu_item_image.dart';
 import '../../data/models/menu_vocabulary.dart';
 import 'menu_item_edit_screen.dart';
 import 'menu_type_selection_screen.dart';
@@ -35,9 +37,9 @@ String _itemEmoji(BusinessMenuItem item) {
   return own != '🧺' ? own : produceEmoji(item.lineOption?.nameEn ?? item.lineOption?.nameAr);
 }
 
-/// The merchant's own first photo, else the catalog model's photo.
+/// The photo the merchant chose for the card (else his first), else the catalog model's photo.
 String? _itemImage(BusinessMenuItem item) =>
-    item.images.isNotEmpty ? item.images.first.url : item.catalogProduct?.image;
+    item.coverImage?.url ?? item.catalogProduct?.image;
 
 class _PriceDialogResult {
   final double price;
@@ -1281,9 +1283,10 @@ class _ItemGridTile extends ConsumerWidget {
               AspectRatio(
                 aspectRatio: _gridPhotoAspect,
                 child: _itemImage(item) != null
-                    ? Image.network(
-                        _itemImage(item)!,
-                        // a catalog shot is shown whole, the merchant's own filled
+                    ? CroppedNetworkImage(
+                        url: _itemImage(item)!,
+                        // the part the merchant chose to show; a catalog shot is shown whole, his own filled
+                        crop: item.coverImage?.crop ?? PhotoCrop.whole,
                         fit: item.images.isNotEmpty ? BoxFit.cover : BoxFit.contain,
                       )
                     : Container(

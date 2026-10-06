@@ -8,6 +8,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/utils/localized_name.dart';
+import '../../../../shared/widgets/cropped_network_image.dart';
+import '../../../../shared/widgets/photo_source_badge.dart';
 import '../../../media/application/media_picker_service.dart';
 import '../../../media/data/picked_media.dart';
 import '../../../media/presentation/widgets/media_source_badge.dart';
@@ -16,6 +18,7 @@ import '../../data/business_menu_api.dart' show BusinessMenuApi;
 import '../../data/models/menu_item.dart';
 import '../../data/models/menu_item_image.dart';
 import '../../data/models/menu_vocabulary.dart';
+import '../widgets/item_photo_actions.dart';
 
 /// «التسعير والتفاصيل» — «منيو مواصفات 1»: a merchant PICKS a real catalog
 /// product (a real phone model, its specs already curated — see
@@ -44,6 +47,22 @@ class TechPricingScreen extends ConsumerStatefulWidget {
 }
 
 class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
+  /// The item's saved photos as the server last said (after a cover/crop/delete here); null = as the screen opened.
+  List<MenuItemImage>? _savedPhotos;
+
+  Future<void> _managePhoto(MenuItemImage image) async {
+    final item = widget.existingItem;
+    if (item == null) return;
+    final changed = await showItemPhotoActions(context, ref, itemId: item.id, image: image);
+    if (!changed || !mounted) return;
+    try {
+      final fresh = await ref.read(businessMenuApiProvider).item(item.id);
+      if (mounted) setState(() => _savedPhotos = fresh.images);
+    } catch (_) {
+      // the next open shows the saved state
+    }
+  }
+
   final _priceController = TextEditingController();
   final _stockController = TextEditingController();
   final _descController = TextEditingController();
@@ -788,9 +807,11 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
           ],
           label(l10n.techPricingPhotosLabel),
           _PhotoStrip(
-            existing: widget.existingItem?.images ?? const [],
+            existing: _savedPhotos ?? widget.existingItem?.images ?? const [],
             picked: _newPhotos,
             onRemovePicked: (i) => setState(() => _newPhotos.removeAt(i)),
+            // a saved photo: make it the card's, set which part shows, or delete it
+            onManage: widget.existingItem == null ? null : _managePhoto,
           ),
           const SizedBox(height: 8),
           Wrap(
@@ -1517,7 +1538,8 @@ class _PhotoStrip extends StatelessWidget {
   final List<MenuItemImage> existing;
   final List<({PickedMedia media, Uint8List bytes})> picked;
   final ValueChanged<int> onRemovePicked;
-  const _PhotoStrip({required this.existing, required this.picked, required this.onRemovePicked});
+  final ValueChanged<MenuItemImage>? onManage;
+  const _PhotoStrip({required this.existing, required this.picked, required this.onRemovePicked, this.onManage});
 
   @override
   Widget build(BuildContext context) {
@@ -1561,7 +1583,32 @@ class _PhotoStrip extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         children: [
           for (final img in existing)
-            tile(NetworkImage(img.url), img.isFromCamera ? MediaSource.camera : MediaSource.gallery),
+            GestureDetector(
+              onTap: onManage == null ? null : () => onManage!(img),
+              child: Padding(
+                padding: const EdgeInsetsDirectional.only(end: 8),
+                child: SizedBox(
+                  width: 96,
+                  height: 96,
+                  child: Stack(
+                    children: [
+                      Positioned.fill(child: ClipRRect(borderRadius: BorderRadius.circular(10), child: CroppedNetworkImage(url: img.url, crop: img.crop))),
+                      PositionedDirectional(top: 8, end: 8, child: PhotoSourceBadge(source: img.source, size: 12)),
+                      if (img.isCover)
+                        PositionedDirectional(
+                          bottom: 4,
+                          start: 4,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(color: AppColors.accentGold, borderRadius: BorderRadius.circular(8)),
+                            child: Text(AppLocalizations.of(context)!.itemPhotoCoverBadge, style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w700, color: AppColors.primaryNavy)),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           for (var i = 0; i < picked.length; i++)
             tile(MemoryImage(picked[i].bytes), picked[i].media.source, onRemove: () => onRemovePicked(i)),
         ],

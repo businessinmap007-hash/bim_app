@@ -220,6 +220,14 @@ class BusinessMenuItem {
     this.extras = const [],
   });
 
+  /// The photo the item's card shows: the merchant's choice, else the first.
+  MenuItemImage? get coverImage {
+    for (final i in images) {
+      if (i.isCover) return i;
+    }
+    return images.isEmpty ? null : images.first;
+  }
+
   factory BusinessMenuItem.fromJson(Map<String, dynamic> json) => BusinessMenuItem(
     id: json['id'] as int,
     nameAr: json['name_ar'] as String,

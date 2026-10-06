@@ -4645,6 +4645,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuItemActiveLabel => 'Active';
 
   @override
+  String get itemPhotoSetCover => 'Show this photo on the card';
+
+  @override
+  String get itemPhotoIsCover => 'This is the card photo';
+
+  @override
+  String get itemPhotoCoverBadge => 'Card photo';
+
+  @override
+  String get itemPhotoCropAdjust => 'Adjust the part that shows';
+
+  @override
+  String get itemPhotoCropTitle => 'The part of the photo that shows';
+
+  @override
+  String get itemPhotoCropHint =>
+      'Drag the photo to put the product in the middle, and zoom in to leave out the empty part. This is how it will look on the card.';
+
+  @override
+  String get itemPhotoCropReset => 'Whole photo';
+
+  @override
   String get menuItemImagesSection => 'Photos';
 
   @override

@@ -4,13 +4,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/utils/localized_name.dart';
+import '../../../../shared/widgets/cropped_network_image.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
+import '../../../../shared/widgets/photo_source_badge.dart';
 import '../../../media/application/media_picker_service.dart';
 import '../../application/business_menu_providers.dart';
 import '../../data/models/menu_item.dart';
+import '../../data/models/menu_item_image.dart';
 import '../../data/models/menu_section.dart';
 import '../../data/models/menu_variant.dart';
 import '../../data/models/menu_vocabulary.dart';
+import '../widgets/item_photo_actions.dart';
 
 /// Create (itemId == null) or edit (itemId set) one menu item. Create shows
 /// only the base-fields form — images/variants/extras all hang off an
@@ -753,8 +757,9 @@ class _ImagesSectionState extends ConsumerState<_ImagesSection> {
     }
   }
 
-  Future<void> _deleteImage(int imageId) async {
-    await ref.read(menuItemEditControllerProvider(widget.item.id).notifier).deleteImage(imageId);
+  Future<void> _manage(MenuItemImage image) async {
+    final changed = await showItemPhotoActions(context, ref, itemId: widget.item.id, image: image);
+    if (changed) await ref.read(menuItemEditControllerProvider(widget.item.id).notifier).load();
   }
 
   static const _tileSize = 92.0;
@@ -788,25 +793,37 @@ class _ImagesSectionState extends ConsumerState<_ImagesSection> {
                   child: Stack(
                     clipBehavior: Clip.none,
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(14),
-                        child: Image.network(
-                          image.url,
-                          width: _tileSize,
-                          height: _tileSize,
-                          fit: BoxFit.cover,
+                      // What the card shows of this photo — the crop applied.
+                      GestureDetector(
+                        onTap: () => _manage(image),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(14),
+                          child: SizedBox(width: _tileSize, height: _tileSize, child: CroppedNetworkImage(url: image.url, crop: image.crop)),
                         ),
                       ),
+                      // camera or gallery — the same badge the customer sees
+                      PositionedDirectional(top: 6, end: 6, child: PhotoSourceBadge(source: image.source, size: 12)),
+                      // the photo the CARD shows
+                      if (image.isCover)
+                        PositionedDirectional(
+                          bottom: 4,
+                          start: 4,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(color: AppColors.accentGold, borderRadius: BorderRadius.circular(8)),
+                            child: Text(l10n.itemPhotoCoverBadge, style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w700, color: AppColors.primaryNavy)),
+                          ),
+                        ),
                       PositionedDirectional(
                         top: 6,
                         start: 6,
                         child: InkWell(
-                          onTap: () => _deleteImage(image.id),
+                          onTap: () => _manage(image),
                           borderRadius: BorderRadius.circular(11),
                           child: const CircleAvatar(
                             radius: 11,
                             backgroundColor: Colors.black54,
-                            child: Icon(Icons.close, size: 13, color: Colors.white),
+                            child: Icon(Icons.tune, size: 13, color: Colors.white),
                           ),
                         ),
                       ),

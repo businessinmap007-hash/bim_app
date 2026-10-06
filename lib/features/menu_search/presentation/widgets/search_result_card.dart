@@ -1,9 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/cropped_network_image.dart';
 import '../../data/models/menu_search.dart';
 
 /// One unit on sale at one shop: its photo, name, the kind's one-line summary,
@@ -36,9 +36,9 @@ class SearchResultCard extends StatelessWidget {
                   width: 88,
                   height: 88,
                   child: item.imageUrl != null
-                      ? CachedNetworkImage(
-                          imageUrl: item.imageUrl!,
-                          fit: BoxFit.cover,
+                      ? CroppedNetworkImage(
+                          url: item.imageUrl!,
+                          crop: item.imageCrop,
                           errorWidget: (_, _, _) => const _Placeholder(),
                         )
                       : const _Placeholder(),
