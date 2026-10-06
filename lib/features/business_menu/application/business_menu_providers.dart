@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../business/application/business_page_providers.dart' show customerMenuDisplayModeControllerProvider;
 import '../../../core/providers/core_providers.dart';
+import '../../media/data/picked_media.dart';
 import '../data/business_menu_api.dart';
 import '../data/models/menu_available_types.dart';
 import '../data/models/menu_item.dart';
@@ -257,6 +258,12 @@ class MenuItemEditController extends StateNotifier<AsyncValue<BusinessMenuItem>>
 
   Future<void> addImage(String filePath) async {
     await _api.addImage(itemId, filePath);
+    await load();
+  }
+
+  /// A picked photo (already watermarked when the merchant chose so), uploaded with where it came from.
+  Future<void> addPickedImage(PickedMedia media) async {
+    await _api.addPickedImage(itemId, media);
     await load();
   }
 

@@ -45,6 +45,11 @@ class WatermarkSettingsController extends StateNotifier<WatermarkSettings> {
     _persist();
   }
 
+  void setOnProducts(bool value) {
+    state = state.copyWith(onProducts: value);
+    _persist();
+  }
+
   void setRepeatCount(int value) {
     state = state.copyWith(repeatCount: value);
     _persist();

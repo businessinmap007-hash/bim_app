@@ -495,6 +495,17 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mediaWatermarkDisabledHint => 'العلامة المائية غير مفعّلة حاليًا.';
 
   @override
+  String get productWatermarkTitle => 'ضع علامتي المائية على الصور';
+
+  @override
+  String productWatermarkOn(String text) {
+    return 'ستُختم بـ: $text — لحماية الصور من السرقة';
+  }
+
+  @override
+  String get productWatermarkOff => 'تُضاف الصور كما هي بلا علامة';
+
+  @override
   String get mediaWatermarkOpenSettings => 'تفعيلها من الإعدادات';
 
   @override

@@ -10,6 +10,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/utils/localized_name.dart';
 import '../../../../shared/widgets/cropped_network_image.dart';
 import '../../../../shared/widgets/photo_source_badge.dart';
+import '../../../media/application/auto_watermark_service.dart';
 import '../../../media/application/media_picker_service.dart';
 import '../../../media/data/picked_media.dart';
 import '../../../media/presentation/widgets/media_source_badge.dart';
@@ -19,6 +20,7 @@ import '../../data/models/menu_item.dart';
 import '../../data/models/menu_item_image.dart';
 import '../../data/models/menu_vocabulary.dart';
 import '../widgets/item_photo_actions.dart';
+import '../widgets/product_watermark_choice.dart';
 
 /// «التسعير والتفاصيل» — «منيو مواصفات 1»: a merchant PICKS a real catalog
 /// product (a real phone model, its specs already curated — see
@@ -107,18 +109,35 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     return picked != null && (picked.nameEn == 'Used' || picked.nameEn == 'Nearly New');
   }
 
+  /// A picked photo as it will be shown AND uploaded: with the merchant's watermark when the switch is on.
+  Future<({PickedMedia media, Uint8List bytes})> _prepare(PickedMedia picked) async {
+    final original = await picked.file.readAsBytes();
+    final bytes = await ref.read(autoWatermarkServiceProvider).applyToProduct(original);
+
+    return (media: picked.copyWith(processedBytes: bytes), bytes: bytes);
+  }
+
+  /// The switch changed: photos already picked in this visit are re-stamped (or un-stamped) from their originals.
+  Future<void> _restamp() async {
+    final again = [for (final p in _newPhotos) await _prepare(p.media)];
+    if (!mounted) return;
+    setState(() => _newPhotos
+      ..clear()
+      ..addAll(again));
+  }
+
   Future<void> _takePhoto() async {
     final picked = await _picker.pickFromCamera();
     if (picked == null) return;
-    final bytes = await picked.file.readAsBytes();
-    if (mounted) setState(() => _newPhotos.add((media: picked, bytes: bytes)));
+    final ready = await _prepare(picked);
+    if (mounted) setState(() => _newPhotos.add(ready));
   }
 
   Future<void> _pickFromGallery() async {
     final picked = await _picker.pickFromGallery();
     for (final p in picked) {
-      final bytes = await p.file.readAsBytes();
-      if (mounted) setState(() => _newPhotos.add((media: p, bytes: bytes)));
+      final ready = await _prepare(p);
+      if (mounted) setState(() => _newPhotos.add(ready));
     }
   }
 
@@ -831,6 +850,8 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
                 ),
             ],
           ),
+          // «ضع علامتي المائية» — protects the photos from being copied
+          ProductWatermarkChoice(onChanged: _restamp),
           if (_isSecondHand(conditionGroup)) ...[
             const SizedBox(height: 6),
             Text(

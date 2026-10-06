@@ -938,6 +938,24 @@ abstract class AppLocalizations {
   /// **'العلامة المائية غير مفعّلة حاليًا.'**
   String get mediaWatermarkDisabledHint;
 
+  /// No description provided for @productWatermarkTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضع علامتي المائية على الصور'**
+  String get productWatermarkTitle;
+
+  /// No description provided for @productWatermarkOn.
+  ///
+  /// In ar, this message translates to:
+  /// **'ستُختم بـ: {text} — لحماية الصور من السرقة'**
+  String productWatermarkOn(String text);
+
+  /// No description provided for @productWatermarkOff.
+  ///
+  /// In ar, this message translates to:
+  /// **'تُضاف الصور كما هي بلا علامة'**
+  String get productWatermarkOff;
+
   /// No description provided for @mediaWatermarkOpenSettings.
   ///
   /// In ar, this message translates to:

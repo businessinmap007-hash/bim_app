@@ -21,6 +21,13 @@ class AutoWatermarkService {
   AutoWatermarkService(this._ref, {WatermarkService? watermarkService})
     : _watermarkService = watermarkService ?? const WatermarkService();
 
+  /// A PRODUCT photo: stamped only when the merchant's «ضع علامتي المائية» switch is on (and a watermark text is set).
+  Future<Uint8List> applyToProduct(Uint8List sourceBytes) async {
+    if (!_ref.read(watermarkSettingsControllerProvider).onProducts) return sourceBytes;
+
+    return apply(sourceBytes);
+  }
+
   Future<Uint8List> apply(Uint8List sourceBytes) async {
     final text = _ref.read(watermarkTextProvider);
     if (text == null) return sourceBytes;

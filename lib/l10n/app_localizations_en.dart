@@ -487,6 +487,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mediaWatermarkDisabledHint => 'Watermark is currently off.';
 
   @override
+  String get productWatermarkTitle => 'Put my watermark on these photos';
+
+  @override
+  String productWatermarkOn(String text) {
+    return 'Stamped with: $text — protects the photos from being copied';
+  }
+
+  @override
+  String get productWatermarkOff => 'The photos are added as they are';
+
+  @override
   String get mediaWatermarkOpenSettings => 'Turn it on in Settings';
 
   @override

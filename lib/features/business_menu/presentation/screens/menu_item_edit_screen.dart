@@ -7,6 +7,7 @@ import '../../../../shared/utils/localized_name.dart';
 import '../../../../shared/widgets/cropped_network_image.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../../shared/widgets/photo_source_badge.dart';
+import '../../../media/application/auto_watermark_service.dart';
 import '../../../media/application/media_picker_service.dart';
 import '../../application/business_menu_providers.dart';
 import '../../data/models/menu_item.dart';
@@ -15,6 +16,7 @@ import '../../data/models/menu_section.dart';
 import '../../data/models/menu_variant.dart';
 import '../../data/models/menu_vocabulary.dart';
 import '../widgets/item_photo_actions.dart';
+import '../widgets/product_watermark_choice.dart';
 
 /// Create (itemId == null) or edit (itemId set) one menu item. Create shows
 /// only the base-fields form — images/variants/extras all hang off an
@@ -749,9 +751,12 @@ class _ImagesSectionState extends ConsumerState<_ImagesSection> {
     if (picked.isEmpty) return;
     setState(() => _uploading = true);
     try {
+      // the merchant's watermark goes on when the switch beside the photos is on
+      final original = await picked.first.file.readAsBytes();
+      final stamped = await ref.read(autoWatermarkServiceProvider).applyToProduct(original);
       await ref
           .read(menuItemEditControllerProvider(widget.item.id).notifier)
-          .addImage(picked.first.file.path);
+          .addPickedImage(picked.first.copyWith(processedBytes: stamped));
     } finally {
       if (mounted) setState(() => _uploading = false);
     }
@@ -834,6 +839,7 @@ class _ImagesSectionState extends ConsumerState<_ImagesSection> {
             ),
           ),
         ),
+        const ProductWatermarkChoice(),
       ],
     );
   }

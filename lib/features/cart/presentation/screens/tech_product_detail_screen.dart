@@ -7,6 +7,7 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../business/data/models/menu_item_summary.dart';
 import '../../../../shared/widgets/cropped_network_image.dart';
+import '../../../../shared/widgets/full_screen_gallery.dart';
 import '../../../../shared/widgets/photo_source_badge.dart';
 import '../../../../shared/utils/produce_emoji.dart';
 import '../../application/cart_controller.dart';
@@ -194,10 +195,15 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
                       onPageChanged: (i) => setState(() => _photo = i),
                       // A catalog photo (it carries a credit) is a product shot of
                       // any shape — shown whole rather than cropped.
-                      itemBuilder: (_, i) => CroppedNetworkImage(
-                        url: photos[i],
-                        crop: item.cropOf(photos[i]),
-                        fit: item.imageCredit != null ? BoxFit.contain : BoxFit.cover,
+                      // Tapping a photo opens it full screen — swipe through the product's photos, pinch to zoom in
+                      // on a detail (the card shows only the part the merchant framed; here it is whole).
+                      itemBuilder: (_, i) => GestureDetector(
+                        onTap: () => FullScreenGallery.show(context, urls: photos, initialIndex: i),
+                        child: CroppedNetworkImage(
+                          url: photos[i],
+                          crop: item.cropOf(photos[i]),
+                          fit: item.imageCredit != null ? BoxFit.contain : BoxFit.cover,
+                        ),
                       ),
                     )
                   // No photo yet — an emoji for what it IS («🛏️» a bedroom, «📱» a
@@ -243,6 +249,19 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
                             ),
                           ),
                       ],
+                    ),
+                  ),
+                // a hint that the photo opens
+                if (photos.isNotEmpty)
+                  PositionedDirectional(
+                    bottom: 8,
+                    end: 8,
+                    child: IgnorePointer(
+                      child: Container(
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(color: Colors.black.withValues(alpha: 0.55), shape: BoxShape.circle),
+                        child: const Icon(Icons.zoom_out_map_rounded, color: Colors.white, size: 16),
+                      ),
                     ),
                   ),
                 // Taken live, or picked from the gallery — the customer is told which (a camera shot of this very

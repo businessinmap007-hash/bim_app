@@ -208,16 +208,25 @@ class _CropGridPainter extends CustomPainter {
     final shade = Paint()
       ..color = Colors.black.withValues(alpha: 0.25)
       ..strokeWidth = 0.8;
+    // the middle line each way — a different colour from the rest, so the exact centre is unmistakable
+    final centreLine = Paint()
+      ..color = const Color(0xFFFF2D55)
+      ..strokeWidth = 1.5;
 
     for (var i = 1; i <= lines; i++) {
       final x = size.width * i / (lines + 1);
       final y = size.height * i / (lines + 1);
       final centre = i == (lines + 1) ~/ 2;
+      if (centre) {
+        canvas.drawLine(Offset(x, 0), Offset(x, size.height), centreLine);
+        canvas.drawLine(Offset(0, y), Offset(size.width, y), centreLine);
+        continue;
+      }
       // a thin dark twin under each white line so the grid reads on a light photo too
       canvas.drawLine(Offset(x + 0.8, 0), Offset(x + 0.8, size.height), shade);
       canvas.drawLine(Offset(0, y + 0.8), Offset(size.width, y + 0.8), shade);
-      canvas.drawLine(Offset(x, 0), Offset(x, size.height), centre ? (Paint.from(light)..strokeWidth = 1.4) : light);
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), centre ? (Paint.from(light)..strokeWidth = 1.4) : light);
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), light);
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), light);
     }
   }
 
