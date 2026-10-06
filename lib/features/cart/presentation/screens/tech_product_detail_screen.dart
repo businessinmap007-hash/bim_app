@@ -198,7 +198,7 @@ class _TechProductDetailScreenState extends ConsumerState<TechProductDetailScree
                       // Tapping a photo opens it full screen — swipe through the product's photos, pinch to zoom in
                       // on a detail (the card shows only the part the merchant framed; here it is whole).
                       itemBuilder: (_, i) => GestureDetector(
-                        onTap: () => FullScreenGallery.show(context, urls: photos, initialIndex: i),
+                        onTap: () => FullScreenGallery.show(context, urls: photos, initialIndex: i, sources: [for (final u in photos) item.sourceOf(u)]),
                         child: CroppedNetworkImage(
                           url: photos[i],
                           crop: item.cropOf(photos[i]),

@@ -178,6 +178,7 @@ class _AlbumDetailScreenState extends ConsumerState<AlbumDetailScreen> {
                                       onTap: () => FullScreenGallery.show(
                                         context,
                                         urls: album.photos.map((p) => p.imageUrl).toList(),
+                                        sources: album.photos.map((p) => p.source).toList(),
                                         initialIndex: index,
                                       ),
                                     ),

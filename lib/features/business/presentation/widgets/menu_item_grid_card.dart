@@ -152,6 +152,7 @@ class _MenuItemGridCardState extends State<MenuItemGridCard> {
                           onTap: () => FullScreenGallery.show(
                             context,
                             urls: item.imageUrls,
+                            sources: [for (final u in item.imageUrls) item.sourceOf(u)],
                           ),
                           borderRadius: BorderRadius.circular(10),
                           child: Container(

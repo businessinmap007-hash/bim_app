@@ -352,6 +352,7 @@ class BusinessAlbumViewerScreen extends ConsumerWidget {
                 onTap: () => FullScreenGallery.show(
                   context,
                   urls: album.photos.map((p) => p.imageUrl).toList(),
+                  sources: album.photos.map((p) => p.source).toList(),
                   initialIndex: index,
                 ),
                 child: CachedNetworkImage(imageUrl: photo.imageUrl, fit: BoxFit.cover),
