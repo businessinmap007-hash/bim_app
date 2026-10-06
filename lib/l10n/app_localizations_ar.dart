@@ -436,6 +436,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get settingsLayoutBarAndMenu => 'شريط وقائمة منسدلة';
 
   @override
+  String get accountDataSection => 'بياناتك الأساسية';
+
+  @override
   String get settingsAccountSection => 'إعدادات الحساب';
 
   @override

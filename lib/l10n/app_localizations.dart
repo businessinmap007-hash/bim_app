@@ -824,6 +824,12 @@ abstract class AppLocalizations {
   /// **'شريط وقائمة منسدلة'**
   String get settingsLayoutBarAndMenu;
 
+  /// No description provided for @accountDataSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'بياناتك الأساسية'**
+  String get accountDataSection;
+
   /// No description provided for @settingsAccountSection.
   ///
   /// In ar, this message translates to:

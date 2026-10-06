@@ -137,6 +137,7 @@
   "settingsLayoutIconRow": "Compact icon row",
   "settingsLayoutTabsAndRows": "Tabs & preview rows",
   "settingsLayoutBarAndMenu": "Bar & dropdown menu",
+  "accountDataSection": "Your details",
   "settingsAccountSection": "Account settings",
   "settingsServicesSection": "Service settings",
   "settingsNoServicesForCategory": "No platform services are available for your business's current category.",

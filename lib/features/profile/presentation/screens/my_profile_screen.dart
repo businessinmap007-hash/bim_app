@@ -436,7 +436,7 @@ class _MyProfileScreenState extends ConsumerState<MyProfileScreen> {
             ),
           ),
           const SizedBox(height: 24),
-          _SectionHeader(l10n.settingsAccountSection),
+          _SectionHeader(l10n.accountDataSection),
           const SizedBox(height: 8),
           Container(
             padding: const EdgeInsets.all(12),

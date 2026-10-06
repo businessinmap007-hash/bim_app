@@ -428,6 +428,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsLayoutBarAndMenu => 'Bar & dropdown menu';
 
   @override
+  String get accountDataSection => 'Your details';
+
+  @override
   String get settingsAccountSection => 'Account settings';
 
   @override
