@@ -11,6 +11,8 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   /// file (under lib/) → how many `AppColors.primaryNavy` uses were reviewed in it.
   const reviewed = {
+    // navy ink on the gold selected chip and the gold «مفضّل» badge
+    'features/booking_settings/presentation/screens/booking_terms_screen.dart': 2,
     'features/business/presentation/widgets/menu_card_stepper.dart': 1,
     'features/business/presentation/widgets/menu_item_grid_card.dart': 1,
     'features/business/presentation/widgets/menu_item_tile.dart': 1,
