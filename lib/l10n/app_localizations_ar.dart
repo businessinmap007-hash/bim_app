@@ -7172,4 +7172,49 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get dayUsePrice => 'سعر Day use';
+
+  @override
+  String get bookingAddOnsTitle => 'إضافات الحجز';
+
+  @override
+  String get bookingAddOnsIntro =>
+      'ما يضيفه النزيل على سعر الغرفة (كنظام الوجبات) وما تتميّز به غرفة بعينها (كالإطلالة). يُسعَّر كل شيء هنا مرة واحدة.';
+
+  @override
+  String get bookingAddOnsGuestChoice => 'ما يختاره النزيل';
+
+  @override
+  String get bookingAddOnsRoomFeatures => 'ما تتميّز به الغرفة';
+
+  @override
+  String get bookingAddOnsRoomFeaturesHint =>
+      'يُسعَّر هنا مرة واحدة، ثم تحدد في كل غرفة أي ميزة تحملها فتُضاف إلى سعرها.';
+
+  @override
+  String get bookingAddOnsEmpty => 'لا توجد إضافات لهذا النشاط';
+
+  @override
+  String get addOnSelectionSingle => 'اختيار واحد';
+
+  @override
+  String get addOnSelectionMultiple => 'أكثر من اختيار';
+
+  @override
+  String get addOnPricePerNight => 'الزيادة لكل ليلة';
+
+  @override
+  String get addOnPriceFeature => 'الزيادة على سعر الغرفة';
+
+  @override
+  String get addOnPerPerson => 'لكل فرد';
+
+  @override
+  String get unitFeaturesTitle => 'مميزات الغرفة';
+
+  @override
+  String get unitFeaturesHint =>
+      'حدد ما تحمله هذه الغرفة. تُسعَّر الميزة مرة في «إضافات الحجز» فيُضاف سعرها إلى سعر الغرفة.';
+
+  @override
+  String get bookingNoAddOn => 'بدون';
 }

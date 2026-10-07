@@ -9,6 +9,7 @@ import 'package:bim_app/features/booking/data/models/unit_discovery.dart';
 import 'package:bim_app/features/booking/presentation/widgets/day_use_tag.dart';
 import 'package:bim_app/features/booking_settings/application/booking_settings_controller.dart';
 import 'package:bim_app/features/booking_settings/data/booking_settings_api.dart';
+import 'package:bim_app/features/booking_settings/data/models/add_on_models.dart';
 import 'package:bim_app/features/booking_settings/data/models/room_models.dart';
 import 'package:bim_app/features/booking_settings/data/models/booking_settings_models.dart';
 import 'package:bim_app/features/booking_settings/presentation/screens/bookable_item_edit_screen.dart';
@@ -23,6 +24,9 @@ class _FakeApi implements BookingSettingsApi {
 
   @override
   Future<DayUseSettings> dayUse(int itemId) async => current;
+
+  @override
+  Future<List<UnitFeature>> unitFeatures(int itemId) async => const [];
 
   @override
   Future<BookableItemRow> updateBookableItem(

@@ -8,6 +8,7 @@ import '../../../../shared/widgets/form_save_button.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../media/application/media_picker_service.dart';
 import '../../application/booking_settings_controller.dart';
+import '../../data/models/add_on_models.dart';
 import '../../data/models/booking_settings_models.dart';
 import '../../data/models/room_models.dart';
 import '../widgets/bookable_rooms_section.dart';
@@ -170,6 +171,8 @@ class _EditorState extends ConsumerState<_Editor> {
   late String _status;
   DayUseSettings _dayUse = const DayUseSettings();
   bool _dayUseLoaded = false;
+  List<UnitFeature> _features = const [];
+  final Set<int> _featureIds = {};
   bool _saving = false;
   String? _error;
   String? _savedSignature;
@@ -186,6 +189,7 @@ class _EditorState extends ConsumerState<_Editor> {
     _dayUse.from,
     _dayUse.to,
     _dayUsePrice.text.trim(),
+    ([..._featureIds]..sort()).join(','),
   ].join('|');
 
   bool get _isSaved => (!_isStay || _dayUseLoaded) && _savedSignature == _signature;
@@ -220,9 +224,16 @@ class _EditorState extends ConsumerState<_Editor> {
 
   Future<void> _loadDayUse() async {
     try {
-      final settings = await ref.read(bookingSettingsApiProvider).dayUse(widget.row.id);
+      final api = ref.read(bookingSettingsApiProvider);
+      final settings = await api.dayUse(widget.row.id);
+      // the features are optional: a hotel that offers none simply has no such section
+      final features = await api.unitFeatures(widget.row.id).catchError((_) => <UnitFeature>[]);
       if (!mounted) return;
       setState(() {
+        _features = features;
+        _featureIds
+          ..clear()
+          ..addAll(features.where((f) => f.selected).map((f) => f.id));
         _dayUse = settings;
         _dayUsePrice.text = settings.price == null ? '' : settings.price!.toStringAsFixed(settings.price! % 1 == 0 ? 0 : 2);
         _dayUseLoaded = true;
@@ -266,6 +277,9 @@ class _EditorState extends ConsumerState<_Editor> {
         );
         _dayUse = saved;
       }
+      if (_isStay && _dayUseLoaded && _features.isNotEmpty) {
+        await ref.read(bookingSettingsApiProvider).saveUnitFeatures(widget.row.id, _featureIds.toList());
+      }
       if (mounted) setState(() => _savedSignature = _signature);
     } catch (e) {
       if (mounted) setState(() => _error = e is ApiException && e.message.isNotEmpty ? e.message : l10n.commonSomethingWentWrong);
@@ -288,6 +302,25 @@ class _EditorState extends ConsumerState<_Editor> {
           if (_isStay) ...[
             const SizedBox(height: 20),
             BookableRoomsSection(itemId: row.id),
+            if (_dayUseLoaded && _features.isNotEmpty) ...[
+              const SizedBox(height: 20),
+              Text(l10n.unitFeaturesTitle, style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 4),
+              Text(l10n.unitFeaturesHint, style: Theme.of(context).textTheme.bodySmall),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  for (final f in _features)
+                    FilterChip(
+                      label: Text(f.price == null ? f.name : '${f.name}  +${f.price! % 1 == 0 ? f.price!.toStringAsFixed(0) : f.price!.toStringAsFixed(2)}'),
+                      selected: _featureIds.contains(f.id),
+                      onSelected: (v) => setState(() => v ? _featureIds.add(f.id) : _featureIds.remove(f.id)),
+                    ),
+                ],
+              ),
+            ],
             if (_dayUseLoaded) ...[
               const SizedBox(height: 20),
               DayUseFields(value: _dayUse, price: _dayUsePrice, onChanged: (v) => setState(() => _dayUse = v)),

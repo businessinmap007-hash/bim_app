@@ -13242,6 +13242,90 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'سعر Day use'**
   String get dayUsePrice;
+
+  /// No description provided for @bookingAddOnsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافات الحجز'**
+  String get bookingAddOnsTitle;
+
+  /// No description provided for @bookingAddOnsIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما يضيفه النزيل على سعر الغرفة (كنظام الوجبات) وما تتميّز به غرفة بعينها (كالإطلالة). يُسعَّر كل شيء هنا مرة واحدة.'**
+  String get bookingAddOnsIntro;
+
+  /// No description provided for @bookingAddOnsGuestChoice.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما يختاره النزيل'**
+  String get bookingAddOnsGuestChoice;
+
+  /// No description provided for @bookingAddOnsRoomFeatures.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما تتميّز به الغرفة'**
+  String get bookingAddOnsRoomFeatures;
+
+  /// No description provided for @bookingAddOnsRoomFeaturesHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُسعَّر هنا مرة واحدة، ثم تحدد في كل غرفة أي ميزة تحملها فتُضاف إلى سعرها.'**
+  String get bookingAddOnsRoomFeaturesHint;
+
+  /// No description provided for @bookingAddOnsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد إضافات لهذا النشاط'**
+  String get bookingAddOnsEmpty;
+
+  /// No description provided for @addOnSelectionSingle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيار واحد'**
+  String get addOnSelectionSingle;
+
+  /// No description provided for @addOnSelectionMultiple.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكثر من اختيار'**
+  String get addOnSelectionMultiple;
+
+  /// No description provided for @addOnPricePerNight.
+  ///
+  /// In ar, this message translates to:
+  /// **'الزيادة لكل ليلة'**
+  String get addOnPricePerNight;
+
+  /// No description provided for @addOnPriceFeature.
+  ///
+  /// In ar, this message translates to:
+  /// **'الزيادة على سعر الغرفة'**
+  String get addOnPriceFeature;
+
+  /// No description provided for @addOnPerPerson.
+  ///
+  /// In ar, this message translates to:
+  /// **'لكل فرد'**
+  String get addOnPerPerson;
+
+  /// No description provided for @unitFeaturesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مميزات الغرفة'**
+  String get unitFeaturesTitle;
+
+  /// No description provided for @unitFeaturesHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدد ما تحمله هذه الغرفة. تُسعَّر الميزة مرة في «إضافات الحجز» فيُضاف سعرها إلى سعر الغرفة.'**
+  String get unitFeaturesHint;
+
+  /// No description provided for @bookingNoAddOn.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون'**
+  String get bookingNoAddOn;
 }
 
 class _AppLocalizationsDelegate

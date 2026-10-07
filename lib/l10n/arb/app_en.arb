@@ -2428,5 +2428,19 @@
   "dayUseEnable": "Offer Day use for this room type",
   "dayUseFrom": "From",
   "dayUseTo": "To",
-  "dayUsePrice": "Day-use price"
+  "dayUsePrice": "Day-use price",
+  "bookingAddOnsTitle": "Booking add-ons",
+  "bookingAddOnsIntro": "What a guest adds on top of the room (like the meal plan) and what one particular room has (like the view). Everything is priced once, here.",
+  "bookingAddOnsGuestChoice": "What the guest chooses",
+  "bookingAddOnsRoomFeatures": "What a room has",
+  "bookingAddOnsRoomFeaturesHint": "Priced once here; then you tick, on each room, which features it has and its price grows by them.",
+  "bookingAddOnsEmpty": "There are no add-ons for this business",
+  "addOnSelectionSingle": "One choice",
+  "addOnSelectionMultiple": "Several choices",
+  "addOnPricePerNight": "Added per night",
+  "addOnPriceFeature": "Added to the room price",
+  "addOnPerPerson": "Per person",
+  "unitFeaturesTitle": "Room features",
+  "unitFeaturesHint": "Tick what this room has. A feature is priced once in «Booking add-ons» and its price is added to the room's price.",
+  "bookingNoAddOn": "None"
 }

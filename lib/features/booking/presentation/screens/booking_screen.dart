@@ -39,6 +39,9 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   int? _unitId;
   // «Day use»: the guest picks only a date; the room type names the window and the flat price
   bool _dayUse = false;
+  // what the chosen room type offers — kept from the moment it was picked, because the discovery request it came from
+  // is keyed by the dates and is replaced as soon as a date is chosen
+  DayUseOffer? _dayUseOffer;
   final Set<int> _modifierOptionIds = {};
   final Map<String, TextEditingController> _textControllers = {};
   final _notesController = TextEditingController();
@@ -81,18 +84,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   );
 
   /// What the chosen room type offers as Day use, if it does.
-  DayUseOffer? _dayUseOfferOfSelected() {
-    final id = _unitId;
-    if (id == null) return null;
-    final groups = ref.read(unitDiscoveryProvider(_discoveryParams)).valueOrNull ?? const <UnitKindGroup>[];
-    for (final g in groups) {
-      for (final u in g.units) {
-        if (u.id == id) return u.dayUse;
-      }
-    }
-
-    return null;
-  }
+  DayUseOffer? _dayUseOfferOfSelected() => _unitId == null ? null : _dayUseOffer;
 
   bool get _dayUseActive => _dayUse && _dayUseOfferOfSelected() != null;
 
@@ -153,7 +145,8 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
       for (final m in groupModifiers) {
         _modifierOptionIds.remove(m.optionId);
       }
-      _modifierOptionIds.add(optionId);
+      // 0 is «بدون»: the group is cleared and nothing is added
+      if (optionId != 0) _modifierOptionIds.add(optionId);
     });
     _schedulePreview();
   }
@@ -357,7 +350,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
               ],
               if (dayUseOffer != null) _dayUseSection(context, l10n, dayUseOffer),
               ...fields.map((field) => _fieldWidget(context, l10n, field, form.shape)),
-              if (form.modifiers.isNotEmpty) ...[
+              if (form.modifiers.isNotEmpty && !dayUseOn) ...[
                 const SizedBox(height: 8),
                 Text(l10n.bookingModifiersTitle, style: Theme.of(context).textTheme.titleSmall),
                 // Grouped modifiers first — a single-select group (e.g.
@@ -367,18 +360,24 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                 for (final group in _modifierGroupsIn(form.modifiers)) ...[
                   if (group.name != null) Text(group.name!, style: Theme.of(context).textTheme.bodyMedium),
                   if (group.isSingle)
-                    ...group.modifiers.map(
-                      (m) => RadioListTile<int>(
-                        contentPadding: EdgeInsets.zero,
-                        value: m.optionId,
-                        groupValue: _singleModifierGroupValue(group.modifiers),
-                        onChanged: (value) => _pickSingleModifier(group.modifiers, m.optionId),
-                        title: Text(m.name),
-                        secondary: Text(
-                          m.adjustType == 'percent'
-                              ? '+${m.adjustValue.toStringAsFixed(0)}%'
-                              : '+${m.adjustValue.toStringAsFixed(0)}',
-                        ),
+                    // one choice → radio buttons, and always «بدون»: the guest may take none of the add-ons
+                    RadioGroup<int>(
+                      groupValue: _singleModifierGroupValue(group.modifiers) ?? 0,
+                      onChanged: (value) => _pickSingleModifier(group.modifiers, value ?? 0),
+                      child: Column(
+                        children: [
+                          RadioListTile<int>(contentPadding: EdgeInsets.zero, value: 0, title: Text(l10n.bookingNoAddOn)),
+                          ...group.modifiers.map(
+                            (m) => RadioListTile<int>(
+                              contentPadding: EdgeInsets.zero,
+                              value: m.optionId,
+                              title: Text(m.name),
+                              secondary: Text(
+                                m.adjustType == 'percent' ? '+${m.adjustValue.toStringAsFixed(0)}%' : '+${m.adjustValue.toStringAsFixed(0)}',
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     )
                   else
@@ -526,7 +525,11 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                 onChanged: entry.unit.available == false
                     ? null
                     : (v) {
-                        setState(() => _unitId = v);
+                        setState(() {
+                          _unitId = v;
+                          _dayUseOffer = entry.unit.dayUse;
+                          if (_dayUseOffer == null) _dayUse = false;
+                        });
                         _schedulePreview();
                       },
                 title: Row(

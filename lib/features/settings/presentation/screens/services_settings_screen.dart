@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../booking/presentation/screens/business_bookings_screen.dart';
 import '../../../booking_settings/presentation/screens/booking_settings_screen.dart';
+import '../../../booking_settings/presentation/screens/booking_add_ons_screen.dart';
 import '../../../booking_settings/presentation/screens/booking_terms_screen.dart';
 import '../../../delivery/application/delivery_providers.dart';
 import '../../../auth/application/auth_controller.dart';
@@ -226,6 +227,13 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.shield_outlined,
         title: l10n.bookingTermsTitle,
         builder: (_) => const BookingTermsScreen(),
+      ),
+      _Tile(
+        // meal plans and a room's features exist where rooms are let
+        show: _has('bookings') && hasStayUnits,
+        leading: Icons.free_breakfast_outlined,
+        title: l10n.bookingAddOnsTitle,
+        builder: (_) => const BookingAddOnsScreen(),
       ),
       _Tile(
         // only a business that lets rooms has guests to hear from

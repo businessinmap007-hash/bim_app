@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import '../../../core/network/api_client.dart';
 import 'models/booking_settings_models.dart';
 import 'models/booking_terms.dart';
+import 'models/add_on_models.dart';
 import 'models/room_models.dart';
 
 /// /business/prices, /business/bookable-items, /business/working-hours —
@@ -151,6 +152,28 @@ class BookingSettingsApi {
 
   Future<void> deleteBookableItemImage(int itemId, int imageId) =>
       _client.delete('/business/bookable-items/$itemId/images/$imageId');
+
+  /// «إضافات الحجز»: meal plans (one choice by default) and the price of a room's own features.
+  Future<BookingAddOns> bookingAddOns() async {
+    final data = await _client.get('/business/booking-add-ons') as Map<String, dynamic>;
+    return BookingAddOns.fromJson(data);
+  }
+
+  Future<BookingAddOns> saveBookingAddOns(BookingAddOns addOns) async {
+    final data = await _client.put('/business/booking-add-ons', data: addOns.toJson()) as Map<String, dynamic>;
+    return BookingAddOns.fromJson(data);
+  }
+
+  /// The features THIS room carries, and the ones it could.
+  Future<List<UnitFeature>> unitFeatures(int itemId) async {
+    final data = await _client.get('/business/bookable-items/$itemId/features') as Map<String, dynamic>;
+    return parseUnitFeatures(data);
+  }
+
+  Future<List<UnitFeature>> saveUnitFeatures(int itemId, List<int> optionIds) async {
+    final data = await _client.put('/business/bookable-items/$itemId/features', data: {'option_ids': optionIds}) as Map<String, dynamic>;
+    return parseUnitFeatures(data);
+  }
 
   /// «Day use» of a room type — the window and flat price the hotel set.
   Future<DayUseSettings> dayUse(int itemId) async {

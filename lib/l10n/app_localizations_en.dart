@@ -7207,4 +7207,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dayUsePrice => 'Day-use price';
+
+  @override
+  String get bookingAddOnsTitle => 'Booking add-ons';
+
+  @override
+  String get bookingAddOnsIntro =>
+      'What a guest adds on top of the room (like the meal plan) and what one particular room has (like the view). Everything is priced once, here.';
+
+  @override
+  String get bookingAddOnsGuestChoice => 'What the guest chooses';
+
+  @override
+  String get bookingAddOnsRoomFeatures => 'What a room has';
+
+  @override
+  String get bookingAddOnsRoomFeaturesHint =>
+      'Priced once here; then you tick, on each room, which features it has and its price grows by them.';
+
+  @override
+  String get bookingAddOnsEmpty => 'There are no add-ons for this business';
+
+  @override
+  String get addOnSelectionSingle => 'One choice';
+
+  @override
+  String get addOnSelectionMultiple => 'Several choices';
+
+  @override
+  String get addOnPricePerNight => 'Added per night';
+
+  @override
+  String get addOnPriceFeature => 'Added to the room price';
+
+  @override
+  String get addOnPerPerson => 'Per person';
+
+  @override
+  String get unitFeaturesTitle => 'Room features';
+
+  @override
+  String get unitFeaturesHint =>
+      'Tick what this room has. A feature is priced once in «Booking add-ons» and its price is added to the room\'s price.';
+
+  @override
+  String get bookingNoAddOn => 'None';
 }

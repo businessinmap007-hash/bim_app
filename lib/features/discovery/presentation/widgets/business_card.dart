@@ -82,7 +82,8 @@ class BusinessGridCard extends StatelessWidget {
                   : const _LogoPlaceholder(),
             ),
             Padding(
-              padding: const EdgeInsets.all(10),
+              // 8 on top and 6 below (was 10 all round): the grid cell left 5.4px less than this block needs
+              padding: const EdgeInsets.fromLTRB(10, 8, 10, 6),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

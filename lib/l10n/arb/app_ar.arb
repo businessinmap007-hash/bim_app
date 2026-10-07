@@ -2437,5 +2437,19 @@
   "dayUseEnable": "أتح Day use لهذا النوع",
   "dayUseFrom": "من",
   "dayUseTo": "إلى",
-  "dayUsePrice": "سعر Day use"
+  "dayUsePrice": "سعر Day use",
+  "bookingAddOnsTitle": "إضافات الحجز",
+  "bookingAddOnsIntro": "ما يضيفه النزيل على سعر الغرفة (كنظام الوجبات) وما تتميّز به غرفة بعينها (كالإطلالة). يُسعَّر كل شيء هنا مرة واحدة.",
+  "bookingAddOnsGuestChoice": "ما يختاره النزيل",
+  "bookingAddOnsRoomFeatures": "ما تتميّز به الغرفة",
+  "bookingAddOnsRoomFeaturesHint": "يُسعَّر هنا مرة واحدة، ثم تحدد في كل غرفة أي ميزة تحملها فتُضاف إلى سعرها.",
+  "bookingAddOnsEmpty": "لا توجد إضافات لهذا النشاط",
+  "addOnSelectionSingle": "اختيار واحد",
+  "addOnSelectionMultiple": "أكثر من اختيار",
+  "addOnPricePerNight": "الزيادة لكل ليلة",
+  "addOnPriceFeature": "الزيادة على سعر الغرفة",
+  "addOnPerPerson": "لكل فرد",
+  "unitFeaturesTitle": "مميزات الغرفة",
+  "unitFeaturesHint": "حدد ما تحمله هذه الغرفة. تُسعَّر الميزة مرة في «إضافات الحجز» فيُضاف سعرها إلى سعر الغرفة.",
+  "bookingNoAddOn": "بدون"
 }
