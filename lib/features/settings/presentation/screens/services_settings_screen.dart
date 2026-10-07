@@ -17,7 +17,6 @@ import '../../../delivery/presentation/screens/my_drivers_screen.dart';
 import '../../../shipping/presentation/screens/shipping_orders_screen.dart';
 import '../../../shipping/presentation/screens/shipping_rates_screen.dart';
 import '../../../business_offers/presentation/screens/business_offers_screen.dart';
-import '../../../business_prices/presentation/screens/business_prices_screen.dart';
 import '../../../business_menu/presentation/screens/menu_items_screen.dart';
 import '../../../clinic_management/presentation/screens/clinic_management_screen.dart';
 import '../../../menu_bundles/presentation/screens/menu_bundles_screen.dart';
@@ -203,12 +202,6 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.groups_outlined,
         title: l10n.myTrainingClientsTitle,
         builder: (_) => const MyTrainingClientsScreen(),
-      ),
-      _Tile(
-        show: _has('prices'),
-        leading: Icons.sell_outlined,
-        title: l10n.businessPricesTitle,
-        builder: (_) => const BusinessPricesScreen(),
       ),
       _Tile(
         show: _has('offers'),
