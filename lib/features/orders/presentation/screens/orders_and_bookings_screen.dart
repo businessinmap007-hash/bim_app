@@ -9,6 +9,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../booking/application/booking_providers.dart';
 import '../../../booking/data/models/booking.dart';
 import '../../../booking/presentation/widgets/booking_money_card.dart';
+import '../../../booking/presentation/widgets/day_use_tag.dart';
 import '../../../cart/application/cart_controller.dart';
 import '../../../cart/presentation/screens/cart_screen.dart';
 import '../../../chat/presentation/screens/operation_chat_screen.dart';
@@ -1156,6 +1157,7 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
             ),
             const SizedBox(height: 8),
             Text(booking.serviceName(languageCode), style: Theme.of(context).textTheme.bodyMedium),
+            DayUseTag(booking: booking),
             // the hotel gives the room when the stay starts — only then does the server send its number
             if (booking.room != null) ...[
               const SizedBox(height: 4),

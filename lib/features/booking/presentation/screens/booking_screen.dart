@@ -9,6 +9,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
 import '../../../business/data/models/offering_item.dart';
 import '../../application/booking_providers.dart';
+import '../../data/models/unit_discovery.dart';
 import '../../data/models/booking_form.dart';
 
 /// Booking a specific priced offering («غرفة مزدوجة», «كشف عظام») at a
@@ -36,6 +37,8 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   String? _channel;
   String? _visitPlace;
   int? _unitId;
+  // «Day use»: the guest picks only a date; the room type names the window and the flat price
+  bool _dayUse = false;
   final Set<int> _modifierOptionIds = {};
   final Map<String, TextEditingController> _textControllers = {};
   final _notesController = TextEditingController();
@@ -69,6 +72,30 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     super.dispose();
   }
 
+  UnitDiscoveryParams get _discoveryParams => (
+    businessId: widget.businessId,
+    serviceId: widget.offering.serviceId,
+    itemType: widget.offering.itemType,
+    startsAt: _startsAt,
+    endsAt: _endsAt,
+  );
+
+  /// What the chosen room type offers as Day use, if it does.
+  DayUseOffer? _dayUseOfferOfSelected() {
+    final id = _unitId;
+    if (id == null) return null;
+    final groups = ref.read(unitDiscoveryProvider(_discoveryParams)).valueOrNull ?? const <UnitKindGroup>[];
+    for (final g in groups) {
+      for (final u in g.units) {
+        if (u.id == id) return u.dayUse;
+      }
+    }
+
+    return null;
+  }
+
+  bool get _dayUseActive => _dayUse && _dayUseOfferOfSelected() != null;
+
   void _schedulePreview() {
     _previewDebounce?.cancel();
     _previewDebounce = Timer(const Duration(milliseconds: 350), _fetchPreview);
@@ -78,14 +105,16 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     final requestId = ++_previewRequestId;
     setState(() => _previewLoading = true);
     try {
+      final dayUse = _dayUseActive && _startsAt != null;
       final total = await ref.read(bookingApiProvider).preview(
         businessId: widget.businessId,
         serviceId: widget.offering.serviceId ?? 0,
         bookableId: _unitId,
         offeringId: widget.offering.id,
         offeringType: 'service_price',
-        startsAt: _startsAt,
-        endsAt: _endsAt,
+        startsAt: dayUse ? null : _startsAt,
+        endsAt: dayUse ? null : _endsAt,
+        dayUseDate: dayUse ? _startsAt : null,
         quantity: _quantity,
         partySize: _partySize,
         optionIds: _modifierOptionIds.toList(),
@@ -234,8 +263,9 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     final hasDateRange = fields.any((f) => f.key == 'date_range' || f.key == 'duration');
     final hasDatetime = fields.any((f) => f.key == 'datetime');
     final needsUnit = form.shape?.needsUnit ?? false;
+    final dayUse = _dayUseActive;
 
-    if ((hasDateRange || hasDatetime) && _startsAt == null) {
+    if ((hasDateRange || hasDatetime || dayUse) && _startsAt == null) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.bookingDateRequired)));
       return;
     }
@@ -252,9 +282,10 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
         bookableId: _unitId,
         offeringId: widget.offering.id,
         offeringType: 'service_price',
-        startsAt: _startsAt,
-        endsAt: hasDateRange ? _endsAt : null,
-        allDay: fields.any((f) => f.key == 'date_range'),
+        startsAt: dayUse ? null : _startsAt,
+        endsAt: !dayUse && hasDateRange ? _endsAt : null,
+        dayUseDate: dayUse ? _startsAt : null,
+        allDay: !dayUse && fields.any((f) => f.key == 'date_range'),
         partySize: fields.any((f) => f.key == 'guest_count' || f.key == 'party_size') ? _partySize : null,
         quantity: fields.any((f) => f.key == 'quantity') ? _quantity : null,
         notes: _notesController.text.trim(),
@@ -299,7 +330,13 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
           // captures the start, so a plain 'datetime' field alongside it
           // would just be the same picker shown twice.
           final hasDurationField = rawFields.any((f) => f.key == 'duration');
-          final fields = rawFields.where((f) => !(f.key == 'datetime' && hasDurationField)).toList();
+          final dayUseOffer = _dayUseOfferOfSelected();
+          final dayUseOn = _dayUse && dayUseOffer != null;
+          final fields = rawFields
+              .where((f) => !(f.key == 'datetime' && hasDurationField))
+              // a Day use asks for a date only — its own picker replaces the night/time fields
+              .where((f) => !(dayUseOn && (f.key == 'date_range' || f.key == 'datetime' || f.key == 'duration')))
+              .toList();
           final needsUnit = form.shape?.needsUnit ?? false;
           final units = widget.offering.units.isNotEmpty ? widget.offering.units : form.units;
 
@@ -318,6 +355,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                 _unitPickerSection(context, l10n, units),
                 const SizedBox(height: 12),
               ],
+              if (dayUseOffer != null) _dayUseSection(context, l10n, dayUseOffer),
               ...fields.map((field) => _fieldWidget(context, l10n, field, form.shape)),
               if (form.modifiers.isNotEmpty) ...[
                 const SizedBox(height: 8),
@@ -421,20 +459,56 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     );
   }
 
+  /// «Day use»: the chosen room type is also sold through the day — the guest picks the date, the room type
+  /// names the window and the price.
+  Widget _dayUseSection(BuildContext context, AppLocalizations l10n, DayUseOffer offer) {
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: double.infinity,
+            child: SegmentedButton<bool>(
+              segments: [
+                ButtonSegment(value: false, label: Text(l10n.bookingStayByNight)),
+                ButtonSegment(value: true, label: Text(l10n.bookingDayUse)),
+              ],
+              selected: {_dayUse},
+              onSelectionChanged: (s) {
+                setState(() => _dayUse = s.first);
+                _schedulePreview();
+              },
+            ),
+          ),
+          if (_dayUse) ...[
+            const SizedBox(height: 8),
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(l10n.bookingDayUseDate),
+              subtitle: Text(_startsAt != null ? DateFormat.yMd().format(_startsAt!) : l10n.bookingChoosePlaceholder),
+              trailing: const Icon(Icons.calendar_today_outlined),
+              onTap: () => _pickDate(isEnd: false),
+            ),
+            Text(
+              '${l10n.bookingDayUseWindow(offer.from, offer.to)} · ${offer.price.toStringAsFixed(0)}',
+              style: theme.textTheme.bodyMedium,
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
   /// Real named units (rooms/tables/pitches), grouped by kind, with an
   /// image and — once dates are picked — live availability for those
   /// exact dates. See Api\V2\UnitDiscoveryController. Falls back to the
   /// plain unscoped list (no price/image/availability) while loading or on
   /// error, so a slow/failed request never blocks booking outright.
   Widget _unitPickerSection(BuildContext context, AppLocalizations l10n, List<BookableUnitOption> fallbackUnits) {
-    final params = (
-      businessId: widget.businessId,
-      serviceId: widget.offering.serviceId,
-      itemType: widget.offering.itemType,
-      startsAt: _startsAt,
-      endsAt: _endsAt,
-    );
-    final discoveryAsync = ref.watch(unitDiscoveryProvider(params));
+    final discoveryAsync = ref.watch(unitDiscoveryProvider(_discoveryParams));
 
     return discoveryAsync.when(
       data: (groups) {

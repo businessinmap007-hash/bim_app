@@ -2414,5 +2414,20 @@
   "stayReqServicesIntro": "What a guest may order during their stay. Add what your hotel offers and switch off what it does not.",
   "stayReqServicesStarting": "This is the platform's starting list — edit it to make it yours.",
   "stayReqAddServiceHint": "A service name, or several separated by commas",
-  "stayReqAdd": "Add"
+  "stayReqAdd": "Add",
+  "bookingDayUse": "Day use",
+  "bookingStayByNight": "Overnight stay",
+  "bookingDayUseDate": "Day-use date",
+  "bookingDayUseWindow": "From {from} to {to}",
+  "@bookingDayUseWindow": { "placeholders": { "from": { "type": "String" }, "to": { "type": "String" } } },
+  "bookingDayUseTag": "Day use · {from}–{to}",
+  "@bookingDayUseTag": { "placeholders": { "from": { "type": "String" }, "to": { "type": "String" } } },
+  "dayUseSettingsTitle": "Day use",
+  "dayUseSettingsHint": "Sell the same room through the day without a night: a time window and a flat price. The guest only picks a date.",
+  "dayUseEnable": "Offer Day use for this room type",
+  "dayUseFrom": "From",
+  "dayUseTo": "To",
+  "dayUsePrice": "Day-use price",
+  "dayUseSave": "Save Day use",
+  "dayUseSaved": "Day use saved"
 }

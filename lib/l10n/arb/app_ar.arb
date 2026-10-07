@@ -2423,5 +2423,20 @@
   "stayReqServicesIntro": "ما يستطيع النزيل طلبه أثناء إقامته. أضف ما يقدّمه فندقك وأوقف ما لا تقدّمه.",
   "stayReqServicesStarting": "هذه قائمة المنصة المبدئية — عدّلها لتصير قائمتك.",
   "stayReqAddServiceHint": "اسم خدمة، أو عدة أسماء مفصولة بفاصلة",
-  "stayReqAdd": "أضف"
+  "stayReqAdd": "أضف",
+  "bookingDayUse": "Day use",
+  "bookingStayByNight": "إقامة بالليل",
+  "bookingDayUseDate": "يوم Day use",
+  "bookingDayUseWindow": "من {from} إلى {to}",
+  "@bookingDayUseWindow": { "placeholders": { "from": { "type": "String" }, "to": { "type": "String" } } },
+  "bookingDayUseTag": "Day use · {from}–{to}",
+  "@bookingDayUseTag": { "placeholders": { "from": { "type": "String" }, "to": { "type": "String" } } },
+  "dayUseSettingsTitle": "Day use",
+  "dayUseSettingsHint": "بيع الغرفة نفسها خلال اليوم بدون مبيت: نافذة وقت وسعر ثابت. يحجز الضيف التاريخ فقط.",
+  "dayUseEnable": "أتح Day use لهذا النوع",
+  "dayUseFrom": "من",
+  "dayUseTo": "إلى",
+  "dayUsePrice": "سعر Day use",
+  "dayUseSave": "حفظ Day use",
+  "dayUseSaved": "تم حفظ Day use"
 }

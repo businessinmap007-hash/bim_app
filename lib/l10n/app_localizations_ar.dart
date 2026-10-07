@@ -7131,4 +7131,48 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get stayReqAdd => 'أضف';
+
+  @override
+  String get bookingDayUse => 'Day use';
+
+  @override
+  String get bookingStayByNight => 'إقامة بالليل';
+
+  @override
+  String get bookingDayUseDate => 'يوم Day use';
+
+  @override
+  String bookingDayUseWindow(String from, String to) {
+    return 'من $from إلى $to';
+  }
+
+  @override
+  String bookingDayUseTag(String from, String to) {
+    return 'Day use · $from–$to';
+  }
+
+  @override
+  String get dayUseSettingsTitle => 'Day use';
+
+  @override
+  String get dayUseSettingsHint =>
+      'بيع الغرفة نفسها خلال اليوم بدون مبيت: نافذة وقت وسعر ثابت. يحجز الضيف التاريخ فقط.';
+
+  @override
+  String get dayUseEnable => 'أتح Day use لهذا النوع';
+
+  @override
+  String get dayUseFrom => 'من';
+
+  @override
+  String get dayUseTo => 'إلى';
+
+  @override
+  String get dayUsePrice => 'سعر Day use';
+
+  @override
+  String get dayUseSave => 'حفظ Day use';
+
+  @override
+  String get dayUseSaved => 'تم حفظ Day use';
 }

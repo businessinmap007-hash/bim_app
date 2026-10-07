@@ -28,6 +28,24 @@ class RoomsPayload {
   );
 }
 
+/// «Day use» as the hotel set it on a room type.
+class DayUseSettings {
+  final bool enabled;
+  final String from;
+  final String to;
+  final double? price;
+  const DayUseSettings({this.enabled = false, this.from = '09:00', this.to = '18:00', this.price});
+
+  factory DayUseSettings.fromJson(Map<String, dynamic> json) => DayUseSettings(
+    enabled: json['enabled'] as bool? ?? false,
+    from: json['from'] as String? ?? '09:00',
+    to: json['to'] as String? ?? '18:00',
+    price: (json['price'] as num?)?.toDouble(),
+  );
+
+  Map<String, dynamic> toJson() => {'enabled': enabled, 'from': from, 'to': to, 'price': price};
+}
+
 /// The rooms a stay could be put in, and the one it has.
 class BookingRoomsPayload {
   final bool usesRooms;

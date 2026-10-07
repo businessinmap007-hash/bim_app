@@ -13170,6 +13170,84 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'أضف'**
   String get stayReqAdd;
+
+  /// No description provided for @bookingDayUse.
+  ///
+  /// In ar, this message translates to:
+  /// **'Day use'**
+  String get bookingDayUse;
+
+  /// No description provided for @bookingStayByNight.
+  ///
+  /// In ar, this message translates to:
+  /// **'إقامة بالليل'**
+  String get bookingStayByNight;
+
+  /// No description provided for @bookingDayUseDate.
+  ///
+  /// In ar, this message translates to:
+  /// **'يوم Day use'**
+  String get bookingDayUseDate;
+
+  /// No description provided for @bookingDayUseWindow.
+  ///
+  /// In ar, this message translates to:
+  /// **'من {from} إلى {to}'**
+  String bookingDayUseWindow(String from, String to);
+
+  /// No description provided for @bookingDayUseTag.
+  ///
+  /// In ar, this message translates to:
+  /// **'Day use · {from}–{to}'**
+  String bookingDayUseTag(String from, String to);
+
+  /// No description provided for @dayUseSettingsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'Day use'**
+  String get dayUseSettingsTitle;
+
+  /// No description provided for @dayUseSettingsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'بيع الغرفة نفسها خلال اليوم بدون مبيت: نافذة وقت وسعر ثابت. يحجز الضيف التاريخ فقط.'**
+  String get dayUseSettingsHint;
+
+  /// No description provided for @dayUseEnable.
+  ///
+  /// In ar, this message translates to:
+  /// **'أتح Day use لهذا النوع'**
+  String get dayUseEnable;
+
+  /// No description provided for @dayUseFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'من'**
+  String get dayUseFrom;
+
+  /// No description provided for @dayUseTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلى'**
+  String get dayUseTo;
+
+  /// No description provided for @dayUsePrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر Day use'**
+  String get dayUsePrice;
+
+  /// No description provided for @dayUseSave.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ Day use'**
+  String get dayUseSave;
+
+  /// No description provided for @dayUseSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ Day use'**
+  String get dayUseSaved;
 }
 
 class _AppLocalizationsDelegate

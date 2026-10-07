@@ -152,6 +152,17 @@ class BookingSettingsApi {
   Future<void> deleteBookableItemImage(int itemId, int imageId) =>
       _client.delete('/business/bookable-items/$itemId/images/$imageId');
 
+  /// «Day use» of a room type — the window and flat price the hotel set.
+  Future<DayUseSettings> dayUse(int itemId) async {
+    final data = await _client.get('/business/bookable-items/$itemId/day-use') as Map<String, dynamic>;
+    return DayUseSettings.fromJson(data['day_use'] as Map<String, dynamic>);
+  }
+
+  Future<DayUseSettings> saveDayUse(int itemId, DayUseSettings settings) async {
+    final data = await _client.put('/business/bookable-items/$itemId/day-use', data: settings.toJson()) as Map<String, dynamic>;
+    return DayUseSettings.fromJson(data['day_use'] as Map<String, dynamic>);
+  }
+
   /// The hotel's own numbered rooms behind a room type (booking_stay only).
   Future<RoomsPayload> rooms(int itemId) async {
     final data = await _client.get('/business/bookable-items/$itemId/rooms') as Map<String, dynamic>;

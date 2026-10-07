@@ -107,6 +107,9 @@ class Booking {
   final String? bookableItemType;
   final BookingRoom? room;
 
+  /// «Day use»: a hotel room held for a window of the day, no night.
+  final bool isDayUse;
+
   const Booking({
     required this.id,
     required this.status,
@@ -135,6 +138,7 @@ class Booking {
     this.depositAsPayment = const DepositAsPayment(),
     this.bookableItemType,
     this.room,
+    this.isDayUse = false,
   });
 
   bool get isCancellable => status == 'pending' || status == 'accepted';
@@ -182,6 +186,7 @@ class Booking {
       partySize: (json['party_size'] as num?)?.toInt(),
       deposit: depositJson != null ? BookingDeposit.fromJson(depositJson) : null,
       bookableItemType: bookable?['item_type'] as String?,
+      isDayUse: json['meta'] is Map<String, dynamic> && (json['meta'] as Map<String, dynamic>)['day_use'] == true,
       room: json['room'] is Map<String, dynamic> ? BookingRoom(id: (json['room'] as Map<String, dynamic>)['id'] as int, number: '${(json['room'] as Map<String, dynamic>)['number']}') : null,
       depositAsPayment: json['deposit_as_payment'] is Map<String, dynamic> ? DepositAsPayment.fromJson(json['deposit_as_payment'] as Map<String, dynamic>) : const DepositAsPayment(),
     );

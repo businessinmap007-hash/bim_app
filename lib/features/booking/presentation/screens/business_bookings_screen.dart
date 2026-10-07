@@ -7,6 +7,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../application/booking_providers.dart' show bookingApiProvider;
 import '../../application/business_bookings_providers.dart';
 import '../widgets/booking_money_card.dart';
+import '../widgets/day_use_tag.dart';
 import '../../data/models/booking.dart';
 
 String _statusLabel(String status, AppLocalizations l10n) => switch (status) {
@@ -283,6 +284,7 @@ class BusinessBookingDetailScreen extends ConsumerWidget {
                   _DetailRow(label: l10n.businessBookingsUnit, value: booking.bookableLabel!),
                 // the hotel's own room number — given when the stay starts, changeable by the hotel before and after
                 if (booking.bookableItemType == 'booking_stay' && (booking.status == 'accepted' || booking.status == 'in_progress'))
+                  DayUseTag(booking: booking),
                   _RoomRow(booking: booking, bookingId: bookingId),
                 if (booking.startsAt != null)
                   _DetailRow(label: l10n.businessBookingsDateTime, value: booking.startsAt!.toLocal().toString().split('.').first),

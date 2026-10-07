@@ -31,6 +31,20 @@ class UnitChoice {
 /// One bookable unit as returned by Api\V2\UnitDiscoveryController — a real
 /// room/table/pitch, with its own image and (when a date window was asked
 /// for) whether it is actually free for it.
+/// «Day use» — the room type is also sold through the day: a window and a flat price.
+class DayUseOffer {
+  final String from;
+  final String to;
+  final double price;
+  const DayUseOffer({required this.from, required this.to, required this.price});
+
+  factory DayUseOffer.fromJson(Map<String, dynamic> json) => DayUseOffer(
+    from: json['from'] as String? ?? '09:00',
+    to: json['to'] as String? ?? '18:00',
+    price: (json['price'] as num?)?.toDouble() ?? 0,
+  );
+}
+
 class DiscoveredUnit {
   final int id;
   final String? code;
@@ -46,6 +60,9 @@ class DiscoveredUnit {
   final bool? available;
   final String? reason;
 
+  /// null unless the hotel sells this room type through the day as well
+  final DayUseOffer? dayUse;
+
   const DiscoveredUnit({
     required this.id,
     this.code,
@@ -60,6 +77,7 @@ class DiscoveredUnit {
     this.periodUnit,
     this.available,
     this.reason,
+    this.dayUse,
   });
 
   String get displayTitle => (title != null && title!.isNotEmpty) ? title! : (label ?? code ?? '#$id');
@@ -81,6 +99,7 @@ class DiscoveredUnit {
     periodUnit: json['period_unit'] as String?,
     available: json['available'] as bool?,
     reason: json['reason'] as String?,
+    dayUse: json['day_use'] is Map<String, dynamic> ? DayUseOffer.fromJson(json['day_use'] as Map<String, dynamic>) : null,
   );
 }
 

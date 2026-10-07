@@ -7166,4 +7166,48 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get stayReqAdd => 'Add';
+
+  @override
+  String get bookingDayUse => 'Day use';
+
+  @override
+  String get bookingStayByNight => 'Overnight stay';
+
+  @override
+  String get bookingDayUseDate => 'Day-use date';
+
+  @override
+  String bookingDayUseWindow(String from, String to) {
+    return 'From $from to $to';
+  }
+
+  @override
+  String bookingDayUseTag(String from, String to) {
+    return 'Day use · $from–$to';
+  }
+
+  @override
+  String get dayUseSettingsTitle => 'Day use';
+
+  @override
+  String get dayUseSettingsHint =>
+      'Sell the same room through the day without a night: a time window and a flat price. The guest only picks a date.';
+
+  @override
+  String get dayUseEnable => 'Offer Day use for this room type';
+
+  @override
+  String get dayUseFrom => 'From';
+
+  @override
+  String get dayUseTo => 'To';
+
+  @override
+  String get dayUsePrice => 'Day-use price';
+
+  @override
+  String get dayUseSave => 'Save Day use';
+
+  @override
+  String get dayUseSaved => 'Day use saved';
 }

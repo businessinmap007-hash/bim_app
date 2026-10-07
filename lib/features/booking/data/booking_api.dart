@@ -6,6 +6,9 @@ import 'models/booking_form.dart';
 import 'models/unit_discovery.dart';
 import '../../booking_settings/data/models/room_models.dart';
 
+String _dateOnly(DateTime d) =>
+    '${d.year.toString().padLeft(4, '0')}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+
 /// /bookings — the customer's own booking requests. See Api\V2\BookingController.
 class BookingApi {
   final ApiClient _client;
@@ -222,6 +225,8 @@ class BookingApi {
     String? notes,
     Map<String, dynamic>? meta,
     List<int> optionIds = const [],
+    // «Day use»: the guest names only a date — the room type names the window and the flat price
+    DateTime? dayUseDate,
   }) async {
     final data =
         await _client.post(
@@ -234,6 +239,7 @@ class BookingApi {
                 'offering_type': ?offeringType,
                 if (startsAt != null) 'starts_at': startsAt.toIso8601String(),
                 if (endsAt != null) 'ends_at': endsAt.toIso8601String(),
+                if (dayUseDate != null) ...{'day_use': true, 'date': _dateOnly(dayUseDate)},
                 'all_day': allDay,
                 'party_size': ?partySize,
                 'quantity': ?quantity,
@@ -262,6 +268,7 @@ class BookingApi {
     int? quantity,
     int? partySize,
     List<int> optionIds = const [],
+    DateTime? dayUseDate,
   }) async {
     final data =
         await _client.post(
@@ -274,6 +281,7 @@ class BookingApi {
                 'offering_type': ?offeringType,
                 if (startsAt != null) 'starts_at': startsAt.toIso8601String(),
                 if (endsAt != null) 'ends_at': endsAt.toIso8601String(),
+                if (dayUseDate != null) ...{'day_use': true, 'date': _dateOnly(dayUseDate)},
                 'quantity': ?quantity,
                 'party_size': ?partySize,
                 if (optionIds.isNotEmpty) 'option_ids': optionIds,
