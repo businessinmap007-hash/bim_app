@@ -230,7 +230,7 @@ class _ServiceList extends StatelessWidget {
       _Tile(
         // only a business that lets rooms has guests to hear from
         show: _has('bookings') && hasStayUnits,
-        leading: Icons.room_service_outlined,
+        leading: Icons.support_agent_outlined,
         title: l10n.stayReqScreenTitle,
         builder: (_) => const StayRequestsScreen(),
       ),

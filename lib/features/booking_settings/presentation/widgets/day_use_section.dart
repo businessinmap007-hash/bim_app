@@ -123,7 +123,7 @@ class _DayUseSectionState extends ConsumerState<DayUseSection> {
         const SizedBox(height: 12),
         SizedBox(
           width: double.infinity,
-          child: FilledButton(
+          child: OutlinedButton(
             onPressed: _busy ? null : _save,
             child: _busy ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2)) : Text(l10n.dayUseSave),
           ),
