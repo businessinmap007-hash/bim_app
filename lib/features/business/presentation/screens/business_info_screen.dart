@@ -31,15 +31,18 @@ class BusinessInfoScreen extends ConsumerWidget {
       body: AsyncValueView(
         value: profileAsync,
         onRetry: () => ref.invalidate(businessProfileProvider(businessId)),
-        builder: (context, profile) => _BusinessInfoBody(profile: profile),
+        builder: (context, profile) => BusinessInfoBody(profile: profile),
       ),
     );
   }
 }
 
-class _BusinessInfoBody extends ConsumerWidget {
+/// The info page's content — its own screen's body, and the «عن النشاط» tab of the business page. In a tab
+/// ([embedded]) it scrolls inside the page's collapsing header, so it injects the header's overlap.
+class BusinessInfoBody extends ConsumerWidget {
   final BusinessProfile profile;
-  const _BusinessInfoBody({required this.profile});
+  final bool embedded;
+  const BusinessInfoBody({super.key, required this.profile, this.embedded = false});
 
   Future<void> _call(BuildContext context) async {
     final l10n = AppLocalizations.of(context)!;
@@ -127,9 +130,7 @@ class _BusinessInfoBody extends ConsumerWidget {
         _InfoRow(icon: Icons.logout_outlined, label: l10n.businessInfoCheckOut, value: profile.checkOutTime!),
     ];
 
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
+    final children = <Widget>[
         _InfoCard(
           children: [
             for (var i = 0; i < rows.length; i++) ...[
@@ -174,7 +175,20 @@ class _BusinessInfoBody extends ConsumerWidget {
         Text(l10n.businessInfoAlbums, style: Theme.of(context).textTheme.titleSmall),
         const SizedBox(height: 8),
         _AlbumsSection(businessId: profile.id),
-      ],
+    ];
+
+    if (!embedded) {
+      return ListView(padding: const EdgeInsets.all(16), children: children);
+    }
+
+    return Builder(
+      builder: (context) => CustomScrollView(
+        key: const PageStorageKey('business_about'),
+        slivers: [
+          SliverOverlapInjector(handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
+          SliverPadding(padding: const EdgeInsets.all(16), sliver: SliverList(delegate: SliverChildListDelegate(children))),
+        ],
+      ),
     );
   }
 }

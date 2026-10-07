@@ -115,6 +115,9 @@ class BookingModifier {
   final String adjustType; // 'amount' | 'percent'
   final double adjustValue;
 
+  /// 'night' (a stay by the night) or 'day_use' (the meals a Day use guest may add)
+  final String appliesTo;
+
   const BookingModifier({
     required this.priceId,
     this.line,
@@ -125,7 +128,10 @@ class BookingModifier {
     required this.selectionType,
     required this.adjustType,
     required this.adjustValue,
+    this.appliesTo = 'night',
   });
+
+  bool get isDayUse => appliesTo == 'day_use';
 
   bool get isSingleSelect => selectionType == selectionSingle;
 
@@ -139,7 +145,49 @@ class BookingModifier {
     selectionType: json['selection_type'] as String? ?? 'multiple',
     adjustType: json['adjust_type'] as String? ?? 'amount',
     adjustValue: (json['adjust_value'] as num?)?.toDouble() ?? 0,
+    appliesTo: json['applies_to'] as String? ?? 'night',
   );
+}
+
+/// What `/bookings/preview` says: the total, and the lines it is made of — «الغرفة 800 · إطلالة 150 · نصف إقامة 250»
+/// per night, then × the nights.
+class BookingPreview {
+  final double total;
+
+  /// the price of ONE period (a night, an hour, a Day use) with everything ticked
+  final double? unitPrice;
+
+  /// the unit's own price before the lines below
+  final double? baseUnitPrice;
+  final int periods;
+  final String? periodUnit;
+  final List<({String name, double amount})> lines;
+
+  const BookingPreview({
+    required this.total,
+    this.unitPrice,
+    this.baseUnitPrice,
+    this.periods = 1,
+    this.periodUnit,
+    this.lines = const [],
+  });
+
+  factory BookingPreview.fromJson(Map<String, dynamic> json) {
+    final breakdown = json['price_breakdown'] as Map<String, dynamic>? ?? const {};
+
+    return BookingPreview(
+      total: (json['price'] as num).toDouble(),
+      unitPrice: (breakdown['unit_price'] as num?)?.toDouble(),
+      baseUnitPrice: (breakdown['base_unit_price'] as num?)?.toDouble(),
+      periods: (breakdown['periods_count'] as num?)?.toInt() ?? 1,
+      periodUnit: breakdown['period_unit'] as String?,
+      lines: (breakdown['modifiers'] as List<dynamic>? ?? [])
+          .map((e) => e as Map<String, dynamic>)
+          .map((e) => (name: e['name'] as String? ?? '', amount: (e['amount'] as num?)?.toDouble() ?? 0))
+          .where((l) => l.name.isNotEmpty && l.amount != 0)
+          .toList(),
+    );
+  }
 }
 
 class BookingFormPayload {

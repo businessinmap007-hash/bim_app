@@ -257,7 +257,7 @@ class BookingApi {
   /// Api\V2\BookingController::preview. Null fields mean "not chosen yet"
   /// (e.g. no dates picked), which the backend prices as best it can (a
   /// single period) rather than rejecting.
-  Future<double> preview({
+  Future<BookingPreview> preview({
     required int businessId,
     required int serviceId,
     int? bookableId,
@@ -288,7 +288,13 @@ class BookingApi {
               },
             )
             as Map<String, dynamic>;
-    return (data['price'] as num).toDouble();
+    return BookingPreview.fromJson(data);
+  }
+
+  /// The whole answer of `/discovery/units/{business}` — kinds, units and the booking shape the page is drawn in.
+  Future<UnitCatalog> unitCatalog(int businessId) async {
+    final data = await _client.get('/discovery/units/$businessId') as Map<String, dynamic>;
+    return UnitCatalog.fromJson(data);
   }
 
   /// The real named units this business has (rooms/tables/pitches), grouped

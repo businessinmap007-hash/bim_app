@@ -175,6 +175,7 @@
   "businessTabPosts": "Posts",
   "businessTabMenu": "Menu",
   "businessTabBooking": "Booking",
+  "businessTabAbout": "About",
   "businessTabServices": "Services",
   "businessPostsEmpty": "No posts yet",
   "businessMenuEmpty": "No menu items yet",
@@ -2442,5 +2443,17 @@
   "addOnPerPerson": "Per person",
   "unitFeaturesTitle": "Room features",
   "unitFeaturesHint": "Tick what this room has. A feature is priced once in «Booking add-ons» and its price is added to the room's price.",
-  "bookingNoAddOn": "None"
+  "bookingNoAddOn": "None",
+  "bookingPickUnitTitle": "Choose your room",
+  "bookingUnitsAvailableCount": "{count} available",
+  "bookingPerNight": "/ night",
+  "bookingPerHour": "/ hour",
+  "bookingPriceIncludes": "includes {features}",
+  "bookingUnitNotPriced": "Not priced yet",
+  "bookingDayUseCardHint": "No overnight — {from} to {to}",
+  "bookingDayUseMealsTitle": "Meals (optional)",
+  "bookingDayUseMealsHint": "Pick any number — added to the day's price",
+  "bookingNightPrice": "Price per night",
+  "bookingTimesNights": "× {count} nights",
+  "bookingBasePriceLine": "Room"
 }

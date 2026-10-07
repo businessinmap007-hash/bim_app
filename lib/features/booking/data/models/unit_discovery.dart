@@ -63,6 +63,9 @@ class DiscoveredUnit {
   /// null unless the hotel sells this room type through the day as well
   final DayUseOffer? dayUse;
 
+  /// what this room carries that is already inside its price («إطلالة على المسبح») — the hotel ticked it on the room
+  final List<String> features;
+
   const DiscoveredUnit({
     required this.id,
     this.code,
@@ -78,6 +81,7 @@ class DiscoveredUnit {
     this.available,
     this.reason,
     this.dayUse,
+    this.features = const [],
   });
 
   String get displayTitle => (title != null && title!.isNotEmpty) ? title! : (label ?? code ?? '#$id');
@@ -100,6 +104,11 @@ class DiscoveredUnit {
     available: json['available'] as bool?,
     reason: json['reason'] as String?,
     dayUse: json['day_use'] is Map<String, dynamic> ? DayUseOffer.fromJson(json['day_use'] as Map<String, dynamic>) : null,
+    features: (json['modifiers'] as List<dynamic>? ?? [])
+        .map((e) => (e as Map<String, dynamic>)['name'] as String?)
+        .whereType<String>()
+        .where((n) => n.isNotEmpty)
+        .toList(),
   );
 }
 
@@ -146,5 +155,61 @@ class UnitKindGroup {
     units: (json['units'] as List<dynamic>? ?? [])
         .map((e) => DiscoveredUnit.fromJson(e as Map<String, dynamic>))
         .toList(),
+  );
+}
+
+/// «شكل الحجز» — how this business's booking page is drawn, as the admin arranged it (`data.shape` of
+/// `/discovery/units/{business}`; null for a trade nobody has put on a shape, which the app draws as it always did).
+class UnitShape {
+  final String code;
+  final String name;
+  final String pattern;
+  final Map<String, dynamic> settings;
+
+  const UnitShape({required this.code, required this.name, required this.pattern, this.settings = const {}});
+
+  bool _flag(String key, bool fallback) => settings[key] is bool ? settings[key] as bool : fallback;
+
+  /// rooms grouped under their kind, like the menu's sections — otherwise one flat list
+  bool get sectioned => (settings['layout'] as String? ?? 'sections') == 'sections';
+  bool get showPhotos => _flag('show_photos', true);
+  bool get showPrice => _flag('show_price', true);
+  bool get showCapacity => _flag('show_capacity', true);
+  bool get showAvailability => _flag('show_availability', true);
+
+  /// the unit first, then the add-ons, then the dates (the hotel's way) — or the dates first
+  bool get unitFirst => (settings['pick_order'] as String? ?? 'unit_then_dates') == 'unit_then_dates';
+  bool get askGuestCounts => _flag('ask_guest_counts', true);
+  bool get askChildren => _flag('ask_children', true);
+  bool get offerDayUse => _flag('offer_day_use', false);
+  bool get pickProvider => _flag('pick_provider', false);
+  bool get multiSelect => _flag('multi_select', false);
+  bool get askAttachment => _flag('ask_attachment', false);
+  bool get offerHomeService => _flag('offer_home_service', false);
+
+  factory UnitShape.fromJson(Map<String, dynamic> json) => UnitShape(
+    code: json['code'] as String? ?? '',
+    name: json['name'] as String? ?? '',
+    pattern: json['pattern'] as String? ?? '',
+    settings: (json['settings'] as Map<String, dynamic>?) ?? const {},
+  );
+}
+
+/// Everything `/discovery/units/{business}` says: the kinds with their units, and the shape the page is drawn in.
+class UnitCatalog {
+  final int? serviceId;
+  final List<UnitKindGroup> kinds;
+  final UnitShape? shape;
+
+  const UnitCatalog({this.serviceId, this.kinds = const [], this.shape});
+
+  bool get hasUnits => kinds.any((k) => k.units.isNotEmpty);
+
+  factory UnitCatalog.fromJson(Map<String, dynamic> json) => UnitCatalog(
+    serviceId: (json['service_id'] as num?)?.toInt(),
+    kinds: (json['kinds'] as List<dynamic>? ?? [])
+        .map((e) => UnitKindGroup.fromJson(e as Map<String, dynamic>))
+        .toList(),
+    shape: json['shape'] is Map<String, dynamic> ? UnitShape.fromJson(json['shape'] as Map<String, dynamic>) : null,
   );
 }

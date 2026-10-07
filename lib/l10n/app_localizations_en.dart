@@ -544,6 +544,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get businessTabBooking => 'Booking';
 
   @override
+  String get businessTabAbout => 'About';
+
+  @override
   String get businessTabServices => 'Services';
 
   @override
@@ -7252,4 +7255,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bookingNoAddOn => 'None';
+
+  @override
+  String get bookingPickUnitTitle => 'Choose your room';
+
+  @override
+  String bookingUnitsAvailableCount(int count) {
+    return '$count available';
+  }
+
+  @override
+  String get bookingPerNight => '/ night';
+
+  @override
+  String get bookingPerHour => '/ hour';
+
+  @override
+  String bookingPriceIncludes(String features) {
+    return 'includes $features';
+  }
+
+  @override
+  String get bookingUnitNotPriced => 'Not priced yet';
+
+  @override
+  String bookingDayUseCardHint(String from, String to) {
+    return 'No overnight — $from to $to';
+  }
+
+  @override
+  String get bookingDayUseMealsTitle => 'Meals (optional)';
+
+  @override
+  String get bookingDayUseMealsHint =>
+      'Pick any number — added to the day\'s price';
+
+  @override
+  String get bookingNightPrice => 'Price per night';
+
+  @override
+  String bookingTimesNights(int count) {
+    return '× $count nights';
+  }
+
+  @override
+  String get bookingBasePriceLine => 'Room';
 }

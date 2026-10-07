@@ -34,6 +34,11 @@ final unitDiscoveryProvider = FutureProvider.autoDispose.family<List<UnitKindGro
   );
 });
 
+/// The units a business sells and the booking shape its page is drawn in (no dates — «what exists and what it costs»).
+final unitCatalogProvider = FutureProvider.autoDispose.family<UnitCatalog, int>((ref, businessId) {
+  return ref.watch(bookingApiProvider).unitCatalog(businessId);
+});
+
 class MyBookingsState {
   final List<Booking> items;
   final bool isLoading;

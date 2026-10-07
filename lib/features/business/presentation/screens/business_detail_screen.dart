@@ -18,6 +18,7 @@ import '../../../business_groups/application/business_groups_providers.dart';
 import '../../../business_groups/data/models/business_group.dart';
 import '../../../business_groups/presentation/widgets/business_group_picker_sheet.dart';
 import '../../../booking/presentation/screens/booking_screen.dart';
+import '../../../booking/presentation/widgets/booking_shape_tab.dart';
 import '../../../cart/application/cart_controller.dart';
 import '../../../cart/application/shared_cart_providers.dart';
 import '../../../cart/presentation/screens/cart_screen.dart';
@@ -155,7 +156,9 @@ class _BusinessDetailBody extends StatelessWidget {
     final bookingFirst = profile.sections.services && profile.sections.booking;
     if (bookingFirst) {
       tabs.add(Tab(text: l10n.businessTabBooking));
-      tabViews.add(_ServicesTab(businessId: profile.id));
+      // drawn by the trade's booking shape when it has one (rooms under their kind, with photos and prices);
+      // otherwise the priced lines, as before
+      tabViews.add(BookingShapeTab(businessId: profile.id, fallback: _ServicesTab(businessId: profile.id)));
     }
     if (profile.sections.posts) {
       tabs.add(Tab(text: l10n.businessTabPosts));
@@ -165,6 +168,9 @@ class _BusinessDetailBody extends StatelessWidget {
       tabs.add(Tab(text: l10n.businessTabServices));
       tabViews.add(_ServicesTab(businessId: profile.id));
     }
+    // «عن النشاط» on EVERY business page — who it is, where, when, its links and its albums.
+    tabs.add(Tab(text: l10n.businessTabAbout));
+    tabViews.add(BusinessInfoBody(profile: profile, embedded: true));
 
     final header = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -185,13 +191,6 @@ class _BusinessDetailBody extends StatelessWidget {
                     ),
                   ),
                   child: BusinessRatingRow(rating: profile.rating, openNow: profile.openNow),
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.info_outline),
-                tooltip: l10n.businessInfoTitle,
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => BusinessInfoScreen(businessId: profile.id)),
                 ),
               ),
               _MessageButton(businessId: profile.id),
@@ -236,26 +235,6 @@ class _BusinessDetailBody extends StatelessWidget {
       avatarImageUrl: profile.logoUrl,
       title: profile.name,
     );
-
-    if (tabs.isEmpty) {
-      return ResponsiveCenter(
-        maxWidth: 800,
-        child: Column(
-          children: [
-            cover,
-            header,
-            Expanded(
-              child: Center(
-                child: Text(
-                  l10n.businessNoContentYet,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).hintColor),
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
 
     // NestedScrollView so the cover/avatar scroll away like any collapsing
     // profile header instead of permanently sitting above the tabs (the

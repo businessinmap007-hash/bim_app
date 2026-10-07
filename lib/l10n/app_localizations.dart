@@ -1046,6 +1046,12 @@ abstract class AppLocalizations {
   /// **'الحجز'**
   String get businessTabBooking;
 
+  /// No description provided for @businessTabAbout.
+  ///
+  /// In ar, this message translates to:
+  /// **'عن النشاط'**
+  String get businessTabAbout;
+
   /// No description provided for @businessTabServices.
   ///
   /// In ar, this message translates to:
@@ -13326,6 +13332,78 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'بدون'**
   String get bookingNoAddOn;
+
+  /// No description provided for @bookingPickUnitTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر غرفتك'**
+  String get bookingPickUnitTitle;
+
+  /// No description provided for @bookingUnitsAvailableCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} متاحة'**
+  String bookingUnitsAvailableCount(int count);
+
+  /// No description provided for @bookingPerNight.
+  ///
+  /// In ar, this message translates to:
+  /// **'/ ليلة'**
+  String get bookingPerNight;
+
+  /// No description provided for @bookingPerHour.
+  ///
+  /// In ar, this message translates to:
+  /// **'/ ساعة'**
+  String get bookingPerHour;
+
+  /// No description provided for @bookingPriceIncludes.
+  ///
+  /// In ar, this message translates to:
+  /// **'شامل {features}'**
+  String bookingPriceIncludes(String features);
+
+  /// No description provided for @bookingUnitNotPriced.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تُسعَّر بعد'**
+  String get bookingUnitNotPriced;
+
+  /// No description provided for @bookingDayUseCardHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'بلا مبيت — من {from} إلى {to}'**
+  String bookingDayUseCardHint(String from, String to);
+
+  /// No description provided for @bookingDayUseMealsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'وجبات (اختياري)'**
+  String get bookingDayUseMealsTitle;
+
+  /// No description provided for @bookingDayUseMealsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يمكن اختيار أكثر من وجبة — تُضاف إلى سعر اليوم'**
+  String get bookingDayUseMealsHint;
+
+  /// No description provided for @bookingNightPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر الليلة'**
+  String get bookingNightPrice;
+
+  /// No description provided for @bookingTimesNights.
+  ///
+  /// In ar, this message translates to:
+  /// **'× {count} ليلة'**
+  String bookingTimesNights(int count);
+
+  /// No description provided for @bookingBasePriceLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'الغرفة'**
+  String get bookingBasePriceLine;
 }
 
 class _AppLocalizationsDelegate

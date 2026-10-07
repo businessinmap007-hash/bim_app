@@ -551,6 +551,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get businessTabBooking => 'الحجز';
 
   @override
+  String get businessTabAbout => 'عن النشاط';
+
+  @override
   String get businessTabServices => 'الخدمات';
 
   @override
@@ -7217,4 +7220,49 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get bookingNoAddOn => 'بدون';
+
+  @override
+  String get bookingPickUnitTitle => 'اختر غرفتك';
+
+  @override
+  String bookingUnitsAvailableCount(int count) {
+    return '$count متاحة';
+  }
+
+  @override
+  String get bookingPerNight => '/ ليلة';
+
+  @override
+  String get bookingPerHour => '/ ساعة';
+
+  @override
+  String bookingPriceIncludes(String features) {
+    return 'شامل $features';
+  }
+
+  @override
+  String get bookingUnitNotPriced => 'لم تُسعَّر بعد';
+
+  @override
+  String bookingDayUseCardHint(String from, String to) {
+    return 'بلا مبيت — من $from إلى $to';
+  }
+
+  @override
+  String get bookingDayUseMealsTitle => 'وجبات (اختياري)';
+
+  @override
+  String get bookingDayUseMealsHint =>
+      'يمكن اختيار أكثر من وجبة — تُضاف إلى سعر اليوم';
+
+  @override
+  String get bookingNightPrice => 'سعر الليلة';
+
+  @override
+  String bookingTimesNights(int count) {
+    return '× $count ليلة';
+  }
+
+  @override
+  String get bookingBasePriceLine => 'الغرفة';
 }

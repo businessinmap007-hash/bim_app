@@ -22,7 +22,23 @@ class BookingScreen extends ConsumerStatefulWidget {
   final int businessId;
   final OfferingItem offering;
 
-  const BookingScreen({super.key, required this.businessId, required this.offering});
+  /// How this business's booking page is drawn («أشكال الحجز») — null draws the form as it always was.
+  final UnitShape? shape;
+
+  /// The room the guest tapped on the business page — chosen already, so the picker is not shown again.
+  final DiscoveredUnit? initialUnit;
+
+  /// Opened from the Day use card: starts on the Day use side of the room type.
+  final bool startInDayUse;
+
+  const BookingScreen({
+    super.key,
+    required this.businessId,
+    required this.offering,
+    this.shape,
+    this.initialUnit,
+    this.startInDayUse = false,
+  });
 
   @override
   ConsumerState<BookingScreen> createState() => _BookingScreenState();
@@ -51,8 +67,10 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   // modifiers per day, × days/quantity), fetched from the server so it
   // never disagrees with what create() ends up charging. Debounced so
   // toggling a few checkboxes in a row doesn't fire a request per tap.
-  double? _previewTotal;
+  BookingPreview? _preview;
+  double? get _previewTotal => _preview?.total;
   bool _previewLoading = false;
+  BookingFormPayload? _form;
   Timer? _previewDebounce;
   int _previewRequestId = 0;
   // Set when the server refuses to price the current selection (e.g. a
@@ -61,6 +79,17 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   // never accounted for their dates/options, and blocks submitting into the
   // same guaranteed failure.
   String? _previewError;
+
+  @override
+  void initState() {
+    super.initState();
+    final unit = widget.initialUnit;
+    if (unit != null) {
+      _unitId = unit.id;
+      _dayUseOffer = unit.dayUse;
+      _dayUse = widget.startInDayUse && unit.dayUse != null;
+    }
+  }
 
   TextEditingController _controllerFor(String key) =>
       _textControllers.putIfAbsent(key, () => TextEditingController());
@@ -98,7 +127,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     setState(() => _previewLoading = true);
     try {
       final dayUse = _dayUseActive && _startsAt != null;
-      final total = await ref.read(bookingApiProvider).preview(
+      final preview = await ref.read(bookingApiProvider).preview(
         businessId: widget.businessId,
         serviceId: widget.offering.serviceId ?? 0,
         bookableId: _unitId,
@@ -115,7 +144,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
       // overwrite it with a stale total.
       if (mounted && requestId == _previewRequestId) {
         setState(() {
-          _previewTotal = total;
+          _preview = preview;
           _previewError = null;
           _previewLoading = false;
         });
@@ -317,7 +346,9 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
           if (_previewTotal == null && !_previewLoading && _previewRequestId == 0) {
             WidgetsBinding.instance.addPostFrameCallback((_) => _fetchPreview());
           }
+          _form = form;
           final rawFields = form.shape?.fields ?? _fallbackFields(l10n);
+          final pageShape = widget.shape;
           // DURATION asks for both 'datetime' (a start point) and 'duration'
           // (start + how long) — the 'duration' picker's own "from" already
           // captures the start, so a plain 'datetime' field alongside it
@@ -329,121 +360,41 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
               .where((f) => !(f.key == 'datetime' && hasDurationField))
               // a Day use asks for a date only — its own picker replaces the night/time fields
               .where((f) => !(dayUseOn && (f.key == 'date_range' || f.key == 'datetime' || f.key == 'duration')))
+              // what the page's shape does not ask the guest
+              .where((f) => !(pageShape != null && !pageShape.askGuestCounts && (f.key == 'guest_count' || f.key == 'party_size')))
+              .where((f) => !(pageShape != null && !pageShape.askChildren && f.key == 'children_count'))
               .toList();
           final needsUnit = form.shape?.needsUnit ?? false;
           final units = widget.offering.units.isNotEmpty ? widget.offering.units : form.units;
+          final unitFirst = pageShape?.unitFirst ?? false;
+          final modifiersBlock = _modifiersBlock(context, l10n, form, dayUseOn);
 
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              Text(widget.offering.label, style: Theme.of(context).textTheme.titleLarge),
-              const SizedBox(height: 4),
-              Text(
-                '${widget.offering.price.toStringAsFixed(0)} ${widget.offering.currency}',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
+              if (widget.initialUnit != null)
+                _selectedUnitCard(context, widget.initialUnit!)
+              else ...[
+                Text(widget.offering.label, style: Theme.of(context).textTheme.titleLarge),
+                const SizedBox(height: 4),
+                Text(
+                  '${widget.offering.price.toStringAsFixed(0)} ${widget.offering.currency}',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ],
               const SizedBox(height: 20),
-              if (needsUnit) ...[
+              if (needsUnit && widget.initialUnit == null) ...[
                 Text(l10n.bookingChooseUnit, style: Theme.of(context).textTheme.titleSmall),
                 _unitPickerSection(context, l10n, units),
                 const SizedBox(height: 12),
               ],
               if (dayUseOffer != null) _dayUseSection(context, l10n, dayUseOffer),
+              // the hotel's order: the room, then what is added to it (the meal plan), then the dates and the total
+              if (unitFirst) ...modifiersBlock,
               ...fields.map((field) => _fieldWidget(context, l10n, field, form.shape)),
-              if (form.modifiers.isNotEmpty && !dayUseOn) ...[
-                const SizedBox(height: 8),
-                Text(l10n.bookingModifiersTitle, style: Theme.of(context).textTheme.titleSmall),
-                // Grouped modifiers first — a single-select group (e.g.
-                // «نظام الوجبات» set to radio by its owner) renders as
-                // RadioListTile with enforced exclusivity; multiple-select
-                // and ungrouped modifiers keep the plain checkbox list.
-                for (final group in _modifierGroupsIn(form.modifiers)) ...[
-                  if (group.name != null) Text(group.name!, style: Theme.of(context).textTheme.bodyMedium),
-                  if (group.isSingle)
-                    // one choice → radio buttons, and always «بدون»: the guest may take none of the add-ons
-                    RadioGroup<int>(
-                      groupValue: _singleModifierGroupValue(group.modifiers) ?? 0,
-                      onChanged: (value) => _pickSingleModifier(group.modifiers, value ?? 0),
-                      child: Column(
-                        children: [
-                          RadioListTile<int>(contentPadding: EdgeInsets.zero, value: 0, title: Text(l10n.bookingNoAddOn)),
-                          ...group.modifiers.map(
-                            (m) => RadioListTile<int>(
-                              contentPadding: EdgeInsets.zero,
-                              value: m.optionId,
-                              title: Text(m.name),
-                              secondary: Text(
-                                m.adjustType == 'percent' ? '+${m.adjustValue.toStringAsFixed(0)}%' : '+${m.adjustValue.toStringAsFixed(0)}',
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  else
-                    ...group.modifiers.map(
-                      (m) => CheckboxListTile(
-                        contentPadding: EdgeInsets.zero,
-                        value: _modifierOptionIds.contains(m.optionId),
-                        onChanged: (checked) {
-                          setState(() {
-                            if (checked ?? false) {
-                              _modifierOptionIds.add(m.optionId);
-                            } else {
-                              _modifierOptionIds.remove(m.optionId);
-                            }
-                          });
-                          _schedulePreview();
-                        },
-                        title: Text(m.name),
-                        secondary: Text(
-                          m.adjustType == 'percent'
-                              ? '+${m.adjustValue.toStringAsFixed(0)}%'
-                              : '+${m.adjustValue.toStringAsFixed(0)}',
-                        ),
-                      ),
-                    ),
-                ],
-              ],
+              if (!unitFirst) ...modifiersBlock,
               const SizedBox(height: 20),
-              Card(
-                margin: EdgeInsets.zero,
-                color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.35),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(l10n.bookingTotalLabel, style: Theme.of(context).textTheme.titleSmall),
-                          _previewLoading && _previewTotal == null
-                              ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
-                              : Text(
-                                  _previewTotal != null
-                                      ? '${_previewTotal!.toStringAsFixed(0)} ${widget.offering.currency}'
-                                      : '${widget.offering.price.toStringAsFixed(0)} ${widget.offering.currency}',
-                                  style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
-                                ),
-                        ],
-                      ),
-                      // The number above may still be showing the flat
-                      // single-unit price (never mind selected dates/options)
-                      // when the server couldn't price the current
-                      // selection — say so instead of letting it pass as
-                      // the real total.
-                      if (_previewError != null) ...[
-                        const SizedBox(height: 6),
-                        Text(
-                          _previewError!,
-                          style: TextStyle(color: Theme.of(context).colorScheme.error),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-              ),
+              _summaryCard(context, l10n, dayUseOn),
               const SizedBox(height: 16),
               FilledButton(
                 onPressed: _submitting || _previewError != null ? null : () => _submit(form, units),
@@ -454,6 +405,189 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
             ],
           );
         },
+      ),
+    );
+  }
+
+  /// The room the guest tapped on the business page, kept at the top of the form.
+  Widget _selectedUnitCard(BuildContext context, DiscoveredUnit unit) {
+    final theme = Theme.of(context);
+
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: SizedBox(
+                width: 84,
+                height: 70,
+                child: unit.images.isEmpty
+                    ? ColoredBox(
+                        color: theme.colorScheme.surfaceContainerHighest,
+                        child: Icon(Icons.bed_outlined, color: theme.hintColor),
+                      )
+                    : Image.network(
+                        unit.images.first,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
+                      ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(unit.displayTitle, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+                  if (unit.features.isNotEmpty)
+                    Text(unit.features.join(' · '), style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+                  if (unit.price != null)
+                    Text(
+                      '${unit.price!.toStringAsFixed(0)} ${widget.offering.currency}',
+                      style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+                    ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// What the guest may add: the meal plan of a stay (one choice, with «بدون»), or — on the Day use side — the meals
+  /// of the day (any number). Each side shows only its own groups.
+  List<Widget> _modifiersBlock(BuildContext context, AppLocalizations l10n, BookingFormPayload form, bool dayUseOn) {
+    final modifiers = form.modifiers.where((m) => m.isDayUse == dayUseOn).toList();
+    if (modifiers.isEmpty) return const [];
+
+    final theme = Theme.of(context);
+
+    return [
+      const SizedBox(height: 8),
+      Text(dayUseOn ? l10n.bookingDayUseMealsTitle : l10n.bookingModifiersTitle, style: theme.textTheme.titleSmall),
+      if (dayUseOn) Text(l10n.bookingDayUseMealsHint, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+      // Grouped modifiers first — a single-select group (e.g.
+      // «نظام الوجبات» set to radio by its owner) renders as
+      // RadioListTile with enforced exclusivity; multiple-select
+      // and ungrouped modifiers keep the plain checkbox list.
+      for (final group in _modifierGroupsIn(modifiers)) ...[
+        if (group.name != null && !dayUseOn) Text(group.name!, style: theme.textTheme.bodyMedium),
+        if (group.isSingle)
+          // one choice → radio buttons, and always «بدون»: the guest may take none of the add-ons
+          RadioGroup<int>(
+            groupValue: _singleModifierGroupValue(group.modifiers) ?? 0,
+            onChanged: (value) => _pickSingleModifier(group.modifiers, value ?? 0),
+            child: Column(
+              children: [
+                RadioListTile<int>(contentPadding: EdgeInsets.zero, value: 0, title: Text(l10n.bookingNoAddOn)),
+                ...group.modifiers.map(
+                  (m) => RadioListTile<int>(
+                    contentPadding: EdgeInsets.zero,
+                    value: m.optionId,
+                    title: Text(m.name),
+                    secondary: Text(
+                      m.adjustType == 'percent' ? '+${m.adjustValue.toStringAsFixed(0)}%' : '+${m.adjustValue.toStringAsFixed(0)}',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        else
+          ...group.modifiers.map(
+            (m) => CheckboxListTile(
+              contentPadding: EdgeInsets.zero,
+              value: _modifierOptionIds.contains(m.optionId),
+              onChanged: (checked) {
+                setState(() {
+                  if (checked ?? false) {
+                    _modifierOptionIds.add(m.optionId);
+                  } else {
+                    _modifierOptionIds.remove(m.optionId);
+                  }
+                });
+                _schedulePreview();
+              },
+              title: Text(m.name),
+              secondary: Text(
+                m.adjustType == 'percent' ? '+${m.adjustValue.toStringAsFixed(0)}%' : '+${m.adjustValue.toStringAsFixed(0)}',
+              ),
+            ),
+          ),
+      ],
+    ];
+  }
+
+  /// The total, with what it is made of: «الغرفة 800 · إطلالة 150 · نصف إقامة 250 = 1200 × 2 ليلة».
+  Widget _summaryCard(BuildContext context, AppLocalizations l10n, bool dayUseOn) {
+    final theme = Theme.of(context);
+    final preview = _preview;
+    final currency = widget.offering.currency;
+    final lines = preview?.lines ?? const <({String name, double amount})>[];
+    final showBreakdown = preview != null && lines.isNotEmpty && preview.unitPrice != null;
+    final nights = preview?.periods ?? 1;
+
+    String money(double v) => '${v.toStringAsFixed(0)} $currency';
+
+    return Card(
+      margin: EdgeInsets.zero,
+      color: theme.colorScheme.primaryContainer.withValues(alpha: 0.35),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (showBreakdown) ...[
+              _summaryRow(theme, l10n.bookingBasePriceLine, money(preview.baseUnitPrice ?? 0)),
+              for (final line in lines) _summaryRow(theme, line.name, '+${line.amount.toStringAsFixed(0)}'),
+              if (!dayUseOn) ...[
+                const Divider(height: 16),
+                _summaryRow(theme, l10n.bookingNightPrice, money(preview.unitPrice!), bold: true),
+                if (nights > 1) _summaryRow(theme, l10n.bookingTimesNights(nights), ''),
+              ],
+              const SizedBox(height: 8),
+            ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(l10n.bookingTotalLabel, style: theme.textTheme.titleSmall),
+                _previewLoading && _previewTotal == null
+                    ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
+                    : Text(
+                        _previewTotal != null ? money(_previewTotal!) : '${widget.offering.price.toStringAsFixed(0)} $currency',
+                        style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+                      ),
+              ],
+            ),
+            // The number above may still be showing the flat
+            // single-unit price (never mind selected dates/options)
+            // when the server couldn't price the current
+            // selection — say so instead of letting it pass as
+            // the real total.
+            if (_previewError != null) ...[
+              const SizedBox(height: 6),
+              Text(_previewError!, style: TextStyle(color: theme.colorScheme.error)),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _summaryRow(ThemeData theme, String label, String value, {bool bold = false}) {
+    final style = theme.textTheme.bodyMedium?.copyWith(fontWeight: bold ? FontWeight.w700 : null);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        children: [
+          Expanded(child: Text(label, style: style)),
+          Text(value, style: style),
+        ],
       ),
     );
   }
@@ -477,7 +611,14 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
               ],
               selected: {_dayUse},
               onSelectionChanged: (s) {
-                setState(() => _dayUse = s.first);
+                setState(() {
+                  _dayUse = s.first;
+                  // the nights meal plan and the days meals are different groups - leaving one drops its ticks
+                  final other = (_form?.modifiers ?? const <BookingModifier>[]).where((m) => m.isDayUse != _dayUse);
+                  for (final m in other) {
+                    _modifierOptionIds.remove(m.optionId);
+                  }
+                });
                 _schedulePreview();
               },
             ),
