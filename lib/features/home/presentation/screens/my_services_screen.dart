@@ -1,3 +1,4 @@
+import '../../../investigations/presentation/screens/investigation_orders_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/responsive/breakpoints.dart';
@@ -79,6 +80,17 @@ class MyServicesScreen extends StatelessWidget {
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => const PrescriptionsScreen(),
+                    ),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.biotech_outlined),
+                  title: Text(l10n.invTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const InvestigationOrdersScreen(),
                     ),
                   ),
                 ),

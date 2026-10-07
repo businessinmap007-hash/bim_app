@@ -7385,4 +7385,211 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addOnPricePerDay => 'Added to the day\'s price';
+
+  @override
+  String get invTitle => 'Investigation orders';
+
+  @override
+  String get invOrderTests => 'Order tests';
+
+  @override
+  String get invMyOrdersEmpty => 'No investigation orders yet.';
+
+  @override
+  String get invStatusIssued => 'Issued';
+
+  @override
+  String get invStatusSent => 'Sent to a centre';
+
+  @override
+  String get invStatusAccepted => 'Accepted';
+
+  @override
+  String get invStatusReady => 'Results ready';
+
+  @override
+  String get invStatusDeclined => 'Declined';
+
+  @override
+  String get invStatusCancelled => 'Cancelled';
+
+  @override
+  String get invStepIssued => 'Issued';
+
+  @override
+  String get invStepSent => 'Sent';
+
+  @override
+  String get invStepAccepted => 'Received';
+
+  @override
+  String get invStepReady => 'Results';
+
+  @override
+  String invFromDoctor(String doctor) {
+    return 'From $doctor';
+  }
+
+  @override
+  String get invOwnRequest => 'Own request';
+
+  @override
+  String get invKindLab => 'Test';
+
+  @override
+  String get invKindRadiology => 'Radiology';
+
+  @override
+  String invDoctorNote(String note) {
+    return 'Doctor\'s note: $note';
+  }
+
+  @override
+  String get invShareTitle => 'Share the order with a registered centre';
+
+  @override
+  String get invShareHint => 'The price of the whole order at each centre';
+
+  @override
+  String get invCoversAll => 'Covers every test';
+
+  @override
+  String invCoversSome(int covers, int of) {
+    return 'Covers $covers of $of';
+  }
+
+  @override
+  String get invShareNever =>
+      'No centre receives the order until you choose it.';
+
+  @override
+  String invShareButton(String center) {
+    return 'Share with $center';
+  }
+
+  @override
+  String get invNoCenters => 'No registered centre does these tests yet.';
+
+  @override
+  String get invCancelOrder => 'Cancel the order';
+
+  @override
+  String get invCancelConfirm => 'Cancel this order?';
+
+  @override
+  String get invSent => 'The order was sent to the centre.';
+
+  @override
+  String get invResults => 'Results';
+
+  @override
+  String invCenterNote(String note) {
+    return 'Centre\'s note: $note';
+  }
+
+  @override
+  String invAppointment(String when) {
+    return 'Appointment: $when';
+  }
+
+  @override
+  String get invTotal => 'Total';
+
+  @override
+  String get invCurrency => 'EGP';
+
+  @override
+  String get invIssueTitle => 'Order tests';
+
+  @override
+  String invIssueForPatient(String name) {
+    return 'For patient: $name';
+  }
+
+  @override
+  String get invTabLab => 'Tests';
+
+  @override
+  String get invTabRadiology => 'Radiology';
+
+  @override
+  String get invSearchHint => 'Search the list';
+
+  @override
+  String get invNotesLabel => 'Notes (optional)';
+
+  @override
+  String invSelectedCount(int count) {
+    return 'In the order: $count';
+  }
+
+  @override
+  String get invNothingSelected => 'Nothing chosen yet';
+
+  @override
+  String get invSendToPatient => 'Send the order to the patient';
+
+  @override
+  String get invIssued => 'The order was sent to the patient.';
+
+  @override
+  String get invCenterTitle => 'Investigation orders';
+
+  @override
+  String get invTabIncoming => 'Incoming';
+
+  @override
+  String get invTabAccepted => 'In progress';
+
+  @override
+  String get invTabDone => 'Done';
+
+  @override
+  String get invCenterEmpty => 'No orders here.';
+
+  @override
+  String get invAccept => 'Accept and set a time';
+
+  @override
+  String get invDecline => 'Decline';
+
+  @override
+  String get invAttachResults => 'Upload the results';
+
+  @override
+  String get invPickAppointment => 'Pick a time';
+
+  @override
+  String get invResultsAttached => 'The results were uploaded.';
+
+  @override
+  String get invPriceList => 'Test prices';
+
+  @override
+  String get invPriceListHint =>
+      'Write your price for each test you do, and leave the rest empty.';
+
+  @override
+  String get invPriceLabel => 'Price';
+
+  @override
+  String get invPricesSaved => 'Prices saved.';
+
+  @override
+  String get invPickTests => 'Choose the tests';
+
+  @override
+  String get invAttachPaper => 'Photo of the doctor\'s request (optional)';
+
+  @override
+  String get invSendRequest => 'Send the request';
+
+  @override
+  String get invRequestSent => 'Your request was sent to the centre.';
+
+  @override
+  String get invNoTests => 'This centre has not priced its tests yet.';
+
+  @override
+  String get invKeepOrder => 'Keep the order';
 }

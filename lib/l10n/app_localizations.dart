@@ -13560,6 +13560,384 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الزيادة على سعر اليوم'**
   String get addOnPricePerDay;
+
+  /// No description provided for @invTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلبات الفحوصات'**
+  String get invTitle;
+
+  /// No description provided for @invOrderTests.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب فحوصات'**
+  String get invOrderTests;
+
+  /// No description provided for @invMyOrdersEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد طلبات فحوصات بعد.'**
+  String get invMyOrdersEmpty;
+
+  /// No description provided for @invStatusIssued.
+  ///
+  /// In ar, this message translates to:
+  /// **'صدر الطلب'**
+  String get invStatusIssued;
+
+  /// No description provided for @invStatusSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُرسل لجهة'**
+  String get invStatusSent;
+
+  /// No description provided for @invStatusAccepted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم القبول'**
+  String get invStatusAccepted;
+
+  /// No description provided for @invStatusReady.
+  ///
+  /// In ar, this message translates to:
+  /// **'النتيجة جاهزة'**
+  String get invStatusReady;
+
+  /// No description provided for @invStatusDeclined.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتُذر عنه'**
+  String get invStatusDeclined;
+
+  /// No description provided for @invStatusCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'مُلغى'**
+  String get invStatusCancelled;
+
+  /// No description provided for @invStepIssued.
+  ///
+  /// In ar, this message translates to:
+  /// **'صدر الطلب'**
+  String get invStepIssued;
+
+  /// No description provided for @invStepSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُرسل لمعمل'**
+  String get invStepSent;
+
+  /// No description provided for @invStepAccepted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الاستلام'**
+  String get invStepAccepted;
+
+  /// No description provided for @invStepReady.
+  ///
+  /// In ar, this message translates to:
+  /// **'النتيجة جاهزة'**
+  String get invStepReady;
+
+  /// No description provided for @invFromDoctor.
+  ///
+  /// In ar, this message translates to:
+  /// **'من {doctor}'**
+  String invFromDoctor(String doctor);
+
+  /// No description provided for @invOwnRequest.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب ذاتي'**
+  String get invOwnRequest;
+
+  /// No description provided for @invKindLab.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحليل'**
+  String get invKindLab;
+
+  /// No description provided for @invKindRadiology.
+  ///
+  /// In ar, this message translates to:
+  /// **'أشعة'**
+  String get invKindRadiology;
+
+  /// No description provided for @invDoctorNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظة الطبيب: {note}'**
+  String invDoctorNote(String note);
+
+  /// No description provided for @invShareTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'شارك الطلب مع معمل مسجّل'**
+  String get invShareTitle;
+
+  /// No description provided for @invShareHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر المجموعة كاملة عند كل جهة'**
+  String get invShareHint;
+
+  /// No description provided for @invCoversAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'يغطي كل الفحوصات'**
+  String get invCoversAll;
+
+  /// No description provided for @invCoversSome.
+  ///
+  /// In ar, this message translates to:
+  /// **'يغطي {covers} من {of}'**
+  String invCoversSome(int covers, int of);
+
+  /// No description provided for @invShareNever.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يصل الطلب لأي جهة إلا بعد أن تختارها أنت.'**
+  String get invShareNever;
+
+  /// No description provided for @invShareButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'شارك مع {center}'**
+  String invShareButton(String center);
+
+  /// No description provided for @invNoCenters.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد جهات مسجّلة تجري هذه الفحوصات بعد.'**
+  String get invNoCenters;
+
+  /// No description provided for @invCancelOrder.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء الطلب'**
+  String get invCancelOrder;
+
+  /// No description provided for @invCancelConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء هذا الطلب؟'**
+  String get invCancelConfirm;
+
+  /// No description provided for @invSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال الطلب إلى الجهة.'**
+  String get invSent;
+
+  /// No description provided for @invResults.
+  ///
+  /// In ar, this message translates to:
+  /// **'النتائج'**
+  String get invResults;
+
+  /// No description provided for @invCenterNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظة الجهة: {note}'**
+  String invCenterNote(String note);
+
+  /// No description provided for @invAppointment.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموعد: {when}'**
+  String invAppointment(String when);
+
+  /// No description provided for @invTotal.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجمالي'**
+  String get invTotal;
+
+  /// No description provided for @invCurrency.
+  ///
+  /// In ar, this message translates to:
+  /// **'ج'**
+  String get invCurrency;
+
+  /// No description provided for @invIssueTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب فحوصات'**
+  String get invIssueTitle;
+
+  /// No description provided for @invIssueForPatient.
+  ///
+  /// In ar, this message translates to:
+  /// **'للمريض: {name}'**
+  String invIssueForPatient(String name);
+
+  /// No description provided for @invTabLab.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحاليل'**
+  String get invTabLab;
+
+  /// No description provided for @invTabRadiology.
+  ///
+  /// In ar, this message translates to:
+  /// **'أشعة'**
+  String get invTabRadiology;
+
+  /// No description provided for @invSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث في القائمة'**
+  String get invSearchHint;
+
+  /// No description provided for @invNotesLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات (اختياري)'**
+  String get invNotesLabel;
+
+  /// No description provided for @invSelectedCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'في الطلب: {count}'**
+  String invSelectedCount(int count);
+
+  /// No description provided for @invNothingSelected.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تختر فحصًا بعد'**
+  String get invNothingSelected;
+
+  /// No description provided for @invSendToPatient.
+  ///
+  /// In ar, this message translates to:
+  /// **'أرسل الطلب للمريض'**
+  String get invSendToPatient;
+
+  /// No description provided for @invIssued.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال الطلب إلى المريض.'**
+  String get invIssued;
+
+  /// No description provided for @invCenterTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلبات الفحوصات'**
+  String get invCenterTitle;
+
+  /// No description provided for @invTabIncoming.
+  ///
+  /// In ar, this message translates to:
+  /// **'واردة'**
+  String get invTabIncoming;
+
+  /// No description provided for @invTabAccepted.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيد التنفيذ'**
+  String get invTabAccepted;
+
+  /// No description provided for @invTabDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتملة'**
+  String get invTabDone;
+
+  /// No description provided for @invCenterEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا طلبات هنا.'**
+  String get invCenterEmpty;
+
+  /// No description provided for @invAccept.
+  ///
+  /// In ar, this message translates to:
+  /// **'اقبل وحدد الموعد'**
+  String get invAccept;
+
+  /// No description provided for @invDecline.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتذر'**
+  String get invDecline;
+
+  /// No description provided for @invAttachResults.
+  ///
+  /// In ar, this message translates to:
+  /// **'ارفع النتيجة'**
+  String get invAttachResults;
+
+  /// No description provided for @invPickAppointment.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر موعد التنفيذ'**
+  String get invPickAppointment;
+
+  /// No description provided for @invResultsAttached.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم رفع النتيجة.'**
+  String get invResultsAttached;
+
+  /// No description provided for @invPriceList.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسعار الفحوصات'**
+  String get invPriceList;
+
+  /// No description provided for @invPriceListHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب سعرك لكل فحص تجريه، واترك الباقي فارغًا.'**
+  String get invPriceListHint;
+
+  /// No description provided for @invPriceLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر'**
+  String get invPriceLabel;
+
+  /// No description provided for @invPricesSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ الأسعار.'**
+  String get invPricesSaved;
+
+  /// No description provided for @invPickTests.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الفحوصات'**
+  String get invPickTests;
+
+  /// No description provided for @invAttachPaper.
+  ///
+  /// In ar, this message translates to:
+  /// **'صورة طلب الطبيب (اختياري)'**
+  String get invAttachPaper;
+
+  /// No description provided for @invSendRequest.
+  ///
+  /// In ar, this message translates to:
+  /// **'أرسل الطلب'**
+  String get invSendRequest;
+
+  /// No description provided for @invRequestSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال طلبك إلى الجهة.'**
+  String get invRequestSent;
+
+  /// No description provided for @invNoTests.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تحدد هذه الجهة أسعار فحوصاتها بعد.'**
+  String get invNoTests;
+
+  /// No description provided for @invKeepOrder.
+  ///
+  /// In ar, this message translates to:
+  /// **'إبقاء الطلب'**
+  String get invKeepOrder;
 }
 
 class _AppLocalizationsDelegate

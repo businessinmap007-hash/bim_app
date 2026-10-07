@@ -7348,4 +7348,210 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get addOnPricePerDay => 'الزيادة على سعر اليوم';
+
+  @override
+  String get invTitle => 'طلبات الفحوصات';
+
+  @override
+  String get invOrderTests => 'طلب فحوصات';
+
+  @override
+  String get invMyOrdersEmpty => 'لا توجد طلبات فحوصات بعد.';
+
+  @override
+  String get invStatusIssued => 'صدر الطلب';
+
+  @override
+  String get invStatusSent => 'أُرسل لجهة';
+
+  @override
+  String get invStatusAccepted => 'تم القبول';
+
+  @override
+  String get invStatusReady => 'النتيجة جاهزة';
+
+  @override
+  String get invStatusDeclined => 'اعتُذر عنه';
+
+  @override
+  String get invStatusCancelled => 'مُلغى';
+
+  @override
+  String get invStepIssued => 'صدر الطلب';
+
+  @override
+  String get invStepSent => 'أُرسل لمعمل';
+
+  @override
+  String get invStepAccepted => 'تم الاستلام';
+
+  @override
+  String get invStepReady => 'النتيجة جاهزة';
+
+  @override
+  String invFromDoctor(String doctor) {
+    return 'من $doctor';
+  }
+
+  @override
+  String get invOwnRequest => 'طلب ذاتي';
+
+  @override
+  String get invKindLab => 'تحليل';
+
+  @override
+  String get invKindRadiology => 'أشعة';
+
+  @override
+  String invDoctorNote(String note) {
+    return 'ملاحظة الطبيب: $note';
+  }
+
+  @override
+  String get invShareTitle => 'شارك الطلب مع معمل مسجّل';
+
+  @override
+  String get invShareHint => 'سعر المجموعة كاملة عند كل جهة';
+
+  @override
+  String get invCoversAll => 'يغطي كل الفحوصات';
+
+  @override
+  String invCoversSome(int covers, int of) {
+    return 'يغطي $covers من $of';
+  }
+
+  @override
+  String get invShareNever => 'لا يصل الطلب لأي جهة إلا بعد أن تختارها أنت.';
+
+  @override
+  String invShareButton(String center) {
+    return 'شارك مع $center';
+  }
+
+  @override
+  String get invNoCenters => 'لا توجد جهات مسجّلة تجري هذه الفحوصات بعد.';
+
+  @override
+  String get invCancelOrder => 'إلغاء الطلب';
+
+  @override
+  String get invCancelConfirm => 'إلغاء هذا الطلب؟';
+
+  @override
+  String get invSent => 'تم إرسال الطلب إلى الجهة.';
+
+  @override
+  String get invResults => 'النتائج';
+
+  @override
+  String invCenterNote(String note) {
+    return 'ملاحظة الجهة: $note';
+  }
+
+  @override
+  String invAppointment(String when) {
+    return 'الموعد: $when';
+  }
+
+  @override
+  String get invTotal => 'الإجمالي';
+
+  @override
+  String get invCurrency => 'ج';
+
+  @override
+  String get invIssueTitle => 'طلب فحوصات';
+
+  @override
+  String invIssueForPatient(String name) {
+    return 'للمريض: $name';
+  }
+
+  @override
+  String get invTabLab => 'تحاليل';
+
+  @override
+  String get invTabRadiology => 'أشعة';
+
+  @override
+  String get invSearchHint => 'ابحث في القائمة';
+
+  @override
+  String get invNotesLabel => 'ملاحظات (اختياري)';
+
+  @override
+  String invSelectedCount(int count) {
+    return 'في الطلب: $count';
+  }
+
+  @override
+  String get invNothingSelected => 'لم تختر فحصًا بعد';
+
+  @override
+  String get invSendToPatient => 'أرسل الطلب للمريض';
+
+  @override
+  String get invIssued => 'تم إرسال الطلب إلى المريض.';
+
+  @override
+  String get invCenterTitle => 'طلبات الفحوصات';
+
+  @override
+  String get invTabIncoming => 'واردة';
+
+  @override
+  String get invTabAccepted => 'قيد التنفيذ';
+
+  @override
+  String get invTabDone => 'مكتملة';
+
+  @override
+  String get invCenterEmpty => 'لا طلبات هنا.';
+
+  @override
+  String get invAccept => 'اقبل وحدد الموعد';
+
+  @override
+  String get invDecline => 'اعتذر';
+
+  @override
+  String get invAttachResults => 'ارفع النتيجة';
+
+  @override
+  String get invPickAppointment => 'اختر موعد التنفيذ';
+
+  @override
+  String get invResultsAttached => 'تم رفع النتيجة.';
+
+  @override
+  String get invPriceList => 'أسعار الفحوصات';
+
+  @override
+  String get invPriceListHint =>
+      'اكتب سعرك لكل فحص تجريه، واترك الباقي فارغًا.';
+
+  @override
+  String get invPriceLabel => 'السعر';
+
+  @override
+  String get invPricesSaved => 'تم حفظ الأسعار.';
+
+  @override
+  String get invPickTests => 'اختر الفحوصات';
+
+  @override
+  String get invAttachPaper => 'صورة طلب الطبيب (اختياري)';
+
+  @override
+  String get invSendRequest => 'أرسل الطلب';
+
+  @override
+  String get invRequestSent => 'تم إرسال طلبك إلى الجهة.';
+
+  @override
+  String get invNoTests => 'لم تحدد هذه الجهة أسعار فحوصاتها بعد.';
+
+  @override
+  String get invKeepOrder => 'إبقاء الطلب';
 }

@@ -33,6 +33,7 @@ import '../../../stay_requests/application/stay_requests_providers.dart';
 import '../../../stay_requests/presentation/screens/stay_requests_screen.dart';
 import '../../../staff/presentation/screens/staff_team_settings_screen.dart';
 import '../../../table/presentation/screens/table_calls_screen.dart';
+import '../../../investigations/presentation/screens/center_investigations_screen.dart';
 import '../../../training/presentation/screens/my_training_clients_screen.dart';
 import '../../../training_templates/presentation/screens/training_templates_screen.dart';
 
@@ -67,6 +68,9 @@ class ServicesSettingsScreen extends ConsumerWidget {
     final authState = ref.watch(authControllerProvider);
     final isCarrier =
         authState is AuthSignedIn && authState.user.isShippingCarrier;
+    // a lab, a radiology centre, a hospital or a medical centre takes investigation orders
+    final isInvestigationCenter =
+        authState is AuthSignedIn && const {163, 252, 513, 515}.contains(authState.user.categoryChildId);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settingsServicesSection)),
@@ -77,6 +81,7 @@ class ServicesSettingsScreen extends ConsumerWidget {
           keys: null,
           menuKinds: menuKinds,
           isCarrier: isCarrier,
+          isInvestigationCenter: isInvestigationCenter,
           hasShopAddons: hasShopAddons,
           hasStayUnits: hasStayUnits,
         ),
@@ -84,6 +89,7 @@ class ServicesSettingsScreen extends ConsumerWidget {
           keys: keys,
           menuKinds: menuKinds,
           isCarrier: isCarrier,
+          isInvestigationCenter: isInvestigationCenter,
           hasShopAddons: hasShopAddons,
           hasStayUnits: hasStayUnits,
         ),
@@ -104,6 +110,9 @@ class _ServiceList extends StatelessWidget {
   /// Shipping & Delivery accounts run deliveries from here (and only they do).
   final bool isCarrier;
 
+  /// A lab / radiology centre / hospital / medical centre — it receives investigation orders and prices its tests.
+  final bool isInvestigationCenter;
+
   /// The trade offers priced services («طريقة الطهي») — the shop prices them here.
   final bool hasShopAddons;
 
@@ -113,6 +122,7 @@ class _ServiceList extends StatelessWidget {
     required this.keys,
     required this.menuKinds,
     required this.isCarrier,
+    this.isInvestigationCenter = false,
     this.hasShopAddons = false,
     this.hasStayUnits = false,
   });
@@ -190,6 +200,12 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.local_pharmacy_outlined,
         title: l10n.pharmacyQueueTitle,
         builder: (_) => const PharmacyQueueScreen(),
+      ),
+      _Tile(
+        show: _has('investigations') && isInvestigationCenter,
+        leading: Icons.biotech_outlined,
+        title: l10n.invCenterTitle,
+        builder: (_) => const CenterInvestigationsScreen(),
       ),
       _Tile(
         show: _has('training'),

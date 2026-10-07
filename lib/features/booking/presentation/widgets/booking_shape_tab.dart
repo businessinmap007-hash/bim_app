@@ -5,6 +5,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../business/data/models/offering_item.dart';
 import '../../application/booking_providers.dart';
 import '../../data/models/unit_discovery.dart';
+import '../../../investigations/presentation/widgets/center_tests_tab.dart';
 import '../screens/booking_screen.dart';
 
 /// The «الحجز» tab of a business page drawn by its booking shape («أشكال الحجز»): a room kind is a section with its
@@ -26,6 +27,8 @@ class BookingShapeTab extends ConsumerWidget {
       error: (_, _) => fallback,
       data: (catalog) {
         final shape = catalog.shape;
+        // a lab or a radiology centre sells tests, not rooms: several at once, priced by the centre
+        if (shape != null && shape.multiSelect) return CenterTestsTab(centerId: businessId);
         if (shape == null || !catalog.hasUnits) return fallback;
 
         return _ShapedBooking(businessId: businessId, catalog: catalog, shape: shape);

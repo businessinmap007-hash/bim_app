@@ -1,3 +1,4 @@
+import '../../../investigations/presentation/screens/issue_investigation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -258,6 +259,18 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
                     );
                   }
                 },
+              ),
+            ),
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: OutlinedButton.icon(
+                icon: const Icon(Icons.biotech_outlined, size: 18),
+                label: Text(l10n.invOrderTests),
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => IssueInvestigationScreen(patientId: a.patientId, patientName: a.patientName),
+                  ),
+                ),
               ),
             ),
             if (a.status == 'requested' || a.status == 'confirmed') ...[
