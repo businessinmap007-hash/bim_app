@@ -128,4 +128,31 @@ void main() {
     expect(api.saved?.enabled, isTrue);
     expect(find.text('تم حفظ شروط الحجز'), findsOneWidget);
   });
+
+  testWidgets('taking the frozen deposit as a payment is offered only where a deposit is frozen', (tester) async {
+    tester.view.physicalSize = const Size(800, 2600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    final api = _FakeApi()..stored = const BookingTerms(enabled: true, depositPercent: 20);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [bookingSettingsApiProvider.overrideWithValue(api)],
+        child: MaterialApp(
+          locale: const Locale('ar'),
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: const [AppLocalizations.delegate, GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate, GlobalCupertinoLocalizations.delegate],
+          home: const BookingTermsScreen(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('أقبل الديبوزت المجمّد كدفعة عندما يطلب العميل'), findsOneWidget);
+    // the deposit is not part of the price — said once, plainly
+    expect(find.textContaining('وليس جزءًا من السعر'), findsOneWidget);
+
+    await tester.tap(find.text('تحويل خارج التطبيق'));
+    await tester.pumpAndSettle();
+    expect(find.text('أقبل الديبوزت المجمّد كدفعة عندما يطلب العميل'), findsNothing);
+  });
 }

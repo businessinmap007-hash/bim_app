@@ -811,6 +811,42 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profileAlbumsDeleteConfirm => 'هل تريد حذف هذا الألبوم وكل صوره؟';
 
   @override
+  String get depositAsPaymentRequest => 'اطلب من النشاط اعتماد ديبوزتي كدفعة';
+
+  @override
+  String get depositAsPaymentRequested =>
+      'تم إرسال طلبك. يبقى الديبوزت مجمّدًا إلى أن يردّ النشاط.';
+
+  @override
+  String get depositAsPaymentAsked =>
+      'يطلب العميل أن يُعتمد ديبوزته المجمّد كدفعة بدل التحويل خارج التطبيق.';
+
+  @override
+  String get depositAsPaymentAccept => 'اعتمد الديبوزت كدفعة';
+
+  @override
+  String get depositAsPaymentDecline => 'ارفض';
+
+  @override
+  String get depositAsPaymentTaken => 'اعتُمد الديبوزت كدفعة.';
+
+  @override
+  String get depositAsPaymentDeclined =>
+      'رفض النشاط. ادفع القيمة مباشرة كالمعتاد.';
+
+  @override
+  String get bookingTermsDepositAsPayment =>
+      'أقبل الديبوزت المجمّد كدفعة عندما يطلب العميل';
+
+  @override
+  String get bookingTermsDepositAsPaymentHint =>
+      'اختياري. بدل التحويل خارج التطبيق، يجوز للعميل أن يطلب اعتماد الديبوزت المجمّد كدفعة، ولك القبول أو الرفض في كل مرة.';
+
+  @override
+  String get depositNotPartOfPrice =>
+      'الديبوزت إجراء لضمان الجدية وليس جزءًا من السعر: يُرد بمجرد دفع العميل كامل القيمة مباشرة. رسوم المنصة تُخصم من كل محفظة بشكل منفصل.';
+
+  @override
   String get bookingTermsTitle => 'شروط الحجز';
 
   @override

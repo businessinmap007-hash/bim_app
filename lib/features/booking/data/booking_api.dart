@@ -30,7 +30,7 @@ class BookingApi {
   Future<Booking> cancel(int id) async {
     final data =
         await _client.post('/bookings/$id/cancel') as Map<String, dynamic>;
-    return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+    return _booking(data);
   }
 
   /// The customer's own "I'm ready" -- start() (the business's action) won't
@@ -46,7 +46,7 @@ class BookingApi {
               data: {'pin': ?pin},
             )
             as Map<String, dynamic>;
-    return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+    return _booking(data);
   }
 
   /// The business's own incoming-booking queue. Reachable by the owner or a
@@ -79,7 +79,7 @@ class BookingApi {
 
   Future<Booking> show(int id) async {
     final data = await _client.get('/bookings/$id') as Map<String, dynamic>;
-    return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+    return _booking(data);
   }
 
   /// This party's own side of what the booking needs up front.
@@ -91,13 +91,13 @@ class BookingApi {
   Future<Booking> accept(int id) async {
     final data =
         await _client.post('/bookings/$id/accept') as Map<String, dynamic>;
-    return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+    return _booking(data);
   }
 
   Future<Booking> reject(int id) async {
     final data =
         await _client.post('/bookings/$id/reject') as Map<String, dynamic>;
-    return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+    return _booking(data);
   }
 
   /// The business's own commitment that it's ready to execute — start()
@@ -107,26 +107,26 @@ class BookingApi {
     final data =
         await _client.post('/bookings/$id/business-confirm')
             as Map<String, dynamic>;
-    return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+    return _booking(data);
   }
 
   Future<Booking> start(int id) async {
     final data =
         await _client.post('/bookings/$id/start') as Map<String, dynamic>;
-    return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+    return _booking(data);
   }
 
   Future<Booking> complete(int id) async {
     final data =
         await _client.post('/bookings/$id/complete') as Map<String, dynamic>;
-    return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+    return _booking(data);
   }
 
   /// The client says they paid the booking in cash - also counts as their
   /// agreement to release the frozen deposit.
   Future<Booking> confirmPayment(int id) async {
     final data = await _client.post('/bookings/$id/confirm-payment') as Map<String, dynamic>;
-    return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+    return _booking(data);
   }
 
   /// The business (or delegated staff, via [businessId]) says it received
@@ -134,7 +134,32 @@ class BookingApi {
   Future<Booking> businessConfirmPayment(int id, {int? businessId}) async {
     final path = '/business/bookings/$id/confirm-payment${businessId == null ? '' : '?business_id=$businessId'}';
     final data = await _client.post(path) as Map<String, dynamic>;
-    return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+    return _booking(data);
+  }
+
+  /// «قبول الديبوزت كدفعة»: the customer asks that the frozen deposit be taken as a payment…
+  Future<Booking> requestDepositAsPayment(int id) async {
+    final data = await _client.post('/bookings/$id/deposit/request-as-payment') as Map<String, dynamic>;
+    return _booking(data);
+  }
+
+  /// …and the business accepts or declines (an optional term of the business).
+  Future<Booking> acceptDepositAsPayment(int id) async {
+    final data = await _client.post('/bookings/$id/deposit/accept-as-payment') as Map<String, dynamic>;
+    return _booking(data);
+  }
+
+  Future<Booking> declineDepositAsPayment(int id) async {
+    final data = await _client.post('/bookings/$id/deposit/decline-as-payment') as Map<String, dynamic>;
+    return _booking(data);
+  }
+
+  /// A booking out of a `{booking, deposit_as_payment, …}` reply — the deposit-as-payment state rides beside the booking.
+  Booking _booking(Map<String, dynamic> data) {
+    final booking = Map<String, dynamic>.from(data['booking'] as Map<String, dynamic>);
+    if (data['deposit_as_payment'] != null) booking['deposit_as_payment'] = data['deposit_as_payment'];
+
+    return Booking.fromJson(booking);
   }
 
   /// Either party agreeing the deal succeeded and the deposit should be
@@ -144,7 +169,7 @@ class BookingApi {
     final data =
         await _client.post('/bookings/$id/deposit/agree-release')
             as Map<String, dynamic>;
-    return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+    return _booking(data);
   }
 
   /// Either party agreeing the deal did NOT go through — once both agree,
@@ -153,7 +178,7 @@ class BookingApi {
     final data =
         await _client.post('/bookings/$id/deposit/agree-refund')
             as Map<String, dynamic>;
-    return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+    return _booking(data);
   }
 
   /// Bookings this account still owes a deposit-settlement decision on —
@@ -209,7 +234,7 @@ class BookingApi {
               },
             )
             as Map<String, dynamic>;
-    return Booking.fromJson(data['booking'] as Map<String, dynamic>);
+    return _booking(data);
   }
 
   /// Same price math as [create] — line + selected modifiers per period,

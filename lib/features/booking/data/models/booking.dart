@@ -42,6 +42,26 @@ class BookingDeposit {
 /// are always available as the display fallback when there's no `offering`
 /// to name the booking more specifically. `title` is Booking::title() from the
 /// server — the offering's own name when it has one, else the service.
+/// «قبول الديبوزت كدفعة»: whether the frozen deposit may be taken as a payment (an optional term of the business), was
+/// asked for by the customer, declined, or accepted — and for how much.
+class DepositAsPayment {
+  final bool allowed;
+  final bool requested;
+  final bool declined;
+  final bool accepted;
+  final double amount;
+
+  const DepositAsPayment({this.allowed = false, this.requested = false, this.declined = false, this.accepted = false, this.amount = 0});
+
+  factory DepositAsPayment.fromJson(Map<String, dynamic> json) => DepositAsPayment(
+    allowed: json['allowed'] as bool? ?? false,
+    requested: json['requested'] as bool? ?? false,
+    declined: json['declined'] as bool? ?? false,
+    accepted: json['accepted'] as bool? ?? false,
+    amount: (json['amount'] as num?)?.toDouble() ?? 0,
+  );
+}
+
 class Booking {
   final int id;
   final String status;
@@ -74,6 +94,7 @@ class Booking {
   final int quantity;
   final int? partySize;
   final BookingDeposit? deposit;
+  final DepositAsPayment depositAsPayment;
 
   const Booking({
     required this.id,
@@ -100,6 +121,7 @@ class Booking {
     this.quantity = 1,
     this.partySize,
     this.deposit,
+    this.depositAsPayment = const DepositAsPayment(),
   });
 
   bool get isCancellable => status == 'pending' || status == 'accepted';
@@ -146,6 +168,7 @@ class Booking {
       quantity: (json['quantity'] as num?)?.toInt() ?? 1,
       partySize: (json['party_size'] as num?)?.toInt(),
       deposit: depositJson != null ? BookingDeposit.fromJson(depositJson) : null,
+      depositAsPayment: json['deposit_as_payment'] is Map<String, dynamic> ? DepositAsPayment.fromJson(json['deposit_as_payment'] as Map<String, dynamic>) : const DepositAsPayment(),
     );
   }
 }

@@ -806,6 +806,43 @@ class AppLocalizationsEn extends AppLocalizations {
       'Delete this album and all its photos?';
 
   @override
+  String get depositAsPaymentRequest =>
+      'Ask the business to take my deposit as a payment';
+
+  @override
+  String get depositAsPaymentRequested =>
+      'Your request was sent. The deposit stays frozen until the business answers.';
+
+  @override
+  String get depositAsPaymentAsked =>
+      'The customer asks that the frozen deposit be taken as a payment instead of a transfer outside the app.';
+
+  @override
+  String get depositAsPaymentAccept => 'Take the deposit as a payment';
+
+  @override
+  String get depositAsPaymentDecline => 'Decline';
+
+  @override
+  String get depositAsPaymentTaken => 'The deposit was taken as a payment.';
+
+  @override
+  String get depositAsPaymentDeclined =>
+      'The business declined. Pay the value directly as usual.';
+
+  @override
+  String get bookingTermsDepositAsPayment =>
+      'Accept the frozen deposit as a payment when the customer asks';
+
+  @override
+  String get bookingTermsDepositAsPaymentHint =>
+      'Optional. Instead of a transfer outside the app, the customer may ask that the frozen deposit be taken as a payment. You may accept or decline each time.';
+
+  @override
+  String get depositNotPartOfPrice =>
+      'A deposit is a seriousness measure, not part of the price: it comes back once the customer has paid the whole value directly. Platform fees are charged separately from each wallet.';
+
+  @override
   String get bookingTermsTitle => 'Booking terms';
 
   @override

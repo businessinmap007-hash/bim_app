@@ -56,6 +56,7 @@ class BookingTerms {
   /// 0 = just the deposit; otherwise N times the day's value.
   final double guaranteeMultiple;
   final bool forfeitToBusiness;
+  final bool acceptDepositAsPayment;
   final double maxPercent;
   final bool hasSpecificPolicies;
   final BookingTermsExample? example;
@@ -68,6 +69,7 @@ class BookingTerms {
     this.businessCounterPercent = 50,
     this.guaranteeMultiple = 0,
     this.forfeitToBusiness = false,
+    this.acceptDepositAsPayment = false,
     this.maxPercent = 50,
     this.hasSpecificPolicies = false,
     this.example,
@@ -81,6 +83,7 @@ class BookingTerms {
     double? businessCounterPercent,
     double? guaranteeMultiple,
     bool? forfeitToBusiness,
+    bool? acceptDepositAsPayment,
   }) => BookingTerms(
     enabled: enabled ?? this.enabled,
     mode: mode ?? this.mode,
@@ -89,6 +92,7 @@ class BookingTerms {
     businessCounterPercent: businessCounterPercent ?? this.businessCounterPercent,
     guaranteeMultiple: guaranteeMultiple ?? this.guaranteeMultiple,
     forfeitToBusiness: forfeitToBusiness ?? this.forfeitToBusiness,
+    acceptDepositAsPayment: acceptDepositAsPayment ?? this.acceptDepositAsPayment,
     maxPercent: maxPercent,
     hasSpecificPolicies: hasSpecificPolicies,
     example: example,
@@ -102,6 +106,7 @@ class BookingTerms {
     businessCounterPercent: (json['business_counter_percent'] as num?)?.toDouble() ?? 50,
     guaranteeMultiple: (json['guarantee_multiple'] as num?)?.toDouble() ?? 0,
     forfeitToBusiness: json['forfeit_to_business'] as bool? ?? false,
+    acceptDepositAsPayment: json['accept_deposit_as_payment'] as bool? ?? false,
     maxPercent: (json['max_percent'] as num?)?.toDouble() ?? 50,
     hasSpecificPolicies: json['has_specific_policies'] as bool? ?? false,
     example: json['example'] is Map<String, dynamic> ? BookingTermsExample.fromJson(json['example'] as Map<String, dynamic>) : null,
@@ -133,5 +138,6 @@ class BookingTerms {
     'business_counter_percent': businessCounterPercent,
     'guarantee_multiple': guaranteeMultiple,
     'forfeit_to_business': forfeitToBusiness,
+    'accept_deposit_as_payment': acceptDepositAsPayment,
   };
 }

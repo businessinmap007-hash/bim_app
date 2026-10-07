@@ -1544,6 +1544,66 @@ abstract class AppLocalizations {
   /// **'هل تريد حذف هذا الألبوم وكل صوره؟'**
   String get profileAlbumsDeleteConfirm;
 
+  /// No description provided for @depositAsPaymentRequest.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلب من النشاط اعتماد ديبوزتي كدفعة'**
+  String get depositAsPaymentRequest;
+
+  /// No description provided for @depositAsPaymentRequested.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال طلبك. يبقى الديبوزت مجمّدًا إلى أن يردّ النشاط.'**
+  String get depositAsPaymentRequested;
+
+  /// No description provided for @depositAsPaymentAsked.
+  ///
+  /// In ar, this message translates to:
+  /// **'يطلب العميل أن يُعتمد ديبوزته المجمّد كدفعة بدل التحويل خارج التطبيق.'**
+  String get depositAsPaymentAsked;
+
+  /// No description provided for @depositAsPaymentAccept.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتمد الديبوزت كدفعة'**
+  String get depositAsPaymentAccept;
+
+  /// No description provided for @depositAsPaymentDecline.
+  ///
+  /// In ar, this message translates to:
+  /// **'ارفض'**
+  String get depositAsPaymentDecline;
+
+  /// No description provided for @depositAsPaymentTaken.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتُمد الديبوزت كدفعة.'**
+  String get depositAsPaymentTaken;
+
+  /// No description provided for @depositAsPaymentDeclined.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفض النشاط. ادفع القيمة مباشرة كالمعتاد.'**
+  String get depositAsPaymentDeclined;
+
+  /// No description provided for @bookingTermsDepositAsPayment.
+  ///
+  /// In ar, this message translates to:
+  /// **'أقبل الديبوزت المجمّد كدفعة عندما يطلب العميل'**
+  String get bookingTermsDepositAsPayment;
+
+  /// No description provided for @bookingTermsDepositAsPaymentHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختياري. بدل التحويل خارج التطبيق، يجوز للعميل أن يطلب اعتماد الديبوزت المجمّد كدفعة، ولك القبول أو الرفض في كل مرة.'**
+  String get bookingTermsDepositAsPaymentHint;
+
+  /// No description provided for @depositNotPartOfPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'الديبوزت إجراء لضمان الجدية وليس جزءًا من السعر: يُرد بمجرد دفع العميل كامل القيمة مباشرة. رسوم المنصة تُخصم من كل محفظة بشكل منفصل.'**
+  String get depositNotPartOfPrice;
+
   /// No description provided for @bookingTermsTitle.
   ///
   /// In ar, this message translates to:

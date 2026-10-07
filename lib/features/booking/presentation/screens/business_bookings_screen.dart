@@ -409,6 +409,29 @@ class BusinessBookingDetailScreen extends ConsumerWidget {
                   else if (booking.deposit!.isRefunded)
                     Text(l10n.bookingsDepositRefunded)
                   else ...[
+                    if (booking.depositAsPayment.requested) ...[
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(color: AppColors.accentGold.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(12)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(l10n.depositAsPaymentAsked),
+                            const SizedBox(height: 8),
+                            FilledButton(
+                              onPressed: () => _run(context, ref, () => ref.read(businessBookingDetailControllerProvider(bookingId).notifier).acceptDepositAsPayment()),
+                              child: Text(l10n.depositAsPaymentAccept),
+                            ),
+                            const SizedBox(height: 6),
+                            OutlinedButton(
+                              onPressed: () => _run(context, ref, () => ref.read(businessBookingDetailControllerProvider(bookingId).notifier).declineDepositAsPayment()),
+                              child: Text(l10n.depositAsPaymentDecline),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                    ],
                     if (booking.deposit!.releaseAgreedBusiness)
                       Padding(
                         padding: const EdgeInsets.only(bottom: 8),

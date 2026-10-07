@@ -197,6 +197,20 @@ class BusinessBookingDetailController extends StateNotifier<BusinessBookingDetai
     }
   }
 
+  Future<void> acceptDepositAsPayment() => _run(() => _api.acceptDepositAsPayment(bookingId));
+
+  Future<void> declineDepositAsPayment() => _run(() => _api.declineDepositAsPayment(bookingId));
+
+  Future<void> _run(Future<Booking> Function() call) async {
+    state = state.copyWith(isBusy: true);
+    try {
+      final booking = await call();
+      state = state.copyWith(booking: booking, isBusy: false);
+    } finally {
+      if (mounted) state = state.copyWith(isBusy: false);
+    }
+  }
+
   Future<void> agreeRefundDeposit() async {
     state = state.copyWith(isBusy: true);
     try {
