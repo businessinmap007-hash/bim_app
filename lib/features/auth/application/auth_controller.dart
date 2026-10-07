@@ -226,6 +226,9 @@ class AuthController extends StateNotifier<AuthState> {
     _ref.invalidate(retailListingsControllerProvider);
     _ref.invalidate(tripSearchControllerProvider);
     _ref.invalidate(staffControllerProvider);
+    // The service tiles/menu shape of whoever signed in before — a hotel signing in after a
+    // furniture shop must not keep the shop's tiles.
+    _ref.invalidate(myCapabilitiesProvider);
     _ref.invalidate(menuItemsControllerProvider);
   }
 }
