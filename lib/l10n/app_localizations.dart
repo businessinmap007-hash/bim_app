@@ -1604,6 +1604,90 @@ abstract class AppLocalizations {
   /// **'الديبوزت إجراء لضمان الجدية وليس جزءًا من السعر: يُرد بمجرد دفع العميل كامل القيمة مباشرة. رسوم المنصة تُخصم من كل محفظة بشكل منفصل.'**
   String get depositNotPartOfPrice;
 
+  /// No description provided for @roomsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الغرف'**
+  String get roomsTitle;
+
+  /// No description provided for @roomsOpenCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{n} متاحة'**
+  String roomsOpenCount(String n);
+
+  /// No description provided for @roomsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'قائمة الفندق الخاصة. العميل يحجز نوع الغرفة ولا يرى هذه الأرقام قبل بدء إقامته. اكتب أرقامًا أو مدى مثل 101-110.'**
+  String get roomsHint;
+
+  /// No description provided for @roomsNumbersField.
+  ///
+  /// In ar, this message translates to:
+  /// **'أرقام الغرف'**
+  String get roomsNumbersField;
+
+  /// No description provided for @roomsAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف'**
+  String get roomsAdd;
+
+  /// No description provided for @roomMaintenance.
+  ///
+  /// In ar, this message translates to:
+  /// **'إغلاق للصيانة'**
+  String get roomMaintenance;
+
+  /// No description provided for @roomsReopen.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة فتح'**
+  String get roomsReopen;
+
+  /// No description provided for @bookingRoom.
+  ///
+  /// In ar, this message translates to:
+  /// **'الغرفة'**
+  String get bookingRoom;
+
+  /// No description provided for @bookingRoomOnStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'تُعيَّن عند بدء الإقامة'**
+  String get bookingRoomOnStart;
+
+  /// No description provided for @bookingRoomAssign.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر'**
+  String get bookingRoomAssign;
+
+  /// No description provided for @bookingRoomChange.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغيير'**
+  String get bookingRoomChange;
+
+  /// No description provided for @bookingRoomNoFree.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد غرفة متاحة من هذا النوع لهذه الليالي.'**
+  String get bookingRoomNoFree;
+
+  /// No description provided for @bookingRoomNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا النوع ليس له غرف مسجّلة.'**
+  String get bookingRoomNone;
+
+  /// No description provided for @bookingRoomYours.
+  ///
+  /// In ar, this message translates to:
+  /// **'غرفتك: {number}'**
+  String bookingRoomYours(String number);
+
   /// No description provided for @bookingTermsTitle.
   ///
   /// In ar, this message translates to:

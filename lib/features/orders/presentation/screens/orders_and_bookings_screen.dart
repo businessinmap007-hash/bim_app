@@ -1154,6 +1154,11 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
             ),
             const SizedBox(height: 8),
             Text(booking.serviceName(languageCode), style: Theme.of(context).textTheme.bodyMedium),
+            // the hotel gives the room when the stay starts — only then does the server send its number
+            if (booking.room != null) ...[
+              const SizedBox(height: 4),
+              Text(l10n.bookingRoomYours(booking.room!.number), style: Theme.of(context).textTheme.titleSmall),
+            ],
             const SizedBox(height: 12),
             if (booking.startsAt != null)
               Text(_formatRange(booking.startsAt!, booking.endsAt))

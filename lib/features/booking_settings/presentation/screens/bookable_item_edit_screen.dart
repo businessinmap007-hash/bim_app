@@ -7,6 +7,7 @@ import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../media/application/media_picker_service.dart';
 import '../../application/booking_settings_controller.dart';
 import '../../data/models/booking_settings_models.dart';
+import '../widgets/bookable_rooms_section.dart';
 
 /// A single room's own screen — description, photo gallery, capacity and its
 /// manual available/maintenance status. Mirrors the menu item edit screen's
@@ -36,6 +37,10 @@ class BookableItemEditScreen extends ConsumerWidget {
         padding: const EdgeInsets.all(16),
         children: [
           _ImagesSection(row: row),
+          if (row.itemType == 'booking_stay') ...[
+            const SizedBox(height: 20),
+            BookableRoomsSection(itemId: row.id),
+          ],
           const SizedBox(height: 20),
           _DetailsForm(row: row),
         ],

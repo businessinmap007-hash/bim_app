@@ -4,6 +4,7 @@ import 'models/booking.dart';
 import 'models/booking_financial_preview.dart';
 import 'models/booking_form.dart';
 import 'models/unit_discovery.dart';
+import '../../booking_settings/data/models/room_models.dart';
 
 /// /bookings — the customer's own booking requests. See Api\V2\BookingController.
 class BookingApi {
@@ -136,6 +137,14 @@ class BookingApi {
     final data = await _client.post(path) as Map<String, dynamic>;
     return _booking(data);
   }
+
+  /// The rooms this stay could be put in (the free ones), and the one it has — the hotel's own view.
+  Future<BookingRoomsPayload> stayRooms(int id) async {
+    final data = await _client.get('/business/bookings/$id/rooms') as Map<String, dynamic>;
+    return BookingRoomsPayload.fromJson(data);
+  }
+
+  Future<void> assignRoom(int id, int roomId) => _client.post('/business/bookings/$id/room', data: {'room_id': roomId});
 
   /// «قبول الديبوزت كدفعة»: the customer asks that the frozen deposit be taken as a payment…
   Future<Booking> requestDepositAsPayment(int id) async {

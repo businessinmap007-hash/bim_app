@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import '../../../core/network/api_client.dart';
 import 'models/booking_settings_models.dart';
 import 'models/booking_terms.dart';
+import 'models/room_models.dart';
 
 /// /business/prices, /business/bookable-items, /business/working-hours —
 /// business-only self-service (the `business` middleware gate on the
@@ -150,6 +151,30 @@ class BookingSettingsApi {
 
   Future<void> deleteBookableItemImage(int itemId, int imageId) =>
       _client.delete('/business/bookable-items/$itemId/images/$imageId');
+
+  /// The hotel's own numbered rooms behind a room type (booking_stay only).
+  Future<RoomsPayload> rooms(int itemId) async {
+    final data = await _client.get('/business/bookable-items/$itemId/rooms') as Map<String, dynamic>;
+    return RoomsPayload.fromJson(data);
+  }
+
+  Future<RoomsPayload> addRooms(int itemId, List<String> numbers) async {
+    final data = await _client.post('/business/bookable-items/$itemId/rooms', data: {'numbers': numbers}) as Map<String, dynamic>;
+    return RoomsPayload.fromJson(data);
+  }
+
+  Future<RoomsPayload> setRoomMaintenance(int itemId, int roomId, bool maintenance) async {
+    final data = await _client.patch(
+      '/business/bookable-items/$itemId/rooms/$roomId',
+      data: {'status': maintenance ? 'maintenance' : 'available'},
+    ) as Map<String, dynamic>;
+    return RoomsPayload.fromJson(data);
+  }
+
+  Future<RoomsPayload> deleteRoom(int itemId, int roomId) async {
+    final data = await _client.delete('/business/bookable-items/$itemId/rooms/$roomId') as Map<String, dynamic>;
+    return RoomsPayload.fromJson(data);
+  }
 
   /// «شروط الحجز» — GET /business/booking-terms.
   Future<BookingTerms> bookingTerms() async {

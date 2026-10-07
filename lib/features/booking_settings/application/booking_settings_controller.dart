@@ -170,6 +170,8 @@ class BookingSettingsController extends StateNotifier<BookingSettingsState> {
 
   /// The images/upload doors return no full resource body — re-fetch this
   /// one item so its gallery reflects what the server now holds.
+  Future<void> refreshItem(int itemId) => _refreshOneItem(itemId);
+
   Future<void> _refreshOneItem(int itemId) async {
     final all = await _api.bookableItems();
     final matches = all.where((i) => i.id == itemId);

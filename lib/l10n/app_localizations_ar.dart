@@ -847,6 +847,54 @@ class AppLocalizationsAr extends AppLocalizations {
       'الديبوزت إجراء لضمان الجدية وليس جزءًا من السعر: يُرد بمجرد دفع العميل كامل القيمة مباشرة. رسوم المنصة تُخصم من كل محفظة بشكل منفصل.';
 
   @override
+  String get roomsTitle => 'الغرف';
+
+  @override
+  String roomsOpenCount(String n) {
+    return '$n متاحة';
+  }
+
+  @override
+  String get roomsHint =>
+      'قائمة الفندق الخاصة. العميل يحجز نوع الغرفة ولا يرى هذه الأرقام قبل بدء إقامته. اكتب أرقامًا أو مدى مثل 101-110.';
+
+  @override
+  String get roomsNumbersField => 'أرقام الغرف';
+
+  @override
+  String get roomsAdd => 'أضف';
+
+  @override
+  String get roomMaintenance => 'إغلاق للصيانة';
+
+  @override
+  String get roomsReopen => 'إعادة فتح';
+
+  @override
+  String get bookingRoom => 'الغرفة';
+
+  @override
+  String get bookingRoomOnStart => 'تُعيَّن عند بدء الإقامة';
+
+  @override
+  String get bookingRoomAssign => 'اختر';
+
+  @override
+  String get bookingRoomChange => 'تغيير';
+
+  @override
+  String get bookingRoomNoFree =>
+      'لا توجد غرفة متاحة من هذا النوع لهذه الليالي.';
+
+  @override
+  String get bookingRoomNone => 'هذا النوع ليس له غرف مسجّلة.';
+
+  @override
+  String bookingRoomYours(String number) {
+    return 'غرفتك: $number';
+  }
+
+  @override
   String get bookingTermsTitle => 'شروط الحجز';
 
   @override

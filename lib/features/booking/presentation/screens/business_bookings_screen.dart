@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../application/booking_providers.dart' show bookingApiProvider;
 import '../../application/business_bookings_providers.dart';
 import '../widgets/booking_money_card.dart';
 import '../../data/models/booking.dart';
@@ -280,6 +281,9 @@ class BusinessBookingDetailScreen extends ConsumerWidget {
                   _DetailRow(label: l10n.businessBookingsCustomer, value: booking.customerPhone!),
                 if (booking.bookableLabel != null)
                   _DetailRow(label: l10n.businessBookingsUnit, value: booking.bookableLabel!),
+                // the hotel's own room number — given when the stay starts, changeable by the hotel before and after
+                if (booking.bookableItemType == 'booking_stay' && (booking.status == 'accepted' || booking.status == 'in_progress'))
+                  _RoomRow(booking: booking, bookingId: bookingId),
                 if (booking.startsAt != null)
                   _DetailRow(label: l10n.businessBookingsDateTime, value: booking.startsAt!.toLocal().toString().split('.').first),
                 _DetailRow(label: l10n.businessBookingsQuantity, value: booking.quantity.toString()),
@@ -484,6 +488,70 @@ class _DetailRow extends StatelessWidget {
             child: Text(label, style: TextStyle(color: Theme.of(context).hintColor)),
           ),
           Expanded(child: Text(value)),
+        ],
+      ),
+    );
+  }
+}
+
+/// «الغرفة» — the number the hotel gives this stay, and a way to put it in another free room.
+class _RoomRow extends ConsumerWidget {
+  final Booking booking;
+  final int bookingId;
+  const _RoomRow({required this.booking, required this.bookingId});
+
+  Future<void> _choose(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    final api = ref.read(bookingApiProvider);
+    final messenger = ScaffoldMessenger.of(context);
+    final rooms = await api.stayRooms(bookingId);
+    if (!context.mounted) return;
+
+    if (!rooms.usesRooms) {
+      messenger.showSnackBar(SnackBar(content: Text(l10n.bookingRoomNone)));
+      return;
+    }
+
+    final picked = await showModalBottomSheet<int>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheet) => SafeArea(
+        child: rooms.free.isEmpty
+            ? Padding(padding: const EdgeInsets.all(24), child: Text(l10n.bookingRoomNoFree))
+            : ListView(
+                shrinkWrap: true,
+                children: [
+                  for (final room in rooms.free)
+                    ListTile(
+                      leading: Icon(room.id == rooms.room?.id ? Icons.check_circle : Icons.meeting_room_outlined),
+                      title: Text(room.number),
+                      onTap: () => Navigator.of(sheet).pop(room.id),
+                    ),
+                ],
+              ),
+      ),
+    );
+    if (picked == null) return;
+
+    try {
+      await api.assignRoom(bookingId, picked);
+      ref.invalidate(businessBookingDetailControllerProvider(bookingId));
+    } catch (_) {
+      messenger.showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          SizedBox(width: 110, child: Text(l10n.bookingRoom, style: TextStyle(color: Theme.of(context).hintColor))),
+          Expanded(child: Text(booking.room?.number ?? l10n.bookingRoomOnStart)),
+          TextButton(onPressed: () => _choose(context, ref), child: Text(booking.room == null ? l10n.bookingRoomAssign : l10n.bookingRoomChange)),
         ],
       ),
     );

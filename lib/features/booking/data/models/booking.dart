@@ -62,6 +62,13 @@ class DepositAsPayment {
   );
 }
 
+/// The hotel's own room number for a stay — shown to the customer only once the stay has started.
+class BookingRoom {
+  final int id;
+  final String number;
+  const BookingRoom({required this.id, required this.number});
+}
+
 class Booking {
   final int id;
   final String status;
@@ -96,6 +103,10 @@ class Booking {
   final BookingDeposit? deposit;
   final DepositAsPayment depositAsPayment;
 
+  /// `booking_stay` for a hotel stay — the only kind that has rooms.
+  final String? bookableItemType;
+  final BookingRoom? room;
+
   const Booking({
     required this.id,
     required this.status,
@@ -122,6 +133,8 @@ class Booking {
     this.partySize,
     this.deposit,
     this.depositAsPayment = const DepositAsPayment(),
+    this.bookableItemType,
+    this.room,
   });
 
   bool get isCancellable => status == 'pending' || status == 'accepted';
@@ -168,6 +181,8 @@ class Booking {
       quantity: (json['quantity'] as num?)?.toInt() ?? 1,
       partySize: (json['party_size'] as num?)?.toInt(),
       deposit: depositJson != null ? BookingDeposit.fromJson(depositJson) : null,
+      bookableItemType: bookable?['item_type'] as String?,
+      room: json['room'] is Map<String, dynamic> ? BookingRoom(id: (json['room'] as Map<String, dynamic>)['id'] as int, number: '${(json['room'] as Map<String, dynamic>)['number']}') : null,
       depositAsPayment: json['deposit_as_payment'] is Map<String, dynamic> ? DepositAsPayment.fromJson(json['deposit_as_payment'] as Map<String, dynamic>) : const DepositAsPayment(),
     );
   }

@@ -843,6 +843,53 @@ class AppLocalizationsEn extends AppLocalizations {
       'A deposit is a seriousness measure, not part of the price: it comes back once the customer has paid the whole value directly. Platform fees are charged separately from each wallet.';
 
   @override
+  String get roomsTitle => 'Rooms';
+
+  @override
+  String roomsOpenCount(String n) {
+    return '$n open';
+  }
+
+  @override
+  String get roomsHint =>
+      'The hotel\'s own list. Customers book a room type and never see these numbers until their stay starts. Type numbers or a range like 101-110.';
+
+  @override
+  String get roomsNumbersField => 'Room numbers';
+
+  @override
+  String get roomsAdd => 'Add';
+
+  @override
+  String get roomMaintenance => 'Close for maintenance';
+
+  @override
+  String get roomsReopen => 'Reopen';
+
+  @override
+  String get bookingRoom => 'Room';
+
+  @override
+  String get bookingRoomOnStart => 'Given when the stay starts';
+
+  @override
+  String get bookingRoomAssign => 'Choose';
+
+  @override
+  String get bookingRoomChange => 'Change';
+
+  @override
+  String get bookingRoomNoFree => 'No free room of this type for these nights.';
+
+  @override
+  String get bookingRoomNone => 'This room type has no listed rooms.';
+
+  @override
+  String bookingRoomYours(String number) {
+    return 'Your room: $number';
+  }
+
+  @override
   String get bookingTermsTitle => 'Booking terms';
 
   @override
