@@ -7345,4 +7345,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get trainingLibraryEquipment => 'المعدات';
+
+  @override
+  String get addOnPricePerDay => 'الزيادة على سعر اليوم';
 }

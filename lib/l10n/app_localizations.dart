@@ -13554,6 +13554,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'المعدات'**
   String get trainingLibraryEquipment;
+
+  /// No description provided for @addOnPricePerDay.
+  ///
+  /// In ar, this message translates to:
+  /// **'الزيادة على سعر اليوم'**
+  String get addOnPricePerDay;
 }
 
 class _AppLocalizationsDelegate

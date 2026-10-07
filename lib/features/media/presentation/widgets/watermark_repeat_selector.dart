@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../app/theme/app_colors.dart';
 import '../../application/watermark_service.dart';
 
 /// The owner's choice of how many times the watermark repeats — one of
@@ -22,11 +21,6 @@ class WatermarkRepeatSelector extends StatelessWidget {
           label: Text('$count'),
           selected: selected,
           onSelected: (_) => onChanged(count),
-          selectedColor: AppColors.accentGold,
-          labelStyle: TextStyle(
-            color: selected ? AppColors.primaryNavy : null,
-            fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-          ),
         );
       }).toList(),
     );

@@ -2480,5 +2480,6 @@
   "trainingExerciseSection": "Section",
   "trainingExerciseInstructions": "How to do it",
   "trainingMealFromTable": "From the table — calories are worked out for you",
-  "trainingLibraryEquipment": "Equipment"
+  "trainingLibraryEquipment": "Equipment",
+  "addOnPricePerDay": "Added to the day's price"
 }

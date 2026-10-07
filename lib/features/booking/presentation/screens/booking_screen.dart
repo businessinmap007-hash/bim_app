@@ -535,7 +535,6 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
 
     return Card(
       margin: EdgeInsets.zero,
-      color: theme.colorScheme.primaryContainer.withValues(alpha: 0.35),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         child: Column(

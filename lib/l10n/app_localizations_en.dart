@@ -7382,4 +7382,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trainingLibraryEquipment => 'Equipment';
+
+  @override
+  String get addOnPricePerDay => 'Added to the day\'s price';
 }

@@ -134,7 +134,7 @@ class _BookingAddOnsScreenState extends ConsumerState<BookingAddOnsScreen> {
                   child: TextField(
                     controller: _amounts[o.id],
                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                    decoration: InputDecoration(labelText: feature ? l10n.addOnPriceFeature : l10n.addOnPricePerNight, prefixText: '+'),
+                    decoration: InputDecoration(labelText: feature ? l10n.addOnPriceFeature : (group.isDayUse ? l10n.addOnPricePerDay : l10n.addOnPricePerNight), prefixText: '+'),
                   ),
                 ),
                 if (!feature) ...[

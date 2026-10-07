@@ -12,7 +12,7 @@ void main() {
   /// file (under lib/) → how many `AppColors.primaryNavy` uses were reviewed in it.
   const reviewed = {
     // navy ink on the gold selected chip and the gold «مفضّل» badge
-    'features/booking_settings/presentation/screens/booking_terms_screen.dart': 2,
+    'features/booking_settings/presentation/screens/booking_terms_screen.dart': 1,
     'features/business/presentation/widgets/menu_card_stepper.dart': 1,
     'features/business/presentation/widgets/menu_item_grid_card.dart': 1,
     'features/business/presentation/widgets/menu_item_tile.dart': 1,
@@ -24,7 +24,6 @@ void main() {
     'features/disputes/presentation/screens/dispute_room_screen.dart': 1,
     'features/home/presentation/screens/home_shell.dart': 1,
     'features/media/presentation/screens/image_cropper_screen.dart': 1,
-    'features/media/presentation/widgets/watermark_repeat_selector.dart': 1,
     'features/profile/presentation/widgets/profile_avatar_picker.dart': 2,
     'features/splash/presentation/screens/splash_screen.dart': 1,
     'features/training/presentation/screens/training_chat_screen.dart': 1,

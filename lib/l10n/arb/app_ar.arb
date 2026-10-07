@@ -2495,5 +2495,6 @@
   "trainingExerciseSection": "القسم",
   "trainingExerciseInstructions": "تعليمات التنفيذ",
   "trainingMealFromTable": "من الجدول — السعرات محسوبة لك",
-  "trainingLibraryEquipment": "المعدات"
+  "trainingLibraryEquipment": "المعدات",
+  "addOnPricePerDay": "الزيادة على سعر اليوم"
 }

@@ -101,8 +101,6 @@ class _BookingTermsScreenState extends ConsumerState<BookingTermsScreen> {
       label: Text(label),
       selected: selected,
       onSelected: (_) => onTap(),
-      selectedColor: AppColors.accentGold,
-      labelStyle: TextStyle(color: selected ? AppColors.primaryNavy : null, fontWeight: selected ? FontWeight.w700 : null),
     );
 
     String number(double v) => v == v.roundToDouble() ? v.toStringAsFixed(0) : v.toStringAsFixed(2);

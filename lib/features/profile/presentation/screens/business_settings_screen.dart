@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/scrolling_chip_row.dart';
 import '../../../auth/application/auth_controller.dart';
@@ -321,7 +320,6 @@ class _OptionGroupChips extends StatelessWidget {
                 label: Text(option.name),
                 selected: state.selectedIds.contains(option.id),
                 onSelected: (value) => notifier.toggle(option.id, value),
-                selectedColor: AppColors.accentGold.withValues(alpha: 0.3),
               ),
           ],
         ),

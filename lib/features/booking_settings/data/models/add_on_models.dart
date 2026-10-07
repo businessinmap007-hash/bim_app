@@ -31,17 +31,35 @@ class AddOnGroup {
   final String? selectionType;
   final List<AddOnOption> options;
 
-  const AddOnGroup({required this.groupId, required this.name, this.selectionType, this.options = const []});
+  /// 'night' (added to each night) or 'day_use' (the meals of a Day use, added to the day's price)
+  final String appliesTo;
+
+  const AddOnGroup({
+    required this.groupId,
+    required this.name,
+    this.selectionType,
+    this.options = const [],
+    this.appliesTo = 'night',
+  });
+
+  bool get isDayUse => appliesTo == 'day_use';
 
   bool get isSingle => selectionType == 'single';
 
   AddOnGroup copyWith({String? selectionType, List<AddOnOption>? options}) =>
-      AddOnGroup(groupId: groupId, name: name, selectionType: selectionType ?? this.selectionType, options: options ?? this.options);
+      AddOnGroup(
+        groupId: groupId,
+        name: name,
+        selectionType: selectionType ?? this.selectionType,
+        options: options ?? this.options,
+        appliesTo: appliesTo,
+      );
 
   factory AddOnGroup.fromJson(Map<String, dynamic> json) => AddOnGroup(
     groupId: json['group_id'] as int? ?? 0,
     name: json['group'] as String? ?? '',
     selectionType: json['selection_type'] as String?,
+    appliesTo: json['applies_to'] as String? ?? 'night',
     options: (json['options'] as List<dynamic>? ?? []).map((e) => AddOnOption.fromJson(e as Map<String, dynamic>)).toList(),
   );
 }
