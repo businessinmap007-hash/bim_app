@@ -1,3 +1,4 @@
+import '../../../../shared/widgets/app_bar_tab_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -128,7 +129,7 @@ class _RetailListingsScreenState extends ConsumerState<RetailListingsScreen> wit
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.retailListingsTitle),
-        bottom: TabBar(
+        bottom: AppBarTabBar(
           controller: _tabController,
           tabs: [
             Tab(text: l10n.retailListingsProductsTab),

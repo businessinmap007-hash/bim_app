@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 /// (checkbox, radio, switch) — surface and ink follow light/dark, no Material-3 tint.
 void main() {
   for (final (name, theme, surface, ink, interactive, onInteractive) in [
-    ('light', AppTheme.light(), AppColors.lightSurface, AppColors.primaryNavy, AppColors.primaryNavy, Colors.white),
+    ('light', AppTheme.light(), AppColors.lightSurface, AppColors.primaryNavy, AppColors.primaryNavy, AppColors.accentGold),
     ('dark', AppTheme.dark(), AppColors.darkSurface, Colors.white, AppColors.accentGold, AppColors.primaryNavy),
   ]) {
     testWidgets('a dialog is drawn on the surface colour, 16 round, untinted in $name', (tester) async {

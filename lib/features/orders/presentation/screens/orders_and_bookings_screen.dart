@@ -1,3 +1,4 @@
+import '../../../../shared/widgets/app_bar_tab_bar.dart';
 import '../../../cart/presentation/widgets/weight_picker.dart';
 import '../widgets/order_line_services.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,7 @@ class OrdersAndBookingsScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(l10n.ordersBookingsTitle),
-          bottom: TabBar(
+          bottom: AppBarTabBar(
             tabs: [Tab(text: l10n.ordersTab), Tab(text: l10n.bookingsTab)],
           ),
         ),

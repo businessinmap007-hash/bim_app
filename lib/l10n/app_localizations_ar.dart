@@ -7265,4 +7265,84 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get bookingBasePriceLine => 'الغرفة';
+
+  @override
+  String get trainingFoodTable => 'جدول التغذية';
+
+  @override
+  String get trainingPickFood => 'اختر من جدول التغذية';
+
+  @override
+  String get trainingFoodSearch => 'ابحث عن صنف';
+
+  @override
+  String get trainingFoodServings => 'عدد الحصص';
+
+  @override
+  String trainingFoodKcal(int kcal) {
+    return '$kcal سعرة';
+  }
+
+  @override
+  String trainingFoodMacros(String p, String c, String f) {
+    return 'بروتين $p · كربوهيدرات $c · دهون $f';
+  }
+
+  @override
+  String get trainingAddOwnFood => 'أضف صنفًا خاصًا';
+
+  @override
+  String get trainingFoodName => 'اسم الصنف';
+
+  @override
+  String get trainingFoodServingLabel => 'الحصة (مثال: طبق 200 جم)';
+
+  @override
+  String get trainingFoodCalories => 'السعرات للحصة';
+
+  @override
+  String get trainingFoodProtein => 'بروتين (جم)';
+
+  @override
+  String get trainingFoodCarbs => 'كربوهيدرات (جم)';
+
+  @override
+  String get trainingFoodFat => 'دهون (جم)';
+
+  @override
+  String get trainingFoodSection => 'القسم';
+
+  @override
+  String get trainingFoodEmpty => 'لا توجد أصناف مطابقة';
+
+  @override
+  String get trainingFoodApprox => 'القيم تقريبية للحصة المذكورة.';
+
+  @override
+  String get trainingMine => 'من إضافتك';
+
+  @override
+  String get trainingEditEntry => 'تعديل';
+
+  @override
+  String get trainingDeleteOwnConfirm =>
+      'حذف هذا العنصر؟ الخطط التي استخدمته تحتفظ بنسختها.';
+
+  @override
+  String get trainingAddOwnExercise => 'أضف تمرينًا خاصًا';
+
+  @override
+  String get trainingOwnExerciseTitle => 'تمرين خاص';
+
+  @override
+  String get trainingExerciseSection => 'القسم';
+
+  @override
+  String get trainingExerciseInstructions => 'تعليمات التنفيذ';
+
+  @override
+  String get trainingMealFromTable => 'من الجدول — السعرات محسوبة لك';
+
+  @override
+  String get trainingLibraryEquipment => 'المعدات';
 }

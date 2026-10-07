@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/models/body_report.dart';
 import '../data/models/exercise_library.dart';
+import '../data/models/food_library.dart';
 import '../data/models/set_log.dart';
 import '../data/models/trainer_weekly_summary.dart';
 import '../data/models/training_plan.dart';
@@ -17,6 +18,11 @@ final trainerPhotosProvider = FutureProvider.autoDispose<List<LibraryPhoto>>((re
 
 final exerciseLibraryProvider = FutureProvider.autoDispose<ExerciseLibrary>((ref) {
   return ref.watch(trainingApiProvider).exerciseLibrary();
+});
+
+/// «جدول التغذية» — the shared foods plus the specialist's own.
+final foodLibraryProvider = FutureProvider.autoDispose<FoodLibrary>((ref) {
+  return ref.watch(trainingApiProvider).foodLibrary();
 });
 
 final trainerWeeklySummaryProvider = FutureProvider.autoDispose<TrainerWeeklySummary>((ref) {
@@ -198,8 +204,23 @@ class TrainingPlanManageController extends StateNotifier<TrainingPlanManageState
     await load();
   }
 
-  Future<void> addMeal({required String mealType, required String name, int? calories, String? notes}) async {
-    await _api.addMeal(planId, mealType: mealType, name: name, calories: calories, notes: notes);
+  Future<void> addMeal({
+    required String mealType,
+    required String name,
+    int? calories,
+    int? foodId,
+    double? servings,
+    String? notes,
+  }) async {
+    await _api.addMeal(
+      planId,
+      mealType: mealType,
+      name: name,
+      calories: calories,
+      foodId: foodId,
+      servings: servings,
+      notes: notes,
+    );
     await load();
   }
 

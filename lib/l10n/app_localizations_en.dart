@@ -7300,4 +7300,86 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bookingBasePriceLine => 'Room';
+
+  @override
+  String get trainingFoodTable => 'Nutrition table';
+
+  @override
+  String get trainingPickFood => 'Pick from the nutrition table';
+
+  @override
+  String get trainingFoodSearch => 'Search a food';
+
+  @override
+  String get trainingFoodServings => 'Servings';
+
+  @override
+  String trainingFoodKcal(int kcal) {
+    return '$kcal kcal';
+  }
+
+  @override
+  String trainingFoodMacros(String p, String c, String f) {
+    return 'Protein $p · Carbs $c · Fat $f';
+  }
+
+  @override
+  String get trainingAddOwnFood => 'Add my own food';
+
+  @override
+  String get trainingFoodName => 'Food name';
+
+  @override
+  String get trainingFoodServingLabel => 'Serving (e.g. plate, 200 g)';
+
+  @override
+  String get trainingFoodCalories => 'Calories per serving';
+
+  @override
+  String get trainingFoodProtein => 'Protein (g)';
+
+  @override
+  String get trainingFoodCarbs => 'Carbs (g)';
+
+  @override
+  String get trainingFoodFat => 'Fat (g)';
+
+  @override
+  String get trainingFoodSection => 'Section';
+
+  @override
+  String get trainingFoodEmpty => 'No matching foods';
+
+  @override
+  String get trainingFoodApprox =>
+      'Values are approximate for the serving named.';
+
+  @override
+  String get trainingMine => 'Added by you';
+
+  @override
+  String get trainingEditEntry => 'Edit';
+
+  @override
+  String get trainingDeleteOwnConfirm =>
+      'Delete this entry? Plans that already use it keep their copy.';
+
+  @override
+  String get trainingAddOwnExercise => 'Add my own exercise';
+
+  @override
+  String get trainingOwnExerciseTitle => 'My exercise';
+
+  @override
+  String get trainingExerciseSection => 'Section';
+
+  @override
+  String get trainingExerciseInstructions => 'How to do it';
+
+  @override
+  String get trainingMealFromTable =>
+      'From the table — calories are worked out for you';
+
+  @override
+  String get trainingLibraryEquipment => 'Equipment';
 }

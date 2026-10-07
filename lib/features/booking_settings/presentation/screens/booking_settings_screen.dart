@@ -1,3 +1,4 @@
+import '../../../../shared/widgets/app_bar_tab_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -24,7 +25,7 @@ class BookingSettingsScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(l10n.bookingSettingsTitle),
-          bottom: TabBar(
+          bottom: AppBarTabBar(
             tabs: [
               Tab(text: l10n.bookingSettingsPricesTab),
               Tab(text: l10n.bookingSettingsUnitsTab),

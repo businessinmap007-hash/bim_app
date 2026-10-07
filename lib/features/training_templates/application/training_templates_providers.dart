@@ -153,8 +153,23 @@ class TrainingTemplateEditController extends StateNotifier<AsyncValue<TrainingTe
     await load();
   }
 
-  Future<void> addMeal({required String mealType, required String name, int? calories, String? notes}) async {
-    await _api.addMeal(templateId, mealType: mealType, name: name, calories: calories, notes: notes);
+  Future<void> addMeal({
+    required String mealType,
+    required String name,
+    int? calories,
+    int? foodId,
+    double? servings,
+    String? notes,
+  }) async {
+    await _api.addMeal(
+      templateId,
+      mealType: mealType,
+      name: name,
+      calories: calories,
+      foodId: foodId,
+      servings: servings,
+      notes: notes,
+    );
     await load();
   }
 

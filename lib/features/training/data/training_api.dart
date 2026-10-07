@@ -8,6 +8,7 @@ import '../../chat/data/models/thread_message.dart';
 import 'models/body_report.dart';
 import 'models/training_plan.dart';
 import 'models/exercise_library.dart';
+import 'models/food_library.dart';
 import 'models/set_log.dart';
 import 'models/trainer_weekly_summary.dart';
 import 'models/weekly_summary.dart';
@@ -234,6 +235,66 @@ class TrainingApi {
     return ExerciseLibrary.fromJson(data);
   }
 
+  /// POST/PUT/DELETE /business/training/exercise-library — the specialist's OWN exercises (theirs alone).
+  Future<LibraryExercise> saveLibraryExercise({
+    int? id,
+    required int categoryId,
+    required String name,
+    int? sets,
+    String? reps,
+    String? equipment,
+    String? instructions,
+  }) async {
+    final body = {
+      'exercise_category_id': categoryId,
+      'name_ar': name,
+      'default_sets': ?sets,
+      if (reps != null && reps.isNotEmpty) 'default_reps': reps,
+      'equipment': ?equipment,
+      if (instructions != null && instructions.isNotEmpty) 'instructions': instructions,
+    };
+    final data = (id == null
+        ? await _client.post('/business/training/exercise-library', data: body)
+        : await _client.put('/business/training/exercise-library/$id', data: body)) as Map<String, dynamic>;
+    return LibraryExercise.fromJson(data['exercise'] as Map<String, dynamic>);
+  }
+
+  Future<void> deleteLibraryExercise(int id) => _client.delete('/business/training/exercise-library/$id');
+
+  /// GET /business/training/food-library — «جدول التغذية»: the shared foods plus the specialist's own.
+  Future<FoodLibrary> foodLibrary() async {
+    final data = await _client.get('/business/training/food-library') as Map<String, dynamic>;
+    return FoodLibrary.fromJson(data);
+  }
+
+  /// POST/PUT /business/training/food-library — the specialist's OWN food, for the serving its label names.
+  Future<LibraryFood> saveFood({
+    int? id,
+    required int categoryId,
+    required String name,
+    required String serving,
+    required int calories,
+    double? proteinG,
+    double? carbsG,
+    double? fatG,
+  }) async {
+    final body = {
+      'food_category_id': categoryId,
+      'name_ar': name,
+      'serving_label': serving,
+      'calories': calories,
+      'protein_g': ?proteinG,
+      'carbs_g': ?carbsG,
+      'fat_g': ?fatG,
+    };
+    final data = (id == null
+        ? await _client.post('/business/training/food-library', data: body)
+        : await _client.put('/business/training/food-library/$id', data: body)) as Map<String, dynamic>;
+    return LibraryFood.fromJson(data['food'] as Map<String, dynamic>);
+  }
+
+  Future<void> deleteFood(int id) => _client.delete('/business/training/food-library/$id');
+
   /// GET /business/training-plans/weekly-summary — adherence for every
   /// active client at once (one query pass server-side).
   Future<TrainerWeeklySummary> trainerWeeklySummary() async {
@@ -349,6 +410,8 @@ class TrainingApi {
     required String mealType,
     required String name,
     int? calories,
+    int? foodId,
+    double? servings,
     String? notes,
   }) async {
     final data =
@@ -357,6 +420,9 @@ class TrainingApi {
               data: {
                 'meal_type': mealType,
                 'name': name,
+                // a meal picked from the table takes its calories from the table, whatever is sent
+                'food_id': ?foodId,
+                'servings': ?servings,
                 'calories': ?calories,
                 if (notes != null && notes.isNotEmpty) 'notes': notes,
               },

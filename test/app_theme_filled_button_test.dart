@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// The canvas's primary button as the app's FilledButton theme: flat, 12-radius,
-/// 16/24 padding, 16 bold — colours follow light/dark (navy/white, gold/navy).
+/// 16/24 padding, 16 bold — colours follow light/dark (navy fill + gold ink, gold fill + navy ink).
 void main() {
   Future<void> pump(WidgetTester tester, ThemeData theme) => tester.pumpWidget(
         MaterialApp(
@@ -14,7 +14,7 @@ void main() {
       );
 
   for (final (name, theme, fill, ink) in [
-    ('light', AppTheme.light(), AppColors.primaryNavy, Colors.white),
+    ('light', AppTheme.light(), AppColors.primaryNavy, AppColors.accentGold),
     ('dark', AppTheme.dark(), AppColors.accentGold, AppColors.primaryNavy),
   ]) {
     testWidgets('FilledButton follows the canvas spec in $name', (tester) async {
@@ -32,7 +32,7 @@ void main() {
       expect(resolved.textStyle!.resolve({})!.fontWeight, FontWeight.w700);
       expect(resolved.elevation!.resolve({}), 0);
 
-      // Colours come from the scheme: the canvas gold/navy in dark, navy/white in light.
+      // Colours come from the scheme: the canvas gold/navy in dark, navy/gold in light.
       expect(theme.colorScheme.primary, fill);
       expect(theme.colorScheme.onPrimary, ink);
 
@@ -52,7 +52,7 @@ void main() {
     final dark = AppTheme.dark().elevatedButtonTheme.style!;
 
     expect(light.backgroundColor!.resolve({}), AppColors.primaryNavy);
-    expect(light.foregroundColor!.resolve({}), Colors.white);
+    expect(light.foregroundColor!.resolve({}), AppColors.accentGold);
     expect(dark.backgroundColor!.resolve({}), AppColors.accentGold);
     expect(dark.foregroundColor!.resolve({}), AppColors.primaryNavy);
   });

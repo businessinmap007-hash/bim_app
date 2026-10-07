@@ -6,7 +6,9 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../training/presentation/screens/training_plan_manage_screen.dart';
 import '../../application/training_templates_providers.dart';
 import '../widgets/apply_template_sheet.dart';
+import '../../../training/data/models/food_library.dart';
 import '../../../training/presentation/widgets/exercise_picker_sheet.dart';
+import '../../../training/presentation/widgets/food_picker_sheet.dart';
 import '../../../training/data/models/set_log.dart';
 import '../../data/models/template_item.dart';
 import '../../data/models/training_template.dart';
@@ -429,6 +431,7 @@ class _MealsSection extends ConsumerWidget {
     final nameController = TextEditingController();
     final caloriesController = TextEditingController();
     String mealType = 'breakfast';
+    PickedFood? picked; // a meal picked from the nutrition table takes its calories from the table
     String? error;
 
     await showModalBottomSheet<void>(
@@ -445,6 +448,20 @@ class _MealsSection extends ConsumerWidget {
                 children: [
                   Text(l10n.trainingTemplateAddMeal, style: Theme.of(sheetContext).textTheme.titleMedium),
                   const SizedBox(height: 16),
+                  OutlinedButton.icon(
+                    onPressed: () async {
+                      final food = await pickLibraryFood(sheetContext);
+                      if (food == null) return;
+                      setSheetState(() {
+                        picked = food;
+                        nameController.text = food.food.name;
+                        caloriesController.text = '${food.calories}';
+                      });
+                    },
+                    icon: const Icon(Icons.restaurant_menu),
+                    label: Text(l10n.trainingPickFood),
+                  ),
+                  const SizedBox(height: 12),
                   DropdownButtonFormField<String>(
                     initialValue: mealType,
                     decoration: InputDecoration(labelText: l10n.trainingMealTypeLabel),
@@ -461,8 +478,12 @@ class _MealsSection extends ConsumerWidget {
                   const SizedBox(height: 12),
                   TextField(
                     controller: caloriesController,
+                    readOnly: picked != null,
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: l10n.trainingMealCaloriesHint),
+                    decoration: InputDecoration(
+                      labelText: l10n.trainingMealCaloriesHint,
+                      helperText: picked == null ? null : l10n.trainingMealFromTable,
+                    ),
                   ),
                   if (error != null) ...[
                     const SizedBox(height: 8),
@@ -482,6 +503,8 @@ class _MealsSection extends ConsumerWidget {
                               mealType: mealType,
                               name: nameController.text.trim(),
                               calories: int.tryParse(caloriesController.text.trim()),
+                              foodId: picked?.food.id,
+                              servings: picked?.servings,
                             );
                         if (sheetContext.mounted) Navigator.of(sheetContext).pop();
                       } catch (e) {

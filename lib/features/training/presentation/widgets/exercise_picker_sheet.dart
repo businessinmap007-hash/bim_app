@@ -3,7 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../application/business_training_providers.dart';
+import '../../../../core/network/api_exception.dart';
+import '../../application/training_providers.dart';
 import '../../data/models/exercise_library.dart';
+import 'library_entry_forms.dart';
 
 /// Opens the exercise catalogue and returns the exercise the trainer picked,
 /// or null when they dismissed it. Filtering is local: section chips, then
@@ -36,6 +39,32 @@ class _ExercisePickerSheetState extends ConsumerState<_ExercisePickerSheet> {
     if (_equipment != null && e.equipment != _equipment) return false;
     final q = _query.trim().toLowerCase();
     return q.isEmpty || e.name.toLowerCase().contains(q);
+  }
+
+  Future<void> _add(ExerciseLibrary lib) async {
+    final added = await editLibraryExercise(context, lib: lib);
+    if (added != null) ref.invalidate(exerciseLibraryProvider);
+  }
+
+  Future<void> _edit(ExerciseLibrary lib, LibraryExercise e) async {
+    final changed = await editLibraryExercise(context, lib: lib, existing: e);
+    if (changed != null) ref.invalidate(exerciseLibraryProvider);
+  }
+
+  Future<void> _delete(LibraryExercise e) async {
+    final l10n = AppLocalizations.of(context)!;
+    final ok = await confirmDeleteEntry(context, l10n.trainingDeleteOwnConfirm);
+    if (!ok || !mounted) return;
+    try {
+      await ref.read(trainingApiProvider).deleteLibraryExercise(e.id);
+      ref.invalidate(exerciseLibraryProvider);
+    } catch (err) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(err is ApiException ? err.message : l10n.commonSomethingWentWrong)),
+        );
+      }
+    }
   }
 
   Widget _chips<T>({
@@ -145,6 +174,7 @@ class _ExercisePickerSheetState extends ConsumerState<_ExercisePickerSheet> {
                             lib.equipmentLabel(e.equipment),
                             if (e.defaultSets != null && e.defaultReps != null) '${e.defaultSets} × ${e.defaultReps}',
                           ].whereType<String>().join(' · ');
+                          final instructions = (e.instructions ?? '').trim();
                           return ListTile(
                             leading: e.imageUrls.isEmpty
                                 ? const SizedBox(width: 56, height: 40, child: Icon(Icons.fitness_center, size: 20))
@@ -160,11 +190,41 @@ class _ExercisePickerSheetState extends ConsumerState<_ExercisePickerSheet> {
                                     ),
                                   ),
                             title: Text(e.name),
-                            subtitle: Text(parts, style: theme.textTheme.bodySmall),
+                            subtitle: Text(
+                              instructions.isEmpty ? parts : '$parts\n$instructions',
+                              style: theme.textTheme.bodySmall,
+                            ),
+                            isThreeLine: instructions.isNotEmpty,
+                            trailing: e.mine
+                                ? Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Chip(label: Text(l10n.trainingMine), visualDensity: VisualDensity.compact),
+                                      PopupMenuButton<String>(
+                                        onSelected: (v) => v == 'edit' ? _edit(lib, e) : _delete(e),
+                                        itemBuilder: (_) => [
+                                          PopupMenuItem(value: 'edit', child: Text(l10n.trainingEditEntry)),
+                                          PopupMenuItem(value: 'delete', child: Text(l10n.commonDelete)),
+                                        ],
+                                      ),
+                                    ],
+                                  )
+                                : null,
                             onTap: () => Navigator.of(context).pop(e),
                           );
                         },
                       ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: () => _add(lib),
+                    icon: const Icon(Icons.add),
+                    label: Text(l10n.trainingAddOwnExercise),
+                  ),
+                ),
               ),
             ],
           );

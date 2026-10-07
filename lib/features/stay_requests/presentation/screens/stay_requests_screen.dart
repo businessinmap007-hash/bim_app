@@ -1,3 +1,4 @@
+import '../../../../shared/widgets/app_bar_tab_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -30,7 +31,7 @@ class StayRequestsScreen extends ConsumerWidget {
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const StayServicesScreen())),
             ),
           ],
-          bottom: TabBar(tabs: [Tab(text: l10n.stayReqTabOpen), Tab(text: l10n.stayReqTabDone)]),
+          bottom: AppBarTabBar(tabs: [Tab(text: l10n.stayReqTabOpen), Tab(text: l10n.stayReqTabDone)]),
         ),
         body: const TabBarView(children: [_RequestList(status: 'open'), _RequestList(status: 'done')]),
       ),

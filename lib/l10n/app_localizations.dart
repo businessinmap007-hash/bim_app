@@ -13404,6 +13404,156 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الغرفة'**
   String get bookingBasePriceLine;
+
+  /// No description provided for @trainingFoodTable.
+  ///
+  /// In ar, this message translates to:
+  /// **'جدول التغذية'**
+  String get trainingFoodTable;
+
+  /// No description provided for @trainingPickFood.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر من جدول التغذية'**
+  String get trainingPickFood;
+
+  /// No description provided for @trainingFoodSearch.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث عن صنف'**
+  String get trainingFoodSearch;
+
+  /// No description provided for @trainingFoodServings.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد الحصص'**
+  String get trainingFoodServings;
+
+  /// No description provided for @trainingFoodKcal.
+  ///
+  /// In ar, this message translates to:
+  /// **'{kcal} سعرة'**
+  String trainingFoodKcal(int kcal);
+
+  /// No description provided for @trainingFoodMacros.
+  ///
+  /// In ar, this message translates to:
+  /// **'بروتين {p} · كربوهيدرات {c} · دهون {f}'**
+  String trainingFoodMacros(String p, String c, String f);
+
+  /// No description provided for @trainingAddOwnFood.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف صنفًا خاصًا'**
+  String get trainingAddOwnFood;
+
+  /// No description provided for @trainingFoodName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الصنف'**
+  String get trainingFoodName;
+
+  /// No description provided for @trainingFoodServingLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحصة (مثال: طبق 200 جم)'**
+  String get trainingFoodServingLabel;
+
+  /// No description provided for @trainingFoodCalories.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعرات للحصة'**
+  String get trainingFoodCalories;
+
+  /// No description provided for @trainingFoodProtein.
+  ///
+  /// In ar, this message translates to:
+  /// **'بروتين (جم)'**
+  String get trainingFoodProtein;
+
+  /// No description provided for @trainingFoodCarbs.
+  ///
+  /// In ar, this message translates to:
+  /// **'كربوهيدرات (جم)'**
+  String get trainingFoodCarbs;
+
+  /// No description provided for @trainingFoodFat.
+  ///
+  /// In ar, this message translates to:
+  /// **'دهون (جم)'**
+  String get trainingFoodFat;
+
+  /// No description provided for @trainingFoodSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'القسم'**
+  String get trainingFoodSection;
+
+  /// No description provided for @trainingFoodEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أصناف مطابقة'**
+  String get trainingFoodEmpty;
+
+  /// No description provided for @trainingFoodApprox.
+  ///
+  /// In ar, this message translates to:
+  /// **'القيم تقريبية للحصة المذكورة.'**
+  String get trainingFoodApprox;
+
+  /// No description provided for @trainingMine.
+  ///
+  /// In ar, this message translates to:
+  /// **'من إضافتك'**
+  String get trainingMine;
+
+  /// No description provided for @trainingEditEntry.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل'**
+  String get trainingEditEntry;
+
+  /// No description provided for @trainingDeleteOwnConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف هذا العنصر؟ الخطط التي استخدمته تحتفظ بنسختها.'**
+  String get trainingDeleteOwnConfirm;
+
+  /// No description provided for @trainingAddOwnExercise.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف تمرينًا خاصًا'**
+  String get trainingAddOwnExercise;
+
+  /// No description provided for @trainingOwnExerciseTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمرين خاص'**
+  String get trainingOwnExerciseTitle;
+
+  /// No description provided for @trainingExerciseSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'القسم'**
+  String get trainingExerciseSection;
+
+  /// No description provided for @trainingExerciseInstructions.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعليمات التنفيذ'**
+  String get trainingExerciseInstructions;
+
+  /// No description provided for @trainingMealFromTable.
+  ///
+  /// In ar, this message translates to:
+  /// **'من الجدول — السعرات محسوبة لك'**
+  String get trainingMealFromTable;
+
+  /// No description provided for @trainingLibraryEquipment.
+  ///
+  /// In ar, this message translates to:
+  /// **'المعدات'**
+  String get trainingLibraryEquipment;
 }
 
 class _AppLocalizationsDelegate

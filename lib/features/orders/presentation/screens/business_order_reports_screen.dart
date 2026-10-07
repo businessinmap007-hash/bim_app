@@ -1,3 +1,4 @@
+import '../../../../shared/widgets/app_bar_tab_bar.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -37,7 +38,7 @@ class _BusinessOrderReportsScreenState extends ConsumerState<BusinessOrderReport
         child: Scaffold(
           appBar: AppBar(
             title: Text(l10n.businessReportsTitle),
-            bottom: TabBar(tabs: [Tab(text: l10n.businessReportsTabCash), Tab(text: l10n.businessReportsTabInstallments)]),
+            bottom: AppBarTabBar(tabs: [Tab(text: l10n.businessReportsTabCash), Tab(text: l10n.businessReportsTabInstallments)]),
           ),
           body: TabBarView(
             children: [

@@ -1,3 +1,4 @@
+import '../../../../shared/widgets/app_bar_tab_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -65,7 +66,7 @@ class TrainingPlanDetailScreen extends ConsumerWidget {
                 ),
               ),
             ],
-            bottom: TabBar(
+            bottom: AppBarTabBar(
               isScrollable: true,
               tabs: [
                 Tab(text: l10n.trainingTabExercises),

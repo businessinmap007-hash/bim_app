@@ -124,6 +124,8 @@ class TrainingTemplatesApi {
     required String mealType,
     required String name,
     int? calories,
+    int? foodId,
+    double? servings,
     String? notes,
   }) async {
     await _client.post(
@@ -131,6 +133,8 @@ class TrainingTemplatesApi {
       data: {
         'meal_type': mealType,
         'name': name,
+        'food_id': ?foodId,
+        'servings': ?servings,
         'calories': ?calories,
         if (notes != null && notes.isNotEmpty) 'notes': notes,
       },

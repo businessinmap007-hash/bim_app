@@ -100,6 +100,8 @@ class PlanMeal {
   final String mealType;
   final String name;
   final int? calories;
+  final int? foodId;
+  final double servings;
   final String? notes;
   final List<PlanImage> images;
 
@@ -108,6 +110,8 @@ class PlanMeal {
     required this.mealType,
     required this.name,
     this.calories,
+    this.foodId,
+    this.servings = 1,
     this.notes,
     this.images = const [],
   });
@@ -117,6 +121,8 @@ class PlanMeal {
     mealType: json['meal_type'] as String? ?? '',
     name: json['name'] as String? ?? '',
     calories: (json['calories'] as num?)?.toInt(),
+    foodId: (json['food_id'] as num?)?.toInt(),
+    servings: (json['servings'] as num?)?.toDouble() ?? 1,
     notes: json['notes'] as String?,
     images: (json['images'] as List<dynamic>? ?? [])
         .map((e) => PlanImage.fromJson(e as Map<String, dynamic>))

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'app_colors.dart';
 import 'app_text_styles.dart';
@@ -15,6 +16,16 @@ class AppTheme {
     borderSide: BorderSide(color: colour, width: width),
   );
 
+  /// Tabs drawn ON the page's dark top (an AppBar's `bottom`, the business page's pinned strip): gold for the
+  /// open tab and its rule, white at 70% for the others — the canvas's header. Same in light and dark, since the
+  /// bar under them is dark in both.
+  static TabBarThemeData onBarTabBarTheme() => TabBarThemeData(
+    labelColor: AppColors.accentGold,
+    unselectedLabelColor: Colors.white.withValues(alpha: 0.7),
+    indicatorColor: AppColors.accentGold,
+    dividerColor: Colors.white.withValues(alpha: 0.14),
+  );
+
   static ThemeData light() => _base(Brightness.light);
   static ThemeData dark() => _base(Brightness.dark);
 
@@ -29,7 +40,9 @@ class AppTheme {
     // dark mode; explicit widget themes below (ElevatedButton) are
     // unaffected since they hardcode their own colors already.
     final interactive = isDark ? AppColors.accentGold : AppColors.primaryNavy;
-    final onInteractive = isDark ? AppColors.primaryNavy : Colors.white;
+    // «زر نشط باللون الداكن والنص ذهبى … والوضع الداكن للعكس: الزر ذهبى والنص داكن» — المالك، 2026-10-08.
+    // Light: a navy slab with GOLD ink; dark: a gold slab with navy ink.
+    final onInteractive = isDark ? AppColors.primaryNavy : AppColors.accentGold;
     // The ink the muted / hairline tokens are drawn in, and the canvas's hairline itself.
     final muted = isDark ? Colors.white : AppColors.primaryNavy;
     final hairline = isDark ? Colors.white.withValues(alpha: 0.14) : AppColors.primaryNavy.withValues(alpha: 0.18);
@@ -63,12 +76,16 @@ class AppTheme {
       // The line under every tab strip: the canvas hairline, not the scheme's full-strength
       // outline (a bright white rule across the dark screens).
       tabBarTheme: TabBarThemeData(dividerColor: hairline),
+      // «اعلى الصفحة اللون الداكن والخط ابيض» — the page's top is the dark brand navy with white ink in
+      // light as well (the canvas's header); dark mode keeps its own dark background. Tabs drawn on it
+      // use [onBarTabBarTheme].
       appBarTheme: AppBarTheme(
-        backgroundColor: isDark
-            ? AppColors.darkBackground
-            : AppColors.lightBackground,
-        foregroundColor: isDark ? Colors.white : AppColors.primaryNavy,
+        backgroundColor: isDark ? AppColors.darkBackground : AppColors.primaryNavy,
+        foregroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         elevation: 0,
+        scrolledUnderElevation: 0,
         centerTitle: true,
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -114,7 +131,8 @@ class AppTheme {
       // follow light/dark (dark = the canvas's #11213B / white 14% / white 70%).
       chipTheme: ChipThemeData(
         backgroundColor: isDark ? AppColors.darkSurface : AppColors.lightSurface,
-        selectedColor: AppColors.accentGold,
+        // the chosen chip is the active control: navy with gold ink in light, gold with navy ink in dark
+        selectedColor: interactive,
         disabledColor: (isDark ? AppColors.darkSurface : AppColors.lightSurface).withValues(alpha: 0.5),
         surfaceTintColor: Colors.transparent,
         showCheckmark: false,
@@ -145,17 +163,37 @@ class AppTheme {
           leadingDistribution: TextLeadingDistribution.even,
           color: WidgetStateColor.resolveWith(
             (states) => states.contains(WidgetState.selected)
-                ? AppColors.primaryNavy
+                ? onInteractive
                 : (isDark ? Colors.white : AppColors.primaryNavy).withValues(alpha: 0.7),
           ),
         ),
-        secondaryLabelStyle: const TextStyle(
+        secondaryLabelStyle: TextStyle(
           fontFamily: _fontFamily,
           fontSize: 15,
           fontWeight: FontWeight.w700,
           height: 1.2,
           leadingDistribution: TextLeadingDistribution.even,
-          color: AppColors.primaryNavy,
+          color: onInteractive,
+        ),
+      ),
+      // The canvas's toggle («نظام غذائي | جدول تمارين», «إقامة بالليل | Day use»): the chosen segment is the
+      // active control — navy with gold ink in light, gold with navy ink in dark; the rest sit on the surface.
+      segmentedButtonTheme: SegmentedButtonThemeData(
+        style: ButtonStyle(
+          backgroundColor: WidgetStateProperty.resolveWith(
+            (states) => states.contains(WidgetState.selected)
+                ? interactive
+                : (isDark ? AppColors.darkSurface : AppColors.lightSurface),
+          ),
+          foregroundColor: WidgetStateProperty.resolveWith(
+            (states) => states.contains(WidgetState.selected)
+                ? onInteractive
+                : (isDark ? Colors.white : AppColors.primaryNavy).withValues(alpha: 0.75),
+          ),
+          side: WidgetStatePropertyAll(BorderSide(color: hairline)),
+          textStyle: const WidgetStatePropertyAll(
+            TextStyle(fontFamily: _fontFamily, fontSize: 14, fontWeight: FontWeight.w700),
+          ),
         ),
       ),
       // ── Phase 3: the surfaces and the small controls ──────────────────────────

@@ -7,7 +7,9 @@ import '../../application/business_training_providers.dart';
 import '../../data/models/body_report.dart';
 import '../../data/models/set_log.dart';
 import '../../data/models/training_plan.dart';
+import '../../data/models/food_library.dart';
 import '../widgets/exercise_picker_sheet.dart';
+import '../widgets/food_picker_sheet.dart';
 import '../widgets/plan_photo_strip.dart';
 import 'training_monthly_summary_screen.dart';
 
@@ -208,6 +210,8 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
     final nameCtrl = TextEditingController();
     final caloriesCtrl = TextEditingController();
     String mealType = 'breakfast';
+    // a meal picked from «جدول التغذية»: its calories are the table's, worked out for the servings
+    PickedFood? picked;
 
     final confirmed = await showModalBottomSheet<bool>(
       context: context,
@@ -234,12 +238,30 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
                   ],
                 ),
                 const SizedBox(height: 8),
+                OutlinedButton.icon(
+                  onPressed: () async {
+                    final food = await pickLibraryFood(sheetContext);
+                    if (food == null) return;
+                    setSheetState(() {
+                      picked = food;
+                      nameCtrl.text = food.food.name;
+                      caloriesCtrl.text = '${food.calories}';
+                    });
+                  },
+                  icon: const Icon(Icons.restaurant_menu),
+                  label: Text(l10n.trainingPickFood),
+                ),
+                const SizedBox(height: 8),
                 TextField(controller: nameCtrl, decoration: InputDecoration(labelText: l10n.trainingMealName)),
                 const SizedBox(height: 8),
                 TextField(
                   controller: caloriesCtrl,
+                  readOnly: picked != null,
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(labelText: l10n.trainingCalories),
+                  decoration: InputDecoration(
+                    labelText: l10n.trainingCalories,
+                    helperText: picked == null ? null : l10n.trainingMealFromTable,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 FilledButton(
@@ -261,6 +283,8 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
             mealType: mealType,
             name: nameCtrl.text.trim(),
             calories: int.tryParse(caloriesCtrl.text.trim()),
+            foodId: picked?.food.id,
+            servings: picked?.servings,
           );
     } catch (e) {
       if (mounted) {

@@ -1,3 +1,4 @@
+import '../../../../shared/widgets/app_bar_tab_bar.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../l10n/app_localizations.dart';
@@ -25,7 +26,7 @@ class FinanceScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(l10n.financeTitle),
-          bottom: TabBar(
+          bottom: AppBarTabBar(
             isScrollable: true,
             tabs: [
               Tab(text: l10n.walletTitle),

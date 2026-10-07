@@ -33,6 +33,12 @@ class LibraryExercise {
   final int? defaultSets;
   final String? defaultReps;
 
+  /// how to do it — copied onto the plan's exercise as its note
+  final String? instructions;
+
+  /// the specialist's own exercise — they may correct and delete it
+  final bool mine;
+
   /// Demonstration photos (start / end position), absolute URLs.
   final List<String> imageUrls;
 
@@ -44,6 +50,8 @@ class LibraryExercise {
     this.equipment,
     this.defaultSets,
     this.defaultReps,
+    this.instructions,
+    this.mine = false,
     this.imageUrls = const [],
   });
 
@@ -55,6 +63,8 @@ class LibraryExercise {
     equipment: json['equipment'] as String?,
     defaultSets: (json['default_sets'] as num?)?.toInt(),
     defaultReps: json['default_reps'] as String?,
+    instructions: json['instructions'] as String?,
+    mine: json['mine'] as bool? ?? false,
     imageUrls: (json['images'] as List<dynamic>? ?? [])
         .map((e) => Env.assetUrl(e as String?))
         .whereType<String>()

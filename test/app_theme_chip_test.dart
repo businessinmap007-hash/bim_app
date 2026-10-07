@@ -3,8 +3,8 @@ import 'package:bim_app/app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// The canvas's chips as the app's chip theme: a chosen chip is a solid gold pill with
-/// bold navy text (no check mark); the rest take the surface colour, a hairline border
+/// The canvas's chips as the app's chip theme: a chosen chip is a solid pill with bold ink (no check
+/// mark) — navy with GOLD ink in light, gold with navy ink in dark («زر نشط باللون الداكن والنص ذهبى»); the rest take the surface colour, a hairline border
 /// and muted text — light and dark each in their own base colours.
 void main() {
   Future<void> pump(WidgetTester tester, ThemeData theme) => tester.pumpWidget(
@@ -19,9 +19,9 @@ void main() {
         ),
       );
 
-  for (final (name, theme, surface, muted) in [
-    ('light', AppTheme.light(), AppColors.lightSurface, AppColors.primaryNavy),
-    ('dark', AppTheme.dark(), AppColors.darkSurface, Colors.white),
+  for (final (name, theme, surface, muted, fill, ink) in [
+    ('light', AppTheme.light(), AppColors.lightSurface, AppColors.primaryNavy, AppColors.primaryNavy, AppColors.accentGold),
+    ('dark', AppTheme.dark(), AppColors.darkSurface, Colors.white, AppColors.accentGold, AppColors.primaryNavy),
   ]) {
     testWidgets('chips follow the canvas in $name', (tester) async {
       await pump(tester, theme);
@@ -31,14 +31,14 @@ void main() {
       final other = chips[1];
 
       expect(chosen.showCheckmark, isFalse, reason: 'the canvas marks the chosen chip by its fill alone');
-      expect(theme.chipTheme.selectedColor, AppColors.accentGold);
+      expect(theme.chipTheme.selectedColor, fill);
       expect(theme.chipTheme.backgroundColor, surface);
       expect((theme.chipTheme.shape as RoundedRectangleBorder).borderRadius, BorderRadius.circular(18));
       expect(theme.chipTheme.padding, const EdgeInsets.symmetric(horizontal: 14, vertical: 9));
 
       final label = theme.chipTheme.labelStyle!;
       final colour = label.color! as WidgetStateColor;
-      expect(colour.resolve({WidgetState.selected}), AppColors.primaryNavy);
+      expect(colour.resolve({WidgetState.selected}), ink);
       expect(colour.resolve({}), muted.withValues(alpha: 0.7));
       expect(label.fontSize, 15);
       expect(label.leadingDistribution, TextLeadingDistribution.even, reason: 'the label sits in the middle of the pill');
