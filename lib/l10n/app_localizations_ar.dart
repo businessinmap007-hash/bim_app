@@ -7034,4 +7034,101 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get rxNotes => 'ملاحظات الطبيب';
+
+  @override
+  String get stayReqButtonIssue => 'بلّغ عن مشكلة';
+
+  @override
+  String get stayReqButtonService => 'اطلب خدمة';
+
+  @override
+  String get stayReqIssueTitle => 'ما المشكلة في الغرفة؟';
+
+  @override
+  String get stayReqServiceTitle => 'ماذا تحتاج؟';
+
+  @override
+  String get stayReqNoteHint => 'ملاحظة (اختياري)';
+
+  @override
+  String get stayReqNoteHintRequired => 'صِف المشكلة';
+
+  @override
+  String get stayReqSend => 'إرسال للفندق';
+
+  @override
+  String get stayReqSent => 'وصل طلبك إلى الفندق';
+
+  @override
+  String get stayReqMine => 'طلباتك في هذه الإقامة';
+
+  @override
+  String get stayReqWithdraw => 'سحب الطلب';
+
+  @override
+  String get stayReqNotNow => 'الطلبات متاحة أثناء الإقامة فقط';
+
+  @override
+  String get stayReqStatusNew => 'في الانتظار';
+
+  @override
+  String get stayReqStatusInProgress => 'قيد التنفيذ';
+
+  @override
+  String get stayReqStatusDone => 'تم';
+
+  @override
+  String get stayReqStatusCancelled => 'أُلغي';
+
+  @override
+  String get stayReqScreenTitle => 'طلبات النزلاء';
+
+  @override
+  String get stayReqTabOpen => 'الجارية';
+
+  @override
+  String get stayReqTabDone => 'المنتهية';
+
+  @override
+  String get stayReqEmpty => 'لا توجد طلبات الآن';
+
+  @override
+  String stayReqRoom(String number) {
+    return 'غرفة $number';
+  }
+
+  @override
+  String get stayReqNoRoom => 'بدون رقم غرفة';
+
+  @override
+  String get stayReqStart => 'ابدأ التنفيذ';
+
+  @override
+  String get stayReqDone => 'تم التنفيذ';
+
+  @override
+  String get stayReqCannot => 'تعذّر';
+
+  @override
+  String get stayReqKindIssue => 'مشكلة';
+
+  @override
+  String get stayReqKindService => 'طلب خدمة';
+
+  @override
+  String get stayReqManageServices => 'الخدمات التي يطلبها النزيل';
+
+  @override
+  String get stayReqServicesIntro =>
+      'ما يستطيع النزيل طلبه أثناء إقامته. أضف ما يقدّمه فندقك وأوقف ما لا تقدّمه.';
+
+  @override
+  String get stayReqServicesStarting =>
+      'هذه قائمة المنصة المبدئية — عدّلها لتصير قائمتك.';
+
+  @override
+  String get stayReqAddServiceHint => 'اسم خدمة، أو عدة أسماء مفصولة بفاصلة';
+
+  @override
+  String get stayReqAdd => 'أضف';
 }

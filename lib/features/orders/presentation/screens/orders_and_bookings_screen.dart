@@ -20,6 +20,8 @@ import '../../../delivery/application/delivery_providers.dart';
 // testing — restore this import alongside the revert in _confirmDelivery().
 // import '../../../delivery/presentation/screens/token_scan_screen.dart';
 import '../../../projects/presentation/screens/project_progress_screen.dart';
+import '../../../stay_requests/data/models/stay_request.dart';
+import '../../../stay_requests/presentation/widgets/stay_request_sheet.dart';
 import '../../../ratings/presentation/widgets/leave_review_sheet.dart';
 import '../../../wallet/presentation/widgets/wallet_pin_prompt.dart';
 import '../../../general_chat/application/general_chat_providers.dart';
@@ -1188,6 +1190,29 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
                       : Text(l10n.bookingsConfirmReadiness),
                 ),
               ),
+            // «زر ابلاغ عن مشكلة بالغرفة وزر طلب خدمة» — only while a hotel stay is running
+            if (booking.status == 'in_progress' && booking.bookableItemType == 'booking_stay') ...[
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      icon: const Icon(Icons.report_problem_outlined),
+                      onPressed: () => showStayRequestSheet(context, bookingId: booking.id, kind: StayRequest.kindIssue),
+                      label: Text(l10n.stayReqButtonIssue),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      icon: const Icon(Icons.room_service_outlined),
+                      onPressed: () => showStayRequestSheet(context, bookingId: booking.id, kind: StayRequest.kindService),
+                      label: Text(l10n.stayReqButtonService),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+            ],
             if (booking.status == 'accepted') const SizedBox(height: 8),
             if (booking.isCancellable)
               SizedBox(

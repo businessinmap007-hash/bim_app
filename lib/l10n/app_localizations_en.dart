@@ -7068,4 +7068,102 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rxNotes => 'Doctor\'s notes';
+
+  @override
+  String get stayReqButtonIssue => 'Report a problem';
+
+  @override
+  String get stayReqButtonService => 'Request a service';
+
+  @override
+  String get stayReqIssueTitle => 'What is wrong in the room?';
+
+  @override
+  String get stayReqServiceTitle => 'What do you need?';
+
+  @override
+  String get stayReqNoteHint => 'Note (optional)';
+
+  @override
+  String get stayReqNoteHintRequired => 'Describe the problem';
+
+  @override
+  String get stayReqSend => 'Send to the hotel';
+
+  @override
+  String get stayReqSent => 'Your request reached the hotel';
+
+  @override
+  String get stayReqMine => 'Your requests in this stay';
+
+  @override
+  String get stayReqWithdraw => 'Withdraw the request';
+
+  @override
+  String get stayReqNotNow => 'Requests are available during the stay only';
+
+  @override
+  String get stayReqStatusNew => 'Waiting';
+
+  @override
+  String get stayReqStatusInProgress => 'In progress';
+
+  @override
+  String get stayReqStatusDone => 'Done';
+
+  @override
+  String get stayReqStatusCancelled => 'Cancelled';
+
+  @override
+  String get stayReqScreenTitle => 'Guest requests';
+
+  @override
+  String get stayReqTabOpen => 'Open';
+
+  @override
+  String get stayReqTabDone => 'Finished';
+
+  @override
+  String get stayReqEmpty => 'No requests right now';
+
+  @override
+  String stayReqRoom(String number) {
+    return 'Room $number';
+  }
+
+  @override
+  String get stayReqNoRoom => 'No room number';
+
+  @override
+  String get stayReqStart => 'Start working on it';
+
+  @override
+  String get stayReqDone => 'Mark done';
+
+  @override
+  String get stayReqCannot => 'Can\'t do it';
+
+  @override
+  String get stayReqKindIssue => 'Problem';
+
+  @override
+  String get stayReqKindService => 'Service';
+
+  @override
+  String get stayReqManageServices => 'Services a guest can order';
+
+  @override
+  String get stayReqServicesIntro =>
+      'What a guest may order during their stay. Add what your hotel offers and switch off what it does not.';
+
+  @override
+  String get stayReqServicesStarting =>
+      'This is the platform\'s starting list — edit it to make it yours.';
+
+  @override
+  String get stayReqAddServiceHint =>
+      'A service name, or several separated by commas';
+
+  @override
+  String get stayReqAdd => 'Add';
 }

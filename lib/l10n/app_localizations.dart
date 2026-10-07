@@ -12984,6 +12984,192 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'ملاحظات الطبيب'**
   String get rxNotes;
+
+  /// No description provided for @stayReqButtonIssue.
+  ///
+  /// In ar, this message translates to:
+  /// **'بلّغ عن مشكلة'**
+  String get stayReqButtonIssue;
+
+  /// No description provided for @stayReqButtonService.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلب خدمة'**
+  String get stayReqButtonService;
+
+  /// No description provided for @stayReqIssueTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما المشكلة في الغرفة؟'**
+  String get stayReqIssueTitle;
+
+  /// No description provided for @stayReqServiceTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ماذا تحتاج؟'**
+  String get stayReqServiceTitle;
+
+  /// No description provided for @stayReqNoteHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظة (اختياري)'**
+  String get stayReqNoteHint;
+
+  /// No description provided for @stayReqNoteHintRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'صِف المشكلة'**
+  String get stayReqNoteHintRequired;
+
+  /// No description provided for @stayReqSend.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال للفندق'**
+  String get stayReqSend;
+
+  /// No description provided for @stayReqSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصل طلبك إلى الفندق'**
+  String get stayReqSent;
+
+  /// No description provided for @stayReqMine.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلباتك في هذه الإقامة'**
+  String get stayReqMine;
+
+  /// No description provided for @stayReqWithdraw.
+  ///
+  /// In ar, this message translates to:
+  /// **'سحب الطلب'**
+  String get stayReqWithdraw;
+
+  /// No description provided for @stayReqNotNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطلبات متاحة أثناء الإقامة فقط'**
+  String get stayReqNotNow;
+
+  /// No description provided for @stayReqStatusNew.
+  ///
+  /// In ar, this message translates to:
+  /// **'في الانتظار'**
+  String get stayReqStatusNew;
+
+  /// No description provided for @stayReqStatusInProgress.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيد التنفيذ'**
+  String get stayReqStatusInProgress;
+
+  /// No description provided for @stayReqStatusDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم'**
+  String get stayReqStatusDone;
+
+  /// No description provided for @stayReqStatusCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُلغي'**
+  String get stayReqStatusCancelled;
+
+  /// No description provided for @stayReqScreenTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلبات النزلاء'**
+  String get stayReqScreenTitle;
+
+  /// No description provided for @stayReqTabOpen.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجارية'**
+  String get stayReqTabOpen;
+
+  /// No description provided for @stayReqTabDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'المنتهية'**
+  String get stayReqTabDone;
+
+  /// No description provided for @stayReqEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد طلبات الآن'**
+  String get stayReqEmpty;
+
+  /// No description provided for @stayReqRoom.
+  ///
+  /// In ar, this message translates to:
+  /// **'غرفة {number}'**
+  String stayReqRoom(String number);
+
+  /// No description provided for @stayReqNoRoom.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون رقم غرفة'**
+  String get stayReqNoRoom;
+
+  /// No description provided for @stayReqStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ التنفيذ'**
+  String get stayReqStart;
+
+  /// No description provided for @stayReqDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التنفيذ'**
+  String get stayReqDone;
+
+  /// No description provided for @stayReqCannot.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر'**
+  String get stayReqCannot;
+
+  /// No description provided for @stayReqKindIssue.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشكلة'**
+  String get stayReqKindIssue;
+
+  /// No description provided for @stayReqKindService.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب خدمة'**
+  String get stayReqKindService;
+
+  /// No description provided for @stayReqManageServices.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخدمات التي يطلبها النزيل'**
+  String get stayReqManageServices;
+
+  /// No description provided for @stayReqServicesIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما يستطيع النزيل طلبه أثناء إقامته. أضف ما يقدّمه فندقك وأوقف ما لا تقدّمه.'**
+  String get stayReqServicesIntro;
+
+  /// No description provided for @stayReqServicesStarting.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذه قائمة المنصة المبدئية — عدّلها لتصير قائمتك.'**
+  String get stayReqServicesStarting;
+
+  /// No description provided for @stayReqAddServiceHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم خدمة، أو عدة أسماء مفصولة بفاصلة'**
+  String get stayReqAddServiceHint;
+
+  /// No description provided for @stayReqAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف'**
+  String get stayReqAdd;
 }
 
 class _AppLocalizationsDelegate

@@ -29,6 +29,8 @@ import '../../../projects/presentation/screens/projects_screen.dart';
 import '../../../retail_listings/presentation/screens/retail_listings_screen.dart';
 import '../../../schedules/presentation/screens/my_trip_schedules_screen.dart';
 import '../../../staff/application/staff_providers.dart';
+import '../../../stay_requests/application/stay_requests_providers.dart';
+import '../../../stay_requests/presentation/screens/stay_requests_screen.dart';
 import '../../../staff/presentation/screens/staff_team_settings_screen.dart';
 import '../../../table/presentation/screens/table_calls_screen.dart';
 import '../../../training/presentation/screens/my_training_clients_screen.dart';
@@ -61,6 +63,7 @@ class ServicesSettingsScreen extends ConsumerWidget {
     final menuKinds = ref.watch(myMenuKindsProvider).valueOrNull;
     // «خدمات المحل» (cooking method…) only for a trade that offers services.
     final hasShopAddons = ref.watch(shopAddonsProvider).valueOrNull?.isNotEmpty ?? false;
+    final hasStayUnits = ref.watch(hasStayUnitsProvider).valueOrNull ?? false;
     final authState = ref.watch(authControllerProvider);
     final isCarrier =
         authState is AuthSignedIn && authState.user.isShippingCarrier;
@@ -75,12 +78,14 @@ class ServicesSettingsScreen extends ConsumerWidget {
           menuKinds: menuKinds,
           isCarrier: isCarrier,
           hasShopAddons: hasShopAddons,
+          hasStayUnits: hasStayUnits,
         ),
         data: (keys) => _ServiceList(
           keys: keys,
           menuKinds: menuKinds,
           isCarrier: isCarrier,
           hasShopAddons: hasShopAddons,
+          hasStayUnits: hasStayUnits,
         ),
       ),
     );
@@ -101,11 +106,15 @@ class _ServiceList extends StatelessWidget {
 
   /// The trade offers priced services («طريقة الطهي») — the shop prices them here.
   final bool hasShopAddons;
+
+  /// The business lets rooms (a `booking_stay` unit) — it is a hotel, and hotels hear from their guests.
+  final bool hasStayUnits;
   const _ServiceList({
     required this.keys,
     required this.menuKinds,
     required this.isCarrier,
     this.hasShopAddons = false,
+    this.hasStayUnits = false,
   });
 
   bool _has(String key) => keys == null || keys!.contains(key);
@@ -217,6 +226,13 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.shield_outlined,
         title: l10n.bookingTermsTitle,
         builder: (_) => const BookingTermsScreen(),
+      ),
+      _Tile(
+        // only a business that lets rooms has guests to hear from
+        show: _has('bookings') && hasStayUnits,
+        leading: Icons.room_service_outlined,
+        title: l10n.stayReqScreenTitle,
+        builder: (_) => const StayRequestsScreen(),
       ),
       _Tile(
         show: _has('bookings'),
