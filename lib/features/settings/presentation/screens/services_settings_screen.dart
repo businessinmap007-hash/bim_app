@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../booking/presentation/screens/business_bookings_screen.dart';
 import '../../../booking_settings/presentation/screens/booking_settings_screen.dart';
+import '../../../booking_settings/presentation/screens/booking_terms_screen.dart';
 import '../../../delivery/application/delivery_providers.dart';
 import '../../../auth/application/auth_controller.dart';
 import '../../../delivery/presentation/screens/delivery_fee_settings_screen.dart';
@@ -210,6 +211,12 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.event_available_outlined,
         title: l10n.bookingSettingsTitle,
         builder: (_) => const BookingSettingsScreen(),
+      ),
+      _Tile(
+        show: _has('bookings'),
+        leading: Icons.shield_outlined,
+        title: l10n.bookingTermsTitle,
+        builder: (_) => const BookingTermsScreen(),
       ),
       _Tile(
         show: _has('bookings'),

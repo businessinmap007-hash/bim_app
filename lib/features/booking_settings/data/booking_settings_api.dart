@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 
 import '../../../core/network/api_client.dart';
 import 'models/booking_settings_models.dart';
+import 'models/booking_terms.dart';
 
 /// /business/prices, /business/bookable-items, /business/working-hours —
 /// business-only self-service (the `business` middleware gate on the
@@ -149,6 +150,17 @@ class BookingSettingsApi {
 
   Future<void> deleteBookableItemImage(int itemId, int imageId) =>
       _client.delete('/business/bookable-items/$itemId/images/$imageId');
+
+  /// «شروط الحجز» — GET /business/booking-terms.
+  Future<BookingTerms> bookingTerms() async {
+    final data = await _client.get('/business/booking-terms') as Map<String, dynamic>;
+    return BookingTerms.fromJson(data);
+  }
+
+  Future<BookingTerms> saveBookingTerms(BookingTerms terms) async {
+    final data = await _client.put('/business/booking-terms', data: terms.toJson()) as Map<String, dynamic>;
+    return BookingTerms.fromJson(data);
+  }
 
   Future<CheckTimes> checkTimes() async {
     final data =

@@ -806,6 +806,144 @@ class AppLocalizationsEn extends AppLocalizations {
       'Delete this album and all its photos?';
 
   @override
+  String get bookingTermsTitle => 'Booking terms';
+
+  @override
+  String get bookingTermsIntro =>
+      'Choose how your bookings are secured. Every booking waits for your approval before it is confirmed.';
+
+  @override
+  String get bookingTermsEnabled => 'Ask for security on a booking';
+
+  @override
+  String get bookingTermsEnabledHint =>
+      'Without it a booking is made with no deposit.';
+
+  @override
+  String get bookingTermsModeTitle => 'How it is secured';
+
+  @override
+  String get bookingTermsModeDeposit => 'Freeze a deposit';
+
+  @override
+  String get bookingTermsModeDepositHint =>
+      'An amount is frozen in the customer\'s wallet and one against it in yours; both are released with the two parties\' agreement.';
+
+  @override
+  String get bookingTermsModeGuarantee => 'Freeze the customer\'s guarantee';
+
+  @override
+  String get bookingTermsModeGuaranteeHint =>
+      'The customer\'s guarantee stands for it instead of cash; if it cannot cover, a deposit is asked.';
+
+  @override
+  String get bookingTermsModeExternal => 'Transfer outside the app';
+
+  @override
+  String get bookingTermsModeExternalHint =>
+      'The customer transfers the amount to you directly; you and the customer both confirm it. The platform carries no responsibility for the transfer.';
+
+  @override
+  String get bookingTermsRecommended => 'Preferred';
+
+  @override
+  String get bookingTermsPercentTitle => 'Deposit amount';
+
+  @override
+  String bookingTermsPercentValue(String percent) {
+    return '$percent% of the booking';
+  }
+
+  @override
+  String get bookingTermsBaseTitle => 'Counted on';
+
+  @override
+  String get bookingTermsBaseFirstDay => 'The first day\'s value';
+
+  @override
+  String get bookingTermsBaseTotal => 'The whole booking';
+
+  @override
+  String get bookingTermsCounterTitle => 'What you freeze against it';
+
+  @override
+  String bookingTermsCounterValue(String percent) {
+    return '$percent% of the deposit';
+  }
+
+  @override
+  String get bookingTermsCounterHint =>
+      'A share of the customer\'s deposit is frozen from your wallet, so you are bound too.';
+
+  @override
+  String get bookingTermsGuaranteeTitle => 'Guarantee asked for';
+
+  @override
+  String get bookingTermsGuaranteeSame => 'As much as the deposit';
+
+  @override
+  String bookingTermsGuaranteeTimes(String n) {
+    return '$n× the day\'s value';
+  }
+
+  @override
+  String get bookingTermsGuaranteeHint =>
+      'It can be several times the value of the day\'s booking.';
+
+  @override
+  String get bookingTermsExternalNote =>
+      'The customer transfers the deposit directly, and you confirm it reached you before the stay starts.';
+
+  @override
+  String get bookingTermsForfeitTitle =>
+      'If the customer breaks the booking, the whole deposit is mine';
+
+  @override
+  String get bookingTermsForfeitHint =>
+      'A declared term the customer sees when booking, and the arbitrator reads in a dispute.';
+
+  @override
+  String bookingTermsExampleTitle(String value) {
+    return 'Example: one day at $value';
+  }
+
+  @override
+  String bookingTermsExampleDeposit(String amount) {
+    return 'Deposit: $amount';
+  }
+
+  @override
+  String bookingTermsExampleCustomer(String amount) {
+    return 'Frozen from the customer: $amount';
+  }
+
+  @override
+  String bookingTermsExampleBusiness(String amount) {
+    return 'Frozen from you: $amount';
+  }
+
+  @override
+  String bookingTermsExampleExternal(String amount) {
+    return 'Transferred directly by the customer: $amount';
+  }
+
+  @override
+  String bookingTermsExampleGuarantee(String amount) {
+    return 'Customer guarantee asked for: $amount';
+  }
+
+  @override
+  String get bookingTermsSpecificWarning =>
+      'You have terms for specific services, and they take priority over these.';
+
+  @override
+  String get bookingTermsApprovalNote =>
+      'Every booking waits for your approval before it is confirmed.';
+
+  @override
+  String get bookingTermsSaved => 'Booking terms saved';
+
+  @override
   String get bookingSettingsTitle => 'Booking management';
 
   @override

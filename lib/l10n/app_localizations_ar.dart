@@ -811,6 +811,141 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profileAlbumsDeleteConfirm => 'هل تريد حذف هذا الألبوم وكل صوره؟';
 
   @override
+  String get bookingTermsTitle => 'شروط الحجز';
+
+  @override
+  String get bookingTermsIntro =>
+      'حدّد كيف تؤمّن حجوزاتك. كل حجز ينتظر موافقتك قبل أن يتأكد.';
+
+  @override
+  String get bookingTermsEnabled => 'اطلب تأمينًا على الحجز';
+
+  @override
+  String get bookingTermsEnabledHint => 'بدونه يتم الحجز دون ديبوزت.';
+
+  @override
+  String get bookingTermsModeTitle => 'طريقة التأمين';
+
+  @override
+  String get bookingTermsModeDeposit => 'تجميد ديبوزت';
+
+  @override
+  String get bookingTermsModeDepositHint =>
+      'يُجمَّد مبلغ من محفظة العميل ومقابله من محفظتك، ويُفرج عنهما بموافقة الطرفين.';
+
+  @override
+  String get bookingTermsModeGuarantee => 'تجميد ضمان العميل';
+
+  @override
+  String get bookingTermsModeGuaranteeHint =>
+      'يقوم ضمان العميل مقام المال، فإن لم يكفِ طُلب منه ديبوزت.';
+
+  @override
+  String get bookingTermsModeExternal => 'تحويل خارج التطبيق';
+
+  @override
+  String get bookingTermsModeExternalHint =>
+      'يحوّل العميل المبلغ إليك مباشرة، ويؤكد الطرفان ذلك. المنصة لا تتحمّل أي مسؤولية عن التحويل.';
+
+  @override
+  String get bookingTermsRecommended => 'مفضّل';
+
+  @override
+  String get bookingTermsPercentTitle => 'قيمة الديبوزت';
+
+  @override
+  String bookingTermsPercentValue(String percent) {
+    return '$percent٪ من قيمة الحجز';
+  }
+
+  @override
+  String get bookingTermsBaseTitle => 'تُحسب على';
+
+  @override
+  String get bookingTermsBaseFirstDay => 'قيمة أول يوم';
+
+  @override
+  String get bookingTermsBaseTotal => 'إجمالي الحجز';
+
+  @override
+  String get bookingTermsCounterTitle => 'ما تجمّده أنت مقابله';
+
+  @override
+  String bookingTermsCounterValue(String percent) {
+    return '$percent٪ من الديبوزت';
+  }
+
+  @override
+  String get bookingTermsCounterHint =>
+      'نسبة من ديبوزت العميل تُجمَّد من محفظتك، فتلتزم أنت أيضًا.';
+
+  @override
+  String get bookingTermsGuaranteeTitle => 'حجم الضمان المطلوب';
+
+  @override
+  String get bookingTermsGuaranteeSame => 'بقدر الديبوزت';
+
+  @override
+  String bookingTermsGuaranteeTimes(String n) {
+    return '$n× قيمة حجز اليوم';
+  }
+
+  @override
+  String get bookingTermsGuaranteeHint => 'يمكن أن يكون أضعاف قيمة حجز اليوم.';
+
+  @override
+  String get bookingTermsExternalNote =>
+      'يحوّل العميل الديبوزت مباشرة، وتؤكد أنت أنه وصلك قبل بدء الإقامة.';
+
+  @override
+  String get bookingTermsForfeitTitle =>
+      'عند تخلّف العميل يُخصم الديبوزت كاملًا لصالحي';
+
+  @override
+  String get bookingTermsForfeitHint =>
+      'شرط معلن يراه العميل عند الحجز، ويرجع إليه المحكّم عند الخلاف.';
+
+  @override
+  String bookingTermsExampleTitle(String value) {
+    return 'مثال: حجز يوم بـ$value';
+  }
+
+  @override
+  String bookingTermsExampleDeposit(String amount) {
+    return 'الديبوزت: $amount';
+  }
+
+  @override
+  String bookingTermsExampleCustomer(String amount) {
+    return 'يُجمَّد من العميل: $amount';
+  }
+
+  @override
+  String bookingTermsExampleBusiness(String amount) {
+    return 'يُجمَّد منك: $amount';
+  }
+
+  @override
+  String bookingTermsExampleExternal(String amount) {
+    return 'يحوّله العميل مباشرة: $amount';
+  }
+
+  @override
+  String bookingTermsExampleGuarantee(String amount) {
+    return 'ضمان العميل المطلوب: $amount';
+  }
+
+  @override
+  String get bookingTermsSpecificWarning =>
+      'لديك شروط مخصصة لخدمات معيّنة، وهي تتقدّم على هذه.';
+
+  @override
+  String get bookingTermsApprovalNote => 'كل حجز ينتظر موافقتك قبل أن يتأكد.';
+
+  @override
+  String get bookingTermsSaved => 'تم حفظ شروط الحجز';
+
+  @override
   String get bookingSettingsTitle => 'إدارة الحجز';
 
   @override

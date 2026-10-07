@@ -1544,6 +1544,222 @@ abstract class AppLocalizations {
   /// **'هل تريد حذف هذا الألبوم وكل صوره؟'**
   String get profileAlbumsDeleteConfirm;
 
+  /// No description provided for @bookingTermsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'شروط الحجز'**
+  String get bookingTermsTitle;
+
+  /// No description provided for @bookingTermsIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدّد كيف تؤمّن حجوزاتك. كل حجز ينتظر موافقتك قبل أن يتأكد.'**
+  String get bookingTermsIntro;
+
+  /// No description provided for @bookingTermsEnabled.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلب تأمينًا على الحجز'**
+  String get bookingTermsEnabled;
+
+  /// No description provided for @bookingTermsEnabledHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدونه يتم الحجز دون ديبوزت.'**
+  String get bookingTermsEnabledHint;
+
+  /// No description provided for @bookingTermsModeTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة التأمين'**
+  String get bookingTermsModeTitle;
+
+  /// No description provided for @bookingTermsModeDeposit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تجميد ديبوزت'**
+  String get bookingTermsModeDeposit;
+
+  /// No description provided for @bookingTermsModeDepositHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُجمَّد مبلغ من محفظة العميل ومقابله من محفظتك، ويُفرج عنهما بموافقة الطرفين.'**
+  String get bookingTermsModeDepositHint;
+
+  /// No description provided for @bookingTermsModeGuarantee.
+  ///
+  /// In ar, this message translates to:
+  /// **'تجميد ضمان العميل'**
+  String get bookingTermsModeGuarantee;
+
+  /// No description provided for @bookingTermsModeGuaranteeHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يقوم ضمان العميل مقام المال، فإن لم يكفِ طُلب منه ديبوزت.'**
+  String get bookingTermsModeGuaranteeHint;
+
+  /// No description provided for @bookingTermsModeExternal.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحويل خارج التطبيق'**
+  String get bookingTermsModeExternal;
+
+  /// No description provided for @bookingTermsModeExternalHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يحوّل العميل المبلغ إليك مباشرة، ويؤكد الطرفان ذلك. المنصة لا تتحمّل أي مسؤولية عن التحويل.'**
+  String get bookingTermsModeExternalHint;
+
+  /// No description provided for @bookingTermsRecommended.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفضّل'**
+  String get bookingTermsRecommended;
+
+  /// No description provided for @bookingTermsPercentTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيمة الديبوزت'**
+  String get bookingTermsPercentTitle;
+
+  /// No description provided for @bookingTermsPercentValue.
+  ///
+  /// In ar, this message translates to:
+  /// **'{percent}٪ من قيمة الحجز'**
+  String bookingTermsPercentValue(String percent);
+
+  /// No description provided for @bookingTermsBaseTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تُحسب على'**
+  String get bookingTermsBaseTitle;
+
+  /// No description provided for @bookingTermsBaseFirstDay.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيمة أول يوم'**
+  String get bookingTermsBaseFirstDay;
+
+  /// No description provided for @bookingTermsBaseTotal.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي الحجز'**
+  String get bookingTermsBaseTotal;
+
+  /// No description provided for @bookingTermsCounterTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما تجمّده أنت مقابله'**
+  String get bookingTermsCounterTitle;
+
+  /// No description provided for @bookingTermsCounterValue.
+  ///
+  /// In ar, this message translates to:
+  /// **'{percent}٪ من الديبوزت'**
+  String bookingTermsCounterValue(String percent);
+
+  /// No description provided for @bookingTermsCounterHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة من ديبوزت العميل تُجمَّد من محفظتك، فتلتزم أنت أيضًا.'**
+  String get bookingTermsCounterHint;
+
+  /// No description provided for @bookingTermsGuaranteeTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجم الضمان المطلوب'**
+  String get bookingTermsGuaranteeTitle;
+
+  /// No description provided for @bookingTermsGuaranteeSame.
+  ///
+  /// In ar, this message translates to:
+  /// **'بقدر الديبوزت'**
+  String get bookingTermsGuaranteeSame;
+
+  /// No description provided for @bookingTermsGuaranteeTimes.
+  ///
+  /// In ar, this message translates to:
+  /// **'{n}× قيمة حجز اليوم'**
+  String bookingTermsGuaranteeTimes(String n);
+
+  /// No description provided for @bookingTermsGuaranteeHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يمكن أن يكون أضعاف قيمة حجز اليوم.'**
+  String get bookingTermsGuaranteeHint;
+
+  /// No description provided for @bookingTermsExternalNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'يحوّل العميل الديبوزت مباشرة، وتؤكد أنت أنه وصلك قبل بدء الإقامة.'**
+  String get bookingTermsExternalNote;
+
+  /// No description provided for @bookingTermsForfeitTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عند تخلّف العميل يُخصم الديبوزت كاملًا لصالحي'**
+  String get bookingTermsForfeitTitle;
+
+  /// No description provided for @bookingTermsForfeitHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'شرط معلن يراه العميل عند الحجز، ويرجع إليه المحكّم عند الخلاف.'**
+  String get bookingTermsForfeitHint;
+
+  /// No description provided for @bookingTermsExampleTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مثال: حجز يوم بـ{value}'**
+  String bookingTermsExampleTitle(String value);
+
+  /// No description provided for @bookingTermsExampleDeposit.
+  ///
+  /// In ar, this message translates to:
+  /// **'الديبوزت: {amount}'**
+  String bookingTermsExampleDeposit(String amount);
+
+  /// No description provided for @bookingTermsExampleCustomer.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُجمَّد من العميل: {amount}'**
+  String bookingTermsExampleCustomer(String amount);
+
+  /// No description provided for @bookingTermsExampleBusiness.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُجمَّد منك: {amount}'**
+  String bookingTermsExampleBusiness(String amount);
+
+  /// No description provided for @bookingTermsExampleExternal.
+  ///
+  /// In ar, this message translates to:
+  /// **'يحوّله العميل مباشرة: {amount}'**
+  String bookingTermsExampleExternal(String amount);
+
+  /// No description provided for @bookingTermsExampleGuarantee.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضمان العميل المطلوب: {amount}'**
+  String bookingTermsExampleGuarantee(String amount);
+
+  /// No description provided for @bookingTermsSpecificWarning.
+  ///
+  /// In ar, this message translates to:
+  /// **'لديك شروط مخصصة لخدمات معيّنة، وهي تتقدّم على هذه.'**
+  String get bookingTermsSpecificWarning;
+
+  /// No description provided for @bookingTermsApprovalNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل حجز ينتظر موافقتك قبل أن يتأكد.'**
+  String get bookingTermsApprovalNote;
+
+  /// No description provided for @bookingTermsSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ شروط الحجز'**
+  String get bookingTermsSaved;
+
   /// No description provided for @bookingSettingsTitle.
   ///
   /// In ar, this message translates to:
