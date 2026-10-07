@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
+import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../media/application/media_picker_service.dart';
 import '../../application/booking_settings_controller.dart';
 import '../../data/models/booking_settings_models.dart';
+import '../../data/models/room_models.dart';
 import '../widgets/bookable_rooms_section.dart';
 import '../widgets/day_use_section.dart';
 
@@ -32,23 +34,7 @@ class BookableItemEditScreen extends ConsumerWidget {
       );
     }
 
-    return Scaffold(
-      appBar: AppBar(title: Text(row.label)),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          _ImagesSection(row: row),
-          if (row.itemType == 'booking_stay') ...[
-            const SizedBox(height: 20),
-            BookableRoomsSection(itemId: row.id),
-            const SizedBox(height: 20),
-            DayUseSection(itemId: row.id),
-          ],
-          const SizedBox(height: 20),
-          _DetailsForm(row: row),
-        ],
-      ),
-    );
+    return _Editor(row: row);
   }
 }
 
@@ -165,20 +151,43 @@ class _AddImageTile extends StatelessWidget {
   }
 }
 
-class _DetailsForm extends ConsumerStatefulWidget {
+/// The whole room type in one form with one save bar — details, and for a hotel its Day use — like every other edit
+/// screen in the app: the bar turns to «تم الحفظ» once nothing is left unsaved.
+class _Editor extends ConsumerStatefulWidget {
   final BookableItemRow row;
-  const _DetailsForm({required this.row});
+  const _Editor({required this.row});
 
   @override
-  ConsumerState<_DetailsForm> createState() => _DetailsFormState();
+  ConsumerState<_Editor> createState() => _EditorState();
 }
 
-class _DetailsFormState extends ConsumerState<_DetailsForm> {
+class _EditorState extends ConsumerState<_Editor> {
   late final TextEditingController _description;
   late final TextEditingController _capacity;
   late final TextEditingController _quantity;
+  final _dayUsePrice = TextEditingController();
   late String _status;
+  DayUseSettings _dayUse = const DayUseSettings();
+  bool _dayUseLoaded = false;
   bool _saving = false;
+  String? _error;
+  String? _savedSignature;
+
+  bool get _isStay => widget.row.itemType == 'booking_stay';
+
+  /// Everything the form can change — the bar is «saved» exactly while this equals what was last saved.
+  String get _signature => [
+    _description.text.trim(),
+    _capacity.text.trim(),
+    _quantity.text.trim(),
+    _status,
+    _dayUse.enabled,
+    _dayUse.from,
+    _dayUse.to,
+    _dayUsePrice.text.trim(),
+  ].join('|');
+
+  bool get _isSaved => (!_isStay || _dayUseLoaded) && _savedSignature == _signature;
 
   @override
   void initState() {
@@ -187,18 +196,49 @@ class _DetailsFormState extends ConsumerState<_DetailsForm> {
     _capacity = TextEditingController(text: widget.row.capacity?.toString() ?? '');
     _quantity = TextEditingController(text: widget.row.quantity.toString());
     _status = widget.row.status;
+    for (final c in [_description, _capacity, _quantity, _dayUsePrice]) {
+      c.addListener(_refresh);
+    }
+    if (_isStay) {
+      _loadDayUse();
+    } else {
+      _savedSignature = _signature;
+    }
   }
+
+  void _refresh() => setState(() {});
 
   @override
   void dispose() {
     _description.dispose();
     _capacity.dispose();
     _quantity.dispose();
+    _dayUsePrice.dispose();
     super.dispose();
   }
 
+  Future<void> _loadDayUse() async {
+    try {
+      final settings = await ref.read(bookingSettingsApiProvider).dayUse(widget.row.id);
+      if (!mounted) return;
+      setState(() {
+        _dayUse = settings;
+        _dayUsePrice.text = settings.price == null ? '' : settings.price!.toStringAsFixed(settings.price! % 1 == 0 ? 0 : 2);
+        _dayUseLoaded = true;
+        _savedSignature = _signature;
+      });
+    } catch (_) {
+      // the rest of the form still works without it
+      if (mounted) setState(() => _savedSignature = _signature);
+    }
+  }
+
   Future<void> _save() async {
-    setState(() => _saving = true);
+    final l10n = AppLocalizations.of(context)!;
+    setState(() {
+      _saving = true;
+      _error = null;
+    });
     try {
       await ref
           .read(bookingSettingsControllerProvider.notifier)
@@ -213,9 +253,21 @@ class _DetailsFormState extends ConsumerState<_DetailsForm> {
             quantity: int.tryParse(_quantity.text.trim()),
             status: _status,
           );
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.commonSave)));
+      if (_isStay && _dayUseLoaded) {
+        final saved = await ref.read(bookingSettingsApiProvider).saveDayUse(
+          widget.row.id,
+          DayUseSettings(
+            enabled: _dayUse.enabled,
+            from: _dayUse.from,
+            to: _dayUse.to,
+            price: double.tryParse(_dayUsePrice.text.trim().replaceAll(',', '.')),
+          ),
+        );
+        _dayUse = saved;
       }
+      if (mounted) setState(() => _savedSignature = _signature);
+    } catch (e) {
+      if (mounted) setState(() => _error = e is ApiException && e.message.isNotEmpty ? e.message : l10n.commonSomethingWentWrong);
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -224,53 +276,76 @@ class _DetailsFormState extends ConsumerState<_DetailsForm> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final row = widget.row;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        TextField(
-          controller: _description,
-          maxLines: 3,
-          decoration: InputDecoration(labelText: l10n.bookingSettingsDescription),
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: _capacity,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(labelText: l10n.bookingSettingsCapacity),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: TextField(
-                controller: _quantity,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(labelText: l10n.cartQty),
-              ),
-            ),
+    return Scaffold(
+      appBar: AppBar(title: Text(row.label)),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          _ImagesSection(row: row),
+          if (_isStay) ...[
+            const SizedBox(height: 20),
+            BookableRoomsSection(itemId: row.id),
+            if (_dayUseLoaded) ...[
+              const SizedBox(height: 20),
+              DayUseFields(value: _dayUse, price: _dayUsePrice, onChanged: (v) => setState(() => _dayUse = v)),
+            ],
           ],
-        ),
-        const SizedBox(height: 12),
-        DropdownButtonFormField<String>(
-          initialValue: _status,
-          decoration: InputDecoration(labelText: l10n.bookingSettingsStatus),
-          items: [
-            DropdownMenuItem(value: 'available', child: Text(l10n.bookingSettingsStatusAvailable)),
-            DropdownMenuItem(value: 'maintenance', child: Text(l10n.bookingSettingsStatusMaintenance)),
+          const SizedBox(height: 20),
+          TextField(
+            controller: _description,
+            maxLines: 3,
+            decoration: InputDecoration(labelText: l10n.bookingSettingsDescription),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _capacity,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(labelText: l10n.bookingSettingsCapacity),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: TextField(
+                  controller: _quantity,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(labelText: l10n.cartQty),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          DropdownButtonFormField<String>(
+            initialValue: _status,
+            decoration: InputDecoration(labelText: l10n.bookingSettingsStatus),
+            items: [
+              DropdownMenuItem(value: 'available', child: Text(l10n.bookingSettingsStatusAvailable)),
+              DropdownMenuItem(value: 'maintenance', child: Text(l10n.bookingSettingsStatusMaintenance)),
+            ],
+            onChanged: (value) => setState(() => _status = value ?? _status),
+          ),
+          if (_error != null) ...[
+            const SizedBox(height: 12),
+            Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
           ],
-          onChanged: (value) => setState(() => _status = value ?? _status),
+        ],
+      ),
+      bottomNavigationBar: SafeArea(
+        minimum: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+        child: SizedBox(
+          width: double.infinity,
+          child: FilledButton(
+            onPressed: _saving || _isSaved ? null : _save,
+            child: _saving
+                ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                : Text(_isSaved ? l10n.storeTermsSavedDone : l10n.commonSave),
+          ),
         ),
-        const SizedBox(height: 16),
-        ElevatedButton(
-          onPressed: _saving ? null : _save,
-          child: _saving
-              ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-              : Text(l10n.commonSave),
-        ),
-      ],
+      ),
     );
   }
 }

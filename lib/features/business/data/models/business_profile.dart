@@ -9,10 +9,14 @@ class BusinessSections {
   final bool menu;
   final bool services;
 
+  /// The business sells bookings (a hotel's rooms, a hall, a pitch): its services tab is called «الحجز».
+  final bool booking;
+
   const BusinessSections({
     required this.posts,
     required this.menu,
     required this.services,
+    this.booking = false,
   });
 
   bool get any => posts || menu || services;
@@ -21,6 +25,7 @@ class BusinessSections {
     posts: json['posts'] as bool? ?? false,
     menu: json['menu'] as bool? ?? false,
     services: json['services'] as bool? ?? false,
+    booking: json['booking'] as bool? ?? false,
   );
 }
 

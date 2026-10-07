@@ -1040,6 +1040,12 @@ abstract class AppLocalizations {
   /// **'منيو'**
   String get businessTabMenu;
 
+  /// No description provided for @businessTabBooking.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحجز'**
+  String get businessTabBooking;
+
   /// No description provided for @businessTabServices.
   ///
   /// In ar, this message translates to:
@@ -13236,18 +13242,6 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'سعر Day use'**
   String get dayUsePrice;
-
-  /// No description provided for @dayUseSave.
-  ///
-  /// In ar, this message translates to:
-  /// **'حفظ Day use'**
-  String get dayUseSave;
-
-  /// No description provided for @dayUseSaved.
-  ///
-  /// In ar, this message translates to:
-  /// **'تم حفظ Day use'**
-  String get dayUseSaved;
 }
 
 class _AppLocalizationsDelegate

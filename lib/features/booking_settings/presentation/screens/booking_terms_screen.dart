@@ -108,7 +108,6 @@ class _BookingTermsScreenState extends ConsumerState<BookingTermsScreen> {
         const SizedBox(height: 8),
         SwitchListTile(
           contentPadding: EdgeInsets.zero,
-          activeThumbColor: AppColors.accentGold,
           title: Text(l10n.bookingTermsEnabled),
           subtitle: Text(l10n.bookingTermsEnabledHint),
           value: terms.enabled,
@@ -212,7 +211,6 @@ class _BookingTermsScreenState extends ConsumerState<BookingTermsScreen> {
           const SizedBox(height: 12),
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
-            activeThumbColor: AppColors.accentGold,
             title: Text(l10n.bookingTermsForfeitTitle),
             subtitle: Text(l10n.bookingTermsForfeitHint),
             value: terms.forfeitToBusiness,
@@ -221,7 +219,6 @@ class _BookingTermsScreenState extends ConsumerState<BookingTermsScreen> {
           if (terms.mode == BookingSecurityMode.depositFreeze)
             SwitchListTile(
               contentPadding: EdgeInsets.zero,
-              activeThumbColor: AppColors.accentGold,
               title: Text(l10n.bookingTermsDepositAsPayment),
               subtitle: Text(l10n.bookingTermsDepositAsPaymentHint),
               value: terms.acceptDepositAsPayment,

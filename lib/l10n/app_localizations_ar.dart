@@ -548,6 +548,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get businessTabMenu => 'منيو';
 
   @override
+  String get businessTabBooking => 'الحجز';
+
+  @override
   String get businessTabServices => 'الخدمات';
 
   @override
@@ -7169,10 +7172,4 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get dayUsePrice => 'سعر Day use';
-
-  @override
-  String get dayUseSave => 'حفظ Day use';
-
-  @override
-  String get dayUseSaved => 'تم حفظ Day use';
 }

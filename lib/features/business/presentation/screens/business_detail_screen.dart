@@ -150,11 +150,18 @@ class _BusinessDetailBody extends StatelessWidget {
       tabs.add(Tab(text: l10n.businessTabMenu));
       tabViews.add(_MenuTab(businessId: profile.id, sharedOrderId: sharedOrderId));
     }
+    // …and a business that sells bookings leads with «الحجز», the same way — a hotel's rooms are why a guest opened
+    // the page; the same tab body (priced lines → the booking screen), just named for what it sells.
+    final bookingFirst = profile.sections.services && profile.sections.booking;
+    if (bookingFirst) {
+      tabs.add(Tab(text: l10n.businessTabBooking));
+      tabViews.add(_ServicesTab(businessId: profile.id));
+    }
     if (profile.sections.posts) {
       tabs.add(Tab(text: l10n.businessTabPosts));
       tabViews.add(_PostsTab(businessId: profile.id));
     }
-    if (profile.sections.services) {
+    if (profile.sections.services && !bookingFirst) {
       tabs.add(Tab(text: l10n.businessTabServices));
       tabViews.add(_ServicesTab(businessId: profile.id));
     }

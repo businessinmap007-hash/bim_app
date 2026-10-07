@@ -541,6 +541,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get businessTabMenu => 'Menu';
 
   @override
+  String get businessTabBooking => 'Booking';
+
+  @override
   String get businessTabServices => 'Services';
 
   @override
@@ -7204,10 +7207,4 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dayUsePrice => 'Day-use price';
-
-  @override
-  String get dayUseSave => 'Save Day use';
-
-  @override
-  String get dayUseSaved => 'Day use saved';
 }
