@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/form_save_button.dart';
 import '../../../../shared/widgets/scrolling_chip_row.dart';
 import '../../application/booking_settings_controller.dart';
 import '../../application/booking_terms_provider.dart';
@@ -27,21 +30,30 @@ class _BookingTermsScreenState extends ConsumerState<BookingTermsScreen> {
 
   BookingTerms? _terms;
   bool _saving = false;
+  String? _error;
+  // what the server last had — the button says «تم الحفظ» exactly while the form equals it
+  String? _savedSignature;
+
+  String _signatureOf(BookingTerms t) => jsonEncode(t.toJson());
 
   void _change(BookingTerms Function(BookingTerms) edit) => setState(() => _terms = edit(_terms!));
 
   Future<void> _save() async {
     final l10n = AppLocalizations.of(context)!;
-    final messenger = ScaffoldMessenger.of(context);
-    setState(() => _saving = true);
+    setState(() {
+      _saving = true;
+      _error = null;
+    });
     try {
       final saved = await ref.read(bookingSettingsApiProvider).saveBookingTerms(_terms!);
       ref.invalidate(bookingTermsProvider);
       if (!mounted) return;
-      setState(() => _terms = saved);
-      messenger.showSnackBar(SnackBar(content: Text(l10n.bookingTermsSaved)));
+      setState(() {
+        _terms = saved;
+        _savedSignature = _signatureOf(saved);
+      });
     } catch (e) {
-      messenger.showSnackBar(SnackBar(content: Text(e is ApiException ? e.message : l10n.commonSomethingWentWrong)));
+      if (mounted) setState(() => _error = e is ApiException ? e.message : l10n.commonSomethingWentWrong);
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -51,7 +63,10 @@ class _BookingTermsScreenState extends ConsumerState<BookingTermsScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final async = ref.watch(bookingTermsProvider);
-    if (_terms == null && async.hasValue) _terms = async.value;
+    if (_terms == null && async.hasValue) {
+      _terms = async.value;
+      _savedSignature = _signatureOf(_terms!);
+    }
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.bookingTermsTitle)),
@@ -69,15 +84,6 @@ class _BookingTermsScreenState extends ConsumerState<BookingTermsScreen> {
                   : const CircularProgressIndicator(),
             )
           : _form(context, l10n, _terms!),
-      bottomNavigationBar: _terms == null
-          ? null
-          : SafeArea(
-              minimum: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-              child: FilledButton(
-                onPressed: _saving ? null : _save,
-                child: _saving ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2)) : Text(l10n.commonSave),
-              ),
-            ),
     );
   }
 
@@ -237,6 +243,12 @@ class _BookingTermsScreenState extends ConsumerState<BookingTermsScreen> {
             Expanded(child: Text(l10n.bookingTermsApprovalNote, style: theme.textTheme.bodySmall)),
           ],
         ),
+        if (_error != null) ...[
+          const SizedBox(height: 12),
+          Text(_error!, style: TextStyle(color: theme.colorScheme.error)),
+        ],
+        const SizedBox(height: 20),
+        FormSaveButton(saving: _saving, saved: _savedSignature == _signatureOf(terms), onPressed: _save),
       ],
     );
   }

@@ -126,16 +126,20 @@ void main() {
     await tester.pumpAndSettle();
 
     // nothing changed yet: the bar already says it is saved, and it is the only save button
+    await tester.scrollUntilVisible(find.text('تم الحفظ'), 300, scrollable: find.byType(Scrollable).first);
     expect(find.text('تم الحفظ'), findsOneWidget);
     expect(find.text('حفظ'), findsNothing);
+    await tester.scrollUntilVisible(find.byType(Switch), -300, scrollable: find.byType(Scrollable).first);
 
     await tester.scrollUntilVisible(find.byType(Switch), 300, scrollable: find.byType(Scrollable).first);
     await tester.tap(find.byType(Switch));
     await tester.pump();
+    await tester.scrollUntilVisible(find.text('حفظ'), 300, scrollable: find.byType(Scrollable).first);
     expect(find.text('حفظ'), findsOneWidget);
 
     await tester.enterText(find.widgetWithText(TextField, 'سعر Day use'), '350');
     await tester.pump();
+    await tester.scrollUntilVisible(find.text('حفظ'), 300, scrollable: find.byType(Scrollable).first);
     await tester.tap(find.text('حفظ'));
     await tester.pumpAndSettle();
 
@@ -146,6 +150,7 @@ void main() {
     expect(api.saved.single.to, '18:00');
     // saved: no snack bar, the bar just says so
     expect(find.byType(SnackBar), findsNothing);
+    await tester.scrollUntilVisible(find.text('تم الحفظ'), 300, scrollable: find.byType(Scrollable).first);
     expect(find.text('تم الحفظ'), findsOneWidget);
   });
 }

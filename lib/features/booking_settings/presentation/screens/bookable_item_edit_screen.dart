@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/form_save_button.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../media/application/media_picker_service.dart';
 import '../../application/booking_settings_controller.dart';
@@ -332,19 +333,9 @@ class _EditorState extends ConsumerState<_Editor> {
             const SizedBox(height: 12),
             Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
           ],
+          const SizedBox(height: 20),
+          FormSaveButton(saving: _saving, saved: _isSaved, onPressed: _save),
         ],
-      ),
-      bottomNavigationBar: SafeArea(
-        minimum: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-        child: SizedBox(
-          width: double.infinity,
-          child: FilledButton(
-            onPressed: _saving || _isSaved ? null : _save,
-            child: _saving
-                ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                : Text(_isSaved ? l10n.storeTermsSavedDone : l10n.commonSave),
-          ),
-        ),
       ),
     );
   }

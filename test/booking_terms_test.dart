@@ -126,7 +126,10 @@ void main() {
     expect(api.saved?.mode, BookingSecurityMode.guaranteeFreeze);
     expect(api.saved?.guaranteeMultiple, 3);
     expect(api.saved?.enabled, isTrue);
-    expect(find.text('تم حفظ شروط الحجز'), findsOneWidget);
+    // no snack bar: the button itself says it is saved
+    expect(find.byType(SnackBar), findsNothing);
+    await tester.scrollUntilVisible(find.text('تم الحفظ'), 300, scrollable: find.byType(Scrollable).first);
+    expect(find.text('تم الحفظ'), findsOneWidget);
   });
 
   testWidgets('taking the frozen deposit as a payment is offered only where a deposit is frozen', (tester) async {
