@@ -3360,6 +3360,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clinicBookAppointment => 'حجز موعد';
 
   @override
+  String get clinicPickKind => 'نوع الزيارة';
+
+  @override
+  String get clinicRequestBooking => 'اطلب الحجز';
+
+  @override
   String get clinicNoOpenSlots => 'لا توجد فترات متاحة حاليًا.';
 
   @override
@@ -7468,6 +7474,88 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get invNotPriced => 'غير مسعّر عند المركز';
+
+  @override
+  String get hospitalTabDepartments => 'الأقسام والأطباء';
+
+  @override
+  String get hospitalNoDepartments => 'لا توجد أقسام معروضة بعد.';
+
+  @override
+  String get hospitalNoDoctors => 'لا يوجد أطباء في هذا القسم بعد.';
+
+  @override
+  String hospitalDoctorCount(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count أطباء',
+      two: 'طبيبان',
+      one: 'طبيب واحد',
+      zero: 'لا أطباء',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get hospitalManageTitle => 'أقسام وأطباء المستشفى';
+
+  @override
+  String get hospitalManageHint =>
+      'الأقسام هي التخصصات التي فعّلتها في إعدادات النشاط. أضف الأطباء تحت كل قسم.';
+
+  @override
+  String get hospitalManageNoDepartments =>
+      'فعّل التخصصات الطبية أولًا من «إعدادات النشاط» لتظهر هنا كأقسام.';
+
+  @override
+  String get hospitalAddDoctor => 'إضافة طبيب';
+
+  @override
+  String get hospitalDoctorWithAccount => 'حساب على التطبيق';
+
+  @override
+  String get hospitalDoctorNoAccount => 'بدون حساب';
+
+  @override
+  String get hospitalSearchDoctorHint => 'ابحث عن الطبيب بالاسم';
+
+  @override
+  String get hospitalInviteNote =>
+      'يظهر الطبيب في القسم بعد أن يوافق على دعوتك، ويستطيع المريض زيارة صفحته من تحت القسم.';
+
+  @override
+  String get hospitalDoctorName => 'اسم الطبيب';
+
+  @override
+  String get hospitalDoctorTitle => 'اللقب (اختياري)';
+
+  @override
+  String get hospitalDoctorPending => 'بانتظار موافقة الطبيب';
+
+  @override
+  String get hospitalDoctorRemoveConfirm => 'إزالة هذا الطبيب من القسم؟';
+
+  @override
+  String get hospitalInvitationsTitle => 'دعوات المستشفيات';
+
+  @override
+  String get hospitalInvitationsEmpty => 'لا توجد دعوات.';
+
+  @override
+  String get hospitalInvitationPendingSection => 'دعوات بانتظار ردك';
+
+  @override
+  String get hospitalInvitationActiveSection => 'تظهر ضمن أطباء';
+
+  @override
+  String get hospitalInvitationAccept => 'قبول';
+
+  @override
+  String get hospitalInvitationDecline => 'رفض';
+
+  @override
+  String get hospitalInvitationLeave => 'إنهاء الظهور';
 
   @override
   String get invCurrency => 'ج';

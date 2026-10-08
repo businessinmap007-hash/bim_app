@@ -3364,6 +3364,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clinicBookAppointment => 'Book an appointment';
 
   @override
+  String get clinicPickKind => 'Visit type';
+
+  @override
+  String get clinicRequestBooking => 'Request the booking';
+
+  @override
   String get clinicNoOpenSlots => 'No open slots right now.';
 
   @override
@@ -7506,6 +7512,89 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invNotPriced => 'Not priced by this centre';
+
+  @override
+  String get hospitalTabDepartments => 'Departments & doctors';
+
+  @override
+  String get hospitalNoDepartments => 'No departments to show yet.';
+
+  @override
+  String get hospitalNoDoctors => 'No doctors in this department yet.';
+
+  @override
+  String hospitalDoctorCount(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count doctors',
+      one: '1 doctor',
+      zero: 'No doctors',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get hospitalManageTitle => 'Hospital departments & doctors';
+
+  @override
+  String get hospitalManageHint =>
+      'Departments are the specialties you enabled in the business settings. Add doctors under each one.';
+
+  @override
+  String get hospitalManageNoDepartments =>
+      'Enable the medical specialties in the business settings first and they will appear here as departments.';
+
+  @override
+  String get hospitalAddDoctor => 'Add a doctor';
+
+  @override
+  String get hospitalDoctorWithAccount => 'App account';
+
+  @override
+  String get hospitalDoctorNoAccount => 'No account';
+
+  @override
+  String get hospitalSearchDoctorHint => 'Search the doctor by name';
+
+  @override
+  String get hospitalInviteNote =>
+      'The doctor appears in the department once they accept your invitation, and patients can visit their page from under it.';
+
+  @override
+  String get hospitalDoctorName => 'Doctor\'s name';
+
+  @override
+  String get hospitalDoctorTitle => 'Title (optional)';
+
+  @override
+  String get hospitalDoctorPending => 'Waiting for the doctor\'s approval';
+
+  @override
+  String get hospitalDoctorRemoveConfirm =>
+      'Remove this doctor from the department?';
+
+  @override
+  String get hospitalInvitationsTitle => 'Hospital invitations';
+
+  @override
+  String get hospitalInvitationsEmpty => 'No invitations.';
+
+  @override
+  String get hospitalInvitationPendingSection =>
+      'Invitations waiting for your answer';
+
+  @override
+  String get hospitalInvitationActiveSection => 'Listed among the doctors of';
+
+  @override
+  String get hospitalInvitationAccept => 'Accept';
+
+  @override
+  String get hospitalInvitationDecline => 'Decline';
+
+  @override
+  String get hospitalInvitationLeave => 'Stop appearing';
 
   @override
   String get invCurrency => 'EGP';

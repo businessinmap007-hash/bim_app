@@ -21,6 +21,7 @@ class ClinicSlotsScreen extends ConsumerStatefulWidget {
 }
 
 class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
+  String? _kind;
   DateTime? _day;
   int? _slotId;
   bool _booking = false;
@@ -79,13 +80,22 @@ class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
           final dated = slots.where((s) => s.startsAt != null).toList()..sort((a, b) => a.startsAt!.compareTo(b.startsAt!));
           if (dated.isEmpty) return Center(child: Text(l10n.clinicNoOpenSlots));
 
-          final days = <DateTime>[];
+          // the visit kinds on offer («كشف / إعادة / استشارة»): the patient picks one, and only its days and times remain
+          final kinds = <String>[];
           for (final s in dated) {
+            final k = s.visitKind;
+            if (k != null && k.isNotEmpty && !kinds.contains(k)) kinds.add(k);
+          }
+          final kind = kinds.isEmpty ? null : (kinds.contains(_kind) ? _kind : kinds.first);
+          final ofKind = kind == null ? dated : dated.where((s) => s.visitKind == kind).toList();
+
+          final days = <DateTime>[];
+          for (final s in ofKind) {
             final d = _dateOnly(s.startsAt!);
             if (!days.contains(d)) days.add(d);
           }
           final day = _day != null && days.contains(_day) ? _day! : days.first;
-          final times = dated.where((s) => _dateOnly(s.startsAt!) == day).toList();
+          final times = ofKind.where((s) => _dateOnly(s.startsAt!) == day).toList();
           final picked = times.where((s) => s.id == _slotId).firstOrNull;
 
           return Column(
@@ -94,6 +104,31 @@ class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
                 child: ListView(
                   padding: const EdgeInsets.all(16),
                   children: [
+                    if (kinds.isNotEmpty) ...[
+                      _SectionCard(
+                        title: l10n.clinicPickKind,
+                        child: RadioGroup<String>(
+                          groupValue: kind,
+                          onChanged: (k) => setState(() {
+                            _kind = k;
+                            _day = null;
+                            _slotId = null;
+                          }),
+                          child: Column(
+                            children: [
+                              for (final k in kinds)
+                                RadioListTile<String>(
+                                  value: k,
+                                  contentPadding: EdgeInsets.zero,
+                                  title: Text(k),
+                                  secondary: _kindPrice(dated, k, l10n.invCurrency),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                    ],
                     _SectionCard(
                       title: l10n.clinicPickDay,
                       child: SizedBox(
@@ -153,6 +188,14 @@ class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
 }
 
 DateTime _dateOnly(DateTime d) => DateTime(d.year, d.month, d.day);
+
+/// What a visit kind costs: the price its first open slot carries.
+Widget? _kindPrice(List<ClinicSlot> slots, String kind, String currency) {
+  final price = slots.where((s) => s.visitKind == kind).map((s) => s.price).whereType<double>().firstOrNull;
+  if (price == null) return null;
+
+  return Text('${price.toStringAsFixed(price % 1 == 0 ? 0 : 2)} $currency', style: const TextStyle(fontWeight: FontWeight.w600));
+}
 
 class _SectionCard extends StatelessWidget {
   final String title;
@@ -299,7 +342,7 @@ class _SummaryBar extends StatelessWidget {
                 onPressed: busy ? null : onBook,
                 child: busy
                     ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                    : Text(l10n.clinicBookSlot),
+                    : Text(l10n.clinicRequestBooking),
               ),
             ],
           ),

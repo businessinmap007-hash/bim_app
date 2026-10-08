@@ -1,3 +1,4 @@
+import '../../../hospital/presentation/widgets/hospital_departments_tab.dart';
 import '../../../../app/theme/app_button_styles.dart';
 import '../../../business_menu/presentation/widgets/store_terms_view.dart';
 import 'package:flutter/material.dart';
@@ -159,6 +160,11 @@ class _BusinessDetailBody extends StatelessWidget {
       // drawn by the trade's booking shape when it has one (rooms under their kind, with photos and prices);
       // otherwise the priced lines, as before
       tabViews.add(BookingShapeTab(businessId: profile.id, fallback: _ServicesTab(businessId: profile.id)));
+    }
+    // a hospital or a medical centre lists its departments, each with its doctors — an account opens that doctor's page
+    if (const {513, 515}.contains(profile.categoryChildId)) {
+      tabs.add(Tab(text: l10n.hospitalTabDepartments));
+      tabViews.add(HospitalDepartmentsTab(hospitalId: profile.id));
     }
     if (profile.sections.posts) {
       tabs.add(Tab(text: l10n.businessTabPosts));

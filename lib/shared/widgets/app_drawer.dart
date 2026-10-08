@@ -88,8 +88,10 @@ class _AppDrawerContent extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 66),
+                      // the avatar straddles the cover; the name and email sit entirely BELOW it (a dark name on the
+                      // navy cover was unreadable in the light theme)
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
                             width: 56,
@@ -127,7 +129,7 @@ class _AppDrawerContent extends ConsumerWidget {
                           const SizedBox(width: 10),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.only(bottom: 6),
+                              padding: const EdgeInsets.only(top: 34),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
@@ -161,7 +163,7 @@ class _AppDrawerContent extends ConsumerWidget {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 6),
+                            padding: const EdgeInsets.only(top: 38),
                             child: Container(
                               padding: const EdgeInsets.all(5),
                               decoration: BoxDecoration(

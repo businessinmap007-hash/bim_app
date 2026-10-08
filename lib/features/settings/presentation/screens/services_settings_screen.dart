@@ -33,6 +33,8 @@ import '../../../stay_requests/application/stay_requests_providers.dart';
 import '../../../stay_requests/presentation/screens/stay_requests_screen.dart';
 import '../../../staff/presentation/screens/staff_team_settings_screen.dart';
 import '../../../table/presentation/screens/table_calls_screen.dart';
+import '../../../hospital/presentation/screens/hospital_doctors_screen.dart';
+import '../../../hospital/presentation/screens/hospital_invitations_screen.dart';
 import '../../../investigations/presentation/screens/center_investigations_screen.dart';
 import '../../../training/presentation/screens/my_training_clients_screen.dart';
 import '../../../training_templates/presentation/screens/training_templates_screen.dart';
@@ -69,6 +71,9 @@ class ServicesSettingsScreen extends ConsumerWidget {
     final isCarrier =
         authState is AuthSignedIn && authState.user.isShippingCarrier;
     // a lab, a radiology centre, a hospital or a medical centre takes investigation orders
+    // a hospital or a medical centre lists doctors under its departments; a single clinic is the doctor who accepts
+    final isHospital = authState is AuthSignedIn && const {513, 515}.contains(authState.user.categoryChildId);
+    final isDoctorClinic = authState is AuthSignedIn && authState.user.categoryChildId == 514;
     final isInvestigationCenter =
         authState is AuthSignedIn && const {163, 252, 513, 515}.contains(authState.user.categoryChildId);
 
@@ -82,6 +87,8 @@ class ServicesSettingsScreen extends ConsumerWidget {
           menuKinds: menuKinds,
           isCarrier: isCarrier,
           isInvestigationCenter: isInvestigationCenter,
+          isHospital: isHospital,
+          isDoctorClinic: isDoctorClinic,
           hasShopAddons: hasShopAddons,
           hasStayUnits: hasStayUnits,
         ),
@@ -90,6 +97,8 @@ class ServicesSettingsScreen extends ConsumerWidget {
           menuKinds: menuKinds,
           isCarrier: isCarrier,
           isInvestigationCenter: isInvestigationCenter,
+          isHospital: isHospital,
+          isDoctorClinic: isDoctorClinic,
           hasShopAddons: hasShopAddons,
           hasStayUnits: hasStayUnits,
         ),
@@ -112,6 +121,8 @@ class _ServiceList extends StatelessWidget {
 
   /// A lab / radiology centre / hospital / medical centre — it receives investigation orders and prices its tests.
   final bool isInvestigationCenter;
+  final bool isHospital;
+  final bool isDoctorClinic;
 
   /// The trade offers priced services («طريقة الطهي») — the shop prices them here.
   final bool hasShopAddons;
@@ -123,6 +134,8 @@ class _ServiceList extends StatelessWidget {
     required this.menuKinds,
     required this.isCarrier,
     this.isInvestigationCenter = false,
+    this.isHospital = false,
+    this.isDoctorClinic = false,
     this.hasShopAddons = false,
     this.hasStayUnits = false,
   });
@@ -200,6 +213,18 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.local_pharmacy_outlined,
         title: l10n.pharmacyQueueTitle,
         builder: (_) => const PharmacyQueueScreen(),
+      ),
+      _Tile(
+        show: _has('clinic') && isHospital,
+        leading: Icons.apartment_outlined,
+        title: l10n.hospitalManageTitle,
+        builder: (_) => const HospitalDoctorsScreen(),
+      ),
+      _Tile(
+        show: _has('clinic') && isDoctorClinic,
+        leading: Icons.local_hospital_outlined,
+        title: l10n.hospitalInvitationsTitle,
+        builder: (_) => const HospitalInvitationsScreen(),
       ),
       _Tile(
         show: _has('investigations') && isInvestigationCenter,

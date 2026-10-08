@@ -54,16 +54,27 @@ void main() {
     // nothing to book until a time is chosen
     expect(tester.widget<FilledButton>(find.byType(FilledButton)).onPressed, isNull);
 
-    // two days offered; the first day has two times
+    // the visit kinds on offer come first; «كشف» is chosen, so only its day (the 14th) and its two times remain
+    expect(find.text('نوع الزيارة'), findsOneWidget);
     expect(find.text('اليوم'), findsOneWidget);
     expect(find.text('الوقت'), findsOneWidget);
 
-    final times = find.byType(InkWell);
-    await tester.tap(times.at(3)); // chips: 2 days, then 17:00 and 18:00 of the 14th
+    final times = find.descendant(of: find.byType(GridView), matching: find.byType(InkWell));
+    expect(times, findsNWidgets(2));
+    await tester.tap(times.last); // 18:00 of the 14th
     await tester.pumpAndSettle();
-    expect(find.textContaining('كشف'), findsOneWidget);
-    expect(find.textContaining('300'), findsOneWidget);
+    expect(find.textContaining('300'), findsWidgets);
     expect(tester.widget<FilledButton>(find.byType(FilledButton)).onPressed, isNotNull);
+
+    // choosing the other kind swaps the days and the times, and clears the choice
+    await tester.tap(find.text('استشارة'));
+    await tester.pumpAndSettle();
+    expect(find.descendant(of: find.byType(GridView), matching: find.byType(InkWell)), findsNWidgets(1));
+    expect(find.text('اختر يومًا ووقتًا للحجز'), findsOneWidget);
+    await tester.tap(find.text('كشف'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.descendant(of: find.byType(GridView), matching: find.byType(InkWell)).last);
+    await tester.pumpAndSettle();
 
     await tester.tap(find.byType(FilledButton));
     await tester.pumpAndSettle();

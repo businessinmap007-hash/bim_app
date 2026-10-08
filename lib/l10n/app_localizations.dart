@@ -6133,6 +6133,18 @@ abstract class AppLocalizations {
   /// **'حجز موعد'**
   String get clinicBookAppointment;
 
+  /// No description provided for @clinicPickKind.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع الزيارة'**
+  String get clinicPickKind;
+
+  /// No description provided for @clinicRequestBooking.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلب الحجز'**
+  String get clinicRequestBooking;
+
   /// No description provided for @clinicNoOpenSlots.
   ///
   /// In ar, this message translates to:
@@ -13776,6 +13788,144 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'غير مسعّر عند المركز'**
   String get invNotPriced;
+
+  /// No description provided for @hospitalTabDepartments.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأقسام والأطباء'**
+  String get hospitalTabDepartments;
+
+  /// No description provided for @hospitalNoDepartments.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أقسام معروضة بعد.'**
+  String get hospitalNoDepartments;
+
+  /// No description provided for @hospitalNoDoctors.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد أطباء في هذا القسم بعد.'**
+  String get hospitalNoDoctors;
+
+  /// No description provided for @hospitalDoctorCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{لا أطباء} =1{طبيب واحد} =2{طبيبان} other{{count} أطباء}}'**
+  String hospitalDoctorCount(num count);
+
+  /// No description provided for @hospitalManageTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أقسام وأطباء المستشفى'**
+  String get hospitalManageTitle;
+
+  /// No description provided for @hospitalManageHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأقسام هي التخصصات التي فعّلتها في إعدادات النشاط. أضف الأطباء تحت كل قسم.'**
+  String get hospitalManageHint;
+
+  /// No description provided for @hospitalManageNoDepartments.
+  ///
+  /// In ar, this message translates to:
+  /// **'فعّل التخصصات الطبية أولًا من «إعدادات النشاط» لتظهر هنا كأقسام.'**
+  String get hospitalManageNoDepartments;
+
+  /// No description provided for @hospitalAddDoctor.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة طبيب'**
+  String get hospitalAddDoctor;
+
+  /// No description provided for @hospitalDoctorWithAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'حساب على التطبيق'**
+  String get hospitalDoctorWithAccount;
+
+  /// No description provided for @hospitalDoctorNoAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون حساب'**
+  String get hospitalDoctorNoAccount;
+
+  /// No description provided for @hospitalSearchDoctorHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث عن الطبيب بالاسم'**
+  String get hospitalSearchDoctorHint;
+
+  /// No description provided for @hospitalInviteNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'يظهر الطبيب في القسم بعد أن يوافق على دعوتك، ويستطيع المريض زيارة صفحته من تحت القسم.'**
+  String get hospitalInviteNote;
+
+  /// No description provided for @hospitalDoctorName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الطبيب'**
+  String get hospitalDoctorName;
+
+  /// No description provided for @hospitalDoctorTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللقب (اختياري)'**
+  String get hospitalDoctorTitle;
+
+  /// No description provided for @hospitalDoctorPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار موافقة الطبيب'**
+  String get hospitalDoctorPending;
+
+  /// No description provided for @hospitalDoctorRemoveConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزالة هذا الطبيب من القسم؟'**
+  String get hospitalDoctorRemoveConfirm;
+
+  /// No description provided for @hospitalInvitationsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'دعوات المستشفيات'**
+  String get hospitalInvitationsTitle;
+
+  /// No description provided for @hospitalInvitationsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد دعوات.'**
+  String get hospitalInvitationsEmpty;
+
+  /// No description provided for @hospitalInvitationPendingSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'دعوات بانتظار ردك'**
+  String get hospitalInvitationPendingSection;
+
+  /// No description provided for @hospitalInvitationActiveSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'تظهر ضمن أطباء'**
+  String get hospitalInvitationActiveSection;
+
+  /// No description provided for @hospitalInvitationAccept.
+  ///
+  /// In ar, this message translates to:
+  /// **'قبول'**
+  String get hospitalInvitationAccept;
+
+  /// No description provided for @hospitalInvitationDecline.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفض'**
+  String get hospitalInvitationDecline;
+
+  /// No description provided for @hospitalInvitationLeave.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنهاء الظهور'**
+  String get hospitalInvitationLeave;
 
   /// No description provided for @invCurrency.
   ///
