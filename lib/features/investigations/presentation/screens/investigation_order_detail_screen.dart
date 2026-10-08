@@ -117,7 +117,7 @@ class _InvestigationOrderDetailScreenState extends ConsumerState<InvestigationOr
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                InvestigationItemRows(items: order.items),
+                InvestigationItemRows(items: order.items, centerChosen: order.center != null),
                 if (order.total != null) ...[
                   const Divider(height: 20),
                   Row(

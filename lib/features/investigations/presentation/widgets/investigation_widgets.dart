@@ -98,10 +98,12 @@ class InvestigationSteps extends StatelessWidget {
   }
 }
 
-/// The tests and exams of an order, one row each, with the centre's price once it has one.
+/// The tests and exams of an order, one row each, with the centre's price once it has one. [centerChosen] marks a row
+/// the centre doesn't price (it isn't in the total and the centre may not do it).
 class InvestigationItemRows extends StatelessWidget {
   final List<InvestigationItem> items;
-  const InvestigationItemRows({super.key, required this.items});
+  final bool centerChosen;
+  const InvestigationItemRows({super.key, required this.items, this.centerChosen = false});
 
   @override
   Widget build(BuildContext context) {
@@ -126,6 +128,9 @@ class InvestigationItemRows extends StatelessWidget {
                 if (item.price != null) ...[
                   const SizedBox(width: 10),
                   Text('${formatInvestigationMoney(item.price!)} ${l10n.invCurrency}', style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700)),
+                ] else if (centerChosen) ...[
+                  const SizedBox(width: 10),
+                  Text(l10n.invNotPriced, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.error)),
                 ],
               ],
             ),

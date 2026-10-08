@@ -3363,6 +3363,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clinicNoOpenSlots => 'لا توجد فترات متاحة حاليًا.';
 
   @override
+  String get clinicPickDay => 'اليوم';
+
+  @override
+  String get clinicPickTime => 'الوقت';
+
+  @override
+  String get clinicPickSlotHint => 'اختر يومًا ووقتًا للحجز';
+
+  @override
   String get clinicBookSlot => 'حجز الموعد';
 
   @override
@@ -7456,6 +7465,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get invTotal => 'الإجمالي';
+
+  @override
+  String get invNotPriced => 'غير مسعّر عند المركز';
 
   @override
   String get invCurrency => 'ج';

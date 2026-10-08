@@ -1,73 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../application/clinic_providers.dart';
 import '../../data/models/clinic_slot.dart';
 
-/// A clinic's open appointment slots — booking one confirms it at once (no
-/// back-and-forth with the clinic). See Api\V2\ClinicAppointmentController.
-class ClinicSlotsScreen extends ConsumerWidget {
+/// A clinic's (or hospital's) open appointment slots, drawn like the «حجز عيادة» canvas board: day chips, a grid of
+/// times for the chosen day, a reason box, and a bottom bar that sums up the visit (kind, date and time, price) with
+/// the one booking button. Booking confirms it at once (no back-and-forth with the clinic). See
+/// Api\V2\ClinicAppointmentController.
+class ClinicSlotsScreen extends ConsumerStatefulWidget {
   final int clinicId;
   final String clinicName;
 
   const ClinicSlotsScreen({super.key, required this.clinicId, required this.clinicName});
 
-  Future<void> _book(BuildContext context, WidgetRef ref, ClinicSlot slot) async {
+  @override
+  ConsumerState<ClinicSlotsScreen> createState() => _ClinicSlotsScreenState();
+}
+
+class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
+  DateTime? _day;
+  int? _slotId;
+  bool _booking = false;
+  final _reason = TextEditingController();
+
+  @override
+  void dispose() {
+    _reason.dispose();
+    super.dispose();
+  }
+
+  Future<void> _book(ClinicSlot slot) async {
     final l10n = AppLocalizations.of(context)!;
-    final reasonController = TextEditingController();
-
-    final confirmed = await showModalBottomSheet<bool>(
-      context: context,
-      isScrollControlled: true,
-      builder: (sheetContext) => Padding(
-        padding: EdgeInsets.fromLTRB(20, 20, 20, 20 + MediaQuery.of(sheetContext).viewInsets.bottom),
-        child: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(l10n.clinicBookSlot, style: Theme.of(sheetContext).textTheme.titleMedium),
-              const SizedBox(height: 8),
-              if (slot.startsAt != null) Text(_formatDateTime(slot.startsAt!)),
-              const SizedBox(height: 12),
-              TextField(
-                controller: reasonController,
-                decoration: InputDecoration(hintText: l10n.clinicReasonHint),
-              ),
-              const SizedBox(height: 16),
-              FilledButton(
-                onPressed: () => Navigator.of(sheetContext).pop(true),
-                child: Text(l10n.clinicBookSlot),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-
-    if (confirmed != true) return;
-
+    final messenger = ScaffoldMessenger.of(context);
+    setState(() => _booking = true);
     try {
-      await ref.read(clinicApiProvider).bookSlot(slot.id, reason: reasonController.text.trim());
-      ref.invalidate(clinicSlotsProvider(clinicId));
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.clinicAppointmentBooked)));
-      }
+      await ref.read(clinicApiProvider).bookSlot(slot.id, reason: _reason.text.trim());
+      ref.invalidate(clinicSlotsProvider(widget.clinicId));
+      if (!mounted) return;
+      setState(() {
+        _slotId = null;
+        _reason.clear();
+      });
+      messenger.showSnackBar(SnackBar(content: Text(l10n.clinicAppointmentBooked)));
     } catch (_) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
-      }
+      messenger.showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+    } finally {
+      if (mounted) setState(() => _booking = false);
     }
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final async = ref.watch(clinicSlotsProvider(clinicId));
+    final locale = Localizations.localeOf(context).toString();
+    final async = ref.watch(clinicSlotsProvider(widget.clinicId));
 
     return Scaffold(
-      appBar: AppBar(title: Text(clinicName)),
+      appBar: AppBar(title: Text(widget.clinicName)),
       body: async.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (_, _) => Center(
@@ -77,33 +69,82 @@ class ClinicSlotsScreen extends ConsumerWidget {
               Text(l10n.commonSomethingWentWrong),
               const SizedBox(height: 8),
               OutlinedButton(
-                onPressed: () => ref.invalidate(clinicSlotsProvider(clinicId)),
+                onPressed: () => ref.invalidate(clinicSlotsProvider(widget.clinicId)),
                 child: Text(l10n.commonRetry),
               ),
             ],
           ),
         ),
         data: (slots) {
-          if (slots.isEmpty) {
-            return Center(child: Text(l10n.clinicNoOpenSlots));
+          final dated = slots.where((s) => s.startsAt != null).toList()..sort((a, b) => a.startsAt!.compareTo(b.startsAt!));
+          if (dated.isEmpty) return Center(child: Text(l10n.clinicNoOpenSlots));
+
+          final days = <DateTime>[];
+          for (final s in dated) {
+            final d = _dateOnly(s.startsAt!);
+            if (!days.contains(d)) days.add(d);
           }
-          return ListView.separated(
-            padding: const EdgeInsets.all(16),
-            itemCount: slots.length,
-            separatorBuilder: (context, index) => const SizedBox(height: 8),
-            itemBuilder: (context, index) {
-              final slot = slots[index];
-              return Card(
-                margin: EdgeInsets.zero,
-                child: ListTile(
-                  onTap: () => _book(context, ref, slot),
-                  leading: const Icon(Icons.event_available_outlined),
-                  title: Text(slot.startsAt != null ? _formatDateTime(slot.startsAt!) : ''),
-                  subtitle: slot.visitKind != null ? Text(slot.visitKind!) : null,
-                  trailing: slot.price != null ? Text(slot.price!.toStringAsFixed(0)) : null,
+          final day = _day != null && days.contains(_day) ? _day! : days.first;
+          final times = dated.where((s) => _dateOnly(s.startsAt!) == day).toList();
+          final picked = times.where((s) => s.id == _slotId).firstOrNull;
+
+          return Column(
+            children: [
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.all(16),
+                  children: [
+                    _SectionCard(
+                      title: l10n.clinicPickDay,
+                      child: SizedBox(
+                        height: 64,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: days.length,
+                          separatorBuilder: (_, _) => const SizedBox(width: 8),
+                          itemBuilder: (context, i) => _DayChip(
+                            day: days[i],
+                            selected: days[i] == day,
+                            onTap: () => setState(() {
+                              _day = days[i];
+                              _slotId = null;
+                            }),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    _SectionCard(
+                      title: l10n.clinicPickTime,
+                      child: GridView.count(
+                        crossAxisCount: 3,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        mainAxisSpacing: 8,
+                        crossAxisSpacing: 8,
+                        childAspectRatio: 2.4,
+                        children: [
+                          for (final s in times)
+                            _TimeChip(
+                              label: DateFormat.jm(locale).format(s.startsAt!),
+                              selected: s.id == _slotId,
+                              onTap: () => setState(() => _slotId = s.id),
+                            ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: _reason,
+                      minLines: 1,
+                      maxLines: 3,
+                      decoration: InputDecoration(hintText: l10n.clinicReasonHint),
+                    ),
+                  ],
                 ),
-              );
-            },
+              ),
+              _SummaryBar(slot: picked, busy: _booking, onBook: picked == null ? null : () => _book(picked)),
+            ],
           );
         },
       ),
@@ -111,7 +152,159 @@ class ClinicSlotsScreen extends ConsumerWidget {
   }
 }
 
-String _formatDateTime(DateTime dt) {
-  return '${dt.year}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')} '
-      '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+DateTime _dateOnly(DateTime d) => DateTime(d.year, d.month, d.day);
+
+class _SectionCard extends StatelessWidget {
+  final String title;
+  final Widget child;
+  const _SectionCard({required this.title, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+            const SizedBox(height: 10),
+            child,
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Active = the theme's primary pair (navy with gold ink in light, gold with navy ink in dark); idle = a bordered chip.
+class _Chip extends StatelessWidget {
+  final bool selected;
+  final VoidCallback onTap;
+  final Widget Function(Color ink) builder;
+  const _Chip({required this.selected, required this.onTap, required this.builder});
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final ink = selected ? cs.onPrimary : cs.onSurface;
+
+    return Material(
+      color: selected ? cs.primary : Colors.transparent,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+        side: BorderSide(color: selected ? cs.primary : cs.outlineVariant),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(10),
+        onTap: onTap,
+        child: Center(child: builder(ink)),
+      ),
+    );
+  }
+}
+
+class _DayChip extends StatelessWidget {
+  final DateTime day;
+  final bool selected;
+  final VoidCallback onTap;
+  const _DayChip({required this.day, required this.selected, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context).toString();
+
+    return SizedBox(
+      width: 62,
+      child: _Chip(
+        selected: selected,
+        onTap: onTap,
+        builder: (ink) => Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(DateFormat.E(locale).format(day), style: TextStyle(fontSize: 11, color: ink)),
+            Text(
+              DateFormat.d(locale).format(day),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: ink),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TimeChip extends StatelessWidget {
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+  const _TimeChip({required this.label, required this.selected, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return _Chip(
+      selected: selected,
+      onTap: onTap,
+      builder: (ink) => Text(label, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: ink)),
+    );
+  }
+}
+
+class _SummaryBar extends StatelessWidget {
+  final ClinicSlot? slot;
+  final bool busy;
+  final VoidCallback? onBook;
+  const _SummaryBar({required this.slot, required this.busy, required this.onBook});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final locale = Localizations.localeOf(context).toString();
+    final s = slot;
+    final kind = s?.visitKind;
+    final startsAt = s?.startsAt;
+    final summary = s == null
+        ? l10n.clinicPickSlotHint
+        : [
+            if (kind != null && kind.isNotEmpty) kind,
+            if (startsAt != null) DateFormat.MMMEd(locale).add_jm().format(startsAt),
+          ].join(' — ');
+    final price = s?.price;
+
+    return Material(
+      color: theme.colorScheme.surface,
+      elevation: 8,
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                children: [
+                  Expanded(child: Text(summary, style: theme.textTheme.bodyMedium)),
+                  if (price != null)
+                    Text(
+                      '${price.toStringAsFixed(price % 1 == 0 ? 0 : 2)} ${l10n.invCurrency}',
+                      style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              FilledButton(
+                onPressed: busy ? null : onBook,
+                child: busy
+                    ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                    : Text(l10n.clinicBookSlot),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

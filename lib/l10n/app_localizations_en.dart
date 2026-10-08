@@ -3367,6 +3367,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clinicNoOpenSlots => 'No open slots right now.';
 
   @override
+  String get clinicPickDay => 'Day';
+
+  @override
+  String get clinicPickTime => 'Time';
+
+  @override
+  String get clinicPickSlotHint => 'Pick a day and a time to book';
+
+  @override
   String get clinicBookSlot => 'Book this slot';
 
   @override
@@ -7494,6 +7503,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invTotal => 'Total';
+
+  @override
+  String get invNotPriced => 'Not priced by this centre';
 
   @override
   String get invCurrency => 'EGP';

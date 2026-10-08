@@ -6139,6 +6139,24 @@ abstract class AppLocalizations {
   /// **'لا توجد فترات متاحة حاليًا.'**
   String get clinicNoOpenSlots;
 
+  /// No description provided for @clinicPickDay.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم'**
+  String get clinicPickDay;
+
+  /// No description provided for @clinicPickTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوقت'**
+  String get clinicPickTime;
+
+  /// No description provided for @clinicPickSlotHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر يومًا ووقتًا للحجز'**
+  String get clinicPickSlotHint;
+
   /// No description provided for @clinicBookSlot.
   ///
   /// In ar, this message translates to:
@@ -13752,6 +13770,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الإجمالي'**
   String get invTotal;
+
+  /// No description provided for @invNotPriced.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير مسعّر عند المركز'**
+  String get invNotPriced;
 
   /// No description provided for @invCurrency.
   ///
