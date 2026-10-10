@@ -8076,6 +8076,28 @@ class AppLocalizationsAr extends AppLocalizations {
   String get invDoctorHiddenNote => 'لا يظهر اسم الطبيب للمعمل أو مركز الأشعة.';
 
   @override
+  String get invKeepPhotosOnPhone => 'حفظ الصور على هذا الهاتف';
+
+  @override
+  String get invPhotosKept =>
+      'تم حفظ الصور على هاتفك. ستُحذف نسخة السيرفر بعد أن يطّلع عليها الطبيب.';
+
+  @override
+  String get invPhotosKeptLocal => 'محفوظة على هذا الهاتف';
+
+  @override
+  String invPhotosExpire(Object date) {
+    return 'ستُحذف صور النتائج من السيرفر في $date إن لم تحفظها على هاتفك.';
+  }
+
+  @override
+  String get invPhotosPurgedNoCopy =>
+      'حُذفت صور النتائج من السيرفر ولا توجد نسخة على هذا الهاتف.';
+
+  @override
+  String get invPhotosSaveFailed => 'تعذّر تنزيل الصور. حاول مرة أخرى.';
+
+  @override
   String get invCurrency => 'ج';
 
   @override

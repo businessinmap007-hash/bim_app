@@ -39,7 +39,7 @@ class _CenterResultsScreenState extends ConsumerState<CenterResultsScreen> {
   bool get _ready => _texts.values.any((c) => c.text.trim().isNotEmpty) || _photos.isNotEmpty;
 
   Future<void> _addPhotos() async {
-    final picked = await ImagePicker().pickMultiImage(imageQuality: 85, limit: 10);
+    final picked = await ImagePicker().pickMultiImage(maxWidth: 1600, maxHeight: 1600, imageQuality: 70, limit: 10);
     if (picked.isNotEmpty && mounted) setState(() => _photos.addAll(picked.map((p) => p.path).take(10 - _photos.length)));
   }
 

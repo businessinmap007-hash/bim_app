@@ -59,6 +59,13 @@ class InvestigationOrder {
   final List<String> requestFiles;
   final List<String> resultFiles;
 
+  /// The server deleted the result photos (they were kept on the patient's phone, or expired).
+  final bool filesPurged;
+  final bool patientSaved;
+
+  /// When the photos will go if nobody keeps them (null once kept or deleted).
+  final DateTime? filesExpireAt;
+
   const InvestigationOrder({
     required this.id,
     required this.status,
@@ -73,6 +80,9 @@ class InvestigationOrder {
     this.issuedAt,
     this.requestFiles = const [],
     this.resultFiles = const [],
+    this.filesPurged = false,
+    this.patientSaved = false,
+    this.filesExpireAt,
   });
 
   bool get canSend => status == issued;
@@ -118,6 +128,9 @@ class InvestigationOrder {
       issuedAt: DateTime.tryParse(json['issued_at'] as String? ?? '')?.toLocal(),
       requestFiles: files('request_files'),
       resultFiles: files('result_files'),
+      filesPurged: json['files_purged'] as bool? ?? false,
+      patientSaved: json['patient_saved'] as bool? ?? false,
+      filesExpireAt: DateTime.tryParse(json['files_expire_at'] as String? ?? '')?.toLocal(),
     );
   }
 }

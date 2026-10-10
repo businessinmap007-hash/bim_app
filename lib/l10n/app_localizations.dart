@@ -14833,6 +14833,42 @@ abstract class AppLocalizations {
   /// **'لا يظهر اسم الطبيب للمعمل أو مركز الأشعة.'**
   String get invDoctorHiddenNote;
 
+  /// No description provided for @invKeepPhotosOnPhone.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ الصور على هذا الهاتف'**
+  String get invKeepPhotosOnPhone;
+
+  /// No description provided for @invPhotosKept.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ الصور على هاتفك. ستُحذف نسخة السيرفر بعد أن يطّلع عليها الطبيب.'**
+  String get invPhotosKept;
+
+  /// No description provided for @invPhotosKeptLocal.
+  ///
+  /// In ar, this message translates to:
+  /// **'محفوظة على هذا الهاتف'**
+  String get invPhotosKeptLocal;
+
+  /// No description provided for @invPhotosExpire.
+  ///
+  /// In ar, this message translates to:
+  /// **'ستُحذف صور النتائج من السيرفر في {date} إن لم تحفظها على هاتفك.'**
+  String invPhotosExpire(Object date);
+
+  /// No description provided for @invPhotosPurgedNoCopy.
+  ///
+  /// In ar, this message translates to:
+  /// **'حُذفت صور النتائج من السيرفر ولا توجد نسخة على هذا الهاتف.'**
+  String get invPhotosPurgedNoCopy;
+
+  /// No description provided for @invPhotosSaveFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر تنزيل الصور. حاول مرة أخرى.'**
+  String get invPhotosSaveFailed;
+
   /// No description provided for @invCurrency.
   ///
   /// In ar, this message translates to:

@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -11,6 +14,7 @@ import '../../../medical_file/data/medical_file.dart';
 import '../../../medical_file/presentation/screens/medical_share_screen.dart';
 import '../../application/investigations_providers.dart';
 import '../../data/models/investigation.dart';
+import '../../data/result_image_store.dart';
 import '../widgets/investigation_widgets.dart';
 
 /// One investigation order, from the patient's side: its items and steps, the registered centres with what each charges
@@ -27,6 +31,40 @@ class InvestigationOrderDetailScreen extends ConsumerStatefulWidget {
 class _InvestigationOrderDetailScreenState extends ConsumerState<InvestigationOrderDetailScreen> {
   int? _centerId;
   bool _busy = false;
+  List<File> _local = const [];
+  bool _localLoaded = false;
+
+  Future<void> _loadLocal(int userId) async {
+    if (_localLoaded) return;
+    _localLoaded = true;
+    try {
+      final files = await const ResultImageStore().local(userId, widget.orderId);
+      if (mounted) setState(() => _local = files);
+    } catch (_) {
+      // no local copy readable: the server's photos (if any) are still shown
+    }
+  }
+
+  /// «نسخة على موبايل المريض»: download the photos, keep them in the app's private folder, then tell the server — it
+  /// deletes its own once the ordering doctor has read them.
+  Future<void> _keepPhotos(InvestigationOrder order, int userId) async {
+    final l10n = AppLocalizations.of(context)!;
+    setState(() => _busy = true);
+    try {
+      await const ResultImageStore().save(userId, order.id, order.resultFiles);
+      await ref.read(investigationsApiProvider).markSaved(order.id);
+      final files = await const ResultImageStore().local(userId, order.id);
+      ref.invalidate(investigationOrderProvider(widget.orderId));
+      if (mounted) {
+        setState(() => _local = files);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.invPhotosKept)));
+      }
+    } catch (_) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.invPhotosSaveFailed)));
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
 
   Future<void> _run(Future<void> Function() action) async {
     final l10n = AppLocalizations.of(context)!;
@@ -107,7 +145,10 @@ class _InvestigationOrderDetailScreenState extends ConsumerState<InvestigationOr
   Widget _body(BuildContext context, AppLocalizations l10n, InvestigationOrder order) {
     final theme = Theme.of(context);
     final auth = ref.watch(authControllerProvider);
-    final isPatient = auth is AuthSignedIn && order.patient?.id == auth.user.id;
+    final userId = auth is AuthSignedIn ? auth.user.id : null;
+    final isPatient = userId != null && order.patient?.id == userId;
+    if (isPatient) _loadLocal(userId);
+    final locale = Localizations.localeOf(context).toString();
 
     return ListView(
       padding: const EdgeInsets.all(16),
@@ -214,6 +255,50 @@ class _InvestigationOrderDetailScreenState extends ConsumerState<InvestigationOr
           Text(l10n.invResults, style: theme.textTheme.titleMedium),
           const SizedBox(height: 8),
           _thumbs(context, order.resultFiles),
+          if (isPatient) ...[
+            const SizedBox(height: 8),
+            // the photos stay on the server only until they are safe on the patient's phone
+            if (order.filesExpireAt != null && !order.patientSaved)
+              Text(
+                l10n.invPhotosExpire(DateFormat.yMMMd(locale).format(order.filesExpireAt!)),
+                style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.error),
+              ),
+            if (!order.patientSaved || _local.isEmpty)
+              OutlinedButton.icon(
+                onPressed: _busy ? null : () => _keepPhotos(order, userId),
+                icon: const Icon(Icons.download_for_offline_outlined),
+                label: Text(l10n.invKeepPhotosOnPhone),
+              ),
+          ],
+        ],
+        // what the patient kept on this phone — and the only copy once the server has deleted its own
+        if (isPatient && _local.isNotEmpty) ...[
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              const Icon(Icons.phone_android_outlined, size: 18),
+              const SizedBox(width: 6),
+              Text(l10n.invPhotosKeptLocal, style: theme.textTheme.titleSmall),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (var i = 0; i < _local.length; i++)
+                InkWell(
+                  onTap: () => FullScreenGallery.show(context, urls: [for (final f in _local) f.uri.toString()], initialIndex: i),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.file(_local[i], width: 96, height: 96, fit: BoxFit.cover),
+                  ),
+                ),
+            ],
+          ),
+        ] else if (isPatient && order.filesPurged && order.resultFiles.isEmpty) ...[
+          const SizedBox(height: 12),
+          Text(l10n.invPhotosPurgedNoCopy, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
         ],
         if (order.canSend && isPatient) ..._shareSection(context, l10n),
         if (order.canCancel) ...[

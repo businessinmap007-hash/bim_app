@@ -8122,6 +8122,29 @@ class AppLocalizationsEn extends AppLocalizations {
       'The doctor\'s name is not shown to the lab or the radiology centre.';
 
   @override
+  String get invKeepPhotosOnPhone => 'Keep the photos on this phone';
+
+  @override
+  String get invPhotosKept =>
+      'The photos are kept on your phone. The server\'s copy is deleted once the doctor has read them.';
+
+  @override
+  String get invPhotosKeptLocal => 'Kept on this phone';
+
+  @override
+  String invPhotosExpire(Object date) {
+    return 'The result photos will be deleted from the server on $date unless you keep them on your phone.';
+  }
+
+  @override
+  String get invPhotosPurgedNoCopy =>
+      'The result photos were deleted from the server and there is no copy on this phone.';
+
+  @override
+  String get invPhotosSaveFailed =>
+      'The photos could not be downloaded. Try again.';
+
+  @override
   String get invCurrency => 'EGP';
 
   @override

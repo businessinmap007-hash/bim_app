@@ -34,6 +34,9 @@ class InvestigationsApi {
 
   Future<InvestigationOrder> cancel(int orderId) async => _order(await _client.post('/investigation-orders/$orderId/cancel'));
 
+  /// The patient has a copy of the result photos on his phone: the server may delete its own once the doctor has read them.
+  Future<InvestigationOrder> markSaved(int orderId) async => _order(await _client.post('/investigation-orders/$orderId/saved'));
+
   /// The patient asks a centre directly, optionally with a photo of a paper request.
   Future<InvestigationOrder> requestFromCenter({
     required int centerId,

@@ -34,7 +34,7 @@ class _CenterTestsTabState extends ConsumerState<CenterTestsTab> {
   }
 
   Future<void> _pickPhoto() async {
-    final picked = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 85);
+    final picked = await ImagePicker().pickImage(source: ImageSource.gallery, maxWidth: 1600, maxHeight: 1600, imageQuality: 70);
     if (picked != null && mounted) setState(() => _photo = File(picked.path));
   }
 
