@@ -1,3 +1,4 @@
+import '../../../hospital/presentation/screens/my_procedure_requests_screen.dart';
 import '../../../investigations/presentation/screens/investigation_orders_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -80,6 +81,17 @@ class MyServicesScreen extends StatelessWidget {
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) => const PrescriptionsScreen(),
+                    ),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.medical_services_outlined),
+                  title: Text(l10n.procMyRequestsTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const MyProcedureRequestsScreen(),
                     ),
                   ),
                 ),

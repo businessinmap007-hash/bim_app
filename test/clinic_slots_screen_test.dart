@@ -12,10 +12,12 @@ import 'package:bim_app/l10n/app_localizations.dart';
 
 class _FakeApi implements ClinicApi {
   final booked = <int>[];
+  final attendees = <String?>[];
 
   @override
-  Future<ClinicAppointment> bookSlot(int slotId, {String? reason}) async {
+  Future<ClinicAppointment> bookSlot(int slotId, {String? reason, String? forName, String? forPhone}) async {
     booked.add(slotId);
+    attendees.add(forName);
     throw StateError('stop after recording');
   }
 
@@ -76,8 +78,21 @@ void main() {
     await tester.tap(find.descendant(of: find.byType(GridView), matching: find.byType(InkWell)).last);
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byType(FilledButton));
+    // «لشخص آخر»: the name is required before the booking can go
+    await tester.scrollUntilVisible(find.text('لشخص آخر'), 200, scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.text('لشخص آخر'));
+    await tester.pumpAndSettle();
+    final book = find.widgetWithText(FilledButton, 'اطلب الحجز');
+    await tester.ensureVisible(book);
+    expect(tester.widget<FilledButton>(book).onPressed, isNull);
+    await tester.scrollUntilVisible(find.widgetWithText(TextField, 'اسم المريض'), 200, scrollable: find.byType(Scrollable).first);
+    await tester.enterText(find.widgetWithText(TextField, 'اسم المريض'), 'الحاج محمود');
+    await tester.pump();
+    expect(tester.widget<FilledButton>(book).onPressed, isNotNull);
+
+    await tester.tap(book);
     await tester.pumpAndSettle();
     expect(api.booked, [2]);
+    expect(api.attendees, ['الحاج محمود']);
   });
 }

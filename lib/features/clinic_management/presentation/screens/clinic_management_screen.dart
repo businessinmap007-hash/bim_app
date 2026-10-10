@@ -225,6 +225,13 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
                 _StatusChip(status: a.status, l10n: l10n),
               ],
             ),
+            if (a.attendeeName != null) ...[
+              const SizedBox(height: 4),
+              Text(
+                [l10n.clinicAttendeeFor(a.attendeeName!), if ((a.attendeePhone ?? '').isNotEmpty) a.attendeePhone!].join(' · '),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+              ),
+            ],
             if (a.scheduledAt != null) ...[
               const SizedBox(height: 4),
               Text(_formatDateTime(a.scheduledAt!)),

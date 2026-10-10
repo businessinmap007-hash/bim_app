@@ -25,11 +25,16 @@ class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
   DateTime? _day;
   int? _slotId;
   bool _booking = false;
+  bool _forOther = false;
   final _reason = TextEditingController();
+  final _forName = TextEditingController();
+  final _forPhone = TextEditingController();
 
   @override
   void dispose() {
     _reason.dispose();
+    _forName.dispose();
+    _forPhone.dispose();
     super.dispose();
   }
 
@@ -38,12 +43,20 @@ class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
     final messenger = ScaffoldMessenger.of(context);
     setState(() => _booking = true);
     try {
-      await ref.read(clinicApiProvider).bookSlot(slot.id, reason: _reason.text.trim());
+      await ref.read(clinicApiProvider).bookSlot(
+        slot.id,
+        reason: _reason.text.trim(),
+        forName: _forOther ? _forName.text.trim() : null,
+        forPhone: _forOther ? _forPhone.text.trim() : null,
+      );
       ref.invalidate(clinicSlotsProvider(widget.clinicId));
       if (!mounted) return;
       setState(() {
         _slotId = null;
         _reason.clear();
+        _forOther = false;
+        _forName.clear();
+        _forPhone.clear();
       });
       messenger.showSnackBar(SnackBar(content: Text(l10n.clinicAppointmentBooked)));
     } catch (_) {
@@ -169,6 +182,54 @@ class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
                       ),
                     ),
                     const SizedBox(height: 12),
+                    _SectionCard(
+                      title: l10n.clinicPatientLabel,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: SizedBox(
+                                  height: 44,
+                                  child: _Chip(
+                                    selected: !_forOther,
+                                    onTap: () => setState(() => _forOther = false),
+                                    builder: (ink) => Text(l10n.clinicForMe, style: TextStyle(fontWeight: FontWeight.w600, color: ink)),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: SizedBox(
+                                  height: 44,
+                                  child: _Chip(
+                                    selected: _forOther,
+                                    onTap: () => setState(() => _forOther = true),
+                                    builder: (ink) => Text(l10n.clinicForOther, style: TextStyle(fontWeight: FontWeight.w600, color: ink)),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          if (_forOther) ...[
+                            const SizedBox(height: 10),
+                            TextField(
+                              controller: _forName,
+                              decoration: InputDecoration(labelText: l10n.clinicAttendeeName),
+                              onChanged: (_) => setState(() {}),
+                            ),
+                            const SizedBox(height: 8),
+                            TextField(
+                              controller: _forPhone,
+                              keyboardType: TextInputType.phone,
+                              decoration: InputDecoration(labelText: l10n.clinicAttendeePhone),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 12),
                     TextField(
                       controller: _reason,
                       minLines: 1,
@@ -178,7 +239,11 @@ class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
                   ],
                 ),
               ),
-              _SummaryBar(slot: picked, busy: _booking, onBook: picked == null ? null : () => _book(picked)),
+              _SummaryBar(
+                slot: picked,
+                busy: _booking,
+                onBook: picked == null || (_forOther && _forName.text.trim().isEmpty) ? null : () => _book(picked),
+              ),
             ],
           );
         },

@@ -20,11 +20,16 @@ class ClinicApi {
     return Paginated.fromJson(data, ClinicSlot.fromJson);
   }
 
-  Future<ClinicAppointment> bookSlot(int slotId, {String? reason}) async {
+  /// [forName]/[forPhone]: the visit is for someone else — the account that books stays the patient of record.
+  Future<ClinicAppointment> bookSlot(int slotId, {String? reason, String? forName, String? forPhone}) async {
     final data =
         await _client.post(
               '/clinic-slots/$slotId/book',
-              data: {if (reason != null && reason.isNotEmpty) 'reason': reason},
+              data: {
+                if (reason != null && reason.isNotEmpty) 'reason': reason,
+                if (forName != null && forName.isNotEmpty) 'for_name': forName,
+                if (forName != null && forName.isNotEmpty && forPhone != null && forPhone.isNotEmpty) 'for_phone': forPhone,
+              },
             )
             as Map<String, dynamic>;
     return ClinicAppointment.fromJson(

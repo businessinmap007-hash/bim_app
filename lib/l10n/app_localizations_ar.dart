@@ -3366,6 +3366,26 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clinicRequestBooking => 'اطلب الحجز';
 
   @override
+  String get clinicPatientLabel => 'المريض';
+
+  @override
+  String get clinicForMe => 'لي';
+
+  @override
+  String get clinicForOther => 'لشخص آخر';
+
+  @override
+  String get clinicAttendeeName => 'اسم المريض';
+
+  @override
+  String get clinicAttendeePhone => 'رقم الهاتف (اختياري)';
+
+  @override
+  String clinicAttendeeFor(Object name) {
+    return 'لـ $name';
+  }
+
+  @override
   String get clinicNoOpenSlots => 'لا توجد فترات متاحة حاليًا.';
 
   @override
@@ -7556,6 +7576,113 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get hospitalInvitationLeave => 'إنهاء الظهور';
+
+  @override
+  String get procKindSurgery => 'عمليات جراحية';
+
+  @override
+  String get procKindEndoscopy => 'مناظير';
+
+  @override
+  String get procKindProcedure => 'إجراءات علاجية';
+
+  @override
+  String get procStatusRequested => 'بانتظار رد المستشفى';
+
+  @override
+  String get procStatusAccepted => 'تم تحديد الموعد';
+
+  @override
+  String get procStatusCompleted => 'تم';
+
+  @override
+  String get procStatusDeclined => 'اعتذر المستشفى';
+
+  @override
+  String get procStatusCancelled => 'ملغي';
+
+  @override
+  String get procPriceAfterAssessment => 'السعر بعد التقييم';
+
+  @override
+  String procScheduledAt(Object when) {
+    return 'الموعد: $when';
+  }
+
+  @override
+  String procPreferredDate(Object date) {
+    return 'اليوم المفضل: $date';
+  }
+
+  @override
+  String procHospitalNote(Object note) {
+    return 'ملاحظة المستشفى: $note';
+  }
+
+  @override
+  String get procTabTitle => 'الإجراءات الطبية';
+
+  @override
+  String get procNoneOffered => 'لا يعرض المستشفى إجراءات بعد.';
+
+  @override
+  String get procRequestSent => 'أُرسل طلبك إلى المستشفى.';
+
+  @override
+  String get procMyRequestsTitle => 'طلباتي من المستشفيات';
+
+  @override
+  String get procMyRequestsEmpty => 'لا توجد طلبات بعد.';
+
+  @override
+  String get procPickPreferredDate => 'اليوم المفضل (اختياري)';
+
+  @override
+  String get procAskButton => 'اطلب الإجراء';
+
+  @override
+  String get procAskNote =>
+      'يردّ المستشفى بموعد، وقد يطلب تقييمك قبل تحديد السعر.';
+
+  @override
+  String get procCancelRequest => 'إلغاء الطلب';
+
+  @override
+  String get procManageTitle => 'إجراءات المستشفى الطبية';
+
+  @override
+  String get procManageHint =>
+      'اختر ما يجريه المستشفى واكتب سعره. اترك السعر فارغًا ليظهر «السعر بعد التقييم».';
+
+  @override
+  String get procAddOwn => 'إضافة إجراء';
+
+  @override
+  String get procOwnName => 'اسم الإجراء';
+
+  @override
+  String get procRequestsTitle => 'طلبات الإجراءات';
+
+  @override
+  String get procTabUpcoming => 'القادمة';
+
+  @override
+  String get procRequestsEmpty => 'لا توجد طلبات.';
+
+  @override
+  String get procPickSchedule => 'موعد الإجراء';
+
+  @override
+  String get procQuoteTitle => 'سعر الإجراء بعد التقييم';
+
+  @override
+  String get procSkipQuote => 'بدون سعر';
+
+  @override
+  String get procAcceptSchedule => 'قبول وتحديد موعد';
+
+  @override
+  String get procMarkDone => 'تم الإجراء';
 
   @override
   String get invCurrency => 'ج';

@@ -35,6 +35,8 @@ import '../../../staff/presentation/screens/staff_team_settings_screen.dart';
 import '../../../table/presentation/screens/table_calls_screen.dart';
 import '../../../hospital/presentation/screens/hospital_doctors_screen.dart';
 import '../../../hospital/presentation/screens/hospital_invitations_screen.dart';
+import '../../../hospital/presentation/screens/hospital_procedure_requests_screen.dart';
+import '../../../hospital/presentation/screens/hospital_procedures_manage_screen.dart';
 import '../../../investigations/presentation/screens/center_investigations_screen.dart';
 import '../../../training/presentation/screens/my_training_clients_screen.dart';
 import '../../../training_templates/presentation/screens/training_templates_screen.dart';
@@ -219,6 +221,18 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.apartment_outlined,
         title: l10n.hospitalManageTitle,
         builder: (_) => const HospitalDoctorsScreen(),
+      ),
+      _Tile(
+        show: _has('clinic') && isHospital,
+        leading: Icons.medical_services_outlined,
+        title: l10n.procManageTitle,
+        builder: (_) => const HospitalProceduresManageScreen(),
+      ),
+      _Tile(
+        show: _has('clinic') && isHospital,
+        leading: Icons.assignment_outlined,
+        title: l10n.procRequestsTitle,
+        builder: (_) => const HospitalProcedureRequestsScreen(),
       ),
       _Tile(
         show: _has('clinic') && isDoctorClinic,

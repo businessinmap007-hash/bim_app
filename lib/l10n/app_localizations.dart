@@ -6145,6 +6145,42 @@ abstract class AppLocalizations {
   /// **'اطلب الحجز'**
   String get clinicRequestBooking;
 
+  /// No description provided for @clinicPatientLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المريض'**
+  String get clinicPatientLabel;
+
+  /// No description provided for @clinicForMe.
+  ///
+  /// In ar, this message translates to:
+  /// **'لي'**
+  String get clinicForMe;
+
+  /// No description provided for @clinicForOther.
+  ///
+  /// In ar, this message translates to:
+  /// **'لشخص آخر'**
+  String get clinicForOther;
+
+  /// No description provided for @clinicAttendeeName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم المريض'**
+  String get clinicAttendeeName;
+
+  /// No description provided for @clinicAttendeePhone.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الهاتف (اختياري)'**
+  String get clinicAttendeePhone;
+
+  /// No description provided for @clinicAttendeeFor.
+  ///
+  /// In ar, this message translates to:
+  /// **'لـ {name}'**
+  String clinicAttendeeFor(Object name);
+
   /// No description provided for @clinicNoOpenSlots.
   ///
   /// In ar, this message translates to:
@@ -13926,6 +13962,204 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'إنهاء الظهور'**
   String get hospitalInvitationLeave;
+
+  /// No description provided for @procKindSurgery.
+  ///
+  /// In ar, this message translates to:
+  /// **'عمليات جراحية'**
+  String get procKindSurgery;
+
+  /// No description provided for @procKindEndoscopy.
+  ///
+  /// In ar, this message translates to:
+  /// **'مناظير'**
+  String get procKindEndoscopy;
+
+  /// No description provided for @procKindProcedure.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجراءات علاجية'**
+  String get procKindProcedure;
+
+  /// No description provided for @procStatusRequested.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار رد المستشفى'**
+  String get procStatusRequested;
+
+  /// No description provided for @procStatusAccepted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تحديد الموعد'**
+  String get procStatusAccepted;
+
+  /// No description provided for @procStatusCompleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم'**
+  String get procStatusCompleted;
+
+  /// No description provided for @procStatusDeclined.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتذر المستشفى'**
+  String get procStatusDeclined;
+
+  /// No description provided for @procStatusCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغي'**
+  String get procStatusCancelled;
+
+  /// No description provided for @procPriceAfterAssessment.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر بعد التقييم'**
+  String get procPriceAfterAssessment;
+
+  /// No description provided for @procScheduledAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموعد: {when}'**
+  String procScheduledAt(Object when);
+
+  /// No description provided for @procPreferredDate.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم المفضل: {date}'**
+  String procPreferredDate(Object date);
+
+  /// No description provided for @procHospitalNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظة المستشفى: {note}'**
+  String procHospitalNote(Object note);
+
+  /// No description provided for @procTabTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجراءات الطبية'**
+  String get procTabTitle;
+
+  /// No description provided for @procNoneOffered.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يعرض المستشفى إجراءات بعد.'**
+  String get procNoneOffered;
+
+  /// No description provided for @procRequestSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُرسل طلبك إلى المستشفى.'**
+  String get procRequestSent;
+
+  /// No description provided for @procMyRequestsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلباتي من المستشفيات'**
+  String get procMyRequestsTitle;
+
+  /// No description provided for @procMyRequestsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد طلبات بعد.'**
+  String get procMyRequestsEmpty;
+
+  /// No description provided for @procPickPreferredDate.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم المفضل (اختياري)'**
+  String get procPickPreferredDate;
+
+  /// No description provided for @procAskButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلب الإجراء'**
+  String get procAskButton;
+
+  /// No description provided for @procAskNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'يردّ المستشفى بموعد، وقد يطلب تقييمك قبل تحديد السعر.'**
+  String get procAskNote;
+
+  /// No description provided for @procCancelRequest.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء الطلب'**
+  String get procCancelRequest;
+
+  /// No description provided for @procManageTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجراءات المستشفى الطبية'**
+  String get procManageTitle;
+
+  /// No description provided for @procManageHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر ما يجريه المستشفى واكتب سعره. اترك السعر فارغًا ليظهر «السعر بعد التقييم».'**
+  String get procManageHint;
+
+  /// No description provided for @procAddOwn.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة إجراء'**
+  String get procAddOwn;
+
+  /// No description provided for @procOwnName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الإجراء'**
+  String get procOwnName;
+
+  /// No description provided for @procRequestsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلبات الإجراءات'**
+  String get procRequestsTitle;
+
+  /// No description provided for @procTabUpcoming.
+  ///
+  /// In ar, this message translates to:
+  /// **'القادمة'**
+  String get procTabUpcoming;
+
+  /// No description provided for @procRequestsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد طلبات.'**
+  String get procRequestsEmpty;
+
+  /// No description provided for @procPickSchedule.
+  ///
+  /// In ar, this message translates to:
+  /// **'موعد الإجراء'**
+  String get procPickSchedule;
+
+  /// No description provided for @procQuoteTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر الإجراء بعد التقييم'**
+  String get procQuoteTitle;
+
+  /// No description provided for @procSkipQuote.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون سعر'**
+  String get procSkipQuote;
+
+  /// No description provided for @procAcceptSchedule.
+  ///
+  /// In ar, this message translates to:
+  /// **'قبول وتحديد موعد'**
+  String get procAcceptSchedule;
+
+  /// No description provided for @procMarkDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الإجراء'**
+  String get procMarkDone;
 
   /// No description provided for @invCurrency.
   ///

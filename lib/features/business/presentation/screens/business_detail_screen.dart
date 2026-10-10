@@ -1,3 +1,4 @@
+import '../../../hospital/presentation/widgets/hospital_procedures_tab.dart';
 import '../../../hospital/presentation/widgets/hospital_departments_tab.dart';
 import '../../../../app/theme/app_button_styles.dart';
 import '../../../business_menu/presentation/widgets/store_terms_view.dart';
@@ -165,6 +166,9 @@ class _BusinessDetailBody extends StatelessWidget {
     if (const {513, 515}.contains(profile.categoryChildId)) {
       tabs.add(Tab(text: l10n.hospitalTabDepartments));
       tabViews.add(HospitalDepartmentsTab(hospitalId: profile.id));
+      // …and the surgeries, endoscopies and treatments it performs, each asked for in a tap
+      tabs.add(Tab(text: l10n.procTabTitle));
+      tabViews.add(HospitalProceduresTab(hospitalId: profile.id));
     }
     if (profile.sections.posts) {
       tabs.add(Tab(text: l10n.businessTabPosts));

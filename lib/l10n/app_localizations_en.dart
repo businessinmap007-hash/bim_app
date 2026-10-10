@@ -3370,6 +3370,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clinicRequestBooking => 'Request the booking';
 
   @override
+  String get clinicPatientLabel => 'Patient';
+
+  @override
+  String get clinicForMe => 'Me';
+
+  @override
+  String get clinicForOther => 'Someone else';
+
+  @override
+  String get clinicAttendeeName => 'Patient\'s name';
+
+  @override
+  String get clinicAttendeePhone => 'Phone (optional)';
+
+  @override
+  String clinicAttendeeFor(Object name) {
+    return 'For $name';
+  }
+
+  @override
   String get clinicNoOpenSlots => 'No open slots right now.';
 
   @override
@@ -7595,6 +7615,113 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hospitalInvitationLeave => 'Stop appearing';
+
+  @override
+  String get procKindSurgery => 'Surgeries';
+
+  @override
+  String get procKindEndoscopy => 'Endoscopies';
+
+  @override
+  String get procKindProcedure => 'Treatment procedures';
+
+  @override
+  String get procStatusRequested => 'Waiting for the hospital';
+
+  @override
+  String get procStatusAccepted => 'Scheduled';
+
+  @override
+  String get procStatusCompleted => 'Done';
+
+  @override
+  String get procStatusDeclined => 'Declined';
+
+  @override
+  String get procStatusCancelled => 'Cancelled';
+
+  @override
+  String get procPriceAfterAssessment => 'Price after assessment';
+
+  @override
+  String procScheduledAt(Object when) {
+    return 'Scheduled: $when';
+  }
+
+  @override
+  String procPreferredDate(Object date) {
+    return 'Preferred day: $date';
+  }
+
+  @override
+  String procHospitalNote(Object note) {
+    return 'Hospital note: $note';
+  }
+
+  @override
+  String get procTabTitle => 'Procedures';
+
+  @override
+  String get procNoneOffered => 'The hospital has not listed procedures yet.';
+
+  @override
+  String get procRequestSent => 'Your request was sent to the hospital.';
+
+  @override
+  String get procMyRequestsTitle => 'My hospital requests';
+
+  @override
+  String get procMyRequestsEmpty => 'No requests yet.';
+
+  @override
+  String get procPickPreferredDate => 'Preferred day (optional)';
+
+  @override
+  String get procAskButton => 'Request the procedure';
+
+  @override
+  String get procAskNote =>
+      'The hospital answers with a date, and may ask to assess you before quoting a price.';
+
+  @override
+  String get procCancelRequest => 'Cancel the request';
+
+  @override
+  String get procManageTitle => 'Hospital medical procedures';
+
+  @override
+  String get procManageHint =>
+      'Tick what the hospital performs and write its price. Leave the price empty to show «price after assessment».';
+
+  @override
+  String get procAddOwn => 'Add a procedure';
+
+  @override
+  String get procOwnName => 'Procedure name';
+
+  @override
+  String get procRequestsTitle => 'Procedure requests';
+
+  @override
+  String get procTabUpcoming => 'Upcoming';
+
+  @override
+  String get procRequestsEmpty => 'No requests.';
+
+  @override
+  String get procPickSchedule => 'Procedure date';
+
+  @override
+  String get procQuoteTitle => 'Price after assessment';
+
+  @override
+  String get procSkipQuote => 'No price';
+
+  @override
+  String get procAcceptSchedule => 'Accept and schedule';
+
+  @override
+  String get procMarkDone => 'Mark as done';
 
   @override
   String get invCurrency => 'EGP';
