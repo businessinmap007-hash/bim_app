@@ -49,7 +49,12 @@ class _MedicalScanScreenState extends ConsumerState<MedicalScanScreen> {
       await Navigator.of(context).pushReplacement(MaterialPageRoute(
         builder: (_) => opened['kind'] == 'prescription'
             ? PrescriptionShownScreen(payload: opened, sharedBy: shared.sharedBy)
-            : MedicalFileViewScreen(file: MedicalFile.fromJson(opened), sharedBy: shared.sharedBy, sharedAt: shared.createdAt),
+            : MedicalFileViewScreen(
+                file: MedicalFile.fromJson(opened),
+                sharedBy: shared.sharedBy,
+                sharedAt: shared.createdAt,
+                isCopy: opened['copy'] == true,
+              ),
       ));
     } catch (_) {
       _handled = false;
@@ -92,14 +97,17 @@ class _MedicalScanScreenState extends ConsumerState<MedicalScanScreen> {
 }
 
 /// A shared medical file, read-only, on the doctor's phone for as long as this screen is open.
-class MedicalFileViewScreen extends StatelessWidget {
+class MedicalFileViewScreen extends ConsumerWidget {
   final MedicalFile file;
   final String sharedBy;
   final DateTime sharedAt;
-  const MedicalFileViewScreen({super.key, required this.file, required this.sharedBy, required this.sharedAt});
+
+  /// A clinic's copy for the patient (not a file shown to a doctor): only then is «حفظ في ملفي» offered.
+  final bool isCopy;
+  const MedicalFileViewScreen({super.key, required this.file, required this.sharedBy, required this.sharedAt, this.isCopy = false});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
@@ -110,6 +118,20 @@ class MedicalFileViewScreen extends StatelessWidget {
         children: [
           Text(l10n.medicalSharedAt(DateFormat.yMMMd().add_Hm().format(sharedAt)), style: theme.textTheme.bodySmall),
           Text(l10n.medicalViewNote, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+          if (isCopy) ...[
+          const SizedBox(height: 10),
+          FilledButton.icon(
+            icon: const Icon(Icons.save_alt_outlined),
+            label: Text(l10n.medicalSaveToMyFile),
+            onPressed: () async {
+              final messenger = ScaffoldMessenger.of(context);
+              final controller = ref.read(medicalFileControllerProvider.notifier);
+              final mine = ref.read(medicalFileControllerProvider).valueOrNull ?? const MedicalFile();
+              await controller.save(mine.mergedWith(file));
+              messenger.showSnackBar(SnackBar(content: Text(l10n.medicalSavedToMyFile)));
+            },
+          ),
+          ],
           if (file.bloodType.isNotEmpty) ...[
             const SizedBox(height: 16),
             Card(

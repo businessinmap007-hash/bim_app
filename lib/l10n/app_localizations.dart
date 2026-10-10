@@ -12511,6 +12511,12 @@ abstract class AppLocalizations {
   /// **'تحديث'**
   String get menuSheetActionUpdate;
 
+  /// No description provided for @menuSheetActionSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'قسم'**
+  String get menuSheetActionSection;
+
   /// No description provided for @menuSheetActionError.
   ///
   /// In ar, this message translates to:
@@ -14160,6 +14166,348 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تم الإجراء'**
   String get procMarkDone;
+
+  /// No description provided for @importHubTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'استيراد بياناتي'**
+  String get importHubTitle;
+
+  /// No description provided for @importHubIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'أحضر بياناتك القديمة من ملف Excel أو CSV بدل أن تبدأ من الصفر: اختر ما تريد استيراده، ثم الملف، ثم اربط أعمدته بأعمدتنا.'**
+  String get importHubIntro;
+
+  /// No description provided for @importHubMenu.
+  ///
+  /// In ar, this message translates to:
+  /// **'المنيو والأصناف'**
+  String get importHubMenu;
+
+  /// No description provided for @importHubMenuSub.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأقسام وأصنافها بأسعارها ومقاساتها وإضافاتها'**
+  String get importHubMenuSub;
+
+  /// No description provided for @importHubPatients.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملفات المرضى'**
+  String get importHubPatients;
+
+  /// No description provided for @importHubPatientsSub.
+  ///
+  /// In ar, this message translates to:
+  /// **'المرضى وتاريخهم المرضي — تُحفظ على هذا الجهاز فقط'**
+  String get importHubPatientsSub;
+
+  /// No description provided for @importHubNothing.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد ما يمكن استيراده لهذا الحساب بعد.'**
+  String get importHubNothing;
+
+  /// No description provided for @importPickFile.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيار ملف'**
+  String get importPickFile;
+
+  /// No description provided for @importTemplate.
+  ///
+  /// In ar, this message translates to:
+  /// **'نموذج جاهز'**
+  String get importTemplate;
+
+  /// No description provided for @importFileEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'الملف فارغ أو لا يحوي صفوفًا بعد صف العناوين.'**
+  String get importFileEmpty;
+
+  /// No description provided for @importFileUnreadable.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّرت قراءة هذا الملف. جرّب ملف Excel (xlsx) أو CSV.'**
+  String get importFileUnreadable;
+
+  /// No description provided for @importFileInfo.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} — {count} صفًا'**
+  String importFileInfo(Object count, Object name);
+
+  /// No description provided for @importMapHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر لكل عمود عندنا اسم العمود المقابل في ملفك. سنتذكر هذا الربط للملفات المشابهة.'**
+  String get importMapHint;
+
+  /// No description provided for @importNotUsed.
+  ///
+  /// In ar, this message translates to:
+  /// **'— لا أستخدمه —'**
+  String get importNotUsed;
+
+  /// No description provided for @importUnnamedColumn.
+  ///
+  /// In ar, this message translates to:
+  /// **'بلا اسم'**
+  String get importUnnamedColumn;
+
+  /// No description provided for @importRun.
+  ///
+  /// In ar, this message translates to:
+  /// **'استيراد {count} صف'**
+  String importRun(Object count);
+
+  /// No description provided for @importRequiredMissing.
+  ///
+  /// In ar, this message translates to:
+  /// **'اربط الأعمدة المطلوبة (*) أولًا.'**
+  String get importRequiredMissing;
+
+  /// No description provided for @importDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الاستيراد'**
+  String get importDone;
+
+  /// No description provided for @importCreated.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملفات جديدة: {count}'**
+  String importCreated(Object count);
+
+  /// No description provided for @importMerged.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُضيف إلى ملفات موجودة: {count}'**
+  String importMerged(Object count);
+
+  /// No description provided for @importSkipped.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تخطي {count} صف:'**
+  String importSkipped(Object count);
+
+  /// No description provided for @importSkippedRow.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصف {row}: {reason}'**
+  String importSkippedRow(Object reason, Object row);
+
+  /// No description provided for @patientFilesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملفات المرضى'**
+  String get patientFilesTitle;
+
+  /// No description provided for @patientFilesDeviceNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذه الملفات محفوظة على هذا الجهاز فقط ومشفّرة، ولا تُرفع إلى السيرفر.'**
+  String get patientFilesDeviceNote;
+
+  /// No description provided for @patientFilesSearch.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث بالاسم أو الهاتف'**
+  String get patientFilesSearch;
+
+  /// No description provided for @patientFilesEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد ملفات على هذا الجهاز بعد.'**
+  String get patientFilesEmpty;
+
+  /// No description provided for @patientFilesImport.
+  ///
+  /// In ar, this message translates to:
+  /// **'استيراد ملفات المرضى'**
+  String get patientFilesImport;
+
+  /// No description provided for @patientFilesImportIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'من ملف Excel أو CSV: اسم المريض مطلوب، وما عداه اختياري. الصفوف التي لها نفس الهاتف تُضم في ملف واحد بزياراتها، وما يوجد مسبقًا لا يتكرر.'**
+  String get patientFilesImportIntro;
+
+  /// No description provided for @patientFilesAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة مريض'**
+  String get patientFilesAdd;
+
+  /// No description provided for @patientFilesCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} ملفًا'**
+  String patientFilesCount(Object count);
+
+  /// No description provided for @patientFileEntryCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} سجلًا'**
+  String patientFileEntryCount(Object count);
+
+  /// No description provided for @patientFileName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم المريض'**
+  String get patientFileName;
+
+  /// No description provided for @patientFilePhone.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الهاتف'**
+  String get patientFilePhone;
+
+  /// No description provided for @patientFileNationalId.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرقم القومي'**
+  String get patientFileNationalId;
+
+  /// No description provided for @patientFileBirth.
+  ///
+  /// In ar, this message translates to:
+  /// **'تاريخ الميلاد'**
+  String get patientFileBirth;
+
+  /// No description provided for @patientFileGender.
+  ///
+  /// In ar, this message translates to:
+  /// **'النوع'**
+  String get patientFileGender;
+
+  /// No description provided for @patientFileChronic.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأمراض المزمنة'**
+  String get patientFileChronic;
+
+  /// No description provided for @patientFileAllergies.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحساسية'**
+  String get patientFileAllergies;
+
+  /// No description provided for @patientFileNotes.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات'**
+  String get patientFileNotes;
+
+  /// No description provided for @patientFileEdit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل البيانات'**
+  String get patientFileEdit;
+
+  /// No description provided for @patientFileDelete.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف الملف'**
+  String get patientFileDelete;
+
+  /// No description provided for @patientFileDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف هذا الملف من الجهاز نهائيًا؟'**
+  String get patientFileDeleteConfirm;
+
+  /// No description provided for @patientFileAddEntry.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة سجل'**
+  String get patientFileAddEntry;
+
+  /// No description provided for @patientFileEntryTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'العنوان (التشخيص، اسم التحليل، الأشعة، الدواء)'**
+  String get patientFileEntryTitle;
+
+  /// No description provided for @patientFileEntryDetail.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل (اختياري)'**
+  String get patientFileEntryDetail;
+
+  /// No description provided for @patientFileNoEntries.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد سجلات بعد. أضف زيارة أو تحليلًا أو أشعة أو دواءً.'**
+  String get patientFileNoEntries;
+
+  /// No description provided for @patientFileSendCopy.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال نسخة للمريض'**
+  String get patientFileSendCopy;
+
+  /// No description provided for @patientFileOpen.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملف المريض'**
+  String get patientFileOpen;
+
+  /// No description provided for @patientFileCreate.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء ملف للمريض'**
+  String get patientFileCreate;
+
+  /// No description provided for @recordKindVisit.
+  ///
+  /// In ar, this message translates to:
+  /// **'زيارة'**
+  String get recordKindVisit;
+
+  /// No description provided for @recordKindTest.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحليل'**
+  String get recordKindTest;
+
+  /// No description provided for @recordKindRadiology.
+  ///
+  /// In ar, this message translates to:
+  /// **'أشعة'**
+  String get recordKindRadiology;
+
+  /// No description provided for @recordKindMedicine.
+  ///
+  /// In ar, this message translates to:
+  /// **'دواء'**
+  String get recordKindMedicine;
+
+  /// No description provided for @recordKindNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظة'**
+  String get recordKindNote;
+
+  /// No description provided for @medicalSectionRecords.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجل الزيارات والتحاليل'**
+  String get medicalSectionRecords;
+
+  /// No description provided for @medicalSaveToMyFile.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ نسخة في ملفي الطبي'**
+  String get medicalSaveToMyFile;
+
+  /// No description provided for @medicalSavedToMyFile.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الحفظ في ملفك الطبي على هذا الهاتف.'**
+  String get medicalSavedToMyFile;
 
   /// No description provided for @invCurrency.
   ///

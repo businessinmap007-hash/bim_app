@@ -31,12 +31,17 @@ class IssuePrescriptionScreen extends ConsumerStatefulWidget {
   final int? appointmentId;
   final Prescription? existing;
 
+  /// Told once the prescription is issued: its medicine names and the diagnosis — so the clinic's own file of the
+  /// patient (kept on the clinic device) can keep a copy.
+  final void Function(List<String> medicines, String diagnosis)? onIssued;
+
   const IssuePrescriptionScreen({
     super.key,
     required this.patientId,
     this.patientName,
     this.appointmentId,
     this.existing,
+    this.onIssued,
   });
 
   @override
@@ -569,6 +574,7 @@ class _IssuePrescriptionScreenState
           handwrittenPhotoPath: _needsPaper ? _paperPath : null,
         );
       }
+      widget.onIssued?.call([for (final d in _items) d.medicine.name], _diagnosisController.text.trim());
       if (mounted) Navigator.of(context).pop(true);
     } catch (e) {
       setState(() {

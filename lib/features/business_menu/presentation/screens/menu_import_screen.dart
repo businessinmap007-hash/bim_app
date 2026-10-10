@@ -375,6 +375,7 @@ class _MenuImportScreenState extends ConsumerState<MenuImportScreen> {
                     switch (row.action) {
                       'create' => l10n.menuSheetActionCreate,
                       'update' => l10n.menuSheetActionUpdate,
+                      'section' => l10n.menuSheetActionSection,
                       _ => l10n.menuSheetActionError,
                     },
                     style: TextStyle(

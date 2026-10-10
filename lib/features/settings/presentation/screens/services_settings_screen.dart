@@ -1,5 +1,4 @@
 import '../../../business_menu/application/business_menu_providers.dart';
-import '../../../business_menu/presentation/screens/menu_import_screen.dart';
 import '../../../business_menu/presentation/screens/shop_addons_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,6 +32,7 @@ import '../../../stay_requests/application/stay_requests_providers.dart';
 import '../../../stay_requests/presentation/screens/stay_requests_screen.dart';
 import '../../../staff/presentation/screens/staff_team_settings_screen.dart';
 import '../../../table/presentation/screens/table_calls_screen.dart';
+import '../../../data_import/presentation/screens/data_import_hub_screen.dart';
 import '../../../hospital/presentation/screens/hospital_doctors_screen.dart';
 import '../../../hospital/presentation/screens/hospital_invitations_screen.dart';
 import '../../../hospital/presentation/screens/hospital_procedure_requests_screen.dart';
@@ -168,11 +168,12 @@ class _ServiceList extends StatelessWidget {
         title: l10n.shopAddonsTitle,
         builder: (_) => const ShopAddonsScreen(),
       ),
+      // one door for bringing old data in (the menu, the clinic's patient files …) — each business sees what it has
       _Tile(
-        show: _has('menu'),
+        show: _has('menu') || _has('clinic'),
         leading: Icons.import_export_outlined,
-        title: l10n.menuSheetTitle,
-        builder: (_) => const MenuImportScreen(),
+        title: l10n.importHubTitle,
+        builder: (_) => DataImportHubScreen(hasMenu: _has('menu'), hasClinic: _has('clinic')),
       ),
       _Tile(
         show: _has('menu') && _isFoodShaped,

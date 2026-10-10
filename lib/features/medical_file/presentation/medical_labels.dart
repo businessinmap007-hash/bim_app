@@ -6,4 +6,5 @@ String medicalSectionLabel(AppLocalizations l10n, MedicalSection section) => swi
   MedicalSection.allergies => l10n.medicalSectionAllergies,
   MedicalSection.medications => l10n.medicalSectionMedications,
   MedicalSection.surgeries => l10n.medicalSectionSurgeries,
+  MedicalSection.records => l10n.medicalSectionRecords,
 };

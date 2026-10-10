@@ -6762,6 +6762,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get menuSheetActionUpdate => 'تحديث';
 
   @override
+  String get menuSheetActionSection => 'قسم';
+
+  @override
   String get menuSheetActionError => 'خطأ';
 
   @override
@@ -7683,6 +7686,202 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get procMarkDone => 'تم الإجراء';
+
+  @override
+  String get importHubTitle => 'استيراد بياناتي';
+
+  @override
+  String get importHubIntro =>
+      'أحضر بياناتك القديمة من ملف Excel أو CSV بدل أن تبدأ من الصفر: اختر ما تريد استيراده، ثم الملف، ثم اربط أعمدته بأعمدتنا.';
+
+  @override
+  String get importHubMenu => 'المنيو والأصناف';
+
+  @override
+  String get importHubMenuSub =>
+      'الأقسام وأصنافها بأسعارها ومقاساتها وإضافاتها';
+
+  @override
+  String get importHubPatients => 'ملفات المرضى';
+
+  @override
+  String get importHubPatientsSub =>
+      'المرضى وتاريخهم المرضي — تُحفظ على هذا الجهاز فقط';
+
+  @override
+  String get importHubNothing => 'لا يوجد ما يمكن استيراده لهذا الحساب بعد.';
+
+  @override
+  String get importPickFile => 'اختيار ملف';
+
+  @override
+  String get importTemplate => 'نموذج جاهز';
+
+  @override
+  String get importFileEmpty => 'الملف فارغ أو لا يحوي صفوفًا بعد صف العناوين.';
+
+  @override
+  String get importFileUnreadable =>
+      'تعذّرت قراءة هذا الملف. جرّب ملف Excel (xlsx) أو CSV.';
+
+  @override
+  String importFileInfo(Object count, Object name) {
+    return '$name — $count صفًا';
+  }
+
+  @override
+  String get importMapHint =>
+      'اختر لكل عمود عندنا اسم العمود المقابل في ملفك. سنتذكر هذا الربط للملفات المشابهة.';
+
+  @override
+  String get importNotUsed => '— لا أستخدمه —';
+
+  @override
+  String get importUnnamedColumn => 'بلا اسم';
+
+  @override
+  String importRun(Object count) {
+    return 'استيراد $count صف';
+  }
+
+  @override
+  String get importRequiredMissing => 'اربط الأعمدة المطلوبة (*) أولًا.';
+
+  @override
+  String get importDone => 'تم الاستيراد';
+
+  @override
+  String importCreated(Object count) {
+    return 'ملفات جديدة: $count';
+  }
+
+  @override
+  String importMerged(Object count) {
+    return 'أُضيف إلى ملفات موجودة: $count';
+  }
+
+  @override
+  String importSkipped(Object count) {
+    return 'تم تخطي $count صف:';
+  }
+
+  @override
+  String importSkippedRow(Object reason, Object row) {
+    return 'الصف $row: $reason';
+  }
+
+  @override
+  String get patientFilesTitle => 'ملفات المرضى';
+
+  @override
+  String get patientFilesDeviceNote =>
+      'هذه الملفات محفوظة على هذا الجهاز فقط ومشفّرة، ولا تُرفع إلى السيرفر.';
+
+  @override
+  String get patientFilesSearch => 'ابحث بالاسم أو الهاتف';
+
+  @override
+  String get patientFilesEmpty => 'لا توجد ملفات على هذا الجهاز بعد.';
+
+  @override
+  String get patientFilesImport => 'استيراد ملفات المرضى';
+
+  @override
+  String get patientFilesImportIntro =>
+      'من ملف Excel أو CSV: اسم المريض مطلوب، وما عداه اختياري. الصفوف التي لها نفس الهاتف تُضم في ملف واحد بزياراتها، وما يوجد مسبقًا لا يتكرر.';
+
+  @override
+  String get patientFilesAdd => 'إضافة مريض';
+
+  @override
+  String patientFilesCount(Object count) {
+    return '$count ملفًا';
+  }
+
+  @override
+  String patientFileEntryCount(Object count) {
+    return '$count سجلًا';
+  }
+
+  @override
+  String get patientFileName => 'اسم المريض';
+
+  @override
+  String get patientFilePhone => 'رقم الهاتف';
+
+  @override
+  String get patientFileNationalId => 'الرقم القومي';
+
+  @override
+  String get patientFileBirth => 'تاريخ الميلاد';
+
+  @override
+  String get patientFileGender => 'النوع';
+
+  @override
+  String get patientFileChronic => 'الأمراض المزمنة';
+
+  @override
+  String get patientFileAllergies => 'الحساسية';
+
+  @override
+  String get patientFileNotes => 'ملاحظات';
+
+  @override
+  String get patientFileEdit => 'تعديل البيانات';
+
+  @override
+  String get patientFileDelete => 'حذف الملف';
+
+  @override
+  String get patientFileDeleteConfirm => 'حذف هذا الملف من الجهاز نهائيًا؟';
+
+  @override
+  String get patientFileAddEntry => 'إضافة سجل';
+
+  @override
+  String get patientFileEntryTitle =>
+      'العنوان (التشخيص، اسم التحليل، الأشعة، الدواء)';
+
+  @override
+  String get patientFileEntryDetail => 'تفاصيل (اختياري)';
+
+  @override
+  String get patientFileNoEntries =>
+      'لا توجد سجلات بعد. أضف زيارة أو تحليلًا أو أشعة أو دواءً.';
+
+  @override
+  String get patientFileSendCopy => 'إرسال نسخة للمريض';
+
+  @override
+  String get patientFileOpen => 'ملف المريض';
+
+  @override
+  String get patientFileCreate => 'إنشاء ملف للمريض';
+
+  @override
+  String get recordKindVisit => 'زيارة';
+
+  @override
+  String get recordKindTest => 'تحليل';
+
+  @override
+  String get recordKindRadiology => 'أشعة';
+
+  @override
+  String get recordKindMedicine => 'دواء';
+
+  @override
+  String get recordKindNote => 'ملاحظة';
+
+  @override
+  String get medicalSectionRecords => 'سجل الزيارات والتحاليل';
+
+  @override
+  String get medicalSaveToMyFile => 'حفظ نسخة في ملفي الطبي';
+
+  @override
+  String get medicalSavedToMyFile => 'تم الحفظ في ملفك الطبي على هذا الهاتف.';
 
   @override
   String get invCurrency => 'ج';

@@ -13,7 +13,10 @@ class IssueInvestigationScreen extends ConsumerStatefulWidget {
   final int patientId;
   final String? patientName;
 
-  const IssueInvestigationScreen({super.key, required this.patientId, this.patientName});
+  /// Told once the order is issued: the names of the lab tests and of the exams (for the clinic's own patient file).
+  final void Function(List<String> labs, List<String> radiology)? onIssued;
+
+  const IssueInvestigationScreen({super.key, required this.patientId, this.patientName, this.onIssued});
 
   @override
   ConsumerState<IssueInvestigationScreen> createState() => _IssueInvestigationScreenState();
@@ -42,6 +45,13 @@ class _IssueInvestigationScreenState extends ConsumerState<IssueInvestigationScr
         notes: _notes.text.trim(),
       );
       ref.invalidate(issuedInvestigationOrdersProvider);
+      final catalog = ref.read(investigationCatalogProvider).valueOrNull;
+      if (catalog != null) {
+        widget.onIssued?.call(
+          [for (final t in catalog.lab) if (_picked.contains(t.id)) t.name],
+          [for (final t in catalog.radiology) if (_picked.contains(t.id)) t.name],
+        );
+      }
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.invIssued)));
       Navigator.of(context).pop(true);

@@ -1,4 +1,7 @@
 import '../../../investigations/presentation/screens/issue_investigation_screen.dart';
+import '../../../patient_records/application/patient_records_providers.dart';
+import '../../../patient_records/data/patient_record.dart';
+import '../../../patient_records/presentation/screens/patient_file_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -204,6 +207,25 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
     }
   }
 
+  /// What the doctor just issued is also written into the clinic's OWN file of this patient (on this device), dated
+  /// today — the file is created when the patient had none. Nothing here goes to the server.
+  Future<void> _keepInFile(List<(RecordKind, String)> items) async {
+    if (items.isEmpty) return;
+    final a = widget.appointment;
+    final phone = (a.attendeeName != null ? a.attendeePhone : a.patientPhone) ?? '';
+    final name = a.attendeeName ?? a.patientName ?? '';
+    if (name.isEmpty && phone.isEmpty) return;
+
+    final records = ref.read(patientRecordsProvider.notifier);
+    final record = records.match(phone: phone, name: name) ?? PatientRecord(id: newRecordId(), name: name, phone: phone, updatedAt: DateTime.now());
+    final today = DateTime.now();
+    final date = DateTime(today.year, today.month, today.day);
+    final fresh = [for (final (kind, title) in items) RecordEntry(id: newRecordId(), date: date, kind: kind, title: title)];
+    final seen = {for (final e in record.entries) e.fingerprint};
+
+    await records.save(record.copyWith(entries: [...record.entries, for (final e in fresh) if (seen.add(e.fingerprint)) e]));
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -236,6 +258,36 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
               const SizedBox(height: 4),
               Text(_formatDateTime(a.scheduledAt!)),
             ],
+            // the clinic's OWN file of this patient (kept on this device): open it at once when there is one
+            Builder(
+              builder: (context) {
+                final records = ref.watch(patientRecordsProvider.notifier);
+                ref.watch(patientRecordsProvider);
+                final phone = (a.attendeeName != null ? a.attendeePhone : a.patientPhone) ?? '';
+                final name = a.attendeeName ?? a.patientName ?? '';
+                final found = records.match(phone: phone, name: name);
+                return Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: ActionChip(
+                      avatar: Icon(found != null ? Icons.folder_shared_outlined : Icons.create_new_folder_outlined, size: 18),
+                      label: Text(found != null ? l10n.patientFileOpen : l10n.patientFileCreate),
+                      onPressed: () async {
+                        var record = found;
+                        if (record == null) {
+                          record = PatientRecord(id: newRecordId(), name: name, phone: phone, updatedAt: DateTime.now());
+                          await records.save(record);
+                        }
+                        if (context.mounted) {
+                          Navigator.of(context).push(MaterialPageRoute(builder: (_) => PatientFileScreen(recordId: record!.id)));
+                        }
+                      },
+                    ),
+                  ),
+                );
+              },
+            ),
             if (a.reason != null && a.reason!.isNotEmpty) ...[
               const SizedBox(height: 4),
               Text(a.reason!, style: Theme.of(context).textTheme.bodySmall),
@@ -254,6 +306,10 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
                           patientId: a.patientId,
                           patientName: a.patientName,
                           appointmentId: a.id,
+                          onIssued: (medicines, diagnosis) => _keepInFile([
+                            if (diagnosis.isNotEmpty) (RecordKind.visit, diagnosis),
+                            for (final m in medicines) (RecordKind.medicine, m),
+                          ]),
                         ),
                       ),
                     );
@@ -275,7 +331,14 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
                 label: Text(l10n.invOrderTests),
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (_) => IssueInvestigationScreen(patientId: a.patientId, patientName: a.patientName),
+                    builder: (_) => IssueInvestigationScreen(
+                      patientId: a.patientId,
+                      patientName: a.patientName,
+                      onIssued: (labs, radiology) => _keepInFile([
+                        for (final t in labs) (RecordKind.test, t),
+                        for (final t in radiology) (RecordKind.radiology, t),
+                      ]),
+                    ),
                   ),
                 ),
               ),

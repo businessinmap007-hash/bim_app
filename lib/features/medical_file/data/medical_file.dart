@@ -1,6 +1,8 @@
 /// «الملف الطبي» — kept on the patient's phone only (see [MedicalFileStore]); the server never holds it.
 /// «التاريخ المرضى يحفظ على الفون وعند مشاركته يقرأ ويعرض للطبيب او الصيدلى» — المالك، 2026-10-05.
-enum MedicalSection { conditions, allergies, medications, surgeries }
+/// [records] is the history a clinic hands over (visits, tests, scans, medicines) — kept here so the patient carries it
+/// and can show it to any doctor.
+enum MedicalSection { conditions, allergies, medications, surgeries, records }
 
 /// One line of a section: «سكر من النوع الثاني — منذ 2019», «بنسلين — طفح جلدي».
 class MedicalEntry {
@@ -62,6 +64,23 @@ class MedicalFile {
       },
       notes: '${json['notes'] ?? ''}',
       updatedAt: DateTime.tryParse('${json['updated_at'] ?? ''}'),
+    );
+  }
+
+  /// Add what another file holds into this one — what is written here stays, entries not here yet are added.
+  MedicalFile mergedWith(MedicalFile other) {
+    final merged = <MedicalSection, List<MedicalEntry>>{};
+    for (final s in MedicalSection.values) {
+      final mine = entries(s);
+      final seen = {for (final e in mine) '${e.title}|${e.detail}'};
+      merged[s] = [...mine, for (final e in other.entries(s)) if (seen.add('${e.title}|${e.detail}')) e];
+    }
+
+    return MedicalFile(
+      bloodType: bloodType.isNotEmpty ? bloodType : other.bloodType,
+      sections: merged,
+      notes: notes.trim().isNotEmpty ? notes : other.notes,
+      updatedAt: DateTime.now(),
     );
   }
 

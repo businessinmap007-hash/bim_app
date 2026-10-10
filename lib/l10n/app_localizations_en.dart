@@ -6790,6 +6790,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuSheetActionUpdate => 'Update';
 
   @override
+  String get menuSheetActionSection => 'Section';
+
+  @override
   String get menuSheetActionError => 'Error';
 
   @override
@@ -7722,6 +7725,204 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get procMarkDone => 'Mark as done';
+
+  @override
+  String get importHubTitle => 'Import my data';
+
+  @override
+  String get importHubIntro =>
+      'Bring your old data from an Excel or CSV file instead of starting from zero: choose what to import, then the file, then link its columns to ours.';
+
+  @override
+  String get importHubMenu => 'Menu and items';
+
+  @override
+  String get importHubMenuSub =>
+      'Sections and their items with prices, sizes and extras';
+
+  @override
+  String get importHubPatients => 'Patient files';
+
+  @override
+  String get importHubPatientsSub =>
+      'Patients and their history — kept on this device only';
+
+  @override
+  String get importHubNothing => 'Nothing to import for this account yet.';
+
+  @override
+  String get importPickFile => 'Choose a file';
+
+  @override
+  String get importTemplate => 'Ready template';
+
+  @override
+  String get importFileEmpty =>
+      'The file is empty or has no rows below the header row.';
+
+  @override
+  String get importFileUnreadable =>
+      'This file could not be read. Try an Excel (xlsx) or CSV file.';
+
+  @override
+  String importFileInfo(Object count, Object name) {
+    return '$name — $count rows';
+  }
+
+  @override
+  String get importMapHint =>
+      'For each of our columns, pick the matching column of your file. We remember the link for similar files.';
+
+  @override
+  String get importNotUsed => '— not used —';
+
+  @override
+  String get importUnnamedColumn => 'unnamed';
+
+  @override
+  String importRun(Object count) {
+    return 'Import $count rows';
+  }
+
+  @override
+  String get importRequiredMissing => 'Link the required (*) columns first.';
+
+  @override
+  String get importDone => 'Import finished';
+
+  @override
+  String importCreated(Object count) {
+    return 'New files: $count';
+  }
+
+  @override
+  String importMerged(Object count) {
+    return 'Added to existing files: $count';
+  }
+
+  @override
+  String importSkipped(Object count) {
+    return '$count rows skipped:';
+  }
+
+  @override
+  String importSkippedRow(Object reason, Object row) {
+    return 'Row $row: $reason';
+  }
+
+  @override
+  String get patientFilesTitle => 'Patient files';
+
+  @override
+  String get patientFilesDeviceNote =>
+      'These files are kept on this device only, encrypted, and are never uploaded to the server.';
+
+  @override
+  String get patientFilesSearch => 'Search by name or phone';
+
+  @override
+  String get patientFilesEmpty => 'No files on this device yet.';
+
+  @override
+  String get patientFilesImport => 'Import patient files';
+
+  @override
+  String get patientFilesImportIntro =>
+      'From an Excel or CSV file: the patient\'s name is required, the rest is optional. Rows with the same phone are folded into one file with its visits, and nothing already there is duplicated.';
+
+  @override
+  String get patientFilesAdd => 'Add a patient';
+
+  @override
+  String patientFilesCount(Object count) {
+    return '$count files';
+  }
+
+  @override
+  String patientFileEntryCount(Object count) {
+    return '$count entries';
+  }
+
+  @override
+  String get patientFileName => 'Patient\'s name';
+
+  @override
+  String get patientFilePhone => 'Phone';
+
+  @override
+  String get patientFileNationalId => 'National ID';
+
+  @override
+  String get patientFileBirth => 'Date of birth';
+
+  @override
+  String get patientFileGender => 'Gender';
+
+  @override
+  String get patientFileChronic => 'Chronic conditions';
+
+  @override
+  String get patientFileAllergies => 'Allergies';
+
+  @override
+  String get patientFileNotes => 'Notes';
+
+  @override
+  String get patientFileEdit => 'Edit details';
+
+  @override
+  String get patientFileDelete => 'Delete the file';
+
+  @override
+  String get patientFileDeleteConfirm =>
+      'Delete this file from the device for good?';
+
+  @override
+  String get patientFileAddEntry => 'Add an entry';
+
+  @override
+  String get patientFileEntryTitle => 'Title (diagnosis, test, scan, medicine)';
+
+  @override
+  String get patientFileEntryDetail => 'Details (optional)';
+
+  @override
+  String get patientFileNoEntries =>
+      'No entries yet. Add a visit, a test, a scan or a medicine.';
+
+  @override
+  String get patientFileSendCopy => 'Send a copy to the patient';
+
+  @override
+  String get patientFileOpen => 'Patient file';
+
+  @override
+  String get patientFileCreate => 'Create a file for this patient';
+
+  @override
+  String get recordKindVisit => 'Visit';
+
+  @override
+  String get recordKindTest => 'Test';
+
+  @override
+  String get recordKindRadiology => 'Scan';
+
+  @override
+  String get recordKindMedicine => 'Medicine';
+
+  @override
+  String get recordKindNote => 'Note';
+
+  @override
+  String get medicalSectionRecords => 'Visits and tests history';
+
+  @override
+  String get medicalSaveToMyFile => 'Save a copy in my medical file';
+
+  @override
+  String get medicalSavedToMyFile =>
+      'Saved in your medical file on this phone.';
 
   @override
   String get invCurrency => 'EGP';

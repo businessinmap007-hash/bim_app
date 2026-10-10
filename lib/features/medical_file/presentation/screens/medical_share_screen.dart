@@ -16,7 +16,10 @@ import '../medical_labels.dart';
 /// code holds the key; the server holds only the ciphertext, and only until the share ends.
 class MedicalShareScreen extends ConsumerStatefulWidget {
   final MedicalFile file;
-  const MedicalShareScreen({super.key, required this.file});
+
+  /// A clinic's COPY for the patient: the patient's phone offers to keep it in their own medical file.
+  final bool asCopy;
+  const MedicalShareScreen({super.key, required this.file, this.asCopy = false});
 
   @override
   ConsumerState<MedicalShareScreen> createState() => _MedicalShareScreenState();
@@ -47,7 +50,7 @@ class _MedicalShareScreenState extends ConsumerState<MedicalShareScreen> {
     });
     try {
       final shown = widget.file.only(sections: _sections, bloodType: _bloodType, notes: _notes);
-      final sealed = await MedicalShareCrypto.seal(shown.toJson());
+      final sealed = await MedicalShareCrypto.seal({...shown.toJson(), if (widget.asCopy) 'copy': true});
       final created = await ref.read(medicalShareApiProvider).create(sealed.ciphertext, minutes: _minutes);
       setState(() => _share = (id: created.id, qr: MedicalShareCrypto.qrPayload(created.id, sealed.key), expiresAt: created.expiresAt));
       _ticker = Timer.periodic(const Duration(seconds: 15), (_) {
