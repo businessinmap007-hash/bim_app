@@ -6,6 +6,7 @@ import '../../../data_import/presentation/screens/import_wizard_screen.dart';
 import '../../application/patient_records_providers.dart';
 import '../../data/patient_import.dart';
 import '../../data/patient_record.dart';
+import 'patient_backup_screen.dart';
 import 'patient_file_screen.dart';
 
 /// «ملفات المرضى» — the clinic's own patient files, kept on THIS device. Import an old sheet, add a patient by hand,
@@ -86,6 +87,11 @@ class _PatientFilesScreenState extends ConsumerState<PatientFilesScreen> {
       appBar: AppBar(
         title: Text(l10n.patientFilesTitle),
         actions: [
+          IconButton(
+            tooltip: l10n.patientBackupTitle,
+            icon: const Icon(Icons.shield_outlined),
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const PatientBackupScreen())),
+          ),
           IconButton(tooltip: l10n.patientFilesImport, icon: const Icon(Icons.upload_file_outlined), onPressed: _import),
           IconButton(tooltip: l10n.patientFilesAdd, icon: const Icon(Icons.person_add_alt_1_outlined), onPressed: _add),
         ],

@@ -18,6 +18,9 @@ class PatientRecordsController extends StateNotifier<AsyncValue<List<PatientReco
     _load();
   }
 
+  /// When the last backup was made or restored on this device; null = never.
+  DateTime? backupAt;
+
   Future<void> _load() async {
     final id = _userId;
     if (id == null) {
@@ -25,6 +28,7 @@ class PatientRecordsController extends StateNotifier<AsyncValue<List<PatientReco
       return;
     }
     try {
+      backupAt = await _store.readBackupAt(id);
       state = AsyncValue.data(await _store.all(id));
     } catch (e, st) {
       state = AsyncValue.error(e, st);
@@ -49,6 +53,48 @@ class PatientRecordsController extends StateNotifier<AsyncValue<List<PatientReco
     }
 
     return null;
+  }
+
+  Future<void> markBackedUp(DateTime at) async {
+    backupAt = at;
+    final id = _userId;
+    if (id != null) await _store.writeBackupAt(id, at);
+    state = AsyncValue.data(_records);
+  }
+
+  /// How many files changed after the last backup (all of them when there was none).
+  int get changedSinceBackup {
+    final at = backupAt;
+    if (at == null) return _records.length;
+
+    return _records.where((r) => r.updatedAt.isAfter(at)).length;
+  }
+
+  /// A backup read back: a file this device does not have is added; one it has is replaced only by the NEWER copy — so
+  /// restoring never throws away what was written after the backup.
+  Future<({int added, int updated})> restore(List<PatientRecord> backup) async {
+    final id = _userId;
+    if (id == null) return (added: 0, updated: 0);
+
+    final have = {for (final r in _records) r.id: r};
+    final write = <PatientRecord>[];
+    var added = 0;
+    var updated = 0;
+    for (final b in backup) {
+      final mine = have[b.id];
+      if (mine == null) {
+        write.add(b);
+        added++;
+      } else if (b.updatedAt.isAfter(mine.updatedAt)) {
+        write.add(b);
+        updated++;
+      }
+    }
+
+    await _store.putAll(id, write);
+    state = AsyncValue.data(await _store.all(id));
+
+    return (added: added, updated: updated);
   }
 
   /// A hand-made file or an edited one.

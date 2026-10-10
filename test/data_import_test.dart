@@ -5,6 +5,7 @@ import 'package:bim_app/features/data_import/data/import_core.dart';
 import 'package:bim_app/features/medical_file/data/medical_file.dart';
 import 'package:bim_app/features/patient_records/application/patient_records_providers.dart';
 import 'package:bim_app/features/patient_records/data/patient_import.dart';
+import 'package:bim_app/features/patient_records/data/patient_backup.dart';
 import 'package:bim_app/features/patient_records/data/patient_record.dart';
 import 'package:bim_app/features/patient_records/data/patient_record_store.dart';
 
@@ -12,6 +13,14 @@ import 'package:bim_app/features/patient_records/data/patient_record_store.dart'
 class _MemoryStore extends PatientRecordStore {
   final Map<String, PatientRecord> rows = {};
   _MemoryStore() : super(const FlutterSecureStorage());
+
+  DateTime? backedUpAt;
+
+  @override
+  Future<DateTime?> readBackupAt(int userId) async => backedUpAt;
+
+  @override
+  Future<void> writeBackupAt(int userId, DateTime at) async => backedUpAt = at;
 
   @override
   Future<List<PatientRecord>> all(int userId) async => rows.values.toList();
@@ -120,6 +129,56 @@ void main() {
       expect(controller.match(phone: '+20 100 000 0001')?.name, 'سامي');
       expect(controller.match(name: 'سامى')?.name, 'سامي', reason: 'ى and ي are the same letter to a clerk');
       expect(controller.match(phone: '0123456789', name: 'غيره'), isNull);
+    });
+  });
+
+  group('the encrypted backup of the clinic files', () {
+    final records = [
+      PatientRecord(
+        id: 'a',
+        name: 'منى علي',
+        phone: '01001112222',
+        entries: [RecordEntry(id: 'e1', date: DateTime(2026, 3, 2), kind: RecordKind.test, title: 'صورة دم', detail: 'طبيعي')],
+        updatedAt: DateTime(2026, 4, 1),
+      ),
+      PatientRecord(id: 'b', name: 'سامي', updatedAt: DateTime(2026, 4, 2)),
+    ];
+
+    test('it seals to noise, opens only with the passphrase, and says nothing readable', () async {
+      final blob = await PatientBackupCrypto.seal(records, 'a long passphrase');
+
+      expect(blob, isNot(contains('منى')));
+      expect(blob, isNot(contains('01001112222')));
+      expect(blob, contains('"kind":"clinic_files"'));
+
+      final back = await PatientBackupCrypto.open(blob, 'a long passphrase');
+      expect(back.map((r) => r.name), ['منى علي', 'سامي']);
+      expect(back.first.entries.single.title, 'صورة دم');
+
+      await expectLater(PatientBackupCrypto.open(blob, 'another passphrase'), throwsA(anything));
+    });
+
+    test('a blob that is not a clinic-files backup is refused', () async {
+      await expectLater(PatientBackupCrypto.open('{"v":1,"kind":"medical_file","salt":"AA==","data":"AA==","iterations":1}', 'x'), throwsA(anything));
+    });
+
+    test('restoring adds what is missing and keeps what was written after the backup', () async {
+      final store = _MemoryStore();
+      final controller = PatientRecordsController(store, 1);
+      await Future<void>.delayed(Duration.zero);
+
+      // the device already has «a», edited AFTER the backup was made, and nothing else
+      final newer = records.first.copyWith(notes: 'كُتبت بعد النسخة');
+      await controller.save(newer);
+
+      final outcome = await controller.restore(records);
+
+      expect((outcome.added, outcome.updated), (1, 0), reason: 'only the missing one comes back');
+      expect(store.rows['a']!.notes, 'كُتبت بعد النسخة');
+      expect(store.rows.keys, containsAll(['a', 'b']));
+
+      await controller.markBackedUp(DateTime.now());
+      expect(controller.changedSinceBackup, 0);
     });
   });
 

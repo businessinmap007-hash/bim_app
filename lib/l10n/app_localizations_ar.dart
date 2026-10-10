@@ -7884,6 +7884,96 @@ class AppLocalizationsAr extends AppLocalizations {
   String get medicalSavedToMyFile => 'تم الحفظ في ملفك الطبي على هذا الهاتف.';
 
   @override
+  String get patientBackupTitle => 'نسخة احتياطية مشفّرة';
+
+  @override
+  String get patientBackupIntro =>
+      'تُضغط ملفات المرضى وتُشفَّر على هذا الجهاز بكلمة سر لا يعرفها غيرك. احفظ النسخة كملف تضعه حيث تشاء (درايف، فلاشة، بريد)، أو على السيرفر الذي لا يستطيع قراءة شيء منها.';
+
+  @override
+  String get patientBackupPassphraseWarning =>
+      'كلمة السر لا تُحفظ في أي مكان: إن نسيتها ضاعت النسخة ولا يمكن استرجاعها.';
+
+  @override
+  String get patientBackupNever => 'لم تُعمل نسخة احتياطية بعد';
+
+  @override
+  String patientBackupLast(Object when) {
+    return 'آخر نسخة: $when';
+  }
+
+  @override
+  String patientBackupChanged(Object changed, Object total) {
+    return 'تغيّر بعدها $changed من $total ملفًا';
+  }
+
+  @override
+  String get patientBackupToFile => 'حفظ نسخة في ملف';
+
+  @override
+  String get patientBackupToServer => 'حفظ نسخة على السيرفر (مشفّرة)';
+
+  @override
+  String get patientBackupRestoreTitle => 'استرجاع';
+
+  @override
+  String get patientBackupFromFile => 'استرجاع من ملف';
+
+  @override
+  String get patientBackupFromServer => 'استرجاع من السيرفر';
+
+  @override
+  String get patientBackupMergeNote =>
+      'الاسترجاع يدمج: يضيف الملفات غير الموجودة، ولا يستبدل ملفًا إلا بنسخة أحدث منه.';
+
+  @override
+  String get patientBackupDeleteServerCopy => 'حذف نسخة السيرفر';
+
+  @override
+  String get patientBackupServerDeleted => 'حُذفت نسخة السيرفر.';
+
+  @override
+  String get patientBackupFileMade => 'تم تجهيز النسخة.';
+
+  @override
+  String get patientBackupServerDone => 'حُفظت النسخة على السيرفر.';
+
+  @override
+  String get patientBackupNoServerCopy => 'لا توجد نسخة على السيرفر.';
+
+  @override
+  String get patientBackupWrongPassphrase =>
+      'كلمة السر غير صحيحة أو أن الملف ليس نسخة لملفات المرضى.';
+
+  @override
+  String get patientBackupFailed => 'تعذّر إتمام العملية.';
+
+  @override
+  String patientBackupRestored(Object added, Object updated) {
+    return 'أُضيف $added ملفًا وتحدّث $updated.';
+  }
+
+  @override
+  String get patientBackupChoosePassphrase => 'اختر كلمة سر للنسخة';
+
+  @override
+  String get patientBackupEnterPassphrase => 'أدخل كلمة سر النسخة';
+
+  @override
+  String get patientBackupPassphrase => 'كلمة السر';
+
+  @override
+  String get patientBackupPassphraseAgain => 'أعد كتابة كلمة السر';
+
+  @override
+  String patientBackupPassphraseShort(Object min) {
+    return 'كلمة السر $min أحرف على الأقل.';
+  }
+
+  @override
+  String get patientBackupPassphraseMismatch => 'كلمتا السر غير متطابقتين.';
+
+  @override
   String get invCurrency => 'ج';
 
   @override

@@ -7925,6 +7925,98 @@ class AppLocalizationsEn extends AppLocalizations {
       'Saved in your medical file on this phone.';
 
   @override
+  String get patientBackupTitle => 'Encrypted backup';
+
+  @override
+  String get patientBackupIntro =>
+      'The patient files are gzipped and encrypted on this device with a passphrase only you know. Keep the backup as a file wherever you like (Drive, a flash drive, e-mail), or on the server, which can read nothing of it.';
+
+  @override
+  String get patientBackupPassphraseWarning =>
+      'The passphrase is kept nowhere: if you forget it the backup is lost and cannot be recovered.';
+
+  @override
+  String get patientBackupNever => 'No backup has been made yet';
+
+  @override
+  String patientBackupLast(Object when) {
+    return 'Last backup: $when';
+  }
+
+  @override
+  String patientBackupChanged(Object changed, Object total) {
+    return '$changed of $total files changed since';
+  }
+
+  @override
+  String get patientBackupToFile => 'Save a backup as a file';
+
+  @override
+  String get patientBackupToServer => 'Save an encrypted backup on the server';
+
+  @override
+  String get patientBackupRestoreTitle => 'Restore';
+
+  @override
+  String get patientBackupFromFile => 'Restore from a file';
+
+  @override
+  String get patientBackupFromServer => 'Restore from the server';
+
+  @override
+  String get patientBackupMergeNote =>
+      'Restoring merges: it adds the files that are missing and replaces a file only with a newer copy of it.';
+
+  @override
+  String get patientBackupDeleteServerCopy => 'Delete the server copy';
+
+  @override
+  String get patientBackupServerDeleted => 'The server copy was deleted.';
+
+  @override
+  String get patientBackupFileMade => 'The backup is ready.';
+
+  @override
+  String get patientBackupServerDone => 'The backup was saved on the server.';
+
+  @override
+  String get patientBackupNoServerCopy => 'There is no copy on the server.';
+
+  @override
+  String get patientBackupWrongPassphrase =>
+      'Wrong passphrase, or the file is not a patient-files backup.';
+
+  @override
+  String get patientBackupFailed => 'The operation could not be completed.';
+
+  @override
+  String patientBackupRestored(Object added, Object updated) {
+    return '$added files added, $updated updated.';
+  }
+
+  @override
+  String get patientBackupChoosePassphrase =>
+      'Choose a passphrase for the backup';
+
+  @override
+  String get patientBackupEnterPassphrase => 'Enter the backup\'s passphrase';
+
+  @override
+  String get patientBackupPassphrase => 'Passphrase';
+
+  @override
+  String get patientBackupPassphraseAgain => 'Type the passphrase again';
+
+  @override
+  String patientBackupPassphraseShort(Object min) {
+    return 'The passphrase needs at least $min characters.';
+  }
+
+  @override
+  String get patientBackupPassphraseMismatch =>
+      'The two passphrases do not match.';
+
+  @override
   String get invCurrency => 'EGP';
 
   @override

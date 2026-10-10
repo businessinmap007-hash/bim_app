@@ -62,6 +62,13 @@ class PatientRecordStore {
     await box.putAll({for (final r in records) r.id: jsonEncode(r.toJson())});
   }
 
+  /// When this device last made (or restored) a backup — only a date, never the passphrase.
+  Future<DateTime?> readBackupAt(int userId) async =>
+      DateTime.tryParse(await _secure.read(key: 'bim_clinic_files_backup_at_$userId') ?? '');
+
+  Future<void> writeBackupAt(int userId, DateTime at) =>
+      _secure.write(key: 'bim_clinic_files_backup_at_$userId', value: at.toIso8601String());
+
   Future<void> delete(int userId, String id) async {
     final box = await _open(userId);
     await box.delete(id);

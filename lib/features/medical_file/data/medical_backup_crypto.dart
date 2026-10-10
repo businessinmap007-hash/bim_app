@@ -105,6 +105,9 @@ class MedicalBackupCrypto {
     ); // a backup made before prescriptions joined
   }
 
+  /// The same passphrase key the medical backup uses — shared with the clinic's patient-files backup.
+  static Future<SecretKey> derive(String passphrase, List<int> salt, int rounds) => _derive(passphrase, salt, rounds);
+
   /// The slow part, off the UI isolate: it takes seconds on a phone and the screen must not freeze.
   static Future<SecretKey> _derive(
     String passphrase,

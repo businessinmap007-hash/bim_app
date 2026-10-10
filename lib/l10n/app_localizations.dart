@@ -14509,6 +14509,162 @@ abstract class AppLocalizations {
   /// **'تم الحفظ في ملفك الطبي على هذا الهاتف.'**
   String get medicalSavedToMyFile;
 
+  /// No description provided for @patientBackupTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسخة احتياطية مشفّرة'**
+  String get patientBackupTitle;
+
+  /// No description provided for @patientBackupIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'تُضغط ملفات المرضى وتُشفَّر على هذا الجهاز بكلمة سر لا يعرفها غيرك. احفظ النسخة كملف تضعه حيث تشاء (درايف، فلاشة، بريد)، أو على السيرفر الذي لا يستطيع قراءة شيء منها.'**
+  String get patientBackupIntro;
+
+  /// No description provided for @patientBackupPassphraseWarning.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمة السر لا تُحفظ في أي مكان: إن نسيتها ضاعت النسخة ولا يمكن استرجاعها.'**
+  String get patientBackupPassphraseWarning;
+
+  /// No description provided for @patientBackupNever.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تُعمل نسخة احتياطية بعد'**
+  String get patientBackupNever;
+
+  /// No description provided for @patientBackupLast.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر نسخة: {when}'**
+  String patientBackupLast(Object when);
+
+  /// No description provided for @patientBackupChanged.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغيّر بعدها {changed} من {total} ملفًا'**
+  String patientBackupChanged(Object changed, Object total);
+
+  /// No description provided for @patientBackupToFile.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ نسخة في ملف'**
+  String get patientBackupToFile;
+
+  /// No description provided for @patientBackupToServer.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ نسخة على السيرفر (مشفّرة)'**
+  String get patientBackupToServer;
+
+  /// No description provided for @patientBackupRestoreTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'استرجاع'**
+  String get patientBackupRestoreTitle;
+
+  /// No description provided for @patientBackupFromFile.
+  ///
+  /// In ar, this message translates to:
+  /// **'استرجاع من ملف'**
+  String get patientBackupFromFile;
+
+  /// No description provided for @patientBackupFromServer.
+  ///
+  /// In ar, this message translates to:
+  /// **'استرجاع من السيرفر'**
+  String get patientBackupFromServer;
+
+  /// No description provided for @patientBackupMergeNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسترجاع يدمج: يضيف الملفات غير الموجودة، ولا يستبدل ملفًا إلا بنسخة أحدث منه.'**
+  String get patientBackupMergeNote;
+
+  /// No description provided for @patientBackupDeleteServerCopy.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف نسخة السيرفر'**
+  String get patientBackupDeleteServerCopy;
+
+  /// No description provided for @patientBackupServerDeleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'حُذفت نسخة السيرفر.'**
+  String get patientBackupServerDeleted;
+
+  /// No description provided for @patientBackupFileMade.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تجهيز النسخة.'**
+  String get patientBackupFileMade;
+
+  /// No description provided for @patientBackupServerDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'حُفظت النسخة على السيرفر.'**
+  String get patientBackupServerDone;
+
+  /// No description provided for @patientBackupNoServerCopy.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد نسخة على السيرفر.'**
+  String get patientBackupNoServerCopy;
+
+  /// No description provided for @patientBackupWrongPassphrase.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمة السر غير صحيحة أو أن الملف ليس نسخة لملفات المرضى.'**
+  String get patientBackupWrongPassphrase;
+
+  /// No description provided for @patientBackupFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر إتمام العملية.'**
+  String get patientBackupFailed;
+
+  /// No description provided for @patientBackupRestored.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُضيف {added} ملفًا وتحدّث {updated}.'**
+  String patientBackupRestored(Object added, Object updated);
+
+  /// No description provided for @patientBackupChoosePassphrase.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر كلمة سر للنسخة'**
+  String get patientBackupChoosePassphrase;
+
+  /// No description provided for @patientBackupEnterPassphrase.
+  ///
+  /// In ar, this message translates to:
+  /// **'أدخل كلمة سر النسخة'**
+  String get patientBackupEnterPassphrase;
+
+  /// No description provided for @patientBackupPassphrase.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمة السر'**
+  String get patientBackupPassphrase;
+
+  /// No description provided for @patientBackupPassphraseAgain.
+  ///
+  /// In ar, this message translates to:
+  /// **'أعد كتابة كلمة السر'**
+  String get patientBackupPassphraseAgain;
+
+  /// No description provided for @patientBackupPassphraseShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمة السر {min} أحرف على الأقل.'**
+  String patientBackupPassphraseShort(Object min);
+
+  /// No description provided for @patientBackupPassphraseMismatch.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلمتا السر غير متطابقتين.'**
+  String get patientBackupPassphraseMismatch;
+
   /// No description provided for @invCurrency.
   ///
   /// In ar, this message translates to:
