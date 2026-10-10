@@ -6982,6 +6982,53 @@ class AppLocalizationsAr extends AppLocalizations {
       'لم يعد السيرفر يحتفظ بالتشخيص والملاحظات لهذه الروشتة المنتهية — نسختك على هذا الهاتف هي الوحيدة الآن. احتفظ بنسخة احتياطية مشفّرة.';
 
   @override
+  String get rxControlledRuleShort => 'روشتة بخط اليد وتُختم «تم الصرف»';
+
+  @override
+  String get rxControlledPickTitle => 'دواء ضمن جداول المواد المخدرة';
+
+  @override
+  String get rxControlledPickBody =>
+      'لا يُكتب هذا الدواء إلا في روشتة بخط اليد، وتصوّرها هنا ليقارنها الصيدلي بالورقة التي مع المريض. حدّد عدد المرات التي سيُصرف فيها؛ وبعد آخر مرة يختم الصيدلي على الورقة «تم الصرف».';
+
+  @override
+  String get rxControlledPickOk => 'فهمت';
+
+  @override
+  String get rxDispenseTimes => 'عدد مرات الصرف';
+
+  @override
+  String get rxDispenseTimesHint =>
+      'بعد آخر مرة يختم الصيدلي على الروشتة الورقية «تم الصرف».';
+
+  @override
+  String rxDispenseTimesValue(Object count) {
+    return '$count مرة';
+  }
+
+  @override
+  String rxFillingOf(Object limit, Object n) {
+    return 'المرة $n من $limit';
+  }
+
+  @override
+  String get rxFinalFilling =>
+      'هذه آخر مرة صرف: بعد التسليم اختم الروشتة الورقية «تم الصرف».';
+
+  @override
+  String get rxMoreFillings =>
+      'ستبقى الروشتة مفتوحة لمرات أخرى: أعدها للمريض بدون ختم «تم الصرف».';
+
+  @override
+  String rxFillingRecorded(Object limit, Object n) {
+    return 'سُجّلت المرة $n من $limit.';
+  }
+
+  @override
+  String get rxFinalRecorded =>
+      'تم الصرف — اختم الروشتة الورقية الآن «تم الصرف».';
+
+  @override
   String get rxControlledBadge => 'دواء مخدر';
 
   @override
@@ -7972,6 +8019,61 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get patientBackupPassphraseMismatch => 'كلمتا السر غير متطابقتين.';
+
+  @override
+  String get invWriteResults => 'كتابة النتائج';
+
+  @override
+  String get invResultsTextHint =>
+      'اكتب نتيجة كل فحص هنا أو الصقها كما في جهاز المعمل: تُقرأ في التطبيق نصًّا وتوفّر مساحة. استخدم الصور لما ليس نصًّا فقط (فيلم أشعة، ورقة موقّعة).';
+
+  @override
+  String get invResultHint => 'مثال: Hb 13.2 g/dL (12–16)';
+
+  @override
+  String get invAddResultPhotos => 'إضافة صور (لما ليس نصًّا)';
+
+  @override
+  String invResultPhotosCount(Object count) {
+    return '$count صورة مرفقة';
+  }
+
+  @override
+  String get invSendResults => 'إرسال النتائج';
+
+  @override
+  String get invSaveToMyFile => 'حفظ نسخة في ملفي';
+
+  @override
+  String get invSavedToMyFile => 'حُفظت النتائج في ملفك الطبي على هذا الهاتف.';
+
+  @override
+  String get invShareWithDoctor => 'مشاركة النتائج مع الطبيب';
+
+  @override
+  String get invResultsAsText => 'النتائج';
+
+  @override
+  String get invIssuedTitle => 'الفحوصات التي طلبتها';
+
+  @override
+  String invIssuedFor(Object name) {
+    return 'فحوصات $name';
+  }
+
+  @override
+  String get invIssuedEmpty => 'لا توجد طلبات فحوصات.';
+
+  @override
+  String get invDoctorOrders => 'فحوصات المريض';
+
+  @override
+  String invDoctorOrdersReady(Object count) {
+    return 'نتائج جاهزة ($count)';
+  }
+
+  @override
+  String get invDoctorHiddenNote => 'لا يظهر اسم الطبيب للمعمل أو مركز الأشعة.';
 
   @override
   String get invCurrency => 'ج';

@@ -7014,6 +7014,54 @@ class AppLocalizationsEn extends AppLocalizations {
       'The server no longer keeps the diagnosis and notes of this finished prescription — the copy on this phone is now the only one. Keep an encrypted backup.';
 
   @override
+  String get rxControlledRuleShort => 'handwritten paper, stamped «dispensed»';
+
+  @override
+  String get rxControlledPickTitle =>
+      'A drug in the controlled-substance schedules';
+
+  @override
+  String get rxControlledPickBody =>
+      'This drug is written only on a handwritten prescription — photograph it here so the pharmacist can compare it with the paper the patient holds. Set how many times it will be dispensed; after the last time the pharmacist stamps the paper «dispensed».';
+
+  @override
+  String get rxControlledPickOk => 'Understood';
+
+  @override
+  String get rxDispenseTimes => 'Number of fillings';
+
+  @override
+  String get rxDispenseTimesHint =>
+      'After the last filling the pharmacist stamps the paper prescription «dispensed».';
+
+  @override
+  String rxDispenseTimesValue(Object count) {
+    return '$count times';
+  }
+
+  @override
+  String rxFillingOf(Object limit, Object n) {
+    return 'Filling $n of $limit';
+  }
+
+  @override
+  String get rxFinalFilling =>
+      'This is the last filling: after handing over, stamp the paper prescription «dispensed».';
+
+  @override
+  String get rxMoreFillings =>
+      'The prescription stays open for more fillings: give it back to the patient without the «dispensed» stamp.';
+
+  @override
+  String rxFillingRecorded(Object limit, Object n) {
+    return 'Filling $n of $limit recorded.';
+  }
+
+  @override
+  String get rxFinalRecorded =>
+      'Dispensed — stamp the paper prescription «dispensed» now.';
+
+  @override
   String get rxControlledBadge => 'Controlled drug';
 
   @override
@@ -8015,6 +8063,63 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get patientBackupPassphraseMismatch =>
       'The two passphrases do not match.';
+
+  @override
+  String get invWriteResults => 'Write the results';
+
+  @override
+  String get invResultsTextHint =>
+      'Write each test result here, or paste it as the lab system has it: it is read in the app as text and saves space. Use photos only for what is not text (a film, a signed paper).';
+
+  @override
+  String get invResultHint => 'e.g. Hb 13.2 g/dL (12–16)';
+
+  @override
+  String get invAddResultPhotos => 'Add photos (for what is not text)';
+
+  @override
+  String invResultPhotosCount(Object count) {
+    return '$count photos attached';
+  }
+
+  @override
+  String get invSendResults => 'Send the results';
+
+  @override
+  String get invSaveToMyFile => 'Save a copy in my file';
+
+  @override
+  String get invSavedToMyFile =>
+      'The results were saved in your medical file on this phone.';
+
+  @override
+  String get invShareWithDoctor => 'Share the results with the doctor';
+
+  @override
+  String get invResultsAsText => 'Results';
+
+  @override
+  String get invIssuedTitle => 'Tests I ordered';
+
+  @override
+  String invIssuedFor(Object name) {
+    return '$name\'s tests';
+  }
+
+  @override
+  String get invIssuedEmpty => 'No investigation orders.';
+
+  @override
+  String get invDoctorOrders => 'Patient\'s tests';
+
+  @override
+  String invDoctorOrdersReady(Object count) {
+    return 'Results ready ($count)';
+  }
+
+  @override
+  String get invDoctorHiddenNote =>
+      'The doctor\'s name is not shown to the lab or the radiology centre.';
 
   @override
   String get invCurrency => 'EGP';

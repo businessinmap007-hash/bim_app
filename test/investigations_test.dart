@@ -3,6 +3,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:bim_app/features/auth/application/auth_controller.dart';
+import 'package:bim_app/features/auth/data/models/auth_user.dart';
 import 'package:bim_app/features/investigations/application/investigations_providers.dart';
 import 'package:bim_app/features/investigations/data/investigations_api.dart';
 import 'package:bim_app/features/investigations/data/models/investigation.dart';
@@ -10,6 +12,13 @@ import 'package:bim_app/features/investigations/presentation/screens/center_inve
 import 'package:bim_app/features/investigations/presentation/screens/investigation_order_detail_screen.dart';
 import 'package:bim_app/features/investigations/presentation/screens/issue_investigation_screen.dart';
 import 'package:bim_app/l10n/app_localizations.dart';
+
+class _FakeAuth extends StateNotifier<AuthState> implements AuthController {
+  _FakeAuth(super.initial);
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
 
 /// «الطبيب يطلب تحاليل وأشعة والمريض يشاركها مع معمل مسجّل» — المالك، 2026-10-08.
 class _FakeApi implements InvestigationsApi {
@@ -21,6 +30,7 @@ class _FakeApi implements InvestigationsApi {
     id: 5,
     status: InvestigationOrder.issued,
     doctor: InvestigationParty(id: 2, name: 'د. سارة'),
+    patient: InvestigationParty(id: 3, name: 'محمد'),
     items: [
       InvestigationItem(id: 1, kind: 'lab', name: 'صورة دم كاملة'),
       InvestigationItem(id: 2, kind: 'radiology', name: 'سونار بطن'),
@@ -77,8 +87,11 @@ class _FakeApi implements InvestigationsApi {
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
-Widget _app(Widget home, _FakeApi api) => ProviderScope(
-  overrides: [investigationsApiProvider.overrideWithValue(api)],
+Widget _app(Widget home, _FakeApi api, {int userId = 3}) => ProviderScope(
+  overrides: [
+    investigationsApiProvider.overrideWithValue(api),
+    authControllerProvider.overrideWith((ref) => _FakeAuth(AuthSignedIn(AuthUser(id: userId, name: 'x', email: 'x@x.test', phone: '0100', type: userId == 3 ? 'client' : 'business')))),
+  ],
   child: MaterialApp(
     locale: const Locale('ar'),
     supportedLocales: AppLocalizations.supportedLocales,
@@ -176,5 +189,43 @@ void main() {
 
     expect(api.savedPrices, {10: 100.0, 11: 60.0});
     expect(find.text('تم الحفظ'), findsOneWidget);
+  });
+
+  testWidgets('a result written as text shows under its test and the patient keeps it or shares it', (tester) async {
+    final api = _FakeApi();
+    api.fixed = const InvestigationOrder(
+      id: 5,
+      status: InvestigationOrder.ready,
+      doctor: InvestigationParty(id: 2, name: 'د. سارة'),
+      patient: InvestigationParty(id: 3, name: 'محمد'),
+      center: InvestigationParty(id: 7, name: 'معمل الأمل'),
+      items: [
+        InvestigationItem(id: 1, kind: 'lab', name: 'صورة دم كاملة', result: 'Hb 13.2 g/dL (12-16)'),
+        InvestigationItem(id: 2, kind: 'lab', name: 'سكر صائم'),
+      ],
+    );
+    await tester.pumpWidget(_app(const InvestigationOrderDetailScreen(orderId: 5), api));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Hb 13.2 g/dL (12-16)'), findsOneWidget);
+    expect(find.text('حفظ نسخة في ملفي'), findsOneWidget);
+    expect(find.text('مشاركة النتائج مع الطبيب'), findsOneWidget);
+  });
+
+  testWidgets('the doctor reads the results but is offered neither the centres to share with nor a copy to keep', (tester) async {
+    final api = _FakeApi();
+    api.fixed = const InvestigationOrder(
+      id: 5,
+      status: InvestigationOrder.ready,
+      doctor: InvestigationParty(id: 2, name: 'د. سارة'),
+      patient: InvestigationParty(id: 3, name: 'محمد'),
+      items: [InvestigationItem(id: 1, kind: 'lab', name: 'صورة دم كاملة', result: 'Hb 13.2')],
+    );
+    await tester.pumpWidget(_app(const InvestigationOrderDetailScreen(orderId: 5), api, userId: 2));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Hb 13.2'), findsOneWidget);
+    expect(find.text('حفظ نسخة في ملفي'), findsNothing);
+    expect(find.text('مشاركة النتائج مع الطبيب'), findsNothing);
   });
 }

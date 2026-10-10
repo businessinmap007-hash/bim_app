@@ -12907,6 +12907,78 @@ abstract class AppLocalizations {
   /// **'لم يعد السيرفر يحتفظ بالتشخيص والملاحظات لهذه الروشتة المنتهية — نسختك على هذا الهاتف هي الوحيدة الآن. احتفظ بنسخة احتياطية مشفّرة.'**
   String get rxPurgedNote;
 
+  /// No description provided for @rxControlledRuleShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'روشتة بخط اليد وتُختم «تم الصرف»'**
+  String get rxControlledRuleShort;
+
+  /// No description provided for @rxControlledPickTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'دواء ضمن جداول المواد المخدرة'**
+  String get rxControlledPickTitle;
+
+  /// No description provided for @rxControlledPickBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يُكتب هذا الدواء إلا في روشتة بخط اليد، وتصوّرها هنا ليقارنها الصيدلي بالورقة التي مع المريض. حدّد عدد المرات التي سيُصرف فيها؛ وبعد آخر مرة يختم الصيدلي على الورقة «تم الصرف».'**
+  String get rxControlledPickBody;
+
+  /// No description provided for @rxControlledPickOk.
+  ///
+  /// In ar, this message translates to:
+  /// **'فهمت'**
+  String get rxControlledPickOk;
+
+  /// No description provided for @rxDispenseTimes.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد مرات الصرف'**
+  String get rxDispenseTimes;
+
+  /// No description provided for @rxDispenseTimesHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعد آخر مرة يختم الصيدلي على الروشتة الورقية «تم الصرف».'**
+  String get rxDispenseTimesHint;
+
+  /// No description provided for @rxDispenseTimesValue.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} مرة'**
+  String rxDispenseTimesValue(Object count);
+
+  /// No description provided for @rxFillingOf.
+  ///
+  /// In ar, this message translates to:
+  /// **'المرة {n} من {limit}'**
+  String rxFillingOf(Object limit, Object n);
+
+  /// No description provided for @rxFinalFilling.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذه آخر مرة صرف: بعد التسليم اختم الروشتة الورقية «تم الصرف».'**
+  String get rxFinalFilling;
+
+  /// No description provided for @rxMoreFillings.
+  ///
+  /// In ar, this message translates to:
+  /// **'ستبقى الروشتة مفتوحة لمرات أخرى: أعدها للمريض بدون ختم «تم الصرف».'**
+  String get rxMoreFillings;
+
+  /// No description provided for @rxFillingRecorded.
+  ///
+  /// In ar, this message translates to:
+  /// **'سُجّلت المرة {n} من {limit}.'**
+  String rxFillingRecorded(Object limit, Object n);
+
+  /// No description provided for @rxFinalRecorded.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الصرف — اختم الروشتة الورقية الآن «تم الصرف».'**
+  String get rxFinalRecorded;
+
   /// No description provided for @rxControlledBadge.
   ///
   /// In ar, this message translates to:
@@ -14664,6 +14736,102 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'كلمتا السر غير متطابقتين.'**
   String get patientBackupPassphraseMismatch;
+
+  /// No description provided for @invWriteResults.
+  ///
+  /// In ar, this message translates to:
+  /// **'كتابة النتائج'**
+  String get invWriteResults;
+
+  /// No description provided for @invResultsTextHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب نتيجة كل فحص هنا أو الصقها كما في جهاز المعمل: تُقرأ في التطبيق نصًّا وتوفّر مساحة. استخدم الصور لما ليس نصًّا فقط (فيلم أشعة، ورقة موقّعة).'**
+  String get invResultsTextHint;
+
+  /// No description provided for @invResultHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مثال: Hb 13.2 g/dL (12–16)'**
+  String get invResultHint;
+
+  /// No description provided for @invAddResultPhotos.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة صور (لما ليس نصًّا)'**
+  String get invAddResultPhotos;
+
+  /// No description provided for @invResultPhotosCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} صورة مرفقة'**
+  String invResultPhotosCount(Object count);
+
+  /// No description provided for @invSendResults.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال النتائج'**
+  String get invSendResults;
+
+  /// No description provided for @invSaveToMyFile.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ نسخة في ملفي'**
+  String get invSaveToMyFile;
+
+  /// No description provided for @invSavedToMyFile.
+  ///
+  /// In ar, this message translates to:
+  /// **'حُفظت النتائج في ملفك الطبي على هذا الهاتف.'**
+  String get invSavedToMyFile;
+
+  /// No description provided for @invShareWithDoctor.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشاركة النتائج مع الطبيب'**
+  String get invShareWithDoctor;
+
+  /// No description provided for @invResultsAsText.
+  ///
+  /// In ar, this message translates to:
+  /// **'النتائج'**
+  String get invResultsAsText;
+
+  /// No description provided for @invIssuedTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفحوصات التي طلبتها'**
+  String get invIssuedTitle;
+
+  /// No description provided for @invIssuedFor.
+  ///
+  /// In ar, this message translates to:
+  /// **'فحوصات {name}'**
+  String invIssuedFor(Object name);
+
+  /// No description provided for @invIssuedEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد طلبات فحوصات.'**
+  String get invIssuedEmpty;
+
+  /// No description provided for @invDoctorOrders.
+  ///
+  /// In ar, this message translates to:
+  /// **'فحوصات المريض'**
+  String get invDoctorOrders;
+
+  /// No description provided for @invDoctorOrdersReady.
+  ///
+  /// In ar, this message translates to:
+  /// **'نتائج جاهزة ({count})'**
+  String invDoctorOrdersReady(Object count);
+
+  /// No description provided for @invDoctorHiddenNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يظهر اسم الطبيب للمعمل أو مركز الأشعة.'**
+  String get invDoctorHiddenNote;
 
   /// No description provided for @invCurrency.
   ///

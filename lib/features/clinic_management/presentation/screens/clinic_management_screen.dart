@@ -1,4 +1,6 @@
+import '../../../investigations/application/investigations_providers.dart';
 import '../../../investigations/presentation/screens/issue_investigation_screen.dart';
+import '../../../investigations/presentation/screens/issued_investigations_screen.dart';
 import '../../../patient_records/application/patient_records_providers.dart';
 import '../../../patient_records/data/patient_record.dart';
 import '../../../patient_records/presentation/screens/patient_file_screen.dart';
@@ -323,6 +325,32 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
                   }
                 },
               ),
+            ),
+            // the tests this doctor ordered for this patient, and whether results are in — read on this device at the visit
+            Builder(
+              builder: (context) {
+                final mine = (ref.watch(issuedInvestigationOrdersProvider).valueOrNull ?? const [])
+                    .where((o) => o.patient?.id == a.patientId)
+                    .toList();
+                if (mine.isEmpty) return const SizedBox.shrink();
+                final ready = mine.where((o) => o.hasResults).length;
+
+                return Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: ActionChip(
+                      avatar: Icon(ready > 0 ? Icons.assignment_turned_in_outlined : Icons.assignment_outlined, size: 18),
+                      label: Text(ready > 0 ? l10n.invDoctorOrdersReady(ready) : l10n.invDoctorOrders),
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => IssuedInvestigationsScreen(patientId: a.patientId, patientName: a.patientName),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
             Align(
               alignment: AlignmentDirectional.centerStart,

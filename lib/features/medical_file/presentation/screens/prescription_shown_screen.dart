@@ -36,6 +36,9 @@ class _PrescriptionShownScreenState
   String? _error;
   bool _done = false;
 
+  /// what the dispensing just recorded (the last filling → the paper is stamped now)
+  ({bool finalFilling, int count, int limit})? _filled;
+
   int get _id => (widget.payload['id'] as num).toInt();
   Map<String, dynamic> get _content =>
       Map<String, dynamic>.from(widget.payload['content'] as Map);
@@ -96,10 +99,15 @@ class _PrescriptionShownScreenState
       _error = null;
     });
     try {
-      await ref
+      final filled = await ref
           .read(pharmacyPrescriptionsApiProvider)
           .dispenseInPerson(_id, _content);
-      if (mounted) setState(() => _done = true);
+      if (mounted) {
+        setState(() {
+          _filled = filled;
+          _done = true;
+        });
+      }
       await _verify();
     } on ApiException catch (e) {
       if (mounted) setState(() => _error = e.message);
@@ -215,18 +223,37 @@ class _PrescriptionShownScreenState
               banner(AppColors.error, Icons.update_disabled, l10n.rxSuperseded)
             else if (check.status == 'dispensed')
               banner(AppColors.error, Icons.block, l10n.rxAlreadyDispensed)
-            else if (check.canDispense)
+            else if (check.canDispense) ...[
               banner(
                 AppColors.success,
                 Icons.check_circle_outline,
                 l10n.rxCanDispense,
-              )
+              ),
+              // «يختم عليها تم الصرف بعد المرات التي سيصرف فيها»
+              if (check.controlled) ...[
+                const SizedBox(height: 8),
+                banner(
+                  check.finalDispense ? AppColors.error : AppColors.success,
+                  Icons.approval_outlined,
+                  '${l10n.rxFillingOf(check.dispenseCount + 1, check.dispenseLimit)} — '
+                  '${check.finalDispense ? l10n.rxFinalFilling : l10n.rxMoreFillings}',
+                ),
+              ],
+            ]
             else
               banner(AppColors.error, Icons.block, l10n.rxCancelledOrOther),
           ],
           if (_done) ...[
             const SizedBox(height: 8),
-            banner(AppColors.success, Icons.task_alt, l10n.rxDispensed),
+            banner(
+              AppColors.success,
+              Icons.task_alt,
+              _filled == null
+                  ? l10n.rxDispensed
+                  : (_filled!.finalFilling && _filled!.limit > 1
+                        ? l10n.rxFinalRecorded
+                        : (_filled!.finalFilling ? l10n.rxDispensed : l10n.rxFillingRecorded(_filled!.count, _filled!.limit))),
+            ),
           ],
           if (_error != null) ...[
             const SizedBox(height: 8),

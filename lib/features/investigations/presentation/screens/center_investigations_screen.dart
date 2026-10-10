@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -11,6 +10,7 @@ import '../../../../shared/widgets/full_screen_gallery.dart';
 import '../../application/investigations_providers.dart';
 import '../../data/models/investigation.dart';
 import '../widgets/investigation_widgets.dart';
+import 'center_results_screen.dart';
 import 'investigation_orders_screen.dart' show InvestigationOrderCard;
 
 /// A lab's, a radiology centre's (or a hospital's) side: the orders patients sent it — accept one with a time, decline
@@ -95,14 +95,11 @@ class _CenterTabState extends ConsumerState<_CenterTab> {
 
   Future<void> _results(InvestigationOrder order) async {
     final l10n = AppLocalizations.of(context)!;
-    final picked = await ImagePicker().pickMultiImage(imageQuality: 85, limit: 10);
-    if (picked.isEmpty || !mounted) return;
-
-    await _act(
-      order,
-      () => ref.read(investigationsApiProvider).attachResults(order.id, picked.map((p) => p.path).toList()),
-      done: l10n.invResultsAttached,
-    );
+    final sent = await Navigator.of(context).push<bool>(MaterialPageRoute(builder: (_) => CenterResultsScreen(order: order)));
+    if (sent == true) {
+      _refresh();
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.invResultsAttached)));
+    }
   }
 
   @override
@@ -167,8 +164,8 @@ class _CenterTabState extends ConsumerState<_CenterTab> {
                   else if (o.status == InvestigationOrder.accepted)
                     FilledButton.icon(
                       onPressed: busy ? null : () => _results(o),
-                      icon: const Icon(Icons.upload_outlined),
-                      label: Text(l10n.invAttachResults),
+                      icon: const Icon(Icons.edit_note_outlined),
+                      label: Text(l10n.invWriteResults),
                     ),
                 ],
               );

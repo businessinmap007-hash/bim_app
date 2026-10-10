@@ -66,6 +66,12 @@ class PrescriptionCheck {
   final bool controlled;
   final String? handwrittenImage;
 
+  /// «تم الصرف بعد المرات»: the doctor's number of fillings, how many are done, and whether the next one is the LAST
+  /// (the pharmacist stamps the paper then).
+  final int dispenseLimit;
+  final int dispenseCount;
+  final bool finalDispense;
+
   const PrescriptionCheck({
     required this.authentic,
     this.status = '',
@@ -76,6 +82,9 @@ class PrescriptionCheck {
     this.dispensedAt,
     this.controlled = false,
     this.handwrittenImage,
+    this.dispenseLimit = 1,
+    this.dispenseCount = 0,
+    this.finalDispense = true,
   });
 
   factory PrescriptionCheck.fromJson(
@@ -90,6 +99,9 @@ class PrescriptionCheck {
     dispensedAt: DateTime.tryParse('${json['dispensed_at'] ?? ''}')?.toLocal(),
     controlled: json['controlled'] as bool? ?? false,
     handwrittenImage: Env.assetUrl(json['handwritten_image'] as String?),
+    dispenseLimit: (json['dispense_limit'] as num?)?.toInt() ?? 1,
+    dispenseCount: (json['dispense_count'] as num?)?.toInt() ?? 0,
+    finalDispense: json['final_dispense'] as bool? ?? true,
   );
 }
 
@@ -108,11 +120,19 @@ class PharmacyPrescriptionsApi {
     return PrescriptionCheck.fromJson(data);
   }
 
-  /// Hand the medicine over against a shown prescription — once; the server re-verifies.
-  Future<void> dispenseInPerson(int id, Map<String, dynamic> content) async {
-    await _client.post(
-      '/pharmacy/prescriptions/dispense-in-person',
-      data: {'id': id, 'content': content},
+  /// Hand the medicine over against a shown prescription; the server re-verifies. [finalFilling]: it was the LAST
+  /// filling, so the paper is stamped «تم الصرف» now.
+  Future<({bool finalFilling, int count, int limit})> dispenseInPerson(int id, Map<String, dynamic> content) async {
+    final data =
+        await _client.post(
+              '/pharmacy/prescriptions/dispense-in-person',
+              data: {'id': id, 'content': content},
+            )
+            as Map<String, dynamic>;
+    return (
+      finalFilling: data['final'] as bool? ?? true,
+      count: (data['dispense_count'] as num?)?.toInt() ?? 1,
+      limit: (data['dispense_limit'] as num?)?.toInt() ?? 1,
     );
   }
 

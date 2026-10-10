@@ -5,6 +5,10 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
 import '../../../../shared/widgets/full_screen_gallery.dart';
+import '../../../auth/application/auth_controller.dart';
+import '../../../medical_file/application/medical_file_providers.dart';
+import '../../../medical_file/data/medical_file.dart';
+import '../../../medical_file/presentation/screens/medical_share_screen.dart';
 import '../../application/investigations_providers.dart';
 import '../../data/models/investigation.dart';
 import '../widgets/investigation_widgets.dart';
@@ -78,8 +82,32 @@ class _InvestigationOrderDetailScreenState extends ConsumerState<InvestigationOr
     );
   }
 
+  /// The results as lines of the patient's medical file: «date · test: …» with the result under it.
+  MedicalFile _resultsFile(AppLocalizations l10n, InvestigationOrder order) {
+    final day = (order.issuedAt ?? DateTime.now()).toIso8601String().substring(0, 10);
+
+    return MedicalFile(
+      sections: {
+        MedicalSection.records: [
+          for (final i in order.items)
+            if (i.hasResult) MedicalEntry(title: '$day · ${investigationKindLabel(l10n, i.kind)}: ${i.name}', detail: i.result!),
+        ],
+      },
+      updatedAt: DateTime.now(),
+    );
+  }
+
+  Future<void> _keepCopy(AppLocalizations l10n, InvestigationOrder order) async {
+    final controller = ref.read(medicalFileControllerProvider.notifier);
+    final mine = ref.read(medicalFileControllerProvider).valueOrNull ?? const MedicalFile();
+    await controller.save(mine.mergedWith(_resultsFile(l10n, order)));
+    if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.invSavedToMyFile)));
+  }
+
   Widget _body(BuildContext context, AppLocalizations l10n, InvestigationOrder order) {
     final theme = Theme.of(context);
+    final auth = ref.watch(authControllerProvider);
+    final isPatient = auth is AuthSignedIn && order.patient?.id == auth.user.id;
 
     return ListView(
       padding: const EdgeInsets.all(16),
@@ -159,13 +187,35 @@ class _InvestigationOrderDetailScreenState extends ConsumerState<InvestigationOr
           const SizedBox(height: 12),
           _thumbs(context, order.requestFiles),
         ],
-        if (order.hasResults) ...[
+        if (order.hasTextResults && isPatient) ...[
+          const SizedBox(height: 12),
+          // «نسخة التحليل تصل للمريض ويرسلها هو أو يشاركها مع الطبيب … ويمكنه تحميل نسخة منها في ملف المريض»
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              FilledButton.icon(
+                onPressed: () => _keepCopy(l10n, order),
+                icon: const Icon(Icons.save_alt_outlined),
+                label: Text(l10n.invSaveToMyFile),
+              ),
+              OutlinedButton.icon(
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => MedicalShareScreen(file: _resultsFile(l10n, order))),
+                ),
+                icon: const Icon(Icons.qr_code_2_outlined),
+                label: Text(l10n.invShareWithDoctor),
+              ),
+            ],
+          ),
+        ],
+        if (order.resultFiles.isNotEmpty) ...[
           const SizedBox(height: 16),
           Text(l10n.invResults, style: theme.textTheme.titleMedium),
           const SizedBox(height: 8),
           _thumbs(context, order.resultFiles),
         ],
-        if (order.canSend) ..._shareSection(context, l10n),
+        if (order.canSend && isPatient) ..._shareSection(context, l10n),
         if (order.canCancel) ...[
           const SizedBox(height: 12),
           Align(

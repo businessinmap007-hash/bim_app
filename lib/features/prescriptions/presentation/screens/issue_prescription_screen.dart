@@ -64,6 +64,9 @@ class _IssuePrescriptionScreenState
   bool get _isRevise => widget.existing != null;
   bool get _needsPaper => _items.any((d) => d.medicine.isControlled);
 
+  /// «بعد المرات التي سيصرف فيها» — how many times the paper prescription will be filled.
+  int _dispenseLimit = 1;
+
   @override
   void initState() {
     super.initState();
@@ -116,7 +119,7 @@ class _IssuePrescriptionScreenState
     bool loading = false;
     bool searched = false;
 
-    return showModalBottomSheet<Medicine>(
+    final picked = await showModalBottomSheet<Medicine>(
       context: context,
       isScrollControlled: true,
       builder: (sheetContext) => StatefulBuilder(
@@ -264,7 +267,7 @@ class _IssuePrescriptionScreenState
                                 title: Text(m.displayName),
                                 subtitle: Text(
                                   [
-                                    if (m.isControlled) l10n.rxControlledBadge,
+                                    if (m.isControlled) '${l10n.rxControlledBadge} — ${l10n.rxControlledRuleShort}',
                                     if (m.scientificName != null &&
                                         m.scientificName!.isNotEmpty)
                                       m.scientificName!,
@@ -297,6 +300,21 @@ class _IssuePrescriptionScreenState
         },
       ),
     );
+
+    // «يجب أن يظهر للطبيب عند اختيار الدواء من القاموس …»: a controlled drug says what it asks for, the moment it is chosen.
+    if (picked != null && picked.isControlled && mounted) {
+      await showDialog<void>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          icon: Icon(Icons.gpp_maybe_outlined, color: Theme.of(dialogContext).colorScheme.error),
+          title: Text(l10n.rxControlledPickTitle),
+          content: Text(l10n.rxControlledPickBody),
+          actions: [FilledButton(onPressed: () => Navigator.of(dialogContext).pop(), child: Text(l10n.rxControlledPickOk))],
+        ),
+      );
+    }
+
+    return picked;
   }
 
   Future<void> _addOrEditItem({
@@ -562,6 +580,7 @@ class _IssuePrescriptionScreenState
           notes: _notesController.text.trim(),
           items: _items.map((d) => d.input).toList(),
           handwrittenPhotoPath: _needsPaper ? _paperPath : null,
+          dispenseLimit: _needsPaper ? _dispenseLimit : null,
         );
       } else {
         await api.issue(
@@ -572,6 +591,7 @@ class _IssuePrescriptionScreenState
           notes: _notesController.text.trim(),
           items: _items.map((d) => d.input).toList(),
           handwrittenPhotoPath: _needsPaper ? _paperPath : null,
+          dispenseLimit: _needsPaper ? _dispenseLimit : null,
         );
       }
       widget.onIssued?.call([for (final d in _items) d.medicine.name], _diagnosisController.text.trim());
@@ -648,7 +668,12 @@ class _IssuePrescriptionScreenState
               onRemove: () => setState(() => _items.removeAt(i)),
             ),
           if (_needsPaper)
-            _HandwrittenCard(path: _paperPath, onTake: _takePaperPhoto),
+            _HandwrittenCard(
+              path: _paperPath,
+              onTake: _takePaperPhoto,
+              times: _dispenseLimit,
+              onTimes: (v) => setState(() => _dispenseLimit = v),
+            ),
           if (_error != null) ...[
             const SizedBox(height: 12),
             Text(
@@ -681,7 +706,9 @@ class _IssuePrescriptionScreenState
 class _HandwrittenCard extends StatelessWidget {
   final String? path;
   final VoidCallback onTake;
-  const _HandwrittenCard({required this.path, required this.onTake});
+  final int times;
+  final ValueChanged<int> onTimes;
+  const _HandwrittenCard({required this.path, required this.onTake, required this.times, required this.onTimes});
 
   @override
   Widget build(BuildContext context) {
@@ -722,6 +749,16 @@ class _HandwrittenCard extends StatelessWidget {
                 ),
               ),
             ],
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(child: Text(l10n.rxDispenseTimes, style: theme.textTheme.titleSmall)),
+                IconButton(onPressed: times > 1 ? () => onTimes(times - 1) : null, icon: const Icon(Icons.remove_circle_outline)),
+                Text(l10n.rxDispenseTimesValue(times), style: theme.textTheme.titleSmall),
+                IconButton(onPressed: times < 6 ? () => onTimes(times + 1) : null, icon: const Icon(Icons.add_circle_outline)),
+              ],
+            ),
+            Text(l10n.rxDispenseTimesHint, style: theme.textTheme.bodySmall),
             const SizedBox(height: 8),
             OutlinedButton.icon(
               onPressed: onTake,

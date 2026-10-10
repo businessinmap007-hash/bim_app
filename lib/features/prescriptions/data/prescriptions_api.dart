@@ -95,9 +95,11 @@ class PrescriptionsApi {
     String? notes,
     required List<PrescriptionItemInput> items,
     String? handwrittenPhotoPath,
+    int? dispenseLimit,
   }) async {
     final fields = <String, dynamic>{
       'patient_id': patientId,
+      'dispense_limit': ?dispenseLimit,
       'appointment_id': ?appointmentId,
       if (diagnosis != null && diagnosis.isNotEmpty) 'diagnosis': diagnosis,
       if (patientCondition != null && patientCondition.isNotEmpty)
@@ -139,8 +141,10 @@ class PrescriptionsApi {
     String? notes,
     required List<PrescriptionItemInput> items,
     String? handwrittenPhotoPath,
+    int? dispenseLimit,
   }) async {
     final fields = <String, dynamic>{
+      'dispense_limit': ?dispenseLimit,
       if (diagnosis != null && diagnosis.isNotEmpty) 'diagnosis': diagnosis,
       if (patientCondition != null && patientCondition.isNotEmpty)
         'patient_condition': patientCondition,

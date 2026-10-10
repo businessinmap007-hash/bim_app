@@ -115,7 +115,10 @@ class InvestigationItemRows extends StatelessWidget {
         for (final item in items)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 6),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+            Row(
               children: [
                 Icon(
                   item.isLab ? Icons.biotech_outlined : Icons.medical_information_outlined,
@@ -132,6 +135,14 @@ class InvestigationItemRows extends StatelessWidget {
                   const SizedBox(width: 10),
                   Text(l10n.invNotPriced, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.error)),
                 ],
+              ],
+            ),
+                // the result, as text, right under its test
+                if (item.hasResult)
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(start: 28, top: 4),
+                    child: SelectableText(item.result!, style: theme.textTheme.bodyMedium),
+                  ),
               ],
             ),
           ),

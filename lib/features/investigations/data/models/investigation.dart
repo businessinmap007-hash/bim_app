@@ -7,15 +7,20 @@ class InvestigationItem {
   final String name;
   final double? price;
 
-  const InvestigationItem({required this.id, required this.kind, required this.name, this.price});
+  /// The result as TEXT, written by the centre beside this test (null until it is in).
+  final String? result;
+
+  const InvestigationItem({required this.id, required this.kind, required this.name, this.price, this.result});
 
   bool get isLab => kind == 'lab';
+  bool get hasResult => (result ?? '').trim().isNotEmpty;
 
   factory InvestigationItem.fromJson(Map<String, dynamic> json) => InvestigationItem(
     id: (json['id'] as num?)?.toInt() ?? 0,
     kind: json['kind'] as String? ?? 'lab',
     name: json['name'] as String? ?? '',
     price: (json['price'] as num?)?.toDouble(),
+    result: json['result'] as String?,
   );
 }
 
@@ -72,7 +77,8 @@ class InvestigationOrder {
 
   bool get canSend => status == issued;
   bool get canCancel => status == issued || status == sent;
-  bool get hasResults => resultFiles.isNotEmpty;
+  bool get hasResults => resultFiles.isNotEmpty || items.any((i) => i.hasResult);
+  bool get hasTextResults => items.any((i) => i.hasResult);
 
   /// the step of the 4-step line the order stands on (1 = issued … 4 = ready), 0 when it ended
   int get step {

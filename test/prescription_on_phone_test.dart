@@ -30,7 +30,7 @@ class _FakePharmacyApi implements PharmacyPrescriptionsApi {
   ) async => check;
 
   @override
-  Future<void> dispenseInPerson(int id, Map<String, dynamic> content) async {
+  Future<({bool finalFilling, int count, int limit})> dispenseInPerson(int id, Map<String, dynamic> content) async {
     dispensed.add(id);
     check = const PrescriptionCheck(
       authentic: true,
@@ -38,6 +38,8 @@ class _FakePharmacyApi implements PharmacyPrescriptionsApi {
       canDispense: false,
       doctorName: 'Dr. Salma',
     );
+
+    return (finalFilling: true, count: 1, limit: 1);
   }
 
   @override

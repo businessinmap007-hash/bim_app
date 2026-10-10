@@ -86,11 +86,18 @@ class InvestigationsApi {
     await _client.post('/business/investigation-orders/$id/decline', data: {if (note != null && note.isNotEmpty) 'note': note}),
   );
 
-  Future<InvestigationOrder> attachResults(int id, List<String> photoPaths, {String? note}) async => _order(
+  /// The results as TEXT per test ([texts]: item id → the result) and/or photos of what is not text.
+  Future<InvestigationOrder> attachResults(
+    int id, {
+    Map<int, String> texts = const {},
+    List<String> photoPaths = const [],
+    String? note,
+  }) async => _order(
     await _client.post(
       '/business/investigation-orders/$id/results',
       data: FormData.fromMap({
         if (note != null && note.isNotEmpty) 'note': note,
+        for (final e in texts.entries) 'texts[${e.key}]': e.value,
         for (var i = 0; i < photoPaths.length; i++) 'images[$i]': await MultipartFile.fromFile(photoPaths[i]),
       }),
     ),
