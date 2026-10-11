@@ -5,6 +5,9 @@ import 'package:intl/intl.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../business/application/business_page_providers.dart';
 import '../../../business/data/models/offering_item.dart';
+import '../../../chairs/application/chairs_providers.dart';
+import '../../../chairs/data/models/service_chair.dart';
+import '../../../chairs/presentation/widgets/chair_picker.dart';
 import '../../application/booking_providers.dart';
 import '../../data/models/unit_discovery.dart';
 import '../screens/booking_screen.dart';
@@ -33,6 +36,7 @@ class _AppointmentBoardTabState extends ConsumerState<AppointmentBoardTab> {
   late DateTime _day;
   int? _offeringId;
   DateTime? _slot;
+  int? _chairId;
 
   @override
   void initState() {
@@ -62,7 +66,9 @@ class _AppointmentBoardTabState extends ConsumerState<AppointmentBoardTab> {
 
         final chosen = services.firstWhere((o) => o.id == _offeringId, orElse: () => services.first);
         if (widget.queue) return _queueBoard(context, l10n, services, chosen);
-        final grid = ref.watch(appointmentGridProvider((businessId: widget.businessId, date: _dateKey(_day), offeringId: chosen.id)));
+        final chairs = ref.watch(chairsDiscoveryProvider(widget.businessId)).valueOrNull ?? const <ServiceChair>[];
+        final chair = chairs.where((c) => c.id == _chairId).firstOrNull;
+        final grid = ref.watch(appointmentGridProvider((businessId: widget.businessId, date: _dateKey(_day), offeringId: chosen.id, chairId: _chairId)));
         final slotData = grid.valueOrNull?.slots.where((s) => s.startsAt == _slot).firstOrNull;
 
         return BoardScaffold(
@@ -83,6 +89,7 @@ class _AppointmentBoardTabState extends ConsumerState<AppointmentBoardTab> {
                           offering: chosen,
                           initialStartsAt: slotData.startsAt,
                           initialEndsAt: slotData.endsAt,
+                          chair: chair,
                         ),
                       ),
                     );
@@ -107,6 +114,20 @@ class _AppointmentBoardTabState extends ConsumerState<AppointmentBoardTab> {
                 ],
               ),
             ),
+            if (chairs.isNotEmpty) ...[
+              const SizedBox(height: 14),
+              BookingSectionCard(
+                title: l10n.chairPickTitle,
+                child: ChairPicker(
+                  chairs: chairs,
+                  selected: _chairId,
+                  onPick: (id) => setState(() {
+                    _chairId = id;
+                    _slot = null;
+                  }),
+                ),
+              ),
+            ],
             const SizedBox(height: 14),
             BookingSectionCard(
               title: l10n.bookingPickDayTitle,
@@ -148,7 +169,9 @@ extension on _AppointmentBoardTabState {
   Widget _queueBoard(BuildContext context, AppLocalizations l10n, List<OfferingItem> services, OfferingItem chosen) {
     final theme = Theme.of(context);
     final locale = Localizations.localeOf(context).toString();
-    final preview = ref.watch(appointmentQueueProvider((businessId: widget.businessId, date: _dateKey(_day), offeringId: chosen.id)));
+    final chairs = ref.watch(chairsDiscoveryProvider(widget.businessId)).valueOrNull ?? const <ServiceChair>[];
+    final chair = chairs.where((c) => c.id == _chairId).firstOrNull;
+    final preview = ref.watch(appointmentQueueProvider((businessId: widget.businessId, date: _dateKey(_day), offeringId: chosen.id, chairId: _chairId)));
     final p = preview.valueOrNull;
     final canTake = p != null && !p.full && !p.closed;
 
@@ -162,7 +185,7 @@ extension on _AppointmentBoardTabState {
             : () async {
                 await Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (_) => BookingScreen(businessId: widget.businessId, shape: widget.shape, offering: chosen, queueDate: _day),
+                    builder: (_) => BookingScreen(businessId: widget.businessId, shape: widget.shape, offering: chosen, queueDate: _day, chair: chair),
                   ),
                 );
                 // the turn just taken moves the next one on
@@ -179,6 +202,13 @@ extension on _AppointmentBoardTabState {
             ],
           ),
         ),
+        if (chairs.isNotEmpty) ...[
+          const SizedBox(height: 14),
+          BookingSectionCard(
+            title: l10n.chairPickTitle,
+            child: ChairPicker(chairs: chairs, selected: _chairId, onPick: (id) => _set(() => _chairId = id)),
+          ),
+        ],
         const SizedBox(height: 14),
         BookingSectionCard(
           title: l10n.bookingPickDayTitle,

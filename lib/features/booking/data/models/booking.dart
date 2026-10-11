@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import '../../../chairs/data/models/service_chair.dart';
 
 /// Mirrors `latest_deposit` on a booking response — a plain `Deposit` row,
 /// present only once the deposit has actually been frozen (i.e. the booking
@@ -126,6 +127,9 @@ class Booking {
   final int? queueTurn;
   final BookingQueueState? queue;
 
+  /// «كرسي وعليه الحلاق»: the chair and the person the booking sits with.
+  final ServiceChair? chair;
+
   /// `booking_stay` for a hotel stay — the only kind that has rooms.
   final String? bookableItemType;
   final BookingRoom? room;
@@ -162,6 +166,7 @@ class Booking {
     this.arrivalNotice,
     this.queueTurn,
     this.queue,
+    this.chair,
     this.bookableItemType,
     this.room,
     this.isDayUse = false,
@@ -215,6 +220,7 @@ class Booking {
       isDayUse: json['meta'] is Map<String, dynamic> && (json['meta'] as Map<String, dynamic>)['day_use'] == true,
       room: json['room'] is Map<String, dynamic> ? BookingRoom(id: (json['room'] as Map<String, dynamic>)['id'] as int, number: '${(json['room'] as Map<String, dynamic>)['number']}') : null,
       queueTurn: (json['queue_turn'] as num?)?.toInt(),
+      chair: json['chair'] is Map<String, dynamic> ? ServiceChair.fromJson(json['chair'] as Map<String, dynamic>) : null,
       queue: json['queue'] is Map<String, dynamic> ? BookingQueueState.fromJson(json['queue'] as Map<String, dynamic>) : null,
       arrivalNotice: json['arrival_notice'] is Map<String, dynamic> ? (json['arrival_notice'] as Map<String, dynamic>)['message'] as String? : null,
       depositAsPayment: json['deposit_as_payment'] is Map<String, dynamic> ? DepositAsPayment.fromJson(json['deposit_as_payment'] as Map<String, dynamic>) : const DepositAsPayment(),

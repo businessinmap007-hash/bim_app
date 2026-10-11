@@ -229,6 +229,8 @@ class BookingApi {
     DateTime? dayUseDate,
     // «كورس»: the group joined — the booking is the enrolment
     int? courseGroupId,
+    // «كرسي وعليه الحلاق»: the person the customer chose; none = whoever is free
+    int? chairId,
   }) async {
     final data =
         await _client.post(
@@ -249,6 +251,7 @@ class BookingApi {
                 if (meta != null && meta.isNotEmpty) 'meta': meta,
                 if (optionIds.isNotEmpty) 'option_ids': optionIds,
                 'course_group_id': ?courseGroupId,
+                'chair_id': ?chairId,
               },
             )
             as Map<String, dynamic>;
@@ -329,12 +332,12 @@ class BookingApi {
   }
 
   /// One day of an appointment with the business itself as start times (`free` 0/1) — no units.
-  Future<DayGrid> appointmentGrid({required int businessId, required DateTime date, int? offeringId}) async {
+  Future<DayGrid> appointmentGrid({required int businessId, required DateTime date, int? offeringId, int? chairId}) async {
     final day = '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
     final data =
         await _client.get(
               '/discovery/appointments/$businessId/day-grid',
-              query: {'date': day, 'offering_id': ?offeringId},
+              query: {'date': day, 'offering_id': ?offeringId, 'chair_id': ?chairId},
             )
             as Map<String, dynamic>;
 
@@ -342,10 +345,10 @@ class BookingApi {
   }
 
   /// «بالدور»: the turn a customer would get on [date] and when it should come. Nothing is taken until [createQueued].
-  Future<QueuePreview> appointmentQueue({required int businessId, required DateTime date, int? offeringId}) async {
+  Future<QueuePreview> appointmentQueue({required int businessId, required DateTime date, int? offeringId, int? chairId}) async {
     final day = '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
     final data =
-        await _client.get('/discovery/appointments/$businessId/queue', query: {'date': day, 'offering_id': ?offeringId})
+        await _client.get('/discovery/appointments/$businessId/queue', query: {'date': day, 'offering_id': ?offeringId, 'chair_id': ?chairId})
             as Map<String, dynamic>;
 
     return QueuePreview.fromJson(data);
@@ -359,6 +362,7 @@ class BookingApi {
     required DateTime date,
     String? notes,
     Map<String, dynamic>? meta,
+    int? chairId,
   }) async {
     final day = '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
     final data =
@@ -370,6 +374,7 @@ class BookingApi {
                 'offering_id': offeringId,
                 'offering_type': 'service_price',
                 'date': day,
+                'chair_id': ?chairId,
                 if (notes != null && notes.isNotEmpty) 'notes': notes,
                 if (meta != null && meta.isNotEmpty) 'meta': meta,
               },

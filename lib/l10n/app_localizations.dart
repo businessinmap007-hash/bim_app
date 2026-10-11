@@ -13987,6 +13987,246 @@ abstract class AppLocalizations {
   /// **'العميل يختار اليوم فقط ويأخذ الدور التالي مع الساعة التقريبية.'**
   String get bookingFlowQueueSub;
 
+  /// No description provided for @chairPickTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الحلاق'**
+  String get chairPickTitle;
+
+  /// No description provided for @chairAnyone.
+  ///
+  /// In ar, this message translates to:
+  /// **'أي حلاق متاح'**
+  String get chairAnyone;
+
+  /// No description provided for @chairWithPerson.
+  ///
+  /// In ar, this message translates to:
+  /// **'مع {name}'**
+  String chairWithPerson(Object name);
+
+  /// No description provided for @chairsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكراسي والحلاقون'**
+  String get chairsTitle;
+
+  /// No description provided for @chairsIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل كرسي له صف دور خاص به. يختار العميل الحلاق أو أيّ كرسي متاح.'**
+  String get chairsIntro;
+
+  /// No description provided for @chairAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة كرسي'**
+  String get chairAdd;
+
+  /// No description provided for @chairEdit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل الكرسي'**
+  String get chairEdit;
+
+  /// No description provided for @chairName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الكرسي (مثال: كرسي ١)'**
+  String get chairName;
+
+  /// No description provided for @chairPerson.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الحلاق'**
+  String get chairPerson;
+
+  /// No description provided for @chairPhoto.
+  ///
+  /// In ar, this message translates to:
+  /// **'صورة الحلاق'**
+  String get chairPhoto;
+
+  /// No description provided for @chairChoosePhoto.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر صورة'**
+  String get chairChoosePhoto;
+
+  /// No description provided for @chairRemovePhoto.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزالة الصورة'**
+  String get chairRemovePhoto;
+
+  /// No description provided for @chairOpen.
+  ///
+  /// In ar, this message translates to:
+  /// **'متاح للحجز'**
+  String get chairOpen;
+
+  /// No description provided for @chairDelete.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف الكرسي'**
+  String get chairDelete;
+
+  /// No description provided for @chairsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد كراسي بعد. أضف كرسيًا وصورة الحلاق ليختاره العملاء.'**
+  String get chairsEmpty;
+
+  /// No description provided for @chairNeedsName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب اسم الكرسي أو اسم الحلاق.'**
+  String get chairNeedsName;
+
+  /// No description provided for @chairClosed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مغلق'**
+  String get chairClosed;
+
+  /// No description provided for @queueConsoleTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'نداء الدور'**
+  String get queueConsoleTitle;
+
+  /// No description provided for @queueNowServing.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُخدَم الآن'**
+  String get queueNowServing;
+
+  /// No description provided for @queueCalled.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم ندائه'**
+  String get queueCalled;
+
+  /// No description provided for @queueWaiting.
+  ///
+  /// In ar, this message translates to:
+  /// **'في الانتظار'**
+  String get queueWaiting;
+
+  /// No description provided for @queueCallNext.
+  ///
+  /// In ar, this message translates to:
+  /// **'نادِ التالي'**
+  String get queueCallNext;
+
+  /// No description provided for @queueCallAgain.
+  ///
+  /// In ar, this message translates to:
+  /// **'نادِه مرة أخرى'**
+  String get queueCallAgain;
+
+  /// No description provided for @queueStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ الخدمة'**
+  String get queueStart;
+
+  /// No description provided for @queueFinish.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمّت الخدمة'**
+  String get queueFinish;
+
+  /// No description provided for @queueNobody.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا أحد في الانتظار'**
+  String get queueNobody;
+
+  /// No description provided for @queueAddWalkIn.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة عميل بدون حجز'**
+  String get queueAddWalkIn;
+
+  /// No description provided for @queueWalkInTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'دور لعميل بدون حجز'**
+  String get queueWalkInTitle;
+
+  /// No description provided for @queueWalkInName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم العميل'**
+  String get queueWalkInName;
+
+  /// No description provided for @queueWalkInPhone.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الهاتف (اختياري)'**
+  String get queueWalkInPhone;
+
+  /// No description provided for @queueWalkInService.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخدمة'**
+  String get queueWalkInService;
+
+  /// No description provided for @queueWalkInAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف الدور'**
+  String get queueWalkInAdd;
+
+  /// No description provided for @queueWalkInAdded.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُضيف الدور رقم {n}'**
+  String queueWalkInAdded(Object n);
+
+  /// No description provided for @queueTurnShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'دور {n}'**
+  String queueTurnShort(Object n);
+
+  /// No description provided for @queueWalkInTag.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون حجز'**
+  String get queueWalkInTag;
+
+  /// No description provided for @queueNoChair.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون كرسي محدد'**
+  String get queueNoChair;
+
+  /// No description provided for @queueCalledSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم نداء العميل'**
+  String get queueCalledSent;
+
+  /// No description provided for @chairFromStaff.
+  ///
+  /// In ar, this message translates to:
+  /// **'من فريق العمل (اختياري)'**
+  String get chairFromStaff;
+
+  /// No description provided for @chairNotStaff.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون — أكتب الاسم والصورة بنفسي'**
+  String get chairNotStaff;
+
+  /// No description provided for @chairStaffHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يظهر اسم الموظف وصورة حسابه على الكرسي، وما تكتبه أدناه يغلب عليهما.'**
+  String get chairStaffHint;
+
   /// No description provided for @bookingPickUnitTitle.
   ///
   /// In ar, this message translates to:

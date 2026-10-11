@@ -37,6 +37,8 @@ import '../../../course/application/course_providers.dart';
 import '../../../course/presentation/screens/course_groups_screen.dart';
 import '../../../booking_settings/presentation/screens/arrival_notice_screen.dart';
 import '../../../booking_settings/presentation/screens/booking_flow_screen.dart';
+import '../../../chairs/presentation/screens/call_next_screen.dart';
+import '../../../chairs/presentation/screens/chairs_screen.dart';
 import '../../../booking/application/booking_providers.dart';
 import '../../../hospital/presentation/screens/hospital_doctors_screen.dart';
 import '../../../hospital/presentation/screens/hospital_invitations_screen.dart';
@@ -312,6 +314,19 @@ class _ServiceList extends StatelessWidget {
         title: l10n.bookingFlowTitle,
         builder: (_) => const BookingFlowScreen(),
       ),
+      // the queue the business runs: who is served, who is called next, who walked in
+      _Tile(
+        show: _has('bookings') && isAppointment,
+        leading: Icons.campaign_outlined,
+        title: l10n.queueConsoleTitle,
+        builder: (_) => const CallNextScreen(),
+      ),
+      _Tile(
+        show: _has('bookings') && isAppointment,
+        leading: Icons.chair_alt_outlined,
+        title: l10n.chairsTitle,
+        builder: (_) => const ChairsScreen(),
+      ),
       _Tile(
         show: _has('bookings') && hasCourses,
         leading: Icons.school_outlined,
@@ -363,7 +378,9 @@ class _ServiceList extends StatelessWidget {
         builder: (_) => const DriverDashboardScreen(),
       ),
       _Tile(
-        show: _has('orders'),
+        // a delivery fee belongs to a business that delivers goods — one that sells a menu or products or runs
+        // drivers. A salon takes «orders» too, but it has nothing to deliver.
+        show: _has('orders') && (_has('menu') || _has('retail') || _has('drivers')),
         leading: Icons.local_shipping_outlined,
         title: l10n.deliveryFeeSettingsTitle,
         builder: (context) => Consumer(

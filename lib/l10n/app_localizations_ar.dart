@@ -7596,6 +7596,135 @@ class AppLocalizationsAr extends AppLocalizations {
       'العميل يختار اليوم فقط ويأخذ الدور التالي مع الساعة التقريبية.';
 
   @override
+  String get chairPickTitle => 'اختر الحلاق';
+
+  @override
+  String get chairAnyone => 'أي حلاق متاح';
+
+  @override
+  String chairWithPerson(Object name) {
+    return 'مع $name';
+  }
+
+  @override
+  String get chairsTitle => 'الكراسي والحلاقون';
+
+  @override
+  String get chairsIntro =>
+      'كل كرسي له صف دور خاص به. يختار العميل الحلاق أو أيّ كرسي متاح.';
+
+  @override
+  String get chairAdd => 'إضافة كرسي';
+
+  @override
+  String get chairEdit => 'تعديل الكرسي';
+
+  @override
+  String get chairName => 'اسم الكرسي (مثال: كرسي ١)';
+
+  @override
+  String get chairPerson => 'اسم الحلاق';
+
+  @override
+  String get chairPhoto => 'صورة الحلاق';
+
+  @override
+  String get chairChoosePhoto => 'اختر صورة';
+
+  @override
+  String get chairRemovePhoto => 'إزالة الصورة';
+
+  @override
+  String get chairOpen => 'متاح للحجز';
+
+  @override
+  String get chairDelete => 'حذف الكرسي';
+
+  @override
+  String get chairsEmpty =>
+      'لا توجد كراسي بعد. أضف كرسيًا وصورة الحلاق ليختاره العملاء.';
+
+  @override
+  String get chairNeedsName => 'اكتب اسم الكرسي أو اسم الحلاق.';
+
+  @override
+  String get chairClosed => 'مغلق';
+
+  @override
+  String get queueConsoleTitle => 'نداء الدور';
+
+  @override
+  String get queueNowServing => 'يُخدَم الآن';
+
+  @override
+  String get queueCalled => 'تم ندائه';
+
+  @override
+  String get queueWaiting => 'في الانتظار';
+
+  @override
+  String get queueCallNext => 'نادِ التالي';
+
+  @override
+  String get queueCallAgain => 'نادِه مرة أخرى';
+
+  @override
+  String get queueStart => 'ابدأ الخدمة';
+
+  @override
+  String get queueFinish => 'تمّت الخدمة';
+
+  @override
+  String get queueNobody => 'لا أحد في الانتظار';
+
+  @override
+  String get queueAddWalkIn => 'إضافة عميل بدون حجز';
+
+  @override
+  String get queueWalkInTitle => 'دور لعميل بدون حجز';
+
+  @override
+  String get queueWalkInName => 'اسم العميل';
+
+  @override
+  String get queueWalkInPhone => 'رقم الهاتف (اختياري)';
+
+  @override
+  String get queueWalkInService => 'الخدمة';
+
+  @override
+  String get queueWalkInAdd => 'أضف الدور';
+
+  @override
+  String queueWalkInAdded(Object n) {
+    return 'أُضيف الدور رقم $n';
+  }
+
+  @override
+  String queueTurnShort(Object n) {
+    return 'دور $n';
+  }
+
+  @override
+  String get queueWalkInTag => 'بدون حجز';
+
+  @override
+  String get queueNoChair => 'بدون كرسي محدد';
+
+  @override
+  String get queueCalledSent => 'تم نداء العميل';
+
+  @override
+  String get chairFromStaff => 'من فريق العمل (اختياري)';
+
+  @override
+  String get chairNotStaff => 'بدون — أكتب الاسم والصورة بنفسي';
+
+  @override
+  String get chairStaffHint =>
+      'يظهر اسم الموظف وصورة حسابه على الكرسي، وما تكتبه أدناه يغلب عليهما.';
+
+  @override
   String get bookingPickUnitTitle => 'اختر غرفتك';
 
   @override

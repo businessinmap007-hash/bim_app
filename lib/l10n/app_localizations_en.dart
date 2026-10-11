@@ -7635,6 +7635,135 @@ class AppLocalizationsEn extends AppLocalizations {
       'The customer picks only the day and gets the next turn with the approximate time.';
 
   @override
+  String get chairPickTitle => 'Choose the barber';
+
+  @override
+  String get chairAnyone => 'Anyone free';
+
+  @override
+  String chairWithPerson(Object name) {
+    return 'With $name';
+  }
+
+  @override
+  String get chairsTitle => 'Chairs and barbers';
+
+  @override
+  String get chairsIntro =>
+      'Each chair has its own line. The customer picks the barber or any free chair.';
+
+  @override
+  String get chairAdd => 'Add a chair';
+
+  @override
+  String get chairEdit => 'Edit the chair';
+
+  @override
+  String get chairName => 'Chair name (e.g. Chair 1)';
+
+  @override
+  String get chairPerson => 'Barber name';
+
+  @override
+  String get chairPhoto => 'The barber\'s photo';
+
+  @override
+  String get chairChoosePhoto => 'Choose a photo';
+
+  @override
+  String get chairRemovePhoto => 'Remove the photo';
+
+  @override
+  String get chairOpen => 'Open for booking';
+
+  @override
+  String get chairDelete => 'Delete the chair';
+
+  @override
+  String get chairsEmpty =>
+      'No chairs yet. Add a chair with the barber photo for customers to choose.';
+
+  @override
+  String get chairNeedsName => 'Write the chair name or the barber name.';
+
+  @override
+  String get chairClosed => 'Closed';
+
+  @override
+  String get queueConsoleTitle => 'Call the next turn';
+
+  @override
+  String get queueNowServing => 'Being served';
+
+  @override
+  String get queueCalled => 'Called';
+
+  @override
+  String get queueWaiting => 'Waiting';
+
+  @override
+  String get queueCallNext => 'Call the next';
+
+  @override
+  String get queueCallAgain => 'Call again';
+
+  @override
+  String get queueStart => 'Start the service';
+
+  @override
+  String get queueFinish => 'Done';
+
+  @override
+  String get queueNobody => 'Nobody is waiting';
+
+  @override
+  String get queueAddWalkIn => 'Add a customer with no booking';
+
+  @override
+  String get queueWalkInTitle => 'A turn for a customer with no booking';
+
+  @override
+  String get queueWalkInName => 'Customer name';
+
+  @override
+  String get queueWalkInPhone => 'Phone (optional)';
+
+  @override
+  String get queueWalkInService => 'Service';
+
+  @override
+  String get queueWalkInAdd => 'Add the turn';
+
+  @override
+  String queueWalkInAdded(Object n) {
+    return 'Turn $n added';
+  }
+
+  @override
+  String queueTurnShort(Object n) {
+    return 'Turn $n';
+  }
+
+  @override
+  String get queueWalkInTag => 'Walk-in';
+
+  @override
+  String get queueNoChair => 'No chair set';
+
+  @override
+  String get queueCalledSent => 'The customer was called';
+
+  @override
+  String get chairFromStaff => 'From the staff (optional)';
+
+  @override
+  String get chairNotStaff => 'None — I write the name and photo myself';
+
+  @override
+  String get chairStaffHint =>
+      'The name and account photo of the staff member show on the chair; what you write below wins over them.';
+
+  @override
   String get bookingPickUnitTitle => 'Choose your room';
 
   @override

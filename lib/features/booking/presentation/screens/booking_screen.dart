@@ -7,6 +7,8 @@ import 'package:intl/intl.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/arrival_notice_banner.dart';
+import '../../../chairs/data/models/service_chair.dart';
+import '../../../chairs/presentation/widgets/chair_picker.dart';
 import '../../../../shared/widgets/async_value_view.dart';
 import '../../../business/data/models/offering_item.dart';
 import '../../application/booking_providers.dart';
@@ -43,6 +45,9 @@ class BookingScreen extends ConsumerStatefulWidget {
   /// «بالدور»: the day named on the board — the business gives the turn and the time, so no time is asked.
   final DateTime? queueDate;
 
+  /// «كرسي وعليه الحلاق»: the person chosen on the board — none means whoever is free.
+  final ServiceChair? chair;
+
   const BookingScreen({
     super.key,
     required this.businessId,
@@ -55,6 +60,7 @@ class BookingScreen extends ConsumerStatefulWidget {
     this.initialPartySize,
     this.courseGroupId,
     this.queueDate,
+    this.chair,
   });
 
   @override
@@ -333,6 +339,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
           date: widget.queueDate!,
           notes: _notesController.text.trim(),
           meta: _buildMeta(fields),
+          chairId: widget.chair?.id,
         );
         if (mounted) {
           final when = booked.queue?.expectedAt ?? booked.startsAt;
@@ -363,6 +370,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
         meta: _buildMeta(fields),
         optionIds: _modifierOptionIds.toList(),
         courseGroupId: widget.courseGroupId,
+        chairId: widget.chair?.id,
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.bookingSuccess)));
@@ -433,6 +441,16 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                 Text(
                   '${widget.offering.price.toStringAsFixed(0)} ${widget.offering.currency}',
                   style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ],
+              if (widget.chair != null) ...[
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    ChairAvatar(chair: widget.chair, size: 40),
+                    const SizedBox(width: 10),
+                    Expanded(child: Text(AppLocalizations.of(context)!.chairWithPerson(widget.chair!.title), style: Theme.of(context).textTheme.titleSmall)),
+                  ],
                 ),
               ],
               if ((form.arrivalNotice ?? '').isNotEmpty) ...[

@@ -168,7 +168,7 @@ final dayGridProvider = FutureProvider.autoDispose.family<DayGrid, DayGridParams
   );
 });
 
-typedef AppointmentGridParams = ({int businessId, String date, int? offeringId});
+typedef AppointmentGridParams = ({int businessId, String date, int? offeringId, int? chairId});
 
 /// One day of appointments with a business as start times, as long as the chosen service.
 final appointmentGridProvider = FutureProvider.autoDispose.family<DayGrid, AppointmentGridParams>((ref, p) {
@@ -176,10 +176,11 @@ final appointmentGridProvider = FutureProvider.autoDispose.family<DayGrid, Appoi
     businessId: p.businessId,
     date: DateTime.parse(p.date),
     offeringId: p.offeringId,
+    chairId: p.chairId,
   );
 });
 
-typedef AppointmentQueueParams = ({int businessId, String date, int? offeringId});
+typedef AppointmentQueueParams = ({int businessId, String date, int? offeringId, int? chairId});
 
 /// The turn a customer would get on a day at a business that books by turn, and when it should come.
 final appointmentQueueProvider = FutureProvider.autoDispose.family<QueuePreview, AppointmentQueueParams>((ref, p) {
@@ -187,5 +188,6 @@ final appointmentQueueProvider = FutureProvider.autoDispose.family<QueuePreview,
     businessId: p.businessId,
     date: DateTime.parse(p.date),
     offeringId: p.offeringId,
+    chairId: p.chairId,
   );
 });
