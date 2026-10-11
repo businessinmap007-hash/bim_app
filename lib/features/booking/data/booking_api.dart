@@ -297,6 +297,34 @@ class BookingApi {
     return UnitCatalog.fromJson(data);
   }
 
+  /// One day as a grid of start times and how many units are free from each (hourly venues, tables).
+  Future<DayGrid> dayGrid({
+    required int businessId,
+    required DateTime date,
+    int durationMinutes = 60,
+    int stepMinutes = 60,
+    int? partySize,
+    int? serviceId,
+    String? itemType,
+  }) async {
+    final day = '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+    final data =
+        await _client.get(
+              '/discovery/units/$businessId/day-grid',
+              query: {
+                'date': day,
+                'duration_minutes': durationMinutes,
+                'step_minutes': stepMinutes,
+                'party_size': ?partySize,
+                'service_id': ?serviceId,
+                if (itemType != null && itemType.isNotEmpty) 'item_type': itemType,
+              },
+            )
+            as Map<String, dynamic>;
+
+    return DayGrid.fromJson(data);
+  }
+
   /// The real named units this business has (rooms/tables/pitches), grouped
   /// by kind with price and — when a date window is given — live
   /// availability. See Api\V2\UnitDiscoveryController. Public endpoint, no

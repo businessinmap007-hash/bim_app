@@ -7,6 +7,9 @@ import '../../application/booking_providers.dart';
 import '../../data/models/unit_discovery.dart';
 import '../../../investigations/presentation/widgets/center_tests_tab.dart';
 import '../screens/booking_screen.dart';
+import 'furnished_units_tab.dart';
+import 'hourly_venue_tab.dart';
+import 'table_booking_tab.dart';
 
 /// The «الحجز» tab of a business page drawn by its booking shape («أشكال الحجز»): a room kind is a section with its
 /// rooms under it — photo, what it carries, its price — like the menu's sections, then one tap into the booking.
@@ -31,8 +34,91 @@ class BookingShapeTab extends ConsumerWidget {
         if (shape != null && shape.multiSelect) return CenterTestsTab(centerId: businessId);
         if (shape == null || !catalog.hasUnits) return fallback;
 
+        // the boards that have their own drawing: a day and a time first (a pitch, a table) or dates first (a chalet)
+        switch (shape.code) {
+          case 'hourly_venue':
+            return HourlyVenueTab(businessId: businessId, catalog: catalog, shape: shape);
+          case 'table':
+            return TableBookingTab(businessId: businessId, catalog: catalog, shape: shape);
+          case 'furnished_units':
+            return FurnishedUnitsTab(businessId: businessId, catalog: catalog, shape: shape);
+        }
+
         return _ShapedBooking(businessId: businessId, catalog: catalog, shape: shape);
       },
+    );
+  }
+}
+
+/// One tap from a board into the booking form with the unit (and, when the board already asked, the time and the
+/// party) filled in — what the form still asks is only what the board did not.
+void openUnitBooking(
+  BuildContext context, {
+  required int businessId,
+  required UnitCatalog catalog,
+  required UnitShape shape,
+  required UnitKindGroup group,
+  required DiscoveredUnit unit,
+  bool dayUse = false,
+  DateTime? startsAt,
+  DateTime? endsAt,
+  int? partySize,
+}) {
+  final offeringId = group.offeringId;
+  if (offeringId == null) return;
+
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (_) => BookingScreen(
+        businessId: businessId,
+        shape: shape,
+        initialUnit: unit,
+        startInDayUse: dayUse,
+        initialStartsAt: startsAt,
+        initialEndsAt: endsAt,
+        initialPartySize: partySize,
+        offering: OfferingItem(
+          id: offeringId,
+          source: 'price',
+          label: unit.displayTitle,
+          price: unit.price ?? group.price ?? 0,
+          currency: group.currency ?? 'EGP',
+          serviceId: catalog.serviceId,
+          itemType: group.itemType,
+          imageUrl: unit.images.isEmpty ? null : unit.images.first,
+          action: 'book',
+        ),
+      ),
+    ),
+  );
+}
+
+/// The scrolling body of a shaped board plus its bottom bar. The page is a tab inside the business page's
+/// NestedScrollView, so the body hands its top over to the header the way every tab there does.
+class BoardScaffold extends StatelessWidget {
+  final List<Widget> children;
+  final Widget? bottom;
+  const BoardScaffold({super.key, required this.children, this.bottom});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: Builder(
+            builder: (context) => CustomScrollView(
+              slivers: [
+                SliverOverlapInjector(handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                  sliver: SliverList(delegate: SliverChildListDelegate(children)),
+                ),
+              ],
+            ),
+          ),
+        ),
+        ?bottom,
+      ],
     );
   }
 }
@@ -45,30 +131,7 @@ class _ShapedBooking extends StatelessWidget {
   const _ShapedBooking({required this.businessId, required this.catalog, required this.shape});
 
   void _book(BuildContext context, UnitKindGroup group, DiscoveredUnit unit, {bool dayUse = false}) {
-    final offeringId = group.offeringId;
-    if (offeringId == null) return;
-
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => BookingScreen(
-          businessId: businessId,
-          shape: shape,
-          initialUnit: unit,
-          startInDayUse: dayUse,
-          offering: OfferingItem(
-            id: offeringId,
-            source: 'price',
-            label: unit.displayTitle,
-            price: unit.price ?? group.price ?? 0,
-            currency: group.currency ?? 'EGP',
-            serviceId: catalog.serviceId,
-            itemType: group.itemType,
-            imageUrl: unit.images.isEmpty ? null : unit.images.first,
-            action: 'book',
-          ),
-        ),
-      ),
-    );
+    openUnitBooking(context, businessId: businessId, catalog: catalog, shape: shape, group: group, unit: unit, dayUse: dayUse);
   }
 
   @override

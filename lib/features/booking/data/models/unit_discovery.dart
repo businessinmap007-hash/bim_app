@@ -213,3 +213,44 @@ class UnitCatalog {
     shape: json['shape'] is Map<String, dynamic> ? UnitShape.fromJson(json['shape'] as Map<String, dynamic>) : null,
   );
 }
+
+/// One start time of a day grid: how many of the business's units are free for the asked duration from it.
+class DayGridSlot {
+  final DateTime startsAt;
+  final DateTime endsAt;
+  final int free;
+  final List<int> unitIds;
+
+  const DayGridSlot({required this.startsAt, required this.endsAt, required this.free, this.unitIds = const []});
+
+  bool get isFree => free > 0;
+
+  factory DayGridSlot.fromJson(Map<String, dynamic> json) => DayGridSlot(
+    // wall-clock strings of the business's own day — read as they are, never shifted
+    startsAt: DateTime.parse((json['starts_at'] as String).replaceFirst(' ', 'T')),
+    endsAt: DateTime.parse((json['ends_at'] as String).replaceFirst(' ', 'T')),
+    free: (json['free'] as num?)?.toInt() ?? 0,
+    unitIds: (json['unit_ids'] as List<dynamic>? ?? []).map((e) => (e as num).toInt()).toList(),
+  );
+}
+
+/// `GET /discovery/units/{business}/day-grid` — «ملاعب وقاعات» and «طاولة»: one day as a grid of start times.
+class DayGrid {
+  final bool closed;
+  final bool hoursKnown;
+  final int unitsTotal;
+  final String? opens;
+  final String? closes;
+  final List<DayGridSlot> slots;
+
+  const DayGrid({this.closed = false, this.hoursKnown = false, this.unitsTotal = 0, this.opens, this.closes, this.slots = const []});
+
+  factory DayGrid.fromJson(Map<String, dynamic> json) => DayGrid(
+    closed: json['closed'] as bool? ?? false,
+    hoursKnown: json['hours_known'] as bool? ?? false,
+    unitsTotal: (json['units_total'] as num?)?.toInt() ?? 0,
+    opens: json['opens'] as String?,
+    closes: json['closes'] as String?,
+    slots: (json['slots'] as List<dynamic>? ?? []).map((e) => DayGridSlot.fromJson(e as Map<String, dynamic>)).toList(),
+  );
+}

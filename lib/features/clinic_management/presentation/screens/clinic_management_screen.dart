@@ -246,24 +246,107 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
     await Navigator.of(context).push(MaterialPageRoute(builder: (_) => PatientFileScreen(recordId: id)));
   }
 
+  /// One action of the card: full width, 44 high, an icon when it has one — the same outlined button everywhere on
+  /// the card, so nothing is a different size or sits crooked beside another.
+  Widget _action(
+    BuildContext context, {
+    required String label,
+    IconData? icon,
+    required VoidCallback? onPressed,
+    bool tonal = false,
+    bool danger = false,
+  }) {
+    final cs = Theme.of(context).colorScheme;
+    final text = Text(label, maxLines: 1, overflow: TextOverflow.ellipsis);
+    const size = Size.fromHeight(44);
+
+    // every action is exactly the same height, whichever kind of button it is
+    if (tonal) {
+      return SizedBox(
+        height: 46,
+        child: FilledButton.tonalIcon(
+          onPressed: onPressed,
+          icon: Icon(icon ?? Icons.check_rounded, size: 20),
+          label: text,
+          style: FilledButton.styleFrom(minimumSize: size, maximumSize: const Size.fromHeight(46)),
+        ),
+      );
+    }
+
+    final style = OutlinedButton.styleFrom(
+      minimumSize: size,
+      maximumSize: const Size.fromHeight(46),
+      foregroundColor: danger ? cs.error : null,
+      side: danger ? BorderSide(color: cs.error.withValues(alpha: 0.5)) : null,
+    );
+
+    return SizedBox(
+      height: 46,
+      child: icon == null
+          ? OutlinedButton(onPressed: onPressed, style: style, child: text)
+          : OutlinedButton.icon(onPressed: onPressed, style: style, icon: Icon(icon, size: 20), label: text),
+    );
+  }
+
+  /// Buttons two to a row, equal width; a last odd one takes the whole row.
+  Widget _pairs(List<Widget> buttons) {
+    final rows = <Widget>[];
+    for (var i = 0; i < buttons.length; i += 2) {
+      final pair = buttons.skip(i).take(2).toList();
+      rows.add(
+        Row(
+          children: [
+            Expanded(child: pair[0]),
+            if (pair.length == 2) ...[const SizedBox(width: 8), Expanded(child: pair[1])],
+          ],
+        ),
+      );
+    }
+
+    return Column(
+      children: [
+        for (var i = 0; i < rows.length; i++) ...[if (i > 0) const SizedBox(height: 8), rows[i]],
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
     final a = widget.appointment;
+
+    final records = ref.watch(patientRecordsProvider.notifier);
+    ref.watch(patientRecordsProvider);
+    final phone = (a.attendeeName != null ? a.attendeePhone : a.patientPhone) ?? '';
+    final name = a.attendeeName ?? a.patientName ?? '';
+    final hasFile = records.match(phone: phone, name: name) != null;
+
+    final mine = (ref.watch(issuedInvestigationOrdersProvider).valueOrNull ?? const [])
+        .where((o) => o.patient?.id == a.patientId)
+        .toList();
+    final ready = mine.where((o) => o.hasResults).length;
+
+    final notifier = ref.read(clinicAppointmentsControllerProvider.notifier);
+    final open = a.status == 'requested' || a.status == 'confirmed';
 
     return Card(
       margin: EdgeInsets.zero,
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(14),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // who and when
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Text(a.patientName ?? '#${a.patientId}', style: Theme.of(context).textTheme.titleSmall),
+                  child: Text(
+                    a.patientName ?? '#${a.patientId}',
+                    style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                  ),
                 ),
+                const SizedBox(width: 8),
                 _StatusChip(status: a.status, l10n: l10n),
               ],
             ),
@@ -271,167 +354,139 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
               const SizedBox(height: 4),
               Text(
                 [l10n.clinicAttendeeFor(a.attendeeName!), if ((a.attendeePhone ?? '').isNotEmpty) a.attendeePhone!].join(' · '),
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
               ),
             ],
             if (a.scheduledAt != null) ...[
-              const SizedBox(height: 4),
-              Text(_formatDateTime(a.scheduledAt!)),
-            ],
-            // «افتح الملف عند بدء الكشف»: starting the visit opens the patient's file on this device at once
-            if (a.status == 'confirmed')
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: FilledButton.icon(
-                    icon: const Icon(Icons.play_arrow_rounded, size: 20),
-                    label: Text(l10n.clinicStartVisit),
-                    onPressed: _openFile,
-                  ),
-                ),
-              ),
-            // the clinic's OWN file of this patient (kept on this device): open it at once when there is one
-            Builder(
-              builder: (context) {
-                final records = ref.watch(patientRecordsProvider.notifier);
-                ref.watch(patientRecordsProvider);
-                final phone = (a.attendeeName != null ? a.attendeePhone : a.patientPhone) ?? '';
-                final name = a.attendeeName ?? a.patientName ?? '';
-                final found = records.match(phone: phone, name: name);
-                return Padding(
-                  padding: const EdgeInsets.only(top: 6),
-                  child: Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: ActionChip(
-                      avatar: Icon(found != null ? Icons.folder_shared_outlined : Icons.create_new_folder_outlined, size: 18),
-                      label: Text(found != null ? l10n.patientFileOpen : l10n.patientFileCreate),
-                      onPressed: _openFile,
-                    ),
-                  ),
-                );
-              },
-            ),
-            if (a.reason != null && a.reason!.isNotEmpty) ...[
-              const SizedBox(height: 4),
-              Text(a.reason!, style: Theme.of(context).textTheme.bodySmall),
-            ],
-            const SizedBox(height: 8),
-            Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: OutlinedButton.icon(
-                icon: const Icon(Icons.receipt_long_outlined, size: 18),
-                label: Text(a.prescriptionId == null ? l10n.clinicWritePrescription : l10n.clinicViewPrescription),
-                onPressed: () async {
-                  if (a.prescriptionId == null) {
-                    await Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => IssuePrescriptionScreen(
-                          patientId: a.patientId,
-                          patientName: a.patientName,
-                          appointmentId: a.id,
-                          onIssued: (medicines, diagnosis) => _keepInFile([
-                            if (diagnosis.isNotEmpty) (RecordKind.visit, diagnosis),
-                            for (final m in medicines) (RecordKind.medicine, m),
-                          ]),
-                        ),
-                      ),
-                    );
-                    ref.read(clinicAppointmentsControllerProvider.notifier).load();
-                  } else {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => PrescriptionDetailScreen(prescriptionId: a.prescriptionId!),
-                      ),
-                    );
-                  }
-                },
-              ),
-            ),
-            // the tests this doctor ordered for this patient, and whether results are in — read on this device at the visit
-            Builder(
-              builder: (context) {
-                final mine = (ref.watch(issuedInvestigationOrdersProvider).valueOrNull ?? const [])
-                    .where((o) => o.patient?.id == a.patientId)
-                    .toList();
-                if (mine.isEmpty) return const SizedBox.shrink();
-                final ready = mine.where((o) => o.hasResults).length;
-
-                return Padding(
-                  padding: const EdgeInsets.only(top: 6),
-                  child: Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: ActionChip(
-                      avatar: Icon(ready > 0 ? Icons.assignment_turned_in_outlined : Icons.assignment_outlined, size: 18),
-                      label: Text(ready > 0 ? l10n.invDoctorOrdersReady(ready) : l10n.invDoctorOrders),
-                      onPressed: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => IssuedInvestigationsScreen(patientId: a.patientId, patientName: a.patientName),
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-            Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: OutlinedButton.icon(
-                icon: const Icon(Icons.biotech_outlined, size: 18),
-                label: Text(l10n.invOrderTests),
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => IssueInvestigationScreen(
-                      patientId: a.patientId,
-                      patientName: a.patientName,
-                      onIssued: (labs, radiology) => _keepInFile([
-                        for (final t in labs) (RecordKind.test, t),
-                        for (final t in radiology) (RecordKind.radiology, t),
-                      ]),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            if (a.status == 'requested' || a.status == 'confirmed') ...[
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                runSpacing: 4,
+              const SizedBox(height: 6),
+              Row(
                 children: [
-                  if (a.status == 'requested')
-                    OutlinedButton(
-                      onPressed: _busy
-                          ? null
-                          : () => _act((id) => ref.read(clinicAppointmentsControllerProvider.notifier).confirm(id)),
-                      child: Text(l10n.clinicActionConfirm),
-                    ),
-                  OutlinedButton(
-                    onPressed: _busy
-                        ? null
-                        : () => _act((id) => ref.read(clinicAppointmentsControllerProvider.notifier).reject(id)),
-                    child: Text(l10n.clinicActionReject),
-                  ),
-                  OutlinedButton(
-                    onPressed: _busy ? null : _reschedule,
-                    child: Text(l10n.clinicActionReschedule),
-                  ),
-                  if (a.status == 'confirmed') ...[
-                    OutlinedButton(
-                      onPressed: _busy
-                          ? null
-                          : () => _act((id) => ref.read(clinicAppointmentsControllerProvider.notifier).complete(id)),
-                      child: Text(l10n.clinicActionComplete),
-                    ),
-                    OutlinedButton(
-                      onPressed: _busy
-                          ? null
-                          : () => _act((id) => ref.read(clinicAppointmentsControllerProvider.notifier).noShow(id)),
-                      child: Text(l10n.clinicActionNoShow),
-                    ),
-                  ],
+                  Icon(Icons.schedule_rounded, size: 16, color: theme.hintColor),
+                  const SizedBox(width: 6),
+                  Text(_formatDateTime(a.scheduledAt!), style: theme.textTheme.bodyMedium),
                 ],
               ),
+            ],
+            if (a.reason != null && a.reason!.isNotEmpty) ...[
+              const SizedBox(height: 6),
+              Text(a.reason!, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+            ],
+            const SizedBox(height: 12),
+
+            // «افتح الملف عند بدء الكشف»: starting the visit opens the patient file on this device at once
+            if (a.status == 'confirmed') ...[
+              FilledButton.icon(
+                style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(48)),
+                icon: const Icon(Icons.play_arrow_rounded, size: 22),
+                label: Text(l10n.clinicStartVisit),
+                onPressed: _openFile,
+              ),
+              const SizedBox(height: 8),
+            ],
+
+            // what the doctor does during the visit — one tidy column
+            _action(
+              context,
+              icon: hasFile ? Icons.folder_shared_outlined : Icons.create_new_folder_outlined,
+              label: hasFile ? l10n.patientFileOpen : l10n.patientFileCreate,
+              onPressed: _openFile,
+            ),
+            const SizedBox(height: 8),
+            _action(
+              context,
+              icon: Icons.receipt_long_outlined,
+              label: a.prescriptionId == null ? l10n.clinicWritePrescription : l10n.clinicViewPrescription,
+              onPressed: () async {
+                if (a.prescriptionId == null) {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => IssuePrescriptionScreen(
+                        patientId: a.patientId,
+                        patientName: a.patientName,
+                        appointmentId: a.id,
+                        onIssued: (medicines, diagnosis) => _keepInFile([
+                          if (diagnosis.isNotEmpty) (RecordKind.visit, diagnosis),
+                          for (final m in medicines) (RecordKind.medicine, m),
+                        ]),
+                      ),
+                    ),
+                  );
+                  notifier.load();
+                } else {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => PrescriptionDetailScreen(prescriptionId: a.prescriptionId!)),
+                  );
+                }
+              },
+            ),
+            const SizedBox(height: 8),
+            _action(
+              context,
+              icon: Icons.biotech_outlined,
+              label: l10n.invOrderTests,
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => IssueInvestigationScreen(
+                    patientId: a.patientId,
+                    patientName: a.patientName,
+                    onIssued: (labs, radiology) => _keepInFile([
+                      for (final t in labs) (RecordKind.test, t),
+                      for (final t in radiology) (RecordKind.radiology, t),
+                    ]),
+                  ),
+                ),
+              ),
+            ),
+            // the tests this doctor ordered for this patient, and whether results are in — read on this device
+            if (mine.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              _action(
+                context,
+                icon: ready > 0 ? Icons.assignment_turned_in_outlined : Icons.assignment_outlined,
+                label: ready > 0 ? l10n.invDoctorOrdersReady(ready) : l10n.invDoctorOrders,
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => IssuedInvestigationsScreen(patientId: a.patientId, patientName: a.patientName),
+                  ),
+                ),
+              ),
+            ],
+
+            // the state of the visit — two to a row, the ones that end it marked as such
+            if (open) ...[
+              const SizedBox(height: 12),
+              const Divider(height: 1),
+              const SizedBox(height: 12),
+              _pairs([
+                if (a.status == 'requested')
+                  _action(
+                    context,
+                    tonal: true,
+                    label: l10n.clinicActionConfirm,
+                    onPressed: _busy ? null : () => _act((id) => notifier.confirm(id)),
+                  ),
+                if (a.status == 'confirmed')
+                  _action(
+                    context,
+                    tonal: true,
+                    label: l10n.clinicActionComplete,
+                    onPressed: _busy ? null : () => _act((id) => notifier.complete(id)),
+                  ),
+                _action(context, label: l10n.clinicActionReschedule, icon: Icons.event_repeat_outlined, onPressed: _busy ? null : _reschedule),
+                if (a.status == 'confirmed')
+                  _action(
+                    context,
+                    danger: true,
+                    label: l10n.clinicActionNoShow,
+                    onPressed: _busy ? null : () => _act((id) => notifier.noShow(id)),
+                  ),
+                _action(
+                  context,
+                  danger: true,
+                  label: l10n.clinicActionReject,
+                  onPressed: _busy ? null : () => _act((id) => notifier.reject(id)),
+                ),
+              ]),
             ],
           ],
         ),

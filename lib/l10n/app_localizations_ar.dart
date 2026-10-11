@@ -7307,6 +7307,110 @@ class AppLocalizationsAr extends AppLocalizations {
   String get bookingNoAddOn => 'بدون';
 
   @override
+  String get bookingDayTitle => 'اليوم';
+
+  @override
+  String get bookingStartTime => 'وقت البداية';
+
+  @override
+  String get bookingTimeTitle => 'الوقت';
+
+  @override
+  String bookingDurationLabel(Object value) {
+    return 'المدة: $value';
+  }
+
+  @override
+  String get bookingDurHour => 'ساعة';
+
+  @override
+  String get bookingDurHourHalf => 'ساعة ونصف';
+
+  @override
+  String get bookingDurTwoHours => 'ساعتان';
+
+  @override
+  String bookingDurHours(Object n) {
+    return '$n ساعات';
+  }
+
+  @override
+  String get bookingBookNow => 'احجز الآن';
+
+  @override
+  String get bookingBookTable => 'احجز طاولة';
+
+  @override
+  String get bookingHourlyHint => 'اختر يومًا ووقتًا ثم الملعب أو القاعة';
+
+  @override
+  String get bookingTableHint => 'اختر يومًا ووقتًا لتظهر الطاولات المتاحة';
+
+  @override
+  String get bookingClosedDay => 'النشاط مغلق في هذا اليوم';
+
+  @override
+  String get bookingNoFreeTime => 'لا توجد أوقات متاحة في هذا اليوم';
+
+  @override
+  String get bookingPartySizeLabel => 'عدد الأفراد';
+
+  @override
+  String bookingPartyPeople(Object n) {
+    return '$n أفراد';
+  }
+
+  @override
+  String bookingTablesAt(Object time) {
+    return 'الطاولات المتاحة الساعة $time';
+  }
+
+  @override
+  String bookingSeatsUpTo(Object n) {
+    return 'تتسع لـ $n أفراد';
+  }
+
+  @override
+  String get bookingHourWord => 'ساعة';
+
+  @override
+  String get bookingNightWord => 'ليلة';
+
+  @override
+  String get bookingWhenStay => 'متى تريد الإقامة؟';
+
+  @override
+  String get bookingArrival => 'الوصول';
+
+  @override
+  String get bookingDeparture => 'المغادرة';
+
+  @override
+  String get bookingGuests => 'الضيوف';
+
+  @override
+  String bookingGuestsCount(Object n) {
+    return '$n ضيوف';
+  }
+
+  @override
+  String get bookingAvailableInDates => 'المتاح في هذه التواريخ';
+
+  @override
+  String bookingUnitsCount(Object n) {
+    return '$n وحدات';
+  }
+
+  @override
+  String get bookingNoUnitsInDates => 'لا توجد وحدات متاحة في هذه التواريخ.';
+
+  @override
+  String get bookingPickUnitToContinue => 'اختر وحدة للمتابعة';
+
+  @override
+  String get bookingContinue => 'متابعة';
+
+  @override
   String get bookingPickUnitTitle => 'اختر غرفتك';
 
   @override

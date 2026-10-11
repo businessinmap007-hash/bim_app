@@ -13477,6 +13477,186 @@ abstract class AppLocalizations {
   /// **'بدون'**
   String get bookingNoAddOn;
 
+  /// No description provided for @bookingDayTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم'**
+  String get bookingDayTitle;
+
+  /// No description provided for @bookingStartTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'وقت البداية'**
+  String get bookingStartTime;
+
+  /// No description provided for @bookingTimeTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوقت'**
+  String get bookingTimeTitle;
+
+  /// No description provided for @bookingDurationLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المدة: {value}'**
+  String bookingDurationLabel(Object value);
+
+  /// No description provided for @bookingDurHour.
+  ///
+  /// In ar, this message translates to:
+  /// **'ساعة'**
+  String get bookingDurHour;
+
+  /// No description provided for @bookingDurHourHalf.
+  ///
+  /// In ar, this message translates to:
+  /// **'ساعة ونصف'**
+  String get bookingDurHourHalf;
+
+  /// No description provided for @bookingDurTwoHours.
+  ///
+  /// In ar, this message translates to:
+  /// **'ساعتان'**
+  String get bookingDurTwoHours;
+
+  /// No description provided for @bookingDurHours.
+  ///
+  /// In ar, this message translates to:
+  /// **'{n} ساعات'**
+  String bookingDurHours(Object n);
+
+  /// No description provided for @bookingBookNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'احجز الآن'**
+  String get bookingBookNow;
+
+  /// No description provided for @bookingBookTable.
+  ///
+  /// In ar, this message translates to:
+  /// **'احجز طاولة'**
+  String get bookingBookTable;
+
+  /// No description provided for @bookingHourlyHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر يومًا ووقتًا ثم الملعب أو القاعة'**
+  String get bookingHourlyHint;
+
+  /// No description provided for @bookingTableHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر يومًا ووقتًا لتظهر الطاولات المتاحة'**
+  String get bookingTableHint;
+
+  /// No description provided for @bookingClosedDay.
+  ///
+  /// In ar, this message translates to:
+  /// **'النشاط مغلق في هذا اليوم'**
+  String get bookingClosedDay;
+
+  /// No description provided for @bookingNoFreeTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أوقات متاحة في هذا اليوم'**
+  String get bookingNoFreeTime;
+
+  /// No description provided for @bookingPartySizeLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد الأفراد'**
+  String get bookingPartySizeLabel;
+
+  /// No description provided for @bookingPartyPeople.
+  ///
+  /// In ar, this message translates to:
+  /// **'{n} أفراد'**
+  String bookingPartyPeople(Object n);
+
+  /// No description provided for @bookingTablesAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطاولات المتاحة الساعة {time}'**
+  String bookingTablesAt(Object time);
+
+  /// No description provided for @bookingSeatsUpTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'تتسع لـ {n} أفراد'**
+  String bookingSeatsUpTo(Object n);
+
+  /// No description provided for @bookingHourWord.
+  ///
+  /// In ar, this message translates to:
+  /// **'ساعة'**
+  String get bookingHourWord;
+
+  /// No description provided for @bookingNightWord.
+  ///
+  /// In ar, this message translates to:
+  /// **'ليلة'**
+  String get bookingNightWord;
+
+  /// No description provided for @bookingWhenStay.
+  ///
+  /// In ar, this message translates to:
+  /// **'متى تريد الإقامة؟'**
+  String get bookingWhenStay;
+
+  /// No description provided for @bookingArrival.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوصول'**
+  String get bookingArrival;
+
+  /// No description provided for @bookingDeparture.
+  ///
+  /// In ar, this message translates to:
+  /// **'المغادرة'**
+  String get bookingDeparture;
+
+  /// No description provided for @bookingGuests.
+  ///
+  /// In ar, this message translates to:
+  /// **'الضيوف'**
+  String get bookingGuests;
+
+  /// No description provided for @bookingGuestsCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{n} ضيوف'**
+  String bookingGuestsCount(Object n);
+
+  /// No description provided for @bookingAvailableInDates.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتاح في هذه التواريخ'**
+  String get bookingAvailableInDates;
+
+  /// No description provided for @bookingUnitsCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{n} وحدات'**
+  String bookingUnitsCount(Object n);
+
+  /// No description provided for @bookingNoUnitsInDates.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد وحدات متاحة في هذه التواريخ.'**
+  String get bookingNoUnitsInDates;
+
+  /// No description provided for @bookingPickUnitToContinue.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر وحدة للمتابعة'**
+  String get bookingPickUnitToContinue;
+
+  /// No description provided for @bookingContinue.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة'**
+  String get bookingContinue;
+
   /// No description provided for @bookingPickUnitTitle.
   ///
   /// In ar, this message translates to:

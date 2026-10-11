@@ -31,6 +31,11 @@ class BookingScreen extends ConsumerStatefulWidget {
   /// Opened from the Day use card: starts on the Day use side of the room type.
   final bool startInDayUse;
 
+  /// The day and time (or the dates) already chosen on the page's own board — the form opens with them filled.
+  final DateTime? initialStartsAt;
+  final DateTime? initialEndsAt;
+  final int? initialPartySize;
+
   const BookingScreen({
     super.key,
     required this.businessId,
@@ -38,6 +43,9 @@ class BookingScreen extends ConsumerStatefulWidget {
     this.shape,
     this.initialUnit,
     this.startInDayUse = false,
+    this.initialStartsAt,
+    this.initialEndsAt,
+    this.initialPartySize,
   });
 
   @override
@@ -89,6 +97,11 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
       _dayUseOffer = unit.dayUse;
       _dayUse = widget.startInDayUse && unit.dayUse != null;
     }
+    _startsAt = widget.initialStartsAt;
+    _endsAt = widget.initialEndsAt;
+    if (widget.initialPartySize != null && widget.initialPartySize! > 0) _partySize = widget.initialPartySize!;
+    // the total of what was chosen on the board, before anything else is touched
+    if (_startsAt != null || _unitId != null) WidgetsBinding.instance.addPostFrameCallback((_) => _schedulePreview());
   }
 
   TextEditingController _controllerFor(String key) =>

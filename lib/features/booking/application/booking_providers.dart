@@ -143,3 +143,27 @@ final myBookingsControllerProvider =
     StateNotifierProvider<MyBookingsController, MyBookingsState>((ref) {
       return MyBookingsController(ref.watch(bookingApiProvider));
     });
+
+typedef DayGridParams = ({
+  int businessId,
+  String date,
+  int durationMinutes,
+  int stepMinutes,
+  int? partySize,
+  int? serviceId,
+  String? itemType,
+});
+
+/// One day of a venue or a restaurant as start times with their free counts (the date is `yyyy-MM-dd` so equal
+/// requests share one answer).
+final dayGridProvider = FutureProvider.autoDispose.family<DayGrid, DayGridParams>((ref, p) {
+  return ref.watch(bookingApiProvider).dayGrid(
+    businessId: p.businessId,
+    date: DateTime.parse(p.date),
+    durationMinutes: p.durationMinutes,
+    stepMinutes: p.stepMinutes,
+    partySize: p.partySize,
+    serviceId: p.serviceId,
+    itemType: p.itemType,
+  );
+});

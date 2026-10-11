@@ -7343,6 +7343,111 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bookingNoAddOn => 'None';
 
   @override
+  String get bookingDayTitle => 'Day';
+
+  @override
+  String get bookingStartTime => 'Start time';
+
+  @override
+  String get bookingTimeTitle => 'Time';
+
+  @override
+  String bookingDurationLabel(Object value) {
+    return 'Duration: $value';
+  }
+
+  @override
+  String get bookingDurHour => '1 hour';
+
+  @override
+  String get bookingDurHourHalf => '1.5 hours';
+
+  @override
+  String get bookingDurTwoHours => '2 hours';
+
+  @override
+  String bookingDurHours(Object n) {
+    return '$n hours';
+  }
+
+  @override
+  String get bookingBookNow => 'Book now';
+
+  @override
+  String get bookingBookTable => 'Book a table';
+
+  @override
+  String get bookingHourlyHint =>
+      'Pick a day and a time, then the pitch or hall';
+
+  @override
+  String get bookingTableHint => 'Pick a day and a time to see the free tables';
+
+  @override
+  String get bookingClosedDay => 'Closed on this day';
+
+  @override
+  String get bookingNoFreeTime => 'No times available on this day';
+
+  @override
+  String get bookingPartySizeLabel => 'Party size';
+
+  @override
+  String bookingPartyPeople(Object n) {
+    return '$n people';
+  }
+
+  @override
+  String bookingTablesAt(Object time) {
+    return 'Tables free at $time';
+  }
+
+  @override
+  String bookingSeatsUpTo(Object n) {
+    return 'Seats $n';
+  }
+
+  @override
+  String get bookingHourWord => 'hour';
+
+  @override
+  String get bookingNightWord => 'night';
+
+  @override
+  String get bookingWhenStay => 'When do you want to stay?';
+
+  @override
+  String get bookingArrival => 'Arrival';
+
+  @override
+  String get bookingDeparture => 'Departure';
+
+  @override
+  String get bookingGuests => 'Guests';
+
+  @override
+  String bookingGuestsCount(Object n) {
+    return '$n guests';
+  }
+
+  @override
+  String get bookingAvailableInDates => 'Available on these dates';
+
+  @override
+  String bookingUnitsCount(Object n) {
+    return '$n units';
+  }
+
+  @override
+  String get bookingNoUnitsInDates => 'No units available on these dates.';
+
+  @override
+  String get bookingPickUnitToContinue => 'Pick a unit to continue';
+
+  @override
+  String get bookingContinue => 'Continue';
+
+  @override
   String get bookingPickUnitTitle => 'Choose your room';
 
   @override
