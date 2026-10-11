@@ -7,6 +7,7 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../booking/presentation/screens/business_bookings_screen.dart';
+import '../../../chairs/presentation/screens/my_chair_screen.dart';
 import '../../../orders/presentation/screens/business_orders_screen.dart';
 import '../../../delivery/application/delivery_providers.dart';
 import '../../../delivery/data/models/roster_driver.dart';
@@ -106,9 +107,8 @@ class MyWorkScreen extends ConsumerWidget {
         actions: [
           IconButton(
             tooltip: l10n.staffInvitationsTitle,
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const StaffInvitationsScreen()),
-            ),
+            onPressed: () =>
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => const StaffInvitationsScreen())),
             icon: Badge(
               isLabelVisible: invitationsCount > 0,
               label: Text('$invitationsCount'),
@@ -177,9 +177,7 @@ class _DriverJobCard extends StatelessWidget {
         title: Text(driver.businessName ?? ''),
         subtitle: Text(l10n.myWorkDriverRole),
         trailing: const Icon(Icons.chevron_right),
-        onTap: () => Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => const DriverDashboardScreen()),
-        ),
+        onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const DriverDashboardScreen())),
       ),
     );
   }
@@ -255,7 +253,10 @@ class _MembershipCard extends StatelessWidget {
                   decoration: BoxDecoration(color: statusColor, shape: BoxShape.circle),
                 ),
                 const SizedBox(width: 6),
-                Text(statusLabel, style: TextStyle(color: statusColor, fontSize: 12, fontWeight: FontWeight.w600)),
+                Text(
+                  statusLabel,
+                  style: TextStyle(color: statusColor, fontSize: 12, fontWeight: FontWeight.w600),
+                ),
                 if (status.checkedInAt != null) ...[
                   const Text(' · '),
                   Text(timeFormat.format(status.checkedInAt!), style: Theme.of(context).textTheme.bodySmall),
@@ -284,22 +285,38 @@ class _MembershipCard extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton.icon(
-                  onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => BusinessOrdersScreen(businessId: membership.businessId)),
-                  ),
+                  onPressed: () => Navigator.of(
+                    context,
+                  ).push(MaterialPageRoute(builder: (_) => BusinessOrdersScreen(businessId: membership.businessId))),
                   icon: const Icon(Icons.receipt_long_outlined, size: 18),
                   label: Text(l10n.businessOrdersTitle),
                 ),
               ),
             ],
-            if (membership.capabilities.contains('bookings')) ...[
+            if (membership.chairs.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton.icon(
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          MyChairScreen(businessId: membership.businessId, businessName: membership.businessName),
+                    ),
+                  ),
+                  icon: const Icon(Icons.event_seat_outlined, size: 18),
+                  label: Text(l10n.myChairTitle),
+                ),
+              ),
+            ],
+            if (membership.capabilities.contains('bookings') && membership.chairs.isEmpty) ...[
               const SizedBox(height: 8),
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton.icon(
-                  onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => BusinessBookingsScreen(businessId: membership.businessId)),
-                  ),
+                  onPressed: () => Navigator.of(
+                    context,
+                  ).push(MaterialPageRoute(builder: (_) => BusinessBookingsScreen(businessId: membership.businessId))),
                   icon: const Icon(Icons.event_note_outlined, size: 18),
                   label: Text(l10n.businessBookingsTitle),
                 ),

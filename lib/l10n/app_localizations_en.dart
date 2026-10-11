@@ -7764,6 +7764,16 @@ class AppLocalizationsEn extends AppLocalizations {
       'The name and account photo of the staff member show on the chair; what you write below wins over them.';
 
   @override
+  String get myChairTitle => 'My chair';
+
+  @override
+  String get myChairServed => 'Served today';
+
+  @override
+  String get myChairNone =>
+      'Your account is not seated at a chair of this business yet. Ask the owner to put you on one.';
+
+  @override
   String get bookingPickUnitTitle => 'Choose your room';
 
   @override

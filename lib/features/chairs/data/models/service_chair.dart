@@ -11,7 +11,14 @@ class ServiceChair {
   /// The account of the business's own staff sitting at this chair (its name and photo are the person's).
   final int? staffUserId;
 
-  const ServiceChair({required this.id, this.name, this.personName, this.photoUrl, this.isActive = true, this.staffUserId});
+  const ServiceChair({
+    required this.id,
+    this.name,
+    this.personName,
+    this.photoUrl,
+    this.isActive = true,
+    this.staffUserId,
+  });
 
   /// The person if the business wrote one, else the chair's own name.
   String get title {
@@ -111,11 +118,17 @@ class BusinessQueue {
   final List<ServiceChair> chairs;
   final List<QueueItem> items;
 
-  const BusinessQueue({required this.date, this.chairs = const [], this.items = const []});
+  /// Customers already served today (on these chairs).
+  final int served;
+
+  const BusinessQueue({required this.date, this.chairs = const [], this.items = const [], this.served = 0});
 
   factory BusinessQueue.fromJson(Map<String, dynamic> json) => BusinessQueue(
     date: DateTime.tryParse(json['date'] as String? ?? '') ?? DateTime.now(),
-    chairs: (json['chairs'] as List<dynamic>? ?? []).map((e) => ServiceChair.fromJson(e as Map<String, dynamic>)).toList(),
+    chairs: (json['chairs'] as List<dynamic>? ?? [])
+        .map((e) => ServiceChair.fromJson(e as Map<String, dynamic>))
+        .toList(),
     items: (json['items'] as List<dynamic>? ?? []).map((e) => QueueItem.fromJson(e as Map<String, dynamic>)).toList(),
+    served: (json['served'] as num?)?.toInt() ?? 0,
   );
 }

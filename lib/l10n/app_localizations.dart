@@ -14227,6 +14227,24 @@ abstract class AppLocalizations {
   /// **'يظهر اسم الموظف وصورة حسابه على الكرسي، وما تكتبه أدناه يغلب عليهما.'**
   String get chairStaffHint;
 
+  /// No description provided for @myChairTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'كرسيي'**
+  String get myChairTitle;
+
+  /// No description provided for @myChairServed.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدمتُهم اليوم'**
+  String get myChairServed;
+
+  /// No description provided for @myChairNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يُربط حسابك بكرسي في هذا النشاط بعد. اطلب من صاحب النشاط أن يضعك على كرسي.'**
+  String get myChairNone;
+
   /// No description provided for @bookingPickUnitTitle.
   ///
   /// In ar, this message translates to:

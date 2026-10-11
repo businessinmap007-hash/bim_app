@@ -15,13 +15,13 @@ class _FakeApi implements ChairsApi {
   final finished = <int>[];
 
   @override
-  Future<void> call(int bookingId) async => called.add(bookingId);
+  Future<void> call(int bookingId, {int? businessId}) async => called.add(bookingId);
 
   @override
-  Future<void> start(int bookingId) async => started.add(bookingId);
+  Future<void> start(int bookingId, {int? businessId}) async => started.add(bookingId);
 
   @override
-  Future<void> finish(int bookingId) async => finished.add(bookingId);
+  Future<void> finish(int bookingId, {int? businessId}) async => finished.add(bookingId);
 
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);

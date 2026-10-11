@@ -11,20 +11,26 @@ class ChairsApi {
   Future<List<ServiceChair>> discover(int businessId) async {
     final data = await _client.get('/discovery/appointments/$businessId/chairs') as Map<String, dynamic>;
 
-    return (data['chairs'] as List<dynamic>? ?? []).map((e) => ServiceChair.fromJson(e as Map<String, dynamic>)).toList();
+    return (data['chairs'] as List<dynamic>? ?? [])
+        .map((e) => ServiceChair.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   Future<List<ServiceChair>> mine() async {
     final data = await _client.get('/business/chairs') as Map<String, dynamic>;
 
-    return (data['chairs'] as List<dynamic>? ?? []).map((e) => ServiceChair.fromJson(e as Map<String, dynamic>)).toList();
+    return (data['chairs'] as List<dynamic>? ?? [])
+        .map((e) => ServiceChair.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   /// The staff of the business that may sit at a chair (accepted, active).
   Future<List<ChairStaffMember>> staff() async {
     final data = await _client.get('/business/chairs/staff') as Map<String, dynamic>;
 
-    return (data['staff'] as List<dynamic>? ?? []).map((e) => ChairStaffMember.fromJson(e as Map<String, dynamic>)).toList();
+    return (data['staff'] as List<dynamic>? ?? [])
+        .map((e) => ChairStaffMember.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   Future<void> create({String? name, String? personName, String? photoPath, int? staffUserId}) async {
@@ -40,7 +46,15 @@ class ChairsApi {
   }
 
   /// A file cannot ride a PUT, so the change is a multipart POST: the fields sent are the fields changed.
-  Future<void> update(int id, {String? name, String? personName, String? photoPath, bool? isActive, bool removePhoto = false, int? staffUserId}) async {
+  Future<void> update(
+    int id, {
+    String? name,
+    String? personName,
+    String? photoPath,
+    bool? isActive,
+    bool removePhoto = false,
+    int? staffUserId,
+  }) async {
     await _client.post(
       '/business/chairs/$id',
       data: FormData.fromMap({
@@ -59,24 +73,44 @@ class ChairsApi {
 
   // ───────────── the queue the business runs ─────────────
 
-  Future<BusinessQueue> queue() async {
-    final data = await _client.get('/business/queue') as Map<String, dynamic>;
+  /// `businessId` is the employer when a staff member works the queue; `mine` is «كرسيي» — only the chairs they sit at.
+  Future<BusinessQueue> queue({int? businessId, bool mine = false}) async {
+    final data =
+        await _client.get('/business/queue', query: {'business_id': ?businessId, if (mine) 'mine': 1})
+            as Map<String, dynamic>;
 
     return BusinessQueue.fromJson(data);
   }
 
-  Future<void> call(int bookingId) => _client.post('/business/queue/$bookingId/call');
+  /// A staff member names the business they act for in the query, as every business endpoint expects.
+  String _acting(String path, int? businessId) => businessId == null ? path : '$path?business_id=$businessId';
 
-  Future<void> start(int bookingId) => _client.post('/business/queue/$bookingId/start');
+  Future<void> call(int bookingId, {int? businessId}) =>
+      _client.post(_acting('/business/queue/$bookingId/call', businessId));
 
-  Future<void> finish(int bookingId) => _client.post('/business/queue/$bookingId/finish');
+  Future<void> start(int bookingId, {int? businessId}) =>
+      _client.post(_acting('/business/queue/$bookingId/start', businessId));
+
+  Future<void> finish(int bookingId, {int? businessId}) =>
+      _client.post(_acting('/business/queue/$bookingId/finish', businessId));
 
   /// A customer with no booking: the staff add a turn for him. Returns the turn number he was given.
-  Future<int> walkIn({required String name, String? phone, required int offeringId, int? chairId}) async {
+  Future<int> walkIn({
+    required String name,
+    String? phone,
+    required int offeringId,
+    int? chairId,
+    int? businessId,
+  }) async {
     final data =
         await _client.post(
-              '/business/queue/walk-in',
-              data: {'name': name, if (phone != null && phone.isNotEmpty) 'phone': phone, 'offering_id': offeringId, 'chair_id': ?chairId},
+              _acting('/business/queue/walk-in', businessId),
+              data: {
+                'name': name,
+                if (phone != null && phone.isNotEmpty) 'phone': phone,
+                'offering_id': offeringId,
+                'chair_id': ?chairId,
+              },
             )
             as Map<String, dynamic>;
 

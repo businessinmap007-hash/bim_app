@@ -16,5 +16,12 @@ final myChairsProvider = FutureProvider.autoDispose<List<ServiceChair>>((ref) =>
 /// The day's queue as the business runs it.
 final businessQueueProvider = FutureProvider.autoDispose<BusinessQueue>((ref) => ref.watch(chairsApiProvider).queue());
 
+/// «كرسيي»: the queue of the chairs this account sits at in an employer's business (a barber).
+final myChairQueueProvider = FutureProvider.autoDispose.family<BusinessQueue, int>((ref, businessId) {
+  return ref.watch(chairsApiProvider).queue(businessId: businessId, mine: true);
+});
+
 /// The staff of the business a chair may be given to.
-final chairStaffProvider = FutureProvider.autoDispose<List<ChairStaffMember>>((ref) => ref.watch(chairsApiProvider).staff());
+final chairStaffProvider = FutureProvider.autoDispose<List<ChairStaffMember>>(
+  (ref) => ref.watch(chairsApiProvider).staff(),
+);

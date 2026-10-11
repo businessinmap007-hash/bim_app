@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import '../../../chairs/data/models/service_chair.dart';
 
 /// A business this account works for as a delegated staff member — mirrors
 /// Api\V2\BusinessStaffController::memberships().
@@ -10,6 +11,9 @@ class StaffMembership {
   final List<String> capabilities;
   final bool attendanceVerificationEnabled;
 
+  /// The chairs of this business the person sits at — a barber has one, and a screen of his own for it.
+  final List<ServiceChair> chairs;
+
   const StaffMembership({
     required this.businessId,
     required this.businessName,
@@ -17,6 +21,7 @@ class StaffMembership {
     this.title,
     required this.capabilities,
     this.attendanceVerificationEnabled = false,
+    this.chairs = const [],
   });
 
   factory StaffMembership.fromJson(Map<String, dynamic> json) {
@@ -28,6 +33,9 @@ class StaffMembership {
       title: json['title'] as String?,
       capabilities: (json['capabilities'] as List<dynamic>? ?? []).map((e) => e as String).toList(),
       attendanceVerificationEnabled: json['attendance_verification_enabled'] as bool? ?? false,
+      chairs: (json['chairs'] as List<dynamic>? ?? [])
+          .map((e) => ServiceChair.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
   }
 }
@@ -48,7 +56,9 @@ class AttendanceStatus {
       // A genuine UTC instant (Carbon's own toIso8601String(), app.timezone is
       // UTC) -- .toLocal() here is correct, not the wall-clock-field trap.
       checkedInAt: json['checked_in_at'] != null ? DateTime.tryParse(json['checked_in_at'] as String)?.toLocal() : null,
-      checkedOutAt: json['checked_out_at'] != null ? DateTime.tryParse(json['checked_out_at'] as String)?.toLocal() : null,
+      checkedOutAt: json['checked_out_at'] != null
+          ? DateTime.tryParse(json['checked_out_at'] as String)?.toLocal()
+          : null,
       isPresent: json['is_present'] as bool? ?? false,
     );
   }

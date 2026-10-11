@@ -7725,6 +7725,16 @@ class AppLocalizationsAr extends AppLocalizations {
       'يظهر اسم الموظف وصورة حسابه على الكرسي، وما تكتبه أدناه يغلب عليهما.';
 
   @override
+  String get myChairTitle => 'كرسيي';
+
+  @override
+  String get myChairServed => 'خدمتُهم اليوم';
+
+  @override
+  String get myChairNone =>
+      'لم يُربط حسابك بكرسي في هذا النشاط بعد. اطلب من صاحب النشاط أن يضعك على كرسي.';
+
+  @override
   String get bookingPickUnitTitle => 'اختر غرفتك';
 
   @override
