@@ -14335,6 +14335,12 @@ abstract class AppLocalizations {
   /// **'لا توجد خدمة بوحدات قابلة للحجز لهذا الحساب.'**
   String get unitsImportNone;
 
+  /// No description provided for @clinicStartVisit.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدء الكشف'**
+  String get clinicStartVisit;
+
   /// No description provided for @importHubNothing.
   ///
   /// In ar, this message translates to:

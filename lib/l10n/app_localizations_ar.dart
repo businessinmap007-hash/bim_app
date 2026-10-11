@@ -7789,6 +7789,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get unitsImportNone => 'لا توجد خدمة بوحدات قابلة للحجز لهذا الحساب.';
 
   @override
+  String get clinicStartVisit => 'بدء الكشف';
+
+  @override
   String get importHubNothing => 'لا يوجد ما يمكن استيراده لهذا الحساب بعد.';
 
   @override

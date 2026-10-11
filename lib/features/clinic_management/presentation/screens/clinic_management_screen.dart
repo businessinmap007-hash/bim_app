@@ -228,6 +228,24 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
     await records.save(record.copyWith(entries: [...record.entries, for (final e in fresh) if (seen.add(e.fingerprint)) e]));
   }
 
+  /// The clinic's own file of this patient (on this device) — created empty when there is none, then opened.
+  Future<void> _openFile() async {
+    final a = widget.appointment;
+    final phone = (a.attendeeName != null ? a.attendeePhone : a.patientPhone) ?? '';
+    final name = a.attendeeName ?? a.patientName ?? '';
+    final records = ref.read(patientRecordsProvider.notifier);
+
+    var record = records.match(phone: phone, name: name);
+    if (record == null) {
+      record = PatientRecord(id: newRecordId(), name: name, phone: phone, updatedAt: DateTime.now());
+      await records.save(record);
+    }
+    if (!mounted) return;
+
+    final id = record.id;
+    await Navigator.of(context).push(MaterialPageRoute(builder: (_) => PatientFileScreen(recordId: id)));
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -260,6 +278,19 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
               const SizedBox(height: 4),
               Text(_formatDateTime(a.scheduledAt!)),
             ],
+            // «افتح الملف عند بدء الكشف»: starting the visit opens the patient's file on this device at once
+            if (a.status == 'confirmed')
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: FilledButton.icon(
+                    icon: const Icon(Icons.play_arrow_rounded, size: 20),
+                    label: Text(l10n.clinicStartVisit),
+                    onPressed: _openFile,
+                  ),
+                ),
+              ),
             // the clinic's OWN file of this patient (kept on this device): open it at once when there is one
             Builder(
               builder: (context) {
@@ -275,16 +306,7 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
                     child: ActionChip(
                       avatar: Icon(found != null ? Icons.folder_shared_outlined : Icons.create_new_folder_outlined, size: 18),
                       label: Text(found != null ? l10n.patientFileOpen : l10n.patientFileCreate),
-                      onPressed: () async {
-                        var record = found;
-                        if (record == null) {
-                          record = PatientRecord(id: newRecordId(), name: name, phone: phone, updatedAt: DateTime.now());
-                          await records.save(record);
-                        }
-                        if (context.mounted) {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (_) => PatientFileScreen(recordId: record!.id)));
-                        }
-                      },
+                      onPressed: _openFile,
                     ),
                   ),
                 );

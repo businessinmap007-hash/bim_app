@@ -7830,6 +7830,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'No service with bookable units on this account.';
 
   @override
+  String get clinicStartVisit => 'Start the visit';
+
+  @override
   String get importHubNothing => 'Nothing to import for this account yet.';
 
   @override

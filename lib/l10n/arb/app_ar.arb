@@ -2632,6 +2632,7 @@
   "unitsImportKindNone": "بدون تصنيف",
   "unitsImportNext": "التالي: اختيار الملف",
   "unitsImportNone": "لا توجد خدمة بوحدات قابلة للحجز لهذا الحساب.",
+  "clinicStartVisit": "بدء الكشف",
   "importHubNothing": "لا يوجد ما يمكن استيراده لهذا الحساب بعد.",
   "importPickFile": "اختيار ملف",
   "importTemplate": "نموذج جاهز",
