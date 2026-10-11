@@ -73,7 +73,6 @@ class _MyChairScreenState extends ConsumerState<MyChairScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final async = ref.watch(myChairQueueProvider(widget.businessId));
-    final queue = async.valueOrNull;
 
     return Scaffold(
       appBar: AppBar(
@@ -85,13 +84,6 @@ class _MyChairScreenState extends ConsumerState<MyChairScreen> {
           ),
         ],
       ),
-      floatingActionButton: queue == null || queue.chairs.isEmpty
-          ? null
-          : FloatingActionButton.extended(
-              onPressed: () => _walkIn(queue),
-              icon: const Icon(Icons.person_add_alt_1_outlined),
-              label: Text(l10n.queueAddWalkIn),
-            ),
       body: async.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (_, _) => Center(
@@ -117,9 +109,16 @@ class _MyChairScreenState extends ConsumerState<MyChairScreen> {
           return RefreshIndicator(
             onRefresh: () async => ref.invalidate(myChairQueueProvider(widget.businessId)),
             child: ListView(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 96),
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
               children: [
                 _Header(queue: queue, businessName: widget.businessName),
+                const SizedBox(height: 12),
+                // inline, not floating: a floating button sat over the next customer's «نادِ التالي»
+                OutlinedButton.icon(
+                  onPressed: () => _walkIn(queue),
+                  icon: const Icon(Icons.person_add_alt_1_outlined),
+                  label: Text(l10n.queueAddWalkIn),
+                ),
                 const SizedBox(height: 16),
                 for (final c in queue.chairs) ...[
                   // a barber with two chairs sees each line under its own face
