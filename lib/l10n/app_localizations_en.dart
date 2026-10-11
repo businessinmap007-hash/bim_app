@@ -7938,6 +7938,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clinicStartVisit => 'Start the visit';
 
   @override
+  String get clinicCreateFileShort => 'Create file';
+
+  @override
   String get importHubNothing => 'Nothing to import for this account yet.';
 
   @override

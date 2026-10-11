@@ -2642,6 +2642,7 @@
   "unitsImportNext": "Next: choose the file",
   "unitsImportNone": "No service with bookable units on this account.",
   "clinicStartVisit": "Start the visit",
+  "clinicCreateFileShort": "Create file",
   "importHubNothing": "Nothing to import for this account yet.",
   "importPickFile": "Choose a file",
   "importTemplate": "Ready template",

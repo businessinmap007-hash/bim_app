@@ -7896,6 +7896,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clinicStartVisit => 'بدء الكشف';
 
   @override
+  String get clinicCreateFileShort => 'إنشاء ملف';
+
+  @override
   String get importHubNothing => 'لا يوجد ما يمكن استيراده لهذا الحساب بعد.';
 
   @override

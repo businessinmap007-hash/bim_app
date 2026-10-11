@@ -81,34 +81,9 @@ class _AppointmentsQueueState extends ConsumerState<_AppointmentsQueue> {
 
     return Column(
       children: [
-        SizedBox(
-          height: 44,
-          child: MouseWheelHorizontalScroll(
-            builder: (context, controller) => ListView(
-              controller: controller,
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: ChoiceChip(
-                    label: Text(l10n.clinicQueueAllStatuses),
-                    selected: state.status == null,
-                    onSelected: (_) => ref.read(clinicAppointmentsControllerProvider.notifier).filterByStatus(null),
-                  ),
-                ),
-                for (final s in _statuses)
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: ChoiceChip(
-                      label: Text(_statusLabel(s, l10n)),
-                      selected: state.status == s,
-                      onSelected: (_) => ref.read(clinicAppointmentsControllerProvider.notifier).filterByStatus(s),
-                    ),
-                  ),
-              ],
-            ),
-          ),
+        _StatusFilterStrip(
+          selected: state.status,
+          onPick: (status) => ref.read(clinicAppointmentsControllerProvider.notifier).filterByStatus(status),
         ),
         Expanded(
           child: state.isLoading
@@ -254,34 +229,48 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
     IconData? icon,
     required VoidCallback? onPressed,
     bool tonal = false,
+    bool primary = false,
     bool danger = false,
   }) {
     final cs = Theme.of(context).colorScheme;
-    final text = Text(label, maxLines: 1, overflow: TextOverflow.ellipsis);
-    const size = Size.fromHeight(44);
+    // a long label shrinks to fit its half of the row instead of being cut
+    final text = FittedBox(fit: BoxFit.scaleDown, child: Text(label, maxLines: 1));
+    const size = Size.fromHeight(48);
 
     // every action is exactly the same height, whichever kind of button it is
+    if (primary) {
+      return SizedBox(
+        height: 48,
+        child: FilledButton.icon(
+          onPressed: onPressed,
+          icon: Icon(icon ?? Icons.play_arrow_rounded, size: 22),
+          label: text,
+          style: FilledButton.styleFrom(minimumSize: size, maximumSize: const Size.fromHeight(48), padding: const EdgeInsets.symmetric(horizontal: 12)),
+        ),
+      );
+    }
+
     if (tonal) {
       return SizedBox(
-        height: 46,
+        height: 48,
         child: FilledButton.tonalIcon(
           onPressed: onPressed,
           icon: Icon(icon ?? Icons.check_rounded, size: 20),
           label: text,
-          style: FilledButton.styleFrom(minimumSize: size, maximumSize: const Size.fromHeight(46)),
+          style: FilledButton.styleFrom(minimumSize: size, maximumSize: const Size.fromHeight(48), padding: const EdgeInsets.symmetric(horizontal: 12)),
         ),
       );
     }
 
     final style = OutlinedButton.styleFrom(
       minimumSize: size,
-      maximumSize: const Size.fromHeight(46),
+      maximumSize: const Size.fromHeight(48), padding: const EdgeInsets.symmetric(horizontal: 12),
       foregroundColor: danger ? cs.error : null,
       side: danger ? BorderSide(color: cs.error.withValues(alpha: 0.5)) : null,
     );
 
     return SizedBox(
-      height: 46,
+      height: 48,
       child: icon == null
           ? OutlinedButton(onPressed: onPressed, style: style, child: text)
           : OutlinedButton.icon(onPressed: onPressed, style: style, icon: Icon(icon, size: 20), label: text),
@@ -373,84 +362,73 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
             ],
             const SizedBox(height: 12),
 
+            // what the doctor does during the visit: two to a row, the same buttons as the state ones below.
             // «افتح الملف عند بدء الكشف»: starting the visit opens the patient file on this device at once
-            if (a.status == 'confirmed') ...[
-              FilledButton.icon(
-                style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(48)),
-                icon: const Icon(Icons.play_arrow_rounded, size: 22),
-                label: Text(l10n.clinicStartVisit),
-                onPressed: _openFile,
-              ),
-              const SizedBox(height: 8),
-            ],
-
-            // what the doctor does during the visit — one tidy column
-            _action(
-              context,
-              icon: hasFile ? Icons.folder_shared_outlined : Icons.create_new_folder_outlined,
-              label: hasFile ? l10n.patientFileOpen : l10n.patientFileCreate,
-              onPressed: _openFile,
-            ),
-            const SizedBox(height: 8),
-            _action(
-              context,
-              icon: Icons.receipt_long_outlined,
-              label: a.prescriptionId == null ? l10n.clinicWritePrescription : l10n.clinicViewPrescription,
-              onPressed: () async {
-                if (a.prescriptionId == null) {
-                  await Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => IssuePrescriptionScreen(
-                        patientId: a.patientId,
-                        patientName: a.patientName,
-                        appointmentId: a.id,
-                        onIssued: (medicines, diagnosis) => _keepInFile([
-                          if (diagnosis.isNotEmpty) (RecordKind.visit, diagnosis),
-                          for (final m in medicines) (RecordKind.medicine, m),
-                        ]),
-                      ),
-                    ),
-                  );
-                  notifier.load();
-                } else {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => PrescriptionDetailScreen(prescriptionId: a.prescriptionId!)),
-                  );
-                }
-              },
-            ),
-            const SizedBox(height: 8),
-            _action(
-              context,
-              icon: Icons.biotech_outlined,
-              label: l10n.invOrderTests,
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => IssueInvestigationScreen(
-                    patientId: a.patientId,
-                    patientName: a.patientName,
-                    onIssued: (labs, radiology) => _keepInFile([
-                      for (final t in labs) (RecordKind.test, t),
-                      for (final t in radiology) (RecordKind.radiology, t),
-                    ]),
-                  ),
-                ),
-              ),
-            ),
-            // the tests this doctor ordered for this patient, and whether results are in — read on this device
-            if (mine.isNotEmpty) ...[
-              const SizedBox(height: 8),
+            _pairs([
+              if (a.status == 'confirmed') _action(context, primary: true, label: l10n.clinicStartVisit, onPressed: _openFile),
               _action(
                 context,
-                icon: ready > 0 ? Icons.assignment_turned_in_outlined : Icons.assignment_outlined,
-                label: ready > 0 ? l10n.invDoctorOrdersReady(ready) : l10n.invDoctorOrders,
+                icon: hasFile ? Icons.folder_shared_outlined : Icons.create_new_folder_outlined,
+                label: hasFile ? l10n.patientFileOpen : l10n.clinicCreateFileShort,
+                onPressed: _openFile,
+              ),
+              _action(
+                context,
+                icon: Icons.receipt_long_outlined,
+                label: a.prescriptionId == null ? l10n.clinicWritePrescription : l10n.clinicViewPrescription,
+                onPressed: () async {
+                  if (a.prescriptionId == null) {
+                    await Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => IssuePrescriptionScreen(
+                          patientId: a.patientId,
+                          patientName: a.patientName,
+                          appointmentId: a.id,
+                          onIssued: (medicines, diagnosis) => _keepInFile([
+                            if (diagnosis.isNotEmpty) (RecordKind.visit, diagnosis),
+                            for (final m in medicines) (RecordKind.medicine, m),
+                          ]),
+                        ),
+                      ),
+                    );
+                    notifier.load();
+                  } else {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => PrescriptionDetailScreen(prescriptionId: a.prescriptionId!)),
+                    );
+                  }
+                },
+              ),
+              _action(
+                context,
+                icon: Icons.biotech_outlined,
+                label: l10n.invOrderTests,
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (_) => IssuedInvestigationsScreen(patientId: a.patientId, patientName: a.patientName),
+                    builder: (_) => IssueInvestigationScreen(
+                      patientId: a.patientId,
+                      patientName: a.patientName,
+                      onIssued: (labs, radiology) => _keepInFile([
+                        for (final t in labs) (RecordKind.test, t),
+                        for (final t in radiology) (RecordKind.radiology, t),
+                      ]),
+                    ),
                   ),
                 ),
               ),
-            ],
+              // the tests this doctor ordered for this patient, and whether results are in: read on this device
+              if (mine.isNotEmpty)
+                _action(
+                  context,
+                  icon: ready > 0 ? Icons.assignment_turned_in_outlined : Icons.assignment_outlined,
+                  label: ready > 0 ? l10n.invDoctorOrdersReady(ready) : l10n.invDoctorOrders,
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => IssuedInvestigationsScreen(patientId: a.patientId, patientName: a.patientName),
+                    ),
+                  ),
+                ),
+            ]),
 
             // the state of the visit — two to a row, the ones that end it marked as such
             if (open) ...[
@@ -489,6 +467,70 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
               ]),
             ],
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// The strip of states the queue can be narrowed to: one pill each, the chosen one filled in the primary pair of the
+/// theme, the others a soft chip with a dot in the colour of the state they stand for.
+class _StatusFilterStrip extends StatelessWidget {
+  final String? selected;
+  final ValueChanged<String?> onPick;
+  const _StatusFilterStrip({required this.selected, required this.onPick});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final cs = Theme.of(context).colorScheme;
+
+    Widget pill({required String label, required bool on, required VoidCallback onTap, Color? dot, IconData? icon}) {
+      final ink = on ? cs.onPrimary : cs.onSurface;
+
+      return Padding(
+        padding: const EdgeInsetsDirectional.only(end: 8),
+        child: Material(
+          color: on ? cs.primary : cs.surfaceContainerHighest.withValues(alpha: 0.55),
+          shape: StadiumBorder(side: BorderSide(color: on ? cs.primary : cs.outlineVariant)),
+          child: InkWell(
+            customBorder: const StadiumBorder(),
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (icon != null) ...[Icon(icon, size: 17, color: ink), const SizedBox(width: 6)],
+                  if (dot != null && !on) ...[
+                    Container(width: 8, height: 8, decoration: BoxDecoration(color: dot, shape: BoxShape.circle)),
+                    const SizedBox(width: 7),
+                  ],
+                  Text(label, style: TextStyle(color: ink, fontSize: 14, fontWeight: on ? FontWeight.w700 : FontWeight.w500)),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Material(
+      color: cs.surface,
+      elevation: 1,
+      child: SizedBox(
+        height: 58,
+        child: MouseWheelHorizontalScroll(
+          builder: (context, controller) => ListView(
+            controller: controller,
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+            children: [
+              pill(label: l10n.clinicQueueAllStatuses, on: selected == null, icon: Icons.view_agenda_outlined, onTap: () => onPick(null)),
+              for (final s in _statuses)
+                pill(label: _statusLabel(s, l10n), on: selected == s, dot: _statusColor(s), onTap: () => onPick(s)),
+            ],
+          ),
         ),
       ),
     );

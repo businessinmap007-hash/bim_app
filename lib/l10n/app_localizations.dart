@@ -14521,6 +14521,12 @@ abstract class AppLocalizations {
   /// **'بدء الكشف'**
   String get clinicStartVisit;
 
+  /// No description provided for @clinicCreateFileShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنشاء ملف'**
+  String get clinicCreateFileShort;
+
   /// No description provided for @importHubNothing.
   ///
   /// In ar, this message translates to:
