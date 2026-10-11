@@ -40,6 +40,9 @@ class BookingScreen extends ConsumerStatefulWidget {
   /// «كورس»: the group chosen on the board — the dates and the group are its own, so the form does not ask them.
   final int? courseGroupId;
 
+  /// «بالدور»: the day named on the board — the business gives the turn and the time, so no time is asked.
+  final DateTime? queueDate;
+
   const BookingScreen({
     super.key,
     required this.businessId,
@@ -51,6 +54,7 @@ class BookingScreen extends ConsumerStatefulWidget {
     this.initialEndsAt,
     this.initialPartySize,
     this.courseGroupId,
+    this.queueDate,
   });
 
   @override
@@ -310,7 +314,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     final needsUnit = form.shape?.needsUnit ?? false;
     final dayUse = _dayUseActive;
 
-    if ((hasDateRange || hasDatetime || dayUse) && _startsAt == null) {
+    if ((hasDateRange || hasDatetime || dayUse) && _startsAt == null && widget.queueDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.bookingDateRequired)));
       return;
     }
@@ -321,6 +325,24 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
 
     setState(() => _submitting = true);
     try {
+      if (widget.queueDate != null) {
+        final booked = await ref.read(bookingApiProvider).createQueued(
+          businessId: widget.businessId,
+          serviceId: widget.offering.serviceId ?? 0,
+          offeringId: widget.offering.id,
+          date: widget.queueDate!,
+          notes: _notesController.text.trim(),
+          meta: _buildMeta(fields),
+        );
+        if (mounted) {
+          final when = booked.queue?.expectedAt ?? booked.startsAt;
+          final time = when == null ? '' : DateFormat.jm(Localizations.localeOf(context).toString()).format(when);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.queueTurnTaken(booked.queueTurn ?? 0, time))));
+          Navigator.of(context).pop(true);
+        }
+        return;
+      }
+
       await ref.read(bookingApiProvider).create(
         businessId: widget.businessId,
         serviceId: widget.offering.serviceId ?? 0,
@@ -393,6 +415,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
               .where((f) => !(pageShape != null && !pageShape.askChildren && f.key == 'children_count'))
               // a group chosen on the board brings its own dates, group and level
               .where((f) => !(widget.courseGroupId != null && (f.key == 'date_range' || f.key == 'datetime' || f.key == 'group' || f.key == 'level')))
+              .where((f) => !(widget.queueDate != null && f.key == 'datetime'))
               .toList();
           final needsUnit = form.shape?.needsUnit ?? false;
           final units = widget.offering.units.isNotEmpty ? widget.offering.units : form.units;

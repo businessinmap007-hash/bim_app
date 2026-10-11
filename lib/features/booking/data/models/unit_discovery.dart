@@ -201,7 +201,12 @@ class UnitCatalog {
   final List<UnitKindGroup> kinds;
   final UnitShape? shape;
 
-  const UnitCatalog({this.serviceId, this.kinds = const [], this.shape});
+  /// How the business takes its appointments: `slots` (the customer picks a time) or `queue` (the next turn of the day).
+  final String flow;
+
+  const UnitCatalog({this.serviceId, this.kinds = const [], this.shape, this.flow = 'slots'});
+
+  bool get isQueue => flow == 'queue';
 
   bool get hasUnits => kinds.any((k) => k.units.isNotEmpty);
 
@@ -211,6 +216,28 @@ class UnitCatalog {
         .map((e) => UnitKindGroup.fromJson(e as Map<String, dynamic>))
         .toList(),
     shape: json['shape'] is Map<String, dynamic> ? UnitShape.fromJson(json['shape'] as Map<String, dynamic>) : null,
+    flow: json['flow'] as String? ?? 'slots',
+  );
+}
+
+/// The turn a customer would get on a day, and when it should come — `GET /discovery/appointments/{id}/queue`.
+class QueuePreview {
+  final bool full;
+  final bool closed;
+  final int turn;
+  final int ahead;
+  final DateTime? expectedAt;
+  final int durationMinutes;
+
+  const QueuePreview({this.full = false, this.closed = false, this.turn = 1, this.ahead = 0, this.expectedAt, this.durationMinutes = 30});
+
+  factory QueuePreview.fromJson(Map<String, dynamic> json) => QueuePreview(
+    full: json['full'] as bool? ?? false,
+    closed: json['closed'] as bool? ?? false,
+    turn: (json['turn'] as num?)?.toInt() ?? 1,
+    ahead: (json['ahead'] as num?)?.toInt() ?? 0,
+    expectedAt: DateTime.tryParse((json['expected_at'] as String? ?? '').replaceFirst(' ', 'T')),
+    durationMinutes: (json['duration_minutes'] as num?)?.toInt() ?? 30,
   );
 }
 

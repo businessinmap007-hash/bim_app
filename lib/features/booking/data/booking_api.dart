@@ -341,6 +341,44 @@ class BookingApi {
     return DayGrid.fromJson(data);
   }
 
+  /// «بالدور»: the turn a customer would get on [date] and when it should come. Nothing is taken until [createQueued].
+  Future<QueuePreview> appointmentQueue({required int businessId, required DateTime date, int? offeringId}) async {
+    final day = '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+    final data =
+        await _client.get('/discovery/appointments/$businessId/queue', query: {'date': day, 'offering_id': ?offeringId})
+            as Map<String, dynamic>;
+
+    return QueuePreview.fromJson(data);
+  }
+
+  /// «بالدور»: book by turn — the day is named, the business gives the turn and the time.
+  Future<Booking> createQueued({
+    required int businessId,
+    required int serviceId,
+    required int offeringId,
+    required DateTime date,
+    String? notes,
+    Map<String, dynamic>? meta,
+  }) async {
+    final day = '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+    final data =
+        await _client.post(
+              '/bookings/queue',
+              data: {
+                'business_id': businessId,
+                'service_id': serviceId,
+                'offering_id': offeringId,
+                'offering_type': 'service_price',
+                'date': day,
+                if (notes != null && notes.isNotEmpty) 'notes': notes,
+                if (meta != null && meta.isNotEmpty) 'meta': meta,
+              },
+            )
+            as Map<String, dynamic>;
+
+    return _booking(data);
+  }
+
   /// The real named units this business has (rooms/tables/pitches), grouped
   /// by kind with price and — when a date window is given — live
   /// availability. See Api\V2\UnitDiscoveryController. Public endpoint, no

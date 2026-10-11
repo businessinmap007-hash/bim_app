@@ -7575,6 +7575,66 @@ class AppLocalizationsEn extends AppLocalizations {
   String get arrivalNoticePreview => 'This is how the customer reads it';
 
   @override
+  String get queueYourTurn => 'Your turn';
+
+  @override
+  String queueTurnNumber(Object n) {
+    return 'Turn number $n';
+  }
+
+  @override
+  String queueExpectedAt(Object time) {
+    return 'Around $time';
+  }
+
+  @override
+  String queueAhead(Object n) {
+    return '$n ahead of you';
+  }
+
+  @override
+  String get queueNoneAhead => 'Nobody ahead of you';
+
+  @override
+  String get queueFull => 'This day\'s turns are used up';
+
+  @override
+  String get queueClosed => 'Closed on this day';
+
+  @override
+  String get queueTake => 'Take my turn';
+
+  @override
+  String queueTurnTaken(Object n, Object time) {
+    return 'Your turn number $n is booked — around $time';
+  }
+
+  @override
+  String get queueEstimateNote =>
+      'The time is approximate and moves with the queue.';
+
+  @override
+  String get bookingFlowTitle => 'How bookings are taken';
+
+  @override
+  String get bookingFlowIntro =>
+      'Choose how your customers book their appointments with you.';
+
+  @override
+  String get bookingFlowSlots => 'By appointment';
+
+  @override
+  String get bookingFlowSlotsSub =>
+      'The customer picks the day and a time from the free ones.';
+
+  @override
+  String get bookingFlowQueue => 'By turn';
+
+  @override
+  String get bookingFlowQueueSub =>
+      'The customer picks only the day and gets the next turn with the approximate time.';
+
+  @override
   String get bookingPickUnitTitle => 'Choose your room';
 
   @override

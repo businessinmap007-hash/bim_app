@@ -36,6 +36,8 @@ import '../../../data_import/presentation/screens/data_import_hub_screen.dart';
 import '../../../course/application/course_providers.dart';
 import '../../../course/presentation/screens/course_groups_screen.dart';
 import '../../../booking_settings/presentation/screens/arrival_notice_screen.dart';
+import '../../../booking_settings/presentation/screens/booking_flow_screen.dart';
+import '../../../booking/application/booking_providers.dart';
 import '../../../hospital/presentation/screens/hospital_doctors_screen.dart';
 import '../../../hospital/presentation/screens/hospital_invitations_screen.dart';
 import '../../../hospital/presentation/screens/hospital_procedure_requests_screen.dart';
@@ -75,6 +77,9 @@ class ServicesSettingsScreen extends ConsumerWidget {
     // only a business that sells courses has groups to open
     final hasCourses = ref.watch(myCoursesProvider).valueOrNull?.courses.isNotEmpty ?? false;
     final authState = ref.watch(authControllerProvider);
+    // a business drawn as an appointment (a salon, a craftsman) chooses between a time and a turn
+    final isAppointment = authState is AuthSignedIn &&
+        (ref.watch(unitCatalogProvider(authState.user.id)).valueOrNull?.shape?.code == 'appointment');
     final isCarrier =
         authState is AuthSignedIn && authState.user.isShippingCarrier;
     // a lab, a radiology centre, a hospital or a medical centre takes investigation orders
@@ -99,6 +104,7 @@ class ServicesSettingsScreen extends ConsumerWidget {
           hasShopAddons: hasShopAddons,
           hasStayUnits: hasStayUnits,
           hasCourses: hasCourses,
+          isAppointment: isAppointment,
         ),
         data: (keys) => _ServiceList(
           keys: keys,
@@ -110,6 +116,7 @@ class ServicesSettingsScreen extends ConsumerWidget {
           hasShopAddons: hasShopAddons,
           hasStayUnits: hasStayUnits,
           hasCourses: hasCourses,
+          isAppointment: isAppointment,
         ),
       ),
     );
@@ -141,6 +148,9 @@ class _ServiceList extends StatelessWidget {
 
   /// The business sells courses (it has a priced course) — it opens groups of them.
   final bool hasCourses;
+
+  /// The business takes appointments with itself — it may book them by time or by turn.
+  final bool isAppointment;
   const _ServiceList({
     required this.keys,
     required this.menuKinds,
@@ -151,6 +161,7 @@ class _ServiceList extends StatelessWidget {
     this.hasShopAddons = false,
     this.hasStayUnits = false,
     this.hasCourses = false,
+    this.isAppointment = false,
   });
 
   bool _has(String key) => keys == null || keys!.contains(key);
@@ -294,6 +305,12 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.schedule_rounded,
         title: l10n.arrivalNoticeTitle,
         builder: (_) => const ArrivalNoticeScreen(),
+      ),
+      _Tile(
+        show: _has('bookings') && isAppointment,
+        leading: Icons.format_list_numbered_rounded,
+        title: l10n.bookingFlowTitle,
+        builder: (_) => const BookingFlowScreen(),
       ),
       _Tile(
         show: _has('bookings') && hasCourses,

@@ -36,7 +36,7 @@ class BookingShapeTab extends ConsumerWidget {
         if (shape != null && shape.multiSelect) return CenterTestsTab(centerId: businessId);
         // an appointment with the business itself has no units: its own board, whatever the unit list says
         if (shape != null && shape.code == 'appointment') {
-          return AppointmentBoardTab(businessId: businessId, shape: shape, fallback: fallback);
+          return AppointmentBoardTab(businessId: businessId, shape: shape, fallback: fallback, queue: catalog.isQueue);
         }
         // a course has no units either: its groups are the board
         if (shape != null && shape.code == 'course') {

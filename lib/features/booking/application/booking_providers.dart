@@ -178,3 +178,14 @@ final appointmentGridProvider = FutureProvider.autoDispose.family<DayGrid, Appoi
     offeringId: p.offeringId,
   );
 });
+
+typedef AppointmentQueueParams = ({int businessId, String date, int? offeringId});
+
+/// The turn a customer would get on a day at a business that books by turn, and when it should come.
+final appointmentQueueProvider = FutureProvider.autoDispose.family<QueuePreview, AppointmentQueueParams>((ref, p) {
+  return ref.watch(bookingApiProvider).appointmentQueue(
+    businessId: p.businessId,
+    date: DateTime.parse(p.date),
+    offeringId: p.offeringId,
+  );
+});

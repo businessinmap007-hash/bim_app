@@ -7538,6 +7538,64 @@ class AppLocalizationsAr extends AppLocalizations {
   String get arrivalNoticePreview => 'هكذا يقرؤه العميل';
 
   @override
+  String get queueYourTurn => 'دورك';
+
+  @override
+  String queueTurnNumber(Object n) {
+    return 'الدور رقم $n';
+  }
+
+  @override
+  String queueExpectedAt(Object time) {
+    return 'الساعة تقريبًا $time';
+  }
+
+  @override
+  String queueAhead(Object n) {
+    return 'أمامك $n';
+  }
+
+  @override
+  String get queueNoneAhead => 'لا أحد أمامك';
+
+  @override
+  String get queueFull => 'اكتمل دور هذا اليوم';
+
+  @override
+  String get queueClosed => 'النشاط مغلق في هذا اليوم';
+
+  @override
+  String get queueTake => 'احجز دوري';
+
+  @override
+  String queueTurnTaken(Object n, Object time) {
+    return 'تم حجز دورك رقم $n — الساعة تقريبًا $time';
+  }
+
+  @override
+  String get queueEstimateNote => 'الوقت تقريبي ويتغير مع سير الطابور.';
+
+  @override
+  String get bookingFlowTitle => 'طريقة الحجز';
+
+  @override
+  String get bookingFlowIntro => 'اختر كيف يحجز عملاؤك مواعيدهم معك.';
+
+  @override
+  String get bookingFlowSlots => 'بالموعد';
+
+  @override
+  String get bookingFlowSlotsSub =>
+      'العميل يختار اليوم والوقت من الأوقات المتاحة.';
+
+  @override
+  String get bookingFlowQueue => 'بالدور';
+
+  @override
+  String get bookingFlowQueueSub =>
+      'العميل يختار اليوم فقط ويأخذ الدور التالي مع الساعة التقريبية.';
+
+  @override
   String get bookingPickUnitTitle => 'اختر غرفتك';
 
   @override

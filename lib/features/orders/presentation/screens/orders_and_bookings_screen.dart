@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import '../../../../shared/widgets/arrival_notice_banner.dart';
 import '../../../../shared/widgets/app_bar_tab_bar.dart';
 import '../../../cart/presentation/widgets/weight_picker.dart';
@@ -1173,6 +1174,19 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
             if (booking.notes != null && booking.notes!.isNotEmpty) ...[
               const SizedBox(height: 12),
               Text(booking.notes!, style: Theme.of(context).textTheme.bodySmall),
+            ],
+            // «بالدور»: where this booking stands in the day's queue right now
+            if (booking.queue != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                [
+                  l10n.queueTurnNumber(booking.queue!.turn),
+                  booking.queue!.ahead == 0 ? l10n.queueNoneAhead : l10n.queueAhead(booking.queue!.ahead),
+                  if (booking.queue!.expectedAt != null)
+                    l10n.queueExpectedAt(DateFormat.jm(Localizations.localeOf(context).toString()).format(booking.queue!.expectedAt!)),
+                ].join(' · '),
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
             ],
             // the business's own «be there N minutes early» while the booking still stands
             if ((booking.arrivalNotice ?? '').isNotEmpty && (booking.status == 'pending' || booking.status == 'accepted')) ...[

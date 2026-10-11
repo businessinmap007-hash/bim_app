@@ -13891,6 +13891,102 @@ abstract class AppLocalizations {
   /// **'هكذا يقرؤه العميل'**
   String get arrivalNoticePreview;
 
+  /// No description provided for @queueYourTurn.
+  ///
+  /// In ar, this message translates to:
+  /// **'دورك'**
+  String get queueYourTurn;
+
+  /// No description provided for @queueTurnNumber.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدور رقم {n}'**
+  String queueTurnNumber(Object n);
+
+  /// No description provided for @queueExpectedAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'الساعة تقريبًا {time}'**
+  String queueExpectedAt(Object time);
+
+  /// No description provided for @queueAhead.
+  ///
+  /// In ar, this message translates to:
+  /// **'أمامك {n}'**
+  String queueAhead(Object n);
+
+  /// No description provided for @queueNoneAhead.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا أحد أمامك'**
+  String get queueNoneAhead;
+
+  /// No description provided for @queueFull.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتمل دور هذا اليوم'**
+  String get queueFull;
+
+  /// No description provided for @queueClosed.
+  ///
+  /// In ar, this message translates to:
+  /// **'النشاط مغلق في هذا اليوم'**
+  String get queueClosed;
+
+  /// No description provided for @queueTake.
+  ///
+  /// In ar, this message translates to:
+  /// **'احجز دوري'**
+  String get queueTake;
+
+  /// No description provided for @queueTurnTaken.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حجز دورك رقم {n} — الساعة تقريبًا {time}'**
+  String queueTurnTaken(Object n, Object time);
+
+  /// No description provided for @queueEstimateNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوقت تقريبي ويتغير مع سير الطابور.'**
+  String get queueEstimateNote;
+
+  /// No description provided for @bookingFlowTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة الحجز'**
+  String get bookingFlowTitle;
+
+  /// No description provided for @bookingFlowIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر كيف يحجز عملاؤك مواعيدهم معك.'**
+  String get bookingFlowIntro;
+
+  /// No description provided for @bookingFlowSlots.
+  ///
+  /// In ar, this message translates to:
+  /// **'بالموعد'**
+  String get bookingFlowSlots;
+
+  /// No description provided for @bookingFlowSlotsSub.
+  ///
+  /// In ar, this message translates to:
+  /// **'العميل يختار اليوم والوقت من الأوقات المتاحة.'**
+  String get bookingFlowSlotsSub;
+
+  /// No description provided for @bookingFlowQueue.
+  ///
+  /// In ar, this message translates to:
+  /// **'بالدور'**
+  String get bookingFlowQueue;
+
+  /// No description provided for @bookingFlowQueueSub.
+  ///
+  /// In ar, this message translates to:
+  /// **'العميل يختار اليوم فقط ويأخذ الدور التالي مع الساعة التقريبية.'**
+  String get bookingFlowQueueSub;
+
   /// No description provided for @bookingPickUnitTitle.
   ///
   /// In ar, this message translates to:

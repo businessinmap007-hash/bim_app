@@ -256,6 +256,19 @@ class BookingSettingsApi {
     return (minutes: (data['minutes'] as num?)?.toInt(), text: data['text'] as String?, message: data['message'] as String?);
   }
 
+  /// «بالموعد أم بالدور»: how the business takes its appointments — `slots` or `queue`.
+  Future<String> bookingFlow() async {
+    final data = await _client.get('/business/booking-settings/flow') as Map<String, dynamic>;
+
+    return data['flow'] as String? ?? 'slots';
+  }
+
+  Future<String> saveBookingFlow(String flow) async {
+    final data = await _client.put('/business/booking-settings/flow', data: {'flow': flow}) as Map<String, dynamic>;
+
+    return data['flow'] as String? ?? 'slots';
+  }
+
   Future<WorkingHours> hours() async {
     final data =
         await _client.get('/business/working-hours') as Map<String, dynamic>;

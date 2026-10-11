@@ -62,6 +62,22 @@ class DepositAsPayment {
   );
 }
 
+/// «بالدور»: where a waiting booking stands in its day's queue right now.
+class BookingQueueState {
+  final int turn;
+  final int ahead;
+  final DateTime? expectedAt;
+
+  const BookingQueueState({required this.turn, this.ahead = 0, this.expectedAt});
+
+  factory BookingQueueState.fromJson(Map<String, dynamic> json) => BookingQueueState(
+    turn: (json['turn'] as num?)?.toInt() ?? 0,
+    ahead: (json['ahead'] as num?)?.toInt() ?? 0,
+    // a wall-clock time of the business's own day — read as it is
+    expectedAt: DateTime.tryParse((json['expected_at'] as String? ?? '').replaceFirst(' ', 'T')),
+  );
+}
+
 /// The hotel's own room number for a stay — shown to the customer only once the stay has started.
 class BookingRoom {
   final int id;
@@ -106,6 +122,10 @@ class Booking {
   /// «يجب التواجد قبل الموعد بـ ١٥ دقيقة» — the business's own notice, as it composed it.
   final String? arrivalNotice;
 
+  /// The number the business gave it when it was booked by turn, and its live place in the queue.
+  final int? queueTurn;
+  final BookingQueueState? queue;
+
   /// `booking_stay` for a hotel stay — the only kind that has rooms.
   final String? bookableItemType;
   final BookingRoom? room;
@@ -140,6 +160,8 @@ class Booking {
     this.deposit,
     this.depositAsPayment = const DepositAsPayment(),
     this.arrivalNotice,
+    this.queueTurn,
+    this.queue,
     this.bookableItemType,
     this.room,
     this.isDayUse = false,
@@ -192,6 +214,8 @@ class Booking {
       bookableItemType: bookable?['item_type'] as String?,
       isDayUse: json['meta'] is Map<String, dynamic> && (json['meta'] as Map<String, dynamic>)['day_use'] == true,
       room: json['room'] is Map<String, dynamic> ? BookingRoom(id: (json['room'] as Map<String, dynamic>)['id'] as int, number: '${(json['room'] as Map<String, dynamic>)['number']}') : null,
+      queueTurn: (json['queue_turn'] as num?)?.toInt(),
+      queue: json['queue'] is Map<String, dynamic> ? BookingQueueState.fromJson(json['queue'] as Map<String, dynamic>) : null,
       arrivalNotice: json['arrival_notice'] is Map<String, dynamic> ? (json['arrival_notice'] as Map<String, dynamic>)['message'] as String? : null,
       depositAsPayment: json['deposit_as_payment'] is Map<String, dynamic> ? DepositAsPayment.fromJson(json['deposit_as_payment'] as Map<String, dynamic>) : const DepositAsPayment(),
     );

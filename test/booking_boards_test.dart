@@ -263,4 +263,40 @@ void main() {
     expect(find.text('يجب التواجد قبل الموعد بـ 15 دقيقة.'), findsOneWidget);
     expect(find.byType(SizedBox), findsWidgets);
   });
+
+  testWidgets('queue: the customer is shown the turn and the time, and cannot take a turn of a full day', (tester) async {
+    final shape = const UnitShape(code: 'appointment', name: 'موعد', pattern: 'appointment');
+    const service = OfferingItem(id: 11, source: 'price', label: 'قص وتصفيف', price: 150, currency: 'EGP', serviceId: 1, itemType: 'booking_appointment', action: 'book', durationMinutes: 45);
+    final day = DateTime.now();
+    var full = false;
+
+    Future<void> pump() async {
+      await tester.pumpWidget(
+        _host(
+          AppointmentBoardTab(businessId: 7, shape: shape, fallback: const Text('fallback'), queue: true),
+          [
+            businessOfferingsProvider.overrideWith((ref, id) async => [service]),
+            appointmentQueueProvider.overrideWith(
+              (ref, p) async => QueuePreview(full: full, turn: 3, ahead: 2, expectedAt: DateTime(day.year, day.month, day.day, 11, 30), durationMinutes: 45),
+            ),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+    }
+
+    await pump();
+    expect(find.text('الدور رقم 3'), findsOneWidget);
+    expect(find.text('أمامك 2'), findsOneWidget);
+    expect(find.textContaining('تقريبًا'), findsWidgets);
+    // no grid of times in this mode
+    expect(find.byType(BookingTimeGrid), findsNothing);
+    expect(_bar(tester).onPressed, isNotNull);
+
+    full = true;
+    await tester.pumpWidget(const SizedBox());
+    await pump();
+    expect(find.text('اكتمل دور هذا اليوم'), findsOneWidget);
+    expect(_bar(tester).onPressed, isNull);
+  });
 }

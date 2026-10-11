@@ -20,7 +20,10 @@ class AppointmentBoardTab extends ConsumerStatefulWidget {
   final UnitShape shape;
   final Widget fallback;
 
-  const AppointmentBoardTab({super.key, required this.businessId, required this.shape, required this.fallback});
+  /// «بالدور»: the business gives the turn and the time — no grid of times.
+  final bool queue;
+
+  const AppointmentBoardTab({super.key, required this.businessId, required this.shape, required this.fallback, this.queue = false});
 
   @override
   ConsumerState<AppointmentBoardTab> createState() => _AppointmentBoardTabState();
@@ -37,6 +40,8 @@ class _AppointmentBoardTabState extends ConsumerState<AppointmentBoardTab> {
     final now = DateTime.now();
     _day = DateTime(now.year, now.month, now.day);
   }
+
+  void _set(VoidCallback change) => setState(change);
 
   String _dateKey(DateTime d) =>
       '${d.year.toString().padLeft(4, '0')}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
@@ -56,6 +61,7 @@ class _AppointmentBoardTabState extends ConsumerState<AppointmentBoardTab> {
         if (services.isEmpty) return widget.fallback;
 
         final chosen = services.firstWhere((o) => o.id == _offeringId, orElse: () => services.first);
+        if (widget.queue) return _queueBoard(context, l10n, services, chosen);
         final grid = ref.watch(appointmentGridProvider((businessId: widget.businessId, date: _dateKey(_day), offeringId: chosen.id)));
         final slotData = grid.valueOrNull?.slots.where((s) => s.startsAt == _slot).firstOrNull;
 
@@ -68,17 +74,21 @@ class _AppointmentBoardTabState extends ConsumerState<AppointmentBoardTab> {
             label: l10n.bookingConfirmAppointment,
             onPressed: slotData == null
                 ? null
-                : () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => BookingScreen(
-                        businessId: widget.businessId,
-                        shape: widget.shape,
-                        offering: chosen,
-                        initialStartsAt: slotData.startsAt,
-                        initialEndsAt: slotData.endsAt,
+                : () async {
+                    await Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => BookingScreen(
+                          businessId: widget.businessId,
+                          shape: widget.shape,
+                          offering: chosen,
+                          initialStartsAt: slotData.startsAt,
+                          initialEndsAt: slotData.endsAt,
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                    // the time just booked is taken now
+                    ref.invalidate(appointmentGridProvider);
+                  },
           ),
           children: [
             BookingSectionCard(
@@ -129,6 +139,99 @@ class _AppointmentBoardTabState extends ConsumerState<AppointmentBoardTab> {
           ],
         );
       },
+    );
+  }
+}
+
+extension on _AppointmentBoardTabState {
+  /// «بالدور»: the service, the day, then the turn this customer would get and when it should come.
+  Widget _queueBoard(BuildContext context, AppLocalizations l10n, List<OfferingItem> services, OfferingItem chosen) {
+    final theme = Theme.of(context);
+    final locale = Localizations.localeOf(context).toString();
+    final preview = ref.watch(appointmentQueueProvider((businessId: widget.businessId, date: _dateKey(_day), offeringId: chosen.id)));
+    final p = preview.valueOrNull;
+    final canTake = p != null && !p.full && !p.closed;
+
+    return BoardScaffold(
+      bottom: BookingSummaryBar(
+        summary: canTake && p.expectedAt != null ? '${chosen.label} — ${l10n.queueTurnNumber(p.turn)}' : '',
+        price: canTake ? chosen.price : null,
+        label: l10n.queueTake,
+        onPressed: !canTake
+            ? null
+            : () async {
+                await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => BookingScreen(businessId: widget.businessId, shape: widget.shape, offering: chosen, queueDate: _day),
+                  ),
+                );
+                // the turn just taken moves the next one on
+                ref.invalidate(appointmentQueueProvider);
+              },
+      ),
+      children: [
+        BookingSectionCard(
+          title: l10n.bookingServiceTitle,
+          child: Column(
+            children: [
+              for (final s in services)
+                _ServiceRow(offering: s, selected: s.id == chosen.id, onTap: () => _set(() => _offeringId = s.id)),
+            ],
+          ),
+        ),
+        const SizedBox(height: 14),
+        BookingSectionCard(
+          title: l10n.bookingPickDayTitle,
+          child: BookingDayStrip(selected: _day, onPick: (d) => _set(() => _day = d)),
+        ),
+        const SizedBox(height: 14),
+        BookingSectionCard(
+          title: l10n.queueYourTurn,
+          child: preview.when(
+            loading: () => const Padding(padding: EdgeInsets.all(16), child: Center(child: CircularProgressIndicator())),
+            error: (_, _) => Text(l10n.commonSomethingWentWrong),
+            data: (q) {
+              if (q.closed) return Text(l10n.queueClosed, style: theme.textTheme.bodyMedium);
+              if (q.full) return Text(l10n.queueFull, style: theme.textTheme.bodyMedium);
+
+              return Row(
+                children: [
+                  Container(
+                    width: 64,
+                    height: 64,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(color: theme.colorScheme.primary, borderRadius: BorderRadius.circular(16)),
+                    child: Text(
+                      '${q.turn}',
+                      style: TextStyle(color: theme.colorScheme.onPrimary, fontSize: 28, fontWeight: FontWeight.w800),
+                    ),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(l10n.queueTurnNumber(q.turn), style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
+                        if (q.expectedAt != null)
+                          Text(
+                            l10n.queueExpectedAt(DateFormat.jm(locale).format(q.expectedAt!)),
+                            style: theme.textTheme.bodyLarge,
+                          ),
+                        Text(
+                          q.ahead == 0 ? l10n.queueNoneAhead : l10n.queueAhead(q.ahead),
+                          style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 10),
+        Text(l10n.queueEstimateNote, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+      ],
     );
   }
 }
