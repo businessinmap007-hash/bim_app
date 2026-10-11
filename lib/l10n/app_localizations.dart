@@ -14275,6 +14275,66 @@ abstract class AppLocalizations {
   /// **'المرضى وتاريخهم المرضي — تُحفظ على هذا الجهاز فقط'**
   String get importHubPatientsSub;
 
+  /// No description provided for @importHubUnits.
+  ///
+  /// In ar, this message translates to:
+  /// **'الغرف والوحدات'**
+  String get importHubUnits;
+
+  /// No description provided for @importHubUnitsSub.
+  ///
+  /// In ar, this message translates to:
+  /// **'الغرف أو الملاعب أو القاعات برقمها ونوعها وسعتها'**
+  String get importHubUnitsSub;
+
+  /// No description provided for @unitsImportIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الخدمة ونوع الوحدة مرة واحدة، ثم الملف: كل صف وحدة (رقمها واسمها ونوعها وسعتها وعددها). ما كان موجودًا بنفس الرقم يُترك كما هو.'**
+  String get unitsImportIntro;
+
+  /// No description provided for @unitsImportService.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخدمة'**
+  String get unitsImportService;
+
+  /// No description provided for @unitsImportType.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع الوحدة'**
+  String get unitsImportType;
+
+  /// No description provided for @unitsImportKind.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصنيف الوحدة إن لم يحدّده الملف'**
+  String get unitsImportKind;
+
+  /// No description provided for @unitsImportKindHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُطابَق عمود «النوع» في الملف مع تصنيفاتك أولًا'**
+  String get unitsImportKindHelp;
+
+  /// No description provided for @unitsImportKindNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون تصنيف'**
+  String get unitsImportKindNone;
+
+  /// No description provided for @unitsImportNext.
+  ///
+  /// In ar, this message translates to:
+  /// **'التالي: اختيار الملف'**
+  String get unitsImportNext;
+
+  /// No description provided for @unitsImportNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد خدمة بوحدات قابلة للحجز لهذا الحساب.'**
+  String get unitsImportNone;
+
   /// No description provided for @importHubNothing.
   ///
   /// In ar, this message translates to:
@@ -14868,6 +14928,36 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تعذّر تنزيل الصور. حاول مرة أخرى.'**
   String get invPhotosSaveFailed;
+
+  /// No description provided for @invAddResultPdf.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرفاق تقرير PDF'**
+  String get invAddResultPdf;
+
+  /// No description provided for @invResultPdfCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} ملف PDF مرفق'**
+  String invResultPdfCount(Object count);
+
+  /// No description provided for @invPdfReport.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقرير PDF {n}'**
+  String invPdfReport(Object n);
+
+  /// No description provided for @invOpenPdf.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح'**
+  String get invOpenPdf;
+
+  /// No description provided for @invPdfOpenFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر فتح الملف.'**
+  String get invPdfOpenFailed;
 
   /// No description provided for @invCurrency.
   ///

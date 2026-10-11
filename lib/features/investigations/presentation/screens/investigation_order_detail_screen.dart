@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -45,13 +47,50 @@ class _InvestigationOrderDetailScreenState extends ConsumerState<InvestigationOr
     }
   }
 
+  List<File> get _localImages => _local.where((f) => !f.path.toLowerCase().endsWith('.pdf')).toList();
+  List<File> get _localDocs => _local.where((f) => f.path.toLowerCase().endsWith('.pdf')).toList();
+
+  Future<void> _openUrl(String url) async {
+    final l10n = AppLocalizations.of(context)!;
+    final ok = await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+    if (!ok && mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.invPdfOpenFailed)));
+  }
+
+  /// A report kept on this phone is handed to whatever PDF viewer the person picks.
+  Future<void> _openLocal(File file) async {
+    await SharePlus.instance.share(ShareParams(files: [XFile(file.path, mimeType: 'application/pdf')]));
+  }
+
+  Widget _pdfTiles(AppLocalizations l10n, {List<String> urls = const [], List<File> files = const []}) {
+    return Column(
+      children: [
+        for (var i = 0; i < urls.length; i++)
+          ListTile(
+            dense: true,
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.picture_as_pdf_outlined),
+            title: Text(l10n.invPdfReport('${i + 1}')),
+            trailing: TextButton(onPressed: () => _openUrl(urls[i]), child: Text(l10n.invOpenPdf)),
+          ),
+        for (var i = 0; i < files.length; i++)
+          ListTile(
+            dense: true,
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.picture_as_pdf_outlined),
+            title: Text(l10n.invPdfReport('${i + 1}')),
+            trailing: TextButton(onPressed: () => _openLocal(files[i]), child: Text(l10n.invOpenPdf)),
+          ),
+      ],
+    );
+  }
+
   /// «نسخة على موبايل المريض»: download the photos, keep them in the app's private folder, then tell the server — it
   /// deletes its own once the ordering doctor has read them.
   Future<void> _keepPhotos(InvestigationOrder order, int userId) async {
     final l10n = AppLocalizations.of(context)!;
     setState(() => _busy = true);
     try {
-      await const ResultImageStore().save(userId, order.id, order.resultFiles);
+      await const ResultImageStore().save(userId, order.id, order.resultFiles, documentUrls: order.resultDocuments);
       await ref.read(investigationsApiProvider).markSaved(order.id);
       final files = await const ResultImageStore().local(userId, order.id);
       ref.invalidate(investigationOrderProvider(widget.orderId));
@@ -250,11 +289,12 @@ class _InvestigationOrderDetailScreenState extends ConsumerState<InvestigationOr
             ],
           ),
         ],
-        if (order.resultFiles.isNotEmpty) ...[
+        if (order.resultFiles.isNotEmpty || order.resultDocuments.isNotEmpty) ...[
           const SizedBox(height: 16),
           Text(l10n.invResults, style: theme.textTheme.titleMedium),
           const SizedBox(height: 8),
-          _thumbs(context, order.resultFiles),
+          if (order.resultFiles.isNotEmpty) _thumbs(context, order.resultFiles),
+          if (order.resultDocuments.isNotEmpty) _pdfTiles(l10n, urls: order.resultDocuments),
           if (isPatient) ...[
             const SizedBox(height: 8),
             // the photos stay on the server only until they are safe on the patient's phone
@@ -286,17 +326,18 @@ class _InvestigationOrderDetailScreenState extends ConsumerState<InvestigationOr
             spacing: 8,
             runSpacing: 8,
             children: [
-              for (var i = 0; i < _local.length; i++)
+              for (var i = 0; i < _localImages.length; i++)
                 InkWell(
-                  onTap: () => FullScreenGallery.show(context, urls: [for (final f in _local) f.uri.toString()], initialIndex: i),
+                  onTap: () => FullScreenGallery.show(context, urls: [for (final f in _localImages) f.uri.toString()], initialIndex: i),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: Image.file(_local[i], width: 96, height: 96, fit: BoxFit.cover),
+                    child: Image.file(_localImages[i], width: 96, height: 96, fit: BoxFit.cover),
                   ),
                 ),
             ],
           ),
-        ] else if (isPatient && order.filesPurged && order.resultFiles.isEmpty) ...[
+          if (_localDocs.isNotEmpty) _pdfTiles(l10n, files: _localDocs),
+        ] else if (isPatient && order.filesPurged && order.resultFiles.isEmpty && order.resultDocuments.isEmpty) ...[
           const SizedBox(height: 12),
           Text(l10n.invPhotosPurgedNoCopy, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
         ],

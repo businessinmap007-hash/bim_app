@@ -94,6 +94,7 @@ class InvestigationsApi {
     int id, {
     Map<int, String> texts = const {},
     List<String> photoPaths = const [],
+    List<String> documentPaths = const [],
     String? note,
   }) async => _order(
     await _client.post(
@@ -102,6 +103,8 @@ class InvestigationsApi {
         if (note != null && note.isNotEmpty) 'note': note,
         for (final e in texts.entries) 'texts[${e.key}]': e.value,
         for (var i = 0; i < photoPaths.length; i++) 'images[$i]': await MultipartFile.fromFile(photoPaths[i]),
+        for (var i = 0; i < documentPaths.length; i++)
+          'documents[$i]': await MultipartFile.fromFile(documentPaths[i], filename: 'report_$i.pdf'),
       }),
     ),
   );

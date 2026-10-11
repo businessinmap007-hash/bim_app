@@ -7796,6 +7796,40 @@ class AppLocalizationsEn extends AppLocalizations {
       'Patients and their history — kept on this device only';
 
   @override
+  String get importHubUnits => 'Rooms and units';
+
+  @override
+  String get importHubUnitsSub =>
+      'Rooms, courts or halls with their number, kind and capacity';
+
+  @override
+  String get unitsImportIntro =>
+      'Pick the service and the unit type once, then the file: each row is a unit (number, name, kind, capacity and count). A unit with the same number already there is left as it is.';
+
+  @override
+  String get unitsImportService => 'Service';
+
+  @override
+  String get unitsImportType => 'Unit type';
+
+  @override
+  String get unitsImportKind => 'Unit kind when the file does not say';
+
+  @override
+  String get unitsImportKindHelp =>
+      'The file\'s «type» column is matched with your kinds first';
+
+  @override
+  String get unitsImportKindNone => 'No kind';
+
+  @override
+  String get unitsImportNext => 'Next: choose the file';
+
+  @override
+  String get unitsImportNone =>
+      'No service with bookable units on this account.';
+
+  @override
   String get importHubNothing => 'Nothing to import for this account yet.';
 
   @override
@@ -8143,6 +8177,25 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get invPhotosSaveFailed =>
       'The photos could not be downloaded. Try again.';
+
+  @override
+  String get invAddResultPdf => 'Attach a PDF report';
+
+  @override
+  String invResultPdfCount(Object count) {
+    return '$count PDF attached';
+  }
+
+  @override
+  String invPdfReport(Object n) {
+    return 'PDF report $n';
+  }
+
+  @override
+  String get invOpenPdf => 'Open';
+
+  @override
+  String get invPdfOpenFailed => 'The file could not be opened.';
 
   @override
   String get invCurrency => 'EGP';

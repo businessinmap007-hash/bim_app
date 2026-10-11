@@ -170,10 +170,10 @@ class _ServiceList extends StatelessWidget {
       ),
       // one door for bringing old data in (the menu, the clinic's patient files …) — each business sees what it has
       _Tile(
-        show: _has('menu') || _has('clinic'),
+        show: _has('menu') || _has('clinic') || _has('bookings'),
         leading: Icons.import_export_outlined,
         title: l10n.importHubTitle,
-        builder: (_) => DataImportHubScreen(hasMenu: _has('menu'), hasClinic: _has('clinic')),
+        builder: (_) => DataImportHubScreen(hasMenu: _has('menu'), hasClinic: _has('clinic'), hasUnits: _has('bookings')),
       ),
       _Tile(
         show: _has('menu') && _isFoodShaped,

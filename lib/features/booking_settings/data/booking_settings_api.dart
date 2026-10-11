@@ -97,6 +97,9 @@ class BookingSettingsApi {
     required String code,
     int? lineOptionId,
     int? capacity,
+    String? title,
+    String? description,
+    int? quantity,
   }) async {
     final data = await _client.post(
       '/business/bookable-items',
@@ -106,6 +109,9 @@ class BookingSettingsApi {
         'code': code,
         'line_option_id': ?lineOptionId,
         'capacity': ?capacity,
+        'title': ?title,
+        'description': ?description,
+        'quantity': ?quantity,
       },
     );
     return BookableItemRow.fromJson(data as Map<String, dynamic>);

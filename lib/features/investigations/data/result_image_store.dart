@@ -27,7 +27,7 @@ class ResultImageStore {
 
   /// Download every photo (the links are signed — no login needed) into this order's folder. Returns how many are
   /// kept now; throws if any download fails, so nothing is marked «saved» on a half copy.
-  Future<int> save(int userId, int orderId, List<String> urls) async {
+  Future<int> save(int userId, int orderId, List<String> urls, {List<String> documentUrls = const []}) async {
     final dir = await _dir(userId, orderId);
     final dio = Dio();
     final kept = <File>[];
@@ -39,6 +39,17 @@ class ResultImageStore {
 
       final ext = _extension(urls[i]);
       final file = File('${dir.path}${Platform.pathSeparator}${(i + 1).toString().padLeft(2, '0')}.$ext');
+      await file.writeAsBytes(bytes, flush: true);
+      kept.add(file);
+    }
+
+    // printed reports (PDF) are kept beside the photos, as they are
+    for (var i = 0; i < documentUrls.length; i++) {
+      final res = await dio.get<List<int>>(documentUrls[i], options: Options(responseType: ResponseType.bytes));
+      final bytes = res.data;
+      if (bytes == null || bytes.isEmpty) throw StateError('empty download');
+
+      final file = File('${dir.path}${Platform.pathSeparator}doc_${(i + 1).toString().padLeft(2, '0')}.pdf');
       await file.writeAsBytes(bytes, flush: true);
       kept.add(file);
     }

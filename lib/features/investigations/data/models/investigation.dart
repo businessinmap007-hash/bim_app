@@ -59,6 +59,9 @@ class InvestigationOrder {
   final List<String> requestFiles;
   final List<String> resultFiles;
 
+  /// Printed reports (PDF) the centre attached — opened outside the app, kept like the photos.
+  final List<String> resultDocuments;
+
   /// The server deleted the result photos (they were kept on the patient's phone, or expired).
   final bool filesPurged;
   final bool patientSaved;
@@ -80,6 +83,7 @@ class InvestigationOrder {
     this.issuedAt,
     this.requestFiles = const [],
     this.resultFiles = const [],
+    this.resultDocuments = const [],
     this.filesPurged = false,
     this.patientSaved = false,
     this.filesExpireAt,
@@ -87,7 +91,7 @@ class InvestigationOrder {
 
   bool get canSend => status == issued;
   bool get canCancel => status == issued || status == sent;
-  bool get hasResults => resultFiles.isNotEmpty || items.any((i) => i.hasResult);
+  bool get hasResults => resultFiles.isNotEmpty || resultDocuments.isNotEmpty || items.any((i) => i.hasResult);
   bool get hasTextResults => items.any((i) => i.hasResult);
 
   /// the step of the 4-step line the order stands on (1 = issued … 4 = ready), 0 when it ended
@@ -107,7 +111,9 @@ class InvestigationOrder {
   }
 
   factory InvestigationOrder.fromJson(Map<String, dynamic> json) {
-    List<String> files(String key) => (json[key] as List<dynamic>? ?? [])
+    // `type` is `pdf` for a printed report and `image` (or absent, on older servers) for a photo
+    List<String> files(String key, {bool pdf = false}) => (json[key] as List<dynamic>? ?? [])
+        .where((e) => (((e as Map<String, dynamic>)['type'] as String?) == 'pdf') == pdf)
         .map((e) => Env.assetUrl((e as Map<String, dynamic>)['image'] as String?))
         .whereType<String>()
         .toList();
@@ -128,6 +134,7 @@ class InvestigationOrder {
       issuedAt: DateTime.tryParse(json['issued_at'] as String? ?? '')?.toLocal(),
       requestFiles: files('request_files'),
       resultFiles: files('result_files'),
+      resultDocuments: files('result_files', pdf: true),
       filesPurged: json['files_purged'] as bool? ?? false,
       patientSaved: json['patient_saved'] as bool? ?? false,
       filesExpireAt: DateTime.tryParse(json['files_expire_at'] as String? ?? '')?.toLocal(),

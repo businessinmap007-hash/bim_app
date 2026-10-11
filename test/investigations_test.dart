@@ -125,6 +125,24 @@ void main() {
     expect(const InvestigationOrder(id: 1, status: 'declined').step, 0);
   });
 
+  test('a printed report (pdf) is told apart from the photos and counts as a result', () {
+    final order = InvestigationOrder.fromJson({
+      'id': 9,
+      'status': 'ready',
+      'items': <dynamic>[],
+      'result_files': [
+        {'id': 1, 'image': 'https://x.test/a', 'type': 'image'},
+        {'id': 2, 'image': 'https://x.test/b', 'type': 'pdf'},
+        {'id': 3, 'image': 'https://x.test/c'},
+      ],
+    });
+
+    expect(order.resultFiles, hasLength(2));
+    expect(order.resultDocuments, hasLength(1));
+    expect(order.hasResults, isTrue);
+    expect(InvestigationOrder.fromJson({'id': 1, 'status': 'ready', 'items': <dynamic>[], 'result_files': [{'id': 2, 'image': 'https://x.test/b', 'type': 'pdf'}]}).hasResults, isTrue);
+  });
+
   testWidgets('the doctor picks tests and exams from the lists and sends the order', (tester) async {
     final api = _FakeApi();
     await tester.pumpWidget(_app(const IssueInvestigationScreen(patientId: 3, patientName: 'محمد علي'), api));

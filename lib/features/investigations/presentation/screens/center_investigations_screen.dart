@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/network/api_exception.dart';
@@ -130,7 +131,11 @@ class _CenterTabState extends ConsumerState<_CenterTab> {
                     order: o,
                     title: o.patient?.name,
                     onTap: () {
-                      if (o.hasResults) FullScreenGallery.show(context, urls: o.resultFiles);
+                      if (o.resultFiles.isNotEmpty) {
+                        FullScreenGallery.show(context, urls: o.resultFiles);
+                      } else if (o.resultDocuments.isNotEmpty) {
+                        launchUrl(Uri.parse(o.resultDocuments.first), mode: LaunchMode.externalApplication);
+                      }
                     },
                   ),
                   if ((o.notes ?? '').isNotEmpty)

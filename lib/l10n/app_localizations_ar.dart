@@ -7756,6 +7756,39 @@ class AppLocalizationsAr extends AppLocalizations {
       'المرضى وتاريخهم المرضي — تُحفظ على هذا الجهاز فقط';
 
   @override
+  String get importHubUnits => 'الغرف والوحدات';
+
+  @override
+  String get importHubUnitsSub =>
+      'الغرف أو الملاعب أو القاعات برقمها ونوعها وسعتها';
+
+  @override
+  String get unitsImportIntro =>
+      'اختر الخدمة ونوع الوحدة مرة واحدة، ثم الملف: كل صف وحدة (رقمها واسمها ونوعها وسعتها وعددها). ما كان موجودًا بنفس الرقم يُترك كما هو.';
+
+  @override
+  String get unitsImportService => 'الخدمة';
+
+  @override
+  String get unitsImportType => 'نوع الوحدة';
+
+  @override
+  String get unitsImportKind => 'تصنيف الوحدة إن لم يحدّده الملف';
+
+  @override
+  String get unitsImportKindHelp =>
+      'يُطابَق عمود «النوع» في الملف مع تصنيفاتك أولًا';
+
+  @override
+  String get unitsImportKindNone => 'بدون تصنيف';
+
+  @override
+  String get unitsImportNext => 'التالي: اختيار الملف';
+
+  @override
+  String get unitsImportNone => 'لا توجد خدمة بوحدات قابلة للحجز لهذا الحساب.';
+
+  @override
   String get importHubNothing => 'لا يوجد ما يمكن استيراده لهذا الحساب بعد.';
 
   @override
@@ -8096,6 +8129,25 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get invPhotosSaveFailed => 'تعذّر تنزيل الصور. حاول مرة أخرى.';
+
+  @override
+  String get invAddResultPdf => 'إرفاق تقرير PDF';
+
+  @override
+  String invResultPdfCount(Object count) {
+    return '$count ملف PDF مرفق';
+  }
+
+  @override
+  String invPdfReport(Object n) {
+    return 'تقرير PDF $n';
+  }
+
+  @override
+  String get invOpenPdf => 'فتح';
+
+  @override
+  String get invPdfOpenFailed => 'تعذّر فتح الملف.';
 
   @override
   String get invCurrency => 'ج';

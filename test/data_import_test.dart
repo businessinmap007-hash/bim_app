@@ -1,7 +1,9 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:bim_app/features/booking_settings/data/models/booking_settings_models.dart' show NamedOption;
 import 'package:bim_app/features/data_import/data/import_core.dart';
+import 'package:bim_app/features/data_import/data/units_import.dart';
 import 'package:bim_app/features/medical_file/data/medical_file.dart';
 import 'package:bim_app/features/patient_records/application/patient_records_providers.dart';
 import 'package:bim_app/features/patient_records/data/patient_import.dart';
@@ -206,6 +208,41 @@ void main() {
       expect(merged.notes, 'ملاحظتي');
       expect(merged.entries(MedicalSection.conditions).map((e) => e.title), ['سكر', 'ضغط']);
       expect(merged.entries(MedicalSection.records), hasLength(1));
+    });
+  });
+
+  group('a hotel sheet of rooms', () {
+    final grid = [
+      ['رقم الغرفة', 'نوع الغرفة', 'السعة', 'العدد', 'الوصف'],
+      ['101', 'غرفة مزدوجة', '٢', '1', 'إطلالة على البحر'],
+      ['102', 'جناح', '4', '', ''],
+      ['101', 'جناح', '2', '', ''],
+      ['', 'جناح', '2', '', ''],
+      ['١٠٣', 'غير معروف', 'x', '3.0', ''],
+    ];
+
+    test('numbers, capacity in Arabic digits, a repeated number and a row without one', () {
+      final mapping = suggestMapping(grid.first, unitImportFields);
+      final result = unitsFromGrid(grid, mapping);
+
+      expect(result.units.map((u) => u.code), ['101', '102', '١٠٣']);
+      expect(result.units.first.capacity, 2);
+      expect(result.units.first.description, 'إطلالة على البحر');
+      expect(result.units.last.quantity, 3);
+      expect(result.units.last.capacity, isNull);
+      expect(result.skipped.map((s) => s.row), [4, 5]);
+    });
+
+    test('a kind is matched by name to the merchants own, ignoring hamza and diacritics', () {
+      const kinds = [NamedOption(id: 1, name: 'غرفة مزدوجة'), NamedOption(id: 2, name: 'جناح'), NamedOption(id: 3, name: 'غرفة فردية')];
+
+      expect(matchKind('غرفه مزدوجه', kinds)?.id, 1);
+      expect(matchKind('جناح ملكي', kinds)?.id, 2);
+      expect(matchKind('غير معروف', kinds), isNull);
+      expect(matchKind('', kinds), isNull);
+      expect(parseWholeNumber('٣'), 3);
+      expect(parseWholeNumber('4.0'), 4);
+      expect(parseWholeNumber('4.5'), isNull);
     });
   });
 }

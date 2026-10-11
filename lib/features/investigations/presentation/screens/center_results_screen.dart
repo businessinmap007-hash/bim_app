@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/network/api_exception.dart';
@@ -24,6 +25,7 @@ class _CenterResultsScreenState extends ConsumerState<CenterResultsScreen> {
   };
   final _note = TextEditingController();
   final List<String> _photos = [];
+  final List<String> _pdfs = [];
   bool _busy = false;
   String? _error;
 
@@ -36,11 +38,18 @@ class _CenterResultsScreenState extends ConsumerState<CenterResultsScreen> {
     super.dispose();
   }
 
-  bool get _ready => _texts.values.any((c) => c.text.trim().isNotEmpty) || _photos.isNotEmpty;
+  bool get _ready => _texts.values.any((c) => c.text.trim().isNotEmpty) || _photos.isNotEmpty || _pdfs.isNotEmpty;
 
   Future<void> _addPhotos() async {
     final picked = await ImagePicker().pickMultiImage(maxWidth: 1600, maxHeight: 1600, imageQuality: 70, limit: 10);
     if (picked.isNotEmpty && mounted) setState(() => _photos.addAll(picked.map((p) => p.path).take(10 - _photos.length)));
+  }
+
+  /// A printed report the centre already has as a PDF: attached as it is (no shrinking), up to 5.
+  Future<void> _addPdfs() async {
+    final picked = await FilePicker.pickFiles(type: FileType.custom, allowedExtensions: ['pdf'], allowMultiple: true);
+    final paths = (picked?.files ?? const []).map((f) => f.path).whereType<String>();
+    if (paths.isNotEmpty && mounted) setState(() => _pdfs.addAll(paths.take(5 - _pdfs.length)));
   }
 
   Future<void> _send() async {
@@ -54,6 +63,7 @@ class _CenterResultsScreenState extends ConsumerState<CenterResultsScreen> {
         widget.order.id,
         texts: {for (final e in _texts.entries) if (e.value.text.trim().isNotEmpty) e.key: e.value.text.trim()},
         photoPaths: _photos,
+        documentPaths: _pdfs,
         note: _note.text.trim(),
       );
       if (mounted) Navigator.of(context).pop(true);
@@ -94,6 +104,12 @@ class _CenterResultsScreenState extends ConsumerState<CenterResultsScreen> {
             onPressed: _photos.length >= 10 ? null : _addPhotos,
             icon: Icon(_photos.isEmpty ? Icons.add_photo_alternate_outlined : Icons.check_circle_outline),
             label: Text(_photos.isEmpty ? l10n.invAddResultPhotos : l10n.invResultPhotosCount(_photos.length)),
+          ),
+          const SizedBox(height: 8),
+          OutlinedButton.icon(
+            onPressed: _pdfs.length >= 5 ? null : _addPdfs,
+            icon: Icon(_pdfs.isEmpty ? Icons.picture_as_pdf_outlined : Icons.check_circle_outline),
+            label: Text(_pdfs.isEmpty ? l10n.invAddResultPdf : l10n.invResultPdfCount(_pdfs.length)),
           ),
           const SizedBox(height: 12),
           TextField(
