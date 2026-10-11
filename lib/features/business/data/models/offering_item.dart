@@ -19,6 +19,9 @@ class OfferingItem {
   final String? itemType;
   final String? imageUrl;
   final String action; // 'book' | 'order'
+
+  /// How long the service takes, when the business wrote it — an appointment grid steps by it.
+  final int? durationMinutes;
   final List<BookableUnitOption> units;
 
   const OfferingItem({
@@ -32,6 +35,7 @@ class OfferingItem {
     this.itemType,
     this.imageUrl,
     required this.action,
+    this.durationMinutes,
     this.units = const [],
   });
 
@@ -48,6 +52,7 @@ class OfferingItem {
     itemType: json['item_type'] as String?,
     imageUrl: Env.assetUrl(json['image'] as String?),
     action: json['action'] as String? ?? 'order',
+    durationMinutes: (json['duration_minutes'] as num?)?.toInt(),
     units: (json['units'] as List<dynamic>? ?? [])
         .map((e) => BookableUnitOption.fromOfferingJson(e as Map<String, dynamic>))
         .toList(),

@@ -7411,6 +7411,23 @@ class AppLocalizationsAr extends AppLocalizations {
   String get bookingContinue => 'متابعة';
 
   @override
+  String get bookingServiceTitle => 'الخدمة';
+
+  @override
+  String get bookingPickDayTitle => 'اختر اليوم';
+
+  @override
+  String get bookingPickTimeTitle => 'اختر الوقت';
+
+  @override
+  String get bookingConfirmAppointment => 'تأكيد الموعد';
+
+  @override
+  String bookingMinutes(Object n) {
+    return '$n دقيقة';
+  }
+
+  @override
   String get bookingPickUnitTitle => 'اختر غرفتك';
 
   @override

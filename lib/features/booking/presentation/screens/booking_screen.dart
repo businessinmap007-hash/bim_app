@@ -61,6 +61,8 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   String? _channel;
   String? _visitPlace;
   int? _unitId;
+  // the length of the time chosen on the page's own board; a form that asks only for a start still sends the end
+  Duration? _boardLength;
   // «Day use»: the guest picks only a date; the room type names the window and the flat price
   bool _dayUse = false;
   // what the chosen room type offers — kept from the moment it was picked, because the discovery request it came from
@@ -99,6 +101,9 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     }
     _startsAt = widget.initialStartsAt;
     _endsAt = widget.initialEndsAt;
+    if (widget.initialStartsAt != null && widget.initialEndsAt != null) {
+      _boardLength = widget.initialEndsAt!.difference(widget.initialStartsAt!);
+    }
     if (widget.initialPartySize != null && widget.initialPartySize! > 0) _partySize = widget.initialPartySize!;
     // the total of what was chosen on the board, before anything else is touched
     if (_startsAt != null || _unitId != null) WidgetsBinding.instance.addPostFrameCallback((_) => _schedulePreview());
@@ -318,7 +323,11 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
         offeringId: widget.offering.id,
         offeringType: 'service_price',
         startsAt: dayUse ? null : _startsAt,
-        endsAt: !dayUse && hasDateRange ? _endsAt : null,
+        endsAt: dayUse
+            ? null
+            : hasDateRange
+            ? _endsAt
+            : (_boardLength != null && _startsAt != null ? _startsAt!.add(_boardLength!) : null),
         dayUseDate: dayUse ? _startsAt : null,
         allDay: !dayUse && fields.any((f) => f.key == 'date_range'),
         partySize: fields.any((f) => f.key == 'guest_count' || f.key == 'party_size') ? _partySize : null,

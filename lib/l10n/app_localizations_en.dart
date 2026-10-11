@@ -7448,6 +7448,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bookingContinue => 'Continue';
 
   @override
+  String get bookingServiceTitle => 'Service';
+
+  @override
+  String get bookingPickDayTitle => 'Pick a day';
+
+  @override
+  String get bookingPickTimeTitle => 'Pick a time';
+
+  @override
+  String get bookingConfirmAppointment => 'Confirm the appointment';
+
+  @override
+  String bookingMinutes(Object n) {
+    return '$n min';
+  }
+
+  @override
   String get bookingPickUnitTitle => 'Choose your room';
 
   @override

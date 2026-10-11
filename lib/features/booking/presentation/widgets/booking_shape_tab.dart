@@ -7,6 +7,7 @@ import '../../application/booking_providers.dart';
 import '../../data/models/unit_discovery.dart';
 import '../../../investigations/presentation/widgets/center_tests_tab.dart';
 import '../screens/booking_screen.dart';
+import 'appointment_board_tab.dart';
 import 'furnished_units_tab.dart';
 import 'hourly_venue_tab.dart';
 import 'table_booking_tab.dart';
@@ -32,6 +33,10 @@ class BookingShapeTab extends ConsumerWidget {
         final shape = catalog.shape;
         // a lab or a radiology centre sells tests, not rooms: several at once, priced by the centre
         if (shape != null && shape.multiSelect) return CenterTestsTab(centerId: businessId);
+        // an appointment with the business itself has no units: its own board, whatever the unit list says
+        if (shape != null && shape.code == 'appointment') {
+          return AppointmentBoardTab(businessId: businessId, shape: shape, fallback: fallback);
+        }
         if (shape == null || !catalog.hasUnits) return fallback;
 
         // the boards that have their own drawing: a day and a time first (a pitch, a table) or dates first (a chalet)

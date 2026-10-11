@@ -5,7 +5,10 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:bim_app/features/booking/application/booking_providers.dart';
 import 'package:bim_app/features/booking/data/models/unit_discovery.dart';
+import 'package:bim_app/features/booking/presentation/widgets/appointment_board_tab.dart';
 import 'package:bim_app/features/booking/presentation/widgets/booking_grid_widgets.dart';
+import 'package:bim_app/features/business/application/business_page_providers.dart';
+import 'package:bim_app/features/business/data/models/offering_item.dart';
 import 'package:bim_app/features/booking/presentation/widgets/furnished_units_tab.dart';
 import 'package:bim_app/features/booking/presentation/widgets/hourly_venue_tab.dart';
 import 'package:bim_app/features/booking/presentation/widgets/table_booking_tab.dart';
@@ -142,5 +145,62 @@ void main() {
     await tester.tap(find.text('شاليه بحري'));
     await tester.pumpAndSettle();
     expect(_bar(tester).onPressed, isNotNull);
+  });
+
+  testWidgets('appointment: the service and its length, a day, a time — a held time cannot be picked', (tester) async {
+    final today = DateTime.now();
+    final day = DateTime(today.year, today.month, today.day);
+    final shape = const UnitShape(code: 'appointment', name: 'موعد', pattern: 'appointment');
+    const service = OfferingItem(
+      id: 11,
+      source: 'price',
+      label: 'قص وتصفيف',
+      price: 150,
+      currency: 'EGP',
+      serviceId: 1,
+      itemType: 'booking_appointment',
+      action: 'book',
+      durationMinutes: 45,
+    );
+    DayGridSlot slot(int h, int free) => DayGridSlot(startsAt: DateTime(day.year, day.month, day.day, h), endsAt: DateTime(day.year, day.month, day.day, h, 45), free: free);
+
+    await tester.pumpWidget(
+      _host(
+        AppointmentBoardTab(businessId: 7, shape: shape, fallback: const Text('fallback')),
+        [
+          businessOfferingsProvider.overrideWith((ref, id) async => [service]),
+          appointmentGridProvider.overrideWith((ref, p) async => DayGrid(hoursKnown: true, slots: [slot(10, 1), slot(11, 0), slot(12, 1)])),
+        ],
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('قص وتصفيف'), findsOneWidget);
+    expect(find.text('45 دقيقة'), findsOneWidget);
+    expect(_bar(tester).onPressed, isNull);
+
+    final chips = find.descendant(of: find.byType(BookingTimeGrid), matching: find.byType(InkWell));
+    expect(chips, findsNWidgets(3));
+    await tester.tap(chips.at(1)); // held: nothing happens
+    await tester.pumpAndSettle();
+    expect(_bar(tester).onPressed, isNull);
+
+    await tester.tap(chips.at(2));
+    await tester.pumpAndSettle();
+    expect(_bar(tester).onPressed, isNotNull);
+  });
+
+  testWidgets('appointment: a business with no bookable service keeps the page it always had', (tester) async {
+    final shape = const UnitShape(code: 'appointment', name: 'موعد', pattern: 'appointment');
+
+    await tester.pumpWidget(
+      _host(
+        AppointmentBoardTab(businessId: 7, shape: shape, fallback: const Text('fallback')),
+        [businessOfferingsProvider.overrideWith((ref, id) async => <OfferingItem>[])],
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('fallback'), findsOneWidget);
   });
 }

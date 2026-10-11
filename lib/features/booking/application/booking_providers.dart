@@ -167,3 +167,14 @@ final dayGridProvider = FutureProvider.autoDispose.family<DayGrid, DayGridParams
     itemType: p.itemType,
   );
 });
+
+typedef AppointmentGridParams = ({int businessId, String date, int? offeringId});
+
+/// One day of appointments with a business as start times, as long as the chosen service.
+final appointmentGridProvider = FutureProvider.autoDispose.family<DayGrid, AppointmentGridParams>((ref, p) {
+  return ref.watch(bookingApiProvider).appointmentGrid(
+    businessId: p.businessId,
+    date: DateTime.parse(p.date),
+    offeringId: p.offeringId,
+  );
+});

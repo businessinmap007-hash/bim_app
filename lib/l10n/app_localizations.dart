@@ -13657,6 +13657,36 @@ abstract class AppLocalizations {
   /// **'متابعة'**
   String get bookingContinue;
 
+  /// No description provided for @bookingServiceTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخدمة'**
+  String get bookingServiceTitle;
+
+  /// No description provided for @bookingPickDayTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر اليوم'**
+  String get bookingPickDayTitle;
+
+  /// No description provided for @bookingPickTimeTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الوقت'**
+  String get bookingPickTimeTitle;
+
+  /// No description provided for @bookingConfirmAppointment.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد الموعد'**
+  String get bookingConfirmAppointment;
+
+  /// No description provided for @bookingMinutes.
+  ///
+  /// In ar, this message translates to:
+  /// **'{n} دقيقة'**
+  String bookingMinutes(Object n);
+
   /// No description provided for @bookingPickUnitTitle.
   ///
   /// In ar, this message translates to:
