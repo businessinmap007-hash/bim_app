@@ -7428,6 +7428,116 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get courseLevelTitle => 'المستوى';
+
+  @override
+  String get courseLevelAll => 'الكل';
+
+  @override
+  String get courseGroupsTitle => 'المجموعات المتاحة';
+
+  @override
+  String courseStartsOn(Object date) {
+    return 'يبدأ $date';
+  }
+
+  @override
+  String courseSeatsLeft(Object n) {
+    return 'متبقٍ $n مقاعد';
+  }
+
+  @override
+  String get courseSeatsFull => 'اكتملت المقاعد';
+
+  @override
+  String get coursePerCourse => 'ج / الكورس';
+
+  @override
+  String get courseEnroll => 'التحق بالكورس';
+
+  @override
+  String get courseNoGroups => 'لا توجد مجموعات مفتوحة حاليًا.';
+
+  @override
+  String get courseHint => 'اختر مجموعة';
+
+  @override
+  String get courseManageTitle => 'مجموعات الكورسات';
+
+  @override
+  String get courseAddGroup => 'إضافة مجموعة';
+
+  @override
+  String get courseEditGroup => 'تعديل المجموعة';
+
+  @override
+  String get courseOfCourse => 'الكورس';
+
+  @override
+  String get courseGroupName => 'اسم المجموعة';
+
+  @override
+  String get courseGroupLevel => 'المستوى';
+
+  @override
+  String get courseGroupLevelHint => 'مبتدئ / متوسط / متقدم';
+
+  @override
+  String get courseGroupSchedule => 'المواعيد (مثال: الأحد والثلاثاء · 7 م)';
+
+  @override
+  String get courseGroupStarts => 'البدء';
+
+  @override
+  String get courseGroupEnds => 'تاريخ الانتهاء (اختياري)';
+
+  @override
+  String get courseGroupEndsShort => 'الانتهاء';
+
+  @override
+  String get courseGroupSeats => 'عدد المقاعد';
+
+  @override
+  String get courseGroupOpen => 'مفتوحة للانضمام';
+
+  @override
+  String get courseGroupClosed => 'مغلقة';
+
+  @override
+  String courseTaken(Object seats, Object taken) {
+    return '$taken من $seats مقعدًا';
+  }
+
+  @override
+  String get courseNoCourses =>
+      'لا توجد كورسات بعد — أضف كورسًا من «أسعاري» أولًا.';
+
+  @override
+  String get courseDeleteGroup => 'حذف المجموعة';
+
+  @override
+  String get courseNameRequired => 'اكتب اسم المجموعة.';
+
+  @override
+  String get arrivalNoticeTitle => 'تنبيه الحضور';
+
+  @override
+  String get arrivalNoticeIntro =>
+      'يقرؤه العميل عند الحجز وبعده، ويُكرَّر في تذكير الموعد.';
+
+  @override
+  String get arrivalNoticeMinutes => 'يجب التواجد قبل الموعد بـ';
+
+  @override
+  String get arrivalNoticeNone => 'بدون';
+
+  @override
+  String get arrivalNoticeText => 'جملة إضافية (اختياري)';
+
+  @override
+  String get arrivalNoticePreview => 'هكذا يقرؤه العميل';
+
+  @override
   String get bookingPickUnitTitle => 'اختر غرفتك';
 
   @override

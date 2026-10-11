@@ -227,6 +227,8 @@ class BookingApi {
     List<int> optionIds = const [],
     // «Day use»: the guest names only a date — the room type names the window and the flat price
     DateTime? dayUseDate,
+    // «كورس»: the group joined — the booking is the enrolment
+    int? courseGroupId,
   }) async {
     final data =
         await _client.post(
@@ -246,6 +248,7 @@ class BookingApi {
                 if (notes != null && notes.isNotEmpty) 'notes': notes,
                 if (meta != null && meta.isNotEmpty) 'meta': meta,
                 if (optionIds.isNotEmpty) 'option_ids': optionIds,
+                'course_group_id': ?courseGroupId,
               },
             )
             as Map<String, dynamic>;

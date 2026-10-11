@@ -13687,6 +13687,210 @@ abstract class AppLocalizations {
   /// **'{n} دقيقة'**
   String bookingMinutes(Object n);
 
+  /// No description provided for @courseLevelTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المستوى'**
+  String get courseLevelTitle;
+
+  /// No description provided for @courseLevelAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get courseLevelAll;
+
+  /// No description provided for @courseGroupsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المجموعات المتاحة'**
+  String get courseGroupsTitle;
+
+  /// No description provided for @courseStartsOn.
+  ///
+  /// In ar, this message translates to:
+  /// **'يبدأ {date}'**
+  String courseStartsOn(Object date);
+
+  /// No description provided for @courseSeatsLeft.
+  ///
+  /// In ar, this message translates to:
+  /// **'متبقٍ {n} مقاعد'**
+  String courseSeatsLeft(Object n);
+
+  /// No description provided for @courseSeatsFull.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتملت المقاعد'**
+  String get courseSeatsFull;
+
+  /// No description provided for @coursePerCourse.
+  ///
+  /// In ar, this message translates to:
+  /// **'ج / الكورس'**
+  String get coursePerCourse;
+
+  /// No description provided for @courseEnroll.
+  ///
+  /// In ar, this message translates to:
+  /// **'التحق بالكورس'**
+  String get courseEnroll;
+
+  /// No description provided for @courseNoGroups.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد مجموعات مفتوحة حاليًا.'**
+  String get courseNoGroups;
+
+  /// No description provided for @courseHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر مجموعة'**
+  String get courseHint;
+
+  /// No description provided for @courseManageTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مجموعات الكورسات'**
+  String get courseManageTitle;
+
+  /// No description provided for @courseAddGroup.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة مجموعة'**
+  String get courseAddGroup;
+
+  /// No description provided for @courseEditGroup.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل المجموعة'**
+  String get courseEditGroup;
+
+  /// No description provided for @courseOfCourse.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكورس'**
+  String get courseOfCourse;
+
+  /// No description provided for @courseGroupName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم المجموعة'**
+  String get courseGroupName;
+
+  /// No description provided for @courseGroupLevel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المستوى'**
+  String get courseGroupLevel;
+
+  /// No description provided for @courseGroupLevelHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مبتدئ / متوسط / متقدم'**
+  String get courseGroupLevelHint;
+
+  /// No description provided for @courseGroupSchedule.
+  ///
+  /// In ar, this message translates to:
+  /// **'المواعيد (مثال: الأحد والثلاثاء · 7 م)'**
+  String get courseGroupSchedule;
+
+  /// No description provided for @courseGroupStarts.
+  ///
+  /// In ar, this message translates to:
+  /// **'البدء'**
+  String get courseGroupStarts;
+
+  /// No description provided for @courseGroupEnds.
+  ///
+  /// In ar, this message translates to:
+  /// **'تاريخ الانتهاء (اختياري)'**
+  String get courseGroupEnds;
+
+  /// No description provided for @courseGroupEndsShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'الانتهاء'**
+  String get courseGroupEndsShort;
+
+  /// No description provided for @courseGroupSeats.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد المقاعد'**
+  String get courseGroupSeats;
+
+  /// No description provided for @courseGroupOpen.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفتوحة للانضمام'**
+  String get courseGroupOpen;
+
+  /// No description provided for @courseGroupClosed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مغلقة'**
+  String get courseGroupClosed;
+
+  /// No description provided for @courseTaken.
+  ///
+  /// In ar, this message translates to:
+  /// **'{taken} من {seats} مقعدًا'**
+  String courseTaken(Object seats, Object taken);
+
+  /// No description provided for @courseNoCourses.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد كورسات بعد — أضف كورسًا من «أسعاري» أولًا.'**
+  String get courseNoCourses;
+
+  /// No description provided for @courseDeleteGroup.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف المجموعة'**
+  String get courseDeleteGroup;
+
+  /// No description provided for @courseNameRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب اسم المجموعة.'**
+  String get courseNameRequired;
+
+  /// No description provided for @arrivalNoticeTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنبيه الحضور'**
+  String get arrivalNoticeTitle;
+
+  /// No description provided for @arrivalNoticeIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'يقرؤه العميل عند الحجز وبعده، ويُكرَّر في تذكير الموعد.'**
+  String get arrivalNoticeIntro;
+
+  /// No description provided for @arrivalNoticeMinutes.
+  ///
+  /// In ar, this message translates to:
+  /// **'يجب التواجد قبل الموعد بـ'**
+  String get arrivalNoticeMinutes;
+
+  /// No description provided for @arrivalNoticeNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون'**
+  String get arrivalNoticeNone;
+
+  /// No description provided for @arrivalNoticeText.
+  ///
+  /// In ar, this message translates to:
+  /// **'جملة إضافية (اختياري)'**
+  String get arrivalNoticeText;
+
+  /// No description provided for @arrivalNoticePreview.
+  ///
+  /// In ar, this message translates to:
+  /// **'هكذا يقرؤه العميل'**
+  String get arrivalNoticePreview;
+
   /// No description provided for @bookingPickUnitTitle.
   ///
   /// In ar, this message translates to:

@@ -7,6 +7,10 @@ import 'package:bim_app/features/booking/application/booking_providers.dart';
 import 'package:bim_app/features/booking/data/models/unit_discovery.dart';
 import 'package:bim_app/features/booking/presentation/widgets/appointment_board_tab.dart';
 import 'package:bim_app/features/booking/presentation/widgets/booking_grid_widgets.dart';
+import 'package:bim_app/features/booking/presentation/widgets/course_board_tab.dart';
+import 'package:bim_app/features/course/application/course_providers.dart';
+import 'package:bim_app/features/course/data/models/course.dart';
+import 'package:bim_app/shared/widgets/arrival_notice_banner.dart';
 import 'package:bim_app/features/business/application/business_page_providers.dart';
 import 'package:bim_app/features/business/data/models/offering_item.dart';
 import 'package:bim_app/features/booking/presentation/widgets/furnished_units_tab.dart';
@@ -202,5 +206,61 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('fallback'), findsOneWidget);
+  });
+
+  testWidgets('course: a full group cannot be joined, a level narrows the groups, enrolling needs a group', (tester) async {
+    final shape = const UnitShape(code: 'course', name: 'كورس', pattern: 'course');
+    final course = CourseInfo(
+      id: 5,
+      serviceId: 1,
+      name: 'اللغة الإنجليزية',
+      price: 1600,
+      groups: [
+        CourseGroup(id: 1, offeringId: 5, name: 'مجموعة المساء', level: 'متوسط', scheduleText: 'الأحد والثلاثاء · 7 م', startsOn: DateTime(2026, 10, 19), seats: 8, seatsTaken: 3, seatsLeft: 5),
+        CourseGroup(id: 2, offeringId: 5, name: 'مجموعة الصباح', level: 'مبتدئ', scheduleText: 'السبت والإثنين · 10 ص', startsOn: DateTime(2026, 10, 24), seats: 8, seatsTaken: 8, seatsLeft: 0),
+      ],
+    );
+
+    await tester.pumpWidget(
+      _host(
+        CourseBoardTab(businessId: 7, shape: shape, fallback: const Text('fallback')),
+        [courseDiscoveryProvider.overrideWith((ref, id) async => [course])],
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('مجموعة المساء'), findsOneWidget);
+    expect(find.textContaining('اكتملت المقاعد'), findsOneWidget);
+    expect(_bar(tester).onPressed, isNull);
+
+    // the full group does nothing when tapped
+    await tester.tap(find.text('مجموعة الصباح'));
+    await tester.pumpAndSettle();
+    expect(_bar(tester).onPressed, isNull);
+
+    await tester.tap(find.text('مجموعة المساء'));
+    await tester.pumpAndSettle();
+    expect(_bar(tester).onPressed, isNotNull);
+
+    // a level narrows the list
+    await tester.tap(find.text('مبتدئ'));
+    await tester.pumpAndSettle();
+    expect(find.text('مجموعة المساء'), findsNothing);
+    expect(_bar(tester).onPressed, isNull, reason: 'the chosen group left the list');
+  });
+
+  testWidgets('arrival notice: drawn when the business wrote one, nothing otherwise', (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: Column(
+            children: [ArrivalNoticeBanner(message: 'يجب التواجد قبل الموعد بـ 15 دقيقة.'), ArrivalNoticeBanner(message: null)],
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('يجب التواجد قبل الموعد بـ 15 دقيقة.'), findsOneWidget);
+    expect(find.byType(SizedBox), findsWidgets);
   });
 }

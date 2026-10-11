@@ -7465,6 +7465,116 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get courseLevelTitle => 'Level';
+
+  @override
+  String get courseLevelAll => 'All';
+
+  @override
+  String get courseGroupsTitle => 'Available groups';
+
+  @override
+  String courseStartsOn(Object date) {
+    return 'Starts $date';
+  }
+
+  @override
+  String courseSeatsLeft(Object n) {
+    return '$n seats left';
+  }
+
+  @override
+  String get courseSeatsFull => 'Full';
+
+  @override
+  String get coursePerCourse => 'EGP / course';
+
+  @override
+  String get courseEnroll => 'Enrol in the course';
+
+  @override
+  String get courseNoGroups => 'No group is open right now.';
+
+  @override
+  String get courseHint => 'Pick a group';
+
+  @override
+  String get courseManageTitle => 'Course groups';
+
+  @override
+  String get courseAddGroup => 'Add a group';
+
+  @override
+  String get courseEditGroup => 'Edit the group';
+
+  @override
+  String get courseOfCourse => 'Course';
+
+  @override
+  String get courseGroupName => 'Group name';
+
+  @override
+  String get courseGroupLevel => 'Level';
+
+  @override
+  String get courseGroupLevelHint => 'Beginner / Intermediate / Advanced';
+
+  @override
+  String get courseGroupSchedule => 'Schedule (e.g. Sun and Tue · 7 pm)';
+
+  @override
+  String get courseGroupStarts => 'Starts';
+
+  @override
+  String get courseGroupEnds => 'End date (optional)';
+
+  @override
+  String get courseGroupEndsShort => 'Ends';
+
+  @override
+  String get courseGroupSeats => 'Seats';
+
+  @override
+  String get courseGroupOpen => 'Open to join';
+
+  @override
+  String get courseGroupClosed => 'Closed';
+
+  @override
+  String courseTaken(Object seats, Object taken) {
+    return '$taken of $seats seats';
+  }
+
+  @override
+  String get courseNoCourses =>
+      'No courses yet — add one from «My prices» first.';
+
+  @override
+  String get courseDeleteGroup => 'Delete the group';
+
+  @override
+  String get courseNameRequired => 'Write the group name.';
+
+  @override
+  String get arrivalNoticeTitle => 'Arrival notice';
+
+  @override
+  String get arrivalNoticeIntro =>
+      'The customer reads it when booking and after, and the reminder repeats it.';
+
+  @override
+  String get arrivalNoticeMinutes => 'Be there before the appointment by';
+
+  @override
+  String get arrivalNoticeNone => 'None';
+
+  @override
+  String get arrivalNoticeText => 'An extra sentence (optional)';
+
+  @override
+  String get arrivalNoticePreview => 'This is how the customer reads it';
+
+  @override
   String get bookingPickUnitTitle => 'Choose your room';
 
   @override

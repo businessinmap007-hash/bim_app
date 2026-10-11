@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/arrival_notice_banner.dart';
+import '../../../booking/application/booking_providers.dart';
 import '../../application/clinic_providers.dart';
 import '../../data/models/clinic_slot.dart';
 
@@ -117,6 +119,15 @@ class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
                 child: ListView(
                   padding: const EdgeInsets.all(16),
                   children: [
+                    // the clinic's own «be there N minutes early», before the patient picks a time
+                    Builder(
+                      builder: (context) {
+                        final notice = ref.watch(bookingFormProvider(widget.clinicId)).valueOrNull?.arrivalNotice;
+                        if ((notice ?? '').isEmpty) return const SizedBox.shrink();
+
+                        return Padding(padding: const EdgeInsets.only(bottom: 12), child: ArrivalNoticeBanner(message: notice));
+                      },
+                    ),
                     if (kinds.isNotEmpty) ...[
                       _SectionCard(
                         title: l10n.clinicPickKind,

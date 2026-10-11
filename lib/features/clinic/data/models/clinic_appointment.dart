@@ -13,6 +13,9 @@ class ClinicAppointment {
   final String? clinicLogoUrl;
   final int? prescriptionId;
 
+  /// «يجب التواجد قبل الموعد بـ ١٥ دقيقة» — the clinic's own notice.
+  final String? arrivalNotice;
+
   const ClinicAppointment({
     required this.id,
     required this.status,
@@ -23,6 +26,7 @@ class ClinicAppointment {
     this.clinicName,
     this.clinicLogoUrl,
     this.prescriptionId,
+    this.arrivalNotice,
   });
 
   bool get isCancellable => status == 'requested' || status == 'confirmed';
@@ -46,6 +50,7 @@ class ClinicAppointment {
       clinicName: clinicName,
       clinicLogoUrl: clinicLogoUrl,
       prescriptionId: prescriptionId,
+      arrivalNotice: arrivalNotice,
     );
   }
 
@@ -61,6 +66,7 @@ class ClinicAppointment {
       clinicName: clinic?['name'] as String?,
       clinicLogoUrl: Env.assetUrl(clinic?['logo'] as String?),
       prescriptionId: json['prescription_id'] as int?,
+      arrivalNotice: json['arrival_notice'] is Map<String, dynamic> ? (json['arrival_notice'] as Map<String, dynamic>)['message'] as String? : null,
     );
   }
 }

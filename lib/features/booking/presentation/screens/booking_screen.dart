@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../shared/widgets/arrival_notice_banner.dart';
 import '../../../../shared/widgets/async_value_view.dart';
 import '../../../business/data/models/offering_item.dart';
 import '../../application/booking_providers.dart';
@@ -36,6 +37,9 @@ class BookingScreen extends ConsumerStatefulWidget {
   final DateTime? initialEndsAt;
   final int? initialPartySize;
 
+  /// «كورس»: the group chosen on the board — the dates and the group are its own, so the form does not ask them.
+  final int? courseGroupId;
+
   const BookingScreen({
     super.key,
     required this.businessId,
@@ -46,6 +50,7 @@ class BookingScreen extends ConsumerStatefulWidget {
     this.initialStartsAt,
     this.initialEndsAt,
     this.initialPartySize,
+    this.courseGroupId,
   });
 
   @override
@@ -335,6 +340,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
         notes: _notesController.text.trim(),
         meta: _buildMeta(fields),
         optionIds: _modifierOptionIds.toList(),
+        courseGroupId: widget.courseGroupId,
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.bookingSuccess)));
@@ -385,6 +391,8 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
               // what the page's shape does not ask the guest
               .where((f) => !(pageShape != null && !pageShape.askGuestCounts && (f.key == 'guest_count' || f.key == 'party_size')))
               .where((f) => !(pageShape != null && !pageShape.askChildren && f.key == 'children_count'))
+              // a group chosen on the board brings its own dates, group and level
+              .where((f) => !(widget.courseGroupId != null && (f.key == 'date_range' || f.key == 'datetime' || f.key == 'group' || f.key == 'level')))
               .toList();
           final needsUnit = form.shape?.needsUnit ?? false;
           final units = widget.offering.units.isNotEmpty ? widget.offering.units : form.units;
@@ -403,6 +411,10 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                   '${widget.offering.price.toStringAsFixed(0)} ${widget.offering.currency}',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
+              ],
+              if ((form.arrivalNotice ?? '').isNotEmpty) ...[
+                const SizedBox(height: 12),
+                ArrivalNoticeBanner(message: form.arrivalNotice),
               ],
               const SizedBox(height: 20),
               if (needsUnit && widget.initialUnit == null) ...[

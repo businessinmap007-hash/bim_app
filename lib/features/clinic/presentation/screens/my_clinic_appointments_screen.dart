@@ -1,3 +1,4 @@
+import '../../../../shared/widgets/arrival_notice_banner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -119,7 +120,10 @@ class _AppointmentTile extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Card(
       margin: EdgeInsets.zero,
-      child: ListTile(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+      ListTile(
         leading: CircleAvatar(
           backgroundImage: appointment.clinicLogoUrl != null ? NetworkImage(appointment.clinicLogoUrl!) : null,
           child: appointment.clinicLogoUrl == null ? const Icon(Icons.local_hospital_outlined) : null,
@@ -144,6 +148,14 @@ class _AppointmentTile extends StatelessWidget {
           ],
         ),
         isThreeLine: false,
+      ),
+      // the clinic's own «be there N minutes early» while the appointment still stands
+      if ((appointment.arrivalNotice ?? '').isNotEmpty && appointment.isCancellable)
+        Padding(
+          padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+          child: ArrivalNoticeBanner(message: appointment.arrivalNotice),
+        ),
+        ],
       ),
     );
   }

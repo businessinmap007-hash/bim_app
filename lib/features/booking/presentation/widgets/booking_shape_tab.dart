@@ -8,6 +8,7 @@ import '../../data/models/unit_discovery.dart';
 import '../../../investigations/presentation/widgets/center_tests_tab.dart';
 import '../screens/booking_screen.dart';
 import 'appointment_board_tab.dart';
+import 'course_board_tab.dart';
 import 'furnished_units_tab.dart';
 import 'hourly_venue_tab.dart';
 import 'table_booking_tab.dart';
@@ -36,6 +37,10 @@ class BookingShapeTab extends ConsumerWidget {
         // an appointment with the business itself has no units: its own board, whatever the unit list says
         if (shape != null && shape.code == 'appointment') {
           return AppointmentBoardTab(businessId: businessId, shape: shape, fallback: fallback);
+        }
+        // a course has no units either: its groups are the board
+        if (shape != null && shape.code == 'course') {
+          return CourseBoardTab(businessId: businessId, shape: shape, fallback: fallback);
         }
         if (shape == null || !catalog.hasUnits) return fallback;
 

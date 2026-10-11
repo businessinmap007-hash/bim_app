@@ -241,6 +241,21 @@ class BookingSettingsApi {
     return CheckTimes.fromJson(data as Map<String, dynamic>);
   }
 
+  /// «يجب التواجد قبل الموعد بـ ١٥ دقيقة» — the business's own notice on its bookings.
+  Future<({int? minutes, String? text, String? message})> arrivalNotice() async {
+    final data = await _client.get('/business/booking-settings/arrival-notice') as Map<String, dynamic>;
+
+    return (minutes: (data['minutes'] as num?)?.toInt(), text: data['text'] as String?, message: data['message'] as String?);
+  }
+
+  Future<({int? minutes, String? text, String? message})> saveArrivalNotice({required int minutes, required String text}) async {
+    final data =
+        await _client.put('/business/booking-settings/arrival-notice', data: {'minutes': minutes, 'text': text})
+            as Map<String, dynamic>;
+
+    return (minutes: (data['minutes'] as num?)?.toInt(), text: data['text'] as String?, message: data['message'] as String?);
+  }
+
   Future<WorkingHours> hours() async {
     final data =
         await _client.get('/business/working-hours') as Map<String, dynamic>;

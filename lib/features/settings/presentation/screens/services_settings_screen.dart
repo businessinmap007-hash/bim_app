@@ -33,6 +33,9 @@ import '../../../stay_requests/presentation/screens/stay_requests_screen.dart';
 import '../../../staff/presentation/screens/staff_team_settings_screen.dart';
 import '../../../table/presentation/screens/table_calls_screen.dart';
 import '../../../data_import/presentation/screens/data_import_hub_screen.dart';
+import '../../../course/application/course_providers.dart';
+import '../../../course/presentation/screens/course_groups_screen.dart';
+import '../../../booking_settings/presentation/screens/arrival_notice_screen.dart';
 import '../../../hospital/presentation/screens/hospital_doctors_screen.dart';
 import '../../../hospital/presentation/screens/hospital_invitations_screen.dart';
 import '../../../hospital/presentation/screens/hospital_procedure_requests_screen.dart';
@@ -69,6 +72,8 @@ class ServicesSettingsScreen extends ConsumerWidget {
     // «خدمات المحل» (cooking method…) only for a trade that offers services.
     final hasShopAddons = ref.watch(shopAddonsProvider).valueOrNull?.isNotEmpty ?? false;
     final hasStayUnits = ref.watch(hasStayUnitsProvider).valueOrNull ?? false;
+    // only a business that sells courses has groups to open
+    final hasCourses = ref.watch(myCoursesProvider).valueOrNull?.courses.isNotEmpty ?? false;
     final authState = ref.watch(authControllerProvider);
     final isCarrier =
         authState is AuthSignedIn && authState.user.isShippingCarrier;
@@ -93,6 +98,7 @@ class ServicesSettingsScreen extends ConsumerWidget {
           isDoctorClinic: isDoctorClinic,
           hasShopAddons: hasShopAddons,
           hasStayUnits: hasStayUnits,
+          hasCourses: hasCourses,
         ),
         data: (keys) => _ServiceList(
           keys: keys,
@@ -103,6 +109,7 @@ class ServicesSettingsScreen extends ConsumerWidget {
           isDoctorClinic: isDoctorClinic,
           hasShopAddons: hasShopAddons,
           hasStayUnits: hasStayUnits,
+          hasCourses: hasCourses,
         ),
       ),
     );
@@ -131,6 +138,9 @@ class _ServiceList extends StatelessWidget {
 
   /// The business lets rooms (a `booking_stay` unit) — it is a hotel, and hotels hear from their guests.
   final bool hasStayUnits;
+
+  /// The business sells courses (it has a priced course) — it opens groups of them.
+  final bool hasCourses;
   const _ServiceList({
     required this.keys,
     required this.menuKinds,
@@ -140,6 +150,7 @@ class _ServiceList extends StatelessWidget {
     this.isDoctorClinic = false,
     this.hasShopAddons = false,
     this.hasStayUnits = false,
+    this.hasCourses = false,
   });
 
   bool _has(String key) => keys == null || keys!.contains(key);
@@ -276,6 +287,19 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.shield_outlined,
         title: l10n.bookingTermsTitle,
         builder: (_) => const BookingTermsScreen(),
+      ),
+      // «يجب التواجد قبل الموعد بـ ١٥ دقيقة»: one notice on every booking and appointment the business takes
+      _Tile(
+        show: _has('bookings') || _has('clinic'),
+        leading: Icons.schedule_rounded,
+        title: l10n.arrivalNoticeTitle,
+        builder: (_) => const ArrivalNoticeScreen(),
+      ),
+      _Tile(
+        show: _has('bookings') && hasCourses,
+        leading: Icons.school_outlined,
+        title: l10n.courseManageTitle,
+        builder: (_) => const CourseGroupsScreen(),
       ),
       _Tile(
         // meal plans and a room's features exist where rooms are let

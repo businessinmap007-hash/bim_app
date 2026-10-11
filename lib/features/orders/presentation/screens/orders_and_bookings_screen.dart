@@ -1,3 +1,4 @@
+import '../../../../shared/widgets/arrival_notice_banner.dart';
 import '../../../../shared/widgets/app_bar_tab_bar.dart';
 import '../../../cart/presentation/widgets/weight_picker.dart';
 import '../widgets/order_line_services.dart';
@@ -1172,6 +1173,11 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
             if (booking.notes != null && booking.notes!.isNotEmpty) ...[
               const SizedBox(height: 12),
               Text(booking.notes!, style: Theme.of(context).textTheme.bodySmall),
+            ],
+            // the business's own «be there N minutes early» while the booking still stands
+            if ((booking.arrivalNotice ?? '').isNotEmpty && (booking.status == 'pending' || booking.status == 'accepted')) ...[
+              const SizedBox(height: 12),
+              ArrivalNoticeBanner(message: booking.arrivalNotice),
             ],
             const Divider(height: 24),
             Row(

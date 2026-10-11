@@ -196,11 +196,15 @@ class BookingFormPayload {
   final List<BookableUnitOption> units;
   final List<BookingModifier> modifiers;
 
+  /// «يجب التواجد قبل الموعد بـ ١٥ دقيقة» — what the business asks of whoever it books.
+  final String? arrivalNotice;
+
   const BookingFormPayload({
     required this.businessId,
     this.shape,
     required this.units,
     required this.modifiers,
+    this.arrivalNotice,
   });
 
   factory BookingFormPayload.fromJson(Map<String, dynamic> json) => BookingFormPayload(
@@ -212,5 +216,6 @@ class BookingFormPayload {
     modifiers: (json['modifiers'] as List<dynamic>? ?? [])
         .map((e) => BookingModifier.fromJson(e as Map<String, dynamic>))
         .toList(),
+    arrivalNotice: json['arrival_notice'] is Map<String, dynamic> ? (json['arrival_notice'] as Map<String, dynamic>)['message'] as String? : null,
   );
 }
