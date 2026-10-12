@@ -138,6 +138,9 @@ class Booking {
   /// «Day use»: a hotel room held for a window of the day, no night.
   final bool isDayUse;
 
+  /// The business linked a build/manufacturing timeline to this booking — only then is «متابعة التنفيذ» offered.
+  final bool hasProject;
+
   const Booking({
     required this.id,
     required this.status,
@@ -171,6 +174,7 @@ class Booking {
     this.bookableItemType,
     this.room,
     this.isDayUse = false,
+    this.hasProject = false,
   });
 
   bool get isCancellable => status == 'pending' || status == 'accepted';
@@ -219,6 +223,7 @@ class Booking {
       deposit: depositJson != null ? BookingDeposit.fromJson(depositJson) : null,
       bookableItemType: bookable?['item_type'] as String?,
       isDayUse: json['meta'] is Map<String, dynamic> && (json['meta'] as Map<String, dynamic>)['day_use'] == true,
+      hasProject: json['has_project'] as bool? ?? false,
       room: json['room'] is Map<String, dynamic> ? BookingRoom(id: (json['room'] as Map<String, dynamic>)['id'] as int, number: '${(json['room'] as Map<String, dynamic>)['number']}') : null,
       queueTurn: (json['queue_turn'] as num?)?.toInt(),
       chair: json['chair'] is Map<String, dynamic> ? ServiceChair.fromJson(json['chair'] as Map<String, dynamic>) : null,

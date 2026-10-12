@@ -883,6 +883,7 @@ class _BookingTile extends StatelessWidget {
       child: ListTile(
         onTap: () => showModalBottomSheet(
           context: context,
+          isScrollControlled: true,
           builder: (_) => _BookingDetailSheet(booking: booking),
         ),
         leading: CircleAvatar(
@@ -914,6 +915,7 @@ Future<void> openBookingDetailSheet(BuildContext context, WidgetRef ref, int boo
     if (!context.mounted) return;
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       builder: (_) => _BookingDetailSheet(booking: booking),
     );
   } catch (_) {
@@ -1127,7 +1129,9 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
     final booking = _booking;
 
     return SafeArea(
-      child: Padding(
+      // a booking with its deposit card and all its buttons is taller than the sheet: it scrolls, never clips
+      child: SingleChildScrollView(
+        child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -1339,18 +1343,21 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
                 ),
               ],
             ],
-            const SizedBox(height: 8),
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton(
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => ProjectProgressScreen(operationType: 'booking', operationId: booking.id),
+            // only a booking the business linked a timeline to (a hotel stay, a haircut have none)
+            if (booking.hasProject) ...[
+              const SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => ProjectProgressScreen(operationType: 'booking', operationId: booking.id),
+                    ),
                   ),
+                  child: Text(l10n.projectViewProgress),
                 ),
-                child: Text(l10n.projectViewProgress),
               ),
-            ),
+            ],
             const SizedBox(height: 8),
             SizedBox(
               width: double.infinity,
@@ -1360,6 +1367,7 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
               ),
             ),
           ],
+        ),
         ),
       ),
     );
