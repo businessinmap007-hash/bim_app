@@ -8101,6 +8101,58 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get dentalTabTitle => 'خدمات الأسنان';
+
+  @override
+  String get dentalManageTitle => 'خدمات عيادة الأسنان';
+
+  @override
+  String get dentalManageHint =>
+      'اختر الخدمات التي تقدمها عيادتك واكتب سعر كل خدمة. اترك السعر فارغاً ليظهر «السعر بعد الكشف».';
+
+  @override
+  String get dentalPriceAfterExam => 'السعر بعد الكشف';
+
+  @override
+  String get dentalNoneOffered => 'لم تعرض العيادة خدماتها بعد.';
+
+  @override
+  String get dentalAddOwn => 'إضافة خدمة';
+
+  @override
+  String get dentalOwnName => 'اسم الخدمة';
+
+  @override
+  String get dentalKindCheckup => 'الأشعة والتشخيص';
+
+  @override
+  String get dentalKindPreventive => 'الوقاية والتنظيف';
+
+  @override
+  String get dentalKindRestorative => 'الحشو والترميم';
+
+  @override
+  String get dentalKindEndodontic => 'علاج الجذور (العصب)';
+
+  @override
+  String get dentalKindPeriodontal => 'اللثة';
+
+  @override
+  String get dentalKindSurgical => 'الجراحة والزراعة';
+
+  @override
+  String get dentalKindProsthetic => 'التركيبات';
+
+  @override
+  String get dentalKindOrthodontic => 'التقويم';
+
+  @override
+  String get dentalKindCosmetic => 'تجميل الأسنان';
+
+  @override
+  String get dentalKindPediatric => 'أسنان الأطفال';
+
+  @override
   String get procTabTitle => 'الإجراءات الطبية';
 
   @override

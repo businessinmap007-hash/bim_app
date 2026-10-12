@@ -14887,6 +14887,108 @@ abstract class AppLocalizations {
   /// **'ملاحظة المستشفى: {note}'**
   String procHospitalNote(Object note);
 
+  /// No description provided for @dentalTabTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدمات الأسنان'**
+  String get dentalTabTitle;
+
+  /// No description provided for @dentalManageTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدمات عيادة الأسنان'**
+  String get dentalManageTitle;
+
+  /// No description provided for @dentalManageHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الخدمات التي تقدمها عيادتك واكتب سعر كل خدمة. اترك السعر فارغاً ليظهر «السعر بعد الكشف».'**
+  String get dentalManageHint;
+
+  /// No description provided for @dentalPriceAfterExam.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر بعد الكشف'**
+  String get dentalPriceAfterExam;
+
+  /// No description provided for @dentalNoneOffered.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تعرض العيادة خدماتها بعد.'**
+  String get dentalNoneOffered;
+
+  /// No description provided for @dentalAddOwn.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة خدمة'**
+  String get dentalAddOwn;
+
+  /// No description provided for @dentalOwnName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الخدمة'**
+  String get dentalOwnName;
+
+  /// No description provided for @dentalKindCheckup.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأشعة والتشخيص'**
+  String get dentalKindCheckup;
+
+  /// No description provided for @dentalKindPreventive.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوقاية والتنظيف'**
+  String get dentalKindPreventive;
+
+  /// No description provided for @dentalKindRestorative.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحشو والترميم'**
+  String get dentalKindRestorative;
+
+  /// No description provided for @dentalKindEndodontic.
+  ///
+  /// In ar, this message translates to:
+  /// **'علاج الجذور (العصب)'**
+  String get dentalKindEndodontic;
+
+  /// No description provided for @dentalKindPeriodontal.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللثة'**
+  String get dentalKindPeriodontal;
+
+  /// No description provided for @dentalKindSurgical.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجراحة والزراعة'**
+  String get dentalKindSurgical;
+
+  /// No description provided for @dentalKindProsthetic.
+  ///
+  /// In ar, this message translates to:
+  /// **'التركيبات'**
+  String get dentalKindProsthetic;
+
+  /// No description provided for @dentalKindOrthodontic.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقويم'**
+  String get dentalKindOrthodontic;
+
+  /// No description provided for @dentalKindCosmetic.
+  ///
+  /// In ar, this message translates to:
+  /// **'تجميل الأسنان'**
+  String get dentalKindCosmetic;
+
+  /// No description provided for @dentalKindPediatric.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسنان الأطفال'**
+  String get dentalKindPediatric;
+
   /// No description provided for @procTabTitle.
   ///
   /// In ar, this message translates to:

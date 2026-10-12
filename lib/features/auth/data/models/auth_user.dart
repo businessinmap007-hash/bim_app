@@ -30,6 +30,9 @@ class AuthUser {
   final bool setupComplete;
   final List<String> setupMissing;
 
+  /// A clinic that ticked «أسنان»: it has its own services list (see DentalServicesManageScreen).
+  final bool dentalClinic;
+
   const AuthUser({
     required this.id,
     required this.name,
@@ -52,13 +55,15 @@ class AuthUser {
     this.social,
     this.setupComplete = true,
     this.setupMissing = const [],
+    this.dentalClinic = false,
   });
 
   bool get isBusiness => type == 'business';
 
   /// A "Shipping & Delivery" business account - the only kind that runs
   /// deliveries on its own account (see DriverDashboardScreen).
-  bool get isShippingCarrier => isBusiness && categorySlug == 'shipping-delivery';
+  bool get isShippingCarrier =>
+      isBusiness && categorySlug == 'shipping-delivery';
   bool get hasLocation => latitude != null && longitude != null;
 
   factory AuthUser.fromJson(Map<String, dynamic> json) => AuthUser(
@@ -81,7 +86,15 @@ class AuthUser {
     categoryChildId: (json['category_child_id'] as num?)?.toInt(),
     categorySlug: json['category_slug'] as String?,
     social: SocialLinks.fromJsonOrNull(json['social']),
-    setupComplete: (json['setup'] as Map<String, dynamic>?)?['complete'] as bool? ?? true,
-    setupMissing: [for (final m in ((json['setup'] as Map<String, dynamic>?)?['missing'] as List<dynamic>? ?? const [])) '$m'],
+    setupComplete:
+        (json['setup'] as Map<String, dynamic>?)?['complete'] as bool? ?? true,
+    setupMissing: [
+      for (final m
+          in ((json['setup'] as Map<String, dynamic>?)?['missing']
+                  as List<dynamic>? ??
+              const []))
+        '$m',
+    ],
+    dentalClinic: json['dental_clinic'] as bool? ?? false,
   );
 }

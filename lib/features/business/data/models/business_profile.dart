@@ -12,11 +12,15 @@ class BusinessSections {
   /// The business sells bookings (a hotel's rooms, a hall, a pitch): its services tab is called «الحجز».
   final bool booking;
 
+  /// A dental clinic that listed its services: its page shows them as a tab.
+  final bool dental;
+
   const BusinessSections({
     required this.posts,
     required this.menu,
     required this.services,
     this.booking = false,
+    this.dental = false,
   });
 
   bool get any => posts || menu || services;
@@ -26,6 +30,7 @@ class BusinessSections {
     menu: json['menu'] as bool? ?? false,
     services: json['services'] as bool? ?? false,
     booking: json['booking'] as bool? ?? false,
+    dental: json['dental'] as bool? ?? false,
   );
 }
 

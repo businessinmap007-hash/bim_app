@@ -8144,6 +8144,58 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get dentalTabTitle => 'Dental services';
+
+  @override
+  String get dentalManageTitle => 'Dental clinic services';
+
+  @override
+  String get dentalManageHint =>
+      'Tick the services your clinic offers and write each price. Leave the price empty to show «Price after the exam».';
+
+  @override
+  String get dentalPriceAfterExam => 'Price after the exam';
+
+  @override
+  String get dentalNoneOffered => 'The clinic has not listed its services yet.';
+
+  @override
+  String get dentalAddOwn => 'Add a service';
+
+  @override
+  String get dentalOwnName => 'Service name';
+
+  @override
+  String get dentalKindCheckup => 'X-rays and diagnosis';
+
+  @override
+  String get dentalKindPreventive => 'Prevention and cleaning';
+
+  @override
+  String get dentalKindRestorative => 'Fillings and restoration';
+
+  @override
+  String get dentalKindEndodontic => 'Root canal treatment';
+
+  @override
+  String get dentalKindPeriodontal => 'Gums';
+
+  @override
+  String get dentalKindSurgical => 'Surgery and implants';
+
+  @override
+  String get dentalKindProsthetic => 'Crowns, bridges and dentures';
+
+  @override
+  String get dentalKindOrthodontic => 'Braces';
+
+  @override
+  String get dentalKindCosmetic => 'Cosmetic dentistry';
+
+  @override
+  String get dentalKindPediatric => 'Children\'s dentistry';
+
+  @override
   String get procTabTitle => 'Procedures';
 
   @override
