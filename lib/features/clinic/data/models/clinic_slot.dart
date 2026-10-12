@@ -21,6 +21,7 @@ class ClinicSlot {
     startsAt: json['starts_at'] != null ? EgyptTime.tryParse(json['starts_at'] as String) : null,
     durationMinutes: (json['duration_minutes'] as num?)?.toInt() ?? 0,
     visitKind: json['visit_kind'] as String?,
-    price: (json['price'] as num?)?.toDouble(),
+    // a number, but a decimal column may still arrive as «400.00» — never let a price take the board down
+    price: json['price'] is num ? (json['price'] as num).toDouble() : double.tryParse('${json['price'] ?? ''}'),
   );
 }

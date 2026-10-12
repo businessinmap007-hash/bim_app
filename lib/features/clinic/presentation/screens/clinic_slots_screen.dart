@@ -6,6 +6,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/arrival_notice_banner.dart';
 import '../../../booking/application/booking_providers.dart';
 import '../../../booking/presentation/widgets/booking_grid_widgets.dart';
+import '../../../booking/presentation/widgets/booking_shape_tab.dart';
 import '../../../specialty_services/application/specialty_services_providers.dart';
 import '../../../specialty_services/presentation/widgets/specialty_widgets.dart';
 import '../../application/clinic_providers.dart';
@@ -15,20 +16,37 @@ import '../../data/models/clinic_slot.dart';
 /// times for the chosen day, a reason box, and a bottom bar that sums up the visit (kind, date and time, price) with
 /// the one booking button. Booking confirms it at once (no back-and-forth with the clinic). See
 /// Api\V2\ClinicAppointmentController.
-class ClinicSlotsScreen extends ConsumerStatefulWidget {
+class ClinicSlotsScreen extends StatelessWidget {
   final int clinicId;
   final String clinicName;
 
-  /// A dental clinic that listed its services: the patient says which one he came for.
+  /// A specialty clinic that listed its services: the patient says which one he came for.
   final bool hasServices;
 
   const ClinicSlotsScreen({super.key, required this.clinicId, required this.clinicName, this.hasServices = false});
 
   @override
-  ConsumerState<ClinicSlotsScreen> createState() => _ClinicSlotsScreenState();
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: Text(clinicName)),
+    body: ClinicBookingBoard(clinicId: clinicId, hasServices: hasServices),
+  );
 }
 
-class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
+/// The booking board itself: visit kind, under it the service the patient came for (a specialty clinic that listed
+/// them), the day, the time, who the visit is for and the bar that books. It is the clinic page's «الحجز» tab
+/// ([embedded]: scrolls with the page's header) and the body of [ClinicSlotsScreen] for a link that opens it alone.
+class ClinicBookingBoard extends ConsumerStatefulWidget {
+  final int clinicId;
+  final bool hasServices;
+  final bool embedded;
+
+  const ClinicBookingBoard({super.key, required this.clinicId, this.hasServices = false, this.embedded = false});
+
+  @override
+  ConsumerState<ClinicBookingBoard> createState() => _ClinicBookingBoardState();
+}
+
+class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
   String? _kind;
   DateTime? _day;
   int? _slotId;
@@ -52,13 +70,15 @@ class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
     final messenger = ScaffoldMessenger.of(context);
     setState(() => _booking = true);
     try {
-      await ref.read(clinicApiProvider).bookSlot(
-        slot.id,
-        reason: _reason.text.trim(),
-        specialtyServiceId: _serviceId,
-        forName: _forOther ? _forName.text.trim() : null,
-        forPhone: _forOther ? _forPhone.text.trim() : null,
-      );
+      await ref
+          .read(clinicApiProvider)
+          .bookSlot(
+            slot.id,
+            reason: _reason.text.trim(),
+            specialtyServiceId: _serviceId,
+            forName: _forOther ? _forName.text.trim() : null,
+            forPhone: _forOther ? _forPhone.text.trim() : null,
+          );
       ref.invalidate(clinicSlotsProvider(widget.clinicId));
       if (!mounted) return;
       setState(() {
@@ -82,10 +102,7 @@ class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
     if (slot == null) return l10n.clinicPickSlotHint;
 
     final kind = slot.visitKind;
-    return [
-      if (kind != null && kind.isNotEmpty) kind,
-      if ((serviceName ?? '').isNotEmpty) serviceName!,
-    ].join(' — ');
+    return [if (kind != null && kind.isNotEmpty) kind, if ((serviceName ?? '').isNotEmpty) serviceName!].join(' — ');
   }
 
   /// The name of the dental service picked, for the summary bar.
@@ -103,202 +120,213 @@ class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
     final locale = Localizations.localeOf(context).toString();
     final async = ref.watch(clinicSlotsProvider(widget.clinicId));
 
-    return Scaffold(
-      appBar: AppBar(title: Text(widget.clinicName)),
-      body: async.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (_, _) => Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(l10n.commonSomethingWentWrong),
-              const SizedBox(height: 8),
-              OutlinedButton(
-                onPressed: () => ref.invalidate(clinicSlotsProvider(widget.clinicId)),
-                child: Text(l10n.commonRetry),
-              ),
-            ],
-          ),
+    return async.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (_, _) => Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(l10n.commonSomethingWentWrong),
+            const SizedBox(height: 8),
+            OutlinedButton(
+              onPressed: () => ref.invalidate(clinicSlotsProvider(widget.clinicId)),
+              child: Text(l10n.commonRetry),
+            ),
+          ],
         ),
-        data: (slots) {
-          final dated = slots.where((s) => s.startsAt != null).toList()..sort((a, b) => a.startsAt!.compareTo(b.startsAt!));
-          if (dated.isEmpty) return Center(child: Text(l10n.clinicNoOpenSlots));
+      ),
+      data: (slots) {
+        final dated = slots.where((s) => s.startsAt != null).toList()
+          ..sort((a, b) => a.startsAt!.compareTo(b.startsAt!));
+        if (dated.isEmpty) return Center(child: Text(l10n.clinicNoOpenSlots));
 
-          // the visit kinds on offer («كشف / إعادة / استشارة»): the patient picks one, and only its days and times remain
-          final kinds = <String>[];
-          for (final s in dated) {
-            final k = s.visitKind;
-            if (k != null && k.isNotEmpty && !kinds.contains(k)) kinds.add(k);
-          }
-          final kind = kinds.isEmpty ? null : (kinds.contains(_kind) ? _kind : kinds.first);
-          final ofKind = kind == null ? dated : dated.where((s) => s.visitKind == kind).toList();
+        // the visit kinds on offer («كشف / إعادة / استشارة»): the patient picks one, and only its days and times remain
+        final kinds = <String>[];
+        for (final s in dated) {
+          final k = s.visitKind;
+          if (k != null && k.isNotEmpty && !kinds.contains(k)) kinds.add(k);
+        }
+        final kind = kinds.isEmpty ? null : (kinds.contains(_kind) ? _kind : kinds.first);
+        final ofKind = kind == null ? dated : dated.where((s) => s.visitKind == kind).toList();
 
-          final days = <DateTime>[];
-          for (final s in ofKind) {
-            final d = _dateOnly(s.startsAt!);
-            if (!days.contains(d)) days.add(d);
-          }
-          final day = _day != null && days.contains(_day) ? _day! : days.first;
-          final times = ofKind.where((s) => _dateOnly(s.startsAt!) == day).toList();
-          final picked = times.where((s) => s.id == _slotId).firstOrNull;
+        final days = <DateTime>[];
+        for (final s in ofKind) {
+          final d = _dateOnly(s.startsAt!);
+          if (!days.contains(d)) days.add(d);
+        }
+        final day = _day != null && days.contains(_day) ? _day! : days.first;
+        final times = ofKind.where((s) => _dateOnly(s.startsAt!) == day).toList();
+        final picked = times.where((s) => s.id == _slotId).firstOrNull;
 
-          return Column(
-            children: [
-              Expanded(
-                child: ListView(
-                  padding: const EdgeInsets.all(16),
+        final children = <Widget>[
+          // the clinic's own «be there N minutes early», before the patient picks a time
+          Builder(
+            builder: (context) {
+              final notice = ref.watch(bookingFormProvider(widget.clinicId)).valueOrNull?.arrivalNotice;
+              if ((notice ?? '').isEmpty) return const SizedBox.shrink();
+
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: ArrivalNoticeBanner(message: notice),
+              );
+            },
+          ),
+          if (kinds.isNotEmpty) ...[
+            _SectionCard(
+              title: l10n.clinicPickKind,
+              child: RadioGroup<String>(
+                groupValue: kind,
+                onChanged: (k) => setState(() {
+                  _kind = k;
+                  _day = null;
+                  _slotId = null;
+                }),
+                child: Column(
                   children: [
-                    // the clinic's own «be there N minutes early», before the patient picks a time
-                    Builder(
-                      builder: (context) {
-                        final notice = ref.watch(bookingFormProvider(widget.clinicId)).valueOrNull?.arrivalNotice;
-                        if ((notice ?? '').isEmpty) return const SizedBox.shrink();
-
-                        return Padding(padding: const EdgeInsets.only(bottom: 12), child: ArrivalNoticeBanner(message: notice));
-                      },
-                    ),
-                    if (kinds.isNotEmpty) ...[
-                      _SectionCard(
-                        title: l10n.clinicPickKind,
-                        child: RadioGroup<String>(
-                          groupValue: kind,
-                          onChanged: (k) => setState(() {
-                            _kind = k;
-                            _day = null;
-                            _slotId = null;
-                          }),
-                          child: Column(
-                            children: [
-                              for (final k in kinds)
-                                RadioListTile<String>(
-                                  value: k,
-                                  contentPadding: EdgeInsets.zero,
-                                  title: Text(k),
-                                  secondary: _kindPrice(dated, k, l10n.invCurrency),
-                                ),
-                            ],
-                          ),
-                        ),
+                    for (final k in kinds)
+                      RadioListTile<String>(
+                        value: k,
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(k),
+                        secondary: _kindPrice(dated, k, l10n.invCurrency),
                       ),
-                      const SizedBox(height: 12),
-                    ],
-                    if (widget.hasServices) ...[
-                      _ServicePicker(
-                        clinicId: widget.clinicId,
-                        selected: _serviceId,
-                        onChanged: (id) => setState(() => _serviceId = id),
-                      ),
-                      const SizedBox(height: 12),
-                    ],
-                    _SectionCard(
-                      title: l10n.clinicPickDay,
-                      child: SizedBox(
-                        height: 64,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: days.length,
-                          separatorBuilder: (_, _) => const SizedBox(width: 8),
-                          itemBuilder: (context, i) => _DayChip(
-                            day: days[i],
-                            selected: days[i] == day,
-                            onTap: () => setState(() {
-                              _day = days[i];
-                              _slotId = null;
-                            }),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    _SectionCard(
-                      title: l10n.clinicPickTime,
-                      child: GridView.count(
-                        crossAxisCount: 3,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        mainAxisSpacing: 8,
-                        crossAxisSpacing: 8,
-                        childAspectRatio: 2.4,
-                        children: [
-                          for (final s in times)
-                            _TimeChip(
-                              label: DateFormat.jm(locale).format(s.startsAt!),
-                              selected: s.id == _slotId,
-                              onTap: () => setState(() => _slotId = s.id),
-                            ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    _SectionCard(
-                      title: l10n.clinicPatientLabel,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: SizedBox(
-                                  height: 44,
-                                  child: _Chip(
-                                    selected: !_forOther,
-                                    onTap: () => setState(() => _forOther = false),
-                                    builder: (ink) => Text(l10n.clinicForMe, style: TextStyle(fontWeight: FontWeight.w600, color: ink)),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: SizedBox(
-                                  height: 44,
-                                  child: _Chip(
-                                    selected: _forOther,
-                                    onTap: () => setState(() => _forOther = true),
-                                    builder: (ink) => Text(l10n.clinicForOther, style: TextStyle(fontWeight: FontWeight.w600, color: ink)),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          if (_forOther) ...[
-                            const SizedBox(height: 10),
-                            TextField(
-                              controller: _forName,
-                              decoration: InputDecoration(labelText: l10n.clinicAttendeeName),
-                              onChanged: (_) => setState(() {}),
-                            ),
-                            const SizedBox(height: 8),
-                            TextField(
-                              controller: _forPhone,
-                              keyboardType: TextInputType.phone,
-                              decoration: InputDecoration(labelText: l10n.clinicAttendeePhone),
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    TextField(
-                      controller: _reason,
-                      minLines: 1,
-                      maxLines: 3,
-                      decoration: InputDecoration(hintText: l10n.clinicReasonHint),
-                    ),
                   ],
                 ),
               ),
-              BookingSummaryBar(
-                summary: _summary(picked, _pickedServiceName(), l10n),
-                when: picked?.startsAt == null ? null : DateFormat.MMMEd(locale).add_jm().format(picked!.startsAt!),
-                price: picked?.price,
-                label: l10n.clinicRequestBooking,
-                busy: _booking,
-                onPressed: picked == null || (_forOther && _forName.text.trim().isEmpty) ? null : () => _book(picked),
+            ),
+            const SizedBox(height: 12),
+          ],
+          if (widget.hasServices) ...[
+            _ServicePicker(
+              clinicId: widget.clinicId,
+              selected: _serviceId,
+              onChanged: (id) => setState(() => _serviceId = id),
+            ),
+            const SizedBox(height: 12),
+          ],
+          _SectionCard(
+            title: l10n.clinicPickDay,
+            child: SizedBox(
+              height: 64,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: days.length,
+                separatorBuilder: (_, _) => const SizedBox(width: 8),
+                itemBuilder: (context, i) => _DayChip(
+                  day: days[i],
+                  selected: days[i] == day,
+                  onTap: () => setState(() {
+                    _day = days[i];
+                    _slotId = null;
+                  }),
+                ),
               ),
-            ],
-          );
-        },
-      ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          _SectionCard(
+            title: l10n.clinicPickTime,
+            child: GridView.count(
+              crossAxisCount: 3,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+              childAspectRatio: 2.4,
+              children: [
+                for (final s in times)
+                  _TimeChip(
+                    label: DateFormat.jm(locale).format(s.startsAt!),
+                    selected: s.id == _slotId,
+                    onTap: () => setState(() => _slotId = s.id),
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          _SectionCard(
+            title: l10n.clinicPatientLabel,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 44,
+                        child: _Chip(
+                          selected: !_forOther,
+                          onTap: () => setState(() => _forOther = false),
+                          builder: (ink) => Text(
+                            l10n.clinicForMe,
+                            style: TextStyle(fontWeight: FontWeight.w600, color: ink),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: SizedBox(
+                        height: 44,
+                        child: _Chip(
+                          selected: _forOther,
+                          onTap: () => setState(() => _forOther = true),
+                          builder: (ink) => Text(
+                            l10n.clinicForOther,
+                            style: TextStyle(fontWeight: FontWeight.w600, color: ink),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                if (_forOther) ...[
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: _forName,
+                    decoration: InputDecoration(labelText: l10n.clinicAttendeeName),
+                    onChanged: (_) => setState(() {}),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: _forPhone,
+                    keyboardType: TextInputType.phone,
+                    decoration: InputDecoration(labelText: l10n.clinicAttendeePhone),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _reason,
+            minLines: 1,
+            maxLines: 3,
+            decoration: InputDecoration(hintText: l10n.clinicReasonHint),
+          ),
+        ];
+
+        final bar = BookingSummaryBar(
+          summary: _summary(picked, _pickedServiceName(), l10n),
+          when: picked?.startsAt == null ? null : DateFormat.MMMEd(locale).add_jm().format(picked!.startsAt!),
+          price: picked?.price,
+          label: l10n.clinicRequestBooking,
+          busy: _booking,
+          onPressed: picked == null || (_forOther && _forName.text.trim().isEmpty) ? null : () => _book(picked),
+        );
+
+        // as a tab it scrolls under the page's header; alone it is a plain padded list above the bar
+        if (widget.embedded) return BoardScaffold(bottom: bar, children: children);
+
+        return Column(
+          children: [
+            Expanded(
+              child: ListView(padding: const EdgeInsets.all(16), children: children),
+            ),
+            bar,
+          ],
+        );
+      },
     );
   }
 }
@@ -310,7 +338,10 @@ Widget? _kindPrice(List<ClinicSlot> slots, String kind, String currency) {
   final price = slots.where((s) => s.visitKind == kind).map((s) => s.price).whereType<double>().firstOrNull;
   if (price == null) return null;
 
-  return Text('${price.toStringAsFixed(price % 1 == 0 ? 0 : 2)} $currency', style: const TextStyle(fontWeight: FontWeight.w600));
+  return Text(
+    '${price.toStringAsFixed(price % 1 == 0 ? 0 : 2)} $currency',
+    style: const TextStyle(fontWeight: FontWeight.w600),
+  );
 }
 
 class _SectionCard extends StatelessWidget {
@@ -405,7 +436,10 @@ class _TimeChip extends StatelessWidget {
     return _Chip(
       selected: selected,
       onTap: onTap,
-      builder: (ink) => Text(label, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: ink)),
+      builder: (ink) => Text(
+        label,
+        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: ink),
+      ),
     );
   }
 }
@@ -434,7 +468,10 @@ class _ServicePicker extends ConsumerWidget {
           for (final s in sections) ...[
             Padding(
               padding: const EdgeInsets.only(top: 4, bottom: 6),
-              child: Text(specialtyKindLabel(l10n, s.kind), style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+              child: Text(
+                specialtyKindLabel(l10n, s.kind),
+                style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
+              ),
             ),
             Wrap(
               spacing: 8,
@@ -442,7 +479,9 @@ class _ServicePicker extends ConsumerWidget {
               children: [
                 for (final p in s.services)
                   ChoiceChip(
-                    label: Text(p.price == null ? p.name : '${p.name} · ${formatServiceMoney(p.price!)} ${l10n.invCurrency}'),
+                    label: Text(
+                      p.price == null ? p.name : '${p.name} · ${formatServiceMoney(p.price!)} ${l10n.invCurrency}',
+                    ),
                     selected: selected == p.id,
                     onSelected: (on) => onChanged(on ? p.id : null),
                   ),

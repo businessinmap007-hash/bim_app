@@ -186,4 +186,62 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('الخدمة المطلوبة (اختياري)'), findsNothing);
   });
+
+  test('a slot price that arrives as a decimal string does not break the board', () {
+    final slot = ClinicSlot.fromJson({'id': 1, 'starts_at': '2026-10-14T11:00:00+03:00', 'duration_minutes': 30, 'visit_kind': 'كشف', 'price': '400.00'});
+    expect(slot.price, 400.0);
+
+    expect(ClinicSlot.fromJson({'id': 2, 'duration_minutes': 30, 'price': 250}).price, 250.0);
+    expect(ClinicSlot.fromJson({'id': 3, 'duration_minutes': 30}).price, isNull);
+  });
+
+  testWidgets('as the booking tab of the page the board holds the visit kind, the service under it, the day and the bar', (tester) async {
+    final api = _FakeApi();
+    final slots = [ClinicSlot(id: 1, startsAt: DateTime(2026, 10, 14, 17), durationMinutes: 30, visitKind: 'كشف', price: 300)];
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          clinicApiProvider.overrideWithValue(api),
+          clinicSlotsProvider(7).overrideWith((ref) async => slots),
+          specialtyServicesProvider(7).overrideWith(
+            (ref) async => const [
+              ServiceOfferingSection(kind: 'injectables', services: [ServiceOffering(id: 21, name: 'فيلر الشفاه', price: 3500)]),
+            ],
+          ),
+        ],
+        child: MaterialApp(
+          locale: const Locale('ar'),
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: const [AppLocalizations.delegate, GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate, GlobalCupertinoLocalizations.delegate],
+          home: Scaffold(
+            body: DefaultTabController(
+              length: 2,
+              child: NestedScrollView(
+                headerSliverBuilder: (context, _) => [
+                  SliverOverlapAbsorber(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                    sliver: const SliverToBoxAdapter(child: SizedBox(height: 80)),
+                  ),
+                ],
+                body: const TabBarView(
+                  children: [
+                    ClinicBookingBoard(clinicId: 7, hasServices: true, embedded: true),
+                    Center(child: Text('عن النشاط')),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('نوع الزيارة'), findsOneWidget);
+    expect(find.text('الخدمة المطلوبة (اختياري)'), findsOneWidget);
+    expect(find.text('فيلر الشفاه · 3500 ج'), findsOneWidget);
+    expect(find.text('اليوم'), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, 'اطلب الحجز'), findsOneWidget);
+  });
 }

@@ -155,7 +155,14 @@ class _BusinessDetailBody extends StatelessWidget {
     }
     // …and a business that sells bookings leads with «الحجز», the same way — a hotel's rooms are why a guest opened
     // the page; the same tab body (priced lines → the booking screen), just named for what it sells.
-    final bookingFirst = profile.sections.services && profile.sections.booking;
+    // a clinic, a hospital or a medical centre takes appointments: its «الحجز» tab IS the booking board — the visit
+    // kind, under it the service the patient came for, then the day and the time — never a button to another screen
+    final isAppointmentClinic = const {513, 514, 515}.contains(profile.categoryChildId);
+    final bookingFirst = !isAppointmentClinic && profile.sections.services && profile.sections.booking;
+    if (isAppointmentClinic) {
+      tabs.add(Tab(text: l10n.businessTabBooking));
+      tabViews.add(ClinicBookingBoard(clinicId: profile.id, hasServices: profile.sections.specialtyServices, embedded: true));
+    }
     if (bookingFirst) {
       tabs.add(Tab(text: l10n.businessTabBooking));
       // drawn by the trade's booking shape when it has one (rooms under their kind, with photos and prices);
@@ -224,7 +231,7 @@ class _BusinessDetailBody extends StatelessWidget {
           // exists to check instead; an empty-slots screen for a
           // health business that doesn't publish any is a harmless
           // outcome, unlike showing this on an unrelated business.
-          if (profile.categoryId == kHealthRootCategoryId) ...[
+          if (profile.categoryId == kHealthRootCategoryId && !isAppointmentClinic) ...[
             const SizedBox(height: 10),
             OutlinedButton.icon(
               onPressed: () => Navigator.of(context).push(
