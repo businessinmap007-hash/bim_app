@@ -8062,7 +8062,43 @@ class AppLocalizationsAr extends AppLocalizations {
   String get hospitalInvitationLeave => 'إنهاء الظهور';
 
   @override
-  String get procKindSurgery => 'عمليات جراحية';
+  String get procKindSurgery => 'الجراحة العامة';
+
+  @override
+  String get procKindOrthopedic => 'العظام والمفاصل';
+
+  @override
+  String get procKindObstetrics => 'النساء والتوليد';
+
+  @override
+  String get procKindUrology => 'المسالك البولية والكلى';
+
+  @override
+  String get procKindEnt => 'الأنف والأذن والحنجرة';
+
+  @override
+  String get procKindOphthalmology => 'العيون';
+
+  @override
+  String get procKindCardiac => 'القلب والصدر والأوعية الدموية';
+
+  @override
+  String get procKindNeuro => 'المخ والأعصاب والعمود الفقري';
+
+  @override
+  String get procKindPlastic => 'التجميل والحروق';
+
+  @override
+  String get procKindPediatric => 'جراحة الأطفال';
+
+  @override
+  String get procKindOncology => 'جراحة الأورام';
+
+  @override
+  String get procKindBariatric => 'جراحة السمنة';
+
+  @override
+  String get procKindMaxillofacial => 'الوجه والفكين والأسنان';
 
   @override
   String get procKindEndoscopy => 'مناظير';
@@ -8104,9 +8140,6 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get dentalTabTitle => 'خدمات الأسنان';
-
-  @override
   String get dentalManageTitle => 'خدمات عيادة الأسنان';
 
   @override
@@ -8115,9 +8148,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get dentalPriceAfterExam => 'السعر بعد الكشف';
-
-  @override
-  String get dentalNoneOffered => 'لم تعرض العيادة خدماتها بعد.';
 
   @override
   String get dentalAddOwn => 'إضافة خدمة';

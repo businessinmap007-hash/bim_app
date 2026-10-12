@@ -9,7 +9,6 @@ import 'package:bim_app/features/dental/application/dental_providers.dart';
 import 'package:bim_app/features/dental/data/dental_api.dart';
 import 'package:bim_app/features/dental/data/models/dental_service.dart';
 import 'package:bim_app/features/dental/presentation/screens/dental_services_manage_screen.dart';
-import 'package:bim_app/features/dental/presentation/widgets/dental_services_tab.dart';
 import 'package:bim_app/l10n/app_localizations.dart';
 
 /// «أنشئ قائمة خدمات عيادات الأسنان» — المالك، 2026-10-13.
@@ -66,32 +65,6 @@ Widget _app(Widget home, _FakeApi api) => ProviderScope(
 );
 
 void main() {
-  testWidgets('a patient reads the clinic\'s services by kind with a price or «after the exam»', (tester) async {
-    await tester.pumpWidget(
-      _app(
-        Scaffold(
-          body: NestedScrollView(
-            headerSliverBuilder: (context, _) => [
-              SliverOverlapAbsorber(
-                handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                sliver: const SliverToBoxAdapter(child: SizedBox(height: 10)),
-              ),
-            ],
-            body: const DentalServicesTab(clinicId: 5),
-          ),
-        ),
-        _FakeApi(),
-      ),
-    );
-    await tester.pumpAndSettle();
-
-    expect(find.text('الوقاية والتنظيف'), findsOneWidget);
-    expect(find.text('الجراحة والزراعة'), findsOneWidget);
-    expect(find.text('تنظيف الأسنان وإزالة الجير'), findsOneWidget);
-    expect(find.text('400 ج'), findsOneWidget);
-    expect(find.text('السعر بعد الكشف'), findsOneWidget);
-  });
-
   testWidgets('the clinic ticks what it does, prices it, and saves with the standard button', (tester) async {
     final api = _FakeApi();
     await tester.pumpWidget(_app(const DentalServicesManageScreen(), api));

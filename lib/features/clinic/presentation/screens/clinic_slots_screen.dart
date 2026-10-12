@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/arrival_notice_banner.dart';
 import '../../../booking/application/booking_providers.dart';
+import '../../../booking/presentation/widgets/booking_grid_widgets.dart';
 import '../../../dental/application/dental_providers.dart';
 import '../../../dental/presentation/widgets/dental_widgets.dart';
 import '../../application/clinic_providers.dart';
@@ -74,6 +75,17 @@ class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
     } finally {
       if (mounted) setState(() => _booking = false);
     }
+  }
+
+  /// What the bar says above the date: the visit kind and the dental service, or the hint before a time is picked.
+  String _summary(ClinicSlot? slot, String? serviceName, AppLocalizations l10n) {
+    if (slot == null) return l10n.clinicPickSlotHint;
+
+    final kind = slot.visitKind;
+    return [
+      if (kind != null && kind.isNotEmpty) kind,
+      if ((serviceName ?? '').isNotEmpty) serviceName!,
+    ].join(' — ');
   }
 
   /// The name of the dental service picked, for the summary bar.
@@ -275,11 +287,13 @@ class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
                   ],
                 ),
               ),
-              _SummaryBar(
-                slot: picked,
-                serviceName: _pickedServiceName(),
+              BookingSummaryBar(
+                summary: _summary(picked, _pickedServiceName(), l10n),
+                when: picked?.startsAt == null ? null : DateFormat.MMMEd(locale).add_jm().format(picked!.startsAt!),
+                price: picked?.price,
+                label: l10n.clinicRequestBooking,
                 busy: _booking,
-                onBook: picked == null || (_forOther && _forName.text.trim().isEmpty) ? null : () => _book(picked),
+                onPressed: picked == null || (_forOther && _forName.text.trim().isEmpty) ? null : () => _book(picked),
               ),
             ],
           );
@@ -392,66 +406,6 @@ class _TimeChip extends StatelessWidget {
       selected: selected,
       onTap: onTap,
       builder: (ink) => Text(label, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: ink)),
-    );
-  }
-}
-
-class _SummaryBar extends StatelessWidget {
-  final ClinicSlot? slot;
-  final String? serviceName;
-  final bool busy;
-  final VoidCallback? onBook;
-  const _SummaryBar({required this.slot, this.serviceName, required this.busy, required this.onBook});
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
-    final locale = Localizations.localeOf(context).toString();
-    final s = slot;
-    final kind = s?.visitKind;
-    final startsAt = s?.startsAt;
-    final summary = s == null
-        ? l10n.clinicPickSlotHint
-        : [
-            if (kind != null && kind.isNotEmpty) kind,
-            if ((serviceName ?? '').isNotEmpty) serviceName!,
-            if (startsAt != null) DateFormat.MMMEd(locale).add_jm().format(startsAt),
-          ].join(' — ');
-    final price = s?.price;
-
-    return Material(
-      color: theme.colorScheme.surface,
-      elevation: 8,
-      child: SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                children: [
-                  Expanded(child: Text(summary, style: theme.textTheme.bodyMedium)),
-                  if (price != null)
-                    Text(
-                      '${price.toStringAsFixed(price % 1 == 0 ? 0 : 2)} ${l10n.invCurrency}',
-                      style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
-                    ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              FilledButton(
-                onPressed: busy ? null : onBook,
-                child: busy
-                    ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                    : Text(l10n.clinicRequestBooking),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

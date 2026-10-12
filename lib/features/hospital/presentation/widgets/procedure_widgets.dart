@@ -7,6 +7,18 @@ import '../../data/models/hospital_procedure.dart';
 String procedureKindLabel(AppLocalizations l10n, String kind) => switch (kind) {
   'surgery' => l10n.procKindSurgery,
   'endoscopy' => l10n.procKindEndoscopy,
+  'orthopedic' => l10n.procKindOrthopedic,
+  'obstetrics' => l10n.procKindObstetrics,
+  'urology' => l10n.procKindUrology,
+  'ent' => l10n.procKindEnt,
+  'ophthalmology' => l10n.procKindOphthalmology,
+  'cardiac' => l10n.procKindCardiac,
+  'neuro' => l10n.procKindNeuro,
+  'plastic' => l10n.procKindPlastic,
+  'pediatric' => l10n.procKindPediatric,
+  'oncology' => l10n.procKindOncology,
+  'bariatric' => l10n.procKindBariatric,
+  'maxillofacial' => l10n.procKindMaxillofacial,
   _ => l10n.procKindProcedure,
 };
 

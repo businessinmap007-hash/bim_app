@@ -162,15 +162,25 @@ class BookingTimeGrid extends StatelessWidget {
   }
 }
 
-/// The bar at the bottom of a board: what is chosen (and its price), then one full-width action.
+/// The bar at the bottom of a board: what is chosen (and its price), then one full-width action. [when] is the date and
+/// the time: it gets its own line and is never split across two (the day on one line, the month on the next).
 class BookingSummaryBar extends StatelessWidget {
   final String summary;
+  final String? when;
   final double? price;
   final String label;
   final bool busy;
   final VoidCallback? onPressed;
 
-  const BookingSummaryBar({super.key, required this.summary, this.price, required this.label, this.busy = false, required this.onPressed});
+  const BookingSummaryBar({
+    super.key,
+    required this.summary,
+    this.when,
+    this.price,
+    required this.label,
+    this.busy = false,
+    required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -188,10 +198,29 @@ class BookingSummaryBar extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (summary.isNotEmpty || price != null) ...[
+              if (summary.isNotEmpty || when != null || price != null) ...[
+                if (when != null && summary.isNotEmpty) ...[
+                  Text(summary, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+                  const SizedBox(height: 2),
+                ],
                 Row(
                   children: [
-                    Expanded(child: Text(summary, style: theme.textTheme.bodyMedium)),
+                    Expanded(
+                      child: when == null
+                          ? Text(summary, style: theme.textTheme.bodyMedium)
+                          : Align(
+                              alignment: AlignmentDirectional.centerStart,
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  when!,
+                                  maxLines: 1,
+                                  softWrap: false,
+                                  style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                            ),
+                    ),
                     if (price != null)
                       Text(
                         '${price!.toStringAsFixed(price! % 1 == 0 ? 0 : 2)} ${l10n.invCurrency}',

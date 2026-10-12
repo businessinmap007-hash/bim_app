@@ -74,9 +74,8 @@ class _AppointmentBoardTabState extends ConsumerState<AppointmentBoardTab> {
 
         return BoardScaffold(
           bottom: BookingSummaryBar(
-            summary: slotData == null
-                ? ''
-                : '${chosen.label} — ${DateFormat.MMMEd(locale).add_jm().format(slotData.startsAt)}',
+            summary: slotData == null ? '' : chosen.label,
+            when: slotData == null ? null : DateFormat.MMMEd(locale).add_jm().format(slotData.startsAt),
             price: slotData == null ? null : chosen.price,
             label: l10n.bookingConfirmAppointment,
             onPressed: slotData == null

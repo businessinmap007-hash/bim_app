@@ -112,7 +112,8 @@ class _TableBookingTabState extends ConsumerState<TableBookingTab> {
       bottom: BookingSummaryBar(
         summary: chosen == null || _slot == null
             ? l10n.bookingTableHint
-            : '${chosen.unit.displayTitle} — ${DateFormat.MMMEd(locale).add_jm().format(_slot!)} — ${l10n.bookingPartyPeople(_party)}',
+            : '${chosen.unit.displayTitle} — ${l10n.bookingPartyPeople(_party)}',
+        when: chosen == null || _slot == null ? null : DateFormat.MMMEd(locale).add_jm().format(_slot!),
         label: l10n.bookingBookTable,
         onPressed: chosen == null || _slot == null
             ? null

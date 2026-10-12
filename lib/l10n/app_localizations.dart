@@ -14824,8 +14824,80 @@ abstract class AppLocalizations {
   /// No description provided for @procKindSurgery.
   ///
   /// In ar, this message translates to:
-  /// **'عمليات جراحية'**
+  /// **'الجراحة العامة'**
   String get procKindSurgery;
+
+  /// No description provided for @procKindOrthopedic.
+  ///
+  /// In ar, this message translates to:
+  /// **'العظام والمفاصل'**
+  String get procKindOrthopedic;
+
+  /// No description provided for @procKindObstetrics.
+  ///
+  /// In ar, this message translates to:
+  /// **'النساء والتوليد'**
+  String get procKindObstetrics;
+
+  /// No description provided for @procKindUrology.
+  ///
+  /// In ar, this message translates to:
+  /// **'المسالك البولية والكلى'**
+  String get procKindUrology;
+
+  /// No description provided for @procKindEnt.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأنف والأذن والحنجرة'**
+  String get procKindEnt;
+
+  /// No description provided for @procKindOphthalmology.
+  ///
+  /// In ar, this message translates to:
+  /// **'العيون'**
+  String get procKindOphthalmology;
+
+  /// No description provided for @procKindCardiac.
+  ///
+  /// In ar, this message translates to:
+  /// **'القلب والصدر والأوعية الدموية'**
+  String get procKindCardiac;
+
+  /// No description provided for @procKindNeuro.
+  ///
+  /// In ar, this message translates to:
+  /// **'المخ والأعصاب والعمود الفقري'**
+  String get procKindNeuro;
+
+  /// No description provided for @procKindPlastic.
+  ///
+  /// In ar, this message translates to:
+  /// **'التجميل والحروق'**
+  String get procKindPlastic;
+
+  /// No description provided for @procKindPediatric.
+  ///
+  /// In ar, this message translates to:
+  /// **'جراحة الأطفال'**
+  String get procKindPediatric;
+
+  /// No description provided for @procKindOncology.
+  ///
+  /// In ar, this message translates to:
+  /// **'جراحة الأورام'**
+  String get procKindOncology;
+
+  /// No description provided for @procKindBariatric.
+  ///
+  /// In ar, this message translates to:
+  /// **'جراحة السمنة'**
+  String get procKindBariatric;
+
+  /// No description provided for @procKindMaxillofacial.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوجه والفكين والأسنان'**
+  String get procKindMaxillofacial;
 
   /// No description provided for @procKindEndoscopy.
   ///
@@ -14893,12 +14965,6 @@ abstract class AppLocalizations {
   /// **'ملاحظة المستشفى: {note}'**
   String procHospitalNote(Object note);
 
-  /// No description provided for @dentalTabTitle.
-  ///
-  /// In ar, this message translates to:
-  /// **'خدمات الأسنان'**
-  String get dentalTabTitle;
-
   /// No description provided for @dentalManageTitle.
   ///
   /// In ar, this message translates to:
@@ -14916,12 +14982,6 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'السعر بعد الكشف'**
   String get dentalPriceAfterExam;
-
-  /// No description provided for @dentalNoneOffered.
-  ///
-  /// In ar, this message translates to:
-  /// **'لم تعرض العيادة خدماتها بعد.'**
-  String get dentalNoneOffered;
 
   /// No description provided for @dentalAddOwn.
   ///

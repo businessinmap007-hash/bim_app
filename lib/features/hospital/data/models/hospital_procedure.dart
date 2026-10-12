@@ -1,6 +1,23 @@
 import '../../../../core/time/egypt_time.dart';
-/// The three kinds of medical procedure a hospital offers, in the order a patient reads them.
-const procedureKinds = ['surgery', 'endoscopy', 'procedure'];
+/// The kinds of medical procedure a hospital offers, in the order a patient reads them: the surgical specialties
+/// (`surgery` is the general one), then the endoscopies and the treatment procedures.
+const procedureKinds = [
+  'surgery',
+  'orthopedic',
+  'obstetrics',
+  'urology',
+  'ent',
+  'ophthalmology',
+  'cardiac',
+  'neuro',
+  'plastic',
+  'pediatric',
+  'oncology',
+  'bariatric',
+  'maxillofacial',
+  'endoscopy',
+  'procedure',
+];
 
 /// A procedure a hospital offers, as a patient sees it. [id] is the offering a patient asks for; [price] null means
 /// «السعر بعد التقييم».

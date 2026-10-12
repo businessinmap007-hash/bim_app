@@ -88,22 +88,31 @@ class _HospitalProceduresManageScreenState extends ConsumerState<HospitalProcedu
         builder: (context, setSheet) => Padding(
           padding: EdgeInsets.fromLTRB(16, 0, 16, 16 + MediaQuery.of(context).viewInsets.bottom),
           child: SafeArea(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(l10n.procAddOwn, style: Theme.of(context).textTheme.titleMedium),
-                const SizedBox(height: 12),
-                SegmentedButton<String>(
-                  segments: [for (final k in procedureKinds) ButtonSegment(value: k, label: Text(procedureKindLabel(l10n, k)))],
-                  selected: {kind},
-                  onSelectionChanged: (s) => setSheet(() => kind = s.first),
-                ),
-                const SizedBox(height: 12),
-                TextField(controller: name, decoration: InputDecoration(labelText: l10n.procOwnName)),
-                const SizedBox(height: 16),
-                FilledButton(onPressed: () => Navigator.of(sheetContext).pop(true), child: Text(l10n.procAddOwn)),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(l10n.procAddOwn, style: Theme.of(context).textTheme.titleMedium),
+                  const SizedBox(height: 12),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      for (final k in procedureKinds)
+                        ChoiceChip(
+                          label: Text(procedureKindLabel(l10n, k)),
+                          selected: kind == k,
+                          onSelected: (_) => setSheet(() => kind = k),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  TextField(controller: name, decoration: InputDecoration(labelText: l10n.procOwnName)),
+                  const SizedBox(height: 16),
+                  FilledButton(onPressed: () => Navigator.of(sheetContext).pop(true), child: Text(l10n.procAddOwn)),
+                ],
+              ),
             ),
           ),
         ),

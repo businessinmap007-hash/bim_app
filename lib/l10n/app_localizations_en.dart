@@ -8105,7 +8105,43 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hospitalInvitationLeave => 'Stop appearing';
 
   @override
-  String get procKindSurgery => 'Surgeries';
+  String get procKindSurgery => 'General surgery';
+
+  @override
+  String get procKindOrthopedic => 'Bones and joints';
+
+  @override
+  String get procKindObstetrics => 'Obstetrics and gynecology';
+
+  @override
+  String get procKindUrology => 'Urology and kidneys';
+
+  @override
+  String get procKindEnt => 'Ear, nose and throat';
+
+  @override
+  String get procKindOphthalmology => 'Eye surgery';
+
+  @override
+  String get procKindCardiac => 'Heart, chest and vascular';
+
+  @override
+  String get procKindNeuro => 'Brain, nerves and spine';
+
+  @override
+  String get procKindPlastic => 'Plastic surgery and burns';
+
+  @override
+  String get procKindPediatric => 'Pediatric surgery';
+
+  @override
+  String get procKindOncology => 'Cancer surgery';
+
+  @override
+  String get procKindBariatric => 'Bariatric surgery';
+
+  @override
+  String get procKindMaxillofacial => 'Face, jaw and dental surgery';
 
   @override
   String get procKindEndoscopy => 'Endoscopies';
@@ -8147,9 +8183,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get dentalTabTitle => 'Dental services';
-
-  @override
   String get dentalManageTitle => 'Dental clinic services';
 
   @override
@@ -8158,9 +8191,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dentalPriceAfterExam => 'Price after the exam';
-
-  @override
-  String get dentalNoneOffered => 'The clinic has not listed its services yet.';
 
   @override
   String get dentalAddOwn => 'Add a service';

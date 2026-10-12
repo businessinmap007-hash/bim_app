@@ -10,7 +10,10 @@ import 'package:bim_app/features/hospital/presentation/screens/hospital_procedur
 import 'package:bim_app/features/hospital/presentation/screens/hospital_procedures_manage_screen.dart';
 import 'package:bim_app/features/hospital/presentation/screens/my_procedure_requests_screen.dart';
 import 'package:bim_app/features/hospital/presentation/widgets/hospital_procedures_tab.dart';
+import 'package:bim_app/features/hospital/presentation/widgets/procedure_widgets.dart';
 import 'package:bim_app/l10n/app_localizations.dart';
+import 'package:bim_app/l10n/app_localizations_ar.dart';
+import 'package:bim_app/l10n/app_localizations_en.dart';
 
 /// «إجراء طبي في المستشفى» — المالك، 2026-10-10.
 class _FakeApi implements HospitalApi {
@@ -109,7 +112,7 @@ void main() {
     ));
     await tester.pumpAndSettle();
 
-    expect(find.text('عمليات جراحية'), findsOneWidget);
+    expect(find.text('الجراحة العامة'), findsOneWidget);
     expect(find.text('مناظير'), findsOneWidget);
     expect(find.text('12000 ج'), findsOneWidget);
     expect(find.text('السعر بعد التقييم'), findsOneWidget);
@@ -171,5 +174,19 @@ void main() {
     await tester.tap(find.text('اعتذر'));
     await tester.pumpAndSettle();
     expect(api.declined, [9]);
+  });
+
+  test('every procedure kind has its own heading in both languages — a missed one would read as «treatment procedures»', () {
+    for (final l10n in [AppLocalizationsAr(), AppLocalizationsEn()]) {
+      final labels = [for (final k in procedureKinds) procedureKindLabel(l10n, k)];
+
+      expect(labels.toSet().length, procedureKinds.length, reason: 'each kind is told apart: $labels');
+      expect(labels.every((l) => l.trim().isNotEmpty), isTrue);
+    }
+
+    expect(procedureKindLabel(AppLocalizationsAr(), 'obstetrics'), 'النساء والتوليد');
+    expect(procedureKindLabel(AppLocalizationsAr(), 'surgery'), 'الجراحة العامة');
+    expect(procedureKinds.first, 'surgery');
+    expect(procedureKinds.last, 'procedure');
   });
 }
