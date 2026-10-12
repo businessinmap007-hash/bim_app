@@ -143,6 +143,30 @@ void main() {
     expect(InvestigationOrder.fromJson({'id': 1, 'status': 'ready', 'items': <dynamic>[], 'result_files': [{'id': 2, 'image': 'https://x.test/b', 'type': 'pdf'}]}).hasResults, isTrue);
   });
 
+  test('a scan (DICOM) is told apart from photos and reports, and counts as a result', () {
+    final order = InvestigationOrder.fromJson({
+      'id': 9,
+      'status': 'ready',
+      'items': <dynamic>[],
+      'result_files': [
+        {'id': 1, 'image': 'https://x.test/a', 'type': 'image'},
+        {'id': 2, 'image': 'https://x.test/b', 'type': 'pdf'},
+        {'id': 3, 'image': 'https://x.test/c', 'type': 'dicom'},
+        {'id': 4, 'image': 'https://x.test/d', 'type': 'dicom'},
+      ],
+    });
+
+    // a scan is never mistaken for a photo the app would try to draw
+    expect(order.resultFiles, hasLength(1));
+    expect(order.resultDocuments, hasLength(1));
+    expect(order.resultDicoms, hasLength(2));
+    expect(
+      InvestigationOrder.fromJson({'id': 1, 'status': 'ready', 'items': <dynamic>[], 'result_files': [{'id': 3, 'image': 'https://x.test/c', 'type': 'dicom'}]})
+          .hasResults,
+      isTrue,
+    );
+  });
+
   testWidgets('the doctor picks tests and exams from the lists and sends the order', (tester) async {
     final api = _FakeApi();
     await tester.pumpWidget(_app(const IssueInvestigationScreen(patientId: 3, patientName: 'محمد علي'), api));
@@ -228,6 +252,26 @@ void main() {
     expect(find.text('Hb 13.2 g/dL (12-16)'), findsOneWidget);
     expect(find.text('حفظ نسخة في ملفي'), findsOneWidget);
     expect(find.text('مشاركة النتائج مع الطبيب'), findsOneWidget);
+  });
+
+  testWidgets('a scan is offered as a file to open in a viewer, not drawn as a photo', (tester) async {
+    final api = _FakeApi();
+    api.fixed = const InvestigationOrder(
+      id: 6,
+      status: InvestigationOrder.ready,
+      doctor: InvestigationParty(id: 2, name: 'د. سارة'),
+      patient: InvestigationParty(id: 3, name: 'محمد'),
+      center: InvestigationParty(id: 7, name: 'مركز الأشعة'),
+      items: [InvestigationItem(id: 1, kind: 'radiology', name: 'أشعة مقطعية')],
+      resultDicoms: ['https://x.test/study1', 'https://x.test/study2'],
+    );
+    await tester.pumpWidget(_app(const InvestigationOrderDetailScreen(orderId: 6), api));
+    await tester.pumpAndSettle();
+
+    expect(find.text('دراسة DICOM 1'), findsOneWidget);
+    expect(find.text('دراسة DICOM 2'), findsOneWidget);
+    expect(find.text('فتح / مشاركة'), findsNWidgets(2));
+    expect(find.byType(Image), findsNothing);
   });
 
   testWidgets('the doctor reads the results but is offered neither the centres to share with nor a copy to keep', (tester) async {

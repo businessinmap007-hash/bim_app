@@ -622,6 +622,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get businessInfoCheckOut => 'Check-out time';
 
   @override
+  String get businessInfoHours => 'Working hours';
+
+  @override
   String get businessInfoAlbums => 'Photo album';
 
   @override
@@ -8614,6 +8617,30 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get invPhotosSaveFailed =>
       'The photos could not be downloaded. Try again.';
+
+  @override
+  String get invAddResultDicom => 'Attach DICOM scans';
+
+  @override
+  String invResultDicomCount(Object n) {
+    return 'DICOM files: $n';
+  }
+
+  @override
+  String invDicomStudy(Object n) {
+    return 'DICOM study $n';
+  }
+
+  @override
+  String get invDicomHint =>
+      'A scan file — opens in a DICOM viewer on your phone';
+
+  @override
+  String get invOpenDicom => 'Open / share';
+
+  @override
+  String get invDicomOpenFailed =>
+      'Could not download the scan file. Try again.';
 
   @override
   String get invAddResultPdf => 'Attach a PDF report';

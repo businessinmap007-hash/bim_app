@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../app/theme/app_colors.dart';
+import '../../../../core/time/egypt_time.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
 import '../../../../shared/widgets/full_screen_gallery.dart';
@@ -139,6 +140,10 @@ class BusinessInfoBody extends ConsumerWidget {
             ],
           ],
         ),
+        if (profile.workingHours != null) ...[
+          const SizedBox(height: 16),
+          _HoursCard(hours: profile.workingHours!, openNow: profile.openNow),
+        ],
         if (profile.social != null && !profile.social!.isEmpty) ...[
           const SizedBox(height: 16),
           Row(
@@ -188,6 +193,103 @@ class BusinessInfoBody extends ConsumerWidget {
           SliverOverlapInjector(handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
           SliverPadding(padding: const EdgeInsets.all(16), sliver: SliverList(delegate: SliverChildListDelegate(children))),
         ],
+      ),
+    );
+  }
+}
+
+/// The week the business wrote, Saturday first (the Egyptian week), today marked, closed days said plainly.
+class _HoursCard extends StatelessWidget {
+  final WorkingHours hours;
+  final bool openNow;
+  const _HoursCard({required this.hours, required this.openNow});
+
+  // Dart weekdays: Monday = 1 … Sunday = 7; the server's: Sunday = 0 … Saturday = 6.
+  static int _serverDay(DateTime d) => d.weekday % 7;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final today = _serverDay(EgyptTime.now());
+    final names = {
+      0: l10n.weekdaySunday,
+      1: l10n.weekdayMonday,
+      2: l10n.weekdayTuesday,
+      3: l10n.weekdayWednesday,
+      4: l10n.weekdayThursday,
+      5: l10n.weekdayFriday,
+      6: l10n.weekdaySaturday,
+    };
+    // Saturday first, Friday last
+    const order = [6, 0, 1, 2, 3, 4, 5];
+
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.schedule_outlined, color: theme.hintColor, size: 20),
+                const SizedBox(width: 8),
+                Expanded(child: Text(l10n.businessInfoHours, style: theme.textTheme.titleSmall)),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: (openNow ? AppColors.success : theme.hintColor).withValues(alpha: 0.14),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    openNow ? l10n.businessOpenNow : l10n.businessClosedNow,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: openNow ? AppColors.success : theme.hintColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            for (final d in order) ...[
+              Builder(
+                builder: (context) {
+                  final day = hours.forDay(d);
+                  final isToday = d == today;
+                  final String value;
+                  if (day == null || !day.isKnown) {
+                    value = '—';
+                  } else if (day.isClosed == true) {
+                    value = l10n.bookingSettingsClosed;
+                  } else {
+                    value = '${day.open ?? '--:--'} – ${day.close ?? '--:--'}';
+                  }
+                  final weight = isToday ? FontWeight.w800 : FontWeight.w500;
+
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: Row(
+                      children: [
+                        Expanded(child: Text(names[d]!, style: theme.textTheme.bodyMedium?.copyWith(fontWeight: weight))),
+                        Text(
+                          value,
+                          textDirection: TextDirection.ltr,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            fontWeight: weight,
+                            color: day?.isClosed == true ? theme.hintColor : null,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }

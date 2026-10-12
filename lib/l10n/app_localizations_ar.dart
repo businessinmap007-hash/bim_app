@@ -629,6 +629,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get businessInfoCheckOut => 'موعد تسجيل المغادرة';
 
   @override
+  String get businessInfoHours => 'ساعات العمل';
+
+  @override
   String get businessInfoAlbums => 'ألبوم الصور';
 
   @override
@@ -8563,6 +8566,28 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get invPhotosSaveFailed => 'تعذّر تنزيل الصور. حاول مرة أخرى.';
+
+  @override
+  String get invAddResultDicom => 'إرفاق أشعة DICOM';
+
+  @override
+  String invResultDicomCount(Object n) {
+    return 'ملفات DICOM: $n';
+  }
+
+  @override
+  String invDicomStudy(Object n) {
+    return 'دراسة DICOM $n';
+  }
+
+  @override
+  String get invDicomHint => 'ملف أشعة يُفتح ببرنامج عرض DICOM على هاتفك';
+
+  @override
+  String get invOpenDicom => 'فتح / مشاركة';
+
+  @override
+  String get invDicomOpenFailed => 'تعذّر تنزيل ملف الأشعة. حاول مرة أخرى.';
 
   @override
   String get invAddResultPdf => 'إرفاق تقرير PDF';

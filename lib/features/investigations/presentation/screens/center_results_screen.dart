@@ -26,6 +26,7 @@ class _CenterResultsScreenState extends ConsumerState<CenterResultsScreen> {
   final _note = TextEditingController();
   final List<String> _photos = [];
   final List<String> _pdfs = [];
+  final List<String> _dicoms = [];
   bool _busy = false;
   String? _error;
 
@@ -38,7 +39,7 @@ class _CenterResultsScreenState extends ConsumerState<CenterResultsScreen> {
     super.dispose();
   }
 
-  bool get _ready => _texts.values.any((c) => c.text.trim().isNotEmpty) || _photos.isNotEmpty || _pdfs.isNotEmpty;
+  bool get _ready => _texts.values.any((c) => c.text.trim().isNotEmpty) || _photos.isNotEmpty || _pdfs.isNotEmpty || _dicoms.isNotEmpty;
 
   Future<void> _addPhotos() async {
     final picked = await ImagePicker().pickMultiImage(maxWidth: 1600, maxHeight: 1600, imageQuality: 70, limit: 10);
@@ -50,6 +51,14 @@ class _CenterResultsScreenState extends ConsumerState<CenterResultsScreen> {
     final picked = await FilePicker.pickFiles(type: FileType.custom, allowedExtensions: ['pdf'], allowMultiple: true);
     final paths = (picked?.files ?? const []).map((f) => f.path).whereType<String>();
     if (paths.isNotEmpty && mounted) setState(() => _pdfs.addAll(paths.take(5 - _pdfs.length)));
+  }
+
+  /// A scan (DICOM) exactly as the machine wrote it, up to 20. Scanners name files `IM0001` with no extension, so the
+  /// picker takes any file and the server checks the content.
+  Future<void> _addDicoms() async {
+    final picked = await FilePicker.pickFiles(type: FileType.any, allowMultiple: true);
+    final paths = (picked?.files ?? const []).map((f) => f.path).whereType<String>();
+    if (paths.isNotEmpty && mounted) setState(() => _dicoms.addAll(paths.take(20 - _dicoms.length)));
   }
 
   Future<void> _send() async {
@@ -64,6 +73,7 @@ class _CenterResultsScreenState extends ConsumerState<CenterResultsScreen> {
         texts: {for (final e in _texts.entries) if (e.value.text.trim().isNotEmpty) e.key: e.value.text.trim()},
         photoPaths: _photos,
         documentPaths: _pdfs,
+        dicomPaths: _dicoms,
         note: _note.text.trim(),
       );
       if (mounted) Navigator.of(context).pop(true);
@@ -110,6 +120,12 @@ class _CenterResultsScreenState extends ConsumerState<CenterResultsScreen> {
             onPressed: _pdfs.length >= 5 ? null : _addPdfs,
             icon: Icon(_pdfs.isEmpty ? Icons.picture_as_pdf_outlined : Icons.check_circle_outline),
             label: Text(_pdfs.isEmpty ? l10n.invAddResultPdf : l10n.invResultPdfCount(_pdfs.length)),
+          ),
+          const SizedBox(height: 8),
+          OutlinedButton.icon(
+            onPressed: _dicoms.length >= 20 ? null : _addDicoms,
+            icon: Icon(_dicoms.isEmpty ? Icons.medical_information_outlined : Icons.check_circle_outline),
+            label: Text(_dicoms.isEmpty ? l10n.invAddResultDicom : l10n.invResultDicomCount(_dicoms.length)),
           ),
           const SizedBox(height: 12),
           TextField(

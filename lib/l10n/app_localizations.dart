@@ -1190,6 +1190,12 @@ abstract class AppLocalizations {
   /// **'موعد تسجيل المغادرة'**
   String get businessInfoCheckOut;
 
+  /// No description provided for @businessInfoHours.
+  ///
+  /// In ar, this message translates to:
+  /// **'ساعات العمل'**
+  String get businessInfoHours;
+
   /// No description provided for @businessInfoAlbums.
   ///
   /// In ar, this message translates to:
@@ -15708,6 +15714,42 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تعذّر تنزيل الصور. حاول مرة أخرى.'**
   String get invPhotosSaveFailed;
+
+  /// No description provided for @invAddResultDicom.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرفاق أشعة DICOM'**
+  String get invAddResultDicom;
+
+  /// No description provided for @invResultDicomCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملفات DICOM: {n}'**
+  String invResultDicomCount(Object n);
+
+  /// No description provided for @invDicomStudy.
+  ///
+  /// In ar, this message translates to:
+  /// **'دراسة DICOM {n}'**
+  String invDicomStudy(Object n);
+
+  /// No description provided for @invDicomHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملف أشعة يُفتح ببرنامج عرض DICOM على هاتفك'**
+  String get invDicomHint;
+
+  /// No description provided for @invOpenDicom.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح / مشاركة'**
+  String get invOpenDicom;
+
+  /// No description provided for @invDicomOpenFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر تنزيل ملف الأشعة. حاول مرة أخرى.'**
+  String get invDicomOpenFailed;
 
   /// No description provided for @invAddResultPdf.
   ///

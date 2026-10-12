@@ -104,6 +104,51 @@ class BusinessFulfillment {
 
 /// A business's social media links — every field optional, the object itself
 /// null when nothing was ever set (see BusinessPageController::socialLinks).
+/// One day of a business's week, as the business wrote it. `isClosed == null` = it never said (unknown, not closed).
+class WorkingDay {
+  /// 0 = Sunday … 6 = Saturday (the server's own numbering).
+  final int day;
+  final bool? isClosed;
+  final String? open;
+  final String? close;
+
+  const WorkingDay({required this.day, this.isClosed, this.open, this.close});
+
+  bool get isKnown => isClosed != null;
+
+  factory WorkingDay.fromJson(Map<String, dynamic> json) => WorkingDay(
+    day: (json['day'] as num).toInt(),
+    isClosed: json['is_closed'] as bool?,
+    open: json['open'] as String?,
+    close: json['close'] as String?,
+  );
+}
+
+/// The week a business wrote — absent (null on the profile) while it has written none.
+class WorkingHours {
+  final String timezone;
+  final List<WorkingDay> days;
+
+  const WorkingHours({required this.timezone, required this.days});
+
+  static WorkingHours? fromJsonOrNull(Object? json) {
+    if (json is! Map<String, dynamic>) return null;
+    final days = (json['days'] as List<dynamic>? ?? const [])
+        .map((e) => WorkingDay.fromJson(e as Map<String, dynamic>))
+        .toList();
+    if (days.isEmpty) return null;
+
+    return WorkingHours(timezone: json['timezone'] as String? ?? '', days: days);
+  }
+
+  WorkingDay? forDay(int day) {
+    for (final d in days) {
+      if (d.day == day) return d;
+    }
+    return null;
+  }
+}
+
 class SocialLinks {
   final String? facebook;
   final String? instagram;
@@ -157,6 +202,9 @@ class BusinessProfile {
   final String? checkInTime;
   final String? checkOutTime;
 
+  /// The weekly opening hours the business wrote, or null while it has written none.
+  final WorkingHours? workingHours;
+
   const BusinessProfile({
     required this.id,
     required this.name,
@@ -185,6 +233,7 @@ class BusinessProfile {
     required this.fulfillment,
     this.checkInTime,
     this.checkOutTime,
+    this.workingHours,
   });
 
   bool get hasLocation => latitude != null && longitude != null;
@@ -218,6 +267,7 @@ class BusinessProfile {
     fulfillment: fulfillment,
     checkInTime: checkInTime,
     checkOutTime: checkOutTime,
+    workingHours: workingHours,
   );
 
   /// The API returns "HH:mm:ss"; only "HH:mm" is worth showing.
@@ -267,6 +317,7 @@ class BusinessProfile {
       fulfillment: BusinessFulfillment.fromJson(json['fulfillment'] as Map<String, dynamic>? ?? const {}),
       checkInTime: _trimSeconds(json['check_in_time'] as String?),
       checkOutTime: _trimSeconds(json['check_out_time'] as String?),
+      workingHours: WorkingHours.fromJsonOrNull(json['working_hours']),
     );
   }
 }

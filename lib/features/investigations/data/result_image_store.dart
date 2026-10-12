@@ -27,7 +27,13 @@ class ResultImageStore {
 
   /// Download every photo (the links are signed — no login needed) into this order's folder. Returns how many are
   /// kept now; throws if any download fails, so nothing is marked «saved» on a half copy.
-  Future<int> save(int userId, int orderId, List<String> urls, {List<String> documentUrls = const []}) async {
+  Future<int> save(
+    int userId,
+    int orderId,
+    List<String> urls, {
+    List<String> documentUrls = const [],
+    List<String> dicomUrls = const [],
+  }) async {
     final dir = await _dir(userId, orderId);
     final dio = Dio();
     final kept = <File>[];
@@ -50,6 +56,17 @@ class ResultImageStore {
       if (bytes == null || bytes.isEmpty) throw StateError('empty download');
 
       final file = File('${dir.path}${Platform.pathSeparator}doc_${(i + 1).toString().padLeft(2, '0')}.pdf');
+      await file.writeAsBytes(bytes, flush: true);
+      kept.add(file);
+    }
+
+    // scans (DICOM) as they are, for a viewer the patient picks
+    for (var i = 0; i < dicomUrls.length; i++) {
+      final res = await dio.get<List<int>>(dicomUrls[i], options: Options(responseType: ResponseType.bytes));
+      final bytes = res.data;
+      if (bytes == null || bytes.isEmpty) throw StateError('empty download');
+
+      final file = File('${dir.path}${Platform.pathSeparator}scan_${(i + 1).toString().padLeft(2, '0')}.dcm');
       await file.writeAsBytes(bytes, flush: true);
       kept.add(file);
     }

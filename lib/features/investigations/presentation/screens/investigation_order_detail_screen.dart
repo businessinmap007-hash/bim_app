@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:dio/dio.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -48,8 +50,10 @@ class _InvestigationOrderDetailScreenState extends ConsumerState<InvestigationOr
     }
   }
 
-  List<File> get _localImages => _local.where((f) => !f.path.toLowerCase().endsWith('.pdf')).toList();
+  List<File> get _localImages =>
+      _local.where((f) => !f.path.toLowerCase().endsWith('.pdf') && !f.path.toLowerCase().endsWith('.dcm')).toList();
   List<File> get _localDocs => _local.where((f) => f.path.toLowerCase().endsWith('.pdf')).toList();
+  List<File> get _localDicoms => _local.where((f) => f.path.toLowerCase().endsWith('.dcm')).toList();
 
   Future<void> _openUrl(String url) async {
     final l10n = AppLocalizations.of(context)!;
@@ -60,6 +64,55 @@ class _InvestigationOrderDetailScreenState extends ConsumerState<InvestigationOr
   /// A report kept on this phone is handed to whatever PDF viewer the person picks.
   Future<void> _openLocal(File file) async {
     await SharePlus.instance.share(ShareParams(files: [XFile(file.path, mimeType: 'application/pdf')]));
+  }
+
+  /// A scan from the server: downloaded to a temporary file, then handed to whatever DICOM viewer the person has.
+  Future<void> _openDicomUrl(String url, int n) async {
+    final l10n = AppLocalizations.of(context)!;
+    setState(() => _busy = true);
+    try {
+      final res = await Dio().get<List<int>>(url, options: Options(responseType: ResponseType.bytes));
+      final bytes = res.data;
+      if (bytes == null || bytes.isEmpty) throw StateError('empty download');
+
+      final dir = await getTemporaryDirectory();
+      final file = File('${dir.path}${Platform.pathSeparator}scan_$n.dcm');
+      await file.writeAsBytes(bytes, flush: true);
+      await SharePlus.instance.share(ShareParams(files: [XFile(file.path, mimeType: 'application/dicom')]));
+    } catch (_) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.invDicomOpenFailed)));
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _openLocalDicom(File file) async {
+    await SharePlus.instance.share(ShareParams(files: [XFile(file.path, mimeType: 'application/dicom')]));
+  }
+
+  Widget _dicomTiles(AppLocalizations l10n, {List<String> urls = const [], List<File> files = const []}) {
+    return Column(
+      children: [
+        for (var i = 0; i < urls.length; i++)
+          ListTile(
+            dense: true,
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.medical_information_outlined),
+            title: Text(l10n.invDicomStudy('${i + 1}')),
+            subtitle: Text(l10n.invDicomHint),
+            trailing: TextButton(onPressed: _busy ? null : () => _openDicomUrl(urls[i], i + 1), child: Text(l10n.invOpenDicom)),
+          ),
+        for (var i = 0; i < files.length; i++)
+          ListTile(
+            dense: true,
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.medical_information_outlined),
+            title: Text(l10n.invDicomStudy('${i + 1}')),
+            subtitle: Text(l10n.invDicomHint),
+            trailing: TextButton(onPressed: () => _openLocalDicom(files[i]), child: Text(l10n.invOpenDicom)),
+          ),
+      ],
+    );
   }
 
   Widget _pdfTiles(AppLocalizations l10n, {List<String> urls = const [], List<File> files = const []}) {
@@ -91,7 +144,13 @@ class _InvestigationOrderDetailScreenState extends ConsumerState<InvestigationOr
     final l10n = AppLocalizations.of(context)!;
     setState(() => _busy = true);
     try {
-      await const ResultImageStore().save(userId, order.id, order.resultFiles, documentUrls: order.resultDocuments);
+      await const ResultImageStore().save(
+        userId,
+        order.id,
+        order.resultFiles,
+        documentUrls: order.resultDocuments,
+        dicomUrls: order.resultDicoms,
+      );
       await ref.read(investigationsApiProvider).markSaved(order.id);
       final files = await const ResultImageStore().local(userId, order.id);
       ref.invalidate(investigationOrderProvider(widget.orderId));
@@ -290,12 +349,13 @@ class _InvestigationOrderDetailScreenState extends ConsumerState<InvestigationOr
             ],
           ),
         ],
-        if (order.resultFiles.isNotEmpty || order.resultDocuments.isNotEmpty) ...[
+        if (order.resultFiles.isNotEmpty || order.resultDocuments.isNotEmpty || order.resultDicoms.isNotEmpty) ...[
           const SizedBox(height: 16),
           Text(l10n.invResults, style: theme.textTheme.titleMedium),
           const SizedBox(height: 8),
           if (order.resultFiles.isNotEmpty) _thumbs(context, order.resultFiles),
           if (order.resultDocuments.isNotEmpty) _pdfTiles(l10n, urls: order.resultDocuments),
+          if (order.resultDicoms.isNotEmpty) _dicomTiles(l10n, urls: order.resultDicoms),
           if (isPatient) ...[
             const SizedBox(height: 8),
             // the photos stay on the server only until they are safe on the patient's phone
@@ -338,7 +398,8 @@ class _InvestigationOrderDetailScreenState extends ConsumerState<InvestigationOr
             ],
           ),
           if (_localDocs.isNotEmpty) _pdfTiles(l10n, files: _localDocs),
-        ] else if (isPatient && order.filesPurged && order.resultFiles.isEmpty && order.resultDocuments.isEmpty) ...[
+          if (_localDicoms.isNotEmpty) _dicomTiles(l10n, files: _localDicoms),
+        ] else if (isPatient && order.filesPurged && order.resultFiles.isEmpty && order.resultDocuments.isEmpty && order.resultDicoms.isEmpty) ...[
           const SizedBox(height: 12),
           Text(l10n.invPhotosPurgedNoCopy, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
         ],
