@@ -43,7 +43,7 @@ import '../../../booking/application/booking_providers.dart';
 import '../../../hospital/presentation/screens/hospital_doctors_screen.dart';
 import '../../../hospital/presentation/screens/hospital_invitations_screen.dart';
 import '../../../hospital/presentation/screens/hospital_procedure_requests_screen.dart';
-import '../../../dental/presentation/screens/dental_services_manage_screen.dart';
+import '../../../specialty_services/presentation/screens/specialty_services_manage_screen.dart';
 import '../../../hospital/presentation/screens/hospital_procedures_manage_screen.dart';
 import '../../../investigations/presentation/screens/center_investigations_screen.dart';
 import '../../../training/presentation/screens/my_training_clients_screen.dart';
@@ -90,7 +90,7 @@ class ServicesSettingsScreen extends ConsumerWidget {
     final isHospital = authState is AuthSignedIn && const {513, 515}.contains(authState.user.categoryChildId);
     final isDoctorClinic = authState is AuthSignedIn && authState.user.categoryChildId == 514;
     // a clinic that ticked «أسنان» lists its dental services with its own prices
-    final isDentalClinic = authState is AuthSignedIn && authState.user.dentalClinic;
+    final hasSpecialtyServices = authState is AuthSignedIn && authState.user.hasSpecialtyServices;
     final isInvestigationCenter =
         authState is AuthSignedIn && const {163, 252, 513, 515}.contains(authState.user.categoryChildId);
 
@@ -106,7 +106,7 @@ class ServicesSettingsScreen extends ConsumerWidget {
           isInvestigationCenter: isInvestigationCenter,
           isHospital: isHospital,
           isDoctorClinic: isDoctorClinic,
-          isDentalClinic: isDentalClinic,
+          hasSpecialtyServices: hasSpecialtyServices,
           hasShopAddons: hasShopAddons,
           hasStayUnits: hasStayUnits,
           hasCourses: hasCourses,
@@ -119,7 +119,7 @@ class ServicesSettingsScreen extends ConsumerWidget {
           isInvestigationCenter: isInvestigationCenter,
           isHospital: isHospital,
           isDoctorClinic: isDoctorClinic,
-          isDentalClinic: isDentalClinic,
+          hasSpecialtyServices: hasSpecialtyServices,
           hasShopAddons: hasShopAddons,
           hasStayUnits: hasStayUnits,
           hasCourses: hasCourses,
@@ -146,7 +146,7 @@ class _ServiceList extends StatelessWidget {
   final bool isInvestigationCenter;
   final bool isHospital;
   final bool isDoctorClinic;
-  final bool isDentalClinic;
+  final bool hasSpecialtyServices;
 
   /// The trade offers priced services («طريقة الطهي») — the shop prices them here.
   final bool hasShopAddons;
@@ -166,7 +166,7 @@ class _ServiceList extends StatelessWidget {
     this.isInvestigationCenter = false,
     this.isHospital = false,
     this.isDoctorClinic = false,
-    this.isDentalClinic = false,
+    this.hasSpecialtyServices = false,
     this.hasShopAddons = false,
     this.hasStayUnits = false,
     this.hasCourses = false,
@@ -267,10 +267,10 @@ class _ServiceList extends StatelessWidget {
         builder: (_) => const HospitalProcedureRequestsScreen(),
       ),
       _Tile(
-        show: _has('clinic') && isDentalClinic,
+        show: _has('clinic') && hasSpecialtyServices,
         leading: Icons.medical_information_outlined,
-        title: l10n.dentalManageTitle,
-        builder: (_) => const DentalServicesManageScreen(),
+        title: l10n.specialtyServicesTitle,
+        builder: (_) => const SpecialtyServicesManageScreen(),
       ),
       _Tile(
         show: _has('clinic') && isDoctorClinic,

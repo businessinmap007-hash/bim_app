@@ -5,20 +5,20 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
 import '../../../../shared/widgets/form_save_button.dart';
-import '../../application/dental_providers.dart';
-import '../../data/models/dental_service.dart';
-import '../widgets/dental_widgets.dart';
+import '../../application/specialty_services_providers.dart';
+import '../../data/models/specialty_service.dart';
+import '../widgets/specialty_widgets.dart';
 
 /// The dental clinic's own list of services: tick the ones it does and write its price (empty = «السعر بعد الكشف»), or
 /// add a service the platform list does not have. The price is the clinic's own.
-class DentalServicesManageScreen extends ConsumerStatefulWidget {
-  const DentalServicesManageScreen({super.key});
+class SpecialtyServicesManageScreen extends ConsumerStatefulWidget {
+  const SpecialtyServicesManageScreen({super.key});
 
   @override
-  ConsumerState<DentalServicesManageScreen> createState() => _DentalServicesManageScreenState();
+  ConsumerState<SpecialtyServicesManageScreen> createState() => _SpecialtyServicesManageScreenState();
 }
 
-class _DentalServicesManageScreenState extends ConsumerState<DentalServicesManageScreen> {
+class _SpecialtyServicesManageScreenState extends ConsumerState<SpecialtyServicesManageScreen> {
   final Map<int, bool> _offered = {};
   final Map<int, TextEditingController> _prices = {};
   final Map<int, bool> _was = {};
@@ -35,11 +35,11 @@ class _DentalServicesManageScreenState extends ConsumerState<DentalServicesManag
     super.dispose();
   }
 
-  void _seed(List<DentalCatalogSection> sections) {
+  void _seed(List<ServiceCatalogSection> sections) {
     for (final e in sections.expand((s) => s.entries)) {
       _offered[e.id] = e.offered;
       _was[e.id] = e.offered;
-      _wasPrice[e.id] = e.price == null ? '' : formatDentalMoney(e.price!);
+      _wasPrice[e.id] = e.price == null ? '' : formatServiceMoney(e.price!);
       final c = _prices[e.id];
       if (c == null) {
         _prices[e.id] = TextEditingController(text: _wasPrice[e.id]);
@@ -72,9 +72,9 @@ class _DentalServicesManageScreenState extends ConsumerState<DentalServicesManag
         for (final e in _offered.entries)
           if (!e.value && (_was[e.key] ?? false)) e.key,
       ];
-      final saved = await ref.read(dentalApiProvider).save(keep, remove);
+      final saved = await ref.read(specialtyServicesApiProvider).save(keep, remove);
       _seed(saved);
-      ref.invalidate(dentalCatalogProvider);
+      ref.invalidate(specialtyCatalogProvider);
     } catch (e) {
       _error = _message(e, l10n);
     } finally {
@@ -85,7 +85,10 @@ class _DentalServicesManageScreenState extends ConsumerState<DentalServicesManag
   Future<void> _addOwn() async {
     final l10n = AppLocalizations.of(context)!;
     final name = TextEditingController();
-    var kind = 'cosmetic';
+    // only the kinds of this clinic's own specialties
+    final kinds = [for (final s in ref.read(specialtyCatalogProvider).valueOrNull ?? const <ServiceCatalogSection>[]) s.kind];
+    if (kinds.isEmpty) return;
+    var kind = kinds.first;
 
     final ok = await showModalBottomSheet<bool>(
       context: context,
@@ -100,15 +103,15 @@ class _DentalServicesManageScreenState extends ConsumerState<DentalServicesManag
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(l10n.dentalAddOwn, style: Theme.of(context).textTheme.titleMedium),
+                  Text(l10n.specialtyAddOwn, style: Theme.of(context).textTheme.titleMedium),
                   const SizedBox(height: 12),
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
                     children: [
-                      for (final k in dentalKinds)
+                      for (final k in kinds)
                         ChoiceChip(
-                          label: Text(dentalKindLabel(l10n, k)),
+                          label: Text(specialtyKindLabel(l10n, k)),
                           selected: kind == k,
                           onSelected: (_) => setSheet(() => kind = k),
                         ),
@@ -117,10 +120,10 @@ class _DentalServicesManageScreenState extends ConsumerState<DentalServicesManag
                   const SizedBox(height: 12),
                   TextField(
                     controller: name,
-                    decoration: InputDecoration(labelText: l10n.dentalOwnName),
+                    decoration: InputDecoration(labelText: l10n.specialtyOwnName),
                   ),
                   const SizedBox(height: 16),
-                  FilledButton(onPressed: () => Navigator.of(sheetContext).pop(true), child: Text(l10n.dentalAddOwn)),
+                  FilledButton(onPressed: () => Navigator.of(sheetContext).pop(true), child: Text(l10n.specialtyAddOwn)),
                 ],
               ),
             ),
@@ -133,20 +136,20 @@ class _DentalServicesManageScreenState extends ConsumerState<DentalServicesManag
     if (ok != true || text.isEmpty) return;
 
     try {
-      final sections = await ref.read(dentalApiProvider).addOwn(kind, text);
+      final sections = await ref.read(specialtyServicesApiProvider).addOwn(kind, text);
       if (mounted) setState(() => _seed(sections));
-      ref.invalidate(dentalCatalogProvider);
+      ref.invalidate(specialtyCatalogProvider);
     } catch (e) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_message(e, l10n))));
     }
   }
 
-  Future<void> _deleteOwn(DentalCatalogEntry entry) async {
+  Future<void> _deleteOwn(ServiceCatalogEntry entry) async {
     final l10n = AppLocalizations.of(context)!;
     try {
-      final sections = await ref.read(dentalApiProvider).deleteOwn(entry.id);
+      final sections = await ref.read(specialtyServicesApiProvider).deleteOwn(entry.id);
       if (mounted) setState(() => _seed(sections));
-      ref.invalidate(dentalCatalogProvider);
+      ref.invalidate(specialtyCatalogProvider);
     } catch (e) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_message(e, l10n))));
     }
@@ -156,28 +159,28 @@ class _DentalServicesManageScreenState extends ConsumerState<DentalServicesManag
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final async = ref.watch(dentalCatalogProvider);
+    final async = ref.watch(specialtyCatalogProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.dentalManageTitle),
-        actions: [IconButton(tooltip: l10n.dentalAddOwn, icon: const Icon(Icons.add), onPressed: _addOwn)],
+        title: Text(l10n.specialtyServicesTitle),
+        actions: [IconButton(tooltip: l10n.specialtyAddOwn, icon: const Icon(Icons.add), onPressed: _addOwn)],
       ),
       body: AsyncValueView(
         value: async,
-        onRetry: () => ref.invalidate(dentalCatalogProvider),
+        onRetry: () => ref.invalidate(specialtyCatalogProvider),
         builder: (context, sections) {
           if (!_seeded) _seed(sections);
 
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              Text(l10n.dentalManageHint, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+              Text(l10n.specialtyServicesHint, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
               for (final s in sections)
                 if (s.entries.isNotEmpty) ...[
                   Padding(
                     padding: const EdgeInsets.only(top: 14, bottom: 6),
-                    child: Text(dentalKindLabel(l10n, s.kind), style: theme.textTheme.titleMedium),
+                    child: Text(specialtyKindLabel(l10n, s.kind), style: theme.textTheme.titleMedium),
                   ),
                   for (final e in s.entries)
                     Padding(

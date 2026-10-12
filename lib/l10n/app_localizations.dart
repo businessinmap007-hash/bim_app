@@ -6139,11 +6139,11 @@ abstract class AppLocalizations {
   /// **'حجز موعد'**
   String get clinicBookAppointment;
 
-  /// No description provided for @clinicPickDentalService.
+  /// No description provided for @clinicPickService.
   ///
   /// In ar, this message translates to:
   /// **'الخدمة المطلوبة (اختياري)'**
-  String get clinicPickDentalService;
+  String get clinicPickService;
 
   /// No description provided for @clinicPickKind.
   ///
@@ -14965,35 +14965,35 @@ abstract class AppLocalizations {
   /// **'ملاحظة المستشفى: {note}'**
   String procHospitalNote(Object note);
 
-  /// No description provided for @dentalManageTitle.
+  /// No description provided for @specialtyServicesTitle.
   ///
   /// In ar, this message translates to:
-  /// **'خدمات عيادة الأسنان'**
-  String get dentalManageTitle;
+  /// **'خدمات العيادة'**
+  String get specialtyServicesTitle;
 
-  /// No description provided for @dentalManageHint.
+  /// No description provided for @specialtyServicesHint.
   ///
   /// In ar, this message translates to:
   /// **'اختر الخدمات التي تقدمها عيادتك واكتب سعر كل خدمة. اترك السعر فارغاً ليظهر «السعر بعد الكشف».'**
-  String get dentalManageHint;
+  String get specialtyServicesHint;
 
-  /// No description provided for @dentalPriceAfterExam.
+  /// No description provided for @specialtyPriceAfterExam.
   ///
   /// In ar, this message translates to:
   /// **'السعر بعد الكشف'**
-  String get dentalPriceAfterExam;
+  String get specialtyPriceAfterExam;
 
-  /// No description provided for @dentalAddOwn.
+  /// No description provided for @specialtyAddOwn.
   ///
   /// In ar, this message translates to:
   /// **'إضافة خدمة'**
-  String get dentalAddOwn;
+  String get specialtyAddOwn;
 
-  /// No description provided for @dentalOwnName.
+  /// No description provided for @specialtyOwnName.
   ///
   /// In ar, this message translates to:
   /// **'اسم الخدمة'**
-  String get dentalOwnName;
+  String get specialtyOwnName;
 
   /// No description provided for @dentalKindCheckup.
   ///
@@ -15054,6 +15054,54 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'أسنان الأطفال'**
   String get dentalKindPediatric;
+
+  /// No description provided for @skinKindInjectables.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحقن التجميلية'**
+  String get skinKindInjectables;
+
+  /// No description provided for @skinKindFaceLifting.
+  ///
+  /// In ar, this message translates to:
+  /// **'شد وتجديد الوجه بلا جراحة'**
+  String get skinKindFaceLifting;
+
+  /// No description provided for @skinKindLaser.
+  ///
+  /// In ar, this message translates to:
+  /// **'الليزر'**
+  String get skinKindLaser;
+
+  /// No description provided for @skinKindScars.
+  ///
+  /// In ar, this message translates to:
+  /// **'الندبات والجروح'**
+  String get skinKindScars;
+
+  /// No description provided for @skinKindPeels.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقشير وعلاج البشرة'**
+  String get skinKindPeels;
+
+  /// No description provided for @skinKindSkinDisease.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأمراض الجلدية'**
+  String get skinKindSkinDisease;
+
+  /// No description provided for @skinKindHair.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشعر وفروة الرأس'**
+  String get skinKindHair;
+
+  /// No description provided for @skinKindBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجسم'**
+  String get skinKindBody;
 
   /// No description provided for @procTabTitle.
   ///

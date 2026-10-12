@@ -3363,7 +3363,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clinicBookAppointment => 'حجز موعد';
 
   @override
-  String get clinicPickDentalService => 'الخدمة المطلوبة (اختياري)';
+  String get clinicPickService => 'الخدمة المطلوبة (اختياري)';
 
   @override
   String get clinicPickKind => 'نوع الزيارة';
@@ -8140,20 +8140,20 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get dentalManageTitle => 'خدمات عيادة الأسنان';
+  String get specialtyServicesTitle => 'خدمات العيادة';
 
   @override
-  String get dentalManageHint =>
+  String get specialtyServicesHint =>
       'اختر الخدمات التي تقدمها عيادتك واكتب سعر كل خدمة. اترك السعر فارغاً ليظهر «السعر بعد الكشف».';
 
   @override
-  String get dentalPriceAfterExam => 'السعر بعد الكشف';
+  String get specialtyPriceAfterExam => 'السعر بعد الكشف';
 
   @override
-  String get dentalAddOwn => 'إضافة خدمة';
+  String get specialtyAddOwn => 'إضافة خدمة';
 
   @override
-  String get dentalOwnName => 'اسم الخدمة';
+  String get specialtyOwnName => 'اسم الخدمة';
 
   @override
   String get dentalKindCheckup => 'الأشعة والتشخيص';
@@ -8184,6 +8184,30 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get dentalKindPediatric => 'أسنان الأطفال';
+
+  @override
+  String get skinKindInjectables => 'الحقن التجميلية';
+
+  @override
+  String get skinKindFaceLifting => 'شد وتجديد الوجه بلا جراحة';
+
+  @override
+  String get skinKindLaser => 'الليزر';
+
+  @override
+  String get skinKindScars => 'الندبات والجروح';
+
+  @override
+  String get skinKindPeels => 'التقشير وعلاج البشرة';
+
+  @override
+  String get skinKindSkinDisease => 'الأمراض الجلدية';
+
+  @override
+  String get skinKindHair => 'الشعر وفروة الرأس';
+
+  @override
+  String get skinKindBody => 'الجسم';
 
   @override
   String get procTabTitle => 'الإجراءات الطبية';

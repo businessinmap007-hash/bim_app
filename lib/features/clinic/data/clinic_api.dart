@@ -21,14 +21,14 @@ class ClinicApi {
   }
 
   /// [forName]/[forPhone]: the visit is for someone else — the account that books stays the patient of record.
-  /// [dentalServiceId]: what the patient came for, from a dental clinic's own list (optional).
-  Future<ClinicAppointment> bookSlot(int slotId, {String? reason, int? dentalServiceId, String? forName, String? forPhone}) async {
+  /// [specialtyServiceId]: what the patient came for, from a dental clinic's own list (optional).
+  Future<ClinicAppointment> bookSlot(int slotId, {String? reason, int? specialtyServiceId, String? forName, String? forPhone}) async {
     final data =
         await _client.post(
               '/clinic-slots/$slotId/book',
               data: {
                 if (reason != null && reason.isNotEmpty) 'reason': reason,
-                'dental_service_id': ?dentalServiceId,
+                'specialty_service_id': ?specialtyServiceId,
                 if (forName != null && forName.isNotEmpty) 'for_name': forName,
                 if (forName != null && forName.isNotEmpty && forPhone != null && forPhone.isNotEmpty) 'for_phone': forPhone,
               },

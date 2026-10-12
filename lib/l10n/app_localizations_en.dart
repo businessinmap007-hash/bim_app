@@ -3367,7 +3367,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clinicBookAppointment => 'Book an appointment';
 
   @override
-  String get clinicPickDentalService => 'Service needed (optional)';
+  String get clinicPickService => 'Service needed (optional)';
 
   @override
   String get clinicPickKind => 'Visit type';
@@ -8183,20 +8183,20 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get dentalManageTitle => 'Dental clinic services';
+  String get specialtyServicesTitle => 'Clinic services';
 
   @override
-  String get dentalManageHint =>
+  String get specialtyServicesHint =>
       'Tick the services your clinic offers and write each price. Leave the price empty to show «Price after the exam».';
 
   @override
-  String get dentalPriceAfterExam => 'Price after the exam';
+  String get specialtyPriceAfterExam => 'Price after the exam';
 
   @override
-  String get dentalAddOwn => 'Add a service';
+  String get specialtyAddOwn => 'Add a service';
 
   @override
-  String get dentalOwnName => 'Service name';
+  String get specialtyOwnName => 'Service name';
 
   @override
   String get dentalKindCheckup => 'X-rays and diagnosis';
@@ -8227,6 +8227,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dentalKindPediatric => 'Children\'s dentistry';
+
+  @override
+  String get skinKindInjectables => 'Cosmetic injections';
+
+  @override
+  String get skinKindFaceLifting => 'Non-surgical face lifting';
+
+  @override
+  String get skinKindLaser => 'Laser';
+
+  @override
+  String get skinKindScars => 'Scars and wounds';
+
+  @override
+  String get skinKindPeels => 'Peels and skin care';
+
+  @override
+  String get skinKindSkinDisease => 'Skin diseases';
+
+  @override
+  String get skinKindHair => 'Hair and scalp';
+
+  @override
+  String get skinKindBody => 'Body';
 
   @override
   String get procTabTitle => 'Procedures';

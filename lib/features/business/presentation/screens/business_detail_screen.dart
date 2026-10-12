@@ -232,7 +232,7 @@ class _BusinessDetailBody extends StatelessWidget {
                   builder: (_) => ClinicSlotsScreen(
                     clinicId: profile.id,
                     clinicName: profile.name,
-                    hasDentalServices: profile.sections.dental,
+                    hasServices: profile.sections.specialtyServices,
                   ),
                 ),
               ),

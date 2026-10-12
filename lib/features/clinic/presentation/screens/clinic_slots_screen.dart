@@ -6,8 +6,8 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/arrival_notice_banner.dart';
 import '../../../booking/application/booking_providers.dart';
 import '../../../booking/presentation/widgets/booking_grid_widgets.dart';
-import '../../../dental/application/dental_providers.dart';
-import '../../../dental/presentation/widgets/dental_widgets.dart';
+import '../../../specialty_services/application/specialty_services_providers.dart';
+import '../../../specialty_services/presentation/widgets/specialty_widgets.dart';
 import '../../application/clinic_providers.dart';
 import '../../data/models/clinic_slot.dart';
 
@@ -20,9 +20,9 @@ class ClinicSlotsScreen extends ConsumerStatefulWidget {
   final String clinicName;
 
   /// A dental clinic that listed its services: the patient says which one he came for.
-  final bool hasDentalServices;
+  final bool hasServices;
 
-  const ClinicSlotsScreen({super.key, required this.clinicId, required this.clinicName, this.hasDentalServices = false});
+  const ClinicSlotsScreen({super.key, required this.clinicId, required this.clinicName, this.hasServices = false});
 
   @override
   ConsumerState<ClinicSlotsScreen> createState() => _ClinicSlotsScreenState();
@@ -55,7 +55,7 @@ class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
       await ref.read(clinicApiProvider).bookSlot(
         slot.id,
         reason: _reason.text.trim(),
-        dentalServiceId: _serviceId,
+        specialtyServiceId: _serviceId,
         forName: _forOther ? _forName.text.trim() : null,
         forPhone: _forOther ? _forPhone.text.trim() : null,
       );
@@ -91,9 +91,9 @@ class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
   /// The name of the dental service picked, for the summary bar.
   String? _pickedServiceName() {
     final id = _serviceId;
-    if (id == null || !widget.hasDentalServices) return null;
+    if (id == null || !widget.hasServices) return null;
 
-    final sections = ref.read(dentalServicesProvider(widget.clinicId)).valueOrNull ?? const [];
+    final sections = ref.read(specialtyServicesProvider(widget.clinicId)).valueOrNull ?? const [];
     return sections.expand((s) => s.services).where((p) => p.id == id).firstOrNull?.name;
   }
 
@@ -182,8 +182,8 @@ class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
                       ),
                       const SizedBox(height: 12),
                     ],
-                    if (widget.hasDentalServices) ...[
-                      _DentalServicePicker(
+                    if (widget.hasServices) ...[
+                      _ServicePicker(
                         clinicId: widget.clinicId,
                         selected: _serviceId,
                         onChanged: (id) => setState(() => _serviceId = id),
@@ -412,29 +412,29 @@ class _TimeChip extends StatelessWidget {
 
 /// «اختر الخدمة المطلوبة»: the services a dental clinic listed, by kind, each with its price. Optional — tap the one
 /// chosen again to clear it.
-class _DentalServicePicker extends ConsumerWidget {
+class _ServicePicker extends ConsumerWidget {
   final int clinicId;
   final int? selected;
   final ValueChanged<int?> onChanged;
 
-  const _DentalServicePicker({required this.clinicId, required this.selected, required this.onChanged});
+  const _ServicePicker({required this.clinicId, required this.selected, required this.onChanged});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final sections = ref.watch(dentalServicesProvider(clinicId)).valueOrNull ?? const [];
+    final sections = ref.watch(specialtyServicesProvider(clinicId)).valueOrNull ?? const [];
     if (sections.isEmpty) return const SizedBox.shrink();
 
     return _SectionCard(
-      title: l10n.clinicPickDentalService,
+      title: l10n.clinicPickService,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           for (final s in sections) ...[
             Padding(
               padding: const EdgeInsets.only(top: 4, bottom: 6),
-              child: Text(dentalKindLabel(l10n, s.kind), style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+              child: Text(specialtyKindLabel(l10n, s.kind), style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
             ),
             Wrap(
               spacing: 8,
@@ -442,7 +442,7 @@ class _DentalServicePicker extends ConsumerWidget {
               children: [
                 for (final p in s.services)
                   ChoiceChip(
-                    label: Text(p.price == null ? p.name : '${p.name} · ${formatDentalMoney(p.price!)} ${l10n.invCurrency}'),
+                    label: Text(p.price == null ? p.name : '${p.name} · ${formatServiceMoney(p.price!)} ${l10n.invCurrency}'),
                     selected: selected == p.id,
                     onSelected: (on) => onChanged(on ? p.id : null),
                   ),

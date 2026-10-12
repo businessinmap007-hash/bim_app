@@ -18,8 +18,8 @@ class BusinessClinicAppointment {
   final String? attendeePhone;
 
   /// What the patient came for, from the clinic's dental list (null when none was named).
-  final String? dentalServiceName;
-  final double? dentalServicePrice;
+  final String? serviceName;
+  final double? servicePrice;
 
   const BusinessClinicAppointment({
     required this.id,
@@ -34,14 +34,14 @@ class BusinessClinicAppointment {
     this.patientPhone,
     this.attendeeName,
     this.attendeePhone,
-    this.dentalServiceName,
-    this.dentalServicePrice,
+    this.serviceName,
+    this.servicePrice,
   });
 
   factory BusinessClinicAppointment.fromJson(Map<String, dynamic> json) {
     final patient = json['patient'] as Map<String, dynamic>?;
     final attendee = json['attendee'] as Map<String, dynamic>?;
-    final dental = json['dental_service'] as Map<String, dynamic>?;
+    final dental = json['specialty_service'] as Map<String, dynamic>?;
     return BusinessClinicAppointment(
       id: json['id'] as int,
       status: json['status'] as String,
@@ -55,8 +55,8 @@ class BusinessClinicAppointment {
       patientPhone: patient?['phone'] as String?,
       attendeeName: attendee?['name'] as String?,
       attendeePhone: attendee?['phone'] as String?,
-      dentalServiceName: dental?['name'] as String?,
-      dentalServicePrice: (dental?['price'] as num?)?.toDouble(),
+      serviceName: dental?['name'] as String?,
+      servicePrice: (dental?['price'] as num?)?.toDouble(),
     );
   }
 }

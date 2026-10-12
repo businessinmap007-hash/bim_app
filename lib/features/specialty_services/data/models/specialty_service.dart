@@ -1,5 +1,5 @@
 /// The kinds of dental service a clinic lists, in the order a patient reads them.
-const dentalKinds = [
+const specialtyKinds = [
   'checkup',
   'preventive',
   'restorative',
@@ -10,48 +10,56 @@ const dentalKinds = [
   'orthodontic',
   'cosmetic',
   'pediatric',
+  'injectables',
+  'face_lifting',
+  'laser',
+  'scars',
+  'peels',
+  'skin_disease',
+  'hair',
+  'body',
 ];
 
 /// A service a dental clinic offers, as a patient sees it. [price] null means «السعر بعد الكشف».
-class DentalOffering {
+class ServiceOffering {
   final int id;
   final String name;
   final double? price;
 
-  const DentalOffering({required this.id, required this.name, this.price});
+  const ServiceOffering({required this.id, required this.name, this.price});
 
-  factory DentalOffering.fromJson(Map<String, dynamic> json) => DentalOffering(
+  factory ServiceOffering.fromJson(Map<String, dynamic> json) => ServiceOffering(
     id: (json['id'] as num?)?.toInt() ?? 0,
     name: json['name'] as String? ?? '',
     price: (json['price'] as num?)?.toDouble(),
   );
 }
 
-class DentalOfferingSection {
+class ServiceOfferingSection {
   final String kind;
-  final List<DentalOffering> services;
+  final List<ServiceOffering> services;
 
-  const DentalOfferingSection({required this.kind, this.services = const []});
+  const ServiceOfferingSection({required this.kind, this.services = const []});
 
-  factory DentalOfferingSection.fromJson(Map<String, dynamic> json) => DentalOfferingSection(
+  factory ServiceOfferingSection.fromJson(Map<String, dynamic> json) => ServiceOfferingSection(
     kind: json['kind'] as String? ?? 'checkup',
     services: (json['services'] as List<dynamic>? ?? [])
-        .map((e) => DentalOffering.fromJson(e as Map<String, dynamic>))
+        .map((e) => ServiceOffering.fromJson(e as Map<String, dynamic>))
         .toList(),
   );
 }
 
 /// One row of the clinic's own catalogue: a platform service or the clinic's own, with what it offers now.
-class DentalCatalogEntry {
+class ServiceCatalogEntry {
   final int id;
   final String name;
   final bool own;
   final bool offered;
   final double? price;
 
-  const DentalCatalogEntry({required this.id, required this.name, this.own = false, this.offered = false, this.price});
+  const ServiceCatalogEntry({required this.id, required this.name, this.own = false, this.offered = false, this.price});
 
-  factory DentalCatalogEntry.fromJson(Map<String, dynamic> json) => DentalCatalogEntry(
+  factory ServiceCatalogEntry.fromJson(Map<String, dynamic> json) => ServiceCatalogEntry(
     id: (json['id'] as num?)?.toInt() ?? 0,
     name: json['name'] as String? ?? '',
     own: json['own'] as bool? ?? false,
@@ -60,16 +68,16 @@ class DentalCatalogEntry {
   );
 }
 
-class DentalCatalogSection {
+class ServiceCatalogSection {
   final String kind;
-  final List<DentalCatalogEntry> entries;
+  final List<ServiceCatalogEntry> entries;
 
-  const DentalCatalogSection({required this.kind, this.entries = const []});
+  const ServiceCatalogSection({required this.kind, this.entries = const []});
 
-  factory DentalCatalogSection.fromJson(Map<String, dynamic> json) => DentalCatalogSection(
+  factory ServiceCatalogSection.fromJson(Map<String, dynamic> json) => ServiceCatalogSection(
     kind: json['kind'] as String? ?? 'checkup',
     entries: (json['services'] as List<dynamic>? ?? [])
-        .map((e) => DentalCatalogEntry.fromJson(e as Map<String, dynamic>))
+        .map((e) => ServiceCatalogEntry.fromJson(e as Map<String, dynamic>))
         .toList(),
   );
 }

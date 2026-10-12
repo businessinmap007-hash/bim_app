@@ -8,8 +8,8 @@ import 'package:bim_app/features/clinic/data/clinic_api.dart';
 import 'package:bim_app/features/clinic/data/models/clinic_appointment.dart';
 import 'package:bim_app/features/clinic/data/models/clinic_slot.dart';
 import 'package:bim_app/features/clinic/presentation/screens/clinic_slots_screen.dart';
-import 'package:bim_app/features/dental/application/dental_providers.dart';
-import 'package:bim_app/features/dental/data/models/dental_service.dart';
+import 'package:bim_app/features/specialty_services/application/specialty_services_providers.dart';
+import 'package:bim_app/features/specialty_services/data/models/specialty_service.dart';
 import 'package:bim_app/l10n/app_localizations.dart';
 
 class _FakeApi implements ClinicApi {
@@ -18,10 +18,10 @@ class _FakeApi implements ClinicApi {
   final services = <int?>[];
 
   @override
-  Future<ClinicAppointment> bookSlot(int slotId, {String? reason, int? dentalServiceId, String? forName, String? forPhone}) async {
+  Future<ClinicAppointment> bookSlot(int slotId, {String? reason, int? specialtyServiceId, String? forName, String? forPhone}) async {
     booked.add(slotId);
     attendees.add(forName);
-    services.add(dentalServiceId);
+    services.add(specialtyServiceId);
     throw StateError('stop after recording');
   }
 
@@ -109,10 +109,10 @@ void main() {
         overrides: [
           clinicApiProvider.overrideWithValue(api),
           clinicSlotsProvider(7).overrideWith((ref) async => slots),
-          dentalServicesProvider(7).overrideWith(
+          specialtyServicesProvider(7).overrideWith(
             (ref) async => const [
-              DentalOfferingSection(kind: 'preventive', services: [DentalOffering(id: 11, name: 'تنظيف الأسنان وإزالة الجير', price: 400)]),
-              DentalOfferingSection(kind: 'surgical', services: [DentalOffering(id: 12, name: 'زراعة سن')]),
+              ServiceOfferingSection(kind: 'preventive', services: [ServiceOffering(id: 11, name: 'تنظيف الأسنان وإزالة الجير', price: 400)]),
+              ServiceOfferingSection(kind: 'surgical', services: [ServiceOffering(id: 12, name: 'زراعة سن')]),
             ],
           ),
         ],
@@ -120,7 +120,7 @@ void main() {
           locale: const Locale('ar'),
           supportedLocales: AppLocalizations.supportedLocales,
           localizationsDelegates: const [AppLocalizations.delegate, GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate, GlobalCupertinoLocalizations.delegate],
-          home: const ClinicSlotsScreen(clinicId: 7, clinicName: 'عيادة أسنان', hasDentalServices: true),
+          home: const ClinicSlotsScreen(clinicId: 7, clinicName: 'عيادة أسنان', hasServices: true),
         ),
       ),
     );
@@ -152,9 +152,9 @@ void main() {
       overrides: [
         clinicApiProvider.overrideWithValue(api),
         clinicSlotsProvider(7).overrideWith((ref) async => slots),
-        dentalServicesProvider(7).overrideWith(
+        specialtyServicesProvider(7).overrideWith(
           (ref) async => const [
-            DentalOfferingSection(kind: 'surgical', services: [DentalOffering(id: 12, name: 'زراعة سن')]),
+            ServiceOfferingSection(kind: 'surgical', services: [ServiceOffering(id: 12, name: 'زراعة سن')]),
           ],
         ),
       ],
@@ -162,7 +162,7 @@ void main() {
         locale: const Locale('ar'),
         supportedLocales: AppLocalizations.supportedLocales,
         localizationsDelegates: const [AppLocalizations.delegate, GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate, GlobalCupertinoLocalizations.delegate],
-        home: ClinicSlotsScreen(clinicId: 7, clinicName: 'عيادة', hasDentalServices: dental),
+        home: ClinicSlotsScreen(clinicId: 7, clinicName: 'عيادة', hasServices: dental),
       ),
     );
 

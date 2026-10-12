@@ -357,7 +357,7 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
                 ],
               ),
             ],
-            if ((a.dentalServiceName ?? '').isNotEmpty) ...[
+            if ((a.serviceName ?? '').isNotEmpty) ...[
               const SizedBox(height: 6),
               Row(
                 children: [
@@ -365,9 +365,9 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
-                      a.dentalServicePrice == null
-                          ? a.dentalServiceName!
-                          : '${a.dentalServiceName} · ${a.dentalServicePrice!.toStringAsFixed(a.dentalServicePrice! % 1 == 0 ? 0 : 2)} ${l10n.invCurrency}',
+                      a.servicePrice == null
+                          ? a.serviceName!
+                          : '${a.serviceName} · ${a.servicePrice!.toStringAsFixed(a.servicePrice! % 1 == 0 ? 0 : 2)} ${l10n.invCurrency}',
                       style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
                     ),
                   ),

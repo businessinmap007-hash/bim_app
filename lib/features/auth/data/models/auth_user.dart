@@ -30,8 +30,8 @@ class AuthUser {
   final bool setupComplete;
   final List<String> setupMissing;
 
-  /// A clinic that ticked «أسنان»: it has its own services list (see DentalServicesManageScreen).
-  final bool dentalClinic;
+  /// A clinic that ticked «أسنان»: it has its own services list (see SpecialtyServicesManageScreen).
+  final bool hasSpecialtyServices;
 
   const AuthUser({
     required this.id,
@@ -55,7 +55,7 @@ class AuthUser {
     this.social,
     this.setupComplete = true,
     this.setupMissing = const [],
-    this.dentalClinic = false,
+    this.hasSpecialtyServices = false,
   });
 
   bool get isBusiness => type == 'business';
@@ -95,6 +95,6 @@ class AuthUser {
               const []))
         '$m',
     ],
-    dentalClinic: json['dental_clinic'] as bool? ?? false,
+    hasSpecialtyServices: json['specialty_services'] as bool? ?? false,
   );
 }
