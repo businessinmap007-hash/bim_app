@@ -235,7 +235,11 @@ class _BusinessDetailBody extends StatelessWidget {
             OutlinedButton.icon(
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => ClinicSlotsScreen(clinicId: profile.id, clinicName: profile.name),
+                  builder: (_) => ClinicSlotsScreen(
+                    clinicId: profile.id,
+                    clinicName: profile.name,
+                    hasDentalServices: profile.sections.dental,
+                  ),
                 ),
               ),
               icon: const Icon(Icons.local_hospital_outlined),

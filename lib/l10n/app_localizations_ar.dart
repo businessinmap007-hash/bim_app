@@ -3363,6 +3363,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clinicBookAppointment => 'حجز موعد';
 
   @override
+  String get clinicPickDentalService => 'الخدمة المطلوبة (اختياري)';
+
+  @override
   String get clinicPickKind => 'نوع الزيارة';
 
   @override

@@ -131,7 +131,8 @@ class _AppointmentTile extends StatelessWidget {
         title: Text(appointment.clinicName ?? ''),
         subtitle: Text(
           '${_statusLabel(appointment.status, l10n)}'
-          '${appointment.scheduledAt != null ? ' · ${_formatDateTime(appointment.scheduledAt!)}' : ''}',
+          '${appointment.scheduledAt != null ? ' · ${_formatDateTime(appointment.scheduledAt!)}' : ''}'
+          '${(appointment.dentalServiceName ?? '').isNotEmpty ? '\n${appointment.dentalServiceName}' : ''}',
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,

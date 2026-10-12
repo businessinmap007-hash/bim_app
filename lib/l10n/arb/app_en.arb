@@ -1118,6 +1118,7 @@
   "tripModeLimousine": "Limousine",
   "tripModeDistribution": "Distribution",
   "clinicBookAppointment": "Book an appointment",
+  "clinicPickDentalService": "Service needed (optional)",
   "clinicPickKind": "Visit type",
   "clinicRequestBooking": "Request the booking",
   "clinicPatientLabel": "Patient",

@@ -8,16 +8,20 @@ import 'package:bim_app/features/clinic/data/clinic_api.dart';
 import 'package:bim_app/features/clinic/data/models/clinic_appointment.dart';
 import 'package:bim_app/features/clinic/data/models/clinic_slot.dart';
 import 'package:bim_app/features/clinic/presentation/screens/clinic_slots_screen.dart';
+import 'package:bim_app/features/dental/application/dental_providers.dart';
+import 'package:bim_app/features/dental/data/models/dental_service.dart';
 import 'package:bim_app/l10n/app_localizations.dart';
 
 class _FakeApi implements ClinicApi {
   final booked = <int>[];
   final attendees = <String?>[];
+  final services = <int?>[];
 
   @override
-  Future<ClinicAppointment> bookSlot(int slotId, {String? reason, String? forName, String? forPhone}) async {
+  Future<ClinicAppointment> bookSlot(int slotId, {String? reason, int? dentalServiceId, String? forName, String? forPhone}) async {
     booked.add(slotId);
     attendees.add(forName);
+    services.add(dentalServiceId);
     throw StateError('stop after recording');
   }
 
@@ -94,5 +98,92 @@ void main() {
     await tester.pumpAndSettle();
     expect(api.booked, [2]);
     expect(api.attendees, ['الحاج محمود']);
+  });
+
+  testWidgets('a dental clinic patient names the service he came for, and it goes with the booking', (tester) async {
+    final api = _FakeApi();
+    final slots = [ClinicSlot(id: 1, startsAt: DateTime(2026, 10, 14, 17), durationMinutes: 30, visitKind: 'كشف', price: 300)];
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          clinicApiProvider.overrideWithValue(api),
+          clinicSlotsProvider(7).overrideWith((ref) async => slots),
+          dentalServicesProvider(7).overrideWith(
+            (ref) async => const [
+              DentalOfferingSection(kind: 'preventive', services: [DentalOffering(id: 11, name: 'تنظيف الأسنان وإزالة الجير', price: 400)]),
+              DentalOfferingSection(kind: 'surgical', services: [DentalOffering(id: 12, name: 'زراعة سن')]),
+            ],
+          ),
+        ],
+        child: MaterialApp(
+          locale: const Locale('ar'),
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: const [AppLocalizations.delegate, GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate, GlobalCupertinoLocalizations.delegate],
+          home: const ClinicSlotsScreen(clinicId: 7, clinicName: 'عيادة أسنان', hasDentalServices: true),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('الخدمة المطلوبة (اختياري)'), findsOneWidget);
+    expect(find.text('تنظيف الأسنان وإزالة الجير · 400 ج'), findsOneWidget);
+    expect(find.text('زراعة سن'), findsOneWidget);
+
+    await tester.tap(find.text('تنظيف الأسنان وإزالة الجير · 400 ج'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('الوقت'), 200, scrollable: find.byType(Scrollable).first);
+    final time = find.descendant(of: find.byType(GridView), matching: find.byType(InkWell)).first;
+    await tester.ensureVisible(time);
+    await tester.pumpAndSettle();
+    await tester.tap(time);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.widgetWithText(FilledButton, 'اطلب الحجز'));
+    await tester.pumpAndSettle();
+    expect(api.services, [11]);
+  });
+
+  testWidgets('tapping the chosen service again clears it, and a clinic with no list shows no picker', (tester) async {
+    final api = _FakeApi();
+    final slots = [ClinicSlot(id: 1, startsAt: DateTime(2026, 10, 14, 17), durationMinutes: 30, visitKind: 'كشف', price: 300)];
+
+    Widget app({required bool dental}) => ProviderScope(
+      overrides: [
+        clinicApiProvider.overrideWithValue(api),
+        clinicSlotsProvider(7).overrideWith((ref) async => slots),
+        dentalServicesProvider(7).overrideWith(
+          (ref) async => const [
+            DentalOfferingSection(kind: 'surgical', services: [DentalOffering(id: 12, name: 'زراعة سن')]),
+          ],
+        ),
+      ],
+      child: MaterialApp(
+        locale: const Locale('ar'),
+        supportedLocales: AppLocalizations.supportedLocales,
+        localizationsDelegates: const [AppLocalizations.delegate, GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate, GlobalCupertinoLocalizations.delegate],
+        home: ClinicSlotsScreen(clinicId: 7, clinicName: 'عيادة', hasDentalServices: dental),
+      ),
+    );
+
+    await tester.pumpWidget(app(dental: true));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('زراعة سن'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('زراعة سن'));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text('الوقت'), 200, scrollable: find.byType(Scrollable).first);
+    final time = find.descendant(of: find.byType(GridView), matching: find.byType(InkWell)).first;
+    await tester.ensureVisible(time);
+    await tester.pumpAndSettle();
+    await tester.tap(time);
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, 'اطلب الحجز'));
+    await tester.pumpAndSettle();
+    expect(api.services, [null], reason: 'cleared again, so nothing is sent');
+
+    await tester.pumpWidget(app(dental: false));
+    await tester.pumpAndSettle();
+    expect(find.text('الخدمة المطلوبة (اختياري)'), findsNothing);
   });
 }

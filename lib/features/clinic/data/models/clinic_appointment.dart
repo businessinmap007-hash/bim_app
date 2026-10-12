@@ -14,6 +14,10 @@ class ClinicAppointment {
   final String? clinicLogoUrl;
   final int? prescriptionId;
 
+  /// The dental service the patient named when booking, with the price asked at the time.
+  final String? dentalServiceName;
+  final double? dentalServicePrice;
+
   /// «يجب التواجد قبل الموعد بـ ١٥ دقيقة» — the clinic's own notice.
   final String? arrivalNotice;
 
@@ -27,6 +31,8 @@ class ClinicAppointment {
     this.clinicName,
     this.clinicLogoUrl,
     this.prescriptionId,
+    this.dentalServiceName,
+    this.dentalServicePrice,
     this.arrivalNotice,
   });
 
@@ -51,12 +57,15 @@ class ClinicAppointment {
       clinicName: clinicName,
       clinicLogoUrl: clinicLogoUrl,
       prescriptionId: prescriptionId,
+      dentalServiceName: dentalServiceName,
+      dentalServicePrice: dentalServicePrice,
       arrivalNotice: arrivalNotice,
     );
   }
 
   factory ClinicAppointment.fromJson(Map<String, dynamic> json) {
     final clinic = json['clinic'] as Map<String, dynamic>?;
+    final dental = json['dental_service'] as Map<String, dynamic>?;
     return ClinicAppointment(
       id: json['id'] as int,
       status: json['status'] as String? ?? 'requested',
@@ -67,6 +76,8 @@ class ClinicAppointment {
       clinicName: clinic?['name'] as String?,
       clinicLogoUrl: Env.assetUrl(clinic?['logo'] as String?),
       prescriptionId: json['prescription_id'] as int?,
+      dentalServiceName: dental?['name'] as String?,
+      dentalServicePrice: (dental?['price'] as num?)?.toDouble(),
       arrivalNotice: json['arrival_notice'] is Map<String, dynamic> ? (json['arrival_notice'] as Map<String, dynamic>)['message'] as String? : null,
     );
   }

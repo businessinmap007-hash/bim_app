@@ -6139,6 +6139,12 @@ abstract class AppLocalizations {
   /// **'حجز موعد'**
   String get clinicBookAppointment;
 
+  /// No description provided for @clinicPickDentalService.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخدمة المطلوبة (اختياري)'**
+  String get clinicPickDentalService;
+
   /// No description provided for @clinicPickKind.
   ///
   /// In ar, this message translates to:

@@ -357,6 +357,23 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
                 ],
               ),
             ],
+            if ((a.dentalServiceName ?? '').isNotEmpty) ...[
+              const SizedBox(height: 6),
+              Row(
+                children: [
+                  Icon(Icons.medical_services_outlined, size: 16, color: theme.hintColor),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      a.dentalServicePrice == null
+                          ? a.dentalServiceName!
+                          : '${a.dentalServiceName} · ${a.dentalServicePrice!.toStringAsFixed(a.dentalServicePrice! % 1 == 0 ? 0 : 2)} ${l10n.invCurrency}',
+                      style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ],
+              ),
+            ],
             if (a.reason != null && a.reason!.isNotEmpty) ...[
               const SizedBox(height: 6),
               Text(a.reason!, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),

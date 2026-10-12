@@ -3367,6 +3367,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clinicBookAppointment => 'Book an appointment';
 
   @override
+  String get clinicPickDentalService => 'Service needed (optional)';
+
+  @override
   String get clinicPickKind => 'Visit type';
 
   @override

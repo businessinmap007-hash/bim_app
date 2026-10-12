@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/arrival_notice_banner.dart';
 import '../../../booking/application/booking_providers.dart';
+import '../../../dental/application/dental_providers.dart';
+import '../../../dental/presentation/widgets/dental_widgets.dart';
 import '../../application/clinic_providers.dart';
 import '../../data/models/clinic_slot.dart';
 
@@ -16,7 +18,10 @@ class ClinicSlotsScreen extends ConsumerStatefulWidget {
   final int clinicId;
   final String clinicName;
 
-  const ClinicSlotsScreen({super.key, required this.clinicId, required this.clinicName});
+  /// A dental clinic that listed its services: the patient says which one he came for.
+  final bool hasDentalServices;
+
+  const ClinicSlotsScreen({super.key, required this.clinicId, required this.clinicName, this.hasDentalServices = false});
 
   @override
   ConsumerState<ClinicSlotsScreen> createState() => _ClinicSlotsScreenState();
@@ -26,6 +31,7 @@ class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
   String? _kind;
   DateTime? _day;
   int? _slotId;
+  int? _serviceId;
   bool _booking = false;
   bool _forOther = false;
   final _reason = TextEditingController();
@@ -48,6 +54,7 @@ class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
       await ref.read(clinicApiProvider).bookSlot(
         slot.id,
         reason: _reason.text.trim(),
+        dentalServiceId: _serviceId,
         forName: _forOther ? _forName.text.trim() : null,
         forPhone: _forOther ? _forPhone.text.trim() : null,
       );
@@ -55,6 +62,7 @@ class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
       if (!mounted) return;
       setState(() {
         _slotId = null;
+        _serviceId = null;
         _reason.clear();
         _forOther = false;
         _forName.clear();
@@ -66,6 +74,15 @@ class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
     } finally {
       if (mounted) setState(() => _booking = false);
     }
+  }
+
+  /// The name of the dental service picked, for the summary bar.
+  String? _pickedServiceName() {
+    final id = _serviceId;
+    if (id == null || !widget.hasDentalServices) return null;
+
+    final sections = ref.read(dentalServicesProvider(widget.clinicId)).valueOrNull ?? const [];
+    return sections.expand((s) => s.services).where((p) => p.id == id).firstOrNull?.name;
   }
 
   @override
@@ -150,6 +167,14 @@ class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
                             ],
                           ),
                         ),
+                      ),
+                      const SizedBox(height: 12),
+                    ],
+                    if (widget.hasDentalServices) ...[
+                      _DentalServicePicker(
+                        clinicId: widget.clinicId,
+                        selected: _serviceId,
+                        onChanged: (id) => setState(() => _serviceId = id),
                       ),
                       const SizedBox(height: 12),
                     ],
@@ -252,6 +277,7 @@ class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
               ),
               _SummaryBar(
                 slot: picked,
+                serviceName: _pickedServiceName(),
                 busy: _booking,
                 onBook: picked == null || (_forOther && _forName.text.trim().isEmpty) ? null : () => _book(picked),
               ),
@@ -372,9 +398,10 @@ class _TimeChip extends StatelessWidget {
 
 class _SummaryBar extends StatelessWidget {
   final ClinicSlot? slot;
+  final String? serviceName;
   final bool busy;
   final VoidCallback? onBook;
-  const _SummaryBar({required this.slot, required this.busy, required this.onBook});
+  const _SummaryBar({required this.slot, this.serviceName, required this.busy, required this.onBook});
 
   @override
   Widget build(BuildContext context) {
@@ -388,6 +415,7 @@ class _SummaryBar extends StatelessWidget {
         ? l10n.clinicPickSlotHint
         : [
             if (kind != null && kind.isNotEmpty) kind,
+            if ((serviceName ?? '').isNotEmpty) serviceName!,
             if (startsAt != null) DateFormat.MMMEd(locale).add_jm().format(startsAt),
           ].join(' — ');
     final price = s?.price;
@@ -423,6 +451,51 @@ class _SummaryBar extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// «اختر الخدمة المطلوبة»: the services a dental clinic listed, by kind, each with its price. Optional — tap the one
+/// chosen again to clear it.
+class _DentalServicePicker extends ConsumerWidget {
+  final int clinicId;
+  final int? selected;
+  final ValueChanged<int?> onChanged;
+
+  const _DentalServicePicker({required this.clinicId, required this.selected, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final sections = ref.watch(dentalServicesProvider(clinicId)).valueOrNull ?? const [];
+    if (sections.isEmpty) return const SizedBox.shrink();
+
+    return _SectionCard(
+      title: l10n.clinicPickDentalService,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          for (final s in sections) ...[
+            Padding(
+              padding: const EdgeInsets.only(top: 4, bottom: 6),
+              child: Text(dentalKindLabel(l10n, s.kind), style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+            ),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (final p in s.services)
+                  ChoiceChip(
+                    label: Text(p.price == null ? p.name : '${p.name} · ${formatDentalMoney(p.price!)} ${l10n.invCurrency}'),
+                    selected: selected == p.id,
+                    onSelected: (on) => onChanged(on ? p.id : null),
+                  ),
+              ],
+            ),
+          ],
+        ],
       ),
     );
   }
