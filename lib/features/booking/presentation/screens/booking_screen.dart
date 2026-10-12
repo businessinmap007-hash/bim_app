@@ -633,7 +633,10 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                 _previewLoading && _previewTotal == null
                     ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
                     : Text(
-                        _previewTotal != null ? money(_previewTotal!) : '${widget.offering.price.toStringAsFixed(0)} $currency',
+                        // before a total is known: the day's flat price when Day use is chosen, not the night's
+                        _previewTotal != null
+                            ? money(_previewTotal!)
+                            : '${(_dayUseActive ? _dayUseOffer!.price : widget.offering.price).toStringAsFixed(0)} $currency',
                         style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
                       ),
               ],
