@@ -7,6 +7,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../application/agenda_providers.dart';
 import '../../data/models/agenda_item.dart';
 import 'agenda_settings_screen.dart';
+import '../../../../core/time/egypt_time.dart';
 
 DateTime _dateOnly(DateTime d) => DateTime(d.year, d.month, d.day);
 
@@ -29,7 +30,7 @@ class AgendaScreen extends ConsumerStatefulWidget {
 }
 
 class _AgendaScreenState extends ConsumerState<AgendaScreen> {
-  DateTime _date = _dateOnly(DateTime.now());
+  DateTime _date = _dateOnly(EgyptTime.now());
   bool _week = false;
 
   void _shiftDay(int delta) {
@@ -42,7 +43,7 @@ class _AgendaScreenState extends ConsumerState<AgendaScreen> {
     final l10n = AppLocalizations.of(context)!;
     final titleController = TextEditingController();
     final notesController = TextEditingController();
-    TimeOfDay startTime = TimeOfDay.now();
+    TimeOfDay startTime = EgyptTime.timeOfDay();
     TimeOfDay? endTime;
     String? error;
     var repeat = 'none'; // none | daily | weekly
@@ -330,7 +331,7 @@ class _AgendaScreenState extends ConsumerState<AgendaScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(agendaDayControllerProvider(_date));
-    final isToday = _date == _dateOnly(DateTime.now());
+    final isToday = _date == _dateOnly(EgyptTime.now());
     final weekData = _week
         ? ref.watch(agendaWeekProvider(_date)).asData?.value
         : null;
@@ -342,7 +343,7 @@ class _AgendaScreenState extends ConsumerState<AgendaScreen> {
           if (!isToday)
             TextButton(
               onPressed: () =>
-                  setState(() => _date = _dateOnly(DateTime.now())),
+                  setState(() => _date = _dateOnly(EgyptTime.now())),
               child: Text(
                 l10n.agendaToday,
                 style: TextStyle(
@@ -453,7 +454,7 @@ class _WeekGrid extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final week = ref.watch(agendaWeekProvider(date));
-    final today = _dateOnly(DateTime.now());
+    final today = _dateOnly(EgyptTime.now());
 
     return week.when(
       loading: () => const Center(child: CircularProgressIndicator()),

@@ -13,6 +13,7 @@ import '../../../orders/presentation/widgets/order_trust_section.dart';
 import '../../application/delivery_providers.dart';
 import '../widgets/fee_amount_dialog.dart';
 import 'token_qr_screen.dart';
+import '../../../../core/time/egypt_time.dart';
 // TEMPORARY: unused while the camera scan below is bypassed for emulator
 // testing — restore this import alongside the revert in _scanPickup().
 // import 'token_scan_screen.dart';
@@ -392,7 +393,7 @@ class _EtaDialogState extends State<_EtaDialog> {
   }
 
   Future<void> _pickTime() async {
-    final picked = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    final picked = await showTimePicker(context: context, initialTime: EgyptTime.timeOfDay());
     if (picked != null) setState(() => _pickedTime = picked);
   }
 
@@ -405,7 +406,7 @@ class _EtaDialogState extends State<_EtaDialog> {
   void _confirmTime() {
     final time = _pickedTime;
     if (time == null) return;
-    final now = DateTime.now();
+    final now = EgyptTime.now();
     var at = DateTime(now.year, now.month, now.day, time.hour, time.minute);
     if (at.isBefore(now)) at = at.add(const Duration(days: 1));
     Navigator.of(context).pop(_EtaChoice.at(at));

@@ -13,6 +13,7 @@ import '../../data/schedules_api.dart';
 import 'incoming_reservations_screen.dart';
 import 'runs_list_screen.dart';
 import 'start_run_screen.dart';
+import '../../../../core/time/egypt_time.dart';
 
 String _modeLabel(String mode, AppLocalizations l10n) => switch (mode) {
   'freight' => l10n.tripModeFreight,
@@ -502,9 +503,9 @@ class TripScheduleFormScreenState extends ConsumerState<TripScheduleFormScreen> 
                 onTap: () async {
                   final picked = await showDatePicker(
                     context: context,
-                    initialDate: _tripDate ?? DateTime.now(),
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime.now().add(const Duration(days: 365)),
+                    initialDate: _tripDate ?? EgyptTime.now(),
+                    firstDate: EgyptTime.now(),
+                    lastDate: EgyptTime.now().add(const Duration(days: 365)),
                   );
                   if (picked != null) setState(() => _tripDate = picked);
                 },

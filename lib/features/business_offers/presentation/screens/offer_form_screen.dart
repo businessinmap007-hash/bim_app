@@ -6,6 +6,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../offers/data/models/commercial_offer.dart';
 import '../../application/business_offers_providers.dart';
 import '../../data/models/offerable_item.dart';
+import '../../../../core/time/egypt_time.dart';
 
 const _offerableTypes = ['menu_item', 'product', 'service'];
 const _endModeDate = 'date';
@@ -91,9 +92,9 @@ class _OfferFormScreenState extends ConsumerState<OfferFormScreen> {
     final l10n = AppLocalizations.of(context)!;
     final picked = await showDatePicker(
       context: context,
-      initialDate: _endsAt ?? DateTime.now().add(const Duration(days: 7)),
-      firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(const Duration(days: 365)),
+      initialDate: _endsAt ?? EgyptTime.now().add(const Duration(days: 7)),
+      firstDate: EgyptTime.now(),
+      lastDate: EgyptTime.now().add(const Duration(days: 365)),
       helpText: l10n.businessOfferEndsAtLabel,
     );
     if (picked != null) setState(() => _endsAt = picked);

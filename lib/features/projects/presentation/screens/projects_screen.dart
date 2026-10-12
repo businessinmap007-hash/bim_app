@@ -6,6 +6,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../application/projects_providers.dart';
 import '../../data/models/project.dart';
 import 'project_detail_screen.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// A business's project management timeline (manufacturing/construction):
 /// dated, dependent tasks with progress tracking. See
@@ -85,9 +86,9 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
                     onTap: () async {
                       final picked = await showDatePicker(
                         context: sheetContext,
-                        initialDate: startsOn ?? DateTime.now(),
-                        firstDate: DateTime.now().subtract(const Duration(days: 365)),
-                        lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
+                        initialDate: startsOn ?? EgyptTime.now(),
+                        firstDate: EgyptTime.now().subtract(const Duration(days: 365)),
+                        lastDate: EgyptTime.now().add(const Duration(days: 365 * 3)),
                       );
                       if (picked != null) setSheetState(() => startsOn = picked);
                     },
@@ -99,9 +100,9 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
                     onTap: () async {
                       final picked = await showDatePicker(
                         context: sheetContext,
-                        initialDate: dueOn ?? startsOn ?? DateTime.now(),
-                        firstDate: DateTime.now().subtract(const Duration(days: 365)),
-                        lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
+                        initialDate: dueOn ?? startsOn ?? EgyptTime.now(),
+                        firstDate: EgyptTime.now().subtract(const Duration(days: 365)),
+                        lastDate: EgyptTime.now().add(const Duration(days: 365 * 3)),
                       );
                       if (picked != null) setSheetState(() => dueOn = picked);
                     },

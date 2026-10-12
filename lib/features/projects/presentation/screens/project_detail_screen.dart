@@ -5,6 +5,7 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/projects_providers.dart';
 import '../../data/models/project_timeline.dart';
+import '../../../../core/time/egypt_time.dart';
 
 class ProjectDetailScreen extends ConsumerWidget {
   final int projectId;
@@ -51,9 +52,9 @@ class ProjectDetailScreen extends ConsumerWidget {
                     onTap: () async {
                       final picked = await showDatePicker(
                         context: sheetContext,
-                        initialDate: startsOn ?? DateTime.now(),
-                        firstDate: DateTime.now().subtract(const Duration(days: 365)),
-                        lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
+                        initialDate: startsOn ?? EgyptTime.now(),
+                        firstDate: EgyptTime.now().subtract(const Duration(days: 365)),
+                        lastDate: EgyptTime.now().add(const Duration(days: 365 * 3)),
                       );
                       if (picked != null) setSheetState(() => startsOn = picked);
                     },
@@ -65,9 +66,9 @@ class ProjectDetailScreen extends ConsumerWidget {
                     onTap: () async {
                       final picked = await showDatePicker(
                         context: sheetContext,
-                        initialDate: endsOn ?? startsOn ?? DateTime.now(),
-                        firstDate: DateTime.now().subtract(const Duration(days: 365)),
-                        lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
+                        initialDate: endsOn ?? startsOn ?? EgyptTime.now(),
+                        firstDate: EgyptTime.now().subtract(const Duration(days: 365)),
+                        lastDate: EgyptTime.now().add(const Duration(days: 365 * 3)),
                       );
                       if (picked != null) setSheetState(() => endsOn = picked);
                     },

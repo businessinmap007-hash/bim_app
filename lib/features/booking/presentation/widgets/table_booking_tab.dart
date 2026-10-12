@@ -7,6 +7,7 @@ import '../../application/booking_providers.dart';
 import '../../data/models/unit_discovery.dart';
 import 'booking_grid_widgets.dart';
 import 'booking_shape_tab.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// «طاولة»: a day and a party size, then the time (the taken ones greyed), then the tables that are free at that time
 /// and seat the party — one bar, «احجز طاولة».
@@ -33,7 +34,7 @@ class _TableBookingTabState extends ConsumerState<TableBookingTab> {
   @override
   void initState() {
     super.initState();
-    final now = DateTime.now();
+    final now = EgyptTime.now();
     _day = DateTime(now.year, now.month, now.day);
   }
 
@@ -41,7 +42,7 @@ class _TableBookingTabState extends ConsumerState<TableBookingTab> {
       '${d.year.toString().padLeft(4, '0')}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
 
   Future<void> _pickDay() async {
-    final now = DateTime.now();
+    final now = EgyptTime.now();
     final picked = await showDatePicker(
       context: context,
       initialDate: _day,

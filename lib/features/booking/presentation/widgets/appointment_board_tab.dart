@@ -13,6 +13,7 @@ import '../../data/models/unit_discovery.dart';
 import '../screens/booking_screen.dart';
 import 'booking_grid_widgets.dart';
 import 'booking_shape_tab.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// «موعد»: an appointment with the business itself (a salon, a craftsman) — the service and how long it takes, a
 /// day, a start time (the held ones greyed), then «تأكيد الموعد». No units, no photos, no add-ons.
@@ -41,7 +42,7 @@ class _AppointmentBoardTabState extends ConsumerState<AppointmentBoardTab> {
   @override
   void initState() {
     super.initState();
-    final now = DateTime.now();
+    final now = EgyptTime.now();
     _day = DateTime(now.year, now.month, now.day);
   }
 

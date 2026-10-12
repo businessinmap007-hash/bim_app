@@ -1,3 +1,4 @@
+import '../../../../core/time/egypt_time.dart';
 /// Who the dispute is against/from, on whichever side the viewer isn't.
 class DisputeCounterparty {
   final int id;
@@ -25,8 +26,8 @@ class DisputeCooperation {
   const DisputeCooperation({this.clientAt, this.businessAt});
 
   factory DisputeCooperation.fromJson(Map<String, dynamic> json) => DisputeCooperation(
-    clientAt: json['client_at'] != null ? DateTime.tryParse(json['client_at'] as String) : null,
-    businessAt: json['business_at'] != null ? DateTime.tryParse(json['business_at'] as String) : null,
+    clientAt: json['client_at'] != null ? EgyptTime.tryParse(json['client_at'] as String) : null,
+    businessAt: json['business_at'] != null ? EgyptTime.tryParse(json['business_at'] as String) : null,
   );
 }
 
@@ -38,10 +39,10 @@ class DisputeSettlementState {
 
   factory DisputeSettlementState.fromJson(Map<String, dynamic> json) => DisputeSettlementState(
     clientAgreedAt: json['client_agreed_at'] != null
-        ? DateTime.tryParse(json['client_agreed_at'] as String)
+        ? EgyptTime.tryParse(json['client_agreed_at'] as String)
         : null,
     businessAgreedAt: json['business_agreed_at'] != null
-        ? DateTime.tryParse(json['business_agreed_at'] as String)
+        ? EgyptTime.tryParse(json['business_agreed_at'] as String)
         : null,
     complete: json['complete'] as bool? ?? false,
   );
@@ -55,12 +56,12 @@ class DisputePurgeState {
 
   factory DisputePurgeState.fromJson(Map<String, dynamic> json) => DisputePurgeState(
     clientConfirmedAt: json['client_confirmed_at'] != null
-        ? DateTime.tryParse(json['client_confirmed_at'] as String)
+        ? EgyptTime.tryParse(json['client_confirmed_at'] as String)
         : null,
     businessConfirmedAt: json['business_confirmed_at'] != null
-        ? DateTime.tryParse(json['business_confirmed_at'] as String)
+        ? EgyptTime.tryParse(json['business_confirmed_at'] as String)
         : null,
-    purgedAt: json['purged_at'] != null ? DateTime.tryParse(json['purged_at'] as String) : null,
+    purgedAt: json['purged_at'] != null ? EgyptTime.tryParse(json['purged_at'] as String) : null,
   );
 }
 
@@ -140,20 +141,20 @@ class Dispute {
     operation: DisputeOperation.fromJson(json['operation'] as Map<String, dynamic>? ?? const {}),
     cooperation: DisputeCooperation.fromJson(json['cooperation'] as Map<String, dynamic>? ?? const {}),
     settlement: DisputeSettlementState.fromJson(json['settlement'] as Map<String, dynamic>? ?? const {}),
-    openedAt: json['opened_at'] != null ? DateTime.tryParse(json['opened_at'] as String) : null,
+    openedAt: json['opened_at'] != null ? EgyptTime.tryParse(json['opened_at'] as String) : null,
     mutualResolutionDeadlineAt: json['mutual_resolution_deadline_at'] != null
-        ? DateTime.tryParse(json['mutual_resolution_deadline_at'] as String)
+        ? EgyptTime.tryParse(json['mutual_resolution_deadline_at'] as String)
         : null,
     warningCount: (json['warning_count'] as num?)?.toInt() ?? 0,
     resolutionType: json['resolution_type'] as String?,
     resolution: json['resolution'] != null
         ? DisputeResolution.fromJson(json['resolution'] as Map<String, dynamic>)
         : null,
-    resolvedAt: json['resolved_at'] != null ? DateTime.tryParse(json['resolved_at'] as String) : null,
-    closedAt: json['closed_at'] != null ? DateTime.tryParse(json['closed_at'] as String) : null,
+    resolvedAt: json['resolved_at'] != null ? EgyptTime.tryParse(json['resolved_at'] as String) : null,
+    closedAt: json['closed_at'] != null ? EgyptTime.tryParse(json['closed_at'] as String) : null,
     closedReason: json['closed_reason'] as String?,
     purge: DisputePurgeState.fromJson(json['purge'] as Map<String, dynamic>? ?? const {}),
-    createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
+    createdAt: json['created_at'] != null ? EgyptTime.tryParse(json['created_at'] as String) : null,
   );
 }
 
@@ -182,7 +183,7 @@ class DisputeObligation {
     type: json['type'] as String? ?? '',
     amount: (json['amount'] as num?)?.toDouble() ?? 0,
     status: json['status'] as String? ?? 'pending',
-    dueAt: json['due_at'] != null ? DateTime.tryParse(json['due_at'] as String) : null,
+    dueAt: json['due_at'] != null ? EgyptTime.tryParse(json['due_at'] as String) : null,
     isDue: json['is_due'] as bool? ?? false,
   );
 }

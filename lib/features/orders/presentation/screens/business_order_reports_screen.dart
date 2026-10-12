@@ -9,6 +9,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../application/business_orders_providers.dart';
 import '../../application/orders_providers.dart';
 import '../../data/models/order_reports.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// Standalone analytics screen for a business's own orders -- separate from
 /// the live "Incoming orders" queue (BusinessOrdersScreen), which stays a
@@ -389,7 +390,7 @@ class _InstallmentsView extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      DateFormat.yMMMM(locale).format(DateTime.parse('${m.month}-01')),
+                      DateFormat.yMMMM(locale).format(EgyptTime.parse('${m.month}-01')),
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),

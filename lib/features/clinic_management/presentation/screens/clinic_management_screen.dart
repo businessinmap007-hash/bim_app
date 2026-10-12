@@ -16,6 +16,7 @@ import '../../../prescriptions/presentation/screens/prescription_detail_screen.d
 import '../../application/business_clinic_providers.dart';
 import '../../data/models/business_clinic_appointment.dart';
 import 'clinic_slots_screen.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// Api\V2\BusinessClinicAppointmentController — the clinic's own side. Two
 /// tabs: the appointments queue (confirm/reject/complete/no-show/reschedule)
@@ -163,7 +164,7 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
 
   Future<void> _reschedule() async {
     final l10n = AppLocalizations.of(context)!;
-    final now = DateTime.now();
+    final now = EgyptTime.now();
     final date = await showDatePicker(
       context: context,
       initialDate: widget.appointment.scheduledAt ?? now,
@@ -194,8 +195,8 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
     if (name.isEmpty && phone.isEmpty) return;
 
     final records = ref.read(patientRecordsProvider.notifier);
-    final record = records.match(phone: phone, name: name) ?? PatientRecord(id: newRecordId(), name: name, phone: phone, updatedAt: DateTime.now());
-    final today = DateTime.now();
+    final record = records.match(phone: phone, name: name) ?? PatientRecord(id: newRecordId(), name: name, phone: phone, updatedAt: EgyptTime.now());
+    final today = EgyptTime.now();
     final date = DateTime(today.year, today.month, today.day);
     final fresh = [for (final (kind, title) in items) RecordEntry(id: newRecordId(), date: date, kind: kind, title: title)];
     final seen = {for (final e in record.entries) e.fingerprint};
@@ -212,7 +213,7 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
 
     var record = records.match(phone: phone, name: name);
     if (record == null) {
-      record = PatientRecord(id: newRecordId(), name: name, phone: phone, updatedAt: DateTime.now());
+      record = PatientRecord(id: newRecordId(), name: name, phone: phone, updatedAt: EgyptTime.now());
       await records.save(record);
     }
     if (!mounted) return;

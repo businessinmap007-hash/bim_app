@@ -1,3 +1,4 @@
+import '../../../../core/time/egypt_time.dart';
 /// The three kinds of medical procedure a hospital offers, in the order a patient reads them.
 const procedureKinds = ['surgery', 'endoscopy', 'procedure'];
 
@@ -114,9 +115,9 @@ class ProcedureRequestItem {
       kind: json['kind'] as String? ?? 'procedure',
       name: json['name'] as String? ?? '',
       price: (json['price'] as num?)?.toDouble(),
-      preferredDate: json['preferred_date'] != null ? DateTime.tryParse(json['preferred_date'] as String) : null,
+      preferredDate: json['preferred_date'] != null ? EgyptTime.tryParse(json['preferred_date'] as String) : null,
       notes: json['notes'] as String?,
-      scheduledAt: json['scheduled_at'] != null ? DateTime.tryParse(json['scheduled_at'] as String) : null,
+      scheduledAt: json['scheduled_at'] != null ? EgyptTime.tryParse(json['scheduled_at'] as String) : null,
       hospitalNote: json['hospital_note'] as String?,
       hospitalName: hospital?['name'] as String?,
       patientName: patient?['name'] as String?,

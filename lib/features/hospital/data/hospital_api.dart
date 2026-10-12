@@ -103,7 +103,7 @@ class HospitalApi {
 
   Future<ProcedureRequestItem> acceptProcedure(int id, {required DateTime scheduledAt, double? price, String? note}) async => _request(
     await _client.post('/business/procedure-requests/$id/accept', data: {
-      'scheduled_at': scheduledAt.toUtc().toIso8601String(),
+      'scheduled_at': scheduledAt.toIso8601String(),
       'price': ?price,
       if (note != null && note.isNotEmpty) 'note': note,
     }),

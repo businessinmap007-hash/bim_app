@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// The pieces every «pick a day, then a time» booking board is drawn with (clinic, hourly venue, table): the white
 /// section card, the day chip, the time chip and the summary bar at the bottom. One look, so the boards agree.
@@ -105,7 +106,7 @@ class BookingDayStrip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final today = DateTime.now();
+    final today = EgyptTime.now();
     final first = DateTime(today.year, today.month, today.day);
 
     return SizedBox(

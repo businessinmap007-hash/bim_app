@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// A named id — category, category child, or the posting business, all of
 /// which JobController's publicShape() renders the same tiny `{id, name}`
@@ -64,10 +65,10 @@ class JobPost {
     business: json['business'] is Map<String, dynamic> ? JobRef.fromJson(json['business'] as Map<String, dynamic>) : null,
     applicantsCount: (json['applicants_count'] as num?)?.toInt() ?? 0,
     isActive: json['is_active'] as bool? ?? true,
-    expireAt: json['expire_at'] != null ? DateTime.tryParse(json['expire_at'] as String) : null,
+    expireAt: json['expire_at'] != null ? EgyptTime.tryParse(json['expire_at'] as String) : null,
     interviewStartsAt: json['interview_starts_at'] != null
-        ? DateTime.tryParse(json['interview_starts_at'] as String)
+        ? EgyptTime.tryParse(json['interview_starts_at'] as String)
         : null,
-    createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
+    createdAt: json['created_at'] != null ? EgyptTime.tryParse(json['created_at'] as String) : null,
   );
 }

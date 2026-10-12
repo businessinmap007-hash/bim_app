@@ -1,3 +1,4 @@
+import '../../../../core/time/egypt_time.dart';
 /// Mirrors `FineResource` — a platform fine as the fined user sees it. There
 /// is no levy/decide/collect here (admin-only, on the backend) — just read
 /// your own fines and contest one while its window is open.
@@ -43,9 +44,9 @@ class Fine {
     isAppealable: json['is_appealable'] as bool? ?? false,
     canAppeal: json['can_appeal'] as bool? ?? false,
     appealDeadlineAt: json['appeal_deadline_at'] != null
-        ? DateTime.tryParse(json['appeal_deadline_at'] as String)
+        ? EgyptTime.tryParse(json['appeal_deadline_at'] as String)
         : null,
     hasPendingAppeal: json['has_pending_appeal'] as bool? ?? false,
-    createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
+    createdAt: json['created_at'] != null ? EgyptTime.tryParse(json['created_at'] as String) : null,
   );
 }

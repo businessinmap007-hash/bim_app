@@ -6,6 +6,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../training/application/training_providers.dart';
 import '../../application/training_templates_providers.dart';
 import '../../data/models/training_template.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// Apply a template to a client: find them by their EXACT phone or e-mail (the
 /// same rule as the business web panel — never a people-finder), choose how many
@@ -30,7 +31,7 @@ class _ApplyTemplateSheet extends ConsumerStatefulWidget {
 class _ApplyTemplateSheetState extends ConsumerState<_ApplyTemplateSheet> {
   final _term = TextEditingController();
   late final _weeks = TextEditingController(text: widget.template.durationWeeks?.toString() ?? '');
-  DateTime _start = DateTime.now();
+  DateTime _start = EgyptTime.now();
   ({int id, String name, String phone})? _client;
   bool _searched = false;
   bool _busy = false;
@@ -69,8 +70,8 @@ class _ApplyTemplateSheetState extends ConsumerState<_ApplyTemplateSheet> {
     final picked = await showDatePicker(
       context: context,
       initialDate: _start,
-      firstDate: DateTime.now().subtract(const Duration(days: 30)),
-      lastDate: DateTime.now().add(const Duration(days: 365)),
+      firstDate: EgyptTime.now().subtract(const Duration(days: 30)),
+      lastDate: EgyptTime.now().add(const Duration(days: 365)),
     );
     if (picked != null) setState(() => _start = picked);
   }

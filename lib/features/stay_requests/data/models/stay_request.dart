@@ -1,3 +1,4 @@
+import '../../../../core/time/egypt_time.dart';
 /// A guest's request during a running hotel stay — a problem with the room (`issue`) or something to bring
 /// (`service`). Api\V2\StayRequestController / BusinessStayRequestController.
 class StayRequest {
@@ -49,7 +50,7 @@ class StayRequest {
     label: json['label'] as String? ?? json['title'] as String? ?? '',
     note: json['note'] as String?,
     status: json['status'] as String? ?? 'new',
-    createdAt: DateTime.tryParse(json['created_at'] as String? ?? ''),
+    createdAt: EgyptTime.tryParse(json['created_at'] as String? ?? ''),
     roomNumber: json['room_number'] as String?,
     unitTitle: json['unit_title'] as String?,
     guestName: json['guest_name'] as String?,

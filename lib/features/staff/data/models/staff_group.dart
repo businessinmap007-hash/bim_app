@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// One staff member's card inside a group — mirrors
 /// Api\V2\BusinessStaffController::groups()'s per-member payload.
@@ -49,10 +50,10 @@ class StaffGroupMember {
       // A genuine UTC instant (Carbon's own toIso8601String(), app.timezone is
       // UTC) -- .toLocal() here is correct, not the wall-clock-field trap.
       checkedInAt: attendance['checked_in_at'] != null
-          ? DateTime.tryParse(attendance['checked_in_at'] as String)?.toLocal()
+          ? EgyptTime.tryParse(attendance['checked_in_at'] as String)?.toLocal()
           : null,
       checkedOutAt: attendance['checked_out_at'] != null
-          ? DateTime.tryParse(attendance['checked_out_at'] as String)?.toLocal()
+          ? EgyptTime.tryParse(attendance['checked_out_at'] as String)?.toLocal()
           : null,
       isDriver: deliveryStatus != null,
       driverBusy: deliveryStatus?['busy'] as bool? ?? false,

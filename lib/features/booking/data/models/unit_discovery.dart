@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// One priced add-on offered alongside a kind of unit («إفطار +٥٠»).
 class UnitChoice {
@@ -236,7 +237,7 @@ class QueuePreview {
     closed: json['closed'] as bool? ?? false,
     turn: (json['turn'] as num?)?.toInt() ?? 1,
     ahead: (json['ahead'] as num?)?.toInt() ?? 0,
-    expectedAt: DateTime.tryParse((json['expected_at'] as String? ?? '').replaceFirst(' ', 'T')),
+    expectedAt: EgyptTime.tryParse((json['expected_at'] as String? ?? '').replaceFirst(' ', 'T')),
     durationMinutes: (json['duration_minutes'] as num?)?.toInt() ?? 30,
   );
 }
@@ -254,8 +255,8 @@ class DayGridSlot {
 
   factory DayGridSlot.fromJson(Map<String, dynamic> json) => DayGridSlot(
     // wall-clock strings of the business's own day — read as they are, never shifted
-    startsAt: DateTime.parse((json['starts_at'] as String).replaceFirst(' ', 'T')),
-    endsAt: DateTime.parse((json['ends_at'] as String).replaceFirst(' ', 'T')),
+    startsAt: EgyptTime.parse((json['starts_at'] as String).replaceFirst(' ', 'T')),
+    endsAt: EgyptTime.parse((json['ends_at'] as String).replaceFirst(' ', 'T')),
     free: (json['free'] as num?)?.toInt() ?? 0,
     unitIds: (json['unit_ids'] as List<dynamic>? ?? []).map((e) => (e as num).toInt()).toList(),
   );

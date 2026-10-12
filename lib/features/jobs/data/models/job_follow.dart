@@ -1,3 +1,4 @@
+import '../../../../core/time/egypt_time.dart';
 /// A followed job field (a root category, or one specialty under it) — new
 /// vacancies posted there notify the follower live. Mirrors
 /// `JobFollowController::index()`'s row shape.
@@ -37,7 +38,7 @@ class JobFollow {
       categoryChildName: child?['name'] as String?,
       isActive: json['is_active'] as bool? ?? true,
       lastMatchedAt: json['last_matched_at'] != null
-          ? DateTime.tryParse(json['last_matched_at'] as String)
+          ? EgyptTime.tryParse(json['last_matched_at'] as String)
           : null,
     );
   }

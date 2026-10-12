@@ -1,3 +1,4 @@
+import '../../../../core/time/egypt_time.dart';
 /// An escrow deposit the caller is a party to — see Api\V2\DepositController
 /// / DepositResource. Read-only: release/refund/split all happen elsewhere
 /// (BookingDepositService, DisputeService), never through this app directly.
@@ -57,9 +58,9 @@ class Deposit {
       bookingId: json['booking_id'] as int?,
       targetType: json['target_type'] as String?,
       targetId: json['target_id'] as int?,
-      releasedAt: json['released_at'] != null ? DateTime.parse(json['released_at'] as String) : null,
-      refundedAt: json['refunded_at'] != null ? DateTime.parse(json['refunded_at'] as String) : null,
-      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at'] as String) : null,
+      releasedAt: json['released_at'] != null ? EgyptTime.parse(json['released_at'] as String) : null,
+      refundedAt: json['refunded_at'] != null ? EgyptTime.parse(json['refunded_at'] as String) : null,
+      createdAt: json['created_at'] != null ? EgyptTime.parse(json['created_at'] as String) : null,
     );
   }
 }

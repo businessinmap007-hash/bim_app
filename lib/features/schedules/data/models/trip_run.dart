@@ -1,3 +1,4 @@
+import '../../../../core/time/egypt_time.dart';
 /// A snapshot of one stop for one live run — mirrors `TripRunController`'s
 /// `serialize()`. Exactly one of these is ever `heading` or `arrived` at a
 /// time; that one is the "current" stop the driver's action button acts on.
@@ -45,8 +46,8 @@ class TripRunStop {
     lat: (json['lat'] as num?)?.toDouble(),
     lng: (json['lng'] as num?)?.toDouble(),
     status: json['status'] as String? ?? 'pending',
-    arrivedAt: json['arrived_at'] != null ? DateTime.tryParse(json['arrived_at'] as String) : null,
-    completedAt: json['completed_at'] != null ? DateTime.tryParse(json['completed_at'] as String) : null,
+    arrivedAt: json['arrived_at'] != null ? EgyptTime.tryParse(json['arrived_at'] as String) : null,
+    completedAt: json['completed_at'] != null ? EgyptTime.tryParse(json['completed_at'] as String) : null,
   );
 }
 
@@ -128,8 +129,8 @@ class TripRun {
     vehicleLabel: json['vehicle_label'] as String?,
     status: json['status'] as String? ?? 'in_progress',
     passengerCount: json['passenger_count'] as int?,
-    startedAt: json['started_at'] != null ? DateTime.tryParse(json['started_at'] as String) : null,
-    completedAt: json['completed_at'] != null ? DateTime.tryParse(json['completed_at'] as String) : null,
+    startedAt: json['started_at'] != null ? EgyptTime.tryParse(json['started_at'] as String) : null,
+    completedAt: json['completed_at'] != null ? EgyptTime.tryParse(json['completed_at'] as String) : null,
     currentStopId: json['current_stop_id'] as int?,
     stops: (json['stops'] as List<dynamic>? ?? []).map((e) => TripRunStop.fromJson(e as Map<String, dynamic>)).toList(),
     manifestItems: (json['manifest_items'] as List<dynamic>? ?? [])

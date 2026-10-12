@@ -7,6 +7,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../application/booking_settings_controller.dart';
 import '../../data/models/booking_settings_models.dart';
 import 'bookable_item_edit_screen.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// A business's self-service booking configuration — prices (what a room
 /// type costs), bookable units (which specific rooms exist) and weekly
@@ -607,7 +608,7 @@ class _HoursTabState extends ConsumerState<_HoursTab> {
 
   Future<void> _pickTime(int index, {required bool isOpen}) async {
     final current = _days![index];
-    final initial = TimeOfDay.now();
+    final initial = EgyptTime.timeOfDay();
     final picked = await showTimePicker(context: context, initialTime: initial);
     if (picked == null) return;
     final formatted = '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
@@ -617,7 +618,7 @@ class _HoursTabState extends ConsumerState<_HoursTab> {
   }
 
   Future<void> _pickBulkTime({required bool isOpen}) async {
-    final picked = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    final picked = await showTimePicker(context: context, initialTime: EgyptTime.timeOfDay());
     if (picked == null) return;
     final formatted = '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
     setState(() {
@@ -660,7 +661,7 @@ class _HoursTabState extends ConsumerState<_HoursTab> {
   }
 
   Future<void> _pickCheckTime({required bool isCheckIn}) async {
-    final picked = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    final picked = await showTimePicker(context: context, initialTime: EgyptTime.timeOfDay());
     if (picked == null) return;
     final formatted = '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
     setState(() {

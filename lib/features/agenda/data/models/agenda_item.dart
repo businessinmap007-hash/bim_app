@@ -1,3 +1,4 @@
+import '../../../../core/time/egypt_time.dart';
 /// Mirrors `AgendaController::serialize()` — one entry on a day: an
 /// appointment, a booking, a medication dose, or a personal task the user
 /// added themselves. Only `kind == 'personal'` items can be deleted from
@@ -45,10 +46,10 @@ class AgendaItem {
     title: json['title'] as String? ?? '',
     notes: json['notes'] as String?,
     startsAt: json['starts_at'] != null
-        ? DateTime.tryParse(json['starts_at'] as String)
+        ? EgyptTime.tryParse(json['starts_at'] as String)
         : null,
     endsAt: json['ends_at'] != null
-        ? DateTime.tryParse(json['ends_at'] as String)
+        ? EgyptTime.tryParse(json['ends_at'] as String)
         : null,
     blocking: json['blocking'] as bool? ?? false,
     isPrivate: json['private'] as bool? ?? false,
@@ -63,7 +64,7 @@ class AgendaWeekDay {
   const AgendaWeekDay({required this.date, this.items = const []});
 
   factory AgendaWeekDay.fromJson(Map<String, dynamic> json) => AgendaWeekDay(
-    date: DateTime.parse(json['date'] as String),
+    date: EgyptTime.parse(json['date'] as String),
     items: (json['items'] as List<dynamic>? ?? [])
         .map((e) => AgendaItem.fromJson(e as Map<String, dynamic>))
         .toList(),
@@ -84,8 +85,8 @@ class AgendaWeek {
   });
 
   factory AgendaWeek.fromJson(Map<String, dynamic> json) => AgendaWeek(
-    from: DateTime.parse(json['from'] as String),
-    to: DateTime.parse(json['to'] as String),
+    from: EgyptTime.parse(json['from'] as String),
+    to: EgyptTime.parse(json['to'] as String),
     days: (json['days'] as List<dynamic>? ?? [])
         .map((e) => AgendaWeekDay.fromJson(e as Map<String, dynamic>))
         .toList(),

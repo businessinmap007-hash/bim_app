@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// The `rater:id,name,type,logo,image` eager load on OperationReview — who
 /// left the review.
@@ -37,7 +38,7 @@ class OperationReview {
     id: json['id'] as int,
     stars: (json['stars'] as num?)?.toInt() ?? 0,
     comment: json['comment'] as String?,
-    createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
+    createdAt: json['created_at'] != null ? EgyptTime.tryParse(json['created_at'] as String) : null,
     rater: json['rater'] != null ? ReviewAuthor.fromJson(json['rater'] as Map<String, dynamic>) : null,
   );
 }

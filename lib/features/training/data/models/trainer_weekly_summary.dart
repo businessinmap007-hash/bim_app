@@ -1,3 +1,4 @@
+import '../../../../core/time/egypt_time.dart';
 /// One client's week in the trainer overview — mirrors an entry of
 /// `TrainingPlanService::weeklySummaryForTrainer()`'s `clients`.
 class ClientWeekAdherence {
@@ -46,8 +47,8 @@ class TrainerWeeklySummary {
     final clients = (json['clients'] as List<dynamic>? ?? [])
         .map((e) => ClientWeekAdherence.fromJson(e as Map<String, dynamic>));
     return TrainerWeeklySummary(
-      from: DateTime.parse(json['from'] as String),
-      to: DateTime.parse(json['to'] as String),
+      from: EgyptTime.parse(json['from'] as String),
+      to: EgyptTime.parse(json['to'] as String),
       averageAdherence: (json['average_adherence'] as num?)?.toInt(),
       byPlan: {for (final c in clients) c.planId: c},
     );

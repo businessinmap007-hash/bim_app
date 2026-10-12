@@ -80,7 +80,7 @@ class InvestigationsApi {
 
   Future<InvestigationOrder> accept(int id, {DateTime? appointmentAt, String? note}) async => _order(
     await _client.post('/business/investigation-orders/$id/accept', data: {
-      if (appointmentAt != null) 'appointment_at': appointmentAt.toUtc().toIso8601String(),
+      if (appointmentAt != null) 'appointment_at': appointmentAt.toIso8601String(),
       if (note != null && note.isNotEmpty) 'note': note,
     }),
   );

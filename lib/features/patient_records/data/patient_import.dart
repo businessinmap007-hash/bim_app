@@ -1,6 +1,7 @@
 import '../../data_import/data/import_core.dart';
 import '../application/patient_records_providers.dart' show newRecordId;
 import 'patient_record.dart';
+import '../../../core/time/egypt_time.dart';
 
 /// The columns a clinic's old patient sheet may have. One row is one patient — or one VISIT of a patient (several rows
 /// with the same phone/name become one file with several entries), so a sheet written either way imports.
@@ -83,7 +84,7 @@ PatientImportResult recordsFromGrid(List<List<String>> grid, Map<String, int?> m
       allergies: cell(row, 'allergies'),
       notes: cell(row, 'notes'),
       entries: entries,
-      updatedAt: DateTime.now(),
+      updatedAt: EgyptTime.now(),
     );
 
     final key = incoming.phoneNormalized.isNotEmpty ? 'p:${incoming.phoneNormalized}' : 'n:${incoming.nameNormalized}';

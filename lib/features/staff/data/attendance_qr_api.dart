@@ -1,4 +1,5 @@
 import '../../../core/network/api_client.dart';
+import '../../../core/time/egypt_time.dart';
 
 class AttendanceQrCode {
   final String token;
@@ -7,7 +8,7 @@ class AttendanceQrCode {
 
   factory AttendanceQrCode.fromJson(Map<String, dynamic> json) => AttendanceQrCode(
     token: json['token'] as String,
-    expiresAt: DateTime.parse(json['expires_at'] as String),
+    expiresAt: EgyptTime.parse(json['expires_at'] as String),
   );
 }
 

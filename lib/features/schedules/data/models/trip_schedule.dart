@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// The reliability signal shown next to a search result — mirrors
 /// `TripScheduleService::emptyTrust()`'s shape. Only the pieces worth
@@ -125,7 +126,7 @@ class TripSchedule {
       scope: json['scope'] as String? ?? 'domestic',
       schedulePattern: json['schedule_pattern'] as String? ?? 'weekly',
       dayOfWeek: json['day_of_week'] as int?,
-      tripDate: json['trip_date'] != null ? DateTime.tryParse(json['trip_date'] as String) : null,
+      tripDate: json['trip_date'] != null ? EgyptTime.tryParse(json['trip_date'] as String) : null,
       departureTime: json['departure_time'] as String?,
       returnTime: json['return_time'] as String?,
       notes: json['notes'] as String?,

@@ -6,6 +6,7 @@ import '../../../core/providers/core_providers.dart';
 import '../../auth/application/auth_controller.dart';
 import '../data/patient_record.dart';
 import '../data/patient_record_store.dart';
+import '../../../core/time/egypt_time.dart';
 
 final patientRecordStoreProvider = Provider<PatientRecordStore>((ref) => PatientRecordStore(ref.watch(secureStorageProvider)));
 
@@ -160,7 +161,7 @@ class PatientRecordsController extends StateNotifier<AsyncValue<List<PatientReco
           allergies: inc.allergies,
           notes: inc.notes,
           entries: inc.entries,
-          updatedAt: DateTime.now(),
+          updatedAt: EgyptTime.now(),
         );
         touched[fresh.id] = fresh;
         byName[fresh.nameNormalized] = fresh;

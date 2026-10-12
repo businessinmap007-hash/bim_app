@@ -1,3 +1,4 @@
+import '../../../../core/time/egypt_time.dart';
 /// A file attached to a message (see ThreadAttachmentResource). `url` is
 /// already an absolute API URL — never pass it through `Env.assetUrl`.
 class ThreadAttachment {
@@ -57,7 +58,7 @@ class ThreadMessage {
       isMine: json['is_mine'] as bool? ?? false,
       isRead: json['is_read'] as bool? ?? false,
       senderName: sender?['name'] as String?,
-      createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
+      createdAt: json['created_at'] != null ? EgyptTime.tryParse(json['created_at'] as String) : null,
       attachments: (json['attachments'] as List<dynamic>? ?? [])
           .map((e) => ThreadAttachment.fromJson(e as Map<String, dynamic>))
           .toList(),

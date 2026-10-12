@@ -4,6 +4,8 @@
 /// This file is the shared core: reading a CSV, guessing which file column is which of ours, and reading a date.
 library;
 
+import '../../../core/time/egypt_time.dart';
+
 /// One column the target understands: [key] is what [ImportTarget] reads, [label] is what the owner sees, and
 /// [aliases] are the other names such a column commonly has in a sheet (Arabic and English).
 class ImportField {
@@ -129,7 +131,7 @@ DateTime? parseSheetDate(String raw) {
   final s = raw.trim();
   if (s.isEmpty) return null;
 
-  final iso = DateTime.tryParse(s.length >= 10 ? s.substring(0, 10) : s);
+  final iso = EgyptTime.tryParse(s.length >= 10 ? s.substring(0, 10) : s);
   if (iso != null && RegExp(r'^\d{4}-\d{1,2}-\d{1,2}').hasMatch(s)) return DateTime(iso.year, iso.month, iso.day);
 
   final dmy = RegExp(r'^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})').firstMatch(s);

@@ -2,6 +2,7 @@ import '../../../core/notifications/local_reminders.dart';
 import '../data/agenda_api.dart';
 import '../data/models/agenda_item.dart';
 import 'private_agenda.dart';
+import '../../../core/time/egypt_time.dart';
 
 /// «الإشعارات المحلية للتذكيرات» — keeps the phone's own notifications in step with the coming agenda items that ask
 /// to be reminded of (a personal task, a medicine dose, an instalment). The words come from [PrivateAgenda], so a
@@ -35,7 +36,7 @@ class AgendaReminders {
         await _scheduler.replaceAll(const []);
         return;
       }
-      final clock = now ?? DateTime.now();
+      final clock = now ?? EgyptTime.now();
 
       final items = await _private.show(await _api.upcoming());
       final lead = Duration(

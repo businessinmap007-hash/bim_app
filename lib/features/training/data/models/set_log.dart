@@ -1,3 +1,4 @@
+import '../../../../core/time/egypt_time.dart';
 /// One confirmed set with what was actually done in it. Reps and weight are
 /// optional: a set can be confirmed without numbers.
 class LoggedSet {
@@ -94,7 +95,7 @@ class FinishedDay {
   });
 
   factory FinishedDay.fromJson(Map<String, dynamic> json) => FinishedDay(
-    date: DateTime.parse(json['date'] as String),
+    date: EgyptTime.parse(json['date'] as String),
     exercisesCount: (json['exercises_count'] as num?)?.toInt() ?? 0,
     setsCount: (json['sets_count'] as num?)?.toInt() ?? 0,
     totalReps: (json['total_reps'] as num?)?.toInt() ?? 0,

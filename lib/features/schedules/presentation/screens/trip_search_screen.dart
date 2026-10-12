@@ -8,6 +8,7 @@ import '../../../location/data/models/location_models.dart';
 import '../../application/schedules_providers.dart';
 import '../../data/models/trip_schedule.dart';
 import 'my_reservations_screen.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// Trip-leg search (BIM-x scheduling service): pick an origin and destination
 /// (governorates, or countries for an international trip), optionally a vehicle type, see published legs ranked by carrier trust, and
@@ -213,9 +214,9 @@ class _TripSearchScreenState extends ConsumerState<TripSearchScreen> {
                   onTap: () async {
                     final picked = await showDatePicker(
                       context: context,
-                      initialDate: _date ?? DateTime.now(),
-                      firstDate: DateTime.now(),
-                      lastDate: DateTime.now().add(const Duration(days: 90)),
+                      initialDate: _date ?? EgyptTime.now(),
+                      firstDate: EgyptTime.now(),
+                      lastDate: EgyptTime.now().add(const Duration(days: 90)),
                     );
                     if (picked != null) setState(() => _date = picked);
                   },

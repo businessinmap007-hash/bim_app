@@ -1,3 +1,4 @@
+import '../../../../core/time/egypt_time.dart';
 /// One run of a course — when it starts, when it meets, how many seats are left.
 class CourseGroup {
   final int id;
@@ -34,8 +35,8 @@ class CourseGroup {
     name: json['name'] as String? ?? '',
     level: (json['level'] as String?)?.trim().isEmpty ?? true ? null : (json['level'] as String).trim(),
     scheduleText: json['schedule_text'] as String?,
-    startsOn: DateTime.tryParse(json['starts_on'] as String? ?? ''),
-    endsOn: DateTime.tryParse(json['ends_on'] as String? ?? ''),
+    startsOn: EgyptTime.tryParse(json['starts_on'] as String? ?? ''),
+    endsOn: EgyptTime.tryParse(json['ends_on'] as String? ?? ''),
     seats: (json['seats'] as num?)?.toInt() ?? 0,
     seatsTaken: (json['seats_taken'] as num?)?.toInt() ?? 0,
     seatsLeft: (json['seats_left'] as num?)?.toInt() ?? 0,

@@ -6,6 +6,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../application/notifications_providers.dart';
 import '../../data/models/app_notification.dart';
 import '../notification_navigator.dart';
+import '../../../../core/time/egypt_time.dart';
 
 class NotificationsScreen extends ConsumerStatefulWidget {
   const NotificationsScreen({super.key});
@@ -238,7 +239,7 @@ class _NotificationTile extends ConsumerWidget {
 }
 
 String _timeAgo(DateTime dateTime, String languageCode) {
-  final diff = DateTime.now().difference(dateTime);
+  final diff = EgyptTime.now().difference(dateTime);
   final ar = languageCode == 'ar';
 
   if (diff.inMinutes < 1) return ar ? 'الآن' : 'now';

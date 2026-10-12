@@ -1,5 +1,6 @@
 import '../../../../core/env/env.dart';
 import 'set_log.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// One image owned by an exercise or a meal — the trainer's illustration,
 /// read-only from the client's side.
@@ -138,7 +139,7 @@ class PlanProgressLog {
   const PlanProgressLog({this.loggedOn, this.weight, this.notes});
 
   factory PlanProgressLog.fromJson(Map<String, dynamic> json) => PlanProgressLog(
-    loggedOn: json['logged_on'] != null ? DateTime.tryParse(json['logged_on'] as String) : null,
+    loggedOn: json['logged_on'] != null ? EgyptTime.tryParse(json['logged_on'] as String) : null,
     weight: (json['weight'] as num?)?.toDouble(),
     notes: json['notes'] as String?,
   );
@@ -206,8 +207,8 @@ class TrainingPlan {
       title: json['title'] as String? ?? '',
       goal: json['goal'] as String?,
       status: json['status'] as String? ?? 'active',
-      startsOn: json['starts_on'] != null ? DateTime.tryParse(json['starts_on'] as String) : null,
-      endsOn: json['ends_on'] != null ? DateTime.tryParse(json['ends_on'] as String) : null,
+      startsOn: json['starts_on'] != null ? EgyptTime.tryParse(json['starts_on'] as String) : null,
+      endsOn: json['ends_on'] != null ? EgyptTime.tryParse(json['ends_on'] as String) : null,
       notes: json['notes'] as String?,
       trainerId: (trainer?['id'] as int?) ?? 0,
       trainerName: trainer?['name'] as String?,

@@ -8,6 +8,7 @@ import '../../data/patient_import.dart';
 import '../../data/patient_record.dart';
 import 'patient_backup_screen.dart';
 import 'patient_file_screen.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// «ملفات المرضى» — the clinic's own patient files, kept on THIS device. Import an old sheet, add a patient by hand,
 /// and open a file at once when a patient with a record walks in.
@@ -70,7 +71,7 @@ class _PatientFilesScreenState extends ConsumerState<PatientFilesScreen> {
     phone.dispose();
     if (ok != true || n.isEmpty || !mounted) return;
 
-    final record = PatientRecord(id: newRecordId(), name: n, phone: p, updatedAt: DateTime.now());
+    final record = PatientRecord(id: newRecordId(), name: n, phone: p, updatedAt: EgyptTime.now());
     await ref.read(patientRecordsProvider.notifier).save(record);
     if (mounted) {
       Navigator.of(context).push(MaterialPageRoute(builder: (_) => PatientFileScreen(recordId: record.id)));

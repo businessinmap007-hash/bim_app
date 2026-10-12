@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/training_providers.dart';
 import '../../data/models/set_log.dart';
+import '../../../../core/time/egypt_time.dart';
 
 String _monthKey(DateTime m) => '${m.year}-${m.month.toString().padLeft(2, '0')}';
 
@@ -24,7 +25,7 @@ class TrainingMonthlySummaryScreen extends ConsumerStatefulWidget {
 }
 
 class _TrainingMonthlySummaryScreenState extends ConsumerState<TrainingMonthlySummaryScreen> {
-  late DateTime _month = DateTime(DateTime.now().year, DateTime.now().month);
+  late DateTime _month = DateTime(EgyptTime.now().year, EgyptTime.now().month);
 
   void _shift(int delta) => setState(() => _month = DateTime(_month.year, _month.month + delta));
 

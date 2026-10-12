@@ -1,3 +1,4 @@
+import '../../../../core/time/egypt_time.dart';
 /// Mirrors `WalletTransactionResource` — one ledger entry. `type` is a free
 /// string set across many services (booking fees, order fees, deposits,
 /// manual top-ups, ...) with no fixed enum on the backend, so this app shows
@@ -38,6 +39,6 @@ class WalletTransaction {
     amount: (json['amount'] as num?)?.toDouble() ?? 0,
     balanceAfter: (json['balance_after'] as num?)?.toDouble() ?? 0,
     note: json['note'] as String?,
-    createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
+    createdAt: json['created_at'] != null ? EgyptTime.tryParse(json['created_at'] as String) : null,
   );
 }

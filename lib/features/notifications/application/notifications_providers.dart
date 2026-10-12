@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers/core_providers.dart';
 import '../data/models/app_notification.dart';
 import '../data/notifications_api.dart';
+import '../../../core/time/egypt_time.dart';
 
 final notificationsApiProvider = Provider<NotificationsApi>((ref) {
   return NotificationsApi(ref.watch(apiClientProvider));
@@ -93,7 +94,7 @@ class NotificationsController extends StateNotifier<NotificationsState> {
 
   Future<void> markRead(AppNotification notification) async {
     if (!notification.isUnread) return;
-    _replace(notification.copyWith(status: 'read', readAt: DateTime.now()));
+    _replace(notification.copyWith(status: 'read', readAt: EgyptTime.now()));
     try {
       await _api.markRead(notification.id);
     } finally {
@@ -102,7 +103,7 @@ class NotificationsController extends StateNotifier<NotificationsState> {
   }
 
   Future<void> markAllRead() async {
-    final now = DateTime.now();
+    final now = EgyptTime.now();
     state = state.copyWith(
       items: [
         for (final n in state.items)

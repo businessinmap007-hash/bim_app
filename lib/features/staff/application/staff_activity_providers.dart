@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers/core_providers.dart';
 import '../data/models/staff_activity.dart';
 import '../data/staff_activity_api.dart';
+import '../../../core/time/egypt_time.dart';
 
 final staffActivityApiProvider = Provider<StaffActivityApi>((ref) {
   return StaffActivityApi(ref.watch(apiClientProvider));
@@ -29,8 +30,8 @@ class StaffActivityState {
     DateTime? from,
     DateTime? to,
     this.userId,
-  }) : from = from ?? DateTime.now(),
-       to = to ?? DateTime.now();
+  }) : from = from ?? EgyptTime.now(),
+       to = to ?? EgyptTime.now();
 
   StaffActivityState copyWith({
     List<StaffActivityEntry>? rows,

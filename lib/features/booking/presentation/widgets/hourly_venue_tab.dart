@@ -7,6 +7,7 @@ import '../../application/booking_providers.dart';
 import '../../data/models/unit_discovery.dart';
 import 'booking_grid_widgets.dart';
 import 'booking_shape_tab.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// «ملاعب وقاعات — بالساعة»: a day, then a start time (the taken ones greyed), then the pitch or hall — each unit that
 /// is free at that time — and one bar with what was chosen and its price.
@@ -32,7 +33,7 @@ class _HourlyVenueTabState extends ConsumerState<HourlyVenueTab> {
   @override
   void initState() {
     super.initState();
-    final now = DateTime.now();
+    final now = EgyptTime.now();
     _day = DateTime(now.year, now.month, now.day);
   }
 

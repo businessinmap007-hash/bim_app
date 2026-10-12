@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// A service added on top of a line («الطهى مشوى») and what it adds to THAT line — its own row of the invoice.
 class OrderLineService {
@@ -121,8 +122,8 @@ class ShippingInfo {
     return ShippingInfo(
       status: json['status'] as String? ?? '',
       fee: (json['fee'] as num?)?.toDouble(),
-      appointmentAt: DateTime.tryParse(json['appointment_at'] as String? ?? '')?.toLocal(),
-      appointmentConfirmedAt: DateTime.tryParse(json['appointment_confirmed_at'] as String? ?? '')?.toLocal(),
+      appointmentAt: EgyptTime.tryParse(json['appointment_at'] as String? ?? '')?.toLocal(),
+      appointmentConfirmedAt: EgyptTime.tryParse(json['appointment_confirmed_at'] as String? ?? '')?.toLocal(),
       appointmentNote: json['appointment_note'] as String?,
       companyId: (company?['id'] as num?)?.toInt(),
       companyName: company?['name'] as String?,
@@ -159,9 +160,9 @@ class OrderInstallment {
 
   factory OrderInstallment.fromJson(Map<String, dynamic> json) => OrderInstallment(
     seq: (json['seq'] as num?)?.toInt() ?? 0,
-    dueOn: DateTime.tryParse(json['due_on'] as String? ?? ''),
+    dueOn: EgyptTime.tryParse(json['due_on'] as String? ?? ''),
     amount: (json['amount'] as num?)?.toDouble() ?? 0,
-    paidAt: DateTime.tryParse(json['paid_at'] as String? ?? ''),
+    paidAt: EgyptTime.tryParse(json['paid_at'] as String? ?? ''),
   );
 }
 
@@ -294,7 +295,7 @@ class PlacedOrder {
       status: json['status'] as String? ?? 'pending',
       prepStatus: json['prep_status'] as String?,
       fulfillmentType: json['fulfillment_type'] as String? ?? 'delivery',
-      pickupAt: json['pickup_at'] != null ? DateTime.tryParse(json['pickup_at'] as String) : null,
+      pickupAt: json['pickup_at'] != null ? EgyptTime.tryParse(json['pickup_at'] as String) : null,
       finalTotal: (totals['final_total'] as num?)?.toDouble() ?? 0,
       deliveryFee: (totals['delivery_fee'] as num?)?.toDouble() ?? 0,
       discount: (totals['discount'] as num?)?.toDouble() ?? 0,
@@ -310,7 +311,7 @@ class PlacedOrder {
       notes: json['notes'] as String?,
       outOfStockPolicy: json['out_of_stock_policy'] as String?,
       hasProject: json['has_project'] as bool? ?? false,
-      createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
+      createdAt: json['created_at'] != null ? EgyptTime.tryParse(json['created_at'] as String) : null,
       customerName: customer?['name'] as String?,
       customerPhone: customer?['phone'] as String?,
       tableLabel: json['table_label'] as String?,
@@ -322,9 +323,9 @@ class PlacedOrder {
       deliveryLat: (deliveryCoordinates?['lat'] as num?)?.toDouble(),
       deliveryLng: (deliveryCoordinates?['lng'] as num?)?.toDouble(),
       paymentMethod: json['payment_method'] as String?,
-      customerPaymentConfirmedAt: DateTime.tryParse(paymentConfirmations['customer_confirmed_at'] as String? ?? ''),
-      merchantPaymentConfirmedAt: DateTime.tryParse(paymentConfirmations['merchant_confirmed_at'] as String? ?? ''),
-      driverPaymentConfirmedAt: DateTime.tryParse(paymentConfirmations['driver_confirmed_at'] as String? ?? ''),
+      customerPaymentConfirmedAt: EgyptTime.tryParse(paymentConfirmations['customer_confirmed_at'] as String? ?? ''),
+      merchantPaymentConfirmedAt: EgyptTime.tryParse(paymentConfirmations['merchant_confirmed_at'] as String? ?? ''),
+      driverPaymentConfirmedAt: EgyptTime.tryParse(paymentConfirmations['driver_confirmed_at'] as String? ?? ''),
       depositReleased: deposit['released'] as bool? ?? false,
       paymentConfirmationRequired: json['payment_confirmation_required'] as bool? ?? false,
       driver: json['delivery_driver'] is Map<String, dynamic>
@@ -334,7 +335,7 @@ class PlacedOrder {
       deliveryFeeQuote: json['delivery_fee_quote'] != null
           ? DeliveryFeeQuote.fromJson(json['delivery_fee_quote'] as Map<String, dynamic>)
           : null,
-      paymentSettledAt: DateTime.tryParse(paymentConfirmations['settled_at'] as String? ?? ''),
+      paymentSettledAt: EgyptTime.tryParse(paymentConfirmations['settled_at'] as String? ?? ''),
       installments: (json['installments'] is List ? json['installments'] as List<dynamic> : const [])
           .map((e) => OrderInstallment.fromJson(e as Map<String, dynamic>))
           .toList(),

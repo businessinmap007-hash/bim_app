@@ -1,3 +1,4 @@
+import '../../../../core/time/egypt_time.dart';
 /// Mirrors `OrderController::businessReports()` — aggregates only, never raw
 /// order rows (those already live in `PlacedOrder`/the incoming-orders queue).
 class OrderReportsSummary {
@@ -35,7 +36,7 @@ class OrderReportsDailyPoint {
   const OrderReportsDailyPoint({required this.date, required this.ordersCount, required this.revenue});
 
   factory OrderReportsDailyPoint.fromJson(Map<String, dynamic> json) => OrderReportsDailyPoint(
-    date: DateTime.parse(json['date'] as String),
+    date: EgyptTime.parse(json['date'] as String),
     ordersCount: (json['orders_count'] as num?)?.toInt() ?? 0,
     revenue: (json['revenue'] as num?)?.toDouble() ?? 0,
   );
@@ -78,7 +79,7 @@ class InstallmentDue {
     orderId: (json['order_id'] as num).toInt(),
     seq: (json['seq'] as num).toInt(),
     count: (json['count'] as num?)?.toInt() ?? 0,
-    dueOn: DateTime.parse(json['due_on'] as String),
+    dueOn: EgyptTime.parse(json['due_on'] as String),
     amount: (json['amount'] as num?)?.toDouble() ?? 0,
     customer: json['customer'] as String? ?? '',
     overdue: json['overdue'] as bool? ?? false,
@@ -163,8 +164,8 @@ class OrderReports {
   factory OrderReports.fromJson(Map<String, dynamic> json) {
     final byType = json['by_fulfillment_type'] as Map<String, dynamic>? ?? const {};
     return OrderReports(
-      from: DateTime.parse(json['from'] as String),
-      to: DateTime.parse(json['to'] as String),
+      from: EgyptTime.parse(json['from'] as String),
+      to: EgyptTime.parse(json['to'] as String),
       summary: OrderReportsSummary.fromJson(json['summary'] as Map<String, dynamic>),
       daily: (json['daily'] as List<dynamic>? ?? const [])
           .map((e) => OrderReportsDailyPoint.fromJson(e as Map<String, dynamic>))

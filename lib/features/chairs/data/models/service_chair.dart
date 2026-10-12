@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// A chair of a salon with the person at it — what a customer picks («احجز مع أحمد») and what the business manages.
 class ServiceChair {
@@ -101,9 +102,9 @@ class QueueItem {
       id: (json['id'] as num).toInt(),
       turn: (json['turn'] as num?)?.toInt(),
       status: json['status'] as String? ?? 'accepted',
-      calledAt: DateTime.tryParse(json['called_at'] as String? ?? '')?.toLocal(),
-      startsAt: DateTime.tryParse((json['starts_at'] as String? ?? '').replaceFirst(' ', 'T')),
-      endsAt: DateTime.tryParse((json['ends_at'] as String? ?? '').replaceFirst(' ', 'T')),
+      calledAt: EgyptTime.tryParse(json['called_at'] as String? ?? '')?.toLocal(),
+      startsAt: EgyptTime.tryParse((json['starts_at'] as String? ?? '').replaceFirst(' ', 'T')),
+      endsAt: EgyptTime.tryParse((json['ends_at'] as String? ?? '').replaceFirst(' ', 'T')),
       chairId: (json['chair_id'] as num?)?.toInt(),
       customerName: customer?['name'] as String? ?? '',
       customerPhone: customer?['phone'] as String?,
@@ -124,7 +125,7 @@ class BusinessQueue {
   const BusinessQueue({required this.date, this.chairs = const [], this.items = const [], this.served = 0});
 
   factory BusinessQueue.fromJson(Map<String, dynamic> json) => BusinessQueue(
-    date: DateTime.tryParse(json['date'] as String? ?? '') ?? DateTime.now(),
+    date: EgyptTime.tryParse(json['date'] as String? ?? '') ?? EgyptTime.now(),
     chairs: (json['chairs'] as List<dynamic>? ?? [])
         .map((e) => ServiceChair.fromJson(e as Map<String, dynamic>))
         .toList(),

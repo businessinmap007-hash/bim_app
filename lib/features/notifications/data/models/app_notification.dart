@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// Mirrors AppNotification's `actor:id,name,type,logo,image` eager load in
 /// NotificationCenterController — whoever triggered the notification, if
@@ -95,8 +96,8 @@ class AppNotification {
     actor: json['actor'] != null
         ? NotificationActor.fromJson(json['actor'] as Map<String, dynamic>)
         : null,
-    createdAt: DateTime.parse(json['created_at'] as String),
-    readAt: json['read_at'] != null ? DateTime.parse(json['read_at'] as String) : null,
+    createdAt: EgyptTime.parse(json['created_at'] as String),
+    readAt: json['read_at'] != null ? EgyptTime.parse(json['read_at'] as String) : null,
   );
 
   AppNotification copyWith({String? status, DateTime? readAt}) => AppNotification(

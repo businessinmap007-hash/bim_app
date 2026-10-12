@@ -6,6 +6,7 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/staff_activity_providers.dart';
 import '../../data/models/staff_activity.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// The owner's end-of-shift review: every order/booking action a staff
 /// member took, plus how many operations each of them ran in the selected
@@ -46,7 +47,7 @@ class _StaffActivityScreenState extends ConsumerState<StaffActivityScreen> {
       context: context,
       initialDate: isFrom ? state.from : state.to,
       firstDate: DateTime(2020),
-      lastDate: DateTime.now(),
+      lastDate: EgyptTime.now(),
     );
     if (picked == null) return;
     final notifier = ref.read(staffActivityControllerProvider.notifier);
@@ -90,7 +91,7 @@ class _StaffActivityScreenState extends ConsumerState<StaffActivityScreen> {
                         const SizedBox(width: 8),
                         TextButton(
                           onPressed: () {
-                            final now = DateTime.now();
+                            final now = EgyptTime.now();
                             ref.read(staffActivityControllerProvider.notifier).setRange(now, now);
                           },
                           child: Text(l10n.staffActivityToday),

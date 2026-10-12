@@ -1,5 +1,6 @@
 import '../../../../core/env/env.dart';
 import '../../../chairs/data/models/service_chair.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// Mirrors `latest_deposit` on a booking response — a plain `Deposit` row,
 /// present only once the deposit has actually been frozen (i.e. the booking
@@ -75,7 +76,7 @@ class BookingQueueState {
     turn: (json['turn'] as num?)?.toInt() ?? 0,
     ahead: (json['ahead'] as num?)?.toInt() ?? 0,
     // a wall-clock time of the business's own day — read as it is
-    expectedAt: DateTime.tryParse((json['expected_at'] as String? ?? '').replaceFirst(' ', 'T')),
+    expectedAt: EgyptTime.tryParse((json['expected_at'] as String? ?? '').replaceFirst(' ', 'T')),
   );
 }
 
@@ -191,21 +192,21 @@ class Booking {
       id: json['id'] as int,
       status: json['status'] as String? ?? 'pending',
       price: double.tryParse('${json['price']}') ?? 0,
-      date: json['date'] != null ? DateTime.tryParse(json['date'] as String) : null,
+      date: json['date'] != null ? EgyptTime.tryParse(json['date'] as String) : null,
       time: json['time'] as String?,
-      startsAt: json['starts_at'] != null ? DateTime.tryParse(json['starts_at'] as String) : null,
-      endsAt: json['ends_at'] != null ? DateTime.tryParse(json['ends_at'] as String) : null,
+      startsAt: json['starts_at'] != null ? EgyptTime.tryParse(json['starts_at'] as String) : null,
+      endsAt: json['ends_at'] != null ? EgyptTime.tryParse(json['ends_at'] as String) : null,
       allDay: json['all_day'] as bool? ?? false,
       notes: json['notes'] as String?,
       businessId: business?['id'] as int?,
-      clientPaymentConfirmedAt: DateTime.tryParse(json['client_payment_confirmed_at'] as String? ?? ''),
-      businessPaymentConfirmedAt: DateTime.tryParse(json['business_payment_confirmed_at'] as String? ?? ''),
+      clientPaymentConfirmedAt: EgyptTime.tryParse(json['client_payment_confirmed_at'] as String? ?? ''),
+      businessPaymentConfirmedAt: EgyptTime.tryParse(json['business_payment_confirmed_at'] as String? ?? ''),
       businessName: business?['name'] as String?,
       businessLogoUrl: Env.assetUrl(business?['logo'] as String?),
       serviceNameAr: service?['name_ar'] as String?,
       title: json['title'] as String?,
       serviceNameEn: service?['name_en'] as String?,
-      createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
+      createdAt: json['created_at'] != null ? EgyptTime.tryParse(json['created_at'] as String) : null,
       customerName: customer?['name'] as String?,
       customerPhone: customer?['phone'] as String?,
       bookableLabel: bookable == null

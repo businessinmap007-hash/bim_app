@@ -1,3 +1,4 @@
+import '../../../../core/time/egypt_time.dart';
 /// One of the clinic's own published slots — see
 /// Api\V2\BusinessClinicAppointmentController::slotsIndex.
 class BusinessClinicSlot {
@@ -21,7 +22,7 @@ class BusinessClinicSlot {
 
   factory BusinessClinicSlot.fromJson(Map<String, dynamic> json) => BusinessClinicSlot(
     id: json['id'] as int,
-    startsAt: json['starts_at'] != null ? DateTime.tryParse(json['starts_at'] as String) : null,
+    startsAt: json['starts_at'] != null ? EgyptTime.tryParse(json['starts_at'] as String) : null,
     durationMinutes: (json['duration_minutes'] as num?)?.toInt() ?? 0,
     servicePriceId: json['service_price_id'] as int?,
     visitKind: json['visit_kind'] as String?,

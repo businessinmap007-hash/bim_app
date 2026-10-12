@@ -1,6 +1,7 @@
 import '../../../../core/env/env.dart';
 import '../../../business_menu/data/models/store_terms.dart';
 import '../../../orders/data/models/placed_order.dart' show OrderInstallment;
+import '../../../../core/time/egypt_time.dart';
 
 /// Mirrors `CartController::presentCart()` — one line already resolved to
 /// what the customer picked, not what the item is called today (the label
@@ -89,7 +90,7 @@ class InstallmentPlanPreview {
     count: (json['count'] as num?)?.toInt() ?? 0,
     monthly: (json['monthly'] as num?)?.toDouble() ?? 0,
     firstAmount: (json['first_amount'] as num?)?.toDouble() ?? (json['monthly'] as num?)?.toDouble() ?? 0,
-    firstDueOn: DateTime.tryParse(json['first_due_on'] as String? ?? ''),
+    firstDueOn: EgyptTime.tryParse(json['first_due_on'] as String? ?? ''),
   );
 }
 

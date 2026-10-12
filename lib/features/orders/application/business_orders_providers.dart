@@ -4,6 +4,7 @@ import '../data/models/order_reports.dart';
 import '../data/models/placed_order.dart';
 import '../data/orders_api.dart';
 import 'orders_providers.dart';
+import '../../../core/time/egypt_time.dart';
 
 class BusinessOrdersState {
   final List<PlacedOrder> items;
@@ -215,8 +216,8 @@ class BusinessOrderReportsState {
   final DateTime to;
 
   BusinessOrderReportsState({this.reports, this.isLoading = false, this.error, DateTime? from, DateTime? to})
-    : to = to ?? DateTime.now(),
-      from = from ?? DateTime.now().subtract(const Duration(days: 29));
+    : to = to ?? EgyptTime.now(),
+      from = from ?? EgyptTime.now().subtract(const Duration(days: 29));
 
   BusinessOrderReportsState copyWith({
     OrderReports? reports,
@@ -255,7 +256,7 @@ class BusinessOrderReportsController extends StateNotifier<BusinessOrderReportsS
 
   /// Presets the merchant picks from -- 7/30/90 days back from today.
   Future<void> setRangeDays(int days) async {
-    final to = DateTime.now();
+    final to = EgyptTime.now();
     state = state.copyWith(from: to.subtract(Duration(days: days - 1)), to: to);
     await load();
   }

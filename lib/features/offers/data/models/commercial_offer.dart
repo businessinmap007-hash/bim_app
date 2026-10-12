@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// The selling or owning business on an offer — Eloquent's default
 /// `sellerBusiness`/`ownerBusiness` relations serialize to snake_case keys.
@@ -96,8 +97,8 @@ class CommercialOffer {
         : null,
     availabilityMode: json['availability_mode'] as String?,
     availableQuantity: (json['available_quantity'] as num?)?.toInt(),
-    startsAt: json['starts_at'] != null ? DateTime.tryParse(json['starts_at'] as String) : null,
-    endsAt: json['ends_at'] != null ? DateTime.tryParse(json['ends_at'] as String) : null,
+    startsAt: json['starts_at'] != null ? EgyptTime.tryParse(json['starts_at'] as String) : null,
+    endsAt: json['ends_at'] != null ? EgyptTime.tryParse(json['ends_at'] as String) : null,
     isFeatured: json['is_featured'] as bool? ?? false,
     status: json['status'] as String? ?? 'active',
     sellerBusiness: json['seller_business'] != null

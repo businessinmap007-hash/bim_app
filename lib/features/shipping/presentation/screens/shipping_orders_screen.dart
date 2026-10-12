@@ -7,6 +7,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
 import '../../../orders/data/models/placed_order.dart';
 import '../../application/shipping_providers.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// The shipping company's orders: it only has to set (or change) the
 /// appointment and move the order to shipped / delivered.
@@ -38,7 +39,7 @@ class _ShippingOrdersScreenState extends ConsumerState<ShippingOrdersScreen> {
   }
 
   Future<void> _pickAppointment(PlacedOrder order) async {
-    final now = DateTime.now();
+    final now = EgyptTime.now();
     final date = await showDatePicker(
       context: context,
       initialDate: order.shipping?.appointmentAt ?? now.add(const Duration(days: 1)),

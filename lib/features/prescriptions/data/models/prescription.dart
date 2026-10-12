@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// A scan of the physical paper, or a doctor's supporting note.
 class PrescriptionImage {
@@ -190,7 +191,7 @@ class Prescription {
     deliveryAddressId: (json['delivery_address_id'] as num?)?.toInt(),
     medicineTotal: (json['medicine_total'] as num?)?.toDouble(),
     pricedAt: json['priced_at'] != null
-        ? DateTime.tryParse(json['priced_at'] as String)
+        ? EgyptTime.tryParse(json['priced_at'] as String)
         : null,
     images: (json['images'] as List<dynamic>? ?? [])
         .map((e) => PrescriptionImage.fromJson(e as Map<String, dynamic>))
@@ -211,10 +212,10 @@ class Prescription {
         .map((e) => PrescriptionItem.fromJson(e as Map<String, dynamic>))
         .toList(),
     issuedAt: json['issued_at'] != null
-        ? DateTime.tryParse(json['issued_at'] as String)
+        ? EgyptTime.tryParse(json['issued_at'] as String)
         : null,
     dispensedAt: json['dispensed_at'] != null
-        ? DateTime.tryParse(json['dispensed_at'] as String)
+        ? EgyptTime.tryParse(json['dispensed_at'] as String)
         : null,
     verifiableContent: json['verifiable'] is Map<String, dynamic>
         ? Map<String, dynamic>.from(

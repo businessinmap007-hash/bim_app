@@ -1,4 +1,5 @@
 import '../../../core/network/api_client.dart';
+import '../../../core/time/egypt_time.dart';
 
 /// The relay for a shared medical file — ciphertext only (see MedicalShareController on the server).
 class MedicalShareApi {
@@ -7,7 +8,7 @@ class MedicalShareApi {
 
   Future<({String id, DateTime expiresAt})> create(String ciphertext, {required int minutes}) async {
     final data = await _client.post('/medical-shares', data: {'ciphertext': ciphertext, 'minutes': minutes}) as Map<String, dynamic>;
-    return (id: '${data['id']}', expiresAt: DateTime.parse('${data['expires_at']}').toLocal());
+    return (id: '${data['id']}', expiresAt: EgyptTime.parse('${data['expires_at']}').toLocal());
   }
 
   Future<({String ciphertext, String sharedBy, DateTime createdAt})> fetch(String id) async {
@@ -15,7 +16,7 @@ class MedicalShareApi {
     return (
       ciphertext: '${data['ciphertext']}',
       sharedBy: '${data['shared_by'] ?? ''}',
-      createdAt: DateTime.parse('${data['created_at']}').toLocal(),
+      createdAt: EgyptTime.parse('${data['created_at']}').toLocal(),
     );
   }
 

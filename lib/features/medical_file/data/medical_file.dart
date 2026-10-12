@@ -1,3 +1,4 @@
+import '../../../core/time/egypt_time.dart';
 /// «الملف الطبي» — kept on the patient's phone only (see [MedicalFileStore]); the server never holds it.
 /// «التاريخ المرضى يحفظ على الفون وعند مشاركته يقرأ ويعرض للطبيب او الصيدلى» — المالك، 2026-10-05.
 /// [records] is the history a clinic hands over (visits, tests, scans, medicines) — kept here so the patient carries it
@@ -36,7 +37,7 @@ class MedicalFile {
     bloodType: bloodType ?? this.bloodType,
     sections: sections ?? this.sections,
     notes: notes ?? this.notes,
-    updatedAt: DateTime.now(),
+    updatedAt: EgyptTime.now(),
   );
 
   MedicalFile withEntries(MedicalSection section, List<MedicalEntry> list) =>
@@ -63,7 +64,7 @@ class MedicalFile {
             s: [for (final e in raw[s.name] as List) MedicalEntry.fromJson(Map<String, dynamic>.from(e as Map))],
       },
       notes: '${json['notes'] ?? ''}',
-      updatedAt: DateTime.tryParse('${json['updated_at'] ?? ''}'),
+      updatedAt: EgyptTime.tryParse('${json['updated_at'] ?? ''}'),
     );
   }
 
@@ -80,7 +81,7 @@ class MedicalFile {
       bloodType: bloodType.isNotEmpty ? bloodType : other.bloodType,
       sections: merged,
       notes: notes.trim().isNotEmpty ? notes : other.notes,
-      updatedAt: DateTime.now(),
+      updatedAt: EgyptTime.now(),
     );
   }
 

@@ -5,6 +5,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/business_clinic_providers.dart';
 import '../../data/models/business_clinic_slot.dart';
+import '../../../../core/time/egypt_time.dart';
 
 class ClinicSlotsScreen extends ConsumerStatefulWidget {
   const ClinicSlotsScreen({super.key});
@@ -176,10 +177,10 @@ class _SpecificDatesTabState extends ConsumerState<_SpecificDatesTab> {
   String? _error;
 
   Future<void> _addDate() async {
-    final now = DateTime.now();
+    final now = EgyptTime.now();
     final date = await showDatePicker(context: context, initialDate: now, firstDate: now, lastDate: now.add(const Duration(days: 365)));
     if (date == null || !mounted) return;
-    final time = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    final time = await showTimePicker(context: context, initialTime: EgyptTime.timeOfDay());
     if (time == null || !mounted) return;
     setState(() => _queued.add(DateTime(date.year, date.month, date.day, time.hour, time.minute)));
   }

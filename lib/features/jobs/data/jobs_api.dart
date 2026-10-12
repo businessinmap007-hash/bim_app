@@ -5,6 +5,7 @@ import 'models/job_category.dart';
 import 'models/job_follow.dart';
 import 'models/job_stats.dart';
 import 'models/job_title.dart';
+import '../../../core/time/egypt_time.dart';
 
 /// /jobs, /jobs/follows — the job-seeker's side of Api\V2\JobController +
 /// JobFollowController. Posting a vacancy (store), seeing who applied
@@ -74,7 +75,7 @@ class JobsApi {
     final data =
         await _client.post('/jobs/$jobId/apply') as Map<String, dynamic>;
     final appliedAt = data['applied_at'] as String?;
-    return appliedAt != null ? DateTime.tryParse(appliedAt) : null;
+    return appliedAt != null ? EgyptTime.tryParse(appliedAt) : null;
   }
 
   Future<Paginated<JobFollow>> follows({int page = 1}) async {

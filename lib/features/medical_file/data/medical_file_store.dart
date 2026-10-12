@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'medical_file.dart';
+import '../../../core/time/egypt_time.dart';
 
 /// The medical file on THIS phone: kept in the platform's secure storage (Android Keystore / iOS Keychain —
 /// encrypted by the system with a key the phone itself guards), one per account that signs in here. Nothing
@@ -23,7 +24,7 @@ class MedicalFileStore {
 
   /// When this phone last made (or restored) a backup — only a date, never the passphrase.
   Future<DateTime?> readBackupAt(int userId) async =>
-      DateTime.tryParse(await _storage.read(key: 'bim_medical_backup_at_$userId') ?? '');
+      EgyptTime.tryParse(await _storage.read(key: 'bim_medical_backup_at_$userId') ?? '');
 
   Future<void> writeBackupAt(int userId, DateTime at) =>
       _storage.write(key: 'bim_medical_backup_at_$userId', value: at.toIso8601String());

@@ -1,3 +1,4 @@
+import '../../../../core/time/egypt_time.dart';
 /// Mirrors `WalletController::show()` — the wallet is auto-provisioned
 /// (`getOrCreateWallet`) on first read, so this never 404s for a signed-in
 /// user; a brand-new wallet just comes back all zeros.
@@ -28,7 +29,7 @@ class WalletSummary {
     totalOut: (json['total_out'] as num?)?.toDouble() ?? 0,
     status: json['status'] as String? ?? 'active',
     lastActivityAt: json['last_activity_at'] != null
-        ? DateTime.tryParse(json['last_activity_at'] as String)
+        ? EgyptTime.tryParse(json['last_activity_at'] as String)
         : null,
   );
 }

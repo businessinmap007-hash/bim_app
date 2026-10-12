@@ -18,6 +18,7 @@ import '../../application/investigations_providers.dart';
 import '../../data/models/investigation.dart';
 import '../../data/result_image_store.dart';
 import '../widgets/investigation_widgets.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// One investigation order, from the patient's side: its items and steps, the registered centres with what each charges
 /// for the WHOLE order (to share it with one), and the results when they are in. The doctor opens the same screen to
@@ -161,7 +162,7 @@ class _InvestigationOrderDetailScreenState extends ConsumerState<InvestigationOr
 
   /// The results as lines of the patient's medical file: «date · test: …» with the result under it.
   MedicalFile _resultsFile(AppLocalizations l10n, InvestigationOrder order) {
-    final day = (order.issuedAt ?? DateTime.now()).toIso8601String().substring(0, 10);
+    final day = (order.issuedAt ?? EgyptTime.now()).toIso8601String().substring(0, 10);
 
     return MedicalFile(
       sections: {
@@ -170,7 +171,7 @@ class _InvestigationOrderDetailScreenState extends ConsumerState<InvestigationOr
             if (i.hasResult) MedicalEntry(title: '$day · ${investigationKindLabel(l10n, i.kind)}: ${i.name}', detail: i.result!),
         ],
       },
-      updatedAt: DateTime.now(),
+      updatedAt: EgyptTime.now(),
     );
   }
 

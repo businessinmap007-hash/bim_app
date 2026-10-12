@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'patient_record.dart';
+import '../../../core/time/egypt_time.dart';
 
 /// The clinic's patient files on THIS device: an AES-encrypted Hive box per signed-in account, the 256-bit key held in
 /// the platform's secure storage (Android Keystore / iOS Keychain / Windows DPAPI). The server holds none of it, and
@@ -64,7 +65,7 @@ class PatientRecordStore {
 
   /// When this device last made (or restored) a backup — only a date, never the passphrase.
   Future<DateTime?> readBackupAt(int userId) async =>
-      DateTime.tryParse(await _secure.read(key: 'bim_clinic_files_backup_at_$userId') ?? '');
+      EgyptTime.tryParse(await _secure.read(key: 'bim_clinic_files_backup_at_$userId') ?? '');
 
   Future<void> writeBackupAt(int userId, DateTime at) =>
       _secure.write(key: 'bim_clinic_files_backup_at_$userId', value: at.toIso8601String());

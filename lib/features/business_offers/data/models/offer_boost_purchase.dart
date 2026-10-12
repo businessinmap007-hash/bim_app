@@ -1,4 +1,5 @@
 import 'offer_boost_package.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// A business's own boost purchase — see Api\V2\OfferBoostController::myPurchases
 /// / OfferBoostPurchase.
@@ -33,8 +34,8 @@ class OfferBoostPurchase {
       offerTitle: offer?['title_ar'] as String?,
       price: double.tryParse(json['price']?.toString() ?? '') ?? 0,
       currency: json['currency'] as String? ?? 'EGP',
-      startsAt: json['starts_at'] != null ? DateTime.tryParse(json['starts_at'] as String) : null,
-      endsAt: json['ends_at'] != null ? DateTime.tryParse(json['ends_at'] as String) : null,
+      startsAt: json['starts_at'] != null ? EgyptTime.tryParse(json['starts_at'] as String) : null,
+      endsAt: json['ends_at'] != null ? EgyptTime.tryParse(json['ends_at'] as String) : null,
       status: json['status'] as String? ?? 'active',
       package: json['package'] != null
           ? OfferBoostPackage.fromJson(json['package'] as Map<String, dynamic>)

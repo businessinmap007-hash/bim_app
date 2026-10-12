@@ -7,6 +7,7 @@ import '../../../medical_file/data/medical_file.dart';
 import '../../../medical_file/presentation/screens/medical_share_screen.dart';
 import '../../application/patient_records_providers.dart';
 import '../../data/patient_record.dart';
+import '../../../../core/time/egypt_time.dart';
 
 String recordKindLabel(AppLocalizations l10n, RecordKind kind) => switch (kind) {
   RecordKind.visit => l10n.recordKindVisit,
@@ -33,7 +34,7 @@ class PatientFileScreen extends ConsumerWidget {
   Future<void> _addEntry(BuildContext context, WidgetRef ref, PatientRecord record) async {
     final l10n = AppLocalizations.of(context)!;
     var kind = RecordKind.visit;
-    var date = DateTime.now();
+    var date = EgyptTime.now();
     final title = TextEditingController();
     final detail = TextEditingController();
 
@@ -64,7 +65,7 @@ class PatientFileScreen extends ConsumerWidget {
                     icon: const Icon(Icons.event_outlined),
                     label: Text(DateFormat.yMMMEd(Localizations.localeOf(context).toString()).format(date)),
                     onPressed: () async {
-                      final d = await showDatePicker(context: context, initialDate: date, firstDate: DateTime(1990), lastDate: DateTime.now().add(const Duration(days: 1)));
+                      final d = await showDatePicker(context: context, initialDate: date, firstDate: DateTime(1990), lastDate: EgyptTime.now().add(const Duration(days: 1)));
                       if (d != null) setSheet(() => date = d);
                     },
                   ),
@@ -159,7 +160,7 @@ class PatientFileScreen extends ConsumerWidget {
         ],
       },
       notes: r.notes,
-      updatedAt: DateTime.now(),
+      updatedAt: EgyptTime.now(),
     );
   }
 

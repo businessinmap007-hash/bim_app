@@ -7,6 +7,7 @@ import '../../application/booking_providers.dart';
 import '../../data/models/unit_discovery.dart';
 import 'booking_grid_widgets.dart';
 import 'booking_shape_tab.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// «شقق وشاليهات»: the dates and the guests first, then the units that are free on those dates — photo, what it
 /// carries, the price a night and for the whole stay — and one bar to carry on with the chosen one.
@@ -30,13 +31,13 @@ class _FurnishedUnitsTabState extends ConsumerState<FurnishedUnitsTab> {
   @override
   void initState() {
     super.initState();
-    final now = DateTime.now();
+    final now = EgyptTime.now();
     _arrival = DateTime(now.year, now.month, now.day).add(const Duration(days: 1));
     _departure = _arrival.add(const Duration(days: 3));
   }
 
   Future<void> _pickArrival() async {
-    final now = DateTime.now();
+    final now = EgyptTime.now();
     final picked = await showDatePicker(
       context: context,
       initialDate: _arrival,

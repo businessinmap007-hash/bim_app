@@ -1,3 +1,4 @@
+import '../../../../core/time/egypt_time.dart';
 double? _num(dynamic v) => v == null ? null : double.tryParse(v.toString());
 double _numOr0(dynamic v) => _num(v) ?? 0;
 
@@ -122,8 +123,8 @@ class UserGuarantee {
     disputesOpenedCount: (json['disputes_opened_count'] as num?)?.toInt() ?? 0,
     disputesLostCount: (json['disputes_lost_count'] as num?)?.toInt() ?? 0,
     trustScore: _numOr0(json['trust_score']),
-    graceUntil: json['grace_until'] != null ? DateTime.tryParse(json['grace_until'] as String) : null,
-    activatedAt: json['activated_at'] != null ? DateTime.tryParse(json['activated_at'] as String) : null,
+    graceUntil: json['grace_until'] != null ? EgyptTime.tryParse(json['grace_until'] as String) : null,
+    activatedAt: json['activated_at'] != null ? EgyptTime.tryParse(json['activated_at'] as String) : null,
   );
 }
 
@@ -156,6 +157,6 @@ class GuaranteeTransaction {
     balanceBefore: _num(json['balance_before']),
     balanceAfter: _num(json['balance_after']),
     reason: json['reason'] as String?,
-    createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
+    createdAt: json['created_at'] != null ? EgyptTime.tryParse(json['created_at'] as String) : null,
   );
 }

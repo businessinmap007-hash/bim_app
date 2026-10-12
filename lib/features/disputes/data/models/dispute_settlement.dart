@@ -1,3 +1,4 @@
+import '../../../../core/time/egypt_time.dart';
 /// Mirrors `DisputeSettlementResource` — one "I paid you off-app" proposal.
 /// The platform never touches this money; it only records the three
 /// statements (propose, accept, receipt) that end the dispute.
@@ -41,9 +42,9 @@ class DisputeSettlementProposal {
       payerSide: json['payer_side'] as String? ?? 'client',
       payeeSide: json['payee_side'] as String? ?? 'business',
       proposedByMe: proposedBy['is_me'] as bool? ?? false,
-      acceptedAt: json['accepted_at'] != null ? DateTime.tryParse(json['accepted_at'] as String) : null,
-      receivedAt: json['received_at'] != null ? DateTime.tryParse(json['received_at'] as String) : null,
-      createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
+      acceptedAt: json['accepted_at'] != null ? EgyptTime.tryParse(json['accepted_at'] as String) : null,
+      receivedAt: json['received_at'] != null ? EgyptTime.tryParse(json['received_at'] as String) : null,
+      createdAt: json['created_at'] != null ? EgyptTime.tryParse(json['created_at'] as String) : null,
     );
   }
 }

@@ -1,3 +1,4 @@
+import '../../../core/time/egypt_time.dart';
 /// «بيانات المرضى والتاريخ المرضي على جهاز العيادة وليست على السيرفر» — المالك، 2026-10-10.
 ///
 /// A patient's file as the CLINIC keeps it: on the clinic's own device only (see [PatientRecordStore]); the server never
@@ -30,7 +31,7 @@ class RecordEntry {
 
   factory RecordEntry.fromJson(Map<String, dynamic> json) => RecordEntry(
     id: '${json['id'] ?? ''}',
-    date: DateTime.tryParse('${json['d'] ?? ''}'),
+    date: EgyptTime.tryParse('${json['d'] ?? ''}'),
     kind: RecordKind.values.firstWhere((k) => k.name == json['k'], orElse: () => RecordKind.note),
     title: '${json['t'] ?? ''}',
     detail: '${json['x'] ?? ''}',
@@ -123,7 +124,7 @@ class PatientRecord {
     allergies: allergies ?? this.allergies,
     notes: notes ?? this.notes,
     entries: entries ?? this.entries,
-    updatedAt: DateTime.now(),
+    updatedAt: EgyptTime.now(),
   );
 
   Map<String, dynamic> toJson() => {
@@ -146,7 +147,7 @@ class PatientRecord {
     name: '${json['name'] ?? ''}',
     phone: '${json['phone'] ?? ''}',
     nationalId: '${json['nid'] ?? ''}',
-    birthDate: DateTime.tryParse('${json['birth'] ?? ''}'),
+    birthDate: EgyptTime.tryParse('${json['birth'] ?? ''}'),
     gender: '${json['gender'] ?? ''}',
     chronic: '${json['chronic'] ?? ''}',
     allergies: '${json['allergies'] ?? ''}',
@@ -154,7 +155,7 @@ class PatientRecord {
     entries: [
       for (final e in json['entries'] as List<dynamic>? ?? const []) RecordEntry.fromJson(Map<String, dynamic>.from(e as Map)),
     ],
-    updatedAt: DateTime.tryParse('${json['updated_at'] ?? ''}') ?? DateTime.now(),
+    updatedAt: EgyptTime.tryParse('${json['updated_at'] ?? ''}') ?? EgyptTime.now(),
   );
 
   /// Merge what an import (or a re-import) knows into this file: fill what is empty, keep what is written, and add
@@ -175,7 +176,7 @@ class PatientRecord {
       allergies: pick(allergies, other.allergies),
       notes: pick(notes, other.notes),
       entries: [...entries, ...added],
-      updatedAt: DateTime.now(),
+      updatedAt: EgyptTime.now(),
     );
   }
 }

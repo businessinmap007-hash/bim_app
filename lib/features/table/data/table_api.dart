@@ -1,4 +1,5 @@
 import '../../../core/network/api_client.dart';
+import '../../../core/time/egypt_time.dart';
 
 class TableScanResult {
   final int orderId;
@@ -29,7 +30,7 @@ class TableCall {
     type: json['type'] as String? ?? '',
     tableLabel: (json['table'] as Map<String, dynamic>?)?['label'] as String? ?? '',
     note: json['note'] as String?,
-    createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
+    createdAt: json['created_at'] != null ? EgyptTime.tryParse(json['created_at'] as String) : null,
   );
 }
 

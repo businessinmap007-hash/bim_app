@@ -6,6 +6,7 @@ import '../data/models/booking.dart';
 import '../data/models/booking_financial_preview.dart';
 import '../data/models/booking_form.dart';
 import '../data/models/unit_discovery.dart';
+import '../../../core/time/egypt_time.dart';
 
 final bookingApiProvider = Provider<BookingApi>((ref) {
   return BookingApi(ref.watch(apiClientProvider));
@@ -159,7 +160,7 @@ typedef DayGridParams = ({
 final dayGridProvider = FutureProvider.autoDispose.family<DayGrid, DayGridParams>((ref, p) {
   return ref.watch(bookingApiProvider).dayGrid(
     businessId: p.businessId,
-    date: DateTime.parse(p.date),
+    date: EgyptTime.parse(p.date),
     durationMinutes: p.durationMinutes,
     stepMinutes: p.stepMinutes,
     partySize: p.partySize,
@@ -174,7 +175,7 @@ typedef AppointmentGridParams = ({int businessId, String date, int? offeringId, 
 final appointmentGridProvider = FutureProvider.autoDispose.family<DayGrid, AppointmentGridParams>((ref, p) {
   return ref.watch(bookingApiProvider).appointmentGrid(
     businessId: p.businessId,
-    date: DateTime.parse(p.date),
+    date: EgyptTime.parse(p.date),
     offeringId: p.offeringId,
     chairId: p.chairId,
   );
@@ -186,7 +187,7 @@ typedef AppointmentQueueParams = ({int businessId, String date, int? offeringId,
 final appointmentQueueProvider = FutureProvider.autoDispose.family<QueuePreview, AppointmentQueueParams>((ref, p) {
   return ref.watch(bookingApiProvider).appointmentQueue(
     businessId: p.businessId,
-    date: DateTime.parse(p.date),
+    date: EgyptTime.parse(p.date),
     offeringId: p.offeringId,
     chairId: p.chairId,
   );

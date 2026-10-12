@@ -2,6 +2,7 @@ import '../../../core/env/env.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/network/paginated.dart';
 import 'models/prescription.dart';
+import '../../../core/time/egypt_time.dart';
 
 /// One line's price, submitted together with every other line on the same
 /// prescription (all-or-nothing) — see PrescriptionService::price().
@@ -95,8 +96,8 @@ class PrescriptionCheck {
     canDispense: json['can_dispense'] as bool? ?? false,
     superseded: json['superseded'] as bool? ?? false,
     doctorName: (json['doctor'] as Map<String, dynamic>?)?['name'] as String?,
-    issuedAt: DateTime.tryParse('${json['issued_at'] ?? ''}')?.toLocal(),
-    dispensedAt: DateTime.tryParse('${json['dispensed_at'] ?? ''}')?.toLocal(),
+    issuedAt: EgyptTime.tryParse('${json['issued_at'] ?? ''}')?.toLocal(),
+    dispensedAt: EgyptTime.tryParse('${json['dispensed_at'] ?? ''}')?.toLocal(),
     controlled: json['controlled'] as bool? ?? false,
     handwrittenImage: Env.assetUrl(json['handwritten_image'] as String?),
     dispenseLimit: (json['dispense_limit'] as num?)?.toInt() ?? 1,

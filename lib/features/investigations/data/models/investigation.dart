@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// One test or exam of an order; [price] is the centre's price once the order has been sent to it.
 class InvestigationItem {
@@ -130,14 +131,14 @@ class InvestigationOrder {
       total: (json['total'] as num?)?.toDouble(),
       notes: json['notes'] as String?,
       centerNote: json['center_note'] as String?,
-      appointmentAt: DateTime.tryParse(json['appointment_at'] as String? ?? '')?.toLocal(),
-      issuedAt: DateTime.tryParse(json['issued_at'] as String? ?? '')?.toLocal(),
+      appointmentAt: EgyptTime.tryParse(json['appointment_at'] as String? ?? '')?.toLocal(),
+      issuedAt: EgyptTime.tryParse(json['issued_at'] as String? ?? '')?.toLocal(),
       requestFiles: files('request_files'),
       resultFiles: files('result_files'),
       resultDocuments: files('result_files', pdf: true),
       filesPurged: json['files_purged'] as bool? ?? false,
       patientSaved: json['patient_saved'] as bool? ?? false,
-      filesExpireAt: DateTime.tryParse(json['files_expire_at'] as String? ?? '')?.toLocal(),
+      filesExpireAt: EgyptTime.tryParse(json['files_expire_at'] as String? ?? '')?.toLocal(),
     );
   }
 }

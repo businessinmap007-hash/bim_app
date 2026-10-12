@@ -13,6 +13,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../application/patient_records_providers.dart';
 import '../../data/patient_backup.dart';
 import '../../data/patient_record.dart';
+import '../../../../core/time/egypt_time.dart';
 
 final patientBackupApiProvider = Provider<PatientBackupApi>((ref) => PatientBackupApi(ref.watch(apiClientProvider)));
 
@@ -62,7 +63,7 @@ class _PatientBackupScreenState extends ConsumerState<PatientBackupScreen> {
 
     await _run(() async {
       final blob = await PatientBackupCrypto.seal(_records, pass);
-      final stamp = DateFormat('yyyyMMdd-HHmm').format(DateTime.now());
+      final stamp = DateFormat('yyyyMMdd-HHmm').format(EgyptTime.now());
       final name = 'patient-files-$stamp.bimbak';
       await SharePlus.instance.share(
         ShareParams(
@@ -70,7 +71,7 @@ class _PatientBackupScreenState extends ConsumerState<PatientBackupScreen> {
           fileNameOverrides: [name],
         ),
       );
-      await ref.read(patientRecordsProvider.notifier).markBackedUp(DateTime.now());
+      await ref.read(patientRecordsProvider.notifier).markBackedUp(EgyptTime.now());
       _say(l10n.patientBackupFileMade);
     });
   }
@@ -102,7 +103,7 @@ class _PatientBackupScreenState extends ConsumerState<PatientBackupScreen> {
         return;
       }
       final outcome = await ref.read(patientRecordsProvider.notifier).restore(records);
-      await ref.read(patientRecordsProvider.notifier).markBackedUp(DateTime.now());
+      await ref.read(patientRecordsProvider.notifier).markBackedUp(EgyptTime.now());
       _say(l10n.patientBackupRestored(outcome.added, outcome.updated));
     });
   }

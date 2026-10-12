@@ -1,3 +1,4 @@
+import '../../../../core/time/egypt_time.dart';
 /// Mirrors `TripReservationController::serialize()` — the customer's own
 /// reservation on a trip leg. Note: the backend eager-loads `schedule` and
 /// `business` for this list but never actually serializes them, so this
@@ -41,7 +42,7 @@ class TripReservation {
     currency: json['currency'] as String? ?? 'EGP',
     status: json['status'] as String? ?? 'pending',
     notes: json['notes'] as String?,
-    createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
+    createdAt: json['created_at'] != null ? EgyptTime.tryParse(json['created_at'] as String) : null,
     clientId: (json['client_id'] as num?)?.toInt(),
   );
 }

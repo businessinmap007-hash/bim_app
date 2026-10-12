@@ -14,6 +14,7 @@ import '../../../business/data/models/offering_item.dart';
 import '../../application/booking_providers.dart';
 import '../../data/models/unit_discovery.dart';
 import '../../data/models/booking_form.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// Booking a specific priced offering («غرفة مزدوجة», «كشف عظام») at a
 /// business. The form itself is entirely shape-driven — see
@@ -246,7 +247,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   ];
 
   Future<void> _pickDate({required bool isEnd}) async {
-    final now = DateTime.now();
+    final now = EgyptTime.now();
     final initial = (isEnd ? _endsAt : _startsAt) ?? now;
     final picked = await showDatePicker(
       context: context,
@@ -266,7 +267,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   }
 
   Future<void> _pickDateTime({required bool isEnd}) async {
-    final now = DateTime.now();
+    final now = EgyptTime.now();
     final initial = (isEnd ? _endsAt : _startsAt) ?? now;
     final date = await showDatePicker(
       context: context,

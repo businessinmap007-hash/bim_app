@@ -1,3 +1,4 @@
+import '../../../../core/time/egypt_time.dart';
 /// The clinic's own view of an appointment — see
 /// Api\V2\BusinessClinicAppointmentController::serialize.
 class BusinessClinicAppointment {
@@ -37,7 +38,7 @@ class BusinessClinicAppointment {
     return BusinessClinicAppointment(
       id: json['id'] as int,
       status: json['status'] as String,
-      scheduledAt: json['scheduled_at'] != null ? DateTime.tryParse(json['scheduled_at'] as String) : null,
+      scheduledAt: json['scheduled_at'] != null ? EgyptTime.tryParse(json['scheduled_at'] as String) : null,
       durationMinutes: (json['duration_minutes'] as num?)?.toInt() ?? 0,
       reason: json['reason'] as String?,
       notes: json['notes'] as String?,

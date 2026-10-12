@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import '../../../../core/time/egypt_time.dart';
 
 class CommentAuthor {
   final int id;
@@ -55,6 +56,6 @@ class Comment {
     author: json['author'] != null ? CommentAuthor.fromJson(json['author'] as Map<String, dynamic>) : null,
     isMine: json['is_mine'] as bool? ?? false,
     canDelete: json['can_delete'] as bool? ?? false,
-    createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
+    createdAt: json['created_at'] != null ? EgyptTime.tryParse(json['created_at'] as String) : null,
   );
 }

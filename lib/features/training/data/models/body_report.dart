@@ -1,3 +1,4 @@
+import '../../../../core/time/egypt_time.dart';
 /// Mirrors `BodyCompositionReport::deltaFrom()` — this report's change from
 /// the previous month, per measure; null where either side is unmeasured.
 class BodyReportChange {
@@ -58,7 +59,7 @@ class BodyReport {
   factory BodyReport.fromJson(Map<String, dynamic> json) => BodyReport(
     id: json['id'] as int,
     forMonth: json['for_month'] as String?,
-    measuredOn: json['measured_on'] != null ? DateTime.tryParse(json['measured_on'] as String) : null,
+    measuredOn: json['measured_on'] != null ? EgyptTime.tryParse(json['measured_on'] as String) : null,
     weightKg: (json['weight_kg'] as num?)?.toDouble(),
     muscleMassKg: (json['muscle_mass_kg'] as num?)?.toDouble(),
     fatPercent: (json['fat_percent'] as num?)?.toDouble(),

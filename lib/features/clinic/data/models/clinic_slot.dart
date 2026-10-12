@@ -1,3 +1,4 @@
+import '../../../../core/time/egypt_time.dart';
 /// One open appointment slot a clinic has published — mirrors
 /// `ClinicAppointmentController::slots()`'s row shape.
 class ClinicSlot {
@@ -17,7 +18,7 @@ class ClinicSlot {
 
   factory ClinicSlot.fromJson(Map<String, dynamic> json) => ClinicSlot(
     id: json['id'] as int,
-    startsAt: json['starts_at'] != null ? DateTime.tryParse(json['starts_at'] as String) : null,
+    startsAt: json['starts_at'] != null ? EgyptTime.tryParse(json['starts_at'] as String) : null,
     durationMinutes: (json['duration_minutes'] as num?)?.toInt() ?? 0,
     visitKind: json['visit_kind'] as String?,
     price: (json['price'] as num?)?.toDouble(),

@@ -11,6 +11,7 @@ import '../../application/medical_file_providers.dart';
 import '../../data/medical_file.dart';
 import '../../data/medical_share_crypto.dart';
 import '../medical_labels.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// The patient picks what to show, for how long, then shows the QR code to the doctor or pharmacist. The
 /// code holds the key; the server holds only the ciphertext, and only until the share ends.
@@ -55,7 +56,7 @@ class _MedicalShareScreenState extends ConsumerState<MedicalShareScreen> {
       setState(() => _share = (id: created.id, qr: MedicalShareCrypto.qrPayload(created.id, sealed.key), expiresAt: created.expiresAt));
       _ticker = Timer.periodic(const Duration(seconds: 15), (_) {
         if (!mounted) return;
-        if (_share != null && DateTime.now().isAfter(_share!.expiresAt)) {
+        if (_share != null && EgyptTime.now().isAfter(_share!.expiresAt)) {
           setState(() => _share = null);
           _ticker?.cancel();
         } else {

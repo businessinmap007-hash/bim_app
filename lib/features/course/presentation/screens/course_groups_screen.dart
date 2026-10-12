@@ -6,6 +6,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/course_providers.dart';
 import '../../data/models/course.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// «مجموعات الكورسات» — the business opens a group of a course (when it starts, when it meets, how many seats), closes
 /// it when it is full or over, and sees how many seats are taken.
@@ -121,7 +122,7 @@ class _GroupFormState extends ConsumerState<_GroupForm> {
     _name = TextEditingController(text: g?.name ?? '');
     _level = TextEditingController(text: g?.level ?? '');
     _schedule = TextEditingController(text: g?.scheduleText ?? '');
-    _startsOn = g?.startsOn ?? DateTime.now().add(const Duration(days: 7));
+    _startsOn = g?.startsOn ?? EgyptTime.now().add(const Duration(days: 7));
     _endsOn = g?.endsOn;
     _seats = g?.seats ?? 10;
     _active = g?.isActive ?? true;
@@ -136,7 +137,7 @@ class _GroupFormState extends ConsumerState<_GroupForm> {
   }
 
   Future<void> _pick({required bool end}) async {
-    final now = DateTime.now();
+    final now = EgyptTime.now();
     final picked = await showDatePicker(
       context: context,
       initialDate: (end ? _endsOn : null) ?? _startsOn,

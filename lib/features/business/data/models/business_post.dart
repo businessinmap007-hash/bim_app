@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// One image attached to a post — mirrors PostResource's `images` array.
 class PostImage {
@@ -102,6 +103,6 @@ class BusinessPost {
     likesCount: (json['likes_count'] as num?)?.toInt() ?? 0,
     dislikesCount: (json['dislikes_count'] as num?)?.toInt() ?? 0,
     commentsCount: (json['comments_count'] as num?)?.toInt() ?? 0,
-    createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
+    createdAt: json['created_at'] != null ? EgyptTime.tryParse(json['created_at'] as String) : null,
   );
 }

@@ -8,6 +8,7 @@ import '../../application/hospital_providers.dart';
 import '../../data/models/hospital_procedure.dart';
 import '../screens/my_procedure_requests_screen.dart';
 import 'procedure_widgets.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// The «الإجراءات الطبية» tab of a hospital's page: the surgeries, endoscopies and treatments it offers, with its own
 /// price (or «السعر بعد التقييم»). Tapping one asks for it — an optional preferred day and a note; the hospital answers
@@ -110,7 +111,7 @@ class _AskSheetState extends ConsumerState<_AskSheet> {
   }
 
   Future<void> _pickDate() async {
-    final now = DateTime.now();
+    final now = EgyptTime.now();
     final d = await showDatePicker(
       context: context,
       firstDate: now,

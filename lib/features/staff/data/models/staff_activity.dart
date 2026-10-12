@@ -1,3 +1,4 @@
+import '../../../../core/time/egypt_time.dart';
 /// One recorded staff action from StaffActivityLogger on the backend — an
 /// order or booking action attributed to the real acting user, never the
 /// business alone. Mirrors Api\V2\BusinessStaffController::activity().
@@ -26,7 +27,7 @@ class StaffActivityEntry {
 
   factory StaffActivityEntry.fromJson(Map<String, dynamic> json) => StaffActivityEntry(
     id: json['id'] as int? ?? 0,
-    createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
+    createdAt: json['created_at'] != null ? EgyptTime.tryParse(json['created_at'] as String) : null,
     userId: json['user_id'] as int? ?? 0,
     userName: json['user_name'] as String? ?? '',
     isOwner: json['is_owner'] as bool? ?? false,

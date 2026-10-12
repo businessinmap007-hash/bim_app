@@ -13,6 +13,7 @@ import '../../data/models/investigation.dart';
 import '../widgets/investigation_widgets.dart';
 import 'center_results_screen.dart';
 import 'investigation_orders_screen.dart' show InvestigationOrderCard;
+import '../../../../core/time/egypt_time.dart';
 
 /// A lab's, a radiology centre's (or a hospital's) side: the orders patients sent it — accept one with a time, decline
 /// it, upload the results — and its own price list of the tests it does.
@@ -78,7 +79,7 @@ class _CenterTabState extends ConsumerState<_CenterTab> {
 
   Future<void> _accept(InvestigationOrder order) async {
     final l10n = AppLocalizations.of(context)!;
-    final now = DateTime.now();
+    final now = EgyptTime.now();
     final date = await showDatePicker(
       context: context,
       helpText: l10n.invPickAppointment,

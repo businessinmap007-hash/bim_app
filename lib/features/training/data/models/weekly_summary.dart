@@ -1,10 +1,11 @@
+import '../../../../core/time/egypt_time.dart';
 class WeeklySummaryDay {
   final DateTime date;
   final int completedRounds;
   const WeeklySummaryDay({required this.date, required this.completedRounds});
 
   factory WeeklySummaryDay.fromJson(Map<String, dynamic> json) => WeeklySummaryDay(
-    date: DateTime.parse(json['date'] as String),
+    date: EgyptTime.parse(json['date'] as String),
     completedRounds: (json['completed_rounds'] as num?)?.toInt() ?? 0,
   );
 }
@@ -36,8 +37,8 @@ class TrainingWeeklySummary {
   factory TrainingWeeklySummary.fromJson(Map<String, dynamic> json) {
     final progress = json['progress'] as Map<String, dynamic>? ?? const {};
     return TrainingWeeklySummary(
-      from: DateTime.parse(json['from'] as String),
-      to: DateTime.parse(json['to'] as String),
+      from: EgyptTime.parse(json['from'] as String),
+      to: EgyptTime.parse(json['to'] as String),
       weeklyTargetRounds: (json['weekly_target_rounds'] as num?)?.toInt() ?? 0,
       completedRounds: (json['completed_rounds'] as num?)?.toInt() ?? 0,
       adherencePercent: (json['adherence_percent'] as num?)?.toInt(),

@@ -90,8 +90,9 @@ void main() {
     final booking = Booking.fromJson({
       'id': 1,
       'status': 'accepted',
-      'starts_at': '2026-10-10T09:00:00.000000Z',
-      'ends_at': '2026-10-10T18:00:00.000000Z',
+      // the server sends true instants: 09:00–18:00 on Cairo's wall clock (UTC+3 in October) is 06:00–15:00Z
+      'starts_at': '2026-10-10T06:00:00.000000Z',
+      'ends_at': '2026-10-10T15:00:00.000000Z',
       'meta': {'day_use': true},
     });
     expect(booking.isDayUse, isTrue);
@@ -108,8 +109,9 @@ void main() {
     final booking = Booking.fromJson({
       'id': 1,
       'status': 'accepted',
-      'starts_at': '2026-10-10T09:00:00.000000Z',
-      'ends_at': '2026-10-10T18:00:00.000000Z',
+      // the server sends true instants: 09:00–18:00 on Cairo's wall clock (UTC+3 in October) is 06:00–15:00Z
+      'starts_at': '2026-10-10T06:00:00.000000Z',
+      'ends_at': '2026-10-10T15:00:00.000000Z',
       'meta': {'day_use': true},
     });
     await tester.pumpWidget(_app(Scaffold(body: DayUseTag(booking: booking))));

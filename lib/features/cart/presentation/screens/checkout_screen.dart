@@ -10,6 +10,7 @@ import '../../../business/application/business_page_providers.dart';
 import '../../../orders/presentation/widgets/installment_schedule.dart';
 import '../../application/cart_controller.dart';
 import '../../data/models/cart_models.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// Fulfillment type + address/notes + payment method, then places the
 /// order (POST /cart/{business}/checkout). Payment is cash-only for now —
@@ -69,7 +70,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   /// value sent to the backend's `after:now` check never trails behind the
   /// picker's own display by stray seconds.
   Future<void> _pickPickupTime() async {
-    final now = DateTime.now();
+    final now = EgyptTime.now();
     final initialDate = _pickupAt ?? now.add(const Duration(minutes: 30));
     final date = await showDatePicker(
       context: context,

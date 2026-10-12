@@ -9,6 +9,7 @@ import '../../../core/network/api_client.dart';
 import '../../../core/network/api_exception.dart';
 import '../../medical_file/data/medical_backup_crypto.dart';
 import 'patient_record.dart';
+import '../../../core/time/egypt_time.dart';
 
 /// «النسخة الاحتياطية المشفرة لملفات المرضى» — المالك، 2026-10-11.
 ///
@@ -66,7 +67,7 @@ class PatientBackupApi {
 
   Future<DateTime> put(String blob) async {
     final data = await _client.put('/clinic-files-backup', data: {'blob': blob}) as Map<String, dynamic>;
-    return DateTime.parse('${data['updated_at']}').toLocal();
+    return EgyptTime.parse('${data['updated_at']}').toLocal();
   }
 
   /// null when the account never made a server backup.
@@ -75,7 +76,7 @@ class PatientBackupApi {
       final data = await _client.get('/clinic-files-backup') as Map<String, dynamic>;
       return (
         blob: '${data['blob']}',
-        updatedAt: DateTime.parse('${data['updated_at']}').toLocal(),
+        updatedAt: EgyptTime.parse('${data['updated_at']}').toLocal(),
         bytes: (data['bytes'] as num?)?.toInt() ?? 0,
       );
     } on ApiException catch (e) {

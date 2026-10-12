@@ -1,5 +1,6 @@
 import '../../../../core/env/env.dart';
 import '../../../chairs/data/models/service_chair.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// A business this account works for as a delegated staff member — mirrors
 /// Api\V2\BusinessStaffController::memberships().
@@ -55,9 +56,9 @@ class AttendanceStatus {
     return AttendanceStatus(
       // A genuine UTC instant (Carbon's own toIso8601String(), app.timezone is
       // UTC) -- .toLocal() here is correct, not the wall-clock-field trap.
-      checkedInAt: json['checked_in_at'] != null ? DateTime.tryParse(json['checked_in_at'] as String)?.toLocal() : null,
+      checkedInAt: json['checked_in_at'] != null ? EgyptTime.tryParse(json['checked_in_at'] as String)?.toLocal() : null,
       checkedOutAt: json['checked_out_at'] != null
-          ? DateTime.tryParse(json['checked_out_at'] as String)?.toLocal()
+          ? EgyptTime.tryParse(json['checked_out_at'] as String)?.toLocal()
           : null,
       isPresent: json['is_present'] as bool? ?? false,
     );

@@ -1,3 +1,4 @@
+import '../../../../core/time/egypt_time.dart';
 /// Mirrors `BusinessProjectController::serialize()` — a business's own
 /// project (manufacturing/construction-style timeline). `progress` is the
 /// aggregate rolled up from its tasks, computed server-side.
@@ -38,10 +39,10 @@ class Project {
     status: json['status'] as String? ?? 'planning',
     visibility: json['visibility'] as String? ?? 'private',
     progress: (json['progress'] as num?)?.toInt() ?? 0,
-    startsOn: json['starts_on'] != null ? DateTime.tryParse(json['starts_on'] as String) : null,
-    dueOn: json['due_on'] != null ? DateTime.tryParse(json['due_on'] as String) : null,
+    startsOn: json['starts_on'] != null ? EgyptTime.tryParse(json['starts_on'] as String) : null,
+    dueOn: json['due_on'] != null ? EgyptTime.tryParse(json['due_on'] as String) : null,
     isOverdue: json['is_overdue'] as bool? ?? false,
     tasksCount: json['tasks_count'] as int?,
-    createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
+    createdAt: json['created_at'] != null ? EgyptTime.tryParse(json['created_at'] as String) : null,
   );
 }

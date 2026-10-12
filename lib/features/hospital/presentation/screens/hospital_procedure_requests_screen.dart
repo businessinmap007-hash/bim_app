@@ -8,6 +8,7 @@ import '../../../../shared/widgets/async_value_view.dart';
 import '../../application/hospital_providers.dart';
 import '../../data/models/hospital_procedure.dart';
 import '../widgets/procedure_widgets.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// The hospital's side of a procedure request: new ones (accept with a date, decline), the ones scheduled (mark done),
 /// and the finished.
@@ -59,7 +60,7 @@ class _TabState extends ConsumerState<_Tab> {
 
   Future<void> _accept(ProcedureRequestItem r) async {
     final l10n = AppLocalizations.of(context)!;
-    final now = DateTime.now();
+    final now = EgyptTime.now();
     final date = await showDatePicker(
       context: context,
       helpText: l10n.procPickSchedule,

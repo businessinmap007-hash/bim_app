@@ -67,7 +67,7 @@ class ShippingApi {
 
   Future<void> setAppointment(int orderId, DateTime at, {String? note}) => _client.post(
     '/business/shipping/orders/$orderId/appointment',
-    data: {'appointment_at': at.toUtc().toIso8601String(), if (note != null && note.trim().isNotEmpty) 'note': note.trim()},
+    data: {'appointment_at': at.toIso8601String(), if (note != null && note.trim().isNotEmpty) 'note': note.trim()},
   );
 
   Future<void> markShipped(int orderId) => _client.post('/business/shipping/orders/$orderId/shipped');

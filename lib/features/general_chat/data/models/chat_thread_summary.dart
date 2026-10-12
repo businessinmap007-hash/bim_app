@@ -1,3 +1,4 @@
+import '../../../../core/time/egypt_time.dart';
 /// One row in the conversation list — see DirectChatService::listFor.
 class ChatParticipant {
   final int userId;
@@ -19,7 +20,7 @@ class ChatLastMessage {
   factory ChatLastMessage.fromJson(Map<String, dynamic> json) => ChatLastMessage(
     body: json['body'] as String?,
     isMine: json['is_mine'] as bool? ?? false,
-    createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'] as String) : null,
+    createdAt: json['created_at'] != null ? EgyptTime.tryParse(json['created_at'] as String) : null,
   );
 }
 
