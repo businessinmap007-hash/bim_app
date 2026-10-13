@@ -181,7 +181,8 @@ class _BusinessDetailBody extends StatelessWidget {
       tabs.add(Tab(text: l10n.businessTabPosts));
       tabViews.add(_PostsTab(businessId: profile.id));
     }
-    if (profile.sections.services && !bookingFirst) {
+    // (an appointment clinic's priced visit kinds are the board's own «نوع الزيارة», not a services list)
+    if (profile.sections.services && !bookingFirst && !isAppointmentClinic) {
       tabs.add(Tab(text: l10n.businessTabServices));
       tabViews.add(_ServicesTab(businessId: profile.id));
     }

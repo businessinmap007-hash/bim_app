@@ -18,15 +18,15 @@ class SpecialtyServicesApi {
 
   /// What a patient reads on the clinic's page.
   Future<List<ServiceOfferingSection>> offered(int clinicId) async =>
-      _offerings(await _client.get('/clinics/$clinicId/dental-services'));
+      _offerings(await _client.get('/clinics/$clinicId/specialty-services'));
 
   // the clinic
-  Future<List<ServiceCatalogSection>> catalog() async => _catalog(await _client.get('/business/dental-services'));
+  Future<List<ServiceCatalogSection>> catalog() async => _catalog(await _client.get('/business/specialty-services'));
 
   /// `{serviceId: price|null}` for every service to keep offered; [removed] are taken off the list.
   Future<List<ServiceCatalogSection>> save(Map<int, double?> offered, List<int> removed) async => _catalog(
     await _client.put(
-      '/business/dental-services',
+      '/business/specialty-services',
       data: {
         'items': [
           for (final e in offered.entries) {'service_id': e.key, 'offered': true, 'price': e.value},
@@ -37,8 +37,8 @@ class SpecialtyServicesApi {
   );
 
   Future<List<ServiceCatalogSection>> addOwn(String kind, String name) async =>
-      _catalog(await _client.post('/business/dental-services/custom', data: {'kind': kind, 'name': name}));
+      _catalog(await _client.post('/business/specialty-services/custom', data: {'kind': kind, 'name': name}));
 
   Future<List<ServiceCatalogSection>> deleteOwn(int id) async =>
-      _catalog(await _client.delete('/business/dental-services/custom/$id'));
+      _catalog(await _client.delete('/business/specialty-services/custom/$id'));
 }

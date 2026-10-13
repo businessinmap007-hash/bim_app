@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:bim_app/core/network/api_client.dart';
 import 'package:bim_app/features/auth/data/models/auth_user.dart';
 import 'package:bim_app/features/business/data/models/business_profile.dart';
 import 'package:bim_app/features/specialty_services/application/specialty_services_providers.dart';
@@ -67,6 +68,17 @@ Widget _app(Widget home, _FakeApi api) => ProviderScope(
   ),
 );
 
+class _Recorder implements ApiClient {
+  final paths = <String>[];
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) {
+    paths.add('${invocation.memberName.toString().replaceAll('Symbol("', '').replaceAll('")', '')} ${invocation.positionalArguments.first}');
+
+    return Future<dynamic>.value(<String, dynamic>{'kinds': <dynamic>[]});
+  }
+}
+
 void main() {
   testWidgets('the clinic ticks what it does, prices it, and saves with the standard button', (tester) async {
     final api = _FakeApi();
@@ -111,5 +123,24 @@ void main() {
 
     expect(specialtyKindLabel(AppLocalizationsAr(), 'injectables'), 'الحقن التجميلية');
     expect(specialtyKindLabel(AppLocalizationsAr(), 'preventive'), 'الوقاية والتنظيف');
+  });
+
+  test('the api talks to the specialty-services routes, never the old dental ones', () async {
+    final rec = _Recorder();
+    final api = SpecialtyServicesApi(rec);
+
+    await api.offered(5);
+    await api.catalog();
+    await api.save({1: 10.0}, const []);
+    await api.addOwn('laser', 'x');
+    await api.deleteOwn(3);
+
+    expect(rec.paths, [
+      'get /clinics/5/specialty-services',
+      'get /business/specialty-services',
+      'put /business/specialty-services',
+      'post /business/specialty-services/custom',
+      'delete /business/specialty-services/custom/3',
+    ]);
   });
 }
