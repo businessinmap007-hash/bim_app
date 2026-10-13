@@ -109,6 +109,8 @@ class ClinicAppointmentsController extends StateNotifier<ClinicAppointmentsState
   Future<void> recordPayment(int id, double amount, String kind, String note) async =>
       _withBilling(id, await _api.recordPayment(id, amount, kind, note: note));
 
+  Future<void> setInstallment(int id, double? amount) async => _withBilling(id, await _api.setInstallment(id, amount));
+
   Future<void> removePayment(int id, int paymentId) async => _withBilling(id, await _api.removePayment(id, paymentId));
 
   Future<void> setFinalPrice(int id, int itemId, double? price) async => _withBilling(id, await _api.setFinalPrice(id, itemId, price));

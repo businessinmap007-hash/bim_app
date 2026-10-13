@@ -10,6 +10,7 @@ import '../../../booking/presentation/widgets/booking_shape_tab.dart';
 import '../../../specialty_services/application/specialty_services_providers.dart';
 import '../../../specialty_services/presentation/widgets/specialty_widgets.dart';
 import '../../application/clinic_providers.dart';
+import '../../data/models/clinic_appointment.dart' show VisitKindOption;
 import '../../data/models/clinic_slot.dart';
 
 /// A clinic's (or hospital's) open appointment slots, drawn like the «حجز عيادة» canvas board: day chips, a grid of
@@ -139,14 +140,32 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
           ..sort((a, b) => a.startsAt!.compareTo(b.startsAt!));
         if (dated.isEmpty) return Center(child: Text(l10n.clinicNoOpenSlots));
 
-        // the visit kinds on offer («كشف / إعادة / استشارة»): the patient picks one, and only its days and times remain
-        final kinds = <String>[];
-        for (final s in dated) {
-          final k = s.visitKind;
-          if (k != null && k.isNotEmpty && !kinds.contains(k)) kinds.add(k);
-        }
-        final kind = kinds.isEmpty ? null : (kinds.contains(_kind) ? _kind : kinds.first);
-        final ofKind = kind == null ? dated : dated.where((s) => s.visitKind == kind).toList();
+        // EVERY visit kind the clinic prices («كشف · استشارة · متابعة · إجراء طبي…») is a radio option, one only; a kind with
+        // no open time shows but cannot be picked. A clinic that prices none falls back to the kinds its slots carry.
+        final options = ref.watch(clinicVisitKindsProvider(widget.clinicId)).valueOrNull?.kinds ?? const <VisitKindOption>[];
+        final byKey = options.isNotEmpty;
+        final choices = <_KindChoice>[
+          if (byKey)
+            for (final o in options)
+              _KindChoice(
+                id: o.key,
+                label: o.name,
+                price: o.price,
+                enabled: dated.any((s) => s.visitKindKey == o.key || s.visitKindKey == null),
+              )
+          else
+            for (final k in {
+              for (final s in dated)
+                if ((s.visitKind ?? '').isNotEmpty) s.visitKind!,
+            })
+              _KindChoice(id: k, label: k, price: dated.where((s) => s.visitKind == k).map((s) => s.price).whereType<double>().firstOrNull),
+        ];
+        final enabledIds = [for (final c in choices) if (c.enabled) c.id];
+        final kind = choices.isEmpty ? null : (enabledIds.contains(_kind) ? _kind : (enabledIds.isEmpty ? null : enabledIds.first));
+        final ofKind = kind == null
+            ? (choices.isEmpty ? dated : <ClinicSlot>[])
+            : dated.where((s) => byKey ? (s.visitKindKey == kind || s.visitKindKey == null) : s.visitKind == kind).toList();
+        if (ofKind.isEmpty) return Center(child: Text(l10n.clinicNoOpenSlots));
 
         final days = <DateTime>[];
         for (final s in ofKind) {
@@ -170,7 +189,24 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
               );
             },
           ),
-          if (kinds.isNotEmpty) ...[
+          // what he still owes this clinic from earlier visits — asked with the next session
+          Builder(
+            builder: (context) {
+              final r = ref.watch(clinicVisitKindsProvider(widget.clinicId)).valueOrNull;
+              if (r == null || r.balance <= 0) return const SizedBox.shrink();
+
+              String money(double v) => '${v.toStringAsFixed(v % 1 == 0 ? 0 : 2)} ${l10n.invCurrency}';
+
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: _SectionCard(
+                  title: l10n.billOwedTitle,
+                  child: Text(l10n.billOwedBody(money(r.balance), money(r.balanceDue > 0 ? r.balanceDue : r.balance))),
+                ),
+              );
+            },
+          ),
+          if (choices.isNotEmpty) ...[
             _SectionCard(
               title: l10n.clinicPickKind,
               child: RadioGroup<String>(
@@ -182,12 +218,19 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
                 }),
                 child: Column(
                   children: [
-                    for (final k in kinds)
+                    for (final c in choices)
                       RadioListTile<String>(
-                        value: k,
+                        value: c.id,
+                        enabled: c.enabled,
                         contentPadding: EdgeInsets.zero,
-                        title: Text(k),
-                        secondary: _kindPrice(dated, k, l10n.invCurrency),
+                        title: Text(c.label),
+                        subtitle: c.enabled ? null : Text(l10n.clinicKindNoSlots),
+                        secondary: c.price == null
+                            ? null
+                            : Text(
+                                '${c.price!.toStringAsFixed(c.price! % 1 == 0 ? 0 : 2)} ${l10n.invCurrency}',
+                                style: const TextStyle(fontWeight: FontWeight.w600),
+                              ),
                       ),
                   ],
                 ),
@@ -332,15 +375,14 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
 
 DateTime _dateOnly(DateTime d) => DateTime(d.year, d.month, d.day);
 
-/// What a visit kind costs: the price its first open slot carries.
-Widget? _kindPrice(List<ClinicSlot> slots, String kind, String currency) {
-  final price = slots.where((s) => s.visitKind == kind).map((s) => s.price).whereType<double>().firstOrNull;
-  if (price == null) return null;
+/// One radio option of the visit-kind list.
+class _KindChoice {
+  final String id;
+  final String label;
+  final double? price;
+  final bool enabled;
 
-  return Text(
-    '${price.toStringAsFixed(price % 1 == 0 ? 0 : 2)} $currency',
-    style: const TextStyle(fontWeight: FontWeight.w600),
-  );
+  const _KindChoice({required this.id, required this.label, this.price, this.enabled = true});
 }
 
 class _SectionCard extends StatelessWidget {

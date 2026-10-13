@@ -53,6 +53,17 @@ class _VisitBillingCardState extends ConsumerState<VisitBillingCard> {
     await _run(() => ref.read(clinicAppointmentsControllerProvider.notifier).recordPayment(widget.appointment.id, r.amount, r.kind, r.note));
   }
 
+  Future<void> _editInstallment() async {
+    final b = widget.appointment.billing!;
+    final r = await showDialog<({double? value})>(
+      context: context,
+      builder: (_) => _InstallmentDialog(current: b.installmentAmount, remaining: b.remaining),
+    );
+    if (r == null || !mounted) return;
+
+    await _run(() => ref.read(clinicAppointmentsControllerProvider.notifier).setInstallment(widget.appointment.id, r.value));
+  }
+
   Future<void> _editPrice(BillingService line) async {
     // a record: the value typed, or none (null inside = back to the listed price)
     final r = await showDialog<({double? value})>(
@@ -93,6 +104,22 @@ class _VisitBillingCardState extends ConsumerState<VisitBillingCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          if (b.carriedOver > 0)
+            Container(
+              margin: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.errorContainer.withValues(alpha: 0.5),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                l10n.billCarriedOverLine(
+                  _money(l10n, b.carriedOver),
+                  _money(l10n, b.carriedOverDue > 0 ? b.carriedOverDue : b.carriedOver),
+                ),
+                style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700),
+              ),
+            ),
           if (b.visitFee != null) row(l10n.billVisitFee, _money(l10n, b.visitFee!)),
           for (final s in b.services)
             Padding(
@@ -128,6 +155,26 @@ class _VisitBillingCardState extends ConsumerState<VisitBillingCard> {
           row(l10n.billTotal, _money(l10n, b.total), bold: true),
           row(l10n.billPaid, _money(l10n, b.paid)),
           row(l10n.billRemaining, _money(l10n, b.remaining), bold: true),
+          if (b.remaining > 0 && canPay)
+            InkWell(
+              onTap: _busy ? null : _editInstallment,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6),
+                child: Row(
+                  children: [
+                    Icon(Icons.event_repeat_outlined, size: 18, color: theme.hintColor),
+                    const SizedBox(width: 6),
+                    Expanded(child: Text(l10n.billNextInstallment, style: theme.textTheme.bodyMedium)),
+                    Text(
+                      _money(l10n, b.installmentAmount ?? b.remaining),
+                      style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700),
+                    ),
+                    const SizedBox(width: 4),
+                    const Icon(Icons.edit_outlined, size: 16),
+                  ],
+                ),
+              ),
+            ),
           if (b.payments.isNotEmpty) ...[
             const Divider(height: 16),
             for (final p in b.payments)
@@ -135,10 +182,29 @@ class _VisitBillingCardState extends ConsumerState<VisitBillingCard> {
                 padding: const EdgeInsets.symmetric(vertical: 2),
                 child: Row(
                   children: [
+                    Icon(
+                      switch (p.confirmation) {
+                        'confirmed' => Icons.verified_outlined,
+                        'disputed' => Icons.report_gmailerrorred_outlined,
+                        _ => Icons.hourglass_empty_rounded,
+                      },
+                      size: 16,
+                      color: switch (p.confirmation) {
+                        'confirmed' => Colors.green,
+                        'disputed' => theme.colorScheme.error,
+                        _ => theme.hintColor,
+                      },
+                    ),
+                    const SizedBox(width: 6),
                     Expanded(
                       child: Text(
                         [
                           p.kind == 'visit_fee' ? l10n.billKindVisitFee : l10n.billKindService,
+                          switch (p.confirmation) {
+                            'confirmed' => l10n.billConfirmed,
+                            'disputed' => '${l10n.billDisputed}${(p.disputeNote ?? '').isNotEmpty ? ': ${p.disputeNote}' : ''}',
+                            _ => l10n.billAwaitingPatient,
+                          },
                           if (p.paidAt != null) DateFormat.MMMd(locale).add_jm().format(p.paidAt!),
                           if ((p.note ?? '').isNotEmpty) p.note!,
                         ].join(' · '),
@@ -146,6 +212,7 @@ class _VisitBillingCardState extends ConsumerState<VisitBillingCard> {
                       ),
                     ),
                     Text(_money(l10n, p.amount), style: theme.textTheme.bodyMedium),
+                    if (p.canRemove)
                     IconButton(
                       tooltip: l10n.commonDelete,
                       visualDensity: VisualDensity.compact,
@@ -288,6 +355,57 @@ class _PriceDialogState extends State<_PriceDialog> {
         decoration: InputDecoration(
           labelText: l10n.billFinalPrice,
           helperText: listed == null ? l10n.billFinalPriceHint : '${l10n.billFinalPriceHint} (${formatServiceMoney(listed)} ${l10n.invCurrency})',
+          suffixText: l10n.invCurrency,
+        ),
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(l10n.commonCancel)),
+        FilledButton(onPressed: _save, child: Text(l10n.billSave)),
+      ],
+    );
+  }
+}
+
+/// What the clinic will ask at the next session: a number, or empty for everything that is left. Owns its controller.
+class _InstallmentDialog extends StatefulWidget {
+  final double? current;
+  final double remaining;
+  const _InstallmentDialog({required this.current, required this.remaining});
+
+  @override
+  State<_InstallmentDialog> createState() => _InstallmentDialogState();
+}
+
+class _InstallmentDialogState extends State<_InstallmentDialog> {
+  late final _c = TextEditingController(text: widget.current == null ? '' : formatServiceMoney(widget.current!));
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  void _save() {
+    final text = _c.text.trim().replaceAll(',', '.');
+    final value = text.isEmpty ? null : double.tryParse(text);
+    if (text.isNotEmpty && value == null) return;
+
+    Navigator.of(context).pop((value: value));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return AlertDialog(
+      title: Text(l10n.billNextInstallment),
+      content: TextField(
+        controller: _c,
+        autofocus: true,
+        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+        decoration: InputDecoration(
+          labelText: l10n.billAmount,
+          helperText: '${l10n.billInstallmentHint} (${formatServiceMoney(widget.remaining)} ${l10n.invCurrency})',
           suffixText: l10n.invCurrency,
         ),
       ),

@@ -3406,6 +3406,52 @@ class AppLocalizationsAr extends AppLocalizations {
   String get billSave => 'حفظ';
 
   @override
+  String get billConfirm => 'تأكيد';
+
+  @override
+  String get billDispute => 'اعتراض';
+
+  @override
+  String get billDisputeNote => 'ما الذي تعترض عليه؟ (اختياري)';
+
+  @override
+  String get billConfirmed => 'مؤكَّدة من المريض';
+
+  @override
+  String get billDisputed => 'اعترض عليها المريض';
+
+  @override
+  String get billAwaitingYou => 'بانتظار تأكيدك';
+
+  @override
+  String get billAwaitingPatient => 'بانتظار تأكيد المريض';
+
+  @override
+  String get billNextInstallment => 'القسط عند الجلسة القادمة';
+
+  @override
+  String get billInstallmentHint => 'اتركه فارغًا لطلب كل المتبقي';
+
+  @override
+  String get billCarriedOver => 'قسط مستحق';
+
+  @override
+  String billCarriedOverLine(String amount, String due) {
+    return 'متبقٍ على المريض $amount من زيارات سابقة — يُطلب $due مع هذه الجلسة.';
+  }
+
+  @override
+  String get billOwedTitle => 'مستحق من زيارات سابقة';
+
+  @override
+  String billOwedBody(String amount, String due) {
+    return 'عليك متبقٍ $amount لهذه العيادة — يُطلب $due مع موعدك القادم.';
+  }
+
+  @override
+  String get clinicKindNoSlots => 'لا مواعيد متاحة لهذا النوع الآن';
+
+  @override
   String get clinicPickService => 'الخدمات المطلوبة (اختياري)';
 
   @override

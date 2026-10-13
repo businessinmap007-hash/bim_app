@@ -67,6 +67,11 @@ class BusinessClinicApi {
     ),
   );
 
+  /// What the clinic will ask at the NEXT session; null = what is left.
+  Future<VisitBilling> setInstallment(int appointmentId, double? amount) async => _billing(
+    await _client.put('/business/clinic-appointments/$appointmentId/installment', data: {'amount': amount}),
+  );
+
   Future<VisitBilling> removePayment(int appointmentId, int paymentId) async =>
       _billing(await _client.delete('/business/clinic-appointments/$appointmentId/payments/$paymentId'));
 

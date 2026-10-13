@@ -170,10 +170,11 @@ class _PendingSettlementGateState
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final authState = ref.watch(authControllerProvider);
-    final isBusiness = authState is AuthSignedIn && authState.user.isBusiness;
     // the last booking was just answered and the prompt is closing — nothing left to draw
     if (_queue.isEmpty) return const SizedBox.shrink();
     final booking = _current;
+    // a business account that BOOKED here is the customer of this booking, not its business side
+    final isBusiness = authState is AuthSignedIn && authState.user.isBusiness && booking.customerId != authState.user.id;
     final otherPartyName = isBusiness
         ? (booking.customerName ?? '')
         : (booking.businessName ?? '');

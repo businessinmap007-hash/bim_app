@@ -6223,6 +6223,90 @@ abstract class AppLocalizations {
   /// **'حفظ'**
   String get billSave;
 
+  /// No description provided for @billConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد'**
+  String get billConfirm;
+
+  /// No description provided for @billDispute.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتراض'**
+  String get billDispute;
+
+  /// No description provided for @billDisputeNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما الذي تعترض عليه؟ (اختياري)'**
+  String get billDisputeNote;
+
+  /// No description provided for @billConfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مؤكَّدة من المريض'**
+  String get billConfirmed;
+
+  /// No description provided for @billDisputed.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعترض عليها المريض'**
+  String get billDisputed;
+
+  /// No description provided for @billAwaitingYou.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار تأكيدك'**
+  String get billAwaitingYou;
+
+  /// No description provided for @billAwaitingPatient.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار تأكيد المريض'**
+  String get billAwaitingPatient;
+
+  /// No description provided for @billNextInstallment.
+  ///
+  /// In ar, this message translates to:
+  /// **'القسط عند الجلسة القادمة'**
+  String get billNextInstallment;
+
+  /// No description provided for @billInstallmentHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتركه فارغًا لطلب كل المتبقي'**
+  String get billInstallmentHint;
+
+  /// No description provided for @billCarriedOver.
+  ///
+  /// In ar, this message translates to:
+  /// **'قسط مستحق'**
+  String get billCarriedOver;
+
+  /// No description provided for @billCarriedOverLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'متبقٍ على المريض {amount} من زيارات سابقة — يُطلب {due} مع هذه الجلسة.'**
+  String billCarriedOverLine(String amount, String due);
+
+  /// No description provided for @billOwedTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مستحق من زيارات سابقة'**
+  String get billOwedTitle;
+
+  /// No description provided for @billOwedBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'عليك متبقٍ {amount} لهذه العيادة — يُطلب {due} مع موعدك القادم.'**
+  String billOwedBody(String amount, String due);
+
+  /// No description provided for @clinicKindNoSlots.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا مواعيد متاحة لهذا النوع الآن'**
+  String get clinicKindNoSlots;
+
   /// No description provided for @clinicPickService.
   ///
   /// In ar, this message translates to:

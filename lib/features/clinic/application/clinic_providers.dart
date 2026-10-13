@@ -17,6 +17,11 @@ final clinicSlotsProvider = FutureProvider.family<List<ClinicSlot>, int>((ref, c
   return page.items;
 });
 
+/// Every visit kind a clinic prices (the radio list), with what the caller still owes it.
+final clinicVisitKindsProvider = FutureProvider.autoDispose.family<VisitKindsResult, int>((ref, clinicId) {
+  return ref.watch(clinicApiProvider).visitKinds(clinicId);
+});
+
 class MyClinicAppointmentsState {
   final List<ClinicAppointment> items;
   final bool isLoading;
@@ -84,6 +89,17 @@ class MyClinicAppointmentsController extends StateNotifier<MyClinicAppointmentsS
       state = state.copyWith(isLoadingMore: false, error: e.toString());
     }
   }
+
+  void _withAccount(ClinicAppointment updated) {
+    state = state.copyWith(
+      items: [for (final a in state.items) a.id == updated.id ? a.copyWith(billing: updated.billing) : a],
+    );
+  }
+
+  Future<void> confirmPayment(int id, int paymentId) async => _withAccount(await _api.confirmPayment(id, paymentId));
+
+  Future<void> disputePayment(int id, int paymentId, {String? note}) async =>
+      _withAccount(await _api.disputePayment(id, paymentId, note: note));
 
   Future<void> cancel(int id) async {
     final updated = await _api.cancel(id);

@@ -12,7 +12,14 @@ import 'package:bim_app/features/clinic_management/presentation/widgets/visit_bi
 import 'package:bim_app/l10n/app_localizations.dart';
 
 /// «عند الوصول رسم الزيارة وبعد الانتهاء تظهر تكلفة الخدمة» — المالك، 2026-10-15.
-VisitBilling _billing({required bool done, double paid = 0, List<VisitPayment> payments = const []}) => VisitBilling(
+VisitBilling _billing({
+  required bool done,
+  double paid = 0,
+  List<VisitPayment> payments = const [],
+  double? installment,
+  double carriedOver = 0,
+  double carriedOverDue = 0,
+}) => VisitBilling(
   visitFee: 300,
   services: [
     BillingService(itemId: 7, name: 'تنظيف الأسنان وإزالة الجير', price: 400, amount: done ? 400 : null, counted: done),
@@ -23,6 +30,9 @@ VisitBilling _billing({required bool done, double paid = 0, List<VisitPayment> p
   remaining: (done ? 700 : 300) - paid,
   servicesPending: !done,
   payments: payments,
+  installmentAmount: installment,
+  carriedOver: carriedOver,
+  carriedOverDue: carriedOverDue,
 );
 
 BusinessClinicAppointment _appointment({required String status, required VisitBilling billing}) => BusinessClinicAppointment(
@@ -40,6 +50,7 @@ class _FakeApi implements BusinessClinicApi {
   final payments = <(double, String, String?)>[];
   final prices = <double?>[];
   final removed = <int>[];
+  final installments = <double?>[];
 
   _FakeApi(this.appointment);
 
@@ -59,6 +70,13 @@ class _FakeApi implements BusinessClinicApi {
     prices.add(price);
 
     return _billing(done: true);
+  }
+
+  @override
+  Future<VisitBilling> setInstallment(int appointmentId, double? amount) async {
+    installments.add(amount);
+
+    return _billing(done: true, installment: amount);
   }
 
   @override
@@ -122,7 +140,7 @@ void main() {
 
     expect(find.text('700 ج'), findsWidgets, reason: 'fee + the listed cleaning, as the total and as what is left');
 
-    await tester.tap(find.byIcon(Icons.edit_outlined));
+    await tester.tap(find.byIcon(Icons.edit_outlined).first);
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextField).last, '500');
     await tester.tap(find.widgetWithText(FilledButton, 'حفظ'));
@@ -170,5 +188,56 @@ void main() {
     expect(b.servicesPending, isTrue);
     expect(b.payments.single.amount, 300.0);
     expect(VisitBilling.fromJsonOrNull(null), isNull);
+  });
+
+  testWidgets('each payment shows the patient\'s answer, and a confirmed one cannot be taken back', (tester) async {
+    final api = _FakeApi(
+      _appointment(
+        status: 'completed',
+        billing: _billing(
+          done: true,
+          paid: 1300,
+          payments: const [
+            VisitPayment(id: 1, amount: 300, kind: 'visit_fee', confirmation: 'confirmed', canRemove: false),
+            VisitPayment(id: 2, amount: 1000, kind: 'service', confirmation: 'pending'),
+            VisitPayment(id: 3, amount: 500, kind: 'service', confirmation: 'disputed', disputeNote: 'دفعت أقل'),
+          ],
+        ),
+      ),
+    );
+    await tester.pumpWidget(_app(api));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('مؤكَّدة من المريض'), findsOneWidget);
+    expect(find.textContaining('بانتظار تأكيد المريض'), findsOneWidget);
+    expect(find.textContaining('دفعت أقل'), findsOneWidget);
+
+    // the confirmed one has no remove button: two of the three can be taken back
+    expect(find.byIcon(Icons.close), findsNWidgets(2));
+  });
+
+  testWidgets('the clinic sets what it will ask at the next session', (tester) async {
+    final api = _FakeApi(_appointment(status: 'completed', billing: _billing(done: true, paid: 100)));
+    await tester.pumpWidget(_app(api));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('القسط عند الجلسة القادمة'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField).last, '700');
+    await tester.tap(find.widgetWithText(FilledButton, 'حفظ'));
+    await tester.pumpAndSettle();
+
+    expect(api.installments, [700.0]);
+  });
+
+  testWidgets('what is carried over from earlier visits is said first, with what is asked now', (tester) async {
+    final api = _FakeApi(
+      _appointment(status: 'confirmed', billing: _billing(done: false, carriedOver: 2200, carriedOverDue: 700)),
+    );
+    await tester.pumpWidget(_app(api));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('2200 ج'), findsOneWidget);
+    expect(find.textContaining('700 ج'), findsWidgets);
   });
 }

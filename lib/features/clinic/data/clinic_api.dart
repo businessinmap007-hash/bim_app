@@ -58,6 +58,28 @@ class ClinicApi {
     return Paginated.fromJson(data, ClinicAppointment.fromJson);
   }
 
+  /// Every visit kind the clinic prices, and what the caller still owes it from earlier visits.
+  Future<VisitKindsResult> visitKinds(int clinicId) async =>
+      VisitKindsResult.fromJson(await _client.get('/clinics/$clinicId/visit-kinds') as Map<String, dynamic>);
+
+  /// «نعم، دفعت هذا المبلغ».
+  Future<ClinicAppointment> confirmPayment(int appointmentId, int paymentId) async {
+    final data =
+        await _client.post('/clinic-appointments/$appointmentId/payments/$paymentId/confirm') as Map<String, dynamic>;
+    return ClinicAppointment.fromJson(data['appointment'] as Map<String, dynamic>);
+  }
+
+  /// «لم أدفع هذا المبلغ»: the clinic is told, the payment stays on record as disputed.
+  Future<ClinicAppointment> disputePayment(int appointmentId, int paymentId, {String? note}) async {
+    final data =
+        await _client.post(
+              '/clinic-appointments/$appointmentId/payments/$paymentId/dispute',
+              data: {if (note != null && note.isNotEmpty) 'note': note},
+            )
+            as Map<String, dynamic>;
+    return ClinicAppointment.fromJson(data['appointment'] as Map<String, dynamic>);
+  }
+
   Future<ClinicAppointment> cancel(int id) async {
     final data =
         await _client.post('/clinic-appointments/$id/cancel')

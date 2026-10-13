@@ -113,6 +113,9 @@ class Booking {
   // scope=business) — the `user` relation is the client who made the request.
   final String? customerName;
   final String? customerPhone;
+
+  /// The account that made the booking — any account may book as a customer, a business included.
+  final int? customerId;
   // The named unit this booking is for (BookableItemResource-style label,
   // e.g. "غرفة مزدوجة — ١٠١"), null for a booking with no specific unit.
   final String? bookableLabel;
@@ -162,6 +165,7 @@ class Booking {
     this.createdAt,
     this.customerName,
     this.customerPhone,
+    this.customerId,
     this.bookableLabel,
     this.quantity = 1,
     this.partySize,
@@ -213,6 +217,7 @@ class Booking {
       createdAt: json['created_at'] != null ? EgyptTime.tryParse(json['created_at'] as String) : null,
       customerName: customer?['name'] as String?,
       customerPhone: customer?['phone'] as String?,
+      customerId: (customer?['id'] as num?)?.toInt(),
       bookableLabel: bookable == null
           ? null
           : ((bookable['title'] as String?)?.trim().isNotEmpty == true

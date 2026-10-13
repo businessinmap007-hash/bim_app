@@ -51,6 +51,7 @@ class ClinicAppointment {
     DateTime? scheduledAt,
     int? durationMinutes,
     String? reason,
+    VisitBilling? billing,
   }) {
     return ClinicAppointment(
       id: id,
@@ -63,7 +64,7 @@ class ClinicAppointment {
       clinicLogoUrl: clinicLogoUrl,
       prescriptionId: prescriptionId,
       services: services,
-      billing: billing,
+      billing: billing ?? this.billing,
       arrivalNotice: arrivalNotice,
     );
   }
@@ -137,7 +138,24 @@ class VisitPayment {
   final DateTime? paidAt;
   final String? recordedBy;
 
-  const VisitPayment({required this.id, required this.amount, required this.kind, this.note, this.paidAt, this.recordedBy});
+  /// `pending` (the patient has not answered) | `confirmed` | `disputed`.
+  final String confirmation;
+  final String? disputeNote;
+
+  /// A payment the patient confirmed is no longer the clinic's to remove.
+  final bool canRemove;
+
+  const VisitPayment({
+    required this.id,
+    required this.amount,
+    required this.kind,
+    this.note,
+    this.paidAt,
+    this.recordedBy,
+    this.confirmation = 'pending',
+    this.disputeNote,
+    this.canRemove = true,
+  });
 
   factory VisitPayment.fromJson(Map<String, dynamic> j) => VisitPayment(
     id: (j['id'] as num?)?.toInt() ?? 0,
@@ -146,6 +164,9 @@ class VisitPayment {
     note: j['note'] as String?,
     paidAt: j['paid_at'] != null ? EgyptTime.tryParse(j['paid_at'] as String) : null,
     recordedBy: j['recorded_by'] as String?,
+    confirmation: j['confirmation'] as String? ?? 'pending',
+    disputeNote: j['dispute_note'] as String?,
+    canRemove: j['can_remove'] as bool? ?? true,
   );
 }
 
@@ -162,6 +183,16 @@ class VisitBilling {
   final bool servicesPending;
   final List<VisitPayment> payments;
 
+  /// Payments the patient has not answered yet.
+  final int awaitingConfirmation;
+
+  /// What the clinic will ask at the NEXT session (null = what is left).
+  final double? installmentAmount;
+
+  /// What the patient still owes this clinic from earlier visits (`carriedOver`), and what is asked with this one.
+  final double carriedOver;
+  final double carriedOverDue;
+
   const VisitBilling({
     this.visitFee,
     this.services = const [],
@@ -171,6 +202,10 @@ class VisitBilling {
     this.remaining = 0,
     this.servicesPending = false,
     this.payments = const [],
+    this.awaitingConfirmation = 0,
+    this.installmentAmount,
+    this.carriedOver = 0,
+    this.carriedOverDue = 0,
   });
 
   static VisitBilling? fromJsonOrNull(dynamic raw) {
@@ -185,6 +220,46 @@ class VisitBilling {
       remaining: _num(raw['remaining']) ?? 0,
       servicesPending: raw['services_pending'] as bool? ?? false,
       payments: [for (final e in (raw['payments'] as List<dynamic>? ?? const [])) VisitPayment.fromJson(e as Map<String, dynamic>)],
+      awaitingConfirmation: (raw['awaiting_confirmation'] as num?)?.toInt() ?? 0,
+      installmentAmount: _num(raw['installment_amount']),
+      carriedOver: _num((raw['carried_over'] as Map<String, dynamic>?)?['amount']) ?? 0,
+      carriedOverDue: _num((raw['carried_over'] as Map<String, dynamic>?)?['due']) ?? 0,
+    );
+  }
+}
+
+/// One visit kind the clinic prices — an option of the radio list, with its fee.
+class VisitKindOption {
+  final String key;
+  final String name;
+  final double? price;
+  final int? durationMinutes;
+
+  const VisitKindOption({required this.key, required this.name, this.price, this.durationMinutes});
+
+  factory VisitKindOption.fromJson(Map<String, dynamic> j) => VisitKindOption(
+    key: j['key'] as String? ?? '',
+    name: j['name'] as String? ?? '',
+    price: _num(j['price']),
+    durationMinutes: (j['duration_minutes'] as num?)?.toInt(),
+  );
+}
+
+/// `GET clinics/{id}/visit-kinds`: every kind the clinic prices, and what the caller still owes the clinic.
+class VisitKindsResult {
+  final List<VisitKindOption> kinds;
+  final double balance;
+  final double balanceDue;
+
+  const VisitKindsResult({this.kinds = const [], this.balance = 0, this.balanceDue = 0});
+
+  factory VisitKindsResult.fromJson(Map<String, dynamic> j) {
+    final b = j['my_balance'] as Map<String, dynamic>?;
+
+    return VisitKindsResult(
+      kinds: [for (final e in (j['kinds'] as List<dynamic>? ?? const [])) VisitKindOption.fromJson(e as Map<String, dynamic>)],
+      balance: _num(b?['amount']) ?? 0,
+      balanceDue: _num(b?['due']) ?? 0,
     );
   }
 }

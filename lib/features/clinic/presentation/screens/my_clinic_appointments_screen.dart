@@ -151,6 +151,8 @@ class _AppointmentTile extends StatelessWidget {
         ),
         isThreeLine: false,
       ),
+      // what the clinic recorded as paid: the patient says yes, or no — so neither side forgets or denies
+      if (appointment.billing != null && appointment.billing!.payments.isNotEmpty) _PaymentsBlock(appointment: appointment),
       // the clinic's own «be there N minutes early» while the appointment still stands
       if ((appointment.arrivalNotice ?? '').isNotEmpty && appointment.isCancellable)
         Padding(
@@ -186,8 +188,129 @@ String _billingLine(ClinicAppointment a, AppLocalizations l10n) {
 
   return [
     if (b.visitFee != null) '${l10n.billVisitFee} ${_money(b.visitFee!, l10n)}',
+    if (b.carriedOver > 0) '${l10n.billCarriedOver} ${_money(b.carriedOverDue > 0 ? b.carriedOverDue : b.carriedOver, l10n)}',
     if (!b.servicesPending && b.services.isNotEmpty) '${l10n.billServices} ${_money(b.servicesTotal, l10n)}',
     '${l10n.billPaid} ${_money(b.paid, l10n)}',
     '${l10n.billRemaining} ${_money(b.remaining, l10n)}',
   ].join(' · ');
+}
+
+/// The payments the clinic recorded against this visit; each waits for the patient's yes — or his no, with a word.
+class _PaymentsBlock extends ConsumerWidget {
+  final ClinicAppointment appointment;
+  const _PaymentsBlock({required this.appointment});
+
+  Future<void> _dispute(BuildContext context, WidgetRef ref, VisitPayment p) async {
+    final l10n = AppLocalizations.of(context)!;
+    final note = await showDialog<String>(context: context, builder: (_) => const _DisputeDialog());
+    if (note == null) return;
+
+    try {
+      await ref.read(myClinicAppointmentsControllerProvider.notifier).disputePayment(appointment.id, p.id, note: note);
+    } catch (_) {
+      if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final b = appointment.billing!;
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (final p in b.payments)
+            Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: Row(
+                children: [
+                  Icon(
+                    switch (p.confirmation) {
+                      'confirmed' => Icons.verified_outlined,
+                      'disputed' => Icons.report_gmailerrorred_outlined,
+                      _ => Icons.hourglass_empty_rounded,
+                    },
+                    size: 18,
+                    color: switch (p.confirmation) {
+                      'confirmed' => Colors.green,
+                      'disputed' => theme.colorScheme.error,
+                      _ => theme.hintColor,
+                    },
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      '${_money(p.amount, l10n)} · ${p.kind == 'visit_fee' ? l10n.billKindVisitFee : l10n.billKindService}'
+                      '${(p.note ?? '').isNotEmpty ? ' · ${p.note}' : ''}'
+                      ' · ${switch (p.confirmation) {
+                        'confirmed' => l10n.billConfirmed,
+                        'disputed' => l10n.billDisputed,
+                        _ => l10n.billAwaitingYou,
+                      }}',
+                      style: theme.textTheme.bodySmall,
+                    ),
+                  ),
+                  if (p.confirmation == 'pending') ...[
+                    TextButton(
+                      onPressed: () async {
+                        try {
+                          await ref.read(myClinicAppointmentsControllerProvider.notifier).confirmPayment(appointment.id, p.id);
+                        } catch (_) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+                          }
+                        }
+                      },
+                      child: Text(l10n.billConfirm),
+                    ),
+                    TextButton(onPressed: () => _dispute(context, ref, p), child: Text(l10n.billDispute)),
+                  ],
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// The patient's word on a payment he did not make; owns its controller.
+class _DisputeDialog extends StatefulWidget {
+  const _DisputeDialog();
+
+  @override
+  State<_DisputeDialog> createState() => _DisputeDialogState();
+}
+
+class _DisputeDialogState extends State<_DisputeDialog> {
+  final _note = TextEditingController();
+
+  @override
+  void dispose() {
+    _note.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return AlertDialog(
+      title: Text(l10n.billDispute),
+      content: TextField(
+        controller: _note,
+        autofocus: true,
+        maxLines: 2,
+        decoration: InputDecoration(labelText: l10n.billDisputeNote),
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(l10n.commonCancel)),
+        FilledButton(onPressed: () => Navigator.of(context).pop(_note.text.trim()), child: Text(l10n.billDispute)),
+      ],
+    );
+  }
 }

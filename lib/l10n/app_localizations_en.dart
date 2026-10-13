@@ -3410,6 +3410,52 @@ class AppLocalizationsEn extends AppLocalizations {
   String get billSave => 'Save';
 
   @override
+  String get billConfirm => 'Confirm';
+
+  @override
+  String get billDispute => 'Dispute';
+
+  @override
+  String get billDisputeNote => 'What do you object to? (optional)';
+
+  @override
+  String get billConfirmed => 'confirmed by the patient';
+
+  @override
+  String get billDisputed => 'disputed by the patient';
+
+  @override
+  String get billAwaitingYou => 'waiting for your confirmation';
+
+  @override
+  String get billAwaitingPatient => 'waiting for the patient';
+
+  @override
+  String get billNextInstallment => 'Instalment at the next session';
+
+  @override
+  String get billInstallmentHint => 'Leave empty to ask for everything left';
+
+  @override
+  String get billCarriedOver => 'Instalment due';
+
+  @override
+  String billCarriedOverLine(String amount, String due) {
+    return 'The patient still owes $amount from earlier visits — $due is asked with this session.';
+  }
+
+  @override
+  String get billOwedTitle => 'Due from earlier visits';
+
+  @override
+  String billOwedBody(String amount, String due) {
+    return 'You still owe this clinic $amount — $due is asked with your next appointment.';
+  }
+
+  @override
+  String get clinicKindNoSlots => 'No open times for this kind right now';
+
+  @override
   String get clinicPickService => 'Services needed (optional)';
 
   @override
