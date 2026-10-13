@@ -3363,7 +3363,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clinicBookAppointment => 'حجز موعد';
 
   @override
-  String get clinicPickService => 'الخدمة المطلوبة (اختياري)';
+  String get clinicPickService => 'الخدمات المطلوبة (اختياري)';
 
   @override
   String get clinicPickKind => 'نوع الزيارة';

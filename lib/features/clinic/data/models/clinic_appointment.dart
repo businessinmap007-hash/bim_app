@@ -14,9 +14,8 @@ class ClinicAppointment {
   final String? clinicLogoUrl;
   final int? prescriptionId;
 
-  /// The dental service the patient named when booking, with the price asked at the time.
-  final String? serviceName;
-  final double? servicePrice;
+  /// The services the patient named when booking, each with the price asked at the time.
+  final List<BookedService> services;
 
   /// «يجب التواجد قبل الموعد بـ ١٥ دقيقة» — the clinic's own notice.
   final String? arrivalNotice;
@@ -31,12 +30,14 @@ class ClinicAppointment {
     this.clinicName,
     this.clinicLogoUrl,
     this.prescriptionId,
-    this.serviceName,
-    this.servicePrice,
+    this.services = const [],
     this.arrivalNotice,
   });
 
   bool get isCancellable => status == 'requested' || status == 'confirmed';
+
+  /// The names of the services named, in the order named — «فيلر الشفاه، ليزر إزالة الشعر».
+  String get servicesLine => services.map((s) => s.name).where((n) => n.isNotEmpty).join('، ');
 
   /// cancel()/reschedule() return the appointment with only `clinic: {id}` —
   /// no name/logo — so callers merge onto the list item instead of replacing
@@ -57,15 +58,13 @@ class ClinicAppointment {
       clinicName: clinicName,
       clinicLogoUrl: clinicLogoUrl,
       prescriptionId: prescriptionId,
-      serviceName: serviceName,
-      servicePrice: servicePrice,
+      services: services,
       arrivalNotice: arrivalNotice,
     );
   }
 
   factory ClinicAppointment.fromJson(Map<String, dynamic> json) {
     final clinic = json['clinic'] as Map<String, dynamic>?;
-    final dental = json['specialty_service'] as Map<String, dynamic>?;
     return ClinicAppointment(
       id: json['id'] as int,
       status: json['status'] as String? ?? 'requested',
@@ -76,9 +75,24 @@ class ClinicAppointment {
       clinicName: clinic?['name'] as String?,
       clinicLogoUrl: Env.assetUrl(clinic?['logo'] as String?),
       prescriptionId: json['prescription_id'] as int?,
-      serviceName: dental?['name'] as String?,
-      servicePrice: (dental?['price'] as num?)?.toDouble(),
+      services: BookedService.listFrom(json['specialty_services']),
       arrivalNotice: json['arrival_notice'] is Map<String, dynamic> ? (json['arrival_notice'] as Map<String, dynamic>)['message'] as String? : null,
     );
   }
+}
+
+/// One service a patient named when booking: its name and the price asked at the time (null = after the exam).
+class BookedService {
+  final String name;
+  final double? price;
+
+  const BookedService({required this.name, this.price});
+
+  factory BookedService.fromJson(Map<String, dynamic> json) => BookedService(
+    name: json['name'] as String? ?? '',
+    price: json['price'] is num ? (json['price'] as num).toDouble() : double.tryParse('${json['price'] ?? ''}'),
+  );
+
+  static List<BookedService> listFrom(dynamic raw) =>
+      [for (final e in (raw as List<dynamic>? ?? const [])) BookedService.fromJson(e as Map<String, dynamic>)];
 }

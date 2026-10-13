@@ -1118,7 +1118,7 @@
   "tripModeLimousine": "ليموزين",
   "tripModeDistribution": "توزيع",
   "clinicBookAppointment": "حجز موعد",
-  "clinicPickService": "الخدمة المطلوبة (اختياري)",
+  "clinicPickService": "الخدمات المطلوبة (اختياري)",
   "clinicPickKind": "نوع الزيارة",
   "clinicRequestBooking": "اطلب الحجز",
   "clinicPatientLabel": "المريض",

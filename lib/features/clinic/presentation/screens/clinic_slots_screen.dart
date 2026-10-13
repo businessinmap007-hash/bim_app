@@ -50,7 +50,7 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
   String? _kind;
   DateTime? _day;
   int? _slotId;
-  int? _serviceId;
+  final Set<int> _serviceIds = {};
   bool _booking = false;
   bool _forOther = false;
   final _reason = TextEditingController();
@@ -75,7 +75,7 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
           .bookSlot(
             slot.id,
             reason: _reason.text.trim(),
-            specialtyServiceId: _serviceId,
+            specialtyServiceIds: _serviceIds.toList(),
             forName: _forOther ? _forName.text.trim() : null,
             forPhone: _forOther ? _forPhone.text.trim() : null,
           );
@@ -83,7 +83,7 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
       if (!mounted) return;
       setState(() {
         _slotId = null;
-        _serviceId = null;
+        _serviceIds.clear();
         _reason.clear();
         _forOther = false;
         _forName.clear();
@@ -97,21 +97,20 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
     }
   }
 
-  /// What the bar says above the date: the visit kind and the dental service, or the hint before a time is picked.
-  String _summary(ClinicSlot? slot, String? serviceName, AppLocalizations l10n) {
+  /// What the bar says above the date: the visit kind and the services picked, or the hint before a time is picked.
+  String _summary(ClinicSlot? slot, String serviceNames, AppLocalizations l10n) {
     if (slot == null) return l10n.clinicPickSlotHint;
 
     final kind = slot.visitKind;
-    return [if (kind != null && kind.isNotEmpty) kind, if ((serviceName ?? '').isNotEmpty) serviceName!].join(' — ');
+    return [if (kind != null && kind.isNotEmpty) kind, if (serviceNames.isNotEmpty) serviceNames].join(' — ');
   }
 
-  /// The name of the dental service picked, for the summary bar.
-  String? _pickedServiceName() {
-    final id = _serviceId;
-    if (id == null || !widget.hasServices) return null;
+  /// The names of the services picked, in the order they are listed, for the summary bar.
+  String _pickedServiceNames() {
+    if (_serviceIds.isEmpty || !widget.hasServices) return '';
 
     final sections = ref.read(specialtyServicesProvider(widget.clinicId)).valueOrNull ?? const [];
-    return sections.expand((s) => s.services).where((p) => p.id == id).firstOrNull?.name;
+    return sections.expand((s) => s.services).where((p) => _serviceIds.contains(p.id)).map((p) => p.name).join('، ');
   }
 
   @override
@@ -199,8 +198,8 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
           if (widget.hasServices) ...[
             _ServicePicker(
               clinicId: widget.clinicId,
-              selected: _serviceId,
-              onChanged: (id) => setState(() => _serviceId = id),
+              selected: _serviceIds,
+              onToggle: (id, on) => setState(() => on ? _serviceIds.add(id) : _serviceIds.remove(id)),
             ),
             const SizedBox(height: 12),
           ],
@@ -307,7 +306,7 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
         ];
 
         final bar = BookingSummaryBar(
-          summary: _summary(picked, _pickedServiceName(), l10n),
+          summary: _summary(picked, _pickedServiceNames(), l10n),
           when: picked?.startsAt == null ? null : DateFormat.MMMEd(locale).add_jm().format(picked!.startsAt!),
           price: picked?.price,
           label: l10n.clinicRequestBooking,
@@ -444,14 +443,14 @@ class _TimeChip extends StatelessWidget {
   }
 }
 
-/// «اختر الخدمة المطلوبة»: the services a dental clinic listed, by kind, each with its price. Optional — tap the one
-/// chosen again to clear it.
+/// «اختر الخدمات المطلوبة»: the services a specialty clinic listed, by kind, each with its price. Optional, and several
+/// may be picked — tap one again to take it off.
 class _ServicePicker extends ConsumerWidget {
   final int clinicId;
-  final int? selected;
-  final ValueChanged<int?> onChanged;
+  final Set<int> selected;
+  final void Function(int id, bool on) onToggle;
 
-  const _ServicePicker({required this.clinicId, required this.selected, required this.onChanged});
+  const _ServicePicker({required this.clinicId, required this.selected, required this.onToggle});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -482,8 +481,8 @@ class _ServicePicker extends ConsumerWidget {
                     label: Text(
                       p.price == null ? p.name : '${p.name} · ${formatServiceMoney(p.price!)} ${l10n.invCurrency}',
                     ),
-                    selected: selected == p.id,
-                    onSelected: (on) => onChanged(on ? p.id : null),
+                    selected: selected.contains(p.id),
+                    onSelected: (on) => onToggle(p.id, on),
                   ),
               ],
             ),

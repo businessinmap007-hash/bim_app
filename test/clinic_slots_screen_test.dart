@@ -15,13 +15,19 @@ import 'package:bim_app/l10n/app_localizations.dart';
 class _FakeApi implements ClinicApi {
   final booked = <int>[];
   final attendees = <String?>[];
-  final services = <int?>[];
+  final services = <List<int>>[];
 
   @override
-  Future<ClinicAppointment> bookSlot(int slotId, {String? reason, int? specialtyServiceId, String? forName, String? forPhone}) async {
+  Future<ClinicAppointment> bookSlot(
+    int slotId, {
+    String? reason,
+    List<int> specialtyServiceIds = const [],
+    String? forName,
+    String? forPhone,
+  }) async {
     booked.add(slotId);
     attendees.add(forName);
-    services.add(specialtyServiceId);
+    services.add(specialtyServiceIds);
     throw StateError('stop after recording');
   }
 
@@ -126,7 +132,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('الخدمة المطلوبة (اختياري)'), findsOneWidget);
+    expect(find.text('الخدمات المطلوبة (اختياري)'), findsOneWidget);
     expect(find.text('تنظيف الأسنان وإزالة الجير · 400 ج'), findsOneWidget);
     expect(find.text('زراعة سن'), findsOneWidget);
 
@@ -141,7 +147,7 @@ void main() {
 
     await tester.tap(find.widgetWithText(FilledButton, 'اطلب الحجز'));
     await tester.pumpAndSettle();
-    expect(api.services, [11]);
+    expect(api.services, [[11]]);
   });
 
   testWidgets('tapping the chosen service again clears it, and a clinic with no list shows no picker', (tester) async {
@@ -180,11 +186,11 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(FilledButton, 'اطلب الحجز'));
     await tester.pumpAndSettle();
-    expect(api.services, [null], reason: 'cleared again, so nothing is sent');
+    expect(api.services, [<int>[]], reason: 'cleared again, so nothing is sent');
 
     await tester.pumpWidget(app(dental: false));
     await tester.pumpAndSettle();
-    expect(find.text('الخدمة المطلوبة (اختياري)'), findsNothing);
+    expect(find.text('الخدمات المطلوبة (اختياري)'), findsNothing);
   });
 
   test('a slot price that arrives as a decimal string does not break the board', () {
@@ -239,9 +245,54 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('نوع الزيارة'), findsOneWidget);
-    expect(find.text('الخدمة المطلوبة (اختياري)'), findsOneWidget);
+    expect(find.text('الخدمات المطلوبة (اختياري)'), findsOneWidget);
     expect(find.text('فيلر الشفاه · 3500 ج'), findsOneWidget);
     expect(find.text('اليوم'), findsOneWidget);
     expect(find.widgetWithText(FilledButton, 'اطلب الحجز'), findsOneWidget);
+  });
+
+  testWidgets('several services may be picked for one visit, and the bar names them all', (tester) async {
+    final api = _FakeApi();
+    final slots = [ClinicSlot(id: 1, startsAt: DateTime(2026, 10, 14, 17), durationMinutes: 30, visitKind: 'كشف', price: 300)];
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          clinicApiProvider.overrideWithValue(api),
+          clinicSlotsProvider(7).overrideWith((ref) async => slots),
+          specialtyServicesProvider(7).overrideWith(
+            (ref) async => const [
+              ServiceOfferingSection(kind: 'preventive', services: [ServiceOffering(id: 11, name: 'تنظيف الأسنان وإزالة الجير', price: 400)]),
+              ServiceOfferingSection(kind: 'injectables', services: [ServiceOffering(id: 21, name: 'فيلر الشفاه', price: 3500)]),
+            ],
+          ),
+        ],
+        child: MaterialApp(
+          locale: const Locale('ar'),
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: const [AppLocalizations.delegate, GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate, GlobalCupertinoLocalizations.delegate],
+          home: const ClinicSlotsScreen(clinicId: 7, clinicName: 'عيادة', hasServices: true),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('تنظيف الأسنان وإزالة الجير · 400 ج'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('فيلر الشفاه · 3500 ج'));
+    await tester.pumpAndSettle();
+
+    await tester.scrollUntilVisible(find.text('الوقت'), 200, scrollable: find.byType(Scrollable).first);
+    final time = find.descendant(of: find.byType(GridView), matching: find.byType(InkWell)).first;
+    await tester.ensureVisible(time);
+    await tester.pumpAndSettle();
+    await tester.tap(time);
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('تنظيف الأسنان وإزالة الجير، فيلر الشفاه'), findsOneWidget);
+
+    await tester.tap(find.widgetWithText(FilledButton, 'اطلب الحجز'));
+    await tester.pumpAndSettle();
+    expect(api.services, [[11, 21]]);
   });
 }

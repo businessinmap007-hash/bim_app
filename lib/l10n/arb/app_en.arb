@@ -1118,7 +1118,7 @@
   "tripModeLimousine": "Limousine",
   "tripModeDistribution": "Distribution",
   "clinicBookAppointment": "Book an appointment",
-  "clinicPickService": "Service needed (optional)",
+  "clinicPickService": "Services needed (optional)",
   "clinicPickKind": "Visit type",
   "clinicRequestBooking": "Request the booking",
   "clinicPatientLabel": "Patient",

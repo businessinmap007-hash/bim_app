@@ -1,3 +1,4 @@
+import '../../../clinic/data/models/clinic_appointment.dart' show BookedService;
 import '../../../../core/time/egypt_time.dart';
 /// The clinic's own view of an appointment — see
 /// Api\V2\BusinessClinicAppointmentController::serialize.
@@ -18,8 +19,7 @@ class BusinessClinicAppointment {
   final String? attendeePhone;
 
   /// What the patient came for, from the clinic's dental list (null when none was named).
-  final String? serviceName;
-  final double? servicePrice;
+  final List<BookedService> services;
 
   const BusinessClinicAppointment({
     required this.id,
@@ -34,14 +34,12 @@ class BusinessClinicAppointment {
     this.patientPhone,
     this.attendeeName,
     this.attendeePhone,
-    this.serviceName,
-    this.servicePrice,
+    this.services = const [],
   });
 
   factory BusinessClinicAppointment.fromJson(Map<String, dynamic> json) {
     final patient = json['patient'] as Map<String, dynamic>?;
     final attendee = json['attendee'] as Map<String, dynamic>?;
-    final dental = json['specialty_service'] as Map<String, dynamic>?;
     return BusinessClinicAppointment(
       id: json['id'] as int,
       status: json['status'] as String,
@@ -55,8 +53,7 @@ class BusinessClinicAppointment {
       patientPhone: patient?['phone'] as String?,
       attendeeName: attendee?['name'] as String?,
       attendeePhone: attendee?['phone'] as String?,
-      serviceName: dental?['name'] as String?,
-      servicePrice: (dental?['price'] as num?)?.toDouble(),
+      services: BookedService.listFrom(json['specialty_services']),
     );
   }
 }

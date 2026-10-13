@@ -6142,7 +6142,7 @@ abstract class AppLocalizations {
   /// No description provided for @clinicPickService.
   ///
   /// In ar, this message translates to:
-  /// **'الخدمة المطلوبة (اختياري)'**
+  /// **'الخدمات المطلوبة (اختياري)'**
   String get clinicPickService;
 
   /// No description provided for @clinicPickKind.

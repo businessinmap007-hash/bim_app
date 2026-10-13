@@ -357,7 +357,7 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
                 ],
               ),
             ],
-            if ((a.serviceName ?? '').isNotEmpty) ...[
+            for (final svc in a.services) ...[
               const SizedBox(height: 6),
               Row(
                 children: [
@@ -365,9 +365,9 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
-                      a.servicePrice == null
-                          ? a.serviceName!
-                          : '${a.serviceName} · ${a.servicePrice!.toStringAsFixed(a.servicePrice! % 1 == 0 ? 0 : 2)} ${l10n.invCurrency}',
+                      svc.price == null
+                          ? svc.name
+                          : '${svc.name} · ${svc.price!.toStringAsFixed(svc.price! % 1 == 0 ? 0 : 2)} ${l10n.invCurrency}',
                       style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
                     ),
                   ),
