@@ -223,22 +223,30 @@ class WorkingDay {
   final String? open;
   final String? close;
 
-  const WorkingDay({required this.day, this.isClosed, this.open, this.close});
+  /// «مفتوح 24 ساعة» — the whole day (the server stores it as 00:00 – 23:59:59).
+  final bool is24h;
 
-  WorkingDay copyWith({bool? isClosed, String? open, String? close, bool clearTimes = false}) {
+  const WorkingDay({required this.day, this.isClosed, this.open, this.close, this.is24h = false});
+
+  WorkingDay copyWith({bool? isClosed, String? open, String? close, bool? is24h, bool clearTimes = false}) {
     return WorkingDay(
       day: day,
       isClosed: isClosed ?? this.isClosed,
       open: clearTimes ? null : (open ?? this.open),
       close: clearTimes ? null : (close ?? this.close),
+      is24h: is24h ?? this.is24h,
     );
   }
+
+  /// This day, open the whole day.
+  WorkingDay allDay() => WorkingDay(day: day, isClosed: false, open: '00:00', close: '23:59', is24h: true);
 
   factory WorkingDay.fromJson(Map<String, dynamic> json) => WorkingDay(
     day: json['day'] as int,
     isClosed: json['is_closed'] as bool?,
     open: json['open'] as String?,
     close: json['close'] as String?,
+    is24h: json['is_24h'] as bool? ?? false,
   );
 }
 

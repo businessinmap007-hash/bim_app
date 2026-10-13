@@ -2950,5 +2950,9 @@
   "invSendRequest": "Send the request",
   "invRequestSent": "Your request was sent to the centre.",
   "invNoTests": "This centre has not priced its tests yet.",
-  "invKeepOrder": "Keep the order"
+  "invKeepOrder": "Keep the order",
+  "workingHoursTitle": "Working hours",
+  "workingHoursTileSubtitle": "Days of the week, opening and closing time, or open 24 hours",
+  "workingHoursOpen24": "Open 24 hours",
+  "bookingSettingsCheckTab": "Check-in / out"
 }

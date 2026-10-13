@@ -8903,4 +8903,17 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get invKeepOrder => 'إبقاء الطلب';
+
+  @override
+  String get workingHoursTitle => 'ساعات العمل';
+
+  @override
+  String get workingHoursTileSubtitle =>
+      'أيام الأسبوع، وقت الفتح والإغلاق، أو مفتوح 24 ساعة';
+
+  @override
+  String get workingHoursOpen24 => 'مفتوح 24 ساعة';
+
+  @override
+  String get bookingSettingsCheckTab => 'الدخول والخروج';
 }

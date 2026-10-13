@@ -2973,5 +2973,9 @@
   "invSendRequest": "أرسل الطلب",
   "invRequestSent": "تم إرسال طلبك إلى الجهة.",
   "invNoTests": "لم تحدد هذه الجهة أسعار فحوصاتها بعد.",
-  "invKeepOrder": "إبقاء الطلب"
+  "invKeepOrder": "إبقاء الطلب",
+  "workingHoursTitle": "ساعات العمل",
+  "workingHoursTileSubtitle": "أيام الأسبوع، وقت الفتح والإغلاق، أو مفتوح 24 ساعة",
+  "workingHoursOpen24": "مفتوح 24 ساعة",
+  "bookingSettingsCheckTab": "الدخول والخروج"
 }

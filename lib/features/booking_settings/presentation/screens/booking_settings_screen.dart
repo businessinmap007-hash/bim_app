@@ -11,10 +11,9 @@ import '../../../../core/time/egypt_time.dart';
 import '../../../../core/time/clock_format.dart';
 
 /// A business's self-service booking configuration — prices (what a room
-/// type costs), bookable units (which specific rooms exist) and weekly
-/// hours. All three sit behind the same GET /business/{prices,
-/// bookable-items,working-hours} endpoints a business already had on the
-/// backend with no app screen to reach them from.
+/// type costs), bookable units (which specific rooms exist) and a stay's
+/// check-in / check-out clock. (The week's opening hours are the business's
+/// own and are edited from the business settings.)
 class BookingSettingsScreen extends StatelessWidget {
   const BookingSettingsScreen({super.key});
 
@@ -31,12 +30,12 @@ class BookingSettingsScreen extends StatelessWidget {
             tabs: [
               Tab(text: l10n.bookingSettingsPricesTab),
               Tab(text: l10n.bookingSettingsUnitsTab),
-              Tab(text: l10n.bookingSettingsHoursTab),
+              Tab(text: l10n.bookingSettingsCheckTab),
             ],
           ),
         ),
         body: const TabBarView(
-          children: [_PricesTab(), _UnitsTab(), _HoursTab()],
+          children: [_PricesTab(), _UnitsTab(), _CheckTimesTab()],
         ),
       ),
     );
@@ -569,100 +568,25 @@ class _AddUnitFormState extends ConsumerState<_AddUnitForm> {
   }
 }
 
-class _HoursTab extends ConsumerStatefulWidget {
-  const _HoursTab();
+/// A stay's own check-in / check-out clock. The week's opening hours are the BUSINESS's and live in the business
+/// settings («ساعات العمل»); only the stay's clock belongs to bookings.
+class _CheckTimesTab extends ConsumerStatefulWidget {
+  const _CheckTimesTab();
 
   @override
-  ConsumerState<_HoursTab> createState() => _HoursTabState();
+  ConsumerState<_CheckTimesTab> createState() => _CheckTimesTabState();
 }
 
-class _HoursTabState extends ConsumerState<_HoursTab> {
-  List<WorkingDay>? _days;
-  bool _saving = false;
-  String? _bulkOpen;
-  String? _bulkClose;
-
+class _CheckTimesTabState extends ConsumerState<_CheckTimesTab> {
   String? _checkIn;
   String? _checkOut;
   bool _checkTimesSaving = false;
 
-  static const _dayOrder = [0, 1, 2, 3, 4, 5, 6];
-
-  String _dayName(AppLocalizations l10n, int day) {
-    switch (day) {
-      case 0:
-        return l10n.weekdaySunday;
-      case 1:
-        return l10n.weekdayMonday;
-      case 2:
-        return l10n.weekdayTuesday;
-      case 3:
-        return l10n.weekdayWednesday;
-      case 4:
-        return l10n.weekdayThursday;
-      case 5:
-        return l10n.weekdayFriday;
-      default:
-        return l10n.weekdaySaturday;
-    }
-  }
-
-  Future<void> _pickTime(int index, {required bool isOpen}) async {
-    final current = _days![index];
-    final initial = ClockFormat.parse(isOpen ? current.open : current.close) ?? EgyptTime.timeOfDay();
-    final picked = await ClockFormat.pick(context, initial: initial);
-    if (picked == null) return;
-    final formatted = ClockFormat.wire(picked);
-    setState(() {
-      _days![index] = isOpen ? current.copyWith(open: formatted) : current.copyWith(close: formatted);
-    });
-  }
-
-  Future<void> _pickBulkTime({required bool isOpen}) async {
-    final picked = await ClockFormat.pick(context, initial: ClockFormat.parse(isOpen ? _bulkOpen : _bulkClose) ?? EgyptTime.timeOfDay());
-    if (picked == null) return;
-    final formatted = ClockFormat.wire(picked);
-    setState(() {
-      if (isOpen) {
-        _bulkOpen = formatted;
-      } else {
-        _bulkClose = formatted;
-      }
-    });
-  }
-
-  /// Fills every day's open/close with the same pair — it doesn't save by
-  /// itself and it doesn't touch a day's closed switch, so a day already
-  /// marked off stays off even after this runs. Mirrors the web business
-  /// panel's "طبّق على الأسبوع" shortcut (resources/views/business/profile/
-  /// edit.blade.php), which most shops need since they open/close at the
-  /// same time every day.
-  void _applyToWeek() {
-    if (_bulkOpen == null && _bulkClose == null) return;
-    setState(() {
-      _days = [
-        for (final day in _days!)
-          day.copyWith(open: _bulkOpen ?? day.open, close: _bulkClose ?? day.close),
-      ];
-    });
-  }
-
-  Future<void> _save() async {
-    final days = _days;
-    if (days == null) return;
-    setState(() => _saving = true);
-    try {
-      await ref.read(bookingSettingsControllerProvider.notifier).saveHours(days);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.bookingSettingsHoursSaved)));
-      }
-    } finally {
-      if (mounted) setState(() => _saving = false);
-    }
-  }
-
   Future<void> _pickCheckTime({required bool isCheckIn}) async {
-    final picked = await ClockFormat.pick(context, initial: ClockFormat.parse(isCheckIn ? _checkIn : _checkOut) ?? EgyptTime.timeOfDay());
+    final picked = await ClockFormat.pick(
+      context,
+      initial: ClockFormat.parse(isCheckIn ? _checkIn : _checkOut) ?? EgyptTime.timeOfDay(),
+    );
     if (picked == null) return;
     final formatted = ClockFormat.wire(picked);
     setState(() {
@@ -696,131 +620,15 @@ class _HoursTabState extends ConsumerState<_HoursTab> {
     final state = ref.watch(bookingSettingsControllerProvider);
 
     if (state.isLoading) return const Center(child: CircularProgressIndicator());
-    if (state.hours == null) return Center(child: Text(l10n.commonSomethingWentWrong));
 
-    _days ??= [for (final day in _dayOrder) state.hours!.days.firstWhere((d) => d.day == day, orElse: () => WorkingDay(day: day))];
     if (state.checkTimes != null) {
       _checkIn ??= state.checkTimes!.checkInTime;
       _checkOut ??= state.checkTimes!.checkOutTime;
     }
 
-    final openNow = state.hours!.isOpenNow;
-    final statusColor = openNow ? AppColors.success : AppColors.error;
-
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: BoxDecoration(color: statusColor.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(999)),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.circle, size: 8, color: statusColor),
-              const SizedBox(width: 8),
-              Text(
-                openNow ? l10n.bookingSettingsOpenNow : l10n.bookingSettingsClosedNow,
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(color: statusColor),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Theme.of(context).cardTheme.color,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: AppColors.softShadow(),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(l10n.bookingSettingsApplyAllLabel, style: Theme.of(context).textTheme.titleSmall),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => _pickBulkTime(isOpen: true),
-                      child: Text(_bulkOpen == null ? l10n.bookingSettingsOpenTime : ClockFormat.hhmm(context, _bulkOpen)),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => _pickBulkTime(isOpen: false),
-                      child: Text(_bulkClose == null ? l10n.bookingSettingsCloseTime : ClockFormat.hhmm(context, _bulkClose)),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  FilledButton(
-                    onPressed: (_bulkOpen == null && _bulkClose == null) ? null : _applyToWeek,
-                    child: Text(l10n.bookingSettingsApplyToWeek),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 6),
-              Text(
-                l10n.bookingSettingsApplyHint,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 12),
-        Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).cardTheme.color,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: AppColors.softShadow(),
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: Column(
-            children: [
-              for (var i = 0; i < _days!.length; i++) ...[
-                if (i > 0) Divider(height: 1, color: Theme.of(context).dividerColor.withValues(alpha: 0.4)),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(_dayName(l10n, _days![i].day), style: Theme.of(context).textTheme.titleSmall),
-                      ),
-                      if (_days![i].isClosed == true)
-                        Text(l10n.bookingSettingsClosed, style: TextStyle(color: Theme.of(context).hintColor))
-                      else ...[
-                        TextButton(
-                          onPressed: () => _pickTime(i, isOpen: true),
-                          child: Text(_days![i].open == null ? l10n.bookingSettingsOpenTime : ClockFormat.hhmm(context, _days![i].open)),
-                        ),
-                        Text(' — ', style: TextStyle(color: Theme.of(context).hintColor)),
-                        TextButton(
-                          onPressed: () => _pickTime(i, isOpen: false),
-                          child: Text(_days![i].close == null ? l10n.bookingSettingsCloseTime : ClockFormat.hhmm(context, _days![i].close)),
-                        ),
-                      ],
-                      Switch(
-                        value: _days![i].isClosed != true,
-                        onChanged: (value) => setState(() {
-                          _days![i] = value ? _days![i].copyWith(isClosed: false) : _days![i].copyWith(isClosed: true, clearTimes: true);
-                        }),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ),
-        const SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: _saving ? null : _save,
-          child: _saving
-              ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-              : Text(l10n.bookingSettingsSaveHours),
-        ),
-        const SizedBox(height: 28),
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(

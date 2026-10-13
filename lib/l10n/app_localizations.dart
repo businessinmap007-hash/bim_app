@@ -16350,6 +16350,30 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'إبقاء الطلب'**
   String get invKeepOrder;
+
+  /// No description provided for @workingHoursTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ساعات العمل'**
+  String get workingHoursTitle;
+
+  /// No description provided for @workingHoursTileSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أيام الأسبوع، وقت الفتح والإغلاق، أو مفتوح 24 ساعة'**
+  String get workingHoursTileSubtitle;
+
+  /// No description provided for @workingHoursOpen24.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفتوح 24 ساعة'**
+  String get workingHoursOpen24;
+
+  /// No description provided for @bookingSettingsCheckTab.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدخول والخروج'**
+  String get bookingSettingsCheckTab;
 }
 
 class _AppLocalizationsDelegate

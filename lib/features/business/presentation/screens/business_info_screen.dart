@@ -265,6 +265,8 @@ class _HoursCard extends StatelessWidget {
                     value = '—';
                   } else if (day.isClosed == true) {
                     value = l10n.bookingSettingsClosed;
+                  } else if (day.is24h) {
+                    value = l10n.workingHoursOpen24;
                   } else {
                     value = '${ClockFormat.hhmm(context, day.open)} – ${ClockFormat.hhmm(context, day.close)}';
                   }

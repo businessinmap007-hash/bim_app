@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/scrolling_chip_row.dart';
 import '../../../auth/application/auth_controller.dart';
+import '../../../booking_settings/presentation/screens/working_hours_screen.dart';
 import '../../../categories/application/categories_providers.dart';
 import '../../../categories/data/models/category_root.dart';
 import '../../../categories/data/models/specialty.dart';
@@ -101,6 +102,18 @@ class _BusinessSettingsScreenState extends ConsumerState<BusinessSettingsScreen>
           _FieldLabel(l10n.profileSpecialty),
           const SizedBox(height: 6),
           _SpecialtyLabel(categoryId: user?.categoryId, categoryChildId: user?.categoryChildId),
+          const SizedBox(height: 16),
+          // the week's opening hours are the business's own, whatever it sells
+          Card(
+            margin: EdgeInsets.zero,
+            child: ListTile(
+              leading: const Icon(Icons.schedule_outlined),
+              title: Text(l10n.workingHoursTitle),
+              subtitle: Text(l10n.workingHoursTileSubtitle),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => Navigator.of(context).push(MaterialPageRoute<void>(builder: (_) => const WorkingHoursScreen())),
+            ),
+          ),
           if (_error != null) ...[
             const SizedBox(height: 16),
             Text(_error!, style: TextStyle(color: theme.colorScheme.error, fontWeight: FontWeight.w600)),

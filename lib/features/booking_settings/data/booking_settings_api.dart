@@ -284,6 +284,7 @@ class BookingSettingsApi {
               (d) => {
                 'day': d.day,
                 if (d.isClosed != null) 'is_closed': d.isClosed,
+                if (d.is24h) 'is_24h': true,
                 if (d.open != null) 'open': d.open,
                 if (d.close != null) 'close': d.close,
               },

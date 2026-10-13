@@ -8956,4 +8956,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invKeepOrder => 'Keep the order';
+
+  @override
+  String get workingHoursTitle => 'Working hours';
+
+  @override
+  String get workingHoursTileSubtitle =>
+      'Days of the week, opening and closing time, or open 24 hours';
+
+  @override
+  String get workingHoursOpen24 => 'Open 24 hours';
+
+  @override
+  String get bookingSettingsCheckTab => 'Check-in / out';
 }

@@ -117,7 +117,10 @@ class WorkingDay {
   final String? open;
   final String? close;
 
-  const WorkingDay({required this.day, this.isClosed, this.open, this.close});
+  /// Open the whole day.
+  final bool is24h;
+
+  const WorkingDay({required this.day, this.isClosed, this.open, this.close, this.is24h = false});
 
   bool get isKnown => isClosed != null;
 
@@ -126,6 +129,7 @@ class WorkingDay {
     isClosed: json['is_closed'] as bool?,
     open: json['open'] as String?,
     close: json['close'] as String?,
+    is24h: json['is_24h'] as bool? ?? false,
   );
 }
 
