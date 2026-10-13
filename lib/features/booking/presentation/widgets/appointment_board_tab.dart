@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../business/application/business_page_providers.dart';
@@ -15,6 +14,7 @@ import 'booking_grid_widgets.dart';
 import 'booking_shape_tab.dart';
 import '../../../../core/time/egypt_time.dart';
 import '../../../../core/time/clock_format.dart';
+import '../../../../core/time/local_format.dart';
 
 /// «موعد»: an appointment with the business itself (a salon, a craftsman) — the service and how long it takes, a
 /// day, a start time (the held ones greyed), then «تأكيد الموعد». No units, no photos, no add-ons.
@@ -56,7 +56,6 @@ class _AppointmentBoardTabState extends ConsumerState<AppointmentBoardTab> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final locale = Localizations.localeOf(context).toString();
     final offeringsAsync = ref.watch(businessOfferingsProvider(widget.businessId));
 
     return offeringsAsync.when(
@@ -76,7 +75,7 @@ class _AppointmentBoardTabState extends ConsumerState<AppointmentBoardTab> {
         return BoardScaffold(
           bottom: BookingSummaryBar(
             summary: slotData == null ? '' : chosen.label,
-            when: slotData == null ? null : DateFormat.MMMEd(locale).add_jm().format(slotData.startsAt),
+            when: slotData == null ? null : LocalFormat.weekdayMonthDay(context).addClock().format(slotData.startsAt),
             price: slotData == null ? null : chosen.price,
             label: l10n.bookingConfirmAppointment,
             onPressed: slotData == null

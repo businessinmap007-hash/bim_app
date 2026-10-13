@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/time/egypt_time.dart';
 import '../../../../core/time/clock_format.dart';
+import '../../../../core/time/local_format.dart';
 
 /// The pieces every «pick a day, then a time» booking board is drawn with (clinic, hourly venue, table): the white
 /// section card, the day chip, the time chip and the summary bar at the bottom. One look, so the boards agree.
@@ -79,7 +79,6 @@ class BookingDayChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final locale = Localizations.localeOf(context).toString();
 
     return SizedBox(
       width: 62,
@@ -89,8 +88,8 @@ class BookingDayChip extends StatelessWidget {
         builder: (ink) => Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(DateFormat.E(locale).format(day), style: TextStyle(fontSize: 11, color: ink)),
-            Text(DateFormat.d(locale).format(day), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: ink)),
+            Text(LocalFormat.weekday(context).format(day), style: TextStyle(fontSize: 11, color: ink)),
+            Text(LocalFormat.dayNumber(context).format(day), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: ink)),
           ],
         ),
       ),

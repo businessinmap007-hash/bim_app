@@ -14,6 +14,7 @@ import 'incoming_reservations_screen.dart';
 import 'runs_list_screen.dart';
 import 'start_run_screen.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/local_format.dart';
 
 String _modeLabel(String mode, AppLocalizations l10n) => switch (mode) {
   'freight' => l10n.tripModeFreight,
@@ -499,7 +500,7 @@ class TripScheduleFormScreenState extends ConsumerState<TripScheduleFormScreen> 
               ListTile(
                 contentPadding: EdgeInsets.zero,
                 title: Text(l10n.tripScheduleDateLabel),
-                trailing: Text(_tripDate != null ? _isoDate(_tripDate!) : '—'),
+                trailing: Text(_tripDate != null ? LocalFormat.date(context).format(_tripDate!) : '—'),
                 onTap: () async {
                   final picked = await showDatePicker(
                     context: context,

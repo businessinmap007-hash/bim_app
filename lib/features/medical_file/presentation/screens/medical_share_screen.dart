@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart' show DateFormat;
+import '../../../../core/time/clock_format.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../../../core/network/api_exception.dart';
@@ -108,7 +108,7 @@ class _MedicalShareScreenState extends ConsumerState<MedicalShareScreen> {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  l10n.medicalShareExpires(DateFormat.Hm().format(share.expiresAt)),
+                  l10n.medicalShareExpires(ClockFormat.time(context, share.expiresAt)),
                   textAlign: TextAlign.center,
                   style: theme.textTheme.titleSmall,
                 ),

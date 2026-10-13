@@ -7,6 +7,7 @@ import '../../../../shared/widgets/screen_frame.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../application/deposits_providers.dart';
 import '../../data/models/deposit.dart';
+import '../../../../core/time/local_format.dart';
 
 const _statuses = ['frozen', 'in_progress', 'released', 'refunded', 'split'];
 
@@ -209,11 +210,11 @@ class _DepositDetailSheet extends StatelessWidget {
               if (deposit.bookingId != null)
                 _Row(label: l10n.depositBookingLabel, value: '#${deposit.bookingId}'),
               if (deposit.createdAt != null)
-                _Row(label: l10n.depositCreatedAt, value: _formatDate(deposit.createdAt!)),
+                _Row(label: l10n.depositCreatedAt, value: _formatDate(context, deposit.createdAt!)),
               if (deposit.releasedAt != null)
-                _Row(label: l10n.depositReleasedAt, value: _formatDate(deposit.releasedAt!)),
+                _Row(label: l10n.depositReleasedAt, value: _formatDate(context, deposit.releasedAt!)),
               if (deposit.refundedAt != null)
-                _Row(label: l10n.depositRefundedAt, value: _formatDate(deposit.refundedAt!)),
+                _Row(label: l10n.depositRefundedAt, value: _formatDate(context, deposit.refundedAt!)),
             ],
           ),
         ),
@@ -242,10 +243,7 @@ class _Row extends StatelessWidget {
   }
 }
 
-String _formatDate(DateTime dt) {
-  final d = dt.toLocal();
-  return '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
-}
+String _formatDate(BuildContext context, DateTime d) => LocalFormat.date(context).format(d.toLocal());
 
 String _statusLabel(String status, AppLocalizations l10n) => switch (status) {
   'frozen' => l10n.depositStatusFrozen,

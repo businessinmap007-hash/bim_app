@@ -12,6 +12,7 @@ import '../../application/cart_controller.dart';
 import '../../data/models/cart_models.dart';
 import '../../../../core/time/egypt_time.dart';
 import '../../../../core/time/clock_format.dart';
+import '../../../../core/time/local_format.dart';
 
 /// Fulfillment type + address/notes + payment method, then places the
 /// order (POST /cart/{business}/checkout). Payment is cash-only for now —
@@ -330,7 +331,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                     widget.cart.installmentPlan!.monthly.round().toString(),
                     widget.cart.installmentPlan!.firstDueOn == null
                         ? ''
-                        : widget.cart.installmentPlan!.firstDueOn!.toIso8601String().substring(0, 10),
+                        : LocalFormat.date(context).format(widget.cart.installmentPlan!.firstDueOn!),
                   )
                 : widget.cart.installmentPlan != null
                 ? l10n.cartPaymentInstalments(
@@ -338,7 +339,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                     widget.cart.installmentPlan!.monthly.round().toString(),
                     widget.cart.installmentPlan!.firstDueOn == null
                         ? ''
-                        : widget.cart.installmentPlan!.firstDueOn!.toIso8601String().substring(0, 10),
+                        : LocalFormat.date(context).format(widget.cart.installmentPlan!.firstDueOn!),
                   )
                 : (selected == 'delivery' ? l10n.cartPaymentCash : l10n.cartPaymentCashInStore),
             style: Theme.of(context).textTheme.bodyMedium,

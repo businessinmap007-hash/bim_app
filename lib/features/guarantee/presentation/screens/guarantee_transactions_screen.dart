@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/guarantee_providers.dart';
 import '../../data/models/guarantee_level.dart';
+import '../../../../core/time/local_format.dart';
 
 class GuaranteeTransactionsScreen extends ConsumerStatefulWidget {
   const GuaranteeTransactionsScreen({super.key});
@@ -92,7 +93,7 @@ class _TransactionTile extends StatelessWidget {
           [
             '${tx.amount}',
             if (tx.reason != null && tx.reason!.isNotEmpty) tx.reason!,
-            if (tx.createdAt != null) _formatDate(tx.createdAt!),
+            if (tx.createdAt != null) _formatDate(context, tx.createdAt!),
           ].join(' · '),
         ),
       ),
@@ -100,7 +101,4 @@ class _TransactionTile extends StatelessWidget {
   }
 }
 
-String _formatDate(DateTime dt) {
-  final d = dt.toLocal();
-  return '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
-}
+String _formatDate(BuildContext context, DateTime d) => LocalFormat.date(context).format(d.toLocal());

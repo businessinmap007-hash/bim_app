@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../application/offers_providers.dart';
+import '../../../../core/time/local_format.dart';
 
 class OfferDetailScreen extends ConsumerStatefulWidget {
   final int offerId;
@@ -110,7 +111,7 @@ class _OfferDetailScreenState extends ConsumerState<OfferDetailScreen> {
               ],
               if (offer.endsAt != null) ...[
                 const SizedBox(height: 4),
-                Text('${l10n.offerEndsAtLabel}: ${_formatDate(offer.endsAt!)}'),
+                Text('${l10n.offerEndsAtLabel}: ${_formatDate(context, offer.endsAt!)}'),
               ],
               const SizedBox(height: 24),
               if (seller != null)
@@ -127,6 +128,4 @@ class _OfferDetailScreenState extends ConsumerState<OfferDetailScreen> {
   }
 }
 
-String _formatDate(DateTime dt) {
-  return '${dt.year}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')}';
-}
+String _formatDate(BuildContext context, DateTime d) => LocalFormat.date(context).format(d);

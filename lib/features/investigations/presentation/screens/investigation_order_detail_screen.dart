@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -21,6 +20,7 @@ import '../../data/models/investigation.dart';
 import '../../data/result_image_store.dart';
 import '../widgets/investigation_widgets.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/local_format.dart';
 
 /// One investigation order, from the patient's side: its items and steps, the registered centres with what each charges
 /// for the WHOLE order (to share it with one), and the results when they are in. The doctor opens the same screen to
@@ -247,7 +247,6 @@ class _InvestigationOrderDetailScreenState extends ConsumerState<InvestigationOr
     final userId = auth is AuthSignedIn ? auth.user.id : null;
     final isPatient = userId != null && order.patient?.id == userId;
     if (isPatient) _loadLocal(userId);
-    final locale = Localizations.localeOf(context).toString();
 
     return ListView(
       padding: const EdgeInsets.all(16),
@@ -361,7 +360,7 @@ class _InvestigationOrderDetailScreenState extends ConsumerState<InvestigationOr
             // the photos stay on the server only until they are safe on the patient's phone
             if (order.filesExpireAt != null && !order.patientSaved)
               Text(
-                l10n.invPhotosExpire(DateFormat.yMMMd(locale).format(order.filesExpireAt!)),
+                l10n.invPhotosExpire(LocalFormat.date(context).format(order.filesExpireAt!)),
                 style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.error),
               ),
             if (!order.patientSaved || _local.isEmpty)

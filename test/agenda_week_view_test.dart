@@ -80,10 +80,10 @@ void main() {
 
     expect(api.weekRequests, hasLength(1));
     // The header shows the server's Saturday-to-Friday range.
-    expect(find.text('2026-09-19  →  2026-09-25'), findsOneWidget);
+    expect(find.text('Sep 19, 2026  →  Sep 25, 2026'), findsOneWidget);
     // Seven day cards: one with the task, six saying there is nothing.
-    expect(find.text('Sat · 2026-09-19'), findsOneWidget);
-    expect(find.text('Fri · 2026-09-25'), findsOneWidget);
+    expect(find.text('Sat · Sep 19, 2026'), findsOneWidget);
+    expect(find.text('Fri · Sep 25, 2026'), findsOneWidget);
     expect(find.text('6:30 PM – 7:30 PM  Gym session'), findsOneWidget);
     expect(find.text('Nothing'), findsNWidgets(6));
   });
@@ -95,12 +95,12 @@ void main() {
     await tester.tap(find.byTooltip('Week view'));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('Sun · 2026-09-20'));
+    await tester.tap(find.text('Sun · Sep 20, 2026'));
     await tester.pumpAndSettle();
 
     // Back to the day view, on the day that was tapped.
     expect(find.byTooltip('Week view'), findsOneWidget);
-    expect(find.text('2026-09-20'), findsOneWidget);
+    expect(find.text('Sep 20, 2026'), findsOneWidget);
     expect(api.dayRequests, contains('2026-09-20'));
   });
 

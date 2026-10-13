@@ -7,6 +7,7 @@ import '../../../offers/data/models/commercial_offer.dart';
 import '../../application/business_offers_providers.dart';
 import '../../data/models/offerable_item.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/local_format.dart';
 
 const _offerableTypes = ['menu_item', 'product', 'service'];
 const _endModeDate = 'date';
@@ -244,7 +245,7 @@ class _OfferFormScreenState extends ConsumerState<OfferFormScreen> {
               groupValue: _endMode,
               title: Text(l10n.businessOfferEndsAtLabel),
               subtitle: _endMode == _endModeDate
-                  ? Text(_endsAt != null ? '${_endsAt!.year}-${_endsAt!.month.toString().padLeft(2, '0')}-${_endsAt!.day.toString().padLeft(2, '0')}' : l10n.businessOfferPickEndDate)
+                  ? Text(_endsAt != null ? LocalFormat.date(context).format(_endsAt!) : l10n.businessOfferPickEndDate)
                   : null,
               onChanged: (v) => setState(() => _endMode = v!),
             ),

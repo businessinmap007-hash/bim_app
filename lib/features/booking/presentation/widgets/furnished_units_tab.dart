@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../application/booking_providers.dart';
@@ -8,6 +7,7 @@ import '../../data/models/unit_discovery.dart';
 import 'booking_grid_widgets.dart';
 import 'booking_shape_tab.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/local_format.dart';
 
 /// «شقق وشاليهات»: the dates and the guests first, then the units that are free on those dates — photo, what it
 /// carries, the price a night and for the whole stay — and one bar to carry on with the chosen one.
@@ -72,8 +72,7 @@ class _FurnishedUnitsTabState extends ConsumerState<FurnishedUnitsTab> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final locale = Localizations.localeOf(context).toString();
-    final fmt = DateFormat.yMMMd(locale);
+    final fmt = LocalFormat.date(context);
 
     final firstKind = widget.catalog.kinds.where((k) => k.units.isNotEmpty).firstOrNull;
     final async = ref.watch(

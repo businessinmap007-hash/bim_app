@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/arrival_notice_banner.dart';
@@ -13,6 +12,7 @@ import '../../application/clinic_providers.dart';
 import '../../data/models/clinic_appointment.dart' show VisitKindOption;
 import '../../data/models/clinic_slot.dart';
 import '../../../../core/time/clock_format.dart';
+import '../../../../core/time/local_format.dart';
 
 /// A clinic's (or hospital's) open appointment slots, drawn like the «حجز عيادة» canvas board: day chips, a grid of
 /// times for the chosen day, a reason box, and a bottom bar that sums up the visit (kind, date and time, price) with
@@ -118,7 +118,6 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final locale = Localizations.localeOf(context).toString();
     final async = ref.watch(clinicSlotsProvider(widget.clinicId));
 
     return async.when(
@@ -351,7 +350,7 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
 
         final bar = BookingSummaryBar(
           summary: _summary(picked, _pickedServiceNames(), l10n),
-          when: picked?.startsAt == null ? null : DateFormat.MMMEd(locale).add_jm().format(picked!.startsAt!),
+          when: picked?.startsAt == null ? null : LocalFormat.weekdayMonthDay(context).addClock().format(picked!.startsAt!),
           price: picked?.price,
           label: l10n.clinicRequestBooking,
           busy: _booking,
@@ -445,7 +444,6 @@ class _DayChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final locale = Localizations.localeOf(context).toString();
 
     return SizedBox(
       width: 62,
@@ -455,9 +453,9 @@ class _DayChip extends StatelessWidget {
         builder: (ink) => Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(DateFormat.E(locale).format(day), style: TextStyle(fontSize: 11, color: ink)),
+            Text(LocalFormat.weekday(context).format(day), style: TextStyle(fontSize: 11, color: ink)),
             Text(
-              DateFormat.d(locale).format(day),
+              LocalFormat.dayNumber(context).format(day),
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: ink),
             ),
           ],

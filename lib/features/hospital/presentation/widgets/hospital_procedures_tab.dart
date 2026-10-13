@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -9,6 +8,7 @@ import '../../data/models/hospital_procedure.dart';
 import '../screens/my_procedure_requests_screen.dart';
 import 'procedure_widgets.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/local_format.dart';
 
 /// The «الإجراءات الطبية» tab of a hospital's page: the surgeries, endoscopies and treatments it offers, with its own
 /// price (or «السعر بعد التقييم»). Tapping one asks for it — an optional preferred day and a note; the hospital answers
@@ -144,7 +144,6 @@ class _AskSheetState extends ConsumerState<_AskSheet> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final locale = Localizations.localeOf(context).toString();
 
     return Padding(
       padding: EdgeInsets.fromLTRB(16, 0, 16, 16 + MediaQuery.of(context).viewInsets.bottom),
@@ -161,7 +160,7 @@ class _AskSheetState extends ConsumerState<_AskSheet> {
               OutlinedButton.icon(
                 onPressed: _pickDate,
                 icon: const Icon(Icons.event_outlined),
-                label: Text(_date == null ? l10n.procPickPreferredDate : DateFormat.yMMMEd(locale).format(_date!)),
+                label: Text(_date == null ? l10n.procPickPreferredDate : LocalFormat.dayDate(context).format(_date!)),
               ),
               const SizedBox(height: 10),
               TextField(

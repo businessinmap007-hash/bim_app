@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart' show DateFormat;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/providers/core_providers.dart';
+import '../../../core/time/clock_format.dart';
 import '../../../core/notifications/local_reminders.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../auth/application/auth_controller.dart';
@@ -89,7 +89,7 @@ final agendaRemindersProvider = Provider<AgendaReminders>((ref) {
       final locale = ref.read(localeControllerProvider);
       return lookupAppLocalizations(
         locale,
-      ).agendaReminderBody(DateFormat.Hm(locale.languageCode).format(at));
+      ).agendaReminderBody(ClockFormat.clock(at, arabic: locale.languageCode == 'ar'));
     },
   );
 });

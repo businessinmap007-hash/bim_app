@@ -10,6 +10,7 @@ import '../../application/business_orders_providers.dart';
 import '../../application/orders_providers.dart';
 import '../../data/models/order_reports.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/local_format.dart';
 
 /// Standalone analytics screen for a business's own orders -- separate from
 /// the live "Incoming orders" queue (BusinessOrdersScreen), which stays a
@@ -346,7 +347,6 @@ class _InstallmentsView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final locale = Localizations.localeOf(context).toString();
 
     return ListView(
       padding: const EdgeInsets.all(16),
@@ -390,7 +390,7 @@ class _InstallmentsView extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      DateFormat.yMMMM(locale).format(EgyptTime.parse('${m.month}-01')),
+                      LocalFormat.monthYear(context).format(EgyptTime.parse('${m.month}-01')),
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
@@ -415,7 +415,7 @@ class _InstallmentsView extends ConsumerWidget {
               margin: const EdgeInsets.only(bottom: 8),
               child: ListTile(
                 title: Text(
-                  '${d.dueOn.toIso8601String().substring(0, 10)} · ${d.customer}',
+                  '${LocalFormat.date(context).format(d.dueOn)} · ${d.customer}',
                   style: d.overdue ? TextStyle(color: AppColors.error) : null,
                 ),
                 subtitle: Text(l10n.businessReportsInstLine(d.seq, d.count, d.orderId)),

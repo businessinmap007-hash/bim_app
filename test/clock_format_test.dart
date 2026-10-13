@@ -1,4 +1,5 @@
 import 'package:bim_app/core/time/clock_format.dart';
+import 'package:bim_app/core/time/local_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -93,17 +94,43 @@ void main() {
     expect(out, '--:--');
   });
 
-  testWidgets('dateTime keeps the ISO date and appends the 12-hour clock', (
-    tester,
-  ) async {
-    final out = await _say(
+  testWidgets('dateTime writes the date in the language with the 12-hour clock after it', (tester) async {
+    final en = await _say(
       tester,
       const Locale('en'),
       (c) => ClockFormat.dateTime(c, DateTime(2026, 10, 14, 15, 5)),
     );
+    expect(en, 'Oct 14, 2026 · 3:05 PM');
 
-    expect(out, startsWith('2026-10-14 '));
-    expect(out, contains('3:05'));
-    expect(out, contains('PM'));
+    final ar = await _say(
+      tester,
+      const Locale('ar'),
+      (c) => ClockFormat.dateTime(c, DateTime(2026, 10, 14, 15, 5)),
+    );
+    expect(ar, contains('أكتوبر'));
+    expect(ar, contains('14'));
+    expect(ar, endsWith('3:05 م'));
+    // Latin digits only: intl's Arabic data would write ١٤ / ٢٠٢٦
+    expect(RegExp('[٠-٩]').hasMatch(ar), isFalse);
+  });
+
+  testWidgets('the numeric date reads day-first in Arabic and month-first in English', (tester) async {
+    final day = DateTime(2026, 10, 20);
+    final ar = await _say(tester, const Locale('ar'), (c) => LocalFormat.numeric(c).format(day));
+    final en = await _say(tester, const Locale('en'), (c) => LocalFormat.numeric(c).format(day));
+
+    expect(ar, '20/10/2026');
+    expect(en, '10/20/2026');
+  });
+
+  testWidgets('addClock appends the clock to any date format', (tester) async {
+    final at = DateTime(2026, 10, 20, 9, 30);
+    final out = await _say(
+      tester,
+      const Locale('en'),
+      (c) => LocalFormat.numeric(c).addClock().format(at),
+    );
+
+    expect(out, '10/20/2026 · 9:30 AM');
   });
 }

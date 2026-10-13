@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../medical_file/data/medical_file.dart';
@@ -8,6 +7,7 @@ import '../../../medical_file/presentation/screens/medical_share_screen.dart';
 import '../../application/patient_records_providers.dart';
 import '../../data/patient_record.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/local_format.dart';
 
 String recordKindLabel(AppLocalizations l10n, RecordKind kind) => switch (kind) {
   RecordKind.visit => l10n.recordKindVisit,
@@ -63,7 +63,7 @@ class PatientFileScreen extends ConsumerWidget {
                   const SizedBox(height: 10),
                   OutlinedButton.icon(
                     icon: const Icon(Icons.event_outlined),
-                    label: Text(DateFormat.yMMMEd(Localizations.localeOf(context).toString()).format(date)),
+                    label: Text(LocalFormat.dayDate(context).format(date)),
                     onPressed: () async {
                       final d = await showDatePicker(context: context, initialDate: date, firstDate: DateTime(1990), lastDate: EgyptTime.now().add(const Duration(days: 1)));
                       if (d != null) setSheet(() => date = d);
@@ -168,7 +168,6 @@ class PatientFileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final locale = Localizations.localeOf(context).toString();
     final record = ref.watch(patientRecordsProvider).valueOrNull?.where((r) => r.id == recordId).firstOrNull;
 
     if (record == null) return Scaffold(appBar: AppBar(), body: Center(child: Text(l10n.patientFilesEmpty)));
@@ -218,7 +217,7 @@ class PatientFileScreen extends ConsumerWidget {
                 children: [
                   if (record.phone.isNotEmpty) Text(record.phone, style: theme.textTheme.titleSmall),
                   if (record.nationalId.isNotEmpty) Text('${l10n.patientFileNationalId}: ${record.nationalId}'),
-                  if (record.birthDate != null) Text('${l10n.patientFileBirth}: ${DateFormat.yMMMd(locale).format(record.birthDate!)}'),
+                  if (record.birthDate != null) Text('${l10n.patientFileBirth}: ${LocalFormat.date(context).format(record.birthDate!)}'),
                   if (record.gender.isNotEmpty) Text('${l10n.patientFileGender}: ${record.gender}'),
                   if (record.chronic.isNotEmpty) ...[const SizedBox(height: 6), Text('${l10n.patientFileChronic}: ${record.chronic}')],
                   if (record.allergies.isNotEmpty) Text('${l10n.patientFileAllergies}: ${record.allergies}'),
@@ -245,7 +244,7 @@ class PatientFileScreen extends ConsumerWidget {
                 child: ListTile(
                   leading: Icon(recordKindIcon(e.kind)),
                   title: Text(e.title),
-                  subtitle: Text([recordKindLabel(l10n, e.kind), if (e.date != null) DateFormat.yMMMd(locale).format(e.date!), if (e.detail.isNotEmpty) e.detail].join(' · ')),
+                  subtitle: Text([recordKindLabel(l10n, e.kind), if (e.date != null) LocalFormat.date(context).format(e.date!), if (e.detail.isNotEmpty) e.detail].join(' · ')),
                   trailing: IconButton(
                     tooltip: l10n.commonDelete,
                     icon: const Icon(Icons.close, size: 18),

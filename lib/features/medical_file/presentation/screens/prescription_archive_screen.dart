@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart' show DateFormat;
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../../../core/network/api_exception.dart';
@@ -16,6 +15,7 @@ import '../../application/medical_file_providers.dart';
 import '../../application/prescription_archive_providers.dart';
 import '../../data/medical_share_crypto.dart';
 import '../../../../core/time/clock_format.dart';
+import '../../../../core/time/local_format.dart';
 
 /// «روشتاتي المحفوظة على الهاتف» — المالك، 2026-10-05: «الروشتات تحفظ على الفون وعند مشاركتها تقرأ وتعرض
 /// للصيدلي». Every prescription a doctor wrote for this patient, kept here as the server sent it; each can be
@@ -90,7 +90,7 @@ class PrescriptionArchiveScreen extends ConsumerWidget {
                               ? p.doctor!.name!
                               : p.patient.name!,
                         if (p.issuedAt != null)
-                          DateFormat.yMMMd().format(p.issuedAt!.toLocal()),
+                          LocalFormat.date(context).format(p.issuedAt!.toLocal()),
                       ].join(' — '),
                     ),
                     trailing: Text(
@@ -131,7 +131,7 @@ class PrescriptionCopyScreen extends ConsumerWidget {
             ),
           if (p.issuedAt != null)
             Text(
-              DateFormat.yMMMd().add_Hm().format(p.issuedAt!.toLocal()),
+              LocalFormat.date(context).addClock().format(p.issuedAt!.toLocal()),
               style: theme.textTheme.bodySmall,
             ),
           if (p.contentPurged) ...[

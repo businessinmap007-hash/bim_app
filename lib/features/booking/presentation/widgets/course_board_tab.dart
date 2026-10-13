@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../business/data/models/offering_item.dart';
@@ -10,6 +9,7 @@ import '../../data/models/unit_discovery.dart';
 import '../screens/booking_screen.dart';
 import 'booking_grid_widgets.dart';
 import 'booking_shape_tab.dart';
+import '../../../../core/time/local_format.dart';
 
 /// «كورس»: the course, its level, and the groups that run it — each with when it meets, when it starts and how many
 /// seats are left — then «التحق بالكورس». A business with no group open keeps the page it always had.
@@ -37,7 +37,6 @@ class _CourseBoardTabState extends ConsumerState<CourseBoardTab> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final locale = Localizations.localeOf(context).toString();
     final async = ref.watch(courseDiscoveryProvider(widget.businessId));
 
     return async.when(
@@ -63,7 +62,7 @@ class _CourseBoardTabState extends ConsumerState<CourseBoardTab> {
           }
         }
 
-        final fmt = DateFormat.yMMMd(locale);
+        final fmt = LocalFormat.date(context);
 
         return BoardScaffold(
           bottom: BookingSummaryBar(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart' show DateFormat;
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/network/api_exception.dart';
@@ -9,6 +8,7 @@ import '../../../auth/application/auth_controller.dart';
 import '../../../prescriptions/application/pharmacy_prescriptions_providers.dart';
 import '../../../prescriptions/data/pharmacy_prescriptions_api.dart';
 import '../../../../shared/widgets/full_screen_gallery.dart';
+import '../../../../core/time/local_format.dart';
 
 /// The pharmacist's side of a shown prescription (what the patient's QR carried). The content is read from
 /// the code; when the viewer is a business account the server is asked whether it is EXACTLY what the doctor
@@ -190,7 +190,7 @@ class _PrescriptionShownScreenState
               ),
             if (check.issuedAt != null)
               Text(
-                DateFormat.yMMMd().add_Hm().format(check.issuedAt!),
+                LocalFormat.date(context).addClock().format(check.issuedAt!),
                 style: theme.textTheme.bodySmall,
               ),
             const SizedBox(height: 8),

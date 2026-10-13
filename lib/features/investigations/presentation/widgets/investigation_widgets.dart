@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../data/models/investigation.dart';
+import '../../../../core/time/local_format.dart';
 
 String investigationStatusLabel(AppLocalizations l10n, String status) {
   switch (status) {
@@ -25,7 +25,7 @@ String investigationKindLabel(AppLocalizations l10n, String kind) => kind == 'ra
 
 String formatInvestigationMoney(double v) => v == v.roundToDouble() ? v.toStringAsFixed(0) : v.toStringAsFixed(2);
 
-String formatInvestigationDate(BuildContext context, DateTime d) => DateFormat.yMMMd(Localizations.localeOf(context).toString()).add_jm().format(d);
+String formatInvestigationDate(BuildContext context, DateTime d) => LocalFormat.date(context).addClock().format(d);
 
 /// The status as a small pill — filled with the interactive colour when the results are in.
 class InvestigationStatusPill extends StatelessWidget {

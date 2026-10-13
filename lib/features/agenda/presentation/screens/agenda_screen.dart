@@ -9,6 +9,7 @@ import '../../data/models/agenda_item.dart';
 import 'agenda_settings_screen.dart';
 import '../../../../core/time/egypt_time.dart';
 import '../../../../core/time/clock_format.dart';
+import '../../../../core/time/local_format.dart';
 
 DateTime _dateOnly(DateTime d) => DateTime(d.year, d.month, d.day);
 
@@ -377,8 +378,8 @@ class _AgendaScreenState extends ConsumerState<AgendaScreen> {
                 ),
                 Text(
                   weekData != null && _week
-                      ? '${_formatDate(weekData.from)}  →  ${_formatDate(weekData.to)}'
-                      : _formatDate(_date),
+                      ? '${_formatDate(context, weekData.from)}  →  ${_formatDate(context, weekData.to)}'
+                      : _formatDate(context, _date),
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
                 IconButton(
@@ -492,7 +493,7 @@ class _WeekGrid extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${_weekdayLabel(l10n, day.date.weekday % 7)} · ${_formatDate(day.date)}',
+                          '${_weekdayLabel(l10n, day.date.weekday % 7)} · ${_formatDate(context, day.date)}',
                           style: theme.textTheme.titleSmall,
                         ),
                         const SizedBox(height: 6),
@@ -591,7 +592,6 @@ class _AgendaTile extends ConsumerWidget {
   }
 }
 
-String _formatDate(DateTime d) =>
-    '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+String _formatDate(BuildContext context, DateTime d) => LocalFormat.date(context).format(d);
 
 String _formatTimeRange(BuildContext context, DateTime start, DateTime? end) => ClockFormat.range(context, start, end);

@@ -14,6 +14,7 @@ import '../widgets/set_log_sheet.dart';
 import 'training_chat_screen.dart';
 import 'training_monthly_summary_screen.dart';
 import '../../../../shared/widgets/full_screen_gallery.dart';
+import '../../../../core/time/local_format.dart';
 
 class TrainingPlanDetailScreen extends ConsumerWidget {
   final int planId;
@@ -630,7 +631,7 @@ class _ProgressTabState extends ConsumerState<_ProgressTab> {
               title: Text(log.weight != null ? '${log.weight} kg' : ''),
               subtitle: Text(
                 [
-                  if (log.loggedOn != null) _formatDate(log.loggedOn!),
+                  if (log.loggedOn != null) _formatDate(context, log.loggedOn!),
                   if (log.notes != null && log.notes!.isNotEmpty) log.notes!,
                 ].join(' · '),
               ),
@@ -784,5 +785,4 @@ class _BodyReportCard extends StatelessWidget {
   }
 }
 
-String _formatDate(DateTime dt) =>
-    '${dt.year}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')}';
+String _formatDate(BuildContext context, DateTime d) => LocalFormat.date(context).format(d);

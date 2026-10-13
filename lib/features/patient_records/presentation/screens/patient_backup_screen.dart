@@ -14,6 +14,7 @@ import '../../application/patient_records_providers.dart';
 import '../../data/patient_backup.dart';
 import '../../data/patient_record.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/local_format.dart';
 
 final patientBackupApiProvider = Provider<PatientBackupApi>((ref) => PatientBackupApi(ref.watch(apiClientProvider)));
 
@@ -143,7 +144,6 @@ class _PatientBackupScreenState extends ConsumerState<PatientBackupScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final locale = Localizations.localeOf(context).toString();
     final controller = ref.watch(patientRecordsProvider.notifier);
     ref.watch(patientRecordsProvider);
     final at = controller.backupAt;
@@ -169,7 +169,7 @@ class _PatientBackupScreenState extends ConsumerState<PatientBackupScreen> {
             margin: EdgeInsets.zero,
             child: ListTile(
               leading: const Icon(Icons.history),
-              title: Text(at == null ? l10n.patientBackupNever : l10n.patientBackupLast(DateFormat.yMMMd(locale).add_Hm().format(at))),
+              title: Text(at == null ? l10n.patientBackupNever : l10n.patientBackupLast(LocalFormat.date(context).addClock().format(at))),
               subtitle: Text(l10n.patientBackupChanged(changed, total)),
             ),
           ),

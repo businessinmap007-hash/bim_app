@@ -6,6 +6,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../application/projects_providers.dart';
 import '../../data/models/project_timeline.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/local_format.dart';
 
 class ProjectDetailScreen extends ConsumerWidget {
   final int projectId;
@@ -48,7 +49,7 @@ class ProjectDetailScreen extends ConsumerWidget {
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text(l10n.projectStartsOn),
-                    trailing: Text(startsOn != null ? _formatDate(startsOn!) : '—'),
+                    trailing: Text(startsOn != null ? _formatDate(context, startsOn!) : '—'),
                     onTap: () async {
                       final picked = await showDatePicker(
                         context: sheetContext,
@@ -62,7 +63,7 @@ class ProjectDetailScreen extends ConsumerWidget {
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text(l10n.projectDueOn),
-                    trailing: Text(endsOn != null ? _formatDate(endsOn!) : '—'),
+                    trailing: Text(endsOn != null ? _formatDate(context, endsOn!) : '—'),
                     onTap: () async {
                       final picked = await showDatePicker(
                         context: sheetContext,
@@ -365,7 +366,7 @@ class _TaskTile extends ConsumerWidget {
   }
 }
 
-String _formatDate(DateTime d) => '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+String _formatDate(BuildContext context, DateTime d) => LocalFormat.date(context).format(d);
 
 String _taskStatusLabel(String status, AppLocalizations l10n) => switch (status) {
   'pending' => l10n.taskStatusPending,

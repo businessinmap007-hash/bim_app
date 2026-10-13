@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/course_providers.dart';
 import '../../data/models/course.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/local_format.dart';
 
 /// «مجموعات الكورسات» — the business opens a group of a course (when it starts, when it meets, how many seats), closes
 /// it when it is full or over, and sees how many seats are taken.
@@ -26,7 +26,6 @@ class CourseGroupsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final locale = Localizations.localeOf(context).toString();
     final async = ref.watch(myCoursesProvider);
 
     return Scaffold(
@@ -50,7 +49,7 @@ class CourseGroupsScreen extends ConsumerWidget {
             );
           }
 
-          final fmt = DateFormat.yMMMd(locale);
+          final fmt = LocalFormat.date(context);
 
           return RefreshIndicator(
             onRefresh: () async => ref.invalidate(myCoursesProvider),
@@ -208,8 +207,7 @@ class _GroupFormState extends ConsumerState<_GroupForm> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final locale = Localizations.localeOf(context).toString();
-    final fmt = DateFormat.yMMMd(locale);
+    final fmt = LocalFormat.date(context);
     final editing = widget.group != null;
 
     return Padding(

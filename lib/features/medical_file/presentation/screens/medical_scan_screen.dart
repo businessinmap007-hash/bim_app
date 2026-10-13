@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart' show DateFormat;
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../../../../l10n/app_localizations.dart';
@@ -9,6 +8,7 @@ import '../../data/medical_file.dart';
 import '../../data/medical_share_crypto.dart';
 import 'prescription_shown_screen.dart';
 import '../medical_labels.dart';
+import '../../../../core/time/local_format.dart';
 
 /// The doctor's or pharmacist's side: scan the patient's code, fetch the ciphertext, open it HERE with the key
 /// the code carried. What is read is shown, never saved on this phone.
@@ -116,7 +116,7 @@ class MedicalFileViewScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          Text(l10n.medicalSharedAt(DateFormat.yMMMd().add_Hm().format(sharedAt)), style: theme.textTheme.bodySmall),
+          Text(l10n.medicalSharedAt(LocalFormat.date(context).addClock().format(sharedAt)), style: theme.textTheme.bodySmall),
           Text(l10n.medicalViewNote, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
           if (isCopy) ...[
           const SizedBox(height: 10),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -8,6 +7,7 @@ import '../../../clinic/data/models/clinic_appointment.dart';
 import '../../../specialty_services/presentation/widgets/specialty_widgets.dart' show formatServiceMoney;
 import '../../application/business_clinic_providers.dart';
 import '../../data/models/business_clinic_appointment.dart';
+import '../../../../core/time/local_format.dart';
 
 /// The money of one visit, on the clinic's side: the visit fee (paid on arrival), the services the patient named
 /// (charged once the visit is done, and the clinic may raise or lower each), what was paid — one row per payment, so a
@@ -79,7 +79,6 @@ class _VisitBillingCardState extends ConsumerState<VisitBillingCard> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final locale = Localizations.localeOf(context).toString();
     final b = widget.appointment.billing;
     if (b == null) return const SizedBox.shrink();
     final canPay = widget.appointment.status == 'confirmed' || widget.appointment.status == 'completed';
@@ -205,7 +204,7 @@ class _VisitBillingCardState extends ConsumerState<VisitBillingCard> {
                             'disputed' => '${l10n.billDisputed}${(p.disputeNote ?? '').isNotEmpty ? ': ${p.disputeNote}' : ''}',
                             _ => l10n.billAwaitingPatient,
                           },
-                          if (p.paidAt != null) DateFormat.MMMd(locale).add_jm().format(p.paidAt!),
+                          if (p.paidAt != null) LocalFormat.monthDay(context).addClock().format(p.paidAt!),
                           if ((p.note ?? '').isNotEmpty) p.note!,
                         ].join(' · '),
                         style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),

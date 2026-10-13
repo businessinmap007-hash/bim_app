@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'local_format.dart';
+
 /// «صباحًا / مساءً» — every clock a person reads or sets in the app is a 12-hour clock with its AM/PM mark
 /// («9:00 ص»), never «21:00». The wire format stays "HH:mm" (the server stores and compares 24-hour strings); this is
 /// only what the screen says and what the time picker offers.
@@ -41,22 +43,21 @@ class ClockFormat {
 
   /// A moment's clock: «9:00 م» / «9:00 PM». Latin digits like every other number in the app (prices, counts), so the
   /// clock never reorders itself inside right-to-left text; only the AM/PM mark follows the language.
-  static String time(BuildContext context, DateTime at) {
+  static String time(BuildContext context, DateTime at) =>
+      clock(at, arabic: Localizations.localeOf(context).languageCode == 'ar');
+
+  /// [time] without a [BuildContext] — for the places that only know the language (a notification body).
+  static String clock(DateTime at, {required bool arabic}) {
     final h = at.hour % 12 == 0 ? 12 : at.hour % 12;
     final m = at.minute.toString().padLeft(2, '0');
-    final arabic = Localizations.localeOf(context).languageCode == 'ar';
     final mark = at.hour < 12 ? (arabic ? 'ص' : 'AM') : (arabic ? 'م' : 'PM');
 
     return '$h:$m $mark';
   }
 
-  /// «2026-10-14 9:00 م» — the compact date + clock the lists use.
-  static String dateTime(BuildContext context, DateTime at) {
-    final d =
-        '${at.year}-${at.month.toString().padLeft(2, '0')}-${at.day.toString().padLeft(2, '0')}';
-
-    return '$d ${time(context, at)}';
-  }
+  /// «20 أكتوبر 2026 · 9:00 م» / «Oct 20, 2026 · 9:00 PM» — the compact date + clock the lists use.
+  static String dateTime(BuildContext context, DateTime at) =>
+      LocalFormat.date(context).addClock().format(at);
 
   /// «9:00 ص – 10:30 ص»; a missing end leaves just the start.
   static String range(BuildContext context, DateTime start, DateTime? end) =>

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../data/models/placed_order.dart';
+import '../../../../core/time/local_format.dart';
 
 /// «تقسيط»: an order's payments by month, each with its date and amount, and
 /// what is paid so far against what is left — shown to the customer on their
@@ -41,7 +42,7 @@ class InstallmentSchedule extends StatelessWidget {
                 SizedBox(width: 26, child: Text('${p.seq}', style: Theme.of(context).textTheme.bodySmall)),
                 Expanded(
                   child: Text(
-                    p.dueOn == null ? '' : p.dueOn!.toIso8601String().substring(0, 10),
+                    p.dueOn == null ? '' : LocalFormat.date(context).format(p.dueOn!),
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),

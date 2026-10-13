@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../application/booking_providers.dart';
@@ -9,6 +8,7 @@ import 'booking_grid_widgets.dart';
 import 'booking_shape_tab.dart';
 import '../../../../core/time/egypt_time.dart';
 import '../../../../core/time/clock_format.dart';
+import '../../../../core/time/local_format.dart';
 
 /// «طاولة»: a day and a party size, then the time (the taken ones greyed), then the tables that are free at that time
 /// and seat the party — one bar, «احجز طاولة».
@@ -90,7 +90,6 @@ class _TableBookingTabState extends ConsumerState<TableBookingTab> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final locale = Localizations.localeOf(context).toString();
     final allUnits = [for (final k in widget.catalog.kinds) for (final u in k.units) (group: k, unit: u)];
 
     final params = (
@@ -107,14 +106,14 @@ class _TableBookingTabState extends ConsumerState<TableBookingTab> {
     final free = slotData == null ? <({UnitKindGroup group, DiscoveredUnit unit})>[] : allUnits.where((e) => slotData.unitIds.contains(e.unit.id)).toList();
     final chosen = free.where((e) => e.unit.id == _unitId).firstOrNull;
 
-    final dayLabel = DateFormat.yMMMEd(locale).format(_day);
+    final dayLabel = LocalFormat.dayDate(context).format(_day);
 
     return BoardScaffold(
       bottom: BookingSummaryBar(
         summary: chosen == null || _slot == null
             ? l10n.bookingTableHint
             : '${chosen.unit.displayTitle} — ${l10n.bookingPartyPeople(_party)}',
-        when: chosen == null || _slot == null ? null : DateFormat.MMMEd(locale).add_jm().format(_slot!),
+        when: chosen == null || _slot == null ? null : LocalFormat.weekdayMonthDay(context).addClock().format(_slot!),
         label: l10n.bookingBookTable,
         onPressed: chosen == null || _slot == null
             ? null

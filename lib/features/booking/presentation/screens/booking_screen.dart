@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -16,6 +15,7 @@ import '../../data/models/unit_discovery.dart';
 import '../../data/models/booking_form.dart';
 import '../../../../core/time/egypt_time.dart';
 import '../../../../core/time/clock_format.dart';
+import '../../../../core/time/local_format.dart';
 
 /// Booking a specific priced offering («غرفة مزدوجة», «كشف عظام») at a
 /// business. The form itself is entirely shape-driven — see
@@ -707,7 +707,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
             ListTile(
               contentPadding: EdgeInsets.zero,
               title: Text(l10n.bookingDayUseDate),
-              subtitle: Text(_startsAt != null ? DateFormat.yMd().format(_startsAt!) : l10n.bookingChoosePlaceholder),
+              subtitle: Text(_startsAt != null ? LocalFormat.numeric(context).format(_startsAt!) : l10n.bookingChoosePlaceholder),
               trailing: const Icon(Icons.calendar_today_outlined),
               onTap: () => _pickDate(isEnd: false),
             ),
@@ -837,7 +837,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                     child: ListTile(
                       contentPadding: EdgeInsets.zero,
                       title: Text(l10n.bookingFrom),
-                      subtitle: Text(_startsAt != null ? DateFormat.yMd().format(_startsAt!) : l10n.bookingChoosePlaceholder),
+                      subtitle: Text(_startsAt != null ? LocalFormat.numeric(context).format(_startsAt!) : l10n.bookingChoosePlaceholder),
                       onTap: () => _pickDate(isEnd: false),
                     ),
                   ),
@@ -845,7 +845,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                     child: ListTile(
                       contentPadding: EdgeInsets.zero,
                       title: Text(l10n.bookingTo),
-                      subtitle: Text(_endsAt != null ? DateFormat.yMd().format(_endsAt!) : l10n.bookingChoosePlaceholder),
+                      subtitle: Text(_endsAt != null ? LocalFormat.numeric(context).format(_endsAt!) : l10n.bookingChoosePlaceholder),
                       onTap: () => _pickDate(isEnd: true),
                     ),
                   ),
@@ -868,7 +868,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                       contentPadding: EdgeInsets.zero,
                       title: Text(l10n.bookingFrom),
                       subtitle: Text(
-                        _startsAt != null ? DateFormat.yMd().add_Hm().format(_startsAt!) : l10n.bookingChoosePlaceholder,
+                        _startsAt != null ? LocalFormat.numeric(context).addClock().format(_startsAt!) : l10n.bookingChoosePlaceholder,
                       ),
                       onTap: () => _pickDateTime(isEnd: false),
                     ),
@@ -878,7 +878,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                       contentPadding: EdgeInsets.zero,
                       title: Text(l10n.bookingTo),
                       subtitle: Text(
-                        _endsAt != null ? DateFormat.yMd().add_Hm().format(_endsAt!) : l10n.bookingChoosePlaceholder,
+                        _endsAt != null ? LocalFormat.numeric(context).addClock().format(_endsAt!) : l10n.bookingChoosePlaceholder,
                       ),
                       onTap: () => _pickDateTime(isEnd: true),
                     ),
@@ -893,7 +893,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
           contentPadding: EdgeInsets.zero,
           title: Text(labelText),
           subtitle: Text(
-            _startsAt != null ? DateFormat.yMd().add_Hm().format(_startsAt!) : l10n.bookingChoosePlaceholder,
+            _startsAt != null ? LocalFormat.numeric(context).addClock().format(_startsAt!) : l10n.bookingChoosePlaceholder,
           ),
           trailing: const Icon(Icons.calendar_month_outlined),
           onTap: () => _pickDateTime(isEnd: false),

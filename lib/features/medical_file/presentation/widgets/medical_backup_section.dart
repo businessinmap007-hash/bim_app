@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart' show DateFormat;
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -9,6 +8,7 @@ import '../../application/medical_file_providers.dart';
 import '../../application/prescription_archive_providers.dart';
 import '../../data/medical_backup_crypto.dart';
 import '../../data/medical_file.dart';
+import '../../../../core/time/local_format.dart';
 
 /// «نسخة احتياطية مشفّرة» — the answer to a lost phone. The file is sealed on THIS phone with a passphrase only
 /// the patient knows, and the server keeps the opaque result; restoring on a new phone asks for the same
@@ -140,7 +140,7 @@ class _MedicalBackupSectionState extends ConsumerState<MedicalBackupSection> {
             ]),
             const SizedBox(height: 8),
             Text(
-              backupAt == null ? l10n.medicalBackupNone : l10n.medicalBackupLast(DateFormat.yMMMd().add_Hm().format(backupAt)),
+              backupAt == null ? l10n.medicalBackupNone : l10n.medicalBackupLast(LocalFormat.date(context).addClock().format(backupAt)),
               style: theme.textTheme.bodySmall?.copyWith(color: backupAt == null ? theme.colorScheme.error : null),
             ),
             if (changed) Text(l10n.medicalBackupChanged, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.error)),

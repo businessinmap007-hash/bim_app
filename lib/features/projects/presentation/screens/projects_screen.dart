@@ -7,6 +7,7 @@ import '../../application/projects_providers.dart';
 import '../../data/models/project.dart';
 import 'project_detail_screen.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/local_format.dart';
 
 /// A business's project management timeline (manufacturing/construction):
 /// dated, dependent tasks with progress tracking. See
@@ -82,7 +83,7 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text(l10n.projectStartsOn),
-                    trailing: Text(startsOn != null ? _formatDate(startsOn!) : '—'),
+                    trailing: Text(startsOn != null ? _formatDate(context, startsOn!) : '—'),
                     onTap: () async {
                       final picked = await showDatePicker(
                         context: sheetContext,
@@ -96,7 +97,7 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text(l10n.projectDueOn),
-                    trailing: Text(dueOn != null ? _formatDate(dueOn!) : '—'),
+                    trailing: Text(dueOn != null ? _formatDate(context, dueOn!) : '—'),
                     onTap: () async {
                       final picked = await showDatePicker(
                         context: sheetContext,
@@ -236,7 +237,7 @@ class _ProjectTile extends StatelessWidget {
   }
 }
 
-String _formatDate(DateTime d) => '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+String _formatDate(BuildContext context, DateTime d) => LocalFormat.date(context).format(d);
 
 String _projectStatusLabel(String status, AppLocalizations l10n) => switch (status) {
   'planning' => l10n.projectStatusPlanning,

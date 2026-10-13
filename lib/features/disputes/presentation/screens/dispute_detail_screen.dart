@@ -8,6 +8,7 @@ import '../../data/models/dispute.dart';
 import 'disputes_screen.dart' show disputeStatusLabel;
 import 'dispute_room_screen.dart';
 import 'dispute_settlement_payments_screen.dart';
+import '../../../../core/time/local_format.dart';
 
 class DisputeDetailScreen extends ConsumerStatefulWidget {
   final int disputeId;
@@ -260,14 +261,11 @@ class _CooperationRow extends StatelessWidget {
       child: Row(
         children: [
           Expanded(child: Text(label)),
-          Text(at != null ? _formatDate(at!) : l10n.disputeCooperationPending),
+          Text(at != null ? _formatDate(context, at!) : l10n.disputeCooperationPending),
         ],
       ),
     );
   }
 }
 
-String _formatDate(DateTime dt) {
-  final d = dt.toLocal();
-  return '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
-}
+String _formatDate(BuildContext context, DateTime d) => LocalFormat.date(context).format(d.toLocal());

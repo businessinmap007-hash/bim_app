@@ -9,6 +9,7 @@ import '../../application/schedules_providers.dart';
 import '../../data/models/trip_schedule.dart';
 import 'my_reservations_screen.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/local_format.dart';
 
 /// Trip-leg search (BIM-x scheduling service): pick an origin and destination
 /// (governorates, or countries for an international trip), optionally a vehicle type, see published legs ranked by carrier trust, and
@@ -210,7 +211,7 @@ class _TripSearchScreenState extends ConsumerState<TripSearchScreen> {
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   title: Text(l10n.tripDateOptional),
-                  trailing: Text(_date != null ? _formatDate(_date!) : '—'),
+                  trailing: Text(_date != null ? _formatDate(context, _date!) : '—'),
                   onTap: () async {
                     final picked = await showDatePicker(
                       context: context,
@@ -256,7 +257,7 @@ class _TripSearchScreenState extends ConsumerState<TripSearchScreen> {
   }
 }
 
-String _formatDate(DateTime d) => '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+String _formatDate(BuildContext context, DateTime d) => LocalFormat.date(context).format(d);
 
 class _TripResultTile extends ConsumerWidget {
   final TripScheduleResult result;

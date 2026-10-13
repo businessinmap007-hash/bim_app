@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../data/models/hospital_procedure.dart';
+import '../../../../core/time/local_format.dart';
 
 String procedureKindLabel(AppLocalizations l10n, String kind) => switch (kind) {
   'surgery' => l10n.procKindSurgery,
@@ -48,7 +48,6 @@ class ProcedureRequestCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final locale = Localizations.localeOf(context).toString();
     final r = request;
     final who = forHospital ? (r.patientName ?? '') : (r.hospitalName ?? '');
 
@@ -71,9 +70,9 @@ class ProcedureRequestCard extends StatelessWidget {
             const SizedBox(height: 8),
             Text(procedurePriceText(l10n, r.price), style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700)),
             if (r.scheduledAt != null)
-              Text(l10n.procScheduledAt(DateFormat.yMMMEd(locale).add_jm().format(r.scheduledAt!.toLocal())), style: theme.textTheme.bodyMedium)
+              Text(l10n.procScheduledAt(LocalFormat.dayDate(context).addClock().format(r.scheduledAt!.toLocal())), style: theme.textTheme.bodyMedium)
             else if (r.preferredDate != null)
-              Text(l10n.procPreferredDate(DateFormat.yMMMEd(locale).format(r.preferredDate!)), style: theme.textTheme.bodySmall),
+              Text(l10n.procPreferredDate(LocalFormat.dayDate(context).format(r.preferredDate!)), style: theme.textTheme.bodySmall),
             if ((r.notes ?? '').isNotEmpty) Padding(padding: const EdgeInsets.only(top: 4), child: Text(r.notes!, style: theme.textTheme.bodySmall)),
             if ((r.hospitalNote ?? '').isNotEmpty)
               Padding(padding: const EdgeInsets.only(top: 4), child: Text(l10n.procHospitalNote(r.hospitalNote!), style: theme.textTheme.bodySmall)),

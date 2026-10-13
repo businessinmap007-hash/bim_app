@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
 import '../../application/shipping_providers.dart';
 import '../../data/shipping_api.dart';
+import '../../../../core/time/local_format.dart';
 
 /// A Shipping & Delivery company's fixed price - and the weekdays it runs - from
 /// its own governorate to every other one. A blank price means "we don't ship
@@ -73,7 +73,7 @@ class _ShippingRatesScreenState extends ConsumerState<ShippingRatesScreen> {
     final isEnglish = locale.languageCode == 'en';
     final async = ref.watch(shippingRatesProvider);
     // 2024-01-07 was a Sunday, so day 0 = Sunday ... 6 = Saturday.
-    String dayName(int d) => DateFormat.E(locale.toString()).format(DateTime(2024, 1, 7 + d));
+    String dayName(int d) => LocalFormat.weekday(context).format(DateTime(2024, 1, 7 + d));
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.shippingRatesTitle)),
