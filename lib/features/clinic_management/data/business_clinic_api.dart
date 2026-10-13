@@ -1,5 +1,6 @@
 import '../../../core/network/api_client.dart';
 import '../../../core/network/paginated.dart';
+import '../../clinic/data/models/clinic_appointment.dart' show VisitBilling;
 import 'models/business_clinic_appointment.dart';
 import 'models/business_clinic_slot.dart';
 
@@ -52,6 +53,27 @@ class BusinessClinicApi {
       data['appointment'] as Map<String, dynamic>,
     );
   }
+
+  // ─────────────────────── the money of a visit ───────────────────────
+
+  VisitBilling _billing(dynamic data) =>
+      VisitBilling.fromJsonOrNull((data as Map<String, dynamic>)['billing']) ?? const VisitBilling();
+
+  /// [kind]: `visit_fee` (paid on arrival) or `service` (paid after it is done, possibly in instalments).
+  Future<VisitBilling> recordPayment(int appointmentId, double amount, String kind, {String? note}) async => _billing(
+    await _client.post(
+      '/business/clinic-appointments/$appointmentId/payments',
+      data: {'amount': amount, 'kind': kind, if (note != null && note.isNotEmpty) 'note': note},
+    ),
+  );
+
+  Future<VisitBilling> removePayment(int appointmentId, int paymentId) async =>
+      _billing(await _client.delete('/business/clinic-appointments/$appointmentId/payments/$paymentId'));
+
+  /// What a named service is charged once done; null puts it back to the listed price.
+  Future<VisitBilling> setFinalPrice(int appointmentId, int itemId, double? price) async => _billing(
+    await _client.put('/business/clinic-appointments/$appointmentId/items/$itemId', data: {'final_price': price}),
+  );
 
   Future<BusinessClinicAppointment> _act(String path) async {
     final data =

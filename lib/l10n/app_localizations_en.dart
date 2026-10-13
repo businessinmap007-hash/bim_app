@@ -3367,6 +3367,49 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clinicBookAppointment => 'Book an appointment';
 
   @override
+  String get billVisitFee => 'Visit fee';
+
+  @override
+  String get billServices => 'Services';
+
+  @override
+  String get billServicesAfterVisit =>
+      'The services\' cost shows once the visit is done, and may be raised or lowered.';
+
+  @override
+  String get billTotal => 'Total';
+
+  @override
+  String get billPaid => 'Paid';
+
+  @override
+  String get billRemaining => 'Remaining';
+
+  @override
+  String get billRecordPayment => 'Record a payment';
+
+  @override
+  String get billAmount => 'Amount';
+
+  @override
+  String get billKindVisitFee => 'Visit fee';
+
+  @override
+  String get billKindService => 'Service';
+
+  @override
+  String get billNote => 'Note (optional)';
+
+  @override
+  String get billFinalPrice => 'Final price';
+
+  @override
+  String get billFinalPriceHint => 'Leave empty for the listed price';
+
+  @override
+  String get billSave => 'Save';
+
+  @override
   String get clinicPickService => 'Services needed (optional)';
 
   @override

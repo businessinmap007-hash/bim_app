@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/core_providers.dart';
+import '../../clinic/data/models/clinic_appointment.dart' show VisitBilling;
 import '../data/business_clinic_api.dart';
 import '../data/models/business_clinic_appointment.dart';
 import '../data/models/business_clinic_slot.dart';
@@ -100,6 +101,17 @@ class ClinicAppointmentsController extends StateNotifier<ClinicAppointmentsState
 
   Future<void> reschedule(int id, DateTime at, {int? durationMinutes}) async =>
       _replace(await _api.reschedule(id, at, durationMinutes: durationMinutes));
+
+  void _withBilling(int id, VisitBilling b) {
+    state = state.copyWith(items: [for (final a in state.items) a.id == id ? a.withBilling(b) : a]);
+  }
+
+  Future<void> recordPayment(int id, double amount, String kind, String note) async =>
+      _withBilling(id, await _api.recordPayment(id, amount, kind, note: note));
+
+  Future<void> removePayment(int id, int paymentId) async => _withBilling(id, await _api.removePayment(id, paymentId));
+
+  Future<void> setFinalPrice(int id, int itemId, double? price) async => _withBilling(id, await _api.setFinalPrice(id, itemId, price));
 }
 
 final clinicAppointmentsControllerProvider =

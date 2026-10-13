@@ -132,7 +132,8 @@ class _AppointmentTile extends StatelessWidget {
         subtitle: Text(
           '${_statusLabel(appointment.status, l10n)}'
           '${appointment.scheduledAt != null ? ' · ${_formatDateTime(appointment.scheduledAt!)}' : ''}'
-          '${appointment.servicesLine.isNotEmpty ? '\n${appointment.servicesLine}' : ''}',
+          '${appointment.servicesLine.isNotEmpty ? '\n${appointment.servicesLine}' : ''}'
+          '${_billingLine(appointment, l10n).isNotEmpty ? '\n${_billingLine(appointment, l10n)}' : ''}',
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
@@ -175,3 +176,18 @@ String _statusLabel(String status, AppLocalizations l10n) => switch (status) {
   'no_show' => l10n.clinicStatusNoShow,
   _ => status,
 };
+
+String _money(double v, AppLocalizations l10n) => '${v == v.roundToDouble() ? v.toStringAsFixed(0) : v.toStringAsFixed(2)} ${l10n.invCurrency}';
+
+/// «رسم الزيارة ٣٠٠ · المدفوع ٣٠٠ · المتبقي ٠» — the services' cost joins the total once the visit is done.
+String _billingLine(ClinicAppointment a, AppLocalizations l10n) {
+  final b = a.billing;
+  if (b == null || (a.status != 'confirmed' && a.status != 'completed')) return '';
+
+  return [
+    if (b.visitFee != null) '${l10n.billVisitFee} ${_money(b.visitFee!, l10n)}',
+    if (!b.servicesPending && b.services.isNotEmpty) '${l10n.billServices} ${_money(b.servicesTotal, l10n)}',
+    '${l10n.billPaid} ${_money(b.paid, l10n)}',
+    '${l10n.billRemaining} ${_money(b.remaining, l10n)}',
+  ].join(' · ');
+}

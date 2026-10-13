@@ -14,6 +14,7 @@ import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../prescriptions/presentation/screens/issue_prescription_screen.dart';
 import '../../../prescriptions/presentation/screens/prescription_detail_screen.dart';
 import '../../application/business_clinic_providers.dart';
+import '../widgets/visit_billing_card.dart';
 import '../../data/models/business_clinic_appointment.dart';
 import 'clinic_slots_screen.dart';
 import '../../../../core/time/egypt_time.dart';
@@ -374,6 +375,7 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
                 ],
               ),
             ],
+            if (a.billing != null && (a.status == 'confirmed' || a.status == 'completed')) VisitBillingCard(appointment: a),
             if (a.reason != null && a.reason!.isNotEmpty) ...[
               const SizedBox(height: 6),
               Text(a.reason!, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),

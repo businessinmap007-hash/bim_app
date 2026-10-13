@@ -6139,6 +6139,90 @@ abstract class AppLocalizations {
   /// **'حجز موعد'**
   String get clinicBookAppointment;
 
+  /// No description provided for @billVisitFee.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسم الزيارة'**
+  String get billVisitFee;
+
+  /// No description provided for @billServices.
+  ///
+  /// In ar, this message translates to:
+  /// **'تكلفة الخدمات'**
+  String get billServices;
+
+  /// No description provided for @billServicesAfterVisit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تظهر تكلفة الخدمات بعد الانتهاء من الزيارة، ويمكن زيادتها أو إنقاصها.'**
+  String get billServicesAfterVisit;
+
+  /// No description provided for @billTotal.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجمالي'**
+  String get billTotal;
+
+  /// No description provided for @billPaid.
+  ///
+  /// In ar, this message translates to:
+  /// **'المدفوع'**
+  String get billPaid;
+
+  /// No description provided for @billRemaining.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتبقي'**
+  String get billRemaining;
+
+  /// No description provided for @billRecordPayment.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل دفعة'**
+  String get billRecordPayment;
+
+  /// No description provided for @billAmount.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ'**
+  String get billAmount;
+
+  /// No description provided for @billKindVisitFee.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسم الزيارة'**
+  String get billKindVisitFee;
+
+  /// No description provided for @billKindService.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدمة'**
+  String get billKindService;
+
+  /// No description provided for @billNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظة (اختياري)'**
+  String get billNote;
+
+  /// No description provided for @billFinalPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر النهائي'**
+  String get billFinalPrice;
+
+  /// No description provided for @billFinalPriceHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتركه فارغاً للسعر المُعلَن'**
+  String get billFinalPriceHint;
+
+  /// No description provided for @billSave.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ'**
+  String get billSave;
+
   /// No description provided for @clinicPickService.
   ///
   /// In ar, this message translates to:

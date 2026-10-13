@@ -3363,6 +3363,49 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clinicBookAppointment => 'حجز موعد';
 
   @override
+  String get billVisitFee => 'رسم الزيارة';
+
+  @override
+  String get billServices => 'تكلفة الخدمات';
+
+  @override
+  String get billServicesAfterVisit =>
+      'تظهر تكلفة الخدمات بعد الانتهاء من الزيارة، ويمكن زيادتها أو إنقاصها.';
+
+  @override
+  String get billTotal => 'الإجمالي';
+
+  @override
+  String get billPaid => 'المدفوع';
+
+  @override
+  String get billRemaining => 'المتبقي';
+
+  @override
+  String get billRecordPayment => 'تسجيل دفعة';
+
+  @override
+  String get billAmount => 'المبلغ';
+
+  @override
+  String get billKindVisitFee => 'رسم الزيارة';
+
+  @override
+  String get billKindService => 'خدمة';
+
+  @override
+  String get billNote => 'ملاحظة (اختياري)';
+
+  @override
+  String get billFinalPrice => 'السعر النهائي';
+
+  @override
+  String get billFinalPriceHint => 'اتركه فارغاً للسعر المُعلَن';
+
+  @override
+  String get billSave => 'حفظ';
+
+  @override
   String get clinicPickService => 'الخدمات المطلوبة (اختياري)';
 
   @override
