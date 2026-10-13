@@ -18,6 +18,7 @@ import '../widgets/visit_billing_card.dart';
 import '../../data/models/business_clinic_appointment.dart';
 import 'clinic_slots_screen.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/clock_format.dart';
 
 /// Api\V2\BusinessClinicAppointmentController — the clinic's own side. Two
 /// tabs: the appointments queue (confirm/reject/complete/no-show/reschedule)
@@ -354,7 +355,7 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
                 children: [
                   Icon(Icons.schedule_rounded, size: 16, color: theme.hintColor),
                   const SizedBox(width: 6),
-                  Text(_formatDateTime(a.scheduledAt!), style: theme.textTheme.bodyMedium),
+                  Text(_formatDateTime(context, a.scheduledAt!), style: theme.textTheme.bodyMedium),
                 ],
               ),
             ],
@@ -593,7 +594,4 @@ Color _statusColor(String status) => switch (status) {
   _ => AppColors.warning,
 };
 
-String _formatDateTime(DateTime dt) {
-  return '${dt.year}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')} '
-      '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
-}
+String _formatDateTime(BuildContext context, DateTime dt) => ClockFormat.dateTime(context, dt);

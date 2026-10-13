@@ -13,6 +13,7 @@ import '../../../albums/application/albums_controller.dart';
 import '../../../albums/data/models/album.dart';
 import '../../application/business_page_providers.dart';
 import '../../data/models/business_profile.dart';
+import '../../../../core/time/clock_format.dart';
 
 /// "Who is this business" — phone, governorate/city, social links, and its
 /// photo album, gathered on one screen instead of scattered (or, until
@@ -265,7 +266,7 @@ class _HoursCard extends StatelessWidget {
                   } else if (day.isClosed == true) {
                     value = l10n.bookingSettingsClosed;
                   } else {
-                    value = '${day.open ?? '--:--'} – ${day.close ?? '--:--'}';
+                    value = '${ClockFormat.hhmm(context, day.open)} – ${ClockFormat.hhmm(context, day.close)}';
                   }
                   final weight = isToday ? FontWeight.w800 : FontWeight.w500;
 

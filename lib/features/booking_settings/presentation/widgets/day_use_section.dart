@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../data/models/room_models.dart';
+import '../../../../core/time/clock_format.dart';
 
 /// «خدمة Day use للحجز في الفنادق» — this room type also sold through the day, no night: a time window and a flat
 /// price. The guest picks only a date; one room of the type is held for that window.
@@ -18,12 +19,12 @@ class DayUseFields extends StatelessWidget {
 
   Future<void> _pick(BuildContext context, {required bool isFrom}) async {
     final parts = (isFrom ? value.from : value.to).split(':');
-    final picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay(hour: int.tryParse(parts[0]) ?? 9, minute: int.tryParse(parts.length > 1 ? parts[1] : '0') ?? 0),
+    final picked = await ClockFormat.pick(
+      context,
+      initial: TimeOfDay(hour: int.tryParse(parts[0]) ?? 9, minute: int.tryParse(parts.length > 1 ? parts[1] : '0') ?? 0),
     );
     if (picked == null) return;
-    final text = '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+    final text = ClockFormat.wire(picked);
     onChanged(isFrom ? _with(from: text) : _with(to: text));
   }
 
@@ -47,9 +48,9 @@ class DayUseFields extends StatelessWidget {
         if (value.enabled) ...[
           Row(
             children: [
-              Expanded(child: OutlinedButton(onPressed: () => _pick(context, isFrom: true), child: Text('${l10n.dayUseFrom} ${value.from}'))),
+              Expanded(child: OutlinedButton(onPressed: () => _pick(context, isFrom: true), child: Text('${l10n.dayUseFrom} ${ClockFormat.hhmm(context, value.from)}'))),
               const SizedBox(width: 8),
-              Expanded(child: OutlinedButton(onPressed: () => _pick(context, isFrom: false), child: Text('${l10n.dayUseTo} ${value.to}'))),
+              Expanded(child: OutlinedButton(onPressed: () => _pick(context, isFrom: false), child: Text('${l10n.dayUseTo} ${ClockFormat.hhmm(context, value.to)}'))),
             ],
           ),
           const SizedBox(height: 12),

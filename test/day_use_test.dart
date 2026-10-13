@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/intl.dart';
 
 import 'package:bim_app/features/booking/data/models/booking.dart';
 import 'package:bim_app/features/business/data/models/business_profile.dart';
@@ -117,7 +118,7 @@ void main() {
     await tester.pumpWidget(_app(Scaffold(body: DayUseTag(booking: booking))));
 
     expect(find.textContaining('Day use'), findsOneWidget);
-    expect(find.textContaining('09:00'), findsOneWidget);
+    expect(find.textContaining(DateFormat.jm('ar').format(DateTime(2000, 1, 1, 9))), findsOneWidget);
   });
 
   testWidgets('the room type has ONE save bar: Day use is saved with the rest, and the bar then says it is saved', (tester) async {

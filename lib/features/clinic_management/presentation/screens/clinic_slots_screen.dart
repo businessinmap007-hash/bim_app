@@ -6,6 +6,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../application/business_clinic_providers.dart';
 import '../../data/models/business_clinic_slot.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/clock_format.dart';
 
 class ClinicSlotsScreen extends ConsumerStatefulWidget {
   const ClinicSlotsScreen({super.key});
@@ -105,7 +106,7 @@ class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
                     margin: EdgeInsets.zero,
                     child: ListTile(
                       leading: const Icon(Icons.schedule_outlined),
-                      title: Text(slot.startsAt != null ? _formatDateTime(slot.startsAt!) : ''),
+                      title: Text(slot.startsAt != null ? _formatDateTime(context, slot.startsAt!) : ''),
                       subtitle: Text('${slot.durationMinutes}m${slot.visitKind != null ? ' · ${slot.visitKind}' : ''}'),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete_outline),
@@ -180,7 +181,7 @@ class _SpecificDatesTabState extends ConsumerState<_SpecificDatesTab> {
     final now = EgyptTime.now();
     final date = await showDatePicker(context: context, initialDate: now, firstDate: now, lastDate: now.add(const Duration(days: 365)));
     if (date == null || !mounted) return;
-    final time = await showTimePicker(context: context, initialTime: EgyptTime.timeOfDay());
+    final time = await ClockFormat.pick(context, initial: EgyptTime.timeOfDay());
     if (time == null || !mounted) return;
     setState(() => _queued.add(DateTime(date.year, date.month, date.day, time.hour, time.minute)));
   }
@@ -229,7 +230,7 @@ class _SpecificDatesTabState extends ConsumerState<_SpecificDatesTab> {
               separatorBuilder: (context, index) => const Divider(height: 1),
               itemBuilder: (context, index) => ListTile(
                 contentPadding: EdgeInsets.zero,
-                title: Text(_formatDateTime(_queued[index])),
+                title: Text(_formatDateTime(context, _queued[index])),
                 trailing: IconButton(
                   icon: const Icon(Icons.close),
                   onPressed: () => setState(() => _queued.removeAt(index)),
@@ -277,7 +278,7 @@ class _RecurringGridTabState extends ConsumerState<_RecurringGridTab> {
     super.dispose();
   }
 
-  String _fmt(TimeOfDay t) => '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}';
+  String _fmt(TimeOfDay t) => ClockFormat.wire(t);
 
   Future<void> _generate() async {
     final l10n = AppLocalizations.of(context)!;
@@ -360,7 +361,7 @@ class _RecurringGridTabState extends ConsumerState<_RecurringGridTab> {
                   title: Text(l10n.clinicStartTimeHint),
                   subtitle: Text(_startTime.format(context)),
                   onTap: () async {
-                    final picked = await showTimePicker(context: context, initialTime: _startTime);
+                    final picked = await ClockFormat.pick(context, initial: _startTime);
                     if (picked != null) setState(() => _startTime = picked);
                   },
                 ),
@@ -371,7 +372,7 @@ class _RecurringGridTabState extends ConsumerState<_RecurringGridTab> {
                   title: Text(l10n.clinicEndTimeHint),
                   subtitle: Text(_endTime.format(context)),
                   onTap: () async {
-                    final picked = await showTimePicker(context: context, initialTime: _endTime);
+                    final picked = await ClockFormat.pick(context, initial: _endTime);
                     if (picked != null) setState(() => _endTime = picked);
                   },
                 ),
@@ -409,7 +410,4 @@ class _RecurringGridTabState extends ConsumerState<_RecurringGridTab> {
   }
 }
 
-String _formatDateTime(DateTime dt) {
-  return '${dt.year}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')} '
-      '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
-}
+String _formatDateTime(BuildContext context, DateTime dt) => ClockFormat.dateTime(context, dt);

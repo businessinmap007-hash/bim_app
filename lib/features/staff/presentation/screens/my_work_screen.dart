@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/network/api_exception.dart';
@@ -17,6 +16,7 @@ import '../../application/my_work_providers.dart';
 import '../../application/staff_providers.dart';
 import '../../data/models/staff_membership.dart';
 import 'staff_invitations_screen.dart';
+import '../../../../core/time/clock_format.dart';
 
 /// Runs the plain check-in/out for a membership that never turned on GPS+QR
 /// verification, or — when it did — first gets the phone's own location and
@@ -201,7 +201,6 @@ class _MembershipCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final timeFormat = DateFormat('HH:mm');
 
     final String statusLabel;
     final Color statusColor;
@@ -259,7 +258,7 @@ class _MembershipCard extends StatelessWidget {
                 ),
                 if (status.checkedInAt != null) ...[
                   const Text(' · '),
-                  Text(timeFormat.format(status.checkedInAt!), style: Theme.of(context).textTheme.bodySmall),
+                  Text(ClockFormat.time(context, status.checkedInAt!), style: Theme.of(context).textTheme.bodySmall),
                 ],
               ],
             ),

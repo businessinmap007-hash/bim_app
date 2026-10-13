@@ -15,6 +15,7 @@ import '../../../../core/time/egypt_time.dart';
 import '../../application/medical_file_providers.dart';
 import '../../application/prescription_archive_providers.dart';
 import '../../data/medical_share_crypto.dart';
+import '../../../../core/time/clock_format.dart';
 
 /// «روشتاتي المحفوظة على الهاتف» — المالك، 2026-10-05: «الروشتات تحفظ على الفون وعند مشاركتها تقرأ وتعرض
 /// للصيدلي». Every prescription a doctor wrote for this patient, kept here as the server sent it; each can be
@@ -311,7 +312,7 @@ class _PrescriptionShowScreenState
                 const SizedBox(height: 12),
                 Text(
                   l10n.medicalShareExpires(
-                    DateFormat.Hm().format(share.expiresAt),
+                    ClockFormat.time(context, share.expiresAt),
                   ),
                   textAlign: TextAlign.center,
                   style: theme.textTheme.titleSmall,

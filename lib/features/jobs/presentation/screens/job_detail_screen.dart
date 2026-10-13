@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/jobs_providers.dart';
+import '../../../../core/time/clock_format.dart';
 
 class JobDetailScreen extends ConsumerStatefulWidget {
   final int jobId;
@@ -79,7 +80,7 @@ class _JobDetailScreenState extends ConsumerState<JobDetailScreen> {
             if (job.salary != null && job.salary!.isNotEmpty)
               Text('${l10n.jobSalaryLabel}: ${job.salary}'),
             if (job.interviewStartsAt != null)
-              Text('${l10n.jobInterviewLabel}: ${_formatDate(job.interviewStartsAt!)}'),
+              Text('${l10n.jobInterviewLabel}: ${_formatDate(context, job.interviewStartsAt!)}'),
             Text('${job.applicantsCount} ${l10n.jobApplicantsLabel}'),
             if (job.body != null && job.body!.isNotEmpty) ...[
               const SizedBox(height: 16),
@@ -105,7 +106,4 @@ class _JobDetailScreenState extends ConsumerState<JobDetailScreen> {
   }
 }
 
-String _formatDate(DateTime dt) {
-  return '${dt.year}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')} '
-      '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
-}
+String _formatDate(BuildContext context, DateTime dt) => ClockFormat.dateTime(context, dt);

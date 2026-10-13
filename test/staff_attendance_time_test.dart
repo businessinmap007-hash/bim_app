@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/intl.dart';
 
 import 'package:bim_app/features/staff/application/staff_providers.dart';
 import 'package:bim_app/features/staff/data/models/staff_group.dart';
@@ -15,8 +16,7 @@ import 'package:bim_app/l10n/app_localizations.dart';
 // this raw UTC one, to the manager reading it.
 const _checkedInIso = '2026-01-01T09:00:00.000000Z';
 
-String _hhmm(DateTime dt) =>
-    '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+String _hhmm(DateTime dt) => DateFormat.jm('en').format(dt);
 
 class _FakeStaffApi implements StaffApi {
   @override
@@ -94,8 +94,6 @@ void main() {
   testWidgets('the manager sees the check-in time, in local wall-clock time', (
     tester,
   ) async {
-    final expectedLocal = _hhmm(DateTime.parse(_checkedInIso).toLocal());
-
     await tester.pumpWidget(
       ProviderScope(
         overrides: [staffApiProvider.overrideWithValue(_FakeStaffApi())],
@@ -114,6 +112,8 @@ void main() {
     );
     await tester.pumpAndSettle();
 
+    // computed after the app's own locale data is loaded, so the clock is spelled exactly as on screen
+    final expectedLocal = _hhmm(DateTime.parse(_checkedInIso).toLocal());
     expect(find.text('Present since $expectedLocal'), findsOneWidget);
   });
 }

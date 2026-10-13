@@ -6,6 +6,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../application/clinic_providers.dart';
 import '../../data/models/clinic_appointment.dart';
 import '../../../prescriptions/presentation/screens/prescription_detail_screen.dart';
+import '../../../../core/time/clock_format.dart';
 
 class MyClinicAppointmentsScreen extends ConsumerStatefulWidget {
   const MyClinicAppointmentsScreen({super.key});
@@ -131,7 +132,7 @@ class _AppointmentTile extends StatelessWidget {
         title: Text(appointment.clinicName ?? ''),
         subtitle: Text(
           '${_statusLabel(appointment.status, l10n)}'
-          '${appointment.scheduledAt != null ? ' · ${_formatDateTime(appointment.scheduledAt!)}' : ''}'
+          '${appointment.scheduledAt != null ? ' · ${_formatDateTime(context, appointment.scheduledAt!)}' : ''}'
           '${appointment.servicesLine.isNotEmpty ? '\n${appointment.servicesLine}' : ''}'
           '${_billingLine(appointment, l10n).isNotEmpty ? '\n${_billingLine(appointment, l10n)}' : ''}',
         ),
@@ -165,10 +166,7 @@ class _AppointmentTile extends StatelessWidget {
   }
 }
 
-String _formatDateTime(DateTime dt) {
-  return '${dt.year}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')} '
-      '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
-}
+String _formatDateTime(BuildContext context, DateTime dt) => ClockFormat.dateTime(context, dt);
 
 String _statusLabel(String status, AppLocalizations l10n) => switch (status) {
   'requested' => l10n.clinicStatusRequested,

@@ -8,6 +8,7 @@ import '../../application/agenda_providers.dart';
 import '../../data/models/agenda_item.dart';
 import 'agenda_settings_screen.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/clock_format.dart';
 
 DateTime _dateOnly(DateTime d) => DateTime(d.year, d.month, d.day);
 
@@ -83,12 +84,9 @@ class _AgendaScreenState extends ConsumerState<AgendaScreen> {
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text(l10n.agendaStartTime),
-                    trailing: Text(startTime.format(sheetContext)),
+                    trailing: Text(ClockFormat.of(sheetContext, startTime)),
                     onTap: () async {
-                      final picked = await showTimePicker(
-                        context: sheetContext,
-                        initialTime: startTime,
-                      );
+                      final picked = await ClockFormat.pick(sheetContext, initial: startTime);
                       if (picked != null) {
                         setSheetState(() => startTime = picked);
                       }
@@ -97,12 +95,9 @@ class _AgendaScreenState extends ConsumerState<AgendaScreen> {
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text(l10n.agendaEndTime),
-                    trailing: Text(endTime?.format(sheetContext) ?? '—'),
+                    trailing: Text(endTime == null ? '—' : ClockFormat.of(sheetContext, endTime!)),
                     onTap: () async {
-                      final picked = await showTimePicker(
-                        context: sheetContext,
-                        initialTime: endTime ?? startTime,
-                      );
+                      final picked = await ClockFormat.pick(sheetContext, initial: endTime ?? startTime);
                       if (picked != null) setSheetState(() => endTime = picked);
                     },
                   ),
@@ -514,7 +509,7 @@ class _WeekGrid extends ConsumerWidget {
                               padding: const EdgeInsets.only(top: 2),
                               child: Text(
                                 item.startsAt != null
-                                    ? '${_formatTimeRange(item.startsAt!, item.endsAt)}  ${item.title}'
+                                    ? '${_formatTimeRange(context, item.startsAt!, item.endsAt)}  ${item.title}'
                                     : item.title,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -558,7 +553,7 @@ class _AgendaTile extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (item.startsAt != null)
-              Text(_formatTimeRange(item.startsAt!, item.endsAt)),
+              Text(_formatTimeRange(context, item.startsAt!, item.endsAt)),
             if (item.notes != null && item.notes!.isNotEmpty) Text(item.notes!),
           ],
         ),
@@ -599,11 +594,4 @@ class _AgendaTile extends ConsumerWidget {
 String _formatDate(DateTime d) =>
     '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
 
-String _formatTimeRange(DateTime start, DateTime? end) {
-  final startStr =
-      '${start.hour.toString().padLeft(2, '0')}:${start.minute.toString().padLeft(2, '0')}';
-  if (end == null) return startStr;
-  final endStr =
-      '${end.hour.toString().padLeft(2, '0')}:${end.minute.toString().padLeft(2, '0')}';
-  return '$startStr – $endStr';
-}
+String _formatTimeRange(BuildContext context, DateTime start, DateTime? end) => ClockFormat.range(context, start, end);

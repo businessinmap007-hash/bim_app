@@ -7,6 +7,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../application/staff_activity_providers.dart';
 import '../../data/models/staff_activity.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/clock_format.dart';
 
 /// The owner's end-of-shift review: every order/booking action a staff
 /// member took, plus how many operations each of them ran in the selected
@@ -303,7 +304,6 @@ class _ActivityTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final timeFormat = DateFormat('yyyy-MM-dd HH:mm');
 
     return Card(
       margin: EdgeInsets.zero,
@@ -335,7 +335,7 @@ class _ActivityTile extends StatelessWidget {
           children: [
             Text('${_subjectLabel(l10n)} #${entry.subjectId}', style: Theme.of(context).textTheme.bodySmall),
             if (entry.createdAt != null)
-              Text(timeFormat.format(entry.createdAt!), style: Theme.of(context).textTheme.bodySmall),
+              Text(ClockFormat.dateTime(context, entry.createdAt!), style: Theme.of(context).textTheme.bodySmall),
           ],
         ),
       ),

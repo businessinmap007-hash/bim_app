@@ -36,6 +36,7 @@ import '../widgets/order_driver_card.dart';
 import '../widgets/installment_schedule.dart';
 import '../widgets/order_tracker_timeline.dart';
 import '../widgets/order_trust_section.dart';
+import '../../../../core/time/clock_format.dart';
 
 /// "My orders & bookings" — every placed order (menu/retail checkout) and
 /// every booking request the customer has made, each with its own tab.
@@ -1172,7 +1173,7 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
             ],
             const SizedBox(height: 12),
             if (booking.startsAt != null)
-              Text(_formatRange(booking.startsAt!, booking.endsAt))
+              Text(_formatRange(context, booking.startsAt!, booking.endsAt))
             else if (booking.date != null)
               Text('${booking.date!}'.split(' ').first + (booking.time != null ? ' ${booking.time}' : '')),
             if (booking.notes != null && booking.notes!.isNotEmpty) ...[
@@ -1374,11 +1375,11 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
   }
 }
 
-String _formatRange(DateTime start, DateTime? end) {
-  final startStr = '${start.year}-${start.month.toString().padLeft(2, '0')}-${start.day.toString().padLeft(2, '0')} ${start.hour.toString().padLeft(2, '0')}:${start.minute.toString().padLeft(2, '0')}';
+String _formatRange(BuildContext context, DateTime start, DateTime? end) {
+  final startStr = ClockFormat.dateTime(context, start);
   if (end == null) return startStr;
-  final endStr = '${end.hour.toString().padLeft(2, '0')}:${end.minute.toString().padLeft(2, '0')}';
-  return '$startStr → $endStr';
+
+  return '$startStr → ${ClockFormat.time(context, end)}';
 }
 
 // ─────────────────────────── Shared ───────────────────────────

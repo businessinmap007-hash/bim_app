@@ -6,6 +6,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/screen_frame.dart';
 import '../../application/wallet_providers.dart';
 import '../../data/models/wallet_transaction.dart';
+import '../../../../core/time/clock_format.dart';
 
 /// Balance + ledger, read-only — see WalletApi's doc comment for why
 /// deposit/withdraw/transfer/PIN aren't wired up here.
@@ -230,7 +231,7 @@ class _TransactionTile extends StatelessWidget {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
-      subtitle: tx.createdAt != null ? Text(_formatDate(tx.createdAt!)) : null,
+      subtitle: tx.createdAt != null ? Text(_formatDate(context, tx.createdAt!)) : null,
       trailing: Text(
         '$sign${tx.amount.toStringAsFixed(2)}',
         style: TextStyle(color: color, fontWeight: FontWeight.w700),
@@ -239,7 +240,4 @@ class _TransactionTile extends StatelessWidget {
   }
 }
 
-String _formatDate(DateTime dt) {
-  final d = dt.toLocal();
-  return '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')} ${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}';
-}
+String _formatDate(BuildContext context, DateTime dt) => ClockFormat.dateTime(context, dt.toLocal());

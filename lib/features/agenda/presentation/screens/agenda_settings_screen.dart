@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/agenda_providers.dart';
 import '../../data/models/agenda_settings.dart';
+import '../../../../core/time/clock_format.dart';
 
 /// Api\V2\MealTimeController + Api\V2\ReminderPreferenceController — two
 /// small preference forms that configure how Agenda schedules and reminds,
@@ -292,7 +293,7 @@ class _MealTimesFormState extends ConsumerState<_MealTimesForm> {
     TimeOfDay current,
     ValueChanged<TimeOfDay> onPicked,
   ) async {
-    final picked = await showTimePicker(context: context, initialTime: current);
+    final picked = await ClockFormat.pick(context, initial: current);
     if (picked != null) onPicked(picked);
   }
 
@@ -331,20 +332,20 @@ class _MealTimesFormState extends ConsumerState<_MealTimesForm> {
         ListTile(
           contentPadding: EdgeInsets.zero,
           title: Text(l10n.agendaSettingsBreakfast),
-          trailing: Text(_breakfast.format(context)),
+          trailing: Text(ClockFormat.of(context, _breakfast)),
           onTap: () =>
               _pickTime(_breakfast, (v) => setState(() => _breakfast = v)),
         ),
         ListTile(
           contentPadding: EdgeInsets.zero,
           title: Text(l10n.agendaSettingsLunch),
-          trailing: Text(_lunch.format(context)),
+          trailing: Text(ClockFormat.of(context, _lunch)),
           onTap: () => _pickTime(_lunch, (v) => setState(() => _lunch = v)),
         ),
         ListTile(
           contentPadding: EdgeInsets.zero,
           title: Text(l10n.agendaSettingsDinner),
-          trailing: Text(_dinner.format(context)),
+          trailing: Text(ClockFormat.of(context, _dinner)),
           onTap: () => _pickTime(_dinner, (v) => setState(() => _dinner = v)),
         ),
         const SizedBox(height: 8),

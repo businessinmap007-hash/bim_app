@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/intl.dart';
 
 import 'package:bim_app/features/agenda/application/agenda_providers.dart';
 import 'package:bim_app/features/agenda/data/agenda_api.dart';
@@ -84,7 +85,11 @@ void main() {
     // Seven day cards: one with the task, six saying there is nothing.
     expect(find.text('Sat · 2026-09-19'), findsOneWidget);
     expect(find.text('Fri · 2026-09-25'), findsOneWidget);
-    expect(find.text('18:30 – 19:30  Gym session'), findsOneWidget);
+    final at = DateFormat.jm('en');
+    expect(
+      find.text('${at.format(DateTime(2000, 1, 1, 18, 30))} – ${at.format(DateTime(2000, 1, 1, 19, 30))}  Gym session'),
+      findsOneWidget,
+    );
     expect(find.text('Nothing'), findsNWidgets(6));
   });
 

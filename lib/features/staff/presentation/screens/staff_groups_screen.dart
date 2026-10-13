@@ -6,6 +6,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../orders/presentation/screens/business_orders_screen.dart';
 import '../../application/staff_groups_providers.dart';
 import '../../data/models/staff_group.dart';
+import '../../../../core/time/clock_format.dart';
 
 /// "فرق العمل" — the roster grouped by what each person does here (المنيو،
 /// مناديب التوصيل، ...), each card showing today's operations, whether they
@@ -98,7 +99,7 @@ class _GroupSectionState extends State<_GroupSection> {
   }
 }
 
-String _hhmm(DateTime dt) => '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+String _hhmm(BuildContext context, DateTime dt) => ClockFormat.time(context, dt);
 
 class _MemberCard extends StatelessWidget {
   final StaffGroupMember member;
@@ -112,11 +113,11 @@ class _MemberCard extends StatelessWidget {
     final Color attendanceColor;
     if (member.isPresent) {
       attendanceLabel = member.checkedInAt != null
-          ? l10n.staffAttendancePresentSince(_hhmm(member.checkedInAt!))
+          ? l10n.staffAttendancePresentSince(_hhmm(context, member.checkedInAt!))
           : l10n.staffAttendancePresent;
       attendanceColor = AppColors.success;
     } else if (member.checkedOutAt != null) {
-      attendanceLabel = l10n.staffAttendanceCheckedOutAt(_hhmm(member.checkedOutAt!));
+      attendanceLabel = l10n.staffAttendanceCheckedOutAt(_hhmm(context, member.checkedOutAt!));
       attendanceColor = Theme.of(context).hintColor;
     } else {
       attendanceLabel = l10n.staffAttendanceNotCheckedIn;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/intl.dart';
 
 import 'package:bim_app/features/albums/application/albums_controller.dart';
 import 'package:bim_app/features/albums/data/models/album.dart';
@@ -67,8 +68,9 @@ void main() {
     expect(find.text('ساعات العمل'), findsOneWidget);
     expect(find.text('مفتوح الآن'), findsOneWidget);
     // a written day shows its window, in reading order
-    expect(find.text('12:00 – 20:00'), findsOneWidget);
-    expect(find.text('09:00 – 23:00'), findsOneWidget);
+    String at(int h) => DateFormat.jm('ar').format(DateTime(2000, 1, 1, h));
+    expect(find.text('${at(12)} – ${at(20)}'), findsOneWidget);
+    expect(find.text('${at(9)} – ${at(23)}'), findsOneWidget);
     // a closed day says so; a day never written is a dash, not «مغلق»
     expect(find.text('مغلق'), findsOneWidget);
     expect(find.text('—'), findsOneWidget);

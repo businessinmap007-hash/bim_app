@@ -8,6 +8,7 @@ import '../../application/booking_settings_controller.dart';
 import '../../data/models/booking_settings_models.dart';
 import 'bookable_item_edit_screen.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/clock_format.dart';
 
 /// A business's self-service booking configuration — prices (what a room
 /// type costs), bookable units (which specific rooms exist) and weekly
@@ -608,19 +609,19 @@ class _HoursTabState extends ConsumerState<_HoursTab> {
 
   Future<void> _pickTime(int index, {required bool isOpen}) async {
     final current = _days![index];
-    final initial = EgyptTime.timeOfDay();
-    final picked = await showTimePicker(context: context, initialTime: initial);
+    final initial = ClockFormat.parse(isOpen ? current.open : current.close) ?? EgyptTime.timeOfDay();
+    final picked = await ClockFormat.pick(context, initial: initial);
     if (picked == null) return;
-    final formatted = '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+    final formatted = ClockFormat.wire(picked);
     setState(() {
       _days![index] = isOpen ? current.copyWith(open: formatted) : current.copyWith(close: formatted);
     });
   }
 
   Future<void> _pickBulkTime({required bool isOpen}) async {
-    final picked = await showTimePicker(context: context, initialTime: EgyptTime.timeOfDay());
+    final picked = await ClockFormat.pick(context, initial: ClockFormat.parse(isOpen ? _bulkOpen : _bulkClose) ?? EgyptTime.timeOfDay());
     if (picked == null) return;
-    final formatted = '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+    final formatted = ClockFormat.wire(picked);
     setState(() {
       if (isOpen) {
         _bulkOpen = formatted;
@@ -661,9 +662,9 @@ class _HoursTabState extends ConsumerState<_HoursTab> {
   }
 
   Future<void> _pickCheckTime({required bool isCheckIn}) async {
-    final picked = await showTimePicker(context: context, initialTime: EgyptTime.timeOfDay());
+    final picked = await ClockFormat.pick(context, initial: ClockFormat.parse(isCheckIn ? _checkIn : _checkOut) ?? EgyptTime.timeOfDay());
     if (picked == null) return;
-    final formatted = '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+    final formatted = ClockFormat.wire(picked);
     setState(() {
       if (isCheckIn) {
         _checkIn = formatted;
@@ -742,14 +743,14 @@ class _HoursTabState extends ConsumerState<_HoursTab> {
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () => _pickBulkTime(isOpen: true),
-                      child: Text(_bulkOpen ?? l10n.bookingSettingsOpenTime),
+                      child: Text(_bulkOpen == null ? l10n.bookingSettingsOpenTime : ClockFormat.hhmm(context, _bulkOpen)),
                     ),
                   ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () => _pickBulkTime(isOpen: false),
-                      child: Text(_bulkClose ?? l10n.bookingSettingsCloseTime),
+                      child: Text(_bulkClose == null ? l10n.bookingSettingsCloseTime : ClockFormat.hhmm(context, _bulkClose)),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -791,12 +792,12 @@ class _HoursTabState extends ConsumerState<_HoursTab> {
                       else ...[
                         TextButton(
                           onPressed: () => _pickTime(i, isOpen: true),
-                          child: Text(_days![i].open ?? l10n.bookingSettingsOpenTime),
+                          child: Text(_days![i].open == null ? l10n.bookingSettingsOpenTime : ClockFormat.hhmm(context, _days![i].open)),
                         ),
                         Text(' — ', style: TextStyle(color: Theme.of(context).hintColor)),
                         TextButton(
                           onPressed: () => _pickTime(i, isOpen: false),
-                          child: Text(_days![i].close ?? l10n.bookingSettingsCloseTime),
+                          child: Text(_days![i].close == null ? l10n.bookingSettingsCloseTime : ClockFormat.hhmm(context, _days![i].close)),
                         ),
                       ],
                       Switch(

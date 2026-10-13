@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../data/models/business_post.dart';
 import 'post_image_carousel.dart';
+import '../../../../core/time/clock_format.dart';
 
 /// One post, laid out like an actual Instagram post rather than a generic
 /// Material card: compact header, the caption, the photo edge-to-edge with
@@ -129,7 +130,7 @@ class PostCard extends StatelessWidget {
                                 ),
                                 if (post.createdAt != null)
                                   Text(
-                                    _formatDateTime(post.createdAt!),
+                                    _formatDateTime(context, post.createdAt!),
                                     style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
                                   ),
                               ],
@@ -269,11 +270,7 @@ class PostCard extends StatelessWidget {
 /// `created_at` is a real server instant (stamped by `now()`, not a
 /// user-typed wall clock like a booking's `starts_at`), so — unlike the
 /// dates covered in the timezone-display fix — `.toLocal()` is correct here.
-String _formatDateTime(DateTime dt) {
-  final local = dt.toLocal();
-  return '${local.year}-${local.month.toString().padLeft(2, '0')}-${local.day.toString().padLeft(2, '0')} '
-      '${local.hour.toString().padLeft(2, '0')}:${local.minute.toString().padLeft(2, '0')}';
-}
+String _formatDateTime(BuildContext context, DateTime dt) => ClockFormat.dateTime(context, dt.toLocal());
 
 /// The caption text, capped at 2 lines with a "...more" toggle — checked via
 /// [TextPainter] against the actual laid-out width rather than guessing a
