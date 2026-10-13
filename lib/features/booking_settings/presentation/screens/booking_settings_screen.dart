@@ -841,7 +841,7 @@ class _HoursTabState extends ConsumerState<_HoursTab> {
                         const SizedBox(height: 4),
                         TextButton(
                           onPressed: () => _pickCheckTime(isCheckIn: true),
-                          child: Text(_checkIn ?? l10n.bookingSettingsOpenTime),
+                          child: Text(_checkIn == null ? l10n.bookingSettingsOpenTime : ClockFormat.hhmm(context, _checkIn)),
                         ),
                       ],
                     ),
@@ -854,7 +854,7 @@ class _HoursTabState extends ConsumerState<_HoursTab> {
                         const SizedBox(height: 4),
                         TextButton(
                           onPressed: () => _pickCheckTime(isCheckIn: false),
-                          child: Text(_checkOut ?? l10n.bookingSettingsCloseTime),
+                          child: Text(_checkOut == null ? l10n.bookingSettingsCloseTime : ClockFormat.hhmm(context, _checkOut)),
                         ),
                       ],
                     ),

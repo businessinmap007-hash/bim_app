@@ -11,6 +11,7 @@ import '../../../orders/presentation/widgets/installment_schedule.dart';
 import '../../application/cart_controller.dart';
 import '../../data/models/cart_models.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/clock_format.dart';
 
 /// Fulfillment type + address/notes + payment method, then places the
 /// order (POST /cart/{business}/checkout). Payment is cash-only for now —
@@ -80,9 +81,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     );
     if (date == null || !mounted) return;
 
-    final time = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(initialDate),
+    final time = await ClockFormat.pick(
+      context,
+      initial: TimeOfDay.fromDateTime(initialDate),
     );
     if (time == null || !mounted) return;
 

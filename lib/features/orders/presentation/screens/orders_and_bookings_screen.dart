@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart';
 import '../../../../shared/widgets/arrival_notice_banner.dart';
 import '../../../../shared/widgets/app_bar_tab_bar.dart';
 import '../../../cart/presentation/widgets/weight_picker.dart';
@@ -1188,7 +1187,7 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
                   l10n.queueTurnNumber(booking.queue!.turn),
                   booking.queue!.ahead == 0 ? l10n.queueNoneAhead : l10n.queueAhead(booking.queue!.ahead),
                   if (booking.queue!.expectedAt != null)
-                    l10n.queueExpectedAt(DateFormat.jm(Localizations.localeOf(context).toString()).format(booking.queue!.expectedAt!)),
+                    l10n.queueExpectedAt(ClockFormat.time(context, booking.queue!.expectedAt!)),
                 ].join(' · '),
                 style: Theme.of(context).textTheme.titleSmall,
               ),

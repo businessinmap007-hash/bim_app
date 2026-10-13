@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 /// «صباحًا / مساءً» — every clock a person reads or sets in the app is a 12-hour clock with its AM/PM mark
-/// («٩:٠٠ ص»), never «21:00». The wire format stays "HH:mm" (the server stores and compares 24-hour strings); this is
+/// («9:00 ص»), never «21:00». The wire format stays "HH:mm" (the server stores and compares 24-hour strings); this is
 /// only what the screen says and what the time picker offers.
 class ClockFormat {
   ClockFormat._();
 
-  static String _localeOf(BuildContext context) =>
-      Localizations.localeOf(context).toString();
-
-  /// "HH:mm" or "HH:mm:ss" (what the API sends) → «٩:٠٠ م». Null / unparsable → [fallback].
+  /// "HH:mm" or "HH:mm:ss" (what the API sends) → «9:00 م». Null / unparsable → [fallback].
   static String hhmm(
     BuildContext context,
     String? value, {
@@ -35,7 +31,7 @@ class ClockFormat {
     return TimeOfDay(hour: h, minute: m);
   }
 
-  /// A [TimeOfDay] as «٩:٠٠ م» — unlike `TimeOfDay.format`, never the phone's own 24-hour setting.
+  /// A [TimeOfDay] as «9:00 م» — unlike `TimeOfDay.format`, never the phone's own 24-hour setting.
   static String of(BuildContext context, TimeOfDay t) =>
       time(context, DateTime(2000, 1, 1, t.hour, t.minute));
 
@@ -43,11 +39,18 @@ class ClockFormat {
   static String wire(TimeOfDay t) =>
       '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}';
 
-  /// A moment's clock: «٩:٠٠ م».
-  static String time(BuildContext context, DateTime at) =>
-      DateFormat.jm(_localeOf(context)).format(at);
+  /// A moment's clock: «9:00 م» / «9:00 PM». Latin digits like every other number in the app (prices, counts), so the
+  /// clock never reorders itself inside right-to-left text; only the AM/PM mark follows the language.
+  static String time(BuildContext context, DateTime at) {
+    final h = at.hour % 12 == 0 ? 12 : at.hour % 12;
+    final m = at.minute.toString().padLeft(2, '0');
+    final arabic = Localizations.localeOf(context).languageCode == 'ar';
+    final mark = at.hour < 12 ? (arabic ? 'ص' : 'AM') : (arabic ? 'م' : 'PM');
 
-  /// «2026-10-14 ٩:٠٠ م» — the compact date + clock the lists use.
+    return '$h:$m $mark';
+  }
+
+  /// «2026-10-14 9:00 م» — the compact date + clock the lists use.
   static String dateTime(BuildContext context, DateTime at) {
     final d =
         '${at.year}-${at.month.toString().padLeft(2, '0')}-${at.day.toString().padLeft(2, '0')}';
@@ -55,7 +58,7 @@ class ClockFormat {
     return '$d ${time(context, at)}';
   }
 
-  /// «٩:٠٠ ص – ١٠:٣٠ ص»; a missing end leaves just the start.
+  /// «9:00 ص – 10:30 ص»; a missing end leaves just the start.
   static String range(BuildContext context, DateTime start, DateTime? end) =>
       end == null
       ? time(context, start)

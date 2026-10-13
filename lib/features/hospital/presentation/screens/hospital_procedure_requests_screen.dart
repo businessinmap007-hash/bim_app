@@ -9,6 +9,7 @@ import '../../application/hospital_providers.dart';
 import '../../data/models/hospital_procedure.dart';
 import '../widgets/procedure_widgets.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/clock_format.dart';
 
 /// The hospital's side of a procedure request: new ones (accept with a date, decline), the ones scheduled (mark done),
 /// and the finished.
@@ -69,7 +70,7 @@ class _TabState extends ConsumerState<_Tab> {
       initialDate: r.preferredDate != null && r.preferredDate!.isAfter(now) ? r.preferredDate! : now.add(const Duration(days: 2)),
     );
     if (date == null || !mounted) return;
-    final time = await showTimePicker(context: context, initialTime: const TimeOfDay(hour: 9, minute: 0));
+    final time = await ClockFormat.pick(context, initial: const TimeOfDay(hour: 9, minute: 0));
     if (time == null || !mounted) return;
 
     double? quote;

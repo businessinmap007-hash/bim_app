@@ -12,6 +12,7 @@ import '../../../specialty_services/presentation/widgets/specialty_widgets.dart'
 import '../../application/clinic_providers.dart';
 import '../../data/models/clinic_appointment.dart' show VisitKindOption;
 import '../../data/models/clinic_slot.dart';
+import '../../../../core/time/clock_format.dart';
 
 /// A clinic's (or hospital's) open appointment slots, drawn like the «حجز عيادة» canvas board: day chips, a grid of
 /// times for the chosen day, a reason box, and a bottom bar that sums up the visit (kind, date and time, price) with
@@ -278,7 +279,7 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
               children: [
                 for (final s in times)
                   _TimeChip(
-                    label: DateFormat.jm(locale).format(s.startsAt!),
+                    label: ClockFormat.time(context, s.startsAt!),
                     selected: s.id == _slotId,
                     onTap: () => setState(() => _slotId = s.id),
                   ),

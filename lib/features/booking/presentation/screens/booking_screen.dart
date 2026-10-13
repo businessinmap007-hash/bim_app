@@ -15,6 +15,7 @@ import '../../application/booking_providers.dart';
 import '../../data/models/unit_discovery.dart';
 import '../../data/models/booking_form.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/clock_format.dart';
 
 /// Booking a specific priced offering («غرفة مزدوجة», «كشف عظام») at a
 /// business. The form itself is entirely shape-driven — see
@@ -276,7 +277,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
       initialDate: initial.isBefore(now) ? now : initial,
     );
     if (date == null || !mounted) return;
-    final time = await showTimePicker(context: context, initialTime: TimeOfDay.fromDateTime(initial));
+    final time = await ClockFormat.pick(context, initial: TimeOfDay.fromDateTime(initial));
     if (time == null) return;
     final combined = DateTime(date.year, date.month, date.day, time.hour, time.minute);
     setState(() {
@@ -344,7 +345,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
         );
         if (mounted) {
           final when = booked.queue?.expectedAt ?? booked.startsAt;
-          final time = when == null ? '' : DateFormat.jm(Localizations.localeOf(context).toString()).format(when);
+          final time = when == null ? '' : ClockFormat.time(context, when);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.queueTurnTaken(booked.queueTurn ?? 0, time))));
           Navigator.of(context).pop(true);
         }
@@ -711,7 +712,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
               onTap: () => _pickDate(isEnd: false),
             ),
             Text(
-              '${l10n.bookingDayUseWindow(offer.from, offer.to)} · ${offer.price.toStringAsFixed(0)}',
+              '${l10n.bookingDayUseWindow(ClockFormat.hhmm(context, offer.from), ClockFormat.hhmm(context, offer.to))} · ${offer.price.toStringAsFixed(0)}',
               style: theme.textTheme.bodyMedium,
             ),
           ],

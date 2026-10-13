@@ -8,6 +8,7 @@ import '../../data/models/unit_discovery.dart';
 import 'booking_grid_widgets.dart';
 import 'booking_shape_tab.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/clock_format.dart';
 
 /// «طاولة»: a day and a party size, then the time (the taken ones greyed), then the tables that are free at that time
 /// and seat the party — one bar, «احجز طاولة».
@@ -172,7 +173,7 @@ class _TableBookingTabState extends ConsumerState<TableBookingTab> {
           Text(l10n.bookingTableHint, style: theme.textTheme.bodyMedium?.copyWith(color: theme.hintColor))
         else ...[
           Text(
-            l10n.bookingTablesAt(DateFormat.jm(locale).format(_slot!)),
+            l10n.bookingTablesAt(ClockFormat.time(context, _slot!)),
             style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 8),

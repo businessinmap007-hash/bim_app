@@ -127,9 +127,9 @@ class BusinessInfoBody extends ConsumerWidget {
       // booking business that set one) — the business's own booking
       // settings screen is where it's written; here it's read-only.
       if (profile.checkInTime != null)
-        _InfoRow(icon: Icons.login_outlined, label: l10n.businessInfoCheckIn, value: profile.checkInTime!),
+        _InfoRow(icon: Icons.login_outlined, label: l10n.businessInfoCheckIn, value: ClockFormat.hhmm(context, profile.checkInTime)),
       if (profile.checkOutTime != null)
-        _InfoRow(icon: Icons.logout_outlined, label: l10n.businessInfoCheckOut, value: profile.checkOutTime!),
+        _InfoRow(icon: Icons.logout_outlined, label: l10n.businessInfoCheckOut, value: ClockFormat.hhmm(context, profile.checkOutTime)),
     ];
 
     final children = <Widget>[

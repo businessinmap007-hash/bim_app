@@ -8,6 +8,7 @@ import '../../../../shared/widgets/async_value_view.dart';
 import '../../../orders/data/models/placed_order.dart';
 import '../../application/shipping_providers.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/clock_format.dart';
 
 /// The shipping company's orders: it only has to set (or change) the
 /// appointment and move the order to shipped / delivered.
@@ -47,7 +48,7 @@ class _ShippingOrdersScreenState extends ConsumerState<ShippingOrdersScreen> {
       lastDate: now.add(const Duration(days: 120)),
     );
     if (date == null || !mounted) return;
-    final time = await showTimePicker(context: context, initialTime: const TimeOfDay(hour: 10, minute: 0));
+    final time = await ClockFormat.pick(context, initial: const TimeOfDay(hour: 10, minute: 0));
     if (time == null || !mounted) return;
 
     final at = DateTime(date.year, date.month, date.day, time.hour, time.minute);

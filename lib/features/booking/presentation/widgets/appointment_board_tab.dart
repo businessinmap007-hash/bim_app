@@ -14,6 +14,7 @@ import '../screens/booking_screen.dart';
 import 'booking_grid_widgets.dart';
 import 'booking_shape_tab.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/clock_format.dart';
 
 /// «موعد»: an appointment with the business itself (a salon, a craftsman) — the service and how long it takes, a
 /// day, a start time (the held ones greyed), then «تأكيد الموعد». No units, no photos, no add-ons.
@@ -168,7 +169,6 @@ extension on _AppointmentBoardTabState {
   /// «بالدور»: the service, the day, then the turn this customer would get and when it should come.
   Widget _queueBoard(BuildContext context, AppLocalizations l10n, List<OfferingItem> services, OfferingItem chosen) {
     final theme = Theme.of(context);
-    final locale = Localizations.localeOf(context).toString();
     final chairs = ref.watch(chairsDiscoveryProvider(widget.businessId)).valueOrNull ?? const <ServiceChair>[];
     final chair = chairs.where((c) => c.id == _chairId).firstOrNull;
     final preview = ref.watch(appointmentQueueProvider((businessId: widget.businessId, date: _dateKey(_day), offeringId: chosen.id, chairId: _chairId)));
@@ -244,7 +244,7 @@ extension on _AppointmentBoardTabState {
                         Text(l10n.queueTurnNumber(q.turn), style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
                         if (q.expectedAt != null)
                           Text(
-                            l10n.queueExpectedAt(DateFormat.jm(locale).format(q.expectedAt!)),
+                            l10n.queueExpectedAt(ClockFormat.time(context, q.expectedAt!)),
                             style: theme.textTheme.bodyLarge,
                           ),
                         Text(

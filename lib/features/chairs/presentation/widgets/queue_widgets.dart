@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -8,6 +7,7 @@ import '../../../business/application/business_page_providers.dart';
 import '../../../business/data/models/offering_item.dart';
 import '../../application/chairs_providers.dart';
 import '../../data/models/service_chair.dart';
+import '../../../../core/time/clock_format.dart';
 
 /// Runs one action of the queue (call / start / finish): the screen owns the busy flag, the refresh and the error.
 typedef QueueAct = Future<void> Function(Future<void> Function() action, {String? done});
@@ -132,7 +132,6 @@ class TurnCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
-    final locale = Localizations.localeOf(context).toString();
 
     return Card(
       margin: const EdgeInsets.only(bottom: 10),
@@ -169,7 +168,7 @@ class TurnCard extends StatelessWidget {
                       Text(
                         [
                           if (item.title.isNotEmpty) item.title,
-                          if (item.startsAt != null) DateFormat.jm(locale).format(item.startsAt!),
+                          if (item.startsAt != null) ClockFormat.time(context, item.startsAt!),
                           if (item.walkIn) l10n.queueWalkInTag,
                         ].join(' · '),
                         style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../application/booking_providers.dart';
@@ -8,6 +7,7 @@ import '../../data/models/unit_discovery.dart';
 import 'booking_grid_widgets.dart';
 import 'booking_shape_tab.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/clock_format.dart';
 
 /// «ملاعب وقاعات — بالساعة»: a day, then a start time (the taken ones greyed), then the pitch or hall — each unit that
 /// is free at that time — and one bar with what was chosen and its price.
@@ -68,7 +68,6 @@ class _HourlyVenueTabState extends ConsumerState<HourlyVenueTab> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final locale = Localizations.localeOf(context).toString();
     final kinds = _kinds;
 
     final params = (
@@ -95,7 +94,7 @@ class _HourlyVenueTabState extends ConsumerState<HourlyVenueTab> {
 
     final summary = chosen == null || _slot == null
         ? l10n.bookingHourlyHint
-        : '${chosen.unit.displayTitle} — ${DateFormat.jm(locale).format(_slot!)} – ${DateFormat.jm(locale).format(_slot!.add(Duration(minutes: _minutes)))}';
+        : '${chosen.unit.displayTitle} — ${ClockFormat.time(context, _slot!)} – ${ClockFormat.time(context, _slot!.add(Duration(minutes: _minutes)))}';
 
     return BoardScaffold(
       bottom: BookingSummaryBar(

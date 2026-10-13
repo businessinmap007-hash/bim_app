@@ -14,6 +14,7 @@ import '../widgets/investigation_widgets.dart';
 import 'center_results_screen.dart';
 import 'investigation_orders_screen.dart' show InvestigationOrderCard;
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/clock_format.dart';
 
 /// A lab's, a radiology centre's (or a hospital's) side: the orders patients sent it — accept one with a time, decline
 /// it, upload the results — and its own price list of the tests it does.
@@ -88,7 +89,7 @@ class _CenterTabState extends ConsumerState<_CenterTab> {
       initialDate: now.add(const Duration(days: 1)),
     );
     if (date == null || !mounted) return;
-    final time = await showTimePicker(context: context, initialTime: const TimeOfDay(hour: 9, minute: 0));
+    final time = await ClockFormat.pick(context, initial: const TimeOfDay(hour: 9, minute: 0));
     if (time == null || !mounted) return;
     final at = DateTime(date.year, date.month, date.day, time.hour, time.minute);
 

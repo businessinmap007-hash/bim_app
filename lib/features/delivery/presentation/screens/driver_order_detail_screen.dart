@@ -14,6 +14,7 @@ import '../../application/delivery_providers.dart';
 import '../widgets/fee_amount_dialog.dart';
 import 'token_qr_screen.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/clock_format.dart';
 // TEMPORARY: unused while the camera scan below is bypassed for emulator
 // testing — restore this import alongside the revert in _scanPickup().
 // import 'token_scan_screen.dart';
@@ -393,7 +394,7 @@ class _EtaDialogState extends State<_EtaDialog> {
   }
 
   Future<void> _pickTime() async {
-    final picked = await showTimePicker(context: context, initialTime: EgyptTime.timeOfDay());
+    final picked = await ClockFormat.pick(context, initial: EgyptTime.timeOfDay());
     if (picked != null) setState(() => _pickedTime = picked);
   }
 

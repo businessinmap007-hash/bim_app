@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:intl/intl.dart';
 
 import 'package:bim_app/features/staff/application/staff_providers.dart';
 import 'package:bim_app/features/staff/data/models/staff_group.dart';
@@ -16,7 +15,8 @@ import 'package:bim_app/l10n/app_localizations.dart';
 // this raw UTC one, to the manager reading it.
 const _checkedInIso = '2026-01-01T09:00:00.000000Z';
 
-String _hhmm(DateTime dt) => DateFormat.jm('en').format(dt);
+String _hhmm(DateTime dt) =>
+    '${dt.hour % 12 == 0 ? 12 : dt.hour % 12}:${dt.minute.toString().padLeft(2, '0')} ${dt.hour < 12 ? 'AM' : 'PM'}';
 
 class _FakeStaffApi implements StaffApi {
   @override

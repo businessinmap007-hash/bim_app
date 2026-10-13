@@ -174,9 +174,9 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
       lastDate: now.add(const Duration(days: 365)),
     );
     if (date == null || !mounted) return;
-    final time = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(widget.appointment.scheduledAt ?? now),
+    final time = await ClockFormat.pick(
+      context,
+      initial: TimeOfDay.fromDateTime(widget.appointment.scheduledAt ?? now),
     );
     if (time == null || !mounted) return;
 

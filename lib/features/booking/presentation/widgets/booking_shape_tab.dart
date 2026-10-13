@@ -12,6 +12,7 @@ import 'course_board_tab.dart';
 import 'furnished_units_tab.dart';
 import 'hourly_venue_tab.dart';
 import 'table_booking_tab.dart';
+import '../../../../core/time/clock_format.dart';
 
 /// The «الحجز» tab of a business page drawn by its booking shape («أشكال الحجز»): a room kind is a section with its
 /// rooms under it — photo, what it carries, its price — like the menu's sections, then one tap into the booking.
@@ -381,7 +382,7 @@ class _DayUseCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      l10n.bookingDayUseCardHint(offer.from, offer.to),
+                      l10n.bookingDayUseCardHint(ClockFormat.hhmm(context, offer.from), ClockFormat.hhmm(context, offer.to)),
                       style: theme.textTheme.bodySmall?.copyWith(color: scheme.onPrimaryContainer),
                     ),
                   ],
