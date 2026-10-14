@@ -8916,4 +8916,22 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get bookingSettingsCheckTab => 'الدخول والخروج';
+
+  @override
+  String businessHoursClosesAt(String time) {
+    return 'يُغلق الساعة $time';
+  }
+
+  @override
+  String businessHoursClosesIn(String left) {
+    return 'باقي $left على الإغلاق';
+  }
+
+  @override
+  String businessHoursOpensAt(String time) {
+    return 'يفتح الساعة $time';
+  }
+
+  @override
+  String get businessHoursClosedToday => 'مغلق اليوم';
 }

@@ -16374,6 +16374,30 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الدخول والخروج'**
   String get bookingSettingsCheckTab;
+
+  /// No description provided for @businessHoursClosesAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُغلق الساعة {time}'**
+  String businessHoursClosesAt(String time);
+
+  /// No description provided for @businessHoursClosesIn.
+  ///
+  /// In ar, this message translates to:
+  /// **'باقي {left} على الإغلاق'**
+  String businessHoursClosesIn(String left);
+
+  /// No description provided for @businessHoursOpensAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'يفتح الساعة {time}'**
+  String businessHoursOpensAt(String time);
+
+  /// No description provided for @businessHoursClosedToday.
+  ///
+  /// In ar, this message translates to:
+  /// **'مغلق اليوم'**
+  String get businessHoursClosedToday;
 }
 
 class _AppLocalizationsDelegate

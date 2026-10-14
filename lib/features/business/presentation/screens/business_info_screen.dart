@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -199,97 +200,93 @@ class BusinessInfoBody extends ConsumerWidget {
   }
 }
 
-/// The week the business wrote, Saturday first (the Egyptian week), today marked, closed days said plainly.
-class _HoursCard extends StatelessWidget {
+/// «ساعات العمل» — not the week, only what a customer needs now: open (and until when), how long is left when the
+/// closing is within two hours, when it opens, or that it is closed today. Ticks every 30 seconds so «باقي 1:59»
+/// counts down on screen.
+class _HoursCard extends StatefulWidget {
   final WorkingHours hours;
   final bool openNow;
   const _HoursCard({required this.hours, required this.openNow});
 
-  // Dart weekdays: Monday = 1 … Sunday = 7; the server's: Sunday = 0 … Saturday = 6.
-  static int _serverDay(DateTime d) => d.weekday % 7;
+  @override
+  State<_HoursCard> createState() => _HoursCardState();
+}
+
+class _HoursCardState extends State<_HoursCard> {
+  Timer? _tick;
+
+  @override
+  void initState() {
+    super.initState();
+    _tick = Timer.periodic(const Duration(seconds: 30), (_) {
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _tick?.cancel();
+    super.dispose();
+  }
+
+  static String _left(Duration d) {
+    final minutes = d.inMinutes < 0 ? 0 : d.inMinutes;
+
+    return '${minutes ~/ 60}:${(minutes % 60).toString().padLeft(2, '0')}';
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final today = _serverDay(EgyptTime.now());
-    final names = {
-      0: l10n.weekdaySunday,
-      1: l10n.weekdayMonday,
-      2: l10n.weekdayTuesday,
-      3: l10n.weekdayWednesday,
-      4: l10n.weekdayThursday,
-      5: l10n.weekdayFriday,
-      6: l10n.weekdaySaturday,
+    final status = widget.hours.statusAt(EgyptTime.now());
+
+    // the server's own open_now answers when the day says nothing
+    final isOpen = status.state == HoursState.unknown ? widget.openNow : status.isOpen;
+    final color = isOpen ? AppColors.success : theme.hintColor;
+
+    final String? line = switch (status.state) {
+      HoursState.allDay => l10n.workingHoursOpen24,
+      HoursState.open => l10n.businessHoursClosesAt(ClockFormat.time(context, status.at!)),
+      HoursState.closesIn => l10n.businessHoursClosesIn(_left(status.left!)),
+      HoursState.opensAt => l10n.businessHoursOpensAt(ClockFormat.time(context, status.at!)),
+      HoursState.closedToday => l10n.businessHoursClosedToday,
+      _ => null,
     };
-    // Saturday first, Friday last
-    const order = [6, 0, 1, 2, 3, 4, 5];
+    final urgent = status.state == HoursState.closesIn;
 
     return Card(
       margin: EdgeInsets.zero,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+        child: Row(
           children: [
-            Row(
-              children: [
-                Icon(Icons.schedule_outlined, color: theme.hintColor, size: 20),
-                const SizedBox(width: 8),
-                Expanded(child: Text(l10n.businessInfoHours, style: theme.textTheme.titleSmall)),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: (openNow ? AppColors.success : theme.hintColor).withValues(alpha: 0.14),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    openNow ? l10n.businessOpenNow : l10n.businessClosedNow,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: openNow ? AppColors.success : theme.hintColor,
+            Icon(Icons.schedule_outlined, color: theme.hintColor, size: 20),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(l10n.businessInfoHours, style: theme.textTheme.titleSmall),
+                  if (line != null)
+                    Text(
+                      line,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: urgent ? AppColors.error : theme.hintColor,
+                        fontWeight: urgent ? FontWeight.w700 : FontWeight.w500,
+                      ),
                     ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 6),
-            for (final d in order) ...[
-              Builder(
-                builder: (context) {
-                  final day = hours.forDay(d);
-                  final isToday = d == today;
-                  final String value;
-                  if (day == null || !day.isKnown) {
-                    value = '—';
-                  } else if (day.isClosed == true) {
-                    value = l10n.bookingSettingsClosed;
-                  } else if (day.is24h) {
-                    value = l10n.workingHoursOpen24;
-                  } else {
-                    value = '${ClockFormat.hhmm(context, day.open)} – ${ClockFormat.hhmm(context, day.close)}';
-                  }
-                  final weight = isToday ? FontWeight.w800 : FontWeight.w500;
-
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 6),
-                    child: Row(
-                      children: [
-                        Expanded(child: Text(names[d]!, style: theme.textTheme.bodyMedium?.copyWith(fontWeight: weight))),
-                        Text(
-                          value,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            fontWeight: weight,
-                            color: day?.isClosed == true ? theme.hintColor : null,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
+                ],
               ),
-            ],
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+              decoration: BoxDecoration(color: color.withValues(alpha: 0.14), borderRadius: BorderRadius.circular(20)),
+              child: Text(
+                isOpen ? l10n.businessOpenNow : l10n.businessClosedNow,
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: color),
+              ),
+            ),
           ],
         ),
       ),

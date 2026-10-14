@@ -8969,4 +8969,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bookingSettingsCheckTab => 'Check-in / out';
+
+  @override
+  String businessHoursClosesAt(String time) {
+    return 'Closes at $time';
+  }
+
+  @override
+  String businessHoursClosesIn(String left) {
+    return '$left left until closing';
+  }
+
+  @override
+  String businessHoursOpensAt(String time) {
+    return 'Opens at $time';
+  }
+
+  @override
+  String get businessHoursClosedToday => 'Closed today';
 }

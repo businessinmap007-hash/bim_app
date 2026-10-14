@@ -16,6 +16,8 @@ import '../../data/models/booking_form.dart';
 import '../../../../core/time/egypt_time.dart';
 import '../../../../core/time/clock_format.dart';
 import '../../../../core/time/local_format.dart';
+import '../../../course/data/models/course.dart';
+import '../widgets/booking_unit_icon.dart';
 
 /// Booking a specific priced offering («غرفة مزدوجة», «كشف عظام») at a
 /// business. The form itself is entirely shape-driven — see
@@ -44,6 +46,9 @@ class BookingScreen extends ConsumerStatefulWidget {
   /// «كورس»: the group chosen on the board — the dates and the group are its own, so the form does not ask them.
   final int? courseGroupId;
 
+  /// …and what that group is, so the form can say it: its name, level, when it meets and when it starts.
+  final CourseGroup? courseGroup;
+
   /// «بالدور»: the day named on the board — the business gives the turn and the time, so no time is asked.
   final DateTime? queueDate;
 
@@ -61,6 +66,7 @@ class BookingScreen extends ConsumerStatefulWidget {
     this.initialEndsAt,
     this.initialPartySize,
     this.courseGroupId,
+    this.courseGroup,
     this.queueDate,
     this.chair,
   });
@@ -445,6 +451,10 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ],
+              if (widget.courseGroup != null) ...[
+                const SizedBox(height: 12),
+                _courseGroupCard(context, l10n, widget.courseGroup!),
+              ],
               if (widget.chair != null) ...[
                 const SizedBox(height: 12),
                 Row(
@@ -486,6 +496,39 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     );
   }
 
+  /// «مجموعة الصباح · مبتدئ · السبت والاثنين 10:00 ص · يبدأ 21 أكتوبر 2026» — the group the person is enrolling in.
+  Widget _courseGroupCard(BuildContext context, AppLocalizations l10n, CourseGroup group) {
+    final theme = Theme.of(context);
+    final details = <String>[
+      if (group.level != null) '${l10n.courseGroupLevel}: ${group.level}',
+      if ((group.scheduleText ?? '').trim().isNotEmpty) group.scheduleText!.trim(),
+      if (group.startsOn != null) l10n.courseStartsOn(LocalFormat.date(context).format(group.startsOn!)),
+    ];
+
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            Icon(Icons.groups_outlined, color: theme.colorScheme.primary),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(group.name, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+                  for (final line in details)
+                    Text(line, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   /// The room the guest tapped on the business page, kept at the top of the form.
   Widget _selectedUnitCard(BuildContext context, DiscoveredUnit unit) {
     final theme = Theme.of(context);
@@ -504,7 +547,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                 child: unit.images.isEmpty
                     ? ColoredBox(
                         color: theme.colorScheme.surfaceContainerHighest,
-                        child: Icon(Icons.bed_outlined, color: theme.hintColor),
+                        child: Icon(bookingUnitIcon(shapeCode: widget.shape?.code, itemType: widget.offering.itemType), color: theme.hintColor),
                       )
                     : Image.network(
                         unit.images.first,
@@ -521,9 +564,9 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                   Text(unit.displayTitle, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
                   if (unit.features.isNotEmpty)
                     Text(unit.features.join(' · '), style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
-                  if (unit.price != null)
+                  if (unit.price != null || _dayUseActive)
                     Text(
-                      '${unit.price!.toStringAsFixed(0)} ${widget.offering.currency}',
+                      '${(_dayUseActive ? _dayUseOffer!.price : unit.price!).toStringAsFixed(0)} ${widget.offering.currency}',
                       style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
                     ),
                 ],
@@ -635,7 +678,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                     ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
                     : Text(
                         // before a total is known: the day's flat price when Day use is chosen, not the night's
-                        _previewTotal != null
+                        (_previewTotal != null && !(_dayUseActive && _startsAt == null))
                             ? money(_previewTotal!)
                             : '${(_dayUseActive ? _dayUseOffer!.price : widget.offering.price).toStringAsFixed(0)} $currency',
                         style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),

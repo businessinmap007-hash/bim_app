@@ -156,6 +156,78 @@ class WorkingHours {
     }
     return null;
   }
+
+  /// What a customer needs to know right now — not the week: open, how long until it closes (shown when it is
+  /// within [soon]), when it opens, or that it is closed. [now] is the business's wall clock (Cairo).
+  HoursStatus statusAt(DateTime now, {Duration soon = const Duration(hours: 2)}) {
+    DateTime? at(String? hhmm, DateTime day) {
+      final parts = (hhmm ?? '').split(':');
+      if (parts.length < 2) return null;
+      final h = int.tryParse(parts[0]);
+      final m = int.tryParse(parts[1]);
+      if (h == null || m == null) return null;
+
+      return DateTime(day.year, day.month, day.day, h, m);
+    }
+
+    final today = DateTime(now.year, now.month, now.day);
+    final sunday0 = now.weekday % 7; // Dart: Monday = 1 … Sunday = 7  →  the server's Sunday = 0
+    final day = forDay(sunday0);
+
+    // last night's window that runs past midnight into today
+    final yesterday = forDay((sunday0 + 6) % 7);
+    if (yesterday != null && yesterday.isClosed == false && !yesterday.is24h) {
+      final yOpen = at(yesterday.open, today);
+      final yClose = at(yesterday.close, today);
+      if (yOpen != null && yClose != null && !yClose.isAfter(yOpen) && now.isBefore(yClose)) {
+        final left = yClose.difference(now);
+
+        return left <= soon ? HoursStatus.closesIn(left) : HoursStatus.open(yClose);
+      }
+    }
+
+    if (day == null || !day.isKnown) return const HoursStatus.unknown();
+    if (day.isClosed == true) return const HoursStatus.closedToday();
+    if (day.is24h) return const HoursStatus.allDay();
+
+    final open = at(day.open, today);
+    var close = at(day.close, today);
+    if (open == null || close == null) return const HoursStatus.unknown();
+    if (!close.isAfter(open)) close = close.add(const Duration(days: 1)); // past midnight
+
+    if (now.isBefore(open)) return HoursStatus.opensAt(open);
+    if (now.isBefore(close)) {
+      final left = close.difference(now);
+
+      return left <= soon ? HoursStatus.closesIn(left) : HoursStatus.open(close);
+    }
+
+    return const HoursStatus.closedNow();
+  }
+}
+
+enum HoursState { unknown, allDay, open, closesIn, opensAt, closedToday, closedNow }
+
+/// The answer of [WorkingHours.statusAt].
+class HoursStatus {
+  final HoursState state;
+
+  /// the closing time for [HoursState.open], the opening time for [HoursState.opensAt]
+  final DateTime? at;
+
+  /// how long is left for [HoursState.closesIn]
+  final Duration? left;
+
+  const HoursStatus._(this.state, {this.at, this.left});
+  const HoursStatus.unknown() : this._(HoursState.unknown);
+  const HoursStatus.allDay() : this._(HoursState.allDay);
+  const HoursStatus.closedToday() : this._(HoursState.closedToday);
+  const HoursStatus.closedNow() : this._(HoursState.closedNow);
+  const HoursStatus.open(DateTime closesAt) : this._(HoursState.open, at: closesAt);
+  const HoursStatus.opensAt(DateTime opensAt) : this._(HoursState.opensAt, at: opensAt);
+  const HoursStatus.closesIn(Duration left) : this._(HoursState.closesIn, left: left);
+
+  bool get isOpen => state == HoursState.allDay || state == HoursState.open || state == HoursState.closesIn;
 }
 
 class SocialLinks {

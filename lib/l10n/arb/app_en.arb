@@ -2954,5 +2954,9 @@
   "workingHoursTitle": "Working hours",
   "workingHoursTileSubtitle": "Days of the week, opening and closing time, or open 24 hours",
   "workingHoursOpen24": "Open 24 hours",
-  "bookingSettingsCheckTab": "Check-in / out"
+  "bookingSettingsCheckTab": "Check-in / out",
+  "businessHoursClosesAt": "Closes at {time}",
+  "businessHoursClosesIn": "{left} left until closing",
+  "businessHoursOpensAt": "Opens at {time}",
+  "businessHoursClosedToday": "Closed today"
 }

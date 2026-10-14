@@ -2977,5 +2977,12 @@
   "workingHoursTitle": "ساعات العمل",
   "workingHoursTileSubtitle": "أيام الأسبوع، وقت الفتح والإغلاق، أو مفتوح 24 ساعة",
   "workingHoursOpen24": "مفتوح 24 ساعة",
-  "bookingSettingsCheckTab": "الدخول والخروج"
+  "bookingSettingsCheckTab": "الدخول والخروج",
+  "businessHoursClosesAt": "يُغلق الساعة {time}",
+  "@businessHoursClosesAt": {"placeholders": {"time": {"type": "String"}}},
+  "businessHoursClosesIn": "باقي {left} على الإغلاق",
+  "@businessHoursClosesIn": {"placeholders": {"left": {"type": "String"}}},
+  "businessHoursOpensAt": "يفتح الساعة {time}",
+  "@businessHoursOpensAt": {"placeholders": {"time": {"type": "String"}}},
+  "businessHoursClosedToday": "مغلق اليوم"
 }

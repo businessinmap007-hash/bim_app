@@ -82,6 +82,7 @@ class _CourseBoardTabState extends ConsumerState<CourseBoardTab> {
                           businessId: widget.businessId,
                           shape: widget.shape,
                           courseGroupId: group.id,
+                          courseGroup: group,
                           initialStartsAt: group.startsOn,
                           initialEndsAt: group.endsOn ?? group.startsOn,
                           offering: OfferingItem(

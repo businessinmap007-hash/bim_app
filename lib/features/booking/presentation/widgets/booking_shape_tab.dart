@@ -13,6 +13,7 @@ import 'furnished_units_tab.dart';
 import 'hourly_venue_tab.dart';
 import 'table_booking_tab.dart';
 import '../../../../core/time/clock_format.dart';
+import 'booking_unit_icon.dart';
 
 /// The «الحجز» tab of a business page drawn by its booking shape («أشكال الحجز»): a room kind is a section with its
 /// rooms under it — photo, what it carries, its price — like the menu's sections, then one tap into the booking.
@@ -280,14 +281,14 @@ class _UnitCard extends StatelessWidget {
                       child: unit.images.isEmpty
                           ? ColoredBox(
                               color: theme.colorScheme.surfaceContainerHighest,
-                              child: Icon(Icons.bed_outlined, color: theme.hintColor),
+                              child: Icon(bookingUnitIcon(shapeCode: shape.code), color: theme.hintColor),
                             )
                           : Image.network(
                               unit.images.first,
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) => ColoredBox(
                                 color: theme.colorScheme.surfaceContainerHighest,
-                                child: Icon(Icons.bed_outlined, color: theme.hintColor),
+                                child: Icon(bookingUnitIcon(shapeCode: shape.code), color: theme.hintColor),
                               ),
                             ),
                     ),
