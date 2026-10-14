@@ -274,7 +274,15 @@ class _BusinessDetailBody extends StatelessWidget {
               handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
               sliver: SliverPersistentHeader(
                 pinned: true,
-                delegate: SliverTabBarDelegate(TabBar(tabs: tabs)),
+                // four or more tabs («الحجز، الأقسام والأطباء، الإجراءات الطبية، عن النشاط») do not fit in equal quarters: the
+                // names were cut in half — so they take the room their own words need and the bar scrolls
+                delegate: SliverTabBarDelegate(
+                  TabBar(
+                    tabs: tabs,
+                    isScrollable: tabs.length > 3,
+                    tabAlignment: tabs.length > 3 ? TabAlignment.start : null,
+                  ),
+                ),
               ),
             ),
           ],
