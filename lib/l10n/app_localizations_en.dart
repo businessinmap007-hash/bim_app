@@ -9221,4 +9221,14 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get depositAsPaymentOffer =>
       'You may take the frozen deposit as a payment toward the booking instead of a payment outside the platform.';
+
+  @override
+  String get bookingsReschedule => 'Change the time';
+
+  @override
+  String get bookingsRescheduleTitle => 'Pick the new day';
+
+  @override
+  String get bookingsRescheduled =>
+      'Time changed. If the booking was accepted, the business answers the new time.';
 }

@@ -3083,5 +3083,8 @@
       "amount": {"type": "String"}
     }
   },
-  "depositAsPaymentOffer": "يمكنك قبول العربون المجمّد دفعةً من قيمة الحجز بدل الدفع خارج المنصة."
+  "depositAsPaymentOffer": "يمكنك قبول العربون المجمّد دفعةً من قيمة الحجز بدل الدفع خارج المنصة.",
+  "bookingsReschedule": "تغيير الموعد",
+  "bookingsRescheduleTitle": "اختر اليوم الجديد",
+  "bookingsRescheduled": "تم تغيير الموعد. إن كان الحجز مقبولًا فبانتظار رد النشاط على الموعد الجديد."
 }

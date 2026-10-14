@@ -31,6 +31,15 @@ class BookingApi {
     );
   }
 
+  /// «تغيير الموعد»: the customer moves his own pending / accepted booking to a new start (the same length). [startsAt] is
+  /// the platform's wall clock — sent as «yyyy-MM-dd HH:mm:ss», never as a UTC instant.
+  Future<Booking> reschedule(int id, DateTime startsAt) async {
+    String two(int v) => v.toString().padLeft(2, '0');
+    final stamp = '${startsAt.year.toString().padLeft(4, '0')}-${two(startsAt.month)}-${two(startsAt.day)} ${two(startsAt.hour)}:${two(startsAt.minute)}:00';
+    final data = await _client.post('/bookings/$id/reschedule', data: {'starts_at': stamp}) as Map<String, dynamic>;
+    return _booking(data);
+  }
+
   Future<Booking> cancel(int id) async {
     final data =
         await _client.post('/bookings/$id/cancel') as Map<String, dynamic>;

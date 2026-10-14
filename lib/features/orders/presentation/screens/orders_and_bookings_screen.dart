@@ -37,6 +37,7 @@ import '../widgets/installment_schedule.dart';
 import '../widgets/order_tracker_timeline.dart';
 import '../widgets/order_trust_section.dart';
 import '../../../../core/time/clock_format.dart';
+import '../../../../core/time/egypt_time.dart';
 
 /// "My orders & bookings" — every placed order (menu/retail checkout) and
 /// every booking request the customer has made, each with its own tab.
@@ -1003,6 +1004,40 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
     }
   }
 
+  /// «تغيير الموعد»: a new day and start — the booking keeps its length; an accepted one goes back to the business.
+  Future<void> _reschedule() async {
+    final l10n = AppLocalizations.of(context)!;
+    final current = _booking.startsAt ?? EgyptTime.now();
+    final now = EgyptTime.now();
+    final date = await showDatePicker(
+      context: context,
+      helpText: l10n.bookingsRescheduleTitle,
+      firstDate: DateTime(now.year, now.month, now.day),
+      lastDate: now.add(const Duration(days: 180)),
+      initialDate: current.isAfter(now) ? current : now.add(const Duration(days: 1)),
+    );
+    if (date == null || !mounted) return;
+    final time = await ClockFormat.pick(context, initial: TimeOfDay(hour: current.hour, minute: current.minute));
+    if (time == null || !mounted) return;
+
+    setState(() => _busy = true);
+    try {
+      await ref.read(myBookingsControllerProvider.notifier).reschedule(
+        _booking.id,
+        DateTime(date.year, date.month, date.day, time.hour, time.minute),
+      );
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.bookingsRescheduled)));
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e is ApiException && e.message.isNotEmpty ? e.message : l10n.commonSomethingWentWrong)),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
   Future<void> _cancel() async {
     final l10n = AppLocalizations.of(context)!;
     final confirmed = await showDialog<bool>(
@@ -1259,6 +1294,16 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
               const SizedBox(height: 8),
             ],
             if (booking.status == 'accepted') const SizedBox(height: 8),
+            if (booking.isCancellable && booking.startsAt != null) ...[
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton.tonal(
+                  onPressed: _busy ? null : _reschedule,
+                  child: Text(l10n.bookingsReschedule),
+                ),
+              ),
+              const SizedBox(height: 8),
+            ],
             if (booking.isCancellable)
               SizedBox(
                 width: double.infinity,

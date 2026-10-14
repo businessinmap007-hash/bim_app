@@ -16812,6 +16812,24 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'يمكنك قبول العربون المجمّد دفعةً من قيمة الحجز بدل الدفع خارج المنصة.'**
   String get depositAsPaymentOffer;
+
+  /// No description provided for @bookingsReschedule.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغيير الموعد'**
+  String get bookingsReschedule;
+
+  /// No description provided for @bookingsRescheduleTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر اليوم الجديد'**
+  String get bookingsRescheduleTitle;
+
+  /// No description provided for @bookingsRescheduled.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تغيير الموعد. إن كان الحجز مقبولًا فبانتظار رد النشاط على الموعد الجديد.'**
+  String get bookingsRescheduled;
 }
 
 class _AppLocalizationsDelegate

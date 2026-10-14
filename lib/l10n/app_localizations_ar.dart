@@ -9164,4 +9164,14 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get depositAsPaymentOffer =>
       'يمكنك قبول العربون المجمّد دفعةً من قيمة الحجز بدل الدفع خارج المنصة.';
+
+  @override
+  String get bookingsReschedule => 'تغيير الموعد';
+
+  @override
+  String get bookingsRescheduleTitle => 'اختر اليوم الجديد';
+
+  @override
+  String get bookingsRescheduled =>
+      'تم تغيير الموعد. إن كان الحجز مقبولًا فبانتظار رد النشاط على الموعد الجديد.';
 }

@@ -113,6 +113,13 @@ class MyBookingsController extends StateNotifier<MyBookingsState> {
     state = state.copyWith(items: [for (final b in state.items) b.id == id ? updated : b]);
   }
 
+  Future<Booking> reschedule(int id, DateTime startsAt) async {
+    final updated = await _api.reschedule(id, startsAt);
+    state = state.copyWith(items: [for (final b in state.items) b.id == id ? updated : b]);
+
+    return updated;
+  }
+
   Future<void> confirm(int id, {String? pin}) async {
     final updated = await _api.clientConfirm(id, pin: pin);
     state = state.copyWith(items: [for (final b in state.items) b.id == id ? updated : b]);
