@@ -81,7 +81,7 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
             forName: _forOther ? _forName.text.trim() : null,
             forPhone: _forOther ? _forPhone.text.trim() : null,
           );
-      ref.invalidate(clinicSlotsProvider(widget.clinicId));
+      ref.invalidate(clinicSlotsBoardProvider(widget.clinicId));
       if (!mounted) return;
       setState(() {
         _slotId = null;
@@ -118,7 +118,7 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final async = ref.watch(clinicSlotsProvider(widget.clinicId));
+    final async = ref.watch(clinicSlotsBoardProvider(widget.clinicId));
 
     return async.when(
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -129,14 +129,14 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
             Text(l10n.commonSomethingWentWrong),
             const SizedBox(height: 8),
             OutlinedButton(
-              onPressed: () => ref.invalidate(clinicSlotsProvider(widget.clinicId)),
+              onPressed: () => ref.invalidate(clinicSlotsBoardProvider(widget.clinicId)),
               child: Text(l10n.commonRetry),
             ),
           ],
         ),
       ),
-      data: (slots) {
-        final dated = slots.where((s) => s.startsAt != null).toList()
+      data: (board) {
+        final dated = board.slots.where((s) => s.startsAt != null).toList()
           ..sort((a, b) => a.startsAt!.compareTo(b.startsAt!));
         if (dated.isEmpty) return Center(child: Text(l10n.clinicNoOpenSlots));
 
@@ -167,12 +167,15 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
             : dated.where((s) => byKey ? (s.visitKindKey == kind || s.visitKindKey == null) : s.visitKind == kind).toList();
         if (ofKind.isEmpty) return Center(child: Text(l10n.clinicNoOpenSlots));
 
-        final days = <DateTime>[];
-        for (final s in ofKind) {
-          final d = _dateOnly(s.startsAt!);
-          if (!days.contains(d)) days.add(d);
-        }
-        final day = _day != null && days.contains(_day) ? _day! : days.first;
+        // the strip is the whole window the server sent (two weeks): a day the doctor sits shows, one with nothing
+        // left or a closed day shows greyed and cannot be picked. An older server sends no strip — then only the days
+        // that have times.
+        final withTimes = <DateTime>{for (final s in ofKind) _dateOnly(s.startsAt!)};
+        final strip = board.days.isNotEmpty
+            ? board.days
+            : [for (final d in (withTimes.toList()..sort())) ClinicDay(date: d, slots: 1)];
+        final enabledDays = [for (final d in strip) if (withTimes.contains(_dateOnly(d.date))) _dateOnly(d.date)];
+        final day = _day != null && enabledDays.contains(_day) ? _day! : enabledDays.first;
         final times = ofKind.where((s) => _dateOnly(s.startsAt!) == day).toList();
         final picked = times.where((s) => s.id == _slotId).firstOrNull;
 
@@ -249,19 +252,26 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
           _SectionCard(
             title: l10n.clinicPickDay,
             child: SizedBox(
-              height: 64,
+              height: 78,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemCount: days.length,
+                itemCount: strip.length,
                 separatorBuilder: (_, _) => const SizedBox(width: 8),
-                itemBuilder: (context, i) => _DayChip(
-                  day: days[i],
-                  selected: days[i] == day,
-                  onTap: () => setState(() {
-                    _day = days[i];
-                    _slotId = null;
-                  }),
-                ),
+                itemBuilder: (context, i) {
+                  final d = _dateOnly(strip[i].date);
+                  final enabled = withTimes.contains(d);
+
+                  return _DayChip(
+                    day: d,
+                    selected: d == day,
+                    enabled: enabled,
+                    caption: enabled ? null : (strip[i].open ? l10n.clinicDayNoSlots : l10n.clinicDayClosed),
+                    onTap: () => setState(() {
+                      _day = d;
+                      _slotId = null;
+                    }),
+                  );
+                },
               ),
             ),
           ),
@@ -439,26 +449,39 @@ class _Chip extends StatelessWidget {
 class _DayChip extends StatelessWidget {
   final DateTime day;
   final bool selected;
+  final bool enabled;
+
+  /// the reason a day cannot be picked: «مغلق» (the clinic's hours) or «لا مواعيد» (all taken / none published)
+  final String? caption;
   final VoidCallback onTap;
-  const _DayChip({required this.day, required this.selected, required this.onTap});
+  const _DayChip({required this.day, required this.selected, required this.onTap, this.enabled = true, this.caption});
 
   @override
   Widget build(BuildContext context) {
-
-    return SizedBox(
-      width: 62,
-      child: _Chip(
-        selected: selected,
-        onTap: onTap,
-        builder: (ink) => Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(LocalFormat.weekday(context).format(day), style: TextStyle(fontSize: 11, color: ink)),
-            Text(
-              LocalFormat.dayNumber(context).format(day),
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: ink),
+    return Opacity(
+      opacity: enabled ? 1 : 0.45,
+      child: SizedBox(
+        width: 62,
+        child: IgnorePointer(
+          ignoring: !enabled,
+          child: _Chip(
+            selected: selected,
+            onTap: onTap,
+            builder: (ink) => FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(LocalFormat.weekday(context).format(day), style: TextStyle(fontSize: 11, color: ink)),
+                  Text(
+                    LocalFormat.dayNumber(context).format(day),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: ink),
+                  ),
+                  if (caption != null) Text(caption!, style: TextStyle(fontSize: 9, color: ink)),
+                ],
+              ),
             ),
-          ],
+          ),
         ),
       ),
     );

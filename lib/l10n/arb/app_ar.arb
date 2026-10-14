@@ -2984,5 +2984,7 @@
   "@businessHoursClosesIn": {"placeholders": {"left": {"type": "String"}}},
   "businessHoursOpensAt": "يفتح الساعة {time}",
   "@businessHoursOpensAt": {"placeholders": {"time": {"type": "String"}}},
-  "businessHoursClosedToday": "مغلق اليوم"
+  "businessHoursClosedToday": "مغلق اليوم",
+  "clinicDayClosed": "مغلق",
+  "clinicDayNoSlots": "لا مواعيد"
 }

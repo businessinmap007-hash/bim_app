@@ -12,9 +12,12 @@ final clinicApiProvider = Provider<ClinicApi>((ref) {
 /// One clinic's open slots — a plain FutureProvider (read-only; booking a
 /// slot is a separate call, and the caller invalidates this to refresh the
 /// list once one is taken).
+final clinicSlotsBoardProvider = FutureProvider.family<ClinicSlotsResult, int>((ref, clinicId) {
+  return ref.watch(clinicApiProvider).slotsWithDays(clinicId);
+});
+
 final clinicSlotsProvider = FutureProvider.family<List<ClinicSlot>, int>((ref, clinicId) async {
-  final page = await ref.watch(clinicApiProvider).slots(clinicId);
-  return page.items;
+  return (await ref.watch(clinicSlotsBoardProvider(clinicId).future)).slots;
 });
 
 /// Every visit kind a clinic prices (the radio list), with what the caller still owes it.

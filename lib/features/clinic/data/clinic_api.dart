@@ -20,6 +20,20 @@ class ClinicApi {
     return Paginated.fromJson(data, ClinicSlot.fromJson);
   }
 
+  /// The next two weeks: every open time AND the strip of days (open by the clinic's weekly hours or not, how many
+  /// times are left) — so the board can show the days the doctor sits, not only the ones that happen to have rows.
+  Future<ClinicSlotsResult> slotsWithDays(int clinicId) async {
+    final data = await _client.get('/clinics/$clinicId/slots') as Map<String, dynamic>;
+    final rows = (data['data'] as List<dynamic>? ?? const [])
+        .map((e) => ClinicSlot.fromJson(e as Map<String, dynamic>))
+        .toList();
+    final days = (data['days'] as List<dynamic>? ?? const [])
+        .map((e) => ClinicDay.fromJson(e as Map<String, dynamic>))
+        .toList();
+
+    return ClinicSlotsResult(slots: rows, days: days);
+  }
+
   /// [forName]/[forPhone]: the visit is for someone else — the account that books stays the patient of record.
   /// [specialtyServiceIds]: what the patient came for — one or several, from the specialty clinic's own list (optional).
   Future<ClinicAppointment> bookSlot(

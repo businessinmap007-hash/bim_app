@@ -30,3 +30,35 @@ class ClinicSlot {
     price: json['price'] is num ? (json['price'] as num).toDouble() : double.tryParse('${json['price'] ?? ''}'),
   );
 }
+
+/// One day of the booking window: whether the clinic sits that day (its weekly hours) and how many open times are left.
+class ClinicDay {
+  final DateTime date;
+  final bool open;
+  final String? opensAt;
+  final String? closesAt;
+  final int slots;
+
+  const ClinicDay({required this.date, this.open = true, this.opensAt, this.closesAt, this.slots = 0});
+
+  factory ClinicDay.fromJson(Map<String, dynamic> json) {
+    final hours = json['hours'] is Map<String, dynamic> ? json['hours'] as Map<String, dynamic> : null;
+    final parsed = DateTime.tryParse('${json['date'] ?? ''}');
+
+    return ClinicDay(
+      date: DateTime((parsed ?? DateTime.now()).year, (parsed ?? DateTime.now()).month, (parsed ?? DateTime.now()).day),
+      open: json['open'] as bool? ?? true,
+      opensAt: hours?['open'] as String?,
+      closesAt: hours?['close'] as String?,
+      slots: (json['slots'] as num?)?.toInt() ?? 0,
+    );
+  }
+}
+
+/// What `GET /clinics/{id}/slots` says: the open times of the next two weeks, and the strip of those days.
+class ClinicSlotsResult {
+  final List<ClinicSlot> slots;
+  final List<ClinicDay> days;
+
+  const ClinicSlotsResult({this.slots = const [], this.days = const []});
+}

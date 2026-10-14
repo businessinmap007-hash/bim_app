@@ -8934,4 +8934,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get businessHoursClosedToday => 'مغلق اليوم';
+
+  @override
+  String get clinicDayClosed => 'مغلق';
+
+  @override
+  String get clinicDayNoSlots => 'لا مواعيد';
 }

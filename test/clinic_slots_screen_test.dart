@@ -50,7 +50,7 @@ void main() {
       ProviderScope(
         overrides: [
           clinicApiProvider.overrideWithValue(api),
-          clinicSlotsProvider(7).overrideWith((ref) async => slots),
+          clinicSlotsBoardProvider(7).overrideWith((ref) async => ClinicSlotsResult(slots: slots)),
         ],
         child: MaterialApp(
           locale: const Locale('ar'),
@@ -114,7 +114,7 @@ void main() {
       ProviderScope(
         overrides: [
           clinicApiProvider.overrideWithValue(api),
-          clinicSlotsProvider(7).overrideWith((ref) async => slots),
+          clinicSlotsBoardProvider(7).overrideWith((ref) async => ClinicSlotsResult(slots: slots)),
           specialtyServicesProvider(7).overrideWith(
             (ref) async => const [
               ServiceOfferingSection(kind: 'preventive', services: [ServiceOffering(id: 11, name: 'تنظيف الأسنان وإزالة الجير', price: 400)]),
@@ -157,7 +157,7 @@ void main() {
     Widget app({required bool dental}) => ProviderScope(
       overrides: [
         clinicApiProvider.overrideWithValue(api),
-        clinicSlotsProvider(7).overrideWith((ref) async => slots),
+        clinicSlotsBoardProvider(7).overrideWith((ref) async => ClinicSlotsResult(slots: slots)),
         specialtyServicesProvider(7).overrideWith(
           (ref) async => const [
             ServiceOfferingSection(kind: 'surgical', services: [ServiceOffering(id: 12, name: 'زراعة سن')]),
@@ -209,7 +209,7 @@ void main() {
       ProviderScope(
         overrides: [
           clinicApiProvider.overrideWithValue(api),
-          clinicSlotsProvider(7).overrideWith((ref) async => slots),
+          clinicSlotsBoardProvider(7).overrideWith((ref) async => ClinicSlotsResult(slots: slots)),
           specialtyServicesProvider(7).overrideWith(
             (ref) async => const [
               ServiceOfferingSection(kind: 'injectables', services: [ServiceOffering(id: 21, name: 'فيلر الشفاه', price: 3500)]),
@@ -259,7 +259,7 @@ void main() {
       ProviderScope(
         overrides: [
           clinicApiProvider.overrideWithValue(api),
-          clinicSlotsProvider(7).overrideWith((ref) async => slots),
+          clinicSlotsBoardProvider(7).overrideWith((ref) async => ClinicSlotsResult(slots: slots)),
           specialtyServicesProvider(7).overrideWith(
             (ref) async => const [
               ServiceOfferingSection(kind: 'preventive', services: [ServiceOffering(id: 11, name: 'تنظيف الأسنان وإزالة الجير', price: 400)]),
@@ -294,5 +294,52 @@ void main() {
     await tester.tap(find.widgetWithText(FilledButton, 'اطلب الحجز'));
     await tester.pumpAndSettle();
     expect(api.services, [[11, 21]]);
+  });
+
+  testWidgets('the day strip is the two weeks the doctor sits: closed days and full days show greyed, with the reason', (tester) async {
+    final api = _FakeApi();
+    final slots = [
+      ClinicSlot(id: 1, startsAt: DateTime(2026, 10, 14, 17), durationMinutes: 30, visitKind: 'كشف', price: 300),
+      ClinicSlot(id: 2, startsAt: DateTime(2026, 10, 17, 17), durationMinutes: 30, visitKind: 'كشف', price: 300),
+    ];
+    final days = [
+      ClinicDay(date: DateTime(2026, 10, 14), slots: 1),
+      ClinicDay(date: DateTime(2026, 10, 15), open: false), // Friday: shut by the weekly hours
+      ClinicDay(date: DateTime(2026, 10, 16), slots: 0), // sits, but nothing left
+      ClinicDay(date: DateTime(2026, 10, 17), slots: 1),
+    ];
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          clinicApiProvider.overrideWithValue(api),
+          clinicSlotsBoardProvider(7).overrideWith((ref) async => ClinicSlotsResult(slots: slots, days: days)),
+        ],
+        child: MaterialApp(
+          locale: const Locale('ar'),
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: const [AppLocalizations.delegate, GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate, GlobalCupertinoLocalizations.delegate],
+          home: const ClinicSlotsScreen(clinicId: 7, clinicName: 'عيادة د. سارة'),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // all four days are on the strip — not only the two that have times
+    expect(find.text('14'), findsOneWidget);
+    expect(find.text('15'), findsOneWidget);
+    expect(find.text('16'), findsOneWidget);
+    expect(find.text('17'), findsOneWidget);
+    expect(find.text('مغلق'), findsOneWidget);
+    expect(find.text('لا مواعيد'), findsOneWidget);
+
+    // a day without times cannot be picked; the 17th can, and shows its own time
+    await tester.tap(find.text('15'));
+    await tester.pumpAndSettle();
+    expect(find.descendant(of: find.byType(GridView), matching: find.byType(InkWell)), findsNWidgets(1));
+
+    await tester.tap(find.text('17'));
+    await tester.pumpAndSettle();
+    expect(find.descendant(of: find.byType(GridView), matching: find.byType(InkWell)), findsNWidgets(1));
   });
 }

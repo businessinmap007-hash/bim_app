@@ -2958,5 +2958,7 @@
   "businessHoursClosesAt": "Closes at {time}",
   "businessHoursClosesIn": "{left} left until closing",
   "businessHoursOpensAt": "Opens at {time}",
-  "businessHoursClosedToday": "Closed today"
+  "businessHoursClosedToday": "Closed today",
+  "clinicDayClosed": "Closed",
+  "clinicDayNoSlots": "Full"
 }

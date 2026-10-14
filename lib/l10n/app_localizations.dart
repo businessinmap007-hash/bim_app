@@ -16398,6 +16398,18 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'مغلق اليوم'**
   String get businessHoursClosedToday;
+
+  /// No description provided for @clinicDayClosed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مغلق'**
+  String get clinicDayClosed;
+
+  /// No description provided for @clinicDayNoSlots.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا مواعيد'**
+  String get clinicDayNoSlots;
 }
 
 class _AppLocalizationsDelegate

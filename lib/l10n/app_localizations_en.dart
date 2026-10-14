@@ -8987,4 +8987,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get businessHoursClosedToday => 'Closed today';
+
+  @override
+  String get clinicDayClosed => 'Closed';
+
+  @override
+  String get clinicDayNoSlots => 'Full';
 }
