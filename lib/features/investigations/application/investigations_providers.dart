@@ -24,7 +24,15 @@ final investigationCentersProvider = FutureProvider.autoDispose.family<List<Inve
 final centerInvestigationOrdersProvider = FutureProvider.autoDispose.family<List<InvestigationOrder>, String>((ref, tab) => ref.watch(investigationsApiProvider).centerOrders(tab));
 
 /// What a centre does and charges, for its page.
-final centerTestsProvider = FutureProvider.autoDispose.family<List<CenterTest>, int>((ref, centerId) => ref.watch(investigationsApiProvider).centerTests(centerId));
+final centerOfferProvider = FutureProvider.autoDispose.family<CenterOffer, int>((ref, centerId) => ref.watch(investigationsApiProvider).centerOffer(centerId));
+
+/// The times a patient may ask for on one day: (centre, `yyyy-MM-dd`).
+final centerTimesProvider = FutureProvider.autoDispose.family<CenterTimes, ({int centerId, String day})>(
+  (ref, key) => ref.watch(investigationsApiProvider).centerTimes(key.centerId, key.day),
+);
+
+/// The centre's own packages and home-sample fee.
+final centerPackagesProvider = FutureProvider.autoDispose<CenterPackages>((ref) => ref.watch(investigationsApiProvider).packages());
 
 /// A centre's own price list.
 final centerPriceListProvider = FutureProvider.autoDispose<List<CenterTest>>((ref) => ref.watch(investigationsApiProvider).priceList());

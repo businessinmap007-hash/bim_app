@@ -16602,6 +16602,162 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'يشمل: مواعيد العيادة، الوصفات الطبية، طلبات الفحوصات والأشعة، وقرارات الإجراءات الجراحية.'**
   String get staffPhysicianBundle;
+
+  /// No description provided for @invPackage.
+  ///
+  /// In ar, this message translates to:
+  /// **'باقة'**
+  String get invPackage;
+
+  /// No description provided for @invPackagesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الباقات'**
+  String get invPackagesTitle;
+
+  /// No description provided for @invPackagesHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'باقات'**
+  String get invPackagesHeading;
+
+  /// No description provided for @invIncludes.
+  ///
+  /// In ar, this message translates to:
+  /// **'تشمل: {names}'**
+  String invIncludes(String names);
+
+  /// No description provided for @invHomeCollection.
+  ///
+  /// In ar, this message translates to:
+  /// **'سحب العينة من المنزل'**
+  String get invHomeCollection;
+
+  /// No description provided for @invPickDay.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم'**
+  String get invPickDay;
+
+  /// No description provided for @invPickTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوقت'**
+  String get invPickTime;
+
+  /// No description provided for @invNoTimes.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا أوقات متاحة في هذا اليوم.'**
+  String get invNoTimes;
+
+  /// No description provided for @invChooseTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر اليوم والوقت'**
+  String get invChooseTime;
+
+  /// No description provided for @invRequestedAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموعد المطلوب: {when}'**
+  String invRequestedAt(String when);
+
+  /// No description provided for @invPackageAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة باقة'**
+  String get invPackageAdd;
+
+  /// No description provided for @invPackageEdit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل الباقة'**
+  String get invPackageEdit;
+
+  /// No description provided for @invPackageName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الباقة'**
+  String get invPackageName;
+
+  /// No description provided for @invPackagePrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر الباقة'**
+  String get invPackagePrice;
+
+  /// No description provided for @invPackageNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظة (اختياري)'**
+  String get invPackageNote;
+
+  /// No description provided for @invPackageTests.
+  ///
+  /// In ar, this message translates to:
+  /// **'التحاليل التي تشملها'**
+  String get invPackageTests;
+
+  /// No description provided for @invPackageSave.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ الباقة'**
+  String get invPackageSave;
+
+  /// No description provided for @invPackageHidden.
+  ///
+  /// In ar, this message translates to:
+  /// **'مخفية عن المرضى'**
+  String get invPackageHidden;
+
+  /// No description provided for @invPackageShow.
+  ///
+  /// In ar, this message translates to:
+  /// **'تظهر للمرضى'**
+  String get invPackageShow;
+
+  /// No description provided for @invPackagesEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد باقات بعد. أضف باقة بسعر واحد لعدّة تحاليل.'**
+  String get invPackagesEmpty;
+
+  /// No description provided for @invPackageNeedTests.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر تحليلًا واحدًا على الأقل واكتب السعر.'**
+  String get invPackageNeedTests;
+
+  /// No description provided for @invPackagesHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما تسعّره هنا يراه المريض في صفحتك ويدفعه كما هو، لا كمجموع تحاليله.'**
+  String get invPackagesHint;
+
+  /// No description provided for @invHomeFeeLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر سحب العينة من المنزل'**
+  String get invHomeFeeLabel;
+
+  /// No description provided for @invHomeFeeHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتركه فارغًا إن كان المعمل لا يسحب العينات من المنازل.'**
+  String get invHomeFeeHint;
+
+  /// No description provided for @invHomeFeeSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ السعر.'**
+  String get invHomeFeeSaved;
+
+  /// No description provided for @invPriceListActionPackages.
+  ///
+  /// In ar, this message translates to:
+  /// **'الباقات'**
+  String get invPriceListActionPackages;
 }
 
 class _AppLocalizationsDelegate

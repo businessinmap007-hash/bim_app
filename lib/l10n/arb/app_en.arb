@@ -3002,5 +3002,41 @@
   "procDecisionSend": "Send the decision to the patient",
   "procDecisionSent": "The decision was sent to the patient.",
   "procDecisionNone": "The hospital has not listed any procedure yet.",
-  "staffPhysicianBundle": "Includes: clinic appointments, prescriptions, test and radiology orders, and procedure decisions."
+  "staffPhysicianBundle": "Includes: clinic appointments, prescriptions, test and radiology orders, and procedure decisions.",
+  "invPackage": "Package",
+  "invPackagesTitle": "Packages",
+  "invPackagesHeading": "Packages",
+  "invIncludes": "Includes: {names}",
+  "@invIncludes": {
+    "placeholders": {
+      "names": {"type": "String"}
+    }
+  },
+  "invHomeCollection": "Sample collection at home",
+  "invPickDay": "Day",
+  "invPickTime": "Time",
+  "invNoTimes": "No times on this day.",
+  "invChooseTime": "Choose a day and time",
+  "invRequestedAt": "Requested time: {when}",
+  "@invRequestedAt": {
+    "placeholders": {
+      "when": {"type": "String"}
+    }
+  },
+  "invPackageAdd": "Add a package",
+  "invPackageEdit": "Edit the package",
+  "invPackageName": "Package name",
+  "invPackagePrice": "Package price",
+  "invPackageNote": "Note (optional)",
+  "invPackageTests": "Tests it includes",
+  "invPackageSave": "Save the package",
+  "invPackageHidden": "Hidden from patients",
+  "invPackageShow": "Shown to patients",
+  "invPackagesEmpty": "No packages yet. Add one price for several tests.",
+  "invPackageNeedTests": "Pick at least one test and write the price.",
+  "invPackagesHint": "What you price here is shown on your page and paid as it is, not as the sum of its tests.",
+  "invHomeFeeLabel": "Fee for taking the sample at home",
+  "invHomeFeeHint": "Leave it empty if the lab does not take samples at home.",
+  "invHomeFeeSaved": "Price saved.",
+  "invPriceListActionPackages": "Packages"
 }

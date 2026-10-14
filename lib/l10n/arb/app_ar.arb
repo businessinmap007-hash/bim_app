@@ -3028,5 +3028,41 @@
   "procDecisionSend": "إرسال القرار للمريض",
   "procDecisionSent": "تم إرسال القرار إلى المريض.",
   "procDecisionNone": "لم تحدّد المستشفى إجراءات بعد.",
-  "staffPhysicianBundle": "يشمل: مواعيد العيادة، الوصفات الطبية، طلبات الفحوصات والأشعة، وقرارات الإجراءات الجراحية."
+  "staffPhysicianBundle": "يشمل: مواعيد العيادة، الوصفات الطبية، طلبات الفحوصات والأشعة، وقرارات الإجراءات الجراحية.",
+  "invPackage": "باقة",
+  "invPackagesTitle": "الباقات",
+  "invPackagesHeading": "باقات",
+  "invIncludes": "تشمل: {names}",
+  "@invIncludes": {
+    "placeholders": {
+      "names": {"type": "String"}
+    }
+  },
+  "invHomeCollection": "سحب العينة من المنزل",
+  "invPickDay": "اليوم",
+  "invPickTime": "الوقت",
+  "invNoTimes": "لا أوقات متاحة في هذا اليوم.",
+  "invChooseTime": "اختر اليوم والوقت",
+  "invRequestedAt": "الموعد المطلوب: {when}",
+  "@invRequestedAt": {
+    "placeholders": {
+      "when": {"type": "String"}
+    }
+  },
+  "invPackageAdd": "إضافة باقة",
+  "invPackageEdit": "تعديل الباقة",
+  "invPackageName": "اسم الباقة",
+  "invPackagePrice": "سعر الباقة",
+  "invPackageNote": "ملاحظة (اختياري)",
+  "invPackageTests": "التحاليل التي تشملها",
+  "invPackageSave": "حفظ الباقة",
+  "invPackageHidden": "مخفية عن المرضى",
+  "invPackageShow": "تظهر للمرضى",
+  "invPackagesEmpty": "لا توجد باقات بعد. أضف باقة بسعر واحد لعدّة تحاليل.",
+  "invPackageNeedTests": "اختر تحليلًا واحدًا على الأقل واكتب السعر.",
+  "invPackagesHint": "ما تسعّره هنا يراه المريض في صفحتك ويدفعه كما هو، لا كمجموع تحاليله.",
+  "invHomeFeeLabel": "سعر سحب العينة من المنزل",
+  "invHomeFeeHint": "اتركه فارغًا إن كان المعمل لا يسحب العينات من المنازل.",
+  "invHomeFeeSaved": "تم حفظ السعر.",
+  "invPriceListActionPackages": "الباقات"
 }

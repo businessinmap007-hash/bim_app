@@ -9100,4 +9100,90 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get staffPhysicianBundle =>
       'Includes: clinic appointments, prescriptions, test and radiology orders, and procedure decisions.';
+
+  @override
+  String get invPackage => 'Package';
+
+  @override
+  String get invPackagesTitle => 'Packages';
+
+  @override
+  String get invPackagesHeading => 'Packages';
+
+  @override
+  String invIncludes(String names) {
+    return 'Includes: $names';
+  }
+
+  @override
+  String get invHomeCollection => 'Sample collection at home';
+
+  @override
+  String get invPickDay => 'Day';
+
+  @override
+  String get invPickTime => 'Time';
+
+  @override
+  String get invNoTimes => 'No times on this day.';
+
+  @override
+  String get invChooseTime => 'Choose a day and time';
+
+  @override
+  String invRequestedAt(String when) {
+    return 'Requested time: $when';
+  }
+
+  @override
+  String get invPackageAdd => 'Add a package';
+
+  @override
+  String get invPackageEdit => 'Edit the package';
+
+  @override
+  String get invPackageName => 'Package name';
+
+  @override
+  String get invPackagePrice => 'Package price';
+
+  @override
+  String get invPackageNote => 'Note (optional)';
+
+  @override
+  String get invPackageTests => 'Tests it includes';
+
+  @override
+  String get invPackageSave => 'Save the package';
+
+  @override
+  String get invPackageHidden => 'Hidden from patients';
+
+  @override
+  String get invPackageShow => 'Shown to patients';
+
+  @override
+  String get invPackagesEmpty =>
+      'No packages yet. Add one price for several tests.';
+
+  @override
+  String get invPackageNeedTests =>
+      'Pick at least one test and write the price.';
+
+  @override
+  String get invPackagesHint =>
+      'What you price here is shown on your page and paid as it is, not as the sum of its tests.';
+
+  @override
+  String get invHomeFeeLabel => 'Fee for taking the sample at home';
+
+  @override
+  String get invHomeFeeHint =>
+      'Leave it empty if the lab does not take samples at home.';
+
+  @override
+  String get invHomeFeeSaved => 'Price saved.';
+
+  @override
+  String get invPriceListActionPackages => 'Packages';
 }

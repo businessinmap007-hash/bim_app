@@ -9045,4 +9045,90 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get staffPhysicianBundle =>
       'يشمل: مواعيد العيادة، الوصفات الطبية، طلبات الفحوصات والأشعة، وقرارات الإجراءات الجراحية.';
+
+  @override
+  String get invPackage => 'باقة';
+
+  @override
+  String get invPackagesTitle => 'الباقات';
+
+  @override
+  String get invPackagesHeading => 'باقات';
+
+  @override
+  String invIncludes(String names) {
+    return 'تشمل: $names';
+  }
+
+  @override
+  String get invHomeCollection => 'سحب العينة من المنزل';
+
+  @override
+  String get invPickDay => 'اليوم';
+
+  @override
+  String get invPickTime => 'الوقت';
+
+  @override
+  String get invNoTimes => 'لا أوقات متاحة في هذا اليوم.';
+
+  @override
+  String get invChooseTime => 'اختر اليوم والوقت';
+
+  @override
+  String invRequestedAt(String when) {
+    return 'الموعد المطلوب: $when';
+  }
+
+  @override
+  String get invPackageAdd => 'إضافة باقة';
+
+  @override
+  String get invPackageEdit => 'تعديل الباقة';
+
+  @override
+  String get invPackageName => 'اسم الباقة';
+
+  @override
+  String get invPackagePrice => 'سعر الباقة';
+
+  @override
+  String get invPackageNote => 'ملاحظة (اختياري)';
+
+  @override
+  String get invPackageTests => 'التحاليل التي تشملها';
+
+  @override
+  String get invPackageSave => 'حفظ الباقة';
+
+  @override
+  String get invPackageHidden => 'مخفية عن المرضى';
+
+  @override
+  String get invPackageShow => 'تظهر للمرضى';
+
+  @override
+  String get invPackagesEmpty =>
+      'لا توجد باقات بعد. أضف باقة بسعر واحد لعدّة تحاليل.';
+
+  @override
+  String get invPackageNeedTests =>
+      'اختر تحليلًا واحدًا على الأقل واكتب السعر.';
+
+  @override
+  String get invPackagesHint =>
+      'ما تسعّره هنا يراه المريض في صفحتك ويدفعه كما هو، لا كمجموع تحاليله.';
+
+  @override
+  String get invHomeFeeLabel => 'سعر سحب العينة من المنزل';
+
+  @override
+  String get invHomeFeeHint =>
+      'اتركه فارغًا إن كان المعمل لا يسحب العينات من المنازل.';
+
+  @override
+  String get invHomeFeeSaved => 'تم حفظ السعر.';
+
+  @override
+  String get invPriceListActionPackages => 'الباقات';
 }

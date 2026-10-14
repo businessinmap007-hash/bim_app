@@ -290,6 +290,29 @@ class _InvestigationOrderDetailScreenState extends ConsumerState<InvestigationOr
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 InvestigationItemRows(items: order.items, centerChosen: order.center != null),
+                // the sample taken at the patient's home, with the lab's fee
+                if (order.homeCollection)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.home_outlined, size: 18),
+                        const SizedBox(width: 10),
+                        Expanded(child: Text(l10n.invHomeCollection, style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600))),
+                        if (order.homeFee != null)
+                          Text('+${formatInvestigationMoney(order.homeFee!)} ${l10n.invCurrency}', style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700)),
+                      ],
+                    ),
+                  ),
+                // the day and time the patient asked for (the centre's own appointment, once set, is below)
+                if (order.requestedAt != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: Text(
+                      l10n.invRequestedAt(formatInvestigationDate(context, order.requestedAt!)),
+                      style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
+                    ),
+                  ),
                 if (order.total != null) ...[
                   const Divider(height: 20),
                   Row(

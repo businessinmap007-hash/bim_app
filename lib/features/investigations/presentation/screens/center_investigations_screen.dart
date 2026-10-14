@@ -11,6 +11,7 @@ import '../../../../shared/widgets/full_screen_gallery.dart';
 import '../../application/investigations_providers.dart';
 import '../../data/models/investigation.dart';
 import '../widgets/investigation_widgets.dart';
+import 'center_packages_screen.dart';
 import 'center_results_screen.dart';
 import 'investigation_orders_screen.dart' show InvestigationOrderCard;
 import '../../../../core/time/egypt_time.dart';
@@ -31,6 +32,11 @@ class CenterInvestigationsScreen extends ConsumerWidget {
         appBar: AppBar(
           title: Text(l10n.invCenterTitle),
           actions: [
+            IconButton(
+              tooltip: l10n.invPackagesTitle,
+              icon: const Icon(Icons.inventory_2_outlined),
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CenterPackagesScreen())),
+            ),
             IconButton(
               tooltip: l10n.invPriceList,
               icon: const Icon(Icons.price_change_outlined),

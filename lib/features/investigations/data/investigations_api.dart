@@ -41,15 +41,29 @@ class InvestigationsApi {
   Future<InvestigationOrder> requestFromCenter({
     required int centerId,
     required List<int> optionIds,
+    List<int> packageIds = const [],
+    bool homeCollection = false,
+    DateTime? requestedAt,
     String? notes,
     String? photoPath,
   }) async {
-    final fields = {'center_id': centerId, 'option_ids': optionIds, if (notes != null && notes.isNotEmpty) 'notes': notes};
+    final stamp = requestedAt?.toIso8601String();
+    final fields = {
+      'center_id': centerId,
+      'option_ids': optionIds,
+      if (packageIds.isNotEmpty) 'package_ids': packageIds,
+      if (homeCollection) 'home_collection': 1,
+      'requested_at': ?stamp,
+      if (notes != null && notes.isNotEmpty) 'notes': notes,
+    };
     final body = photoPath == null
         ? fields
         : FormData.fromMap({
             'center_id': '$centerId',
             for (var i = 0; i < optionIds.length; i++) 'option_ids[$i]': '${optionIds[i]}',
+            for (var i = 0; i < packageIds.length; i++) 'package_ids[$i]': '${packageIds[i]}',
+            if (homeCollection) 'home_collection': '1',
+            'requested_at': ?stamp,
             if (notes != null && notes.isNotEmpty) 'notes': notes,
             'photo': await MultipartFile.fromFile(photoPath),
           });
@@ -57,11 +71,13 @@ class InvestigationsApi {
     return _order(await _client.post('/investigation-orders/request', data: body));
   }
 
-  /// What a lab or radiology centre does and charges, for its page.
-  Future<List<CenterTest>> centerTests(int centerId) async {
-    final data = await _client.get('/investigation-centers/$centerId/tests') as Map<String, dynamic>;
-    return (data['tests'] as List<dynamic>? ?? []).map((e) => CenterTest.fromJson(e as Map<String, dynamic>)).toList();
-  }
+  /// What a lab or radiology centre does and charges, for its page — tests, packages and the home-sample fee.
+  Future<CenterOffer> centerOffer(int centerId) async =>
+      CenterOffer.fromJson(await _client.get('/investigation-centers/$centerId/tests') as Map<String, dynamic>);
+
+  /// The times a patient may ask for on [day] (`yyyy-MM-dd`).
+  Future<CenterTimes> centerTimes(int centerId, String day) async =>
+      CenterTimes.fromJson(await _client.get('/investigation-centers/$centerId/times', query: {'date': day}) as Map<String, dynamic>);
 
   // ── the doctor ──
   Future<InvestigationOrder> issue({required int patientId, required List<int> optionIds, String? notes}) async => _order(
@@ -115,6 +131,39 @@ class InvestigationsApi {
   Future<List<CenterTest>> priceList() async {
     final data = await _client.get('/business/investigation-prices') as Map<String, dynamic>;
     return (data['tests'] as List<dynamic>? ?? []).map((e) => CenterTest.fromJson(e as Map<String, dynamic>)).toList();
+  }
+
+  // «باقات» and the home sample — the centre's own settings
+  Future<CenterPackages> packages() async =>
+      CenterPackages.fromJson(await _client.get('/business/investigation-packages') as Map<String, dynamic>);
+
+  Future<List<CenterPackage>> savePackage({
+    int? id,
+    required String name,
+    required double price,
+    required List<int> optionIds,
+    String? note,
+    bool active = true,
+  }) async {
+    final data = await _client.post('/business/investigation-packages', data: {
+      'id': ?id,
+      'name': name,
+      'price': price,
+      'option_ids': optionIds,
+      if (note != null && note.isNotEmpty) 'note': note,
+      'is_active': active ? 1 : 0,
+    }) as Map<String, dynamic>;
+    return (data['packages'] as List<dynamic>? ?? []).map((e) => CenterPackage.fromJson(e as Map<String, dynamic>)).toList();
+  }
+
+  Future<List<CenterPackage>> deletePackage(int id) async {
+    final data = await _client.delete('/business/investigation-packages/$id') as Map<String, dynamic>;
+    return (data['packages'] as List<dynamic>? ?? []).map((e) => CenterPackage.fromJson(e as Map<String, dynamic>)).toList();
+  }
+
+  Future<double?> saveHomeFee(double? fee) async {
+    final data = await _client.put('/business/investigation-home-fee', data: {'home_fee': fee}) as Map<String, dynamic>;
+    return (data['home_fee'] as num?)?.toDouble();
   }
 
   /// `{optionId: price}`; a null price removes the test from this centre's list.

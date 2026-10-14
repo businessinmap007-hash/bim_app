@@ -121,13 +121,13 @@ class InvestigationItemRows extends StatelessWidget {
             Row(
               children: [
                 Icon(
-                  item.isLab ? Icons.biotech_outlined : Icons.medical_information_outlined,
+                  item.isPackage ? Icons.inventory_2_outlined : (item.isLab ? Icons.biotech_outlined : Icons.medical_information_outlined),
                   size: 18,
                   color: theme.hintColor,
                 ),
                 const SizedBox(width: 10),
                 Expanded(child: Text(item.name, style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600))),
-                Text(investigationKindLabel(l10n, item.kind), style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+                Text(item.isPackage ? l10n.invPackage : investigationKindLabel(l10n, item.kind), style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
                 if (item.price != null) ...[
                   const SizedBox(width: 10),
                   Text('${formatInvestigationMoney(item.price!)} ${l10n.invCurrency}', style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700)),
@@ -137,6 +137,12 @@ class InvestigationItemRows extends StatelessWidget {
                 ],
               ],
             ),
+                // a package says what it includes
+                if (item.details != null)
+                  Padding(
+                    padding: const EdgeInsetsDirectional.only(start: 28, top: 2),
+                    child: Text(l10n.invIncludes(item.details!), style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+                  ),
                 // the result, as text, right under its test
                 if (item.hasResult)
                   Padding(

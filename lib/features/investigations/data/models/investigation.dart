@@ -11,9 +11,13 @@ class InvestigationItem {
   /// The result as TEXT, written by the centre beside this test (null until it is in).
   final String? result;
 
-  const InvestigationItem({required this.id, required this.kind, required this.name, this.price, this.result});
+  /// A package names what it includes (a test has none).
+  final String? details;
+
+  const InvestigationItem({required this.id, required this.kind, required this.name, this.price, this.result, this.details});
 
   bool get isLab => kind == 'lab';
+  bool get isPackage => kind == 'package';
   bool get hasResult => (result ?? '').trim().isNotEmpty;
 
   factory InvestigationItem.fromJson(Map<String, dynamic> json) => InvestigationItem(
@@ -22,6 +26,7 @@ class InvestigationItem {
     name: json['name'] as String? ?? '',
     price: (json['price'] as num?)?.toDouble(),
     result: json['result'] as String?,
+    details: (json['details'] as String?)?.trim().isEmpty ?? true ? null : (json['details'] as String).trim(),
   );
 }
 
@@ -64,6 +69,11 @@ class InvestigationOrder {
   final String? centerNote;
   final DateTime? appointmentAt;
   final DateTime? issuedAt;
+
+  /// The day and time the patient asked for, and whether the lab takes the sample at his home (its fee is in the total).
+  final DateTime? requestedAt;
+  final bool homeCollection;
+  final double? homeFee;
   final List<String> requestFiles;
   final List<String> resultFiles;
 
@@ -93,6 +103,9 @@ class InvestigationOrder {
     this.centerNote,
     this.appointmentAt,
     this.issuedAt,
+    this.requestedAt,
+    this.homeCollection = false,
+    this.homeFee,
     this.requestFiles = const [],
     this.resultFiles = const [],
     this.resultDocuments = const [],
@@ -147,6 +160,9 @@ class InvestigationOrder {
       centerNote: json['center_note'] as String?,
       appointmentAt: EgyptTime.tryParse(json['appointment_at'] as String? ?? '')?.toLocal(),
       issuedAt: EgyptTime.tryParse(json['issued_at'] as String? ?? '')?.toLocal(),
+      requestedAt: EgyptTime.tryParse(json['requested_at'] as String? ?? '')?.toLocal(),
+      homeCollection: json['home_collection'] as bool? ?? false,
+      homeFee: (json['home_fee'] as num?)?.toDouble(),
       requestFiles: files('request_files'),
       resultFiles: files('result_files'),
       resultDocuments: files('result_files', kind: 'pdf'),
@@ -226,5 +242,79 @@ class CenterTest {
     kind: json['kind'] as String? ?? 'lab',
     name: json['name'] as String? ?? '',
     price: (json['price'] as num?)?.toDouble(),
+  );
+}
+
+/// «باقة»: a named set of a centre's tests at ONE price.
+class CenterPackage {
+  final int id;
+  final String name;
+  final String? note;
+  final double price;
+  final bool isActive;
+  final List<int> optionIds;
+  final List<String> tests;
+
+  const CenterPackage({
+    required this.id,
+    required this.name,
+    this.note,
+    required this.price,
+    this.isActive = true,
+    this.optionIds = const [],
+    this.tests = const [],
+  });
+
+  factory CenterPackage.fromJson(Map<String, dynamic> json) => CenterPackage(
+    id: (json['id'] as num).toInt(),
+    name: json['name'] as String? ?? '',
+    note: (json['note'] as String?)?.trim().isEmpty ?? true ? null : (json['note'] as String).trim(),
+    price: (json['price'] as num?)?.toDouble() ?? 0,
+    isActive: json['is_active'] as bool? ?? true,
+    optionIds: (json['option_ids'] as List<dynamic>? ?? []).map((e) => (e as num).toInt()).toList(),
+    tests: (json['tests'] as List<dynamic>? ?? []).map((e) => e.toString()).toList(),
+  );
+}
+
+/// What a centre's page offers: its tests, its packages, and (a lab) the fee of taking the sample at home.
+class CenterOffer {
+  final List<CenterTest> tests;
+  final List<CenterPackage> packages;
+  final double? homeFee;
+
+  const CenterOffer({this.tests = const [], this.packages = const [], this.homeFee});
+
+  factory CenterOffer.fromJson(Map<String, dynamic> json) => CenterOffer(
+    tests: (json['tests'] as List<dynamic>? ?? []).map((e) => CenterTest.fromJson(e as Map<String, dynamic>)).toList(),
+    packages: (json['packages'] as List<dynamic>? ?? []).map((e) => CenterPackage.fromJson(e as Map<String, dynamic>)).toList(),
+    homeFee: (json['home_fee'] as num?)?.toDouble(),
+  );
+}
+
+/// The centre's own packages screen: all of them (hidden too), and whether this centre may take samples at home.
+class CenterPackages {
+  final List<CenterPackage> packages;
+  final double? homeFee;
+  final bool canHome;
+
+  const CenterPackages({this.packages = const [], this.homeFee, this.canHome = false});
+
+  factory CenterPackages.fromJson(Map<String, dynamic> json) => CenterPackages(
+    packages: (json['packages'] as List<dynamic>? ?? []).map((e) => CenterPackage.fromJson(e as Map<String, dynamic>)).toList(),
+    homeFee: (json['home_fee'] as num?)?.toDouble(),
+    canHome: json['can_home'] as bool? ?? false,
+  );
+}
+
+/// The times a patient may ask for on one day.
+class CenterTimes {
+  final bool closed;
+  final List<String> times;
+
+  const CenterTimes({this.closed = false, this.times = const []});
+
+  factory CenterTimes.fromJson(Map<String, dynamic> json) => CenterTimes(
+    closed: json['closed'] as bool? ?? false,
+    times: (json['times'] as List<dynamic>? ?? []).map((e) => e.toString()).toList(),
   );
 }
