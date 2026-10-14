@@ -38,14 +38,24 @@ class ClinicManagementScreen extends ConsumerStatefulWidget {
 
 class _ClinicManagementScreenState extends ConsumerState<ClinicManagementScreen> {
   late final ApiClient _client;
+  late final ProviderContainer _container;
+
+  /// The queue and slots controllers outlive the screen: acting for a hospital must neither show what the person's own
+  /// clinic loaded earlier nor leave the hospital's list behind for it.
+  void _resetControllers() {
+    _container.invalidate(clinicAppointmentsControllerProvider);
+    _container.invalidate(clinicSlotsControllerProvider);
+  }
 
   @override
   void initState() {
     super.initState();
     _client = ref.read(apiClientProvider);
+    _container = ProviderScope.containerOf(context, listen: false);
     if (widget.actingBusinessId != null) {
       // set before the first frame so the first list request already acts for the hospital
       _client.actingBusinessId = widget.actingBusinessId;
+      _resetControllers();
     }
   }
 
@@ -53,6 +63,7 @@ class _ClinicManagementScreenState extends ConsumerState<ClinicManagementScreen>
   void dispose() {
     if (widget.actingBusinessId != null && _client.actingBusinessId == widget.actingBusinessId) {
       _client.actingBusinessId = null;
+      Future.microtask(_resetControllers);
     }
     super.dispose();
   }
