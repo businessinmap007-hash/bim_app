@@ -1,3 +1,5 @@
+import '../../../../core/assignment/assignment_providers.dart';
+import '../../../../core/assignment/widgets/assignee_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -286,6 +288,16 @@ class BusinessBookingDetailScreen extends ConsumerWidget {
                 if (booking.bookableItemType == 'booking_stay' && (booking.status == 'accepted' || booking.status == 'in_progress'))
                   DayUseTag(booking: booking),
                   _RoomRow(booking: booking, bookingId: bookingId),
+                // «نظام التعيين»: who is responsible — the same tile every business uses
+                AssigneeTile(
+                  current: booking.assignee,
+                  businessId: businessId,
+                  onAssign: (id) => ref.read(assignmentApiProvider).assignBooking(bookingId, id, businessId: businessId),
+                  onChanged: () {
+                    ref.read(businessBookingDetailControllerProvider(bookingId).notifier).load();
+                    ref.read(businessBookingsControllerProvider(businessId).notifier).load();
+                  },
+                ),
                 if (booking.startsAt != null)
                   _DetailRow(label: l10n.businessBookingsDateTime, value: booking.startsAt!.toLocal().toString().split('.').first),
                 _DetailRow(label: l10n.businessBookingsQuantity, value: booking.quantity.toString()),

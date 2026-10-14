@@ -1,3 +1,4 @@
+import '../../../../core/assignment/widgets/assignee_widgets.dart';
 import '../../../../shared/widgets/arrival_notice_banner.dart';
 import '../../../../shared/widgets/app_bar_tab_bar.dart';
 import '../../../cart/presentation/widgets/weight_picker.dart';
@@ -1166,6 +1167,11 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
             Text(booking.serviceName(languageCode), style: Theme.of(context).textTheme.bodyMedium),
             DayUseTag(booking: booking),
             // the hotel gives the room when the stay starts — only then does the server send its number
+            // «نظام التعيين»: who is responsible for it
+            if (booking.assignee != null) ...[
+              const SizedBox(height: 6),
+              AssigneeLine(booking.assignee),
+            ],
             if (booking.room != null) ...[
               const SizedBox(height: 4),
               Text(l10n.bookingRoomYours(booking.room!.number), style: Theme.of(context).textTheme.titleSmall),

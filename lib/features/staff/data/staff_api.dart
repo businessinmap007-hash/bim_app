@@ -30,6 +30,7 @@ class StaffApi {
     required List<String> capabilities,
     bool isActive = true,
     bool isPhysician = false,
+    bool isProvider = false,
   }) async {
     final data =
         await _client.post(
@@ -40,6 +41,7 @@ class StaffApi {
                 'capabilities': capabilities,
                 'is_active': isActive,
                 if (isPhysician) 'is_physician': true,
+                if (isProvider) 'is_provider': true,
               },
             )
             as Map<String, dynamic>;
@@ -52,6 +54,7 @@ class StaffApi {
     List<String>? capabilities,
     bool? isActive,
     bool? isPhysician,
+    bool? isProvider,
   }) async {
     final data =
         await _client.patch(
@@ -61,6 +64,7 @@ class StaffApi {
                 'capabilities': ?capabilities,
                 'is_active': ?isActive,
                 'is_physician': ?isPhysician,
+                'is_provider': ?isProvider,
               },
             )
             as Map<String, dynamic>;

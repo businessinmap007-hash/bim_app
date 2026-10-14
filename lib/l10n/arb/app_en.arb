@@ -2969,5 +2969,20 @@
   "clinicWithPhysician": "Treating physician: {name}",
   "clinicSlotsForPhysician": "Physician's times",
   "clinicSlotsForHospital": "The hospital itself (no physician named)",
-  "treatingPhysicianLabel": "Treating physician"
+  "treatingPhysicianLabel": "Treating physician",
+  "assigneeLine": "Responsible: {name}",
+  "@assigneeLine": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "assigneeTitle": "Responsible",
+  "assigneeNobody": "Nobody assigned yet",
+  "assigneeAssign": "Assign",
+  "assigneeChange": "Change",
+  "assigneePickTitle": "Choose who is responsible for this",
+  "assigneeRelease": "Unassign",
+  "staffIsProvider": "Serves customers directly",
+  "staffIsProviderHint": "Bookings can be assigned to him, and he sees only the ones assigned to him.",
+  "staffProviderBadge": "Service provider"
 }

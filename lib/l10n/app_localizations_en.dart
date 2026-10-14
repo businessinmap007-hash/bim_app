@@ -9024,4 +9024,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get treatingPhysicianLabel => 'Treating physician';
+
+  @override
+  String assigneeLine(String name) {
+    return 'Responsible: $name';
+  }
+
+  @override
+  String get assigneeTitle => 'Responsible';
+
+  @override
+  String get assigneeNobody => 'Nobody assigned yet';
+
+  @override
+  String get assigneeAssign => 'Assign';
+
+  @override
+  String get assigneeChange => 'Change';
+
+  @override
+  String get assigneePickTitle => 'Choose who is responsible for this';
+
+  @override
+  String get assigneeRelease => 'Unassign';
+
+  @override
+  String get staffIsProvider => 'Serves customers directly';
+
+  @override
+  String get staffIsProviderHint =>
+      'Bookings can be assigned to him, and he sees only the ones assigned to him.';
+
+  @override
+  String get staffProviderBadge => 'Service provider';
 }

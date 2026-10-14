@@ -2995,5 +2995,20 @@
   "clinicWithPhysician": "الطبيب المعالج: {name}",
   "clinicSlotsForPhysician": "مواعيد الطبيب",
   "clinicSlotsForHospital": "المستشفى نفسه (بلا طبيب محدد)",
-  "treatingPhysicianLabel": "الطبيب المعالج"
+  "treatingPhysicianLabel": "الطبيب المعالج",
+  "assigneeLine": "المسؤول: {name}",
+  "@assigneeLine": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "assigneeTitle": "المسؤول",
+  "assigneeNobody": "لم يُعيَّن أحد بعد",
+  "assigneeAssign": "تعيين",
+  "assigneeChange": "تغيير",
+  "assigneePickTitle": "اختر المسؤول عن هذا العمل",
+  "assigneeRelease": "بدون تعيين",
+  "staffIsProvider": "يخدم العملاء مباشرة",
+  "staffIsProviderHint": "يمكن تعيين الحجوزات عليه، ويرى حجوزاته المعيّنة له فقط.",
+  "staffProviderBadge": "مقدّم خدمة"
 }

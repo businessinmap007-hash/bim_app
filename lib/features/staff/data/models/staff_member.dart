@@ -70,6 +70,9 @@ class StaffMember {
   /// «طبيب»: a treating physician of the account — named on the visits, prescriptions and orders he handles.
   final bool isPhysician;
 
+  /// «مقدّم خدمة»: serves customers directly, so work can be assigned to him and he sees his own list.
+  final bool isProvider;
+
   const StaffMember({
     required this.userId,
     required this.name,
@@ -80,6 +83,7 @@ class StaffMember {
     required this.isActive,
     this.status = StaffStatus.accepted,
     this.isPhysician = false,
+    this.isProvider = false,
   });
 
   bool get isPending => status == StaffStatus.pending;
@@ -98,6 +102,7 @@ class StaffMember {
       isActive: json['is_active'] as bool? ?? true,
       status: json['status'] as String? ?? StaffStatus.accepted,
       isPhysician: json['is_physician'] as bool? ?? false,
+      isProvider: json['is_provider'] as bool? ?? (json['is_physician'] as bool? ?? false),
     );
   }
 }

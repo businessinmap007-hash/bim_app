@@ -16464,6 +16464,66 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الطبيب المعالج'**
   String get treatingPhysicianLabel;
+
+  /// No description provided for @assigneeLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'المسؤول: {name}'**
+  String assigneeLine(String name);
+
+  /// No description provided for @assigneeTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المسؤول'**
+  String get assigneeTitle;
+
+  /// No description provided for @assigneeNobody.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يُعيَّن أحد بعد'**
+  String get assigneeNobody;
+
+  /// No description provided for @assigneeAssign.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعيين'**
+  String get assigneeAssign;
+
+  /// No description provided for @assigneeChange.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغيير'**
+  String get assigneeChange;
+
+  /// No description provided for @assigneePickTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر المسؤول عن هذا العمل'**
+  String get assigneePickTitle;
+
+  /// No description provided for @assigneeRelease.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون تعيين'**
+  String get assigneeRelease;
+
+  /// No description provided for @staffIsProvider.
+  ///
+  /// In ar, this message translates to:
+  /// **'يخدم العملاء مباشرة'**
+  String get staffIsProvider;
+
+  /// No description provided for @staffIsProviderHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يمكن تعيين الحجوزات عليه، ويرى حجوزاته المعيّنة له فقط.'**
+  String get staffIsProviderHint;
+
+  /// No description provided for @staffProviderBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقدّم خدمة'**
+  String get staffProviderBadge;
 }
 
 class _AppLocalizationsDelegate

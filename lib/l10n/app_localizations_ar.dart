@@ -8970,4 +8970,37 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get treatingPhysicianLabel => 'الطبيب المعالج';
+
+  @override
+  String assigneeLine(String name) {
+    return 'المسؤول: $name';
+  }
+
+  @override
+  String get assigneeTitle => 'المسؤول';
+
+  @override
+  String get assigneeNobody => 'لم يُعيَّن أحد بعد';
+
+  @override
+  String get assigneeAssign => 'تعيين';
+
+  @override
+  String get assigneeChange => 'تغيير';
+
+  @override
+  String get assigneePickTitle => 'اختر المسؤول عن هذا العمل';
+
+  @override
+  String get assigneeRelease => 'بدون تعيين';
+
+  @override
+  String get staffIsProvider => 'يخدم العملاء مباشرة';
+
+  @override
+  String get staffIsProviderHint =>
+      'يمكن تعيين الحجوزات عليه، ويرى حجوزاته المعيّنة له فقط.';
+
+  @override
+  String get staffProviderBadge => 'مقدّم خدمة';
 }
