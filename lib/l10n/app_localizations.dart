@@ -16444,7 +16444,7 @@ abstract class AppLocalizations {
   /// No description provided for @clinicWithPhysician.
   ///
   /// In ar, this message translates to:
-  /// **'مع {name}'**
+  /// **'الطبيب المعالج: {name}'**
   String clinicWithPhysician(Object name);
 
   /// No description provided for @clinicSlotsForPhysician.

@@ -8959,7 +8959,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String clinicWithPhysician(Object name) {
-    return 'مع $name';
+    return 'الطبيب المعالج: $name';
   }
 
   @override

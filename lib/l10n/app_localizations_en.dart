@@ -9012,7 +9012,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String clinicWithPhysician(Object name) {
-    return 'With $name';
+    return 'Treating physician: $name';
   }
 
   @override

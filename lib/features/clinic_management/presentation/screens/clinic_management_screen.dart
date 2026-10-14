@@ -391,8 +391,7 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
                 style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
               ),
             ],
-            // «مواعيدي» is all his own: don't name him on every card
-            if (a.physicianLine != null && ref.read(apiClientProvider).actingBusinessId == null) ...[
+            if (a.physicianLine != null) ...[
               const SizedBox(height: 4),
               Row(
                 children: [

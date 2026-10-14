@@ -2966,7 +2966,7 @@
   "staffPhysicianBadge": "Physician",
   "clinicPickPhysician": "Physician",
   "myAppointmentsTitle": "My appointments",
-  "clinicWithPhysician": "With {name}",
+  "clinicWithPhysician": "Treating physician: {name}",
   "clinicSlotsForPhysician": "Physician's times",
   "clinicSlotsForHospital": "The hospital itself (no physician named)",
   "treatingPhysicianLabel": "Treating physician"
