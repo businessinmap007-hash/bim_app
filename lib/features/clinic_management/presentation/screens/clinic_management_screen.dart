@@ -19,19 +19,50 @@ import '../../data/models/business_clinic_appointment.dart';
 import 'clinic_slots_screen.dart';
 import '../../../../core/time/egypt_time.dart';
 import '../../../../core/time/clock_format.dart';
+import '../../../../core/network/api_client.dart';
+import '../../../../core/providers/core_providers.dart';
 
 /// Api\V2\BusinessClinicAppointmentController — the clinic's own side. Two
 /// tabs: the appointments queue (confirm/reject/complete/no-show/reschedule)
 /// and slot management lives on its own screen, reached from here.
-class ClinicManagementScreen extends StatelessWidget {
-  const ClinicManagementScreen({super.key});
+class ClinicManagementScreen extends ConsumerStatefulWidget {
+  /// A physician working FOR a hospital opens this as «مواعيدي»: every call acts for [actingBusinessId] and the server
+  /// narrows it to his own appointments and times. Null = the account's own clinic screen.
+  final int? actingBusinessId;
+
+  const ClinicManagementScreen({super.key, this.actingBusinessId});
+
+  @override
+  ConsumerState<ClinicManagementScreen> createState() => _ClinicManagementScreenState();
+}
+
+class _ClinicManagementScreenState extends ConsumerState<ClinicManagementScreen> {
+  late final ApiClient _client;
+
+  @override
+  void initState() {
+    super.initState();
+    _client = ref.read(apiClientProvider);
+    if (widget.actingBusinessId != null) {
+      // set before the first frame so the first list request already acts for the hospital
+      _client.actingBusinessId = widget.actingBusinessId;
+    }
+  }
+
+  @override
+  void dispose() {
+    if (widget.actingBusinessId != null && _client.actingBusinessId == widget.actingBusinessId) {
+      _client.actingBusinessId = null;
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.clinicManagementTitle),
+        title: Text(widget.actingBusinessId != null ? l10n.myAppointmentsTitle : l10n.clinicManagementTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.event_available_outlined),
@@ -347,6 +378,16 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
               Text(
                 [l10n.clinicAttendeeFor(a.attendeeName!), if ((a.attendeePhone ?? '').isNotEmpty) a.attendeePhone!].join(' · '),
                 style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+              ),
+            ],
+            if (a.physicianLine != null) ...[
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  Icon(Icons.medical_information_outlined, size: 16, color: theme.hintColor),
+                  const SizedBox(width: 6),
+                  Expanded(child: Text(l10n.clinicWithPhysician(a.physicianLine!), style: theme.textTheme.bodyMedium)),
+                ],
               ),
             ],
             if (a.scheduledAt != null) ...[

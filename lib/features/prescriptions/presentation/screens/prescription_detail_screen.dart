@@ -661,6 +661,11 @@ class PrescriptionDetailScreen extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(statusLabel(p.status, l10n), style: Theme.of(context).textTheme.titleSmall),
+                    if (p.physician != null) ...[
+                      const SizedBox(height: 6),
+                      Text(l10n.treatingPhysicianLabel, style: Theme.of(context).textTheme.labelMedium),
+                      Text(p.physician!.line),
+                    ],
                     if (p.superseded) Text(l10n.prescriptionSupersededLabel),
                     if (p.contentPurged) ...[
                       const SizedBox(height: 6),

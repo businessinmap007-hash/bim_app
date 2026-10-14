@@ -103,12 +103,14 @@ class StaffController extends StateNotifier<StaffState> {
     String? title,
     required List<String> capabilities,
     bool isActive = true,
+    bool isPhysician = false,
   }) async {
     final member = await _api.add(
       phone: phone,
       title: title,
       capabilities: capabilities,
       isActive: isActive,
+      isPhysician: isPhysician,
     );
     final without = state.staff
         .where((s) => s.userId != member.userId)
@@ -122,12 +124,14 @@ class StaffController extends StateNotifier<StaffState> {
     String? title,
     List<String>? capabilities,
     bool? isActive,
+    bool? isPhysician,
   }) async {
     final updated = await _api.update(
       userId,
       title: title,
       capabilities: capabilities,
       isActive: isActive,
+      isPhysician: isPhysician,
     );
     state = state.copyWith(
       staff: [for (final s in state.staff) s.userId == userId ? updated : s],

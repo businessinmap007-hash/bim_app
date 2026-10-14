@@ -8993,4 +8993,35 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get clinicDayNoSlots => 'Full';
+
+  @override
+  String get staffIsPhysician => 'Treating physician';
+
+  @override
+  String get staffIsPhysicianHint =>
+      'His name is on his visits, prescriptions and test orders; he has his own schedule and sees only his patients.';
+
+  @override
+  String get staffPhysicianBadge => 'Physician';
+
+  @override
+  String get clinicPickPhysician => 'Physician';
+
+  @override
+  String get myAppointmentsTitle => 'My appointments';
+
+  @override
+  String clinicWithPhysician(Object name) {
+    return 'With $name';
+  }
+
+  @override
+  String get clinicSlotsForPhysician => 'Physician\'s times';
+
+  @override
+  String get clinicSlotsForHospital =>
+      'The hospital itself (no physician named)';
+
+  @override
+  String get treatingPhysicianLabel => 'Treating physician';
 }

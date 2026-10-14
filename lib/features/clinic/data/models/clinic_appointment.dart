@@ -23,6 +23,10 @@ class ClinicAppointment {
   /// «يجب التواجد قبل الموعد بـ ١٥ دقيقة» — the clinic's own notice.
   final String? arrivalNotice;
 
+  /// the physician the visit is with (a hospital's staff physician) and his title there
+  final String? physicianName;
+  final String? physicianTitle;
+
   const ClinicAppointment({
     required this.id,
     required this.status,
@@ -36,7 +40,14 @@ class ClinicAppointment {
     this.services = const [],
     this.billing,
     this.arrivalNotice,
+    this.physicianName,
+    this.physicianTitle,
   });
+
+  /// «د. فلان — استشاري باطنة», or null when the visit is with the account itself
+  String? get physicianLine => (physicianName ?? '').isEmpty
+      ? null
+      : ((physicianTitle ?? '').isEmpty ? physicianName : '$physicianName — $physicianTitle');
 
   bool get isCancellable => status == 'requested' || status == 'confirmed';
 
@@ -66,6 +77,8 @@ class ClinicAppointment {
       services: services,
       billing: billing ?? this.billing,
       arrivalNotice: arrivalNotice,
+      physicianName: physicianName,
+      physicianTitle: physicianTitle,
     );
   }
 
@@ -84,6 +97,8 @@ class ClinicAppointment {
       services: BookedService.listFrom(json['specialty_services']),
       billing: VisitBilling.fromJsonOrNull(json['billing']),
       arrivalNotice: json['arrival_notice'] is Map<String, dynamic> ? (json['arrival_notice'] as Map<String, dynamic>)['message'] as String? : null,
+      physicianName: (json['physician'] as Map<String, dynamic>?)?['name'] as String?,
+      physicianTitle: (json['physician'] as Map<String, dynamic>?)?['title'] as String?,
     );
   }
 }

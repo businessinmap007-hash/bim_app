@@ -28,11 +28,15 @@ class InvestigationItem {
 class InvestigationParty {
   final int id;
   final String name;
+  final String? title;
 
-  const InvestigationParty({required this.id, required this.name});
+  const InvestigationParty({required this.id, required this.name, this.title});
+
+  /// «د. فلان — استشاري باطنة»
+  String get line => (title ?? '').isEmpty ? name : '$name — $title';
 
   static InvestigationParty? from(dynamic json) => json is Map<String, dynamic>
-      ? InvestigationParty(id: (json['id'] as num).toInt(), name: json['name'] as String? ?? '')
+      ? InvestigationParty(id: (json['id'] as num).toInt(), name: json['name'] as String? ?? '', title: json['title'] as String?)
       : null;
 }
 
@@ -49,6 +53,9 @@ class InvestigationOrder {
   final int id;
   final String status;
   final InvestigationParty? doctor;
+
+  /// the physician working for the hospital who ordered it (never sent to the centre)
+  final InvestigationParty? physician;
   final InvestigationParty? patient;
   final InvestigationParty? center;
   final List<InvestigationItem> items;
@@ -77,6 +84,7 @@ class InvestigationOrder {
     required this.id,
     required this.status,
     this.doctor,
+    this.physician,
     this.patient,
     this.center,
     this.items = const [],
@@ -128,6 +136,7 @@ class InvestigationOrder {
       id: (json['id'] as num).toInt(),
       status: json['status'] as String? ?? issued,
       doctor: InvestigationParty.from(json['doctor']),
+      physician: InvestigationParty.from(json['physician']),
       patient: InvestigationParty.from(json['patient']),
       center: InvestigationParty.from(json['center']),
       items: (json['items'] as List<dynamic>? ?? [])

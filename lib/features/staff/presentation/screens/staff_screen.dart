@@ -90,6 +90,7 @@ class _StaffTile extends StatelessWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
+            if (member.isPhysician) _Badge(text: l10n.staffPhysicianBadge, color: AppColors.success),
             if (member.isPending)
               _Badge(text: l10n.staffPendingBadge, color: AppColors.warning)
             else if (!member.isActive)
@@ -169,6 +170,7 @@ class _StaffMemberSheetState extends ConsumerState<_StaffMemberSheet> {
   final _titleController = TextEditingController();
   final Set<String> _selectedCapabilities = {};
   bool _isActive = true;
+  bool _isPhysician = false;
   bool _submitting = false;
   String? _error;
 
@@ -183,6 +185,7 @@ class _StaffMemberSheetState extends ConsumerState<_StaffMemberSheet> {
       _titleController.text = existing.title ?? '';
       _selectedCapabilities.addAll(existing.capabilities);
       _isActive = existing.isActive;
+      _isPhysician = existing.isPhysician;
     }
   }
 
@@ -217,6 +220,7 @@ class _StaffMemberSheetState extends ConsumerState<_StaffMemberSheet> {
           title: _titleController.text.trim(),
           capabilities: _selectedCapabilities.toList(),
           isActive: _isActive,
+          isPhysician: _isPhysician,
         );
       } else {
         added = await notifier.add(
@@ -224,6 +228,7 @@ class _StaffMemberSheetState extends ConsumerState<_StaffMemberSheet> {
           title: _titleController.text.trim(),
           capabilities: _selectedCapabilities.toList(),
           isActive: _isActive,
+          isPhysician: _isPhysician,
         );
       }
       if (mounted) {
@@ -328,6 +333,16 @@ class _StaffMemberSheetState extends ConsumerState<_StaffMemberSheet> {
                     }
                   }),
                   title: Text(cap.name(languageCode)),
+                ),
+              // a clinic / hospital / medical centre only (they are the accounts that hold the visit and prescription
+              // capabilities): the member is a treating physician — named on what he handles, sees his own patients
+              if (capabilities.any((c) => c.key == 'prescriptions' || c.key == 'clinic'))
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  value: _isPhysician,
+                  onChanged: (value) => setState(() => _isPhysician = value),
+                  title: Text(l10n.staffIsPhysician),
+                  subtitle: Text(l10n.staffIsPhysicianHint),
                 ),
               SwitchListTile(
                 contentPadding: EdgeInsets.zero,

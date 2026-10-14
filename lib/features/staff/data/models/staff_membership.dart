@@ -12,6 +12,9 @@ class StaffMembership {
   final List<String> capabilities;
   final bool attendanceVerificationEnabled;
 
+  /// a treating physician of this business: his own appointments screen («مواعيدي»)
+  final bool isPhysician;
+
   /// The chairs of this business the person sits at — a barber has one, and a screen of his own for it.
   final List<ServiceChair> chairs;
 
@@ -23,6 +26,7 @@ class StaffMembership {
     required this.capabilities,
     this.attendanceVerificationEnabled = false,
     this.chairs = const [],
+    this.isPhysician = false,
   });
 
   factory StaffMembership.fromJson(Map<String, dynamic> json) {
@@ -34,6 +38,7 @@ class StaffMembership {
       title: json['title'] as String?,
       capabilities: (json['capabilities'] as List<dynamic>? ?? []).map((e) => e as String).toList(),
       attendanceVerificationEnabled: json['attendance_verification_enabled'] as bool? ?? false,
+      isPhysician: json['is_physician'] as bool? ?? false,
       chairs: (json['chairs'] as List<dynamic>? ?? [])
           .map((e) => ServiceChair.fromJson(e as Map<String, dynamic>))
           .toList(),

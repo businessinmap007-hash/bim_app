@@ -16,6 +16,16 @@ final clinicSlotsBoardProvider = FutureProvider.family<ClinicSlotsResult, int>((
   return ref.watch(clinicApiProvider).slotsWithDays(clinicId);
 });
 
+/// One physician's board at a hospital: his times and his strip of days.
+final clinicPhysicianBoardProvider = FutureProvider.family<ClinicSlotsResult, ({int clinicId, int physicianId})>((ref, key) {
+  return ref.watch(clinicApiProvider).slotsWithDays(key.clinicId, physicianId: key.physicianId);
+});
+
+/// The hospital's physicians a patient may choose between — empty for a clinic with none.
+final clinicPhysiciansProvider = FutureProvider.family<List<ClinicPhysician>, int>((ref, clinicId) {
+  return ref.watch(clinicApiProvider).physicians(clinicId);
+});
+
 final clinicSlotsProvider = FutureProvider.family<List<ClinicSlot>, int>((ref, clinicId) async {
   return (await ref.watch(clinicSlotsBoardProvider(clinicId).future)).slots;
 });

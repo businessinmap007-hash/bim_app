@@ -269,6 +269,11 @@ class _InvestigationOrderDetailScreenState extends ConsumerState<InvestigationOr
                     InvestigationStatusPill(status: order.status),
                   ],
                 ),
+                if (order.physician != null)
+                  Text(
+                    '${l10n.treatingPhysicianLabel}: ${order.physician!.line}',
+                    style: theme.textTheme.bodyMedium,
+                  ),
                 if (order.issuedAt != null)
                   Text(formatInvestigationDate(context, order.issuedAt!), style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
                 if (order.step > 0) ...[const SizedBox(height: 14), InvestigationSteps(step: order.step)],

@@ -67,6 +67,9 @@ class StaffMember {
   final bool isActive;
   final String status;
 
+  /// «طبيب»: a treating physician of the account — named on the visits, prescriptions and orders he handles.
+  final bool isPhysician;
+
   const StaffMember({
     required this.userId,
     required this.name,
@@ -76,6 +79,7 @@ class StaffMember {
     required this.capabilities,
     required this.isActive,
     this.status = StaffStatus.accepted,
+    this.isPhysician = false,
   });
 
   bool get isPending => status == StaffStatus.pending;
@@ -93,6 +97,7 @@ class StaffMember {
           .toList(),
       isActive: json['is_active'] as bool? ?? true,
       status: json['status'] as String? ?? StaffStatus.accepted,
+      isPhysician: json['is_physician'] as bool? ?? false,
     );
   }
 }

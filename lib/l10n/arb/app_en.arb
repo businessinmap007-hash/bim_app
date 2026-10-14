@@ -2960,5 +2960,14 @@
   "businessHoursOpensAt": "Opens at {time}",
   "businessHoursClosedToday": "Closed today",
   "clinicDayClosed": "Closed",
-  "clinicDayNoSlots": "Full"
+  "clinicDayNoSlots": "Full",
+  "staffIsPhysician": "Treating physician",
+  "staffIsPhysicianHint": "His name is on his visits, prescriptions and test orders; he has his own schedule and sees only his patients.",
+  "staffPhysicianBadge": "Physician",
+  "clinicPickPhysician": "Physician",
+  "myAppointmentsTitle": "My appointments",
+  "clinicWithPhysician": "With {name}",
+  "clinicSlotsForPhysician": "Physician's times",
+  "clinicSlotsForHospital": "The hospital itself (no physician named)",
+  "treatingPhysicianLabel": "Treating physician"
 }

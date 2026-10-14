@@ -24,9 +24,19 @@ class BusinessClinicAppointment {
   /// The account of the visit (see VisitBillingCard).
   final VisitBilling? billing;
 
+  /// the physician the visit is with — a hospital shows its owner whose it is
+  final String? physicianName;
+  final String? physicianTitle;
+
+  String? get physicianLine => (physicianName ?? '').isEmpty
+      ? null
+      : ((physicianTitle ?? '').isEmpty ? physicianName : '$physicianName — $physicianTitle');
+
   const BusinessClinicAppointment({
     required this.id,
     required this.status,
+    this.physicianName,
+    this.physicianTitle,
     this.scheduledAt,
     required this.durationMinutes,
     this.reason,
@@ -76,6 +86,8 @@ class BusinessClinicAppointment {
       attendeePhone: attendee?['phone'] as String?,
       services: BookedService.listFrom(json['specialty_services']),
       billing: VisitBilling.fromJsonOrNull(json['billing']),
+      physicianName: (json['physician'] as Map<String, dynamic>?)?['name'] as String?,
+      physicianTitle: (json['physician'] as Map<String, dynamic>?)?['title'] as String?,
     );
   }
 }

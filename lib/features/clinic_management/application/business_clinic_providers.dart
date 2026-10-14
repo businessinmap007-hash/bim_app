@@ -191,8 +191,8 @@ class ClinicSlotsController extends StateNotifier<ClinicSlotsState> {
     }
   }
 
-  Future<({int created, int skipped})> publishSlots({DateTime? startsAt, List<DateTime>? slots}) async {
-    final result = await _api.publishSlots(startsAt: startsAt, slots: slots);
+  Future<({int created, int skipped})> publishSlots({DateTime? startsAt, List<DateTime>? slots, int? physicianId}) async {
+    final result = await _api.publishSlots(startsAt: startsAt, slots: slots, physicianId: physicianId);
     await load();
     return result;
   }
@@ -203,6 +203,7 @@ class ClinicSlotsController extends StateNotifier<ClinicSlotsState> {
     required String endTime,
     int? intervalMinutes,
     int weeks = 4,
+    int? physicianId,
   }) async {
     final result = await _api.generateSlots(
       weekdays: weekdays,
@@ -210,6 +211,7 @@ class ClinicSlotsController extends StateNotifier<ClinicSlotsState> {
       endTime: endTime,
       intervalMinutes: intervalMinutes,
       weeks: weeks,
+      physicianId: physicianId,
     );
     await load();
     return result;
@@ -230,3 +232,6 @@ class ClinicSlotsController extends StateNotifier<ClinicSlotsState> {
 final clinicSlotsControllerProvider = StateNotifierProvider<ClinicSlotsController, ClinicSlotsState>((ref) {
   return ClinicSlotsController(ref.watch(businessClinicApiProvider));
 });
+
+/// «لطبيب»: which of the hospital's physicians the slots being published belong to (null = the hospital's own board).
+final clinicSlotsPhysicianProvider = StateProvider.autoDispose<int?>((ref) => null);

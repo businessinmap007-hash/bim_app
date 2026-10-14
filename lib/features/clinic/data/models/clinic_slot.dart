@@ -1,3 +1,4 @@
+import '../../../../core/env/env.dart';
 import '../../../../core/time/egypt_time.dart';
 /// One open appointment slot a clinic has published — mirrors
 /// `ClinicAppointmentController::slots()`'s row shape.
@@ -69,4 +70,25 @@ class ClinicSlotsResult {
   final List<ClinicDay> days;
 
   const ClinicSlotsResult({this.slots = const [], this.days = const []});
+}
+
+/// «الطبيب»: a physician who works for a hospital / centre and has times to book — with his title there.
+class ClinicPhysician {
+  final int id;
+  final String name;
+  final String? title;
+  final String? logoUrl;
+  final int openSlots;
+  final DateTime? nextAt;
+
+  const ClinicPhysician({required this.id, required this.name, this.title, this.logoUrl, this.openSlots = 0, this.nextAt});
+
+  factory ClinicPhysician.fromJson(Map<String, dynamic> json) => ClinicPhysician(
+    id: (json['id'] as num).toInt(),
+    name: json['name'] as String? ?? '',
+    title: (json['title'] as String?)?.trim().isEmpty ?? true ? null : (json['title'] as String).trim(),
+    logoUrl: Env.assetUrl(json['logo'] as String?),
+    openSlots: (json['open_slots'] as num?)?.toInt() ?? 0,
+    nextAt: json['next_at'] != null ? EgyptTime.tryParse(json['next_at'] as String) : null,
+  );
 }

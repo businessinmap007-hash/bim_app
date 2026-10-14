@@ -20,6 +20,11 @@ class ApiClient {
   /// whenever the user switches language, so this always matches the UI.
   String languageCode = 'ar';
 
+  /// The business a delegated staff member is acting for (sent as `X-Business-Id`, which the `business.member`
+  /// middleware reads). Set only while a screen of that business is open — a physician's «مواعيدي», for instance —
+  /// and cleared when it closes, so the person's own account is never mistaken for the employer's.
+  int? actingBusinessId;
+
   ApiClient(this._tokenStorage)
     : _dio = Dio(
         BaseOptions(
@@ -33,6 +38,8 @@ class ApiClient {
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           options.headers['Accept-Language'] = languageCode;
+          final acting = actingBusinessId;
+          if (acting != null) options.headers['X-Business-Id'] = acting;
           final token = await _tokenStorage.read();
           if (token != null && token.isNotEmpty) {
             options.headers['Authorization'] = 'Bearer $token';

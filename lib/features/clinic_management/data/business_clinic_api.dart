@@ -109,6 +109,7 @@ class BusinessClinicApi {
   Future<({int created, int skipped})> publishSlots({
     DateTime? startsAt,
     List<DateTime>? slots,
+    int? physicianId,
   }) async {
     final data =
         await _client.post(
@@ -117,6 +118,7 @@ class BusinessClinicApi {
                 if (startsAt != null) 'starts_at': startsAt.toIso8601String(),
                 if (slots != null)
                   'slots': slots.map((d) => d.toIso8601String()).toList(),
+                'physician_id': ?physicianId,
               },
             )
             as Map<String, dynamic>;
@@ -131,6 +133,7 @@ class BusinessClinicApi {
     required String endTime,
     int? intervalMinutes,
     int weeks = 4,
+    int? physicianId,
   }) async {
     final data =
         await _client.post(
@@ -141,6 +144,7 @@ class BusinessClinicApi {
                 'end_time': endTime,
                 'interval_minutes': ?intervalMinutes,
                 'weeks': weeks,
+                'physician_id': ?physicianId,
               },
             )
             as Map<String, dynamic>;

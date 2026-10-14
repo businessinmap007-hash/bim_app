@@ -129,7 +129,11 @@ class _AppointmentTile extends StatelessWidget {
           backgroundImage: appointment.clinicLogoUrl != null ? NetworkImage(appointment.clinicLogoUrl!) : null,
           child: appointment.clinicLogoUrl == null ? const Icon(Icons.local_hospital_outlined) : null,
         ),
-        title: Text(appointment.clinicName ?? ''),
+        title: Text(
+          appointment.physicianLine == null
+              ? (appointment.clinicName ?? '')
+              : '${appointment.clinicName ?? ''} — ${appointment.physicianLine}',
+        ),
         subtitle: Text(
           '${_statusLabel(appointment.status, l10n)}'
           '${appointment.scheduledAt != null ? ' · ${_formatDateTime(context, appointment.scheduledAt!)}' : ''}'

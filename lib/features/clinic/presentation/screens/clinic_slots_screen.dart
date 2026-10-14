@@ -50,6 +50,7 @@ class ClinicBookingBoard extends ConsumerStatefulWidget {
 
 class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
   String? _kind;
+  int? _physicianId;
   DateTime? _day;
   int? _slotId;
   final Set<int> _serviceIds = {};
@@ -82,6 +83,7 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
             forPhone: _forOther ? _forPhone.text.trim() : null,
           );
       ref.invalidate(clinicSlotsBoardProvider(widget.clinicId));
+      if (_physicianId != null) ref.invalidate(clinicPhysicianBoardProvider((clinicId: widget.clinicId, physicianId: _physicianId!)));
       if (!mounted) return;
       setState(() {
         _slotId = null;
@@ -100,11 +102,15 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
   }
 
   /// What the bar says above the date: the visit kind and the services picked, or the hint before a time is picked.
-  String _summary(ClinicSlot? slot, String serviceNames, AppLocalizations l10n) {
+  String _summary(ClinicSlot? slot, String serviceNames, AppLocalizations l10n, {String? physicianName}) {
     if (slot == null) return l10n.clinicPickSlotHint;
 
     final kind = slot.visitKind;
-    return [if (kind != null && kind.isNotEmpty) kind, if (serviceNames.isNotEmpty) serviceNames].join(' — ');
+    return [
+      if (physicianName != null && physicianName.isNotEmpty) physicianName,
+      if (kind != null && kind.isNotEmpty) kind,
+      if (serviceNames.isNotEmpty) serviceNames,
+    ].join(' — ');
   }
 
   /// The names of the services picked, in the order they are listed, for the summary bar.
@@ -118,7 +124,46 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final async = ref.watch(clinicSlotsBoardProvider(widget.clinicId));
+    // a hospital with physicians: the patient first chooses WHOM he is seeing; his board is that physician's own
+    final physicians = ref.watch(clinicPhysiciansProvider(widget.clinicId)).valueOrNull ?? const <ClinicPhysician>[];
+    final physicianId = physicians.isEmpty
+        ? null
+        : (physicians.any((p) => p.id == _physicianId)
+              ? _physicianId
+              : (physicians.where((p) => p.openSlots > 0).firstOrNull ?? physicians.first).id);
+    final async = physicianId == null
+        ? ref.watch(clinicSlotsBoardProvider(widget.clinicId))
+        : ref.watch(clinicPhysicianBoardProvider((clinicId: widget.clinicId, physicianId: physicianId)));
+    final physician = physicians.where((p) => p.id == physicianId).firstOrNull;
+
+    Widget physicianCard() => _SectionCard(
+      title: l10n.clinicPickPhysician,
+      child: SizedBox(
+        height: 74,
+        child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          itemCount: physicians.length,
+          separatorBuilder: (_, _) => const SizedBox(width: 8),
+          itemBuilder: (context, i) => _PhysicianChip(
+            physician: physicians[i],
+            selected: physicians[i].id == physicianId,
+            onTap: () => setState(() {
+              _physicianId = physicians[i].id;
+              _day = null;
+              _slotId = null;
+            }),
+          ),
+        ),
+      ),
+    );
+
+    // nothing to book from this physician (or this clinic): say so — and keep the physicians chooser if there is one
+    Widget nothing() => physicians.isEmpty
+        ? Center(child: Text(l10n.clinicNoOpenSlots))
+        : ListView(
+            padding: const EdgeInsets.all(16),
+            children: [physicianCard(), const SizedBox(height: 24), Center(child: Text(l10n.clinicNoOpenSlots))],
+          );
 
     return async.when(
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -138,7 +183,7 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
       data: (board) {
         final dated = board.slots.where((s) => s.startsAt != null).toList()
           ..sort((a, b) => a.startsAt!.compareTo(b.startsAt!));
-        if (dated.isEmpty) return Center(child: Text(l10n.clinicNoOpenSlots));
+        if (dated.isEmpty) return nothing();
 
         // EVERY visit kind the clinic prices («كشف · استشارة · متابعة · إجراء طبي…») is a radio option, one only; a kind with
         // no open time shows but cannot be picked. A clinic that prices none falls back to the kinds its slots carry.
@@ -165,7 +210,7 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
         final ofKind = kind == null
             ? (choices.isEmpty ? dated : <ClinicSlot>[])
             : dated.where((s) => byKey ? (s.visitKindKey == kind || s.visitKindKey == null) : s.visitKind == kind).toList();
-        if (ofKind.isEmpty) return Center(child: Text(l10n.clinicNoOpenSlots));
+        if (ofKind.isEmpty) return nothing();
 
         // the strip is the days the doctor sits in the next two weeks — a closed day (the clinic's hours) and a day
         // with nothing published (a leave) are not shown at all; a day whose times are all taken shows greyed as
@@ -180,6 +225,10 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
         final picked = times.where((s) => s.id == _slotId).firstOrNull;
 
         final children = <Widget>[
+          if (physicians.isNotEmpty) ...[
+            physicianCard(),
+            const SizedBox(height: 12),
+          ],
           // the clinic's own «be there N minutes early», before the patient picks a time
           Builder(
             builder: (context) {
@@ -359,7 +408,7 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
         ];
 
         final bar = BookingSummaryBar(
-          summary: _summary(picked, _pickedServiceNames(), l10n),
+          summary: _summary(picked, _pickedServiceNames(), l10n, physicianName: physician?.name),
           when: picked?.startsAt == null ? null : LocalFormat.weekdayMonthDay(context).addClock().format(picked!.startsAt!),
           price: picked?.price,
           label: l10n.clinicRequestBooking,
@@ -441,6 +490,59 @@ class _Chip extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         onTap: onTap,
         child: Center(child: builder(ink)),
+      ),
+    );
+  }
+}
+
+/// One physician to choose: his photo, name and title there.
+class _PhysicianChip extends StatelessWidget {
+  final ClinicPhysician physician;
+  final bool selected;
+  final VoidCallback onTap;
+  const _PhysicianChip({required this.physician, required this.selected, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 168,
+      child: _Chip(
+        selected: selected,
+        onTap: onTap,
+        builder: (ink) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 18,
+                backgroundImage: physician.logoUrl != null ? NetworkImage(physician.logoUrl!) : null,
+                child: physician.logoUrl == null ? const Icon(Icons.person_outline, size: 18) : null,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      physician.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: ink),
+                    ),
+                    if (physician.title != null)
+                      Text(
+                        physician.title!,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 11, color: ink),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -17,6 +17,7 @@ import '../../application/staff_providers.dart';
 import '../../data/models/staff_membership.dart';
 import 'staff_invitations_screen.dart';
 import '../../../../core/time/clock_format.dart';
+import '../../../clinic_management/presentation/screens/clinic_management_screen.dart';
 
 /// Runs the plain check-in/out for a membership that never turned on GPS+QR
 /// verification, or — when it did — first gets the phone's own location and
@@ -289,6 +290,20 @@ class _MembershipCard extends StatelessWidget {
                   ).push(MaterialPageRoute(builder: (_) => BusinessOrdersScreen(businessId: membership.businessId))),
                   icon: const Icon(Icons.receipt_long_outlined, size: 18),
                   label: Text(l10n.businessOrdersTitle),
+                ),
+              ),
+            ],
+            // «مواعيدي»: a treating physician of the hospital — his own visits, his own times, prescriptions and tests
+            if (membership.isPhysician && membership.capabilities.contains('clinic')) ...[
+              const SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton.icon(
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => ClinicManagementScreen(actingBusinessId: membership.businessId)),
+                  ),
+                  icon: const Icon(Icons.medical_services_outlined, size: 18),
+                  label: Text(l10n.myAppointmentsTitle),
                 ),
               ),
             ],

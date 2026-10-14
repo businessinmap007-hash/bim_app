@@ -8940,4 +8940,34 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get clinicDayNoSlots => 'لا مواعيد';
+
+  @override
+  String get staffIsPhysician => 'طبيب يعالج المرضى';
+
+  @override
+  String get staffIsPhysicianHint =>
+      'يظهر اسمه على زياراته ووصفاته وطلبات الفحوصات، وله جدول مواعيده ويرى مرضاه فقط.';
+
+  @override
+  String get staffPhysicianBadge => 'طبيب';
+
+  @override
+  String get clinicPickPhysician => 'الطبيب';
+
+  @override
+  String get myAppointmentsTitle => 'مواعيدي';
+
+  @override
+  String clinicWithPhysician(Object name) {
+    return 'مع $name';
+  }
+
+  @override
+  String get clinicSlotsForPhysician => 'مواعيد الطبيب';
+
+  @override
+  String get clinicSlotsForHospital => 'المستشفى نفسه (بلا طبيب محدد)';
+
+  @override
+  String get treatingPhysicianLabel => 'الطبيب المعالج';
 }

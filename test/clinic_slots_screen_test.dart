@@ -345,4 +345,60 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.descendant(of: find.byType(GridView), matching: find.byType(InkWell)), findsNWidgets(1));
   });
+
+  testWidgets('a hospital with physicians: the patient first chooses whom he sees, and that physician board shows', (tester) async {
+    final api = _FakeApi();
+    final hisSlots = ClinicSlotsResult(
+      slots: [ClinicSlot(id: 1, startsAt: DateTime(2026, 10, 14, 10), durationMinutes: 30, visitKind: 'كشف', price: 400)],
+      days: [ClinicDay(date: DateTime(2026, 10, 14), slots: 1, published: 1)],
+    );
+    final herSlots = ClinicSlotsResult(
+      slots: [
+        ClinicSlot(id: 2, startsAt: DateTime(2026, 10, 15, 16), durationMinutes: 30, visitKind: 'كشف', price: 300),
+        ClinicSlot(id: 3, startsAt: DateTime(2026, 10, 15, 16, 30), durationMinutes: 30, visitKind: 'كشف', price: 300),
+      ],
+      days: [ClinicDay(date: DateTime(2026, 10, 15), slots: 2, published: 2)],
+    );
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          clinicApiProvider.overrideWithValue(api),
+          clinicPhysiciansProvider(7).overrideWith(
+            (ref) async => const [
+              ClinicPhysician(id: 11, name: 'د. كمال', title: 'استشاري باطنة', openSlots: 1),
+              ClinicPhysician(id: 12, name: 'د. منى', title: 'أخصائية أطفال', openSlots: 2),
+            ],
+          ),
+          clinicPhysicianBoardProvider((clinicId: 7, physicianId: 11)).overrideWith((ref) async => hisSlots),
+          clinicPhysicianBoardProvider((clinicId: 7, physicianId: 12)).overrideWith((ref) async => herSlots),
+        ],
+        child: MaterialApp(
+          locale: const Locale('ar'),
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: const [AppLocalizations.delegate, GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate, GlobalCupertinoLocalizations.delegate],
+          home: const ClinicSlotsScreen(clinicId: 7, clinicName: 'مستشفى الشفاء'),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // both physicians are offered, with their titles, and the first one's board is the one drawn (one time)
+    expect(find.text('الطبيب'), findsOneWidget);
+    expect(find.text('د. كمال'), findsOneWidget);
+    expect(find.text('استشاري باطنة'), findsOneWidget);
+    expect(find.text('د. منى'), findsOneWidget);
+    expect(find.descendant(of: find.byType(GridView), matching: find.byType(InkWell)), findsNWidgets(1));
+
+    // choosing the other physician swaps to HER board: her two times
+    await tester.tap(find.text('د. منى'));
+    await tester.pumpAndSettle();
+    expect(find.descendant(of: find.byType(GridView), matching: find.byType(InkWell)), findsNWidgets(2));
+  });
+
+  test('a physician rides on the staff member, the membership and the appointment', () {
+    // (the models are plain parsers: this guards the JSON keys the server sends)
+    expect(ClinicPhysician.fromJson({'id': 3, 'name': 'د. كمال', 'title': ' استشاري ', 'open_slots': 4}).title, 'استشاري');
+    expect(ClinicPhysician.fromJson({'id': 3, 'name': 'د. كمال', 'title': ''}).title, isNull);
+  });
 }

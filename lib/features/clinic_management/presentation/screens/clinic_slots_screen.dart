@@ -7,6 +7,10 @@ import '../../application/business_clinic_providers.dart';
 import '../../data/models/business_clinic_slot.dart';
 import '../../../../core/time/egypt_time.dart';
 import '../../../../core/time/clock_format.dart';
+import '../../../auth/application/auth_controller.dart';
+import '../../../clinic/application/clinic_providers.dart';
+import '../../../clinic/data/models/clinic_slot.dart';
+import '../../../../core/providers/core_providers.dart';
 
 class ClinicSlotsScreen extends ConsumerStatefulWidget {
   const ClinicSlotsScreen({super.key});
@@ -121,14 +125,14 @@ class _ClinicSlotsScreenState extends ConsumerState<ClinicSlotsScreen> {
   }
 }
 
-class _AddSlotsSheet extends StatefulWidget {
+class _AddSlotsSheet extends ConsumerStatefulWidget {
   const _AddSlotsSheet();
 
   @override
-  State<_AddSlotsSheet> createState() => _AddSlotsSheetState();
+  ConsumerState<_AddSlotsSheet> createState() => _AddSlotsSheetState();
 }
 
-class _AddSlotsSheetState extends State<_AddSlotsSheet> with SingleTickerProviderStateMixin {
+class _AddSlotsSheetState extends ConsumerState<_AddSlotsSheet> with SingleTickerProviderStateMixin {
   late final _tabController = TabController(length: 2, vsync: this);
 
   @override
@@ -147,6 +151,32 @@ class _AddSlotsSheetState extends State<_AddSlotsSheet> with SingleTickerProvide
           height: MediaQuery.of(context).size.height * 0.75,
           child: Column(
             children: [
+              // the hospital's owner chooses whose times these are; a physician publishing his own is always himself
+              Builder(
+                builder: (context) {
+                  final me = ref.watch(authControllerProvider);
+                  final acting = ref.read(apiClientProvider).actingBusinessId;
+                  final businessId = me is AuthSignedIn ? me.user.id : null;
+                  if (acting != null || businessId == null) return const SizedBox.shrink();
+
+                  final physicians = ref.watch(clinicPhysiciansProvider(businessId)).valueOrNull ?? const <ClinicPhysician>[];
+                  if (physicians.isEmpty) return const SizedBox.shrink();
+
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+                    child: DropdownButtonFormField<int?>(
+                      initialValue: ref.watch(clinicSlotsPhysicianProvider),
+                      decoration: InputDecoration(labelText: l10n.clinicSlotsForPhysician),
+                      items: [
+                        DropdownMenuItem<int?>(value: null, child: Text(l10n.clinicSlotsForHospital)),
+                        for (final p in physicians)
+                          DropdownMenuItem<int?>(value: p.id, child: Text(p.title == null ? p.name : '${p.name} — ${p.title}')),
+                      ],
+                      onChanged: (v) => ref.read(clinicSlotsPhysicianProvider.notifier).state = v,
+                    ),
+                  );
+                },
+              ),
               TabBar(
                 controller: _tabController,
                 tabs: [Tab(text: l10n.clinicSlotsSpecificTab), Tab(text: l10n.clinicSlotsRecurringTab)],
@@ -194,7 +224,7 @@ class _SpecificDatesTabState extends ConsumerState<_SpecificDatesTab> {
       _error = null;
     });
     try {
-      final result = await ref.read(clinicSlotsControllerProvider.notifier).publishSlots(slots: _queued);
+      final result = await ref.read(clinicSlotsControllerProvider.notifier).publishSlots(slots: _queued, physicianId: ref.read(clinicSlotsPhysicianProvider));
       if (mounted) {
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(
@@ -297,6 +327,7 @@ class _RecurringGridTabState extends ConsumerState<_RecurringGridTab> {
             endTime: _fmt(_endTime),
             intervalMinutes: int.tryParse(_intervalController.text.trim()),
             weeks: _weeks,
+            physicianId: ref.read(clinicSlotsPhysicianProvider),
           );
       if (mounted) {
         Navigator.of(context).pop();
@@ -359,7 +390,7 @@ class _RecurringGridTabState extends ConsumerState<_RecurringGridTab> {
                 child: ListTile(
                   contentPadding: EdgeInsets.zero,
                   title: Text(l10n.clinicStartTimeHint),
-                  subtitle: Text(_startTime.format(context)),
+                  subtitle: Text(ClockFormat.of(context, _startTime)),
                   onTap: () async {
                     final picked = await ClockFormat.pick(context, initial: _startTime);
                     if (picked != null) setState(() => _startTime = picked);
@@ -370,7 +401,7 @@ class _RecurringGridTabState extends ConsumerState<_RecurringGridTab> {
                 child: ListTile(
                   contentPadding: EdgeInsets.zero,
                   title: Text(l10n.clinicEndTimeHint),
-                  subtitle: Text(_endTime.format(context)),
+                  subtitle: Text(ClockFormat.of(context, _endTime)),
                   onTap: () async {
                     final picked = await ClockFormat.pick(context, initial: _endTime);
                     if (picked != null) setState(() => _endTime = picked);

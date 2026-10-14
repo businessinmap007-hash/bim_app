@@ -2986,5 +2986,14 @@
   "@businessHoursOpensAt": {"placeholders": {"time": {"type": "String"}}},
   "businessHoursClosedToday": "مغلق اليوم",
   "clinicDayClosed": "مغلق",
-  "clinicDayNoSlots": "لا مواعيد"
+  "clinicDayNoSlots": "لا مواعيد",
+  "staffIsPhysician": "طبيب يعالج المرضى",
+  "staffIsPhysicianHint": "يظهر اسمه على زياراته ووصفاته وطلبات الفحوصات، وله جدول مواعيده ويرى مرضاه فقط.",
+  "staffPhysicianBadge": "طبيب",
+  "clinicPickPhysician": "الطبيب",
+  "myAppointmentsTitle": "مواعيدي",
+  "clinicWithPhysician": "مع {name}",
+  "clinicSlotsForPhysician": "مواعيد الطبيب",
+  "clinicSlotsForHospital": "المستشفى نفسه (بلا طبيب محدد)",
+  "treatingPhysicianLabel": "الطبيب المعالج"
 }

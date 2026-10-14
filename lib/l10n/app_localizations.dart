@@ -16410,6 +16410,60 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لا مواعيد'**
   String get clinicDayNoSlots;
+
+  /// No description provided for @staffIsPhysician.
+  ///
+  /// In ar, this message translates to:
+  /// **'طبيب يعالج المرضى'**
+  String get staffIsPhysician;
+
+  /// No description provided for @staffIsPhysicianHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يظهر اسمه على زياراته ووصفاته وطلبات الفحوصات، وله جدول مواعيده ويرى مرضاه فقط.'**
+  String get staffIsPhysicianHint;
+
+  /// No description provided for @staffPhysicianBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'طبيب'**
+  String get staffPhysicianBadge;
+
+  /// No description provided for @clinicPickPhysician.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطبيب'**
+  String get clinicPickPhysician;
+
+  /// No description provided for @myAppointmentsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مواعيدي'**
+  String get myAppointmentsTitle;
+
+  /// No description provided for @clinicWithPhysician.
+  ///
+  /// In ar, this message translates to:
+  /// **'مع {name}'**
+  String clinicWithPhysician(Object name);
+
+  /// No description provided for @clinicSlotsForPhysician.
+  ///
+  /// In ar, this message translates to:
+  /// **'مواعيد الطبيب'**
+  String get clinicSlotsForPhysician;
+
+  /// No description provided for @clinicSlotsForHospital.
+  ///
+  /// In ar, this message translates to:
+  /// **'المستشفى نفسه (بلا طبيب محدد)'**
+  String get clinicSlotsForHospital;
+
+  /// No description provided for @treatingPhysicianLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطبيب المعالج'**
+  String get treatingPhysicianLabel;
 }
 
 class _AppLocalizationsDelegate

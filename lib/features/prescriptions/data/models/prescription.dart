@@ -19,10 +19,16 @@ class PrescriptionImage {
 class PrescriptionParty {
   final int id;
   final String? name;
-  const PrescriptionParty({required this.id, this.name});
+
+  /// the title a physician holds at the hospital («استشاري باطنة») — only on `physician`
+  final String? title;
+  const PrescriptionParty({required this.id, this.name, this.title});
 
   factory PrescriptionParty.fromJson(Map<String, dynamic> json) =>
-      PrescriptionParty(id: json['id'] as int, name: json['name'] as String?);
+      PrescriptionParty(id: json['id'] as int, name: json['name'] as String?, title: json['title'] as String?);
+
+  /// «د. فلان — استشاري باطنة»
+  String get line => (title ?? '').isEmpty ? (name ?? '') : '${name ?? ''} — $title';
 }
 
 /// One drug line. Written by the doctor at issue time — read-only here.
@@ -105,6 +111,9 @@ class Prescription {
   final DateTime? pricedAt;
   final List<PrescriptionImage> images;
   final PrescriptionParty? doctor;
+
+  /// the physician who works for the hospital and wrote it (the hospital stays the doctor of record)
+  final PrescriptionParty? physician;
   final PrescriptionParty patient;
   final PrescriptionParty? pharmacy;
   final List<PrescriptionParty> sharedWith;
@@ -146,6 +155,7 @@ class Prescription {
     this.pricedAt,
     this.images = const [],
     this.doctor,
+    this.physician,
     required this.patient,
     this.pharmacy,
     this.sharedWith = const [],
@@ -198,6 +208,9 @@ class Prescription {
         .toList(),
     doctor: json['doctor'] != null
         ? PrescriptionParty.fromJson(json['doctor'] as Map<String, dynamic>)
+        : null,
+    physician: json['physician'] is Map<String, dynamic>
+        ? PrescriptionParty.fromJson(json['physician'] as Map<String, dynamic>)
         : null,
     patient: PrescriptionParty.fromJson(
       json['patient'] as Map<String, dynamic>,
