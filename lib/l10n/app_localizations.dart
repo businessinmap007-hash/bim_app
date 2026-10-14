@@ -16414,13 +16414,13 @@ abstract class AppLocalizations {
   /// No description provided for @staffIsPhysician.
   ///
   /// In ar, this message translates to:
-  /// **'طبيب يعالج المرضى'**
+  /// **'طبيب معالج'**
   String get staffIsPhysician;
 
   /// No description provided for @staffIsPhysicianHint.
   ///
   /// In ar, this message translates to:
-  /// **'يظهر اسمه على زياراته ووصفاته وطلبات الفحوصات، وله جدول مواعيده ويرى مرضاه فقط.'**
+  /// **'يظهر اسمه على زياراته ووصفاته وطلبات الفحوصات، ويُختار عند الحجز، وله جدوله ويرى مرضاه فقط.'**
   String get staffIsPhysicianHint;
 
   /// No description provided for @staffPhysicianBadge.
@@ -16536,6 +16536,72 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'بدون قسم'**
   String get staffNoDepartment;
+
+  /// No description provided for @procStatusAdvised.
+  ///
+  /// In ar, this message translates to:
+  /// **'قرار الطبيب بانتظار ردّك'**
+  String get procStatusAdvised;
+
+  /// No description provided for @procDecisionBy.
+  ///
+  /// In ar, this message translates to:
+  /// **'قرار الطبيب: {name}'**
+  String procDecisionBy(String name);
+
+  /// No description provided for @procConfirmDecision.
+  ///
+  /// In ar, this message translates to:
+  /// **'أؤكد الإجراء'**
+  String get procConfirmDecision;
+
+  /// No description provided for @procDeclineDecision.
+  ///
+  /// In ar, this message translates to:
+  /// **'أعتذر'**
+  String get procDeclineDecision;
+
+  /// No description provided for @procDecisionAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'قرار إجراء جراحي'**
+  String get procDecisionAction;
+
+  /// No description provided for @procDecisionTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'قرار إجراء جراحي'**
+  String get procDecisionTitle;
+
+  /// No description provided for @procDecisionNotes.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات للمريض (اختياري)'**
+  String get procDecisionNotes;
+
+  /// No description provided for @procDecisionSend.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال القرار للمريض'**
+  String get procDecisionSend;
+
+  /// No description provided for @procDecisionSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إرسال القرار إلى المريض.'**
+  String get procDecisionSent;
+
+  /// No description provided for @procDecisionNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تحدّد المستشفى إجراءات بعد.'**
+  String get procDecisionNone;
+
+  /// No description provided for @staffPhysicianBundle.
+  ///
+  /// In ar, this message translates to:
+  /// **'يشمل: مواعيد العيادة، الوصفات الطبية، طلبات الفحوصات والأشعة، وقرارات الإجراءات الجراحية.'**
+  String get staffPhysicianBundle;
 }
 
 class _AppLocalizationsDelegate

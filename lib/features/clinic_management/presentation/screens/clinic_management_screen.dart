@@ -11,6 +11,9 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
+import '../../../hospital/application/hospital_providers.dart';
+import '../../../hospital/presentation/widgets/procedure_decision_sheet.dart';
+import '../../../auth/application/auth_controller.dart';
 import '../../../prescriptions/presentation/screens/issue_prescription_screen.dart';
 import '../../../prescriptions/presentation/screens/prescription_detail_screen.dart';
 import '../../application/business_clinic_providers.dart';
@@ -183,6 +186,21 @@ class _AppointmentTile extends ConsumerStatefulWidget {
 
 class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
   bool _busy = false;
+
+  /// The hospital whose procedures a decision picks from: the one a physician acts for, else the account itself.
+  int? get _hospitalId {
+    final acting = ref.read(apiClientProvider).actingBusinessId;
+    if (acting != null) return acting;
+    final me = ref.read(authControllerProvider);
+    return me is AuthSignedIn ? me.user.id : null;
+  }
+
+  bool get _offersProcedures {
+    final id = _hospitalId;
+    if (id == null) return false;
+
+    return (ref.watch(hospitalProceduresProvider(id)).valueOrNull ?? const []).isNotEmpty;
+  }
 
   /// Returns whether [action] actually succeeded — callers that show their
   /// own follow-up snackbar (e.g. reschedule) must check this instead of
@@ -489,6 +507,20 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
                   ),
                 ),
               ),
+              // «قرار إجراء جراحي»: only where this account's hospital offers procedures (a single clinic has none)
+              if (_offersProcedures)
+                _action(
+                  context,
+                  icon: Icons.medical_services_outlined,
+                  label: l10n.procDecisionAction,
+                  onPressed: () => showProcedureDecisionSheet(
+                    context,
+                    hospitalId: _hospitalId!,
+                    patientId: a.patientId,
+                    patientName: a.patientName ?? '',
+                    appointmentId: a.id,
+                  ),
+                ),
               // the tests this doctor ordered for this patient, and whether results are in: read on this device
               if (mine.isNotEmpty)
                 _action(

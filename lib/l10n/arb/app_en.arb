@@ -2962,7 +2962,7 @@
   "clinicDayClosed": "Closed",
   "clinicDayNoSlots": "Full",
   "staffIsPhysician": "Treating physician",
-  "staffIsPhysicianHint": "His name is on his visits, prescriptions and test orders; he has his own schedule and sees only his patients.",
+  "staffIsPhysicianHint": "His name is on his visits, prescriptions and test orders; patients can choose him, he has his own schedule and sees only his patients.",
   "staffPhysicianBadge": "Physician",
   "clinicPickPhysician": "Physician",
   "myAppointmentsTitle": "My appointments",
@@ -2986,5 +2986,21 @@
   "staffIsProviderHint": "Bookings can be assigned to him, and he sees only the ones assigned to him.",
   "staffProviderBadge": "Service provider",
   "staffDepartment": "Department",
-  "staffNoDepartment": "No department"
+  "staffNoDepartment": "No department",
+  "procStatusAdvised": "Physician’s decision — awaiting your answer",
+  "procDecisionBy": "Physician’s decision: {name}",
+  "@procDecisionBy": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "procConfirmDecision": "Confirm the procedure",
+  "procDeclineDecision": "Decline",
+  "procDecisionAction": "Procedure decision",
+  "procDecisionTitle": "Procedure decision",
+  "procDecisionNotes": "Notes for the patient (optional)",
+  "procDecisionSend": "Send the decision to the patient",
+  "procDecisionSent": "The decision was sent to the patient.",
+  "procDecisionNone": "The hospital has not listed any procedure yet.",
+  "staffPhysicianBundle": "Includes: clinic appointments, prescriptions, test and radiology orders, and procedure decisions."
 }

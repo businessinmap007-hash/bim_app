@@ -169,6 +169,15 @@ class _StaffMemberSheet extends ConsumerStatefulWidget {
 }
 
 class _StaffMemberSheetState extends ConsumerState<_StaffMemberSheet> {
+  /// What «طبيب معالج» carries on its own: the visit, the prescription, the test / radiology orders and the decision to
+  /// perform a procedure — ticked and locked while the role is on (the server grants them too).
+  static const _physicianBundle = {'clinic', 'prescriptions', 'investigations', 'procedures'};
+
+  Set<String> _effectiveCapabilities(Iterable<String> available) => {
+    ..._selectedCapabilities,
+    if (_isPhysician) ..._physicianBundle.where(available.contains),
+  };
+
   final _phoneController = TextEditingController();
   final _titleController = TextEditingController();
   final Set<String> _selectedCapabilities = {};
@@ -209,7 +218,8 @@ class _StaffMemberSheetState extends ConsumerState<_StaffMemberSheet> {
       setState(() => _error = l10n.staffPhoneRequired);
       return;
     }
-    if (_selectedCapabilities.isEmpty) {
+    final granted = _effectiveCapabilities(ref.read(staffControllerProvider).capabilities.map((c) => c.key));
+    if (granted.isEmpty) {
       setState(() => _error = l10n.staffCapabilitiesRequired);
       return;
     }
@@ -225,7 +235,7 @@ class _StaffMemberSheetState extends ConsumerState<_StaffMemberSheet> {
         await notifier.update(
           widget.existing!.userId,
           title: _titleController.text.trim(),
-          capabilities: _selectedCapabilities.toList(),
+          capabilities: granted.toList(),
           isActive: _isActive,
           isPhysician: _isPhysician,
           isProvider: _isProvider || _isPhysician,
@@ -236,7 +246,7 @@ class _StaffMemberSheetState extends ConsumerState<_StaffMemberSheet> {
         added = await notifier.add(
           phone: _phoneController.text.trim(),
           title: _titleController.text.trim(),
-          capabilities: _selectedCapabilities.toList(),
+          capabilities: granted.toList(),
           isActive: _isActive,
           isPhysician: _isPhysician,
           isProvider: _isProvider || _isPhysician,
@@ -333,11 +343,24 @@ class _StaffMemberSheetState extends ConsumerState<_StaffMemberSheet> {
               ),
               const SizedBox(height: 12),
               Text(l10n.staffCapabilities, style: Theme.of(context).textTheme.titleSmall),
+              // «طبيب معالج»: a role among the permissions — a clinic / hospital / medical centre only (the accounts that
+              // hold the visit and prescription capabilities). It is what puts him on the booking's chooser.
+              if (capabilities.any((c) => c.key == 'prescriptions' || c.key == 'clinic'))
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  value: _isPhysician,
+                  onChanged: (value) => setState(() => _isPhysician = value),
+                  title: Text(l10n.staffIsPhysician),
+                  subtitle: Text('${l10n.staffIsPhysicianHint}\n${l10n.staffPhysicianBundle}'),
+                ),
               for (final cap in capabilities)
                 CheckboxListTile(
                   contentPadding: EdgeInsets.zero,
-                  value: _selectedCapabilities.contains(cap.key),
-                  onChanged: (checked) => setState(() {
+                  value: _selectedCapabilities.contains(cap.key) || (_isPhysician && _physicianBundle.contains(cap.key)),
+                  // the role's own permissions are not the owner's to remove while the role is on
+                  onChanged: _isPhysician && _physicianBundle.contains(cap.key)
+                      ? null
+                      : (checked) => setState(() {
                     if (checked ?? false) {
                       _selectedCapabilities.add(cap.key);
                     } else {
@@ -345,16 +368,6 @@ class _StaffMemberSheetState extends ConsumerState<_StaffMemberSheet> {
                     }
                   }),
                   title: Text(cap.name(languageCode)),
-                ),
-              // a clinic / hospital / medical centre only (they are the accounts that hold the visit and prescription
-              // capabilities): the member is a treating physician — named on what he handles, sees his own patients
-              if (capabilities.any((c) => c.key == 'prescriptions' || c.key == 'clinic'))
-                SwitchListTile(
-                  contentPadding: EdgeInsets.zero,
-                  value: _isPhysician,
-                  onChanged: (value) => setState(() => _isPhysician = value),
-                  title: Text(l10n.staffIsPhysician),
-                  subtitle: Text(l10n.staffIsPhysicianHint),
                 ),
               // «نظام التعيين»: any business — a person who serves its customers directly (a barber, a trainer, a driver…)
               // can be assigned work and sees only his own; a physician is one already

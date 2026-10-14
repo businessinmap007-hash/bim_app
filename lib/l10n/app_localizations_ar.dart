@@ -8942,11 +8942,11 @@ class AppLocalizationsAr extends AppLocalizations {
   String get clinicDayNoSlots => 'لا مواعيد';
 
   @override
-  String get staffIsPhysician => 'طبيب يعالج المرضى';
+  String get staffIsPhysician => 'طبيب معالج';
 
   @override
   String get staffIsPhysicianHint =>
-      'يظهر اسمه على زياراته ووصفاته وطلبات الفحوصات، وله جدول مواعيده ويرى مرضاه فقط.';
+      'يظهر اسمه على زياراته ووصفاته وطلبات الفحوصات، ويُختار عند الحجز، وله جدوله ويرى مرضاه فقط.';
 
   @override
   String get staffPhysicianBadge => 'طبيب';
@@ -9009,4 +9009,40 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get staffNoDepartment => 'بدون قسم';
+
+  @override
+  String get procStatusAdvised => 'قرار الطبيب بانتظار ردّك';
+
+  @override
+  String procDecisionBy(String name) {
+    return 'قرار الطبيب: $name';
+  }
+
+  @override
+  String get procConfirmDecision => 'أؤكد الإجراء';
+
+  @override
+  String get procDeclineDecision => 'أعتذر';
+
+  @override
+  String get procDecisionAction => 'قرار إجراء جراحي';
+
+  @override
+  String get procDecisionTitle => 'قرار إجراء جراحي';
+
+  @override
+  String get procDecisionNotes => 'ملاحظات للمريض (اختياري)';
+
+  @override
+  String get procDecisionSend => 'إرسال القرار للمريض';
+
+  @override
+  String get procDecisionSent => 'تم إرسال القرار إلى المريض.';
+
+  @override
+  String get procDecisionNone => 'لم تحدّد المستشفى إجراءات بعد.';
+
+  @override
+  String get staffPhysicianBundle =>
+      'يشمل: مواعيد العيادة، الوصفات الطبية، طلبات الفحوصات والأشعة، وقرارات الإجراءات الجراحية.';
 }

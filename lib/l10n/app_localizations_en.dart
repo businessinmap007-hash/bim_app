@@ -8999,7 +8999,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get staffIsPhysicianHint =>
-      'His name is on his visits, prescriptions and test orders; he has his own schedule and sees only his patients.';
+      'His name is on his visits, prescriptions and test orders; patients can choose him, he has his own schedule and sees only his patients.';
 
   @override
   String get staffPhysicianBadge => 'Physician';
@@ -9063,4 +9063,41 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get staffNoDepartment => 'No department';
+
+  @override
+  String get procStatusAdvised => 'Physician’s decision — awaiting your answer';
+
+  @override
+  String procDecisionBy(String name) {
+    return 'Physician’s decision: $name';
+  }
+
+  @override
+  String get procConfirmDecision => 'Confirm the procedure';
+
+  @override
+  String get procDeclineDecision => 'Decline';
+
+  @override
+  String get procDecisionAction => 'Procedure decision';
+
+  @override
+  String get procDecisionTitle => 'Procedure decision';
+
+  @override
+  String get procDecisionNotes => 'Notes for the patient (optional)';
+
+  @override
+  String get procDecisionSend => 'Send the decision to the patient';
+
+  @override
+  String get procDecisionSent => 'The decision was sent to the patient.';
+
+  @override
+  String get procDecisionNone =>
+      'The hospital has not listed any procedure yet.';
+
+  @override
+  String get staffPhysicianBundle =>
+      'Includes: clinic appointments, prescriptions, test and radiology orders, and procedure decisions.';
 }

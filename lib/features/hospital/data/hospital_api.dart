@@ -79,6 +79,19 @@ class HospitalApi {
 
   Future<ProcedureRequestItem> cancelProcedureRequest(int id) async => _request(await _client.post('/procedure-requests/$id/cancel'));
 
+  /// The patient accepts his physician's decision: it becomes a request the hospital schedules.
+  Future<ProcedureRequestItem> confirmProcedureRequest(int id) async => _request(await _client.post('/procedure-requests/$id/confirm'));
+
+  /// «قرار إجراء جراحي»: the treating physician decides one of the hospital's procedures for a patient.
+  Future<ProcedureRequestItem> decideProcedure({required int patientId, required int offeringId, String? notes, int? appointmentId}) async => _request(
+    await _client.post('/business/procedure-decisions', data: {
+      'patient_id': patientId,
+      'hospital_procedure_id': offeringId,
+      if (notes != null && notes.isNotEmpty) 'notes': notes,
+      'appointment_id': ?appointmentId,
+    }),
+  );
+
   // the hospital
   Future<List<ProcedureCatalogSection>> procedureCatalog() async => _catalog(await _client.get('/business/hospital-procedures'));
 

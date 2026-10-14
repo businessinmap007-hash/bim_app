@@ -23,6 +23,7 @@ String procedureKindLabel(AppLocalizations l10n, String kind) => switch (kind) {
 };
 
 String procedureStatusLabel(AppLocalizations l10n, String status) => switch (status) {
+  ProcedureRequestItem.advised => l10n.procStatusAdvised,
   ProcedureRequestItem.requested => l10n.procStatusRequested,
   ProcedureRequestItem.accepted => l10n.procStatusAccepted,
   ProcedureRequestItem.completed => l10n.procStatusCompleted,
@@ -67,6 +68,7 @@ class ProcedureRequestCard extends StatelessWidget {
             const SizedBox(height: 2),
             Text('${procedureKindLabel(l10n, r.kind)}${who.isEmpty ? '' : ' · $who'}', style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
             if (forHospital && (r.patientPhone ?? '').isNotEmpty) Text(r.patientPhone!, style: theme.textTheme.bodySmall),
+            if (r.physicianLine != null) Text(l10n.procDecisionBy(r.physicianLine!), style: theme.textTheme.bodySmall),
             const SizedBox(height: 8),
             Text(procedurePriceText(l10n, r.price), style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700)),
             if (r.scheduledAt != null)

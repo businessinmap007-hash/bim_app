@@ -86,6 +86,8 @@ class ProcedureCatalogSection {
 
 /// A patient's request for a procedure — read by the patient and by the hospital.
 class ProcedureRequestItem {
+  /// The treating physician decided it; the patient has not answered yet.
+  static const advised = 'advised';
   static const requested = 'requested';
   static const accepted = 'accepted';
   static const completed = 'completed';
@@ -105,6 +107,9 @@ class ProcedureRequestItem {
   final String? patientName;
   final String? patientPhone;
 
+  /// «قرار الطبيب»: who decided it (name + his title at the hospital), when a physician did.
+  final String? physicianLine;
+
   const ProcedureRequestItem({
     required this.id,
     required this.status,
@@ -118,9 +123,13 @@ class ProcedureRequestItem {
     this.hospitalName,
     this.patientName,
     this.patientPhone,
+    this.physicianLine,
   });
 
-  bool get canCancel => status == requested || status == accepted;
+  bool get isAdvised => status == advised;
+
+  /// An advised decision is declined from the same call (the patient answers it), so it is cancellable too.
+  bool get canCancel => status == requested || status == accepted || status == advised;
 
   factory ProcedureRequestItem.fromJson(Map<String, dynamic> json) {
     final hospital = json['hospital'] as Map<String, dynamic>?;
@@ -139,6 +148,16 @@ class ProcedureRequestItem {
       hospitalName: hospital?['name'] as String?,
       patientName: patient?['name'] as String?,
       patientPhone: patient?['phone'] as String?,
+      physicianLine: _physicianLine(json['physician']),
     );
   }
+}
+
+String? _physicianLine(dynamic json) {
+  if (json is! Map<String, dynamic>) return null;
+  final name = (json['name'] as String?)?.trim() ?? '';
+  if (name.isEmpty) return null;
+  final title = (json['title'] as String?)?.trim() ?? '';
+
+  return title.isEmpty ? name : '$name — $title';
 }

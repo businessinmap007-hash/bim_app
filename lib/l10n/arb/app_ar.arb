@@ -2987,8 +2987,8 @@
   "businessHoursClosedToday": "مغلق اليوم",
   "clinicDayClosed": "مغلق",
   "clinicDayNoSlots": "لا مواعيد",
-  "staffIsPhysician": "طبيب يعالج المرضى",
-  "staffIsPhysicianHint": "يظهر اسمه على زياراته ووصفاته وطلبات الفحوصات، وله جدول مواعيده ويرى مرضاه فقط.",
+  "staffIsPhysician": "طبيب معالج",
+  "staffIsPhysicianHint": "يظهر اسمه على زياراته ووصفاته وطلبات الفحوصات، ويُختار عند الحجز، وله جدوله ويرى مرضاه فقط.",
   "staffPhysicianBadge": "طبيب",
   "clinicPickPhysician": "الطبيب",
   "myAppointmentsTitle": "مواعيدي",
@@ -3012,5 +3012,21 @@
   "staffIsProviderHint": "يمكن تعيين الحجوزات عليه، ويرى حجوزاته المعيّنة له فقط.",
   "staffProviderBadge": "مقدّم خدمة",
   "staffDepartment": "القسم",
-  "staffNoDepartment": "بدون قسم"
+  "staffNoDepartment": "بدون قسم",
+  "procStatusAdvised": "قرار الطبيب بانتظار ردّك",
+  "procDecisionBy": "قرار الطبيب: {name}",
+  "@procDecisionBy": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "procConfirmDecision": "أؤكد الإجراء",
+  "procDeclineDecision": "أعتذر",
+  "procDecisionAction": "قرار إجراء جراحي",
+  "procDecisionTitle": "قرار إجراء جراحي",
+  "procDecisionNotes": "ملاحظات للمريض (اختياري)",
+  "procDecisionSend": "إرسال القرار للمريض",
+  "procDecisionSent": "تم إرسال القرار إلى المريض.",
+  "procDecisionNone": "لم تحدّد المستشفى إجراءات بعد.",
+  "staffPhysicianBundle": "يشمل: مواعيد العيادة، الوصفات الطبية، طلبات الفحوصات والأشعة، وقرارات الإجراءات الجراحية."
 }

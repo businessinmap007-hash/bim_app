@@ -36,6 +36,22 @@ class MyProcedureRequestsScreen extends ConsumerWidget {
                 return ProcedureRequestCard(
                   request: r,
                   actions: [
+                    // the physician's decision waits for his answer
+                    if (r.isAdvised)
+                      FilledButton(
+                        onPressed: () async {
+                          final messenger = ScaffoldMessenger.of(context);
+                          try {
+                            await ref.read(hospitalApiProvider).confirmProcedureRequest(r.id);
+                            ref.invalidate(myProcedureRequestsProvider);
+                          } catch (e) {
+                            messenger.showSnackBar(
+                              SnackBar(content: Text(e is ApiException && e.message.isNotEmpty ? e.message : l10n.commonSomethingWentWrong)),
+                            );
+                          }
+                        },
+                        child: Text(l10n.procConfirmDecision),
+                      ),
                     if (r.canCancel)
                       OutlinedButton(
                         onPressed: () async {
@@ -49,7 +65,7 @@ class MyProcedureRequestsScreen extends ConsumerWidget {
                             );
                           }
                         },
-                        child: Text(l10n.procCancelRequest),
+                        child: Text(r.isAdvised ? l10n.procDeclineDecision : l10n.procCancelRequest),
                       ),
                   ],
                 );
