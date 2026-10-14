@@ -59,12 +59,21 @@ class ProcedureRequestCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Expanded(child: Text(r.name, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700))),
-                Text(procedureStatusLabel(l10n, r.status), style: theme.textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w700)),
-              ],
-            ),
+            // the status sits beside the name; a decision awaiting the patient has a long label, so it takes its own line
+            if (r.isAdvised) ...[
+              Text(r.name, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+              const SizedBox(height: 2),
+              Text(
+                procedureStatusLabel(l10n, r.status),
+                style: theme.textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w700, color: theme.colorScheme.primary),
+              ),
+            ] else
+              Row(
+                children: [
+                  Expanded(child: Text(r.name, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700))),
+                  Text(procedureStatusLabel(l10n, r.status), style: theme.textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w700)),
+                ],
+              ),
             const SizedBox(height: 2),
             Text('${procedureKindLabel(l10n, r.kind)}${who.isEmpty ? '' : ' · $who'}', style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
             if (forHospital && (r.patientPhone ?? '').isNotEmpty) Text(r.patientPhone!, style: theme.textTheme.bodySmall),
