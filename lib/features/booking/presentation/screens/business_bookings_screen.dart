@@ -285,9 +285,10 @@ class BusinessBookingDetailScreen extends ConsumerWidget {
                 if (booking.bookableLabel != null)
                   _DetailRow(label: l10n.businessBookingsUnit, value: booking.bookableLabel!),
                 // the hotel's own room number — given when the stay starts, changeable by the hotel before and after
-                if (booking.bookableItemType == 'booking_stay' && (booking.status == 'accepted' || booking.status == 'in_progress'))
+                if (booking.bookableItemType == 'booking_stay' && (booking.status == 'accepted' || booking.status == 'in_progress')) ...[
                   DayUseTag(booking: booking),
                   _RoomRow(booking: booking, bookingId: bookingId),
+                ],
                 // «نظام التعيين»: who is responsible — the same tile every business uses
                 AssigneeTile(
                   current: booking.assignee,
