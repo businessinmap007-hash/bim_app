@@ -1022,11 +1022,14 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
 
     setState(() => _busy = true);
     try {
-      await ref.read(myBookingsControllerProvider.notifier).reschedule(
+      final moved = await ref.read(myBookingsControllerProvider.notifier).reschedule(
         _booking.id,
         DateTime(date.year, date.month, date.day, time.hour, time.minute),
       );
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.bookingsRescheduled)));
+      if (mounted) {
+        setState(() => _booking = moved);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.bookingsRescheduled)));
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

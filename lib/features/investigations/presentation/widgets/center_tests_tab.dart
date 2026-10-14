@@ -203,8 +203,15 @@ class _CenterTestsTabState extends ConsumerState<CenterTestsTab> {
                           label: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(LocalFormat.weekday(context).format(d), style: theme.textTheme.bodySmall),
-                              Text(LocalFormat.dayNumber(context).format(d), style: theme.textTheme.titleMedium),
+                              // the chip's own selected ink (gold on the navy fill), never a fixed dark colour
+                              Text(
+                                LocalFormat.weekday(context).format(d),
+                                style: theme.textTheme.bodySmall?.copyWith(color: selected ? theme.colorScheme.onPrimary : null),
+                              ),
+                              Text(
+                                LocalFormat.dayNumber(context).format(d),
+                                style: theme.textTheme.titleMedium?.copyWith(color: selected ? theme.colorScheme.onPrimary : null),
+                              ),
                             ],
                           ),
                         );
