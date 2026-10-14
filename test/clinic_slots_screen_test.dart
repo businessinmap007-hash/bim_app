@@ -296,17 +296,18 @@ void main() {
     expect(api.services, [[11, 21]]);
   });
 
-  testWidgets('the day strip is the two weeks the doctor sits: closed days and full days show greyed, with the reason', (tester) async {
+  testWidgets('the day strip shows only the days the doctor sits: a closed day and a leave are not drawn, a full day is greyed', (tester) async {
     final api = _FakeApi();
     final slots = [
       ClinicSlot(id: 1, startsAt: DateTime(2026, 10, 14, 17), durationMinutes: 30, visitKind: 'كشف', price: 300),
       ClinicSlot(id: 2, startsAt: DateTime(2026, 10, 17, 17), durationMinutes: 30, visitKind: 'كشف', price: 300),
     ];
     final days = [
-      ClinicDay(date: DateTime(2026, 10, 14), slots: 1),
+      ClinicDay(date: DateTime(2026, 10, 14), slots: 1, published: 4),
       ClinicDay(date: DateTime(2026, 10, 15), open: false), // Friday: shut by the weekly hours
-      ClinicDay(date: DateTime(2026, 10, 16), slots: 0), // sits, but nothing left
-      ClinicDay(date: DateTime(2026, 10, 17), slots: 1),
+      ClinicDay(date: DateTime(2026, 10, 16), slots: 0, published: 0), // a leave: nothing published
+      ClinicDay(date: DateTime(2026, 10, 17), slots: 1, published: 1),
+      ClinicDay(date: DateTime(2026, 10, 18), slots: 0, published: 6), // sits, but every time is taken
     ];
 
     await tester.pumpWidget(
@@ -325,16 +326,18 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    // all four days are on the strip — not only the two that have times
+    // the days he sits are on the strip …
     expect(find.text('14'), findsOneWidget);
-    expect(find.text('15'), findsOneWidget);
-    expect(find.text('16'), findsOneWidget);
     expect(find.text('17'), findsOneWidget);
-    expect(find.text('مغلق'), findsOneWidget);
+    expect(find.text('18'), findsOneWidget);
+    // … the shut Friday and the leave day are not drawn at all
+    expect(find.text('15'), findsNothing);
+    expect(find.text('16'), findsNothing);
+    expect(find.text('مغلق'), findsNothing);
+    // the full day says so, and cannot be picked
     expect(find.text('لا مواعيد'), findsOneWidget);
 
-    // a day without times cannot be picked; the 17th can, and shows its own time
-    await tester.tap(find.text('15'));
+    await tester.tap(find.text('18'));
     await tester.pumpAndSettle();
     expect(find.descendant(of: find.byType(GridView), matching: find.byType(InkWell)), findsNWidgets(1));
 

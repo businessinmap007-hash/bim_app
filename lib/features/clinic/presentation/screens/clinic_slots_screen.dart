@@ -167,12 +167,12 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
             : dated.where((s) => byKey ? (s.visitKindKey == kind || s.visitKindKey == null) : s.visitKind == kind).toList();
         if (ofKind.isEmpty) return Center(child: Text(l10n.clinicNoOpenSlots));
 
-        // the strip is the whole window the server sent (two weeks): a day the doctor sits shows, one with nothing
-        // left or a closed day shows greyed and cannot be picked. An older server sends no strip — then only the days
-        // that have times.
+        // the strip is the days the doctor sits in the next two weeks — a closed day (the clinic's hours) and a day
+        // with nothing published (a leave) are not shown at all; a day whose times are all taken shows greyed as
+        // full. An older server sends no strip — then only the days that have times.
         final withTimes = <DateTime>{for (final s in ofKind) _dateOnly(s.startsAt!)};
         final strip = board.days.isNotEmpty
-            ? board.days
+            ? [for (final d in board.days) if (d.isWorkingDay) d]
             : [for (final d in (withTimes.toList()..sort())) ClinicDay(date: d, slots: 1)];
         final enabledDays = [for (final d in strip) if (withTimes.contains(_dateOnly(d.date))) _dateOnly(d.date)];
         final day = _day != null && enabledDays.contains(_day) ? _day! : enabledDays.first;
@@ -265,7 +265,7 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
                     day: d,
                     selected: d == day,
                     enabled: enabled,
-                    caption: enabled ? null : (strip[i].open ? l10n.clinicDayNoSlots : l10n.clinicDayClosed),
+                    caption: enabled ? null : l10n.clinicDayNoSlots,
                     onTap: () => setState(() {
                       _day = d;
                       _slotId = null;

@@ -39,7 +39,14 @@ class ClinicDay {
   final String? closesAt;
   final int slots;
 
-  const ClinicDay({required this.date, this.open = true, this.opensAt, this.closesAt, this.slots = 0});
+  /// every time the clinic published that day, booked ones too — none means the doctor is not there (a leave)
+  final int published;
+
+  const ClinicDay({required this.date, this.open = true, this.opensAt, this.closesAt, this.slots = 0, int? published})
+    : published = published ?? slots;
+
+  /// a day the doctor sits: the clinic is open by its hours AND published times for it
+  bool get isWorkingDay => open && published > 0;
 
   factory ClinicDay.fromJson(Map<String, dynamic> json) {
     final hours = json['hours'] is Map<String, dynamic> ? json['hours'] as Map<String, dynamic> : null;
@@ -51,6 +58,7 @@ class ClinicDay {
       opensAt: hours?['open'] as String?,
       closesAt: hours?['close'] as String?,
       slots: (json['slots'] as num?)?.toInt() ?? 0,
+      published: (json['published'] as num?)?.toInt(),
     );
   }
 }
