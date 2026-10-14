@@ -6,7 +6,21 @@ class HospitalDoctorEntry {
   final int? businessId;
   final String status;
 
-  const HospitalDoctorEntry({required this.id, required this.name, this.businessId, this.status = 'active'});
+  /// A physician who WORKS for the hospital (a staff member placed in this department): his own board is where a
+  /// patient books, [physicianId] names it; [title] is his title there. Not removable from this list.
+  final int? physicianId;
+  final String? title;
+
+  const HospitalDoctorEntry({
+    required this.id,
+    required this.name,
+    this.businessId,
+    this.status = 'active',
+    this.physicianId,
+    this.title,
+  });
+
+  bool get isStaff => physicianId != null;
 
   bool get isPending => status == 'pending';
 
@@ -15,6 +29,8 @@ class HospitalDoctorEntry {
     name: json['name'] as String? ?? '',
     businessId: (json['business_id'] as num?)?.toInt(),
     status: json['status'] as String? ?? 'active',
+    physicianId: (json['physician_id'] as num?)?.toInt(),
+    title: (json['title'] as String?)?.trim().isEmpty ?? true ? null : (json['title'] as String).trim(),
   );
 }
 

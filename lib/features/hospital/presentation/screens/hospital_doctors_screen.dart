@@ -86,14 +86,23 @@ class HospitalDoctorsScreen extends ConsumerWidget {
                               ListTile(
                                 contentPadding: EdgeInsets.zero,
                                 dense: true,
-                                leading: Icon(doc.businessId == null ? Icons.person_outline : Icons.verified_user_outlined),
-                                title: Text(doc.name),
-                                subtitle: doc.isPending ? Text(l10n.hospitalDoctorPending) : null,
-                                trailing: IconButton(
-                                  tooltip: l10n.commonDelete,
-                                  icon: const Icon(Icons.delete_outline),
-                                  onPressed: () => _remove(context, ref, doc),
+                                leading: Icon(
+                                  doc.isStaff
+                                      ? Icons.badge_outlined
+                                      : (doc.businessId == null ? Icons.person_outline : Icons.verified_user_outlined),
                                 ),
+                                title: Text(doc.name),
+                                subtitle: doc.isPending
+                                    ? Text(l10n.hospitalDoctorPending)
+                                    : (doc.title != null ? Text(doc.title!) : null),
+                                // a staff physician is managed from the staff screen, where his department is chosen
+                                trailing: doc.isStaff
+                                    ? null
+                                    : IconButton(
+                                        tooltip: l10n.commonDelete,
+                                        icon: const Icon(Icons.delete_outline),
+                                        onPressed: () => _remove(context, ref, doc),
+                                      ),
                               ),
                         ],
                       ),

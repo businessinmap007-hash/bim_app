@@ -2984,5 +2984,7 @@
   "assigneeRelease": "Unassign",
   "staffIsProvider": "Serves customers directly",
   "staffIsProviderHint": "Bookings can be assigned to him, and he sees only the ones assigned to him.",
-  "staffProviderBadge": "Service provider"
+  "staffProviderBadge": "Service provider",
+  "staffDepartment": "Department",
+  "staffNoDepartment": "No department"
 }

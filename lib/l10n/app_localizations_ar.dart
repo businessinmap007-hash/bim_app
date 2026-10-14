@@ -9003,4 +9003,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get staffProviderBadge => 'مقدّم خدمة';
+
+  @override
+  String get staffDepartment => 'القسم';
+
+  @override
+  String get staffNoDepartment => 'بدون قسم';
 }

@@ -7,6 +7,7 @@ import 'package:bim_app/core/assignment/assignee.dart';
 import 'package:bim_app/core/assignment/assignment_providers.dart';
 import 'package:bim_app/core/assignment/widgets/assignee_widgets.dart';
 import 'package:bim_app/features/booking/data/models/booking.dart';
+import 'package:bim_app/features/hospital/data/models/hospital_department.dart';
 import 'package:bim_app/features/staff/data/models/staff_member.dart';
 import 'package:bim_app/l10n/app_localizations.dart';
 
@@ -143,5 +144,39 @@ void main() {
 
     await tester.pumpWidget(_host(const AssigneeLine(_ahmed)));
     expect(find.text('المسؤول: أحمد — حلاق أول'), findsOneWidget);
+  });
+
+  group('«القسم»', () {
+    test('a staff member carries the department he is placed in', () {
+      final staff = StaffMember.fromJson({
+        'user': {'id': 1, 'name': 'محمد فهيم'},
+        'capabilities': <String>[],
+        'is_active': true,
+        'is_physician': true,
+        'department': {'id': 31, 'name': 'جراحة عيون'},
+      });
+      expect(staff.departmentId, 31);
+      expect(staff.departmentName, 'جراحة عيون');
+
+      final none = StaffMember.fromJson({'user': {'id': 2, 'name': 'س'}, 'capabilities': <String>[], 'is_active': true, 'department': null});
+      expect(none.departmentId, isNull);
+    });
+
+    test('a department lists a staff physician with his own board, a listed doctor without', () {
+      final department = HospitalDepartment.fromJson({
+        'option_id': 31,
+        'name': 'جراحة عيون',
+        'doctors': [
+          {'id': 0, 'name': 'محمد فهيم', 'title': 'استشاري جراحة عيون', 'business_id': null, 'physician_id': 782640, 'staff': true, 'status': 'active'},
+          {'id': 5, 'name': 'د. مكتوب', 'business_id': null, 'status': 'active'},
+        ],
+      });
+
+      final staff = department.doctors.first;
+      expect(staff.isStaff, isTrue);
+      expect(staff.physicianId, 782640);
+      expect(staff.title, 'استشاري جراحة عيون');
+      expect(department.doctors.last.isStaff, isFalse);
+    });
   });
 }

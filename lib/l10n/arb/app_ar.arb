@@ -3010,5 +3010,7 @@
   "assigneeRelease": "بدون تعيين",
   "staffIsProvider": "يخدم العملاء مباشرة",
   "staffIsProviderHint": "يمكن تعيين الحجوزات عليه، ويرى حجوزاته المعيّنة له فقط.",
-  "staffProviderBadge": "مقدّم خدمة"
+  "staffProviderBadge": "مقدّم خدمة",
+  "staffDepartment": "القسم",
+  "staffNoDepartment": "بدون قسم"
 }

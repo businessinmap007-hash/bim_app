@@ -16524,6 +16524,18 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'مقدّم خدمة'**
   String get staffProviderBadge;
+
+  /// No description provided for @staffDepartment.
+  ///
+  /// In ar, this message translates to:
+  /// **'القسم'**
+  String get staffDepartment;
+
+  /// No description provided for @staffNoDepartment.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون قسم'**
+  String get staffNoDepartment;
 }
 
 class _AppLocalizationsDelegate

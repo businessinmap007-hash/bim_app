@@ -80,7 +80,10 @@ class _BusinessBookingsScreenState extends ConsumerState<BusinessBookingsScreen>
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            child: Wrap(
+            // one line: the six chips never wrap onto a second row, the row scrolls sideways instead
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
               spacing: 8,
               children: [
                 ChoiceChip(
@@ -114,6 +117,7 @@ class _BusinessBookingsScreenState extends ConsumerState<BusinessBookingsScreen>
                   onSelected: (_) => _setStatus('cancelled'),
                 ),
               ],
+              ),
             ),
           ),
           Expanded(

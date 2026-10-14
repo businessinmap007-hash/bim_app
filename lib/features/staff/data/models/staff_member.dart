@@ -73,6 +73,10 @@ class StaffMember {
   /// «مقدّم خدمة»: serves customers directly, so work can be assigned to him and he sees his own list.
   final bool isProvider;
 
+  /// «القسم»: the one department of the hospital he is placed in (id of the option + its name), or null.
+  final int? departmentId;
+  final String? departmentName;
+
   const StaffMember({
     required this.userId,
     required this.name,
@@ -84,6 +88,8 @@ class StaffMember {
     this.status = StaffStatus.accepted,
     this.isPhysician = false,
     this.isProvider = false,
+    this.departmentId,
+    this.departmentName,
   });
 
   bool get isPending => status == StaffStatus.pending;
@@ -103,6 +109,8 @@ class StaffMember {
       status: json['status'] as String? ?? StaffStatus.accepted,
       isPhysician: json['is_physician'] as bool? ?? false,
       isProvider: json['is_provider'] as bool? ?? (json['is_physician'] as bool? ?? false),
+      departmentId: (json['department'] is Map<String, dynamic>) ? ((json['department'] as Map<String, dynamic>)['id'] as num?)?.toInt() : null,
+      departmentName: (json['department'] is Map<String, dynamic>) ? (json['department'] as Map<String, dynamic>)['name'] as String? : null,
     );
   }
 }

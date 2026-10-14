@@ -25,12 +25,21 @@ class ClinicSlotsScreen extends StatelessWidget {
   /// A specialty clinic that listed its services: the patient says which one he came for.
   final bool hasServices;
 
-  const ClinicSlotsScreen({super.key, required this.clinicId, required this.clinicName, this.hasServices = false});
+  /// Opened from a department's doctor: that physician's board is the one shown first.
+  final int? initialPhysicianId;
+
+  const ClinicSlotsScreen({
+    super.key,
+    required this.clinicId,
+    required this.clinicName,
+    this.hasServices = false,
+    this.initialPhysicianId,
+  });
 
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(title: Text(clinicName)),
-    body: ClinicBookingBoard(clinicId: clinicId, hasServices: hasServices),
+    body: ClinicBookingBoard(clinicId: clinicId, hasServices: hasServices, initialPhysicianId: initialPhysicianId),
   );
 }
 
@@ -41,8 +50,15 @@ class ClinicBookingBoard extends ConsumerStatefulWidget {
   final int clinicId;
   final bool hasServices;
   final bool embedded;
+  final int? initialPhysicianId;
 
-  const ClinicBookingBoard({super.key, required this.clinicId, this.hasServices = false, this.embedded = false});
+  const ClinicBookingBoard({
+    super.key,
+    required this.clinicId,
+    this.hasServices = false,
+    this.embedded = false,
+    this.initialPhysicianId,
+  });
 
   @override
   ConsumerState<ClinicBookingBoard> createState() => _ClinicBookingBoardState();
@@ -59,6 +75,12 @@ class _ClinicBookingBoardState extends ConsumerState<ClinicBookingBoard> {
   final _reason = TextEditingController();
   final _forName = TextEditingController();
   final _forPhone = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _physicianId = widget.initialPhysicianId;
+  }
 
   @override
   void dispose() {

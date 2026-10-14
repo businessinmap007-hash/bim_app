@@ -31,6 +31,7 @@ class StaffApi {
     bool isActive = true,
     bool isPhysician = false,
     bool isProvider = false,
+    int? departmentOptionId,
   }) async {
     final data =
         await _client.post(
@@ -42,6 +43,7 @@ class StaffApi {
                 'is_active': isActive,
                 if (isPhysician) 'is_physician': true,
                 if (isProvider) 'is_provider': true,
+                'department_option_id': ?departmentOptionId,
               },
             )
             as Map<String, dynamic>;
@@ -55,6 +57,10 @@ class StaffApi {
     bool? isActive,
     bool? isPhysician,
     bool? isProvider,
+    int? departmentOptionId,
+
+    /// null [departmentOptionId] is «no department» only when this is true — the call otherwise leaves it alone
+    bool setDepartment = false,
   }) async {
     final data =
         await _client.patch(
@@ -65,6 +71,7 @@ class StaffApi {
                 'is_active': ?isActive,
                 'is_physician': ?isPhysician,
                 'is_provider': ?isProvider,
+                if (setDepartment) 'department_option_id': departmentOptionId,
               },
             )
             as Map<String, dynamic>;

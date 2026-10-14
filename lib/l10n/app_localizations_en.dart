@@ -9057,4 +9057,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get staffProviderBadge => 'Service provider';
+
+  @override
+  String get staffDepartment => 'Department';
+
+  @override
+  String get staffNoDepartment => 'No department';
 }

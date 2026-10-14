@@ -7,6 +7,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/person_card.dart';
 import '../../../general_chat/application/general_chat_providers.dart';
 import '../../../general_chat/presentation/screens/chat_thread_screen.dart';
+import '../../../hospital/application/hospital_providers.dart';
 import '../../application/staff_providers.dart';
 import '../../data/models/staff_member.dart';
 
@@ -92,6 +93,7 @@ class _StaffTile extends StatelessWidget {
           children: [
             if (member.isPhysician) _Badge(text: l10n.staffPhysicianBadge, color: AppColors.success)
             else if (member.isProvider) _Badge(text: l10n.staffProviderBadge, color: AppColors.success),
+            if (member.departmentName != null) _Badge(text: member.departmentName!, color: AppColors.accentGold),
             if (member.isPending)
               _Badge(text: l10n.staffPendingBadge, color: AppColors.warning)
             else if (!member.isActive)
@@ -173,6 +175,7 @@ class _StaffMemberSheetState extends ConsumerState<_StaffMemberSheet> {
   bool _isActive = true;
   bool _isPhysician = false;
   bool _isProvider = false;
+  int? _departmentId;
   bool _submitting = false;
   String? _error;
 
@@ -189,6 +192,7 @@ class _StaffMemberSheetState extends ConsumerState<_StaffMemberSheet> {
       _isActive = existing.isActive;
       _isPhysician = existing.isPhysician;
       _isProvider = existing.isProvider;
+      _departmentId = existing.departmentId;
     }
   }
 
@@ -225,6 +229,8 @@ class _StaffMemberSheetState extends ConsumerState<_StaffMemberSheet> {
           isActive: _isActive,
           isPhysician: _isPhysician,
           isProvider: _isProvider || _isPhysician,
+          departmentOptionId: (_isProvider || _isPhysician) ? _departmentId : null,
+          setDepartment: true,
         );
       } else {
         added = await notifier.add(
@@ -234,6 +240,7 @@ class _StaffMemberSheetState extends ConsumerState<_StaffMemberSheet> {
           isActive: _isActive,
           isPhysician: _isPhysician,
           isProvider: _isProvider || _isPhysician,
+          departmentOptionId: (_isProvider || _isPhysician) ? _departmentId : null,
         );
       }
       if (mounted) {
@@ -358,6 +365,28 @@ class _StaffMemberSheetState extends ConsumerState<_StaffMemberSheet> {
                   onChanged: (value) => setState(() => _isProvider = value),
                   title: Text(l10n.staffIsProvider),
                   subtitle: Text(l10n.staffIsProviderHint),
+                ),
+              // «القسم»: a hospital places its physician in ONE of the departments it ticked («جراحة عيون»); every
+              // other business has none, so the field is not drawn
+              if (_isProvider || _isPhysician)
+                Builder(
+                  builder: (context) {
+                    final departments = ref.watch(myHospitalDepartmentsProvider).valueOrNull ?? const [];
+                    if (departments.isEmpty) return const SizedBox.shrink();
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: DropdownButtonFormField<int?>(
+                        initialValue: departments.any((d) => d.optionId == _departmentId) ? _departmentId : null,
+                        decoration: InputDecoration(labelText: l10n.staffDepartment),
+                        items: [
+                          DropdownMenuItem<int?>(value: null, child: Text(l10n.staffNoDepartment)),
+                          for (final d in departments) DropdownMenuItem<int?>(value: d.optionId, child: Text(d.name)),
+                        ],
+                        onChanged: (value) => setState(() => _departmentId = value),
+                      ),
+                    );
+                  },
                 ),
               SwitchListTile(
                 contentPadding: EdgeInsets.zero,
