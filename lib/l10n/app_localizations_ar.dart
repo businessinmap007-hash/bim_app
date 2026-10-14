@@ -9131,4 +9131,37 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get invPriceListActionPackages => 'الباقات';
+
+  @override
+  String externalDepositOwed(String amount) {
+    return 'العربون المطلوب خارج المنصة: $amount ج';
+  }
+
+  @override
+  String get externalDepositWaiting =>
+      'حساب العميل متوقف عن العمليات الجديدة حتى تؤكد أنك استلمته أو تقبل الحجز بدونه.';
+
+  @override
+  String get externalDepositCash => 'استلمت كاش';
+
+  @override
+  String get externalDepositTransfer => 'استلمت تحويلًا';
+
+  @override
+  String get externalDepositWaive => 'قبول العربون — بلا دفع خارج المنصة';
+
+  @override
+  String get externalDepositReceived => 'تم تأكيد استلام العربون.';
+
+  @override
+  String get externalDepositWaived => 'قُبل الحجز بلا عربون.';
+
+  @override
+  String externalDepositCustomerNote(String amount) {
+    return 'ادفع العربون ($amount ج) للنشاط مباشرة كاش أو تحويلًا. حسابك لا يستطيع إجراء عمليات جديدة حتى يؤكد النشاط استلامه، ويمكنك إلغاء الحجز لإنهاء الانتظار.';
+  }
+
+  @override
+  String get depositAsPaymentOffer =>
+      'يمكنك قبول العربون المجمّد دفعةً من قيمة الحجز بدل الدفع خارج المنصة.';
 }

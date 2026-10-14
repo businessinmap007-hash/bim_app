@@ -199,6 +199,10 @@ class BusinessBookingDetailController extends StateNotifier<BusinessBookingDetai
 
   Future<void> acceptDepositAsPayment() => _run(() => _api.acceptDepositAsPayment(bookingId));
 
+  Future<void> confirmExternalDeposit(String method) => _run(() => _api.confirmExternalDeposit(bookingId, method));
+
+  Future<void> waiveExternalDeposit() => _run(() => _api.waiveExternalDeposit(bookingId));
+
   Future<void> declineDepositAsPayment() => _run(() => _api.declineDepositAsPayment(bookingId));
 
   Future<void> _run(Future<Booking> Function() call) async {

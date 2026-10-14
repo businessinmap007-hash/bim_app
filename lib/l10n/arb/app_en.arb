@@ -3038,5 +3038,24 @@
   "invHomeFeeLabel": "Fee for taking the sample at home",
   "invHomeFeeHint": "Leave it empty if the lab does not take samples at home.",
   "invHomeFeeSaved": "Price saved.",
-  "invPriceListActionPackages": "Packages"
+  "invPriceListActionPackages": "Packages",
+  "externalDepositOwed": "Deposit owed outside the platform: {amount} EGP",
+  "@externalDepositOwed": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "externalDepositWaiting": "The customer’s account cannot start new dealings until you confirm you received it or accept the booking without it.",
+  "externalDepositCash": "Received in cash",
+  "externalDepositTransfer": "Received by transfer",
+  "externalDepositWaive": "Accept the deposit — no payment outside",
+  "externalDepositReceived": "The deposit was confirmed as received.",
+  "externalDepositWaived": "The booking was accepted with no deposit.",
+  "externalDepositCustomerNote": "Pay the deposit ({amount} EGP) to the business directly, in cash or by transfer. Your account cannot start new dealings until the business confirms it, and you may cancel the booking to end the wait.",
+  "@externalDepositCustomerNote": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "depositAsPaymentOffer": "You may take the frozen deposit as a payment toward the booking instead of a payment outside the platform."
 }

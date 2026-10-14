@@ -65,6 +65,29 @@ class DepositAsPayment {
   );
 }
 
+/// «العربون خارج المنصة»: the deposit taken in cash or by a transfer outside the platform — owed, and whether the
+/// business has said it arrived (`received`) or accepted the booking without it (`waived`). While it is `pending` the
+/// customer's account waits for the business.
+class ExternalDeposit {
+  final bool required;
+  final String? status;
+  final double amount;
+  final String? method;
+
+  const ExternalDeposit({this.required = false, this.status, this.amount = 0, this.method});
+
+  bool get isPending => required && status == 'pending';
+  bool get isReceived => status == 'received';
+  bool get isWaived => status == 'waived';
+
+  factory ExternalDeposit.fromJson(Map<String, dynamic> json) => ExternalDeposit(
+    required: json['required'] as bool? ?? false,
+    status: json['status'] as String?,
+    amount: (json['amount'] as num?)?.toDouble() ?? 0,
+    method: json['method'] as String?,
+  );
+}
+
 /// «بالدور»: where a waiting booking stands in its day's queue right now.
 class BookingQueueState {
   final int turn;
@@ -124,6 +147,7 @@ class Booking {
   final int? partySize;
   final BookingDeposit? deposit;
   final DepositAsPayment depositAsPayment;
+  final ExternalDeposit externalDeposit;
 
   /// «يجب التواجد قبل الموعد بـ ١٥ دقيقة» — the business's own notice, as it composed it.
   final String? arrivalNotice;
@@ -175,6 +199,7 @@ class Booking {
     this.partySize,
     this.deposit,
     this.depositAsPayment = const DepositAsPayment(),
+    this.externalDeposit = const ExternalDeposit(),
     this.arrivalNotice,
     this.queueTurn,
     this.queue,
@@ -241,6 +266,7 @@ class Booking {
       queue: json['queue'] is Map<String, dynamic> ? BookingQueueState.fromJson(json['queue'] as Map<String, dynamic>) : null,
       arrivalNotice: json['arrival_notice'] is Map<String, dynamic> ? (json['arrival_notice'] as Map<String, dynamic>)['message'] as String? : null,
       depositAsPayment: json['deposit_as_payment'] is Map<String, dynamic> ? DepositAsPayment.fromJson(json['deposit_as_payment'] as Map<String, dynamic>) : const DepositAsPayment(),
+      externalDeposit: json['external_deposit'] is Map<String, dynamic> ? ExternalDeposit.fromJson(json['external_deposit'] as Map<String, dynamic>) : const ExternalDeposit(),
     );
   }
 }

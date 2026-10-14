@@ -16758,6 +16758,60 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الباقات'**
   String get invPriceListActionPackages;
+
+  /// No description provided for @externalDepositOwed.
+  ///
+  /// In ar, this message translates to:
+  /// **'العربون المطلوب خارج المنصة: {amount} ج'**
+  String externalDepositOwed(String amount);
+
+  /// No description provided for @externalDepositWaiting.
+  ///
+  /// In ar, this message translates to:
+  /// **'حساب العميل متوقف عن العمليات الجديدة حتى تؤكد أنك استلمته أو تقبل الحجز بدونه.'**
+  String get externalDepositWaiting;
+
+  /// No description provided for @externalDepositCash.
+  ///
+  /// In ar, this message translates to:
+  /// **'استلمت كاش'**
+  String get externalDepositCash;
+
+  /// No description provided for @externalDepositTransfer.
+  ///
+  /// In ar, this message translates to:
+  /// **'استلمت تحويلًا'**
+  String get externalDepositTransfer;
+
+  /// No description provided for @externalDepositWaive.
+  ///
+  /// In ar, this message translates to:
+  /// **'قبول العربون — بلا دفع خارج المنصة'**
+  String get externalDepositWaive;
+
+  /// No description provided for @externalDepositReceived.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تأكيد استلام العربون.'**
+  String get externalDepositReceived;
+
+  /// No description provided for @externalDepositWaived.
+  ///
+  /// In ar, this message translates to:
+  /// **'قُبل الحجز بلا عربون.'**
+  String get externalDepositWaived;
+
+  /// No description provided for @externalDepositCustomerNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'ادفع العربون ({amount} ج) للنشاط مباشرة كاش أو تحويلًا. حسابك لا يستطيع إجراء عمليات جديدة حتى يؤكد النشاط استلامه، ويمكنك إلغاء الحجز لإنهاء الانتظار.'**
+  String externalDepositCustomerNote(String amount);
+
+  /// No description provided for @depositAsPaymentOffer.
+  ///
+  /// In ar, this message translates to:
+  /// **'يمكنك قبول العربون المجمّد دفعةً من قيمة الحجز بدل الدفع خارج المنصة.'**
+  String get depositAsPaymentOffer;
 }
 
 class _AppLocalizationsDelegate

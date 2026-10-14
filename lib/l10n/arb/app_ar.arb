@@ -3064,5 +3064,24 @@
   "invHomeFeeLabel": "سعر سحب العينة من المنزل",
   "invHomeFeeHint": "اتركه فارغًا إن كان المعمل لا يسحب العينات من المنازل.",
   "invHomeFeeSaved": "تم حفظ السعر.",
-  "invPriceListActionPackages": "الباقات"
+  "invPriceListActionPackages": "الباقات",
+  "externalDepositOwed": "العربون المطلوب خارج المنصة: {amount} ج",
+  "@externalDepositOwed": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "externalDepositWaiting": "حساب العميل متوقف عن العمليات الجديدة حتى تؤكد أنك استلمته أو تقبل الحجز بدونه.",
+  "externalDepositCash": "استلمت كاش",
+  "externalDepositTransfer": "استلمت تحويلًا",
+  "externalDepositWaive": "قبول العربون — بلا دفع خارج المنصة",
+  "externalDepositReceived": "تم تأكيد استلام العربون.",
+  "externalDepositWaived": "قُبل الحجز بلا عربون.",
+  "externalDepositCustomerNote": "ادفع العربون ({amount} ج) للنشاط مباشرة كاش أو تحويلًا. حسابك لا يستطيع إجراء عمليات جديدة حتى يؤكد النشاط استلامه، ويمكنك إلغاء الحجز لإنهاء الانتظار.",
+  "@externalDepositCustomerNote": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "depositAsPaymentOffer": "يمكنك قبول العربون المجمّد دفعةً من قيمة الحجز بدل الدفع خارج المنصة."
 }

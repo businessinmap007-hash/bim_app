@@ -9186,4 +9186,39 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get invPriceListActionPackages => 'Packages';
+
+  @override
+  String externalDepositOwed(String amount) {
+    return 'Deposit owed outside the platform: $amount EGP';
+  }
+
+  @override
+  String get externalDepositWaiting =>
+      'The customer’s account cannot start new dealings until you confirm you received it or accept the booking without it.';
+
+  @override
+  String get externalDepositCash => 'Received in cash';
+
+  @override
+  String get externalDepositTransfer => 'Received by transfer';
+
+  @override
+  String get externalDepositWaive => 'Accept the deposit — no payment outside';
+
+  @override
+  String get externalDepositReceived =>
+      'The deposit was confirmed as received.';
+
+  @override
+  String get externalDepositWaived =>
+      'The booking was accepted with no deposit.';
+
+  @override
+  String externalDepositCustomerNote(String amount) {
+    return 'Pay the deposit ($amount EGP) to the business directly, in cash or by transfer. Your account cannot start new dealings until the business confirms it, and you may cancel the booking to end the wait.';
+  }
+
+  @override
+  String get depositAsPaymentOffer =>
+      'You may take the frozen deposit as a payment toward the booking instead of a payment outside the platform.';
 }

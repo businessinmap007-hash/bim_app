@@ -166,6 +166,20 @@ class BookingApi {
     return _booking(data);
   }
 
+  /// «استلمت العربون»: the deposit taken outside the platform arrived ([method] `cash` | `transfer`).
+  Future<Booking> confirmExternalDeposit(int id, String method, {int? businessId}) async {
+    final path = '/business/bookings/$id/deposit/confirm-received${businessId == null ? '' : '?business_id=$businessId'}';
+    final data = await _client.post(path, data: {'method': method}) as Map<String, dynamic>;
+    return _booking(data);
+  }
+
+  /// «قبول العربون»: accepted with no deposit paid outside the platform.
+  Future<Booking> waiveExternalDeposit(int id, {int? businessId}) async {
+    final path = '/business/bookings/$id/deposit/waive${businessId == null ? '' : '?business_id=$businessId'}';
+    final data = await _client.post(path) as Map<String, dynamic>;
+    return _booking(data);
+  }
+
   /// A booking out of a `{booking, deposit_as_payment, …}` reply — the deposit-as-payment state rides beside the booking.
   Booking _booking(Map<String, dynamic> data) {
     final booking = Map<String, dynamic>.from(data['booking'] as Map<String, dynamic>);

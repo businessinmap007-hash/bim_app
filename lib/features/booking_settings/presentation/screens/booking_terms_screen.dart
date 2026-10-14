@@ -213,13 +213,6 @@ class _BookingTermsScreenState extends ConsumerState<BookingTermsScreen> {
             Text(l10n.bookingTermsGuaranteeHint, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
           ],
           const SizedBox(height: 12),
-          SwitchListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Text(l10n.bookingTermsForfeitTitle),
-            subtitle: Text(l10n.bookingTermsForfeitHint),
-            value: terms.forfeitToBusiness,
-            onChanged: (v) => _change((t) => t.copyWith(forfeitToBusiness: v)),
-          ),
           if (terms.mode == BookingSecurityMode.depositFreeze)
             SwitchListTile(
               contentPadding: EdgeInsets.zero,

@@ -318,6 +318,54 @@ class BusinessBookingDetailScreen extends ConsumerWidget {
                     Text(booking.price.toStringAsFixed(2), style: Theme.of(context).textTheme.titleSmall),
                   ],
                 ),
+                // «العربون خارج المنصة»: the customer's account waits until the business says it arrived (or accepts without it)
+                if (booking.externalDeposit.isPending) ...[
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(color: AppColors.accentGold.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(12)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          l10n.externalDepositOwed(booking.externalDeposit.amount.toStringAsFixed(booking.externalDeposit.amount == booking.externalDeposit.amount.roundToDouble() ? 0 : 2)),
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(l10n.externalDepositWaiting, style: Theme.of(context).textTheme.bodySmall),
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: FilledButton(
+                                onPressed: () => _run(context, ref, () => ref.read(businessBookingDetailControllerProvider(bookingId).notifier).confirmExternalDeposit('cash')),
+                                child: Text(l10n.externalDepositCash),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: FilledButton.tonal(
+                                onPressed: () => _run(context, ref, () => ref.read(businessBookingDetailControllerProvider(bookingId).notifier).confirmExternalDeposit('transfer')),
+                                child: Text(l10n.externalDepositTransfer),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        OutlinedButton(
+                          onPressed: () => _run(context, ref, () => ref.read(businessBookingDetailControllerProvider(bookingId).notifier).waiveExternalDeposit()),
+                          child: Text(l10n.externalDepositWaive),
+                        ),
+                      ],
+                    ),
+                  ),
+                ] else if (booking.externalDeposit.isReceived || booking.externalDeposit.isWaived) ...[
+                  const SizedBox(height: 12),
+                  Text(
+                    booking.externalDeposit.isWaived ? l10n.externalDepositWaived : l10n.externalDepositReceived,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
                 if (booking.status == 'pending' || booking.status == 'accepted')
                   BookingMoneyCard(bookingId: bookingId),
                 const SizedBox(height: 24),
@@ -432,24 +480,27 @@ class BusinessBookingDetailScreen extends ConsumerWidget {
                   else if (booking.deposit!.isRefunded)
                     Text(l10n.bookingsDepositRefunded)
                   else ...[
-                    if (booking.depositAsPayment.requested) ...[
+                    // «قبول العربون»: the business may take the frozen deposit as a payment whether or not the customer asked
+                    if (booking.depositAsPayment.requested || booking.depositAsPayment.allowed) ...[
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(color: AppColors.accentGold.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(12)),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Text(l10n.depositAsPaymentAsked),
+                            Text(booking.depositAsPayment.requested ? l10n.depositAsPaymentAsked : l10n.depositAsPaymentOffer),
                             const SizedBox(height: 8),
                             FilledButton(
                               onPressed: () => _run(context, ref, () => ref.read(businessBookingDetailControllerProvider(bookingId).notifier).acceptDepositAsPayment()),
                               child: Text(l10n.depositAsPaymentAccept),
                             ),
-                            const SizedBox(height: 6),
-                            OutlinedButton(
-                              onPressed: () => _run(context, ref, () => ref.read(businessBookingDetailControllerProvider(bookingId).notifier).declineDepositAsPayment()),
-                              child: Text(l10n.depositAsPaymentDecline),
-                            ),
+                            if (booking.depositAsPayment.requested) ...[
+                              const SizedBox(height: 6),
+                              OutlinedButton(
+                                onPressed: () => _run(context, ref, () => ref.read(businessBookingDetailControllerProvider(bookingId).notifier).declineDepositAsPayment()),
+                                child: Text(l10n.depositAsPaymentDecline),
+                              ),
+                            ],
                           ],
                         ),
                       ),

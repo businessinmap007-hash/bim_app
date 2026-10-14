@@ -1167,6 +1167,18 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
             Text(booking.serviceName(languageCode), style: Theme.of(context).textTheme.bodyMedium),
             DayUseTag(booking: booking),
             // the hotel gives the room when the stay starts — only then does the server send its number
+            // «العربون خارج المنصة»: pay it to the business directly; the account waits until the business confirms
+            if (booking.externalDeposit.isPending) ...[
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(color: AppColors.accentGold.withValues(alpha: 0.14), borderRadius: BorderRadius.circular(10)),
+                child: Text(
+                  l10n.externalDepositCustomerNote(booking.externalDeposit.amount.toStringAsFixed(booking.externalDeposit.amount == booking.externalDeposit.amount.roundToDouble() ? 0 : 2)),
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ),
+            ],
             // «نظام التعيين»: who is responsible for it
             if (booking.assignee != null) ...[
               const SizedBox(height: 6),
