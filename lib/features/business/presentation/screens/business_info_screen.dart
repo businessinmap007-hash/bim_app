@@ -279,7 +279,6 @@ class _HoursCard extends StatelessWidget {
                         Expanded(child: Text(names[d]!, style: theme.textTheme.bodyMedium?.copyWith(fontWeight: weight))),
                         Text(
                           value,
-                          textDirection: TextDirection.ltr,
                           style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: weight,
                             color: day?.isClosed == true ? theme.hintColor : null,
