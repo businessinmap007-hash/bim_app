@@ -17004,6 +17004,120 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'غطاء الطلب {amount} ج مجمّد حتى التسليم وتأكيد الدفع.'**
   String orderDepositHeld(String amount);
+
+  /// No description provided for @guarantorInviteButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'ادعُ ضامنًا من أصدقائك'**
+  String get guarantorInviteButton;
+
+  /// No description provided for @guarantorSheetTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضامن من أصدقائك'**
+  String get guarantorSheetTitle;
+
+  /// No description provided for @guarantorSheetBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'ينقصك {amount} ج لتغطية العربون. صديق له ضمان فعّال يُجمِّد جزءًا منه حتى تنتهي العملية ثم يعود إليه كاملًا.'**
+  String guarantorSheetBody(String amount);
+
+  /// No description provided for @guarantorNoNeed.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضمانك ومحفظتك يغطيان العربون الآن. يمكنك مع ذلك دعوة صديق.'**
+  String get guarantorNoNeed;
+
+  /// No description provided for @guarantorFieldHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'هاتف الصديق أو بريده'**
+  String get guarantorFieldHint;
+
+  /// No description provided for @guarantorSend.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال الدعوة'**
+  String get guarantorSend;
+
+  /// No description provided for @guarantorSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُرسلت الدعوة.'**
+  String get guarantorSent;
+
+  /// No description provided for @guarantorStatusInvited.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار رده'**
+  String get guarantorStatusInvited;
+
+  /// No description provided for @guarantorStatusAccepted.
+  ///
+  /// In ar, this message translates to:
+  /// **'قبل وجمّد {amount} ج من ضمانه'**
+  String guarantorStatusAccepted(String amount);
+
+  /// No description provided for @guarantorStatusDeclined.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتذر'**
+  String get guarantorStatusDeclined;
+
+  /// No description provided for @guarantorStatusReleased.
+  ///
+  /// In ar, this message translates to:
+  /// **'عاد إليه ضمانه'**
+  String get guarantorStatusReleased;
+
+  /// No description provided for @guarantorStatusCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُلغيت الدعوة'**
+  String get guarantorStatusCancelled;
+
+  /// No description provided for @guarantorRequestTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب ضمان'**
+  String get guarantorRequestTitle;
+
+  /// No description provided for @guarantorRequestBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} يطلب أن تضمن عمليته: يُجمَّد جزء من ضمانك حتى تنتهي العملية ثم يعود إليك كاملًا، ولا يُخصم منه شيء.'**
+  String guarantorRequestBody(String name);
+
+  /// No description provided for @guarantorAvailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتاح من ضمانك: {amount} ج'**
+  String guarantorAvailable(String amount);
+
+  /// No description provided for @guarantorAmountLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ الذي تجمّده من ضمانك'**
+  String get guarantorAmountLabel;
+
+  /// No description provided for @guarantorAccept.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضمنه'**
+  String get guarantorAccept;
+
+  /// No description provided for @guarantorDecline.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتذر'**
+  String get guarantorDecline;
+
+  /// No description provided for @guarantorAccepted.
+  ///
+  /// In ar, this message translates to:
+  /// **'جُمِّد جزء من ضمانك لهذه العملية.'**
+  String get guarantorAccepted;
 }
 
 class _AppLocalizationsDelegate

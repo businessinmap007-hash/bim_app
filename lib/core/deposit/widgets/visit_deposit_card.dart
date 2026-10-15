@@ -6,6 +6,7 @@ import '../../../l10n/app_localizations.dart';
 import '../../network/api_exception.dart';
 import '../visit_deposit.dart';
 import '../visit_deposit_providers.dart';
+import 'invite_guarantor_sheet.dart';
 
 /// «عربون الجدية» of one health visit, in plain words, with what each side may do about it.
 ///
@@ -154,6 +155,15 @@ class _VisitDepositCardState extends ConsumerState<VisitDepositCard> {
               padding: const EdgeInsets.only(top: 2),
               child: Text(l10n.visitDepositBusinessFromGuarantee(_money(_d.businessGuaranteeAmount)), style: theme.textTheme.bodySmall),
             ),
+          // short of the deposit? a friend with an active guarantee may stand for it until the operation ends
+          if (!widget.forBusiness && _d.status == VisitDeposit.quoted && !_d.isExternal) ...[
+            const SizedBox(height: 10),
+            OutlinedButton.icon(
+              onPressed: () => showInviteGuarantorSheet(context, kind: widget.kind, subjectId: widget.subjectId),
+              icon: const Icon(Icons.group_add_outlined),
+              label: Text(l10n.guarantorInviteButton),
+            ),
+          ],
           if (answersExternal) ...[
             const SizedBox(height: 10),
             Row(

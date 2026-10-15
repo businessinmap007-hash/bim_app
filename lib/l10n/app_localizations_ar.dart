@@ -9294,4 +9294,70 @@ class AppLocalizationsAr extends AppLocalizations {
   String orderDepositHeld(String amount) {
     return 'غطاء الطلب $amount ج مجمّد حتى التسليم وتأكيد الدفع.';
   }
+
+  @override
+  String get guarantorInviteButton => 'ادعُ ضامنًا من أصدقائك';
+
+  @override
+  String get guarantorSheetTitle => 'ضامن من أصدقائك';
+
+  @override
+  String guarantorSheetBody(String amount) {
+    return 'ينقصك $amount ج لتغطية العربون. صديق له ضمان فعّال يُجمِّد جزءًا منه حتى تنتهي العملية ثم يعود إليه كاملًا.';
+  }
+
+  @override
+  String get guarantorNoNeed =>
+      'ضمانك ومحفظتك يغطيان العربون الآن. يمكنك مع ذلك دعوة صديق.';
+
+  @override
+  String get guarantorFieldHint => 'هاتف الصديق أو بريده';
+
+  @override
+  String get guarantorSend => 'إرسال الدعوة';
+
+  @override
+  String get guarantorSent => 'أُرسلت الدعوة.';
+
+  @override
+  String get guarantorStatusInvited => 'بانتظار رده';
+
+  @override
+  String guarantorStatusAccepted(String amount) {
+    return 'قبل وجمّد $amount ج من ضمانه';
+  }
+
+  @override
+  String get guarantorStatusDeclined => 'اعتذر';
+
+  @override
+  String get guarantorStatusReleased => 'عاد إليه ضمانه';
+
+  @override
+  String get guarantorStatusCancelled => 'أُلغيت الدعوة';
+
+  @override
+  String get guarantorRequestTitle => 'طلب ضمان';
+
+  @override
+  String guarantorRequestBody(String name) {
+    return '$name يطلب أن تضمن عمليته: يُجمَّد جزء من ضمانك حتى تنتهي العملية ثم يعود إليك كاملًا، ولا يُخصم منه شيء.';
+  }
+
+  @override
+  String guarantorAvailable(String amount) {
+    return 'المتاح من ضمانك: $amount ج';
+  }
+
+  @override
+  String get guarantorAmountLabel => 'المبلغ الذي تجمّده من ضمانك';
+
+  @override
+  String get guarantorAccept => 'أضمنه';
+
+  @override
+  String get guarantorDecline => 'اعتذر';
+
+  @override
+  String get guarantorAccepted => 'جُمِّد جزء من ضمانك لهذه العملية.';
 }

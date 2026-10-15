@@ -9357,4 +9357,71 @@ class AppLocalizationsEn extends AppLocalizations {
   String orderDepositHeld(String amount) {
     return 'The order’s $amount EGP cover is frozen until delivery and payment confirmation.';
   }
+
+  @override
+  String get guarantorInviteButton => 'Ask a friend to stand for you';
+
+  @override
+  String get guarantorSheetTitle => 'A friend as guarantor';
+
+  @override
+  String guarantorSheetBody(String amount) {
+    return 'You are $amount EGP short of the deposit. A friend with an active guarantee freezes a part of it until the operation ends, then it goes back to him in full.';
+  }
+
+  @override
+  String get guarantorNoNeed =>
+      'Your guarantee and wallet cover the deposit now. You may still invite a friend.';
+
+  @override
+  String get guarantorFieldHint => 'Friend’s phone or email';
+
+  @override
+  String get guarantorSend => 'Send the invitation';
+
+  @override
+  String get guarantorSent => 'The invitation was sent.';
+
+  @override
+  String get guarantorStatusInvited => 'Waiting for an answer';
+
+  @override
+  String guarantorStatusAccepted(String amount) {
+    return 'Accepted and froze $amount EGP of his guarantee';
+  }
+
+  @override
+  String get guarantorStatusDeclined => 'Declined';
+
+  @override
+  String get guarantorStatusReleased => 'His guarantee went back to him';
+
+  @override
+  String get guarantorStatusCancelled => 'The invitation was cancelled';
+
+  @override
+  String get guarantorRequestTitle => 'Guarantee request';
+
+  @override
+  String guarantorRequestBody(String name) {
+    return '$name asks you to stand for an operation: a part of your guarantee is frozen until it ends, then returned in full — nothing is deducted.';
+  }
+
+  @override
+  String guarantorAvailable(String amount) {
+    return 'Free in your guarantee: $amount EGP';
+  }
+
+  @override
+  String get guarantorAmountLabel => 'Amount to freeze from your guarantee';
+
+  @override
+  String get guarantorAccept => 'I will stand for it';
+
+  @override
+  String get guarantorDecline => 'Decline';
+
+  @override
+  String get guarantorAccepted =>
+      'A part of your guarantee is frozen for this operation.';
 }

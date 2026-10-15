@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/deposit/screens/guarantor_request_screen.dart';
 import '../../auth/application/auth_controller.dart';
 import '../../booking/presentation/screens/business_bookings_screen.dart';
 import '../../business/presentation/screens/business_detail_screen.dart';
@@ -38,6 +39,11 @@ Future<void> openNotificationTarget(BuildContext context, WidgetRef ref, AppNoti
   switch (notification.actionType) {
     case 'open_wallet':
       Navigator.of(context).push(MaterialPageRoute(builder: (_) => const WalletScreen()));
+    // A friend asked him to stand for an operation's deposit: opens straight onto accept / decline.
+    case 'open_coguarantor_request':
+      if (id != null) {
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => GuarantorRequestScreen(guarantorId: id)));
+      }
     case 'open_business_order':
       if (id != null) {
         Navigator.of(context).push(

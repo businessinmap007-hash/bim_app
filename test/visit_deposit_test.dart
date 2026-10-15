@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:bim_app/core/deposit/guarantor.dart';
 import 'package:bim_app/core/deposit/visit_deposit.dart';
 import 'package:bim_app/core/deposit/widgets/visit_deposit_card.dart';
 import 'package:bim_app/features/booking_settings/data/models/booking_terms.dart';
@@ -137,7 +138,25 @@ void main() {
 
       expect(find.textContaining('20'), findsWidgets);
       expect(find.byType(FilledButton), findsNothing);
-      expect(find.byType(OutlinedButton), findsNothing);
+      // the one thing he may do: ask a friend with a guarantee to stand for it
+      expect(find.byType(OutlinedButton), findsOneWidget);
+    });
+
+    test("a friend request reads who asked, how much of his guarantee is free and where it stands", () {
+      final g = Guarantor.fromJson({
+        'id': 9,
+        'status': 'invited',
+        'covered_amount': 0,
+        'guarantor': {'id': 3, 'name': 'صديق'},
+        'requester': {'id': 4, 'name': 'أحمد'},
+        'available_coverage': 100,
+      });
+
+      expect(g.isInvited, isTrue);
+      expect(g.requesterName, 'أحمد');
+      expect(g.availableCoverage, 100);
+      expect(GuarantorNeed.fromJsonOrNull({'deposit': 20, 'combined_coverage': 0, 'needed': 20})!.needed, 20);
+      expect(GuarantorNeed.fromJsonOrNull(null), isNull);
     });
 
     testWidgets('the business answers a deposit owed outside the platform', (tester) async {

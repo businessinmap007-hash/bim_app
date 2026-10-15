@@ -3198,5 +3198,44 @@
     "placeholders": {
       "amount": {"type": "String"}
     }
-  }
+  },
+  "guarantorInviteButton": "ادعُ ضامنًا من أصدقائك",
+  "guarantorSheetTitle": "ضامن من أصدقائك",
+  "guarantorSheetBody": "ينقصك {amount} ج لتغطية العربون. صديق له ضمان فعّال يُجمِّد جزءًا منه حتى تنتهي العملية ثم يعود إليه كاملًا.",
+  "@guarantorSheetBody": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "guarantorNoNeed": "ضمانك ومحفظتك يغطيان العربون الآن. يمكنك مع ذلك دعوة صديق.",
+  "guarantorFieldHint": "هاتف الصديق أو بريده",
+  "guarantorSend": "إرسال الدعوة",
+  "guarantorSent": "أُرسلت الدعوة.",
+  "guarantorStatusInvited": "بانتظار رده",
+  "guarantorStatusAccepted": "قبل وجمّد {amount} ج من ضمانه",
+  "@guarantorStatusAccepted": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "guarantorStatusDeclined": "اعتذر",
+  "guarantorStatusReleased": "عاد إليه ضمانه",
+  "guarantorStatusCancelled": "أُلغيت الدعوة",
+  "guarantorRequestTitle": "طلب ضمان",
+  "guarantorRequestBody": "{name} يطلب أن تضمن عمليته: يُجمَّد جزء من ضمانك حتى تنتهي العملية ثم يعود إليك كاملًا، ولا يُخصم منه شيء.",
+  "@guarantorRequestBody": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "guarantorAvailable": "المتاح من ضمانك: {amount} ج",
+  "@guarantorAvailable": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "guarantorAmountLabel": "المبلغ الذي تجمّده من ضمانك",
+  "guarantorAccept": "أضمنه",
+  "guarantorDecline": "اعتذر",
+  "guarantorAccepted": "جُمِّد جزء من ضمانك لهذه العملية."
 }

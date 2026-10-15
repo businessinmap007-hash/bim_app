@@ -1,4 +1,5 @@
 import '../network/api_client.dart';
+import 'guarantor.dart';
 import 'visit_deposit.dart';
 
 /// «عربون الجدية» of a health visit over HTTP — see Api\V2\VisitDepositController. The same four calls serve a clinic
@@ -23,6 +24,47 @@ class VisitDepositApi {
       '/visit-deposits/${kind.slug}/$id/disputes',
       data: {'reason_code': reasonCode, if (reasonText != null && reasonText.isNotEmpty) 'reason_text': reasonText},
     );
+  }
+
+  // ── a friend stands for the deposit ──────────────────────────────────────────────────────────────────────────
+
+  /// The friends invited for this operation, and what is still missing.
+  Future<GuarantorList> guarantors(VisitKind kind, int id) async {
+    final data = await _client.get('/visit-deposits/${kind.slug}/$id/guarantors') as Map<String, dynamic>;
+
+    return GuarantorList(
+      items: [for (final g in (data['guarantors'] as List<dynamic>? ?? const [])) Guarantor.fromJson(g as Map<String, dynamic>)],
+      need: GuarantorNeed.fromJsonOrNull(data['need']),
+    );
+  }
+
+  /// Invites a friend by phone or email (or account id).
+  Future<Guarantor> inviteGuarantor(VisitKind kind, int id, {String? phone, String? email, int? userId}) async {
+    final data = await _client.post(
+      '/visit-deposits/${kind.slug}/$id/guarantors',
+      data: {'phone': ?phone, 'email': ?email, 'guarantor_user_id': ?userId},
+    ) as Map<String, dynamic>;
+
+    return Guarantor.fromJson(data['guarantor'] as Map<String, dynamic>);
+  }
+
+  /// One request, read by the invited friend.
+  Future<Guarantor> guarantor(int id) async {
+    final data = await _client.get('/guarantors/$id') as Map<String, dynamic>;
+
+    return Guarantor.fromJson(data['guarantor'] as Map<String, dynamic>);
+  }
+
+  Future<Guarantor> acceptGuarantor(int id, double amount) async {
+    final data = await _client.post('/guarantors/$id/accept', data: {'amount': amount}) as Map<String, dynamic>;
+
+    return Guarantor.fromJson(data['guarantor'] as Map<String, dynamic>);
+  }
+
+  Future<Guarantor> declineGuarantor(int id) async {
+    final data = await _client.post('/guarantors/$id/decline') as Map<String, dynamic>;
+
+    return Guarantor.fromJson(data['guarantor'] as Map<String, dynamic>);
   }
 
   Future<VisitDeposit?> _answer(VisitKind kind, int id, String action, [Map<String, dynamic>? data]) async {

@@ -3172,5 +3172,44 @@
     "placeholders": {
       "amount": {"type": "String"}
     }
-  }
+  },
+  "guarantorInviteButton": "Ask a friend to stand for you",
+  "guarantorSheetTitle": "A friend as guarantor",
+  "guarantorSheetBody": "You are {amount} EGP short of the deposit. A friend with an active guarantee freezes a part of it until the operation ends, then it goes back to him in full.",
+  "@guarantorSheetBody": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "guarantorNoNeed": "Your guarantee and wallet cover the deposit now. You may still invite a friend.",
+  "guarantorFieldHint": "Friend’s phone or email",
+  "guarantorSend": "Send the invitation",
+  "guarantorSent": "The invitation was sent.",
+  "guarantorStatusInvited": "Waiting for an answer",
+  "guarantorStatusAccepted": "Accepted and froze {amount} EGP of his guarantee",
+  "@guarantorStatusAccepted": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "guarantorStatusDeclined": "Declined",
+  "guarantorStatusReleased": "His guarantee went back to him",
+  "guarantorStatusCancelled": "The invitation was cancelled",
+  "guarantorRequestTitle": "Guarantee request",
+  "guarantorRequestBody": "{name} asks you to stand for an operation: a part of your guarantee is frozen until it ends, then returned in full — nothing is deducted.",
+  "@guarantorRequestBody": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "guarantorAvailable": "Free in your guarantee: {amount} EGP",
+  "@guarantorAvailable": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "guarantorAmountLabel": "Amount to freeze from your guarantee",
+  "guarantorAccept": "I will stand for it",
+  "guarantorDecline": "Decline",
+  "guarantorAccepted": "A part of your guarantee is frozen for this operation."
 }
