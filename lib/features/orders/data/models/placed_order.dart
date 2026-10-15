@@ -1,3 +1,4 @@
+import '../../../../core/deposit/visit_deposit.dart';
 import '../../../../core/env/env.dart';
 import '../../../../core/time/egypt_time.dart';
 
@@ -208,6 +209,9 @@ class PlacedOrder {
   final DateTime? merchantPaymentConfirmedAt;
   final DateTime? driverPaymentConfirmedAt;
   final bool depositReleased;
+
+  /// Where the deposit the merchant's threshold asked for stands — quoted, held, released, refunded, disputed.
+  final VisitDeposit? deposit;
   // Cash orders are held to the three-party confirmation: pickup/dine-in
   // completion waits on the merchant's confirmation, reviews on settlement.
   final bool paymentConfirmationRequired;
@@ -256,6 +260,7 @@ class PlacedOrder {
     this.merchantPaymentConfirmedAt,
     this.driverPaymentConfirmedAt,
     this.depositReleased = false,
+    this.deposit,
     this.paymentConfirmationRequired = false,
     this.deliveryFeeQuote,
     this.shipping,
@@ -330,6 +335,7 @@ class PlacedOrder {
       merchantPaymentConfirmedAt: EgyptTime.tryParse(paymentConfirmations['merchant_confirmed_at'] as String? ?? ''),
       driverPaymentConfirmedAt: EgyptTime.tryParse(paymentConfirmations['driver_confirmed_at'] as String? ?? ''),
       depositReleased: deposit['released'] as bool? ?? false,
+      deposit: VisitDeposit.fromJsonOrNull(deposit['state']),
       paymentConfirmationRequired: json['payment_confirmation_required'] as bool? ?? false,
       driver: json['delivery_driver'] is Map<String, dynamic>
           ? OrderDriver.fromJson(json['delivery_driver'] as Map<String, dynamic>)

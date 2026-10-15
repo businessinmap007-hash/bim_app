@@ -3180,5 +3180,23 @@
     "placeholders": {
       "amount": {"type": "String"}
     }
+  },
+  "orderDepositQuotedCustomer": "يلزم لهذا الطلب غطاء {amount} ج: يُجمَّد من ضمانك أولًا ثم من محفظتك عند قبول النشاط، ويعود بعد التسليم وتأكيد الدفع.",
+  "@orderDepositQuotedCustomer": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "orderDepositQuotedBusiness": "غطاء هذا الطلب {amount} ج: يُجمَّد من ضمان العميل أولًا ثم محفظته عند قبولك، ويعود بعد التسليم وتأكيد الدفع.",
+  "@orderDepositQuotedBusiness": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "orderDepositHeld": "غطاء الطلب {amount} ج مجمّد حتى التسليم وتأكيد الدفع.",
+  "@orderDepositHeld": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
   }
 }

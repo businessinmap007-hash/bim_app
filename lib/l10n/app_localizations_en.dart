@@ -9342,4 +9342,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String guaranteeBadgeBody(String amount) {
     return 'This is the account’s guarantee level on the platform; it covers its operations up to $amount EGP, so you know which level you are dealing with.';
   }
+
+  @override
+  String orderDepositQuotedCustomer(String amount) {
+    return 'This order needs $amount EGP of cover: frozen from your guarantee first, then your wallet, when the business accepts; it goes back after delivery and payment confirmation.';
+  }
+
+  @override
+  String orderDepositQuotedBusiness(String amount) {
+    return 'This order’s cover is $amount EGP: frozen from the customer’s guarantee first, then his wallet, when you accept; it goes back after delivery and payment confirmation.';
+  }
+
+  @override
+  String orderDepositHeld(String amount) {
+    return 'The order’s $amount EGP cover is frozen until delivery and payment confirmation.';
+  }
 }

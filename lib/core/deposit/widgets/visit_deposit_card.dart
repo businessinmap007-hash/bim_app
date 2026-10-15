@@ -52,6 +52,13 @@ class _VisitDepositCardState extends ConsumerState<VisitDepositCard> {
     final amount = _money(_d.amount);
     final counter = _money(_d.counterAmount);
 
+    if (widget.kind == VisitKind.order && (_d.status == VisitDeposit.quoted || _d.status == VisitDeposit.held)) {
+      return switch (_d.status) {
+        VisitDeposit.quoted => widget.forBusiness ? l10n.orderDepositQuotedBusiness(amount) : l10n.orderDepositQuotedCustomer(amount),
+        _ => l10n.orderDepositHeld(amount),
+      };
+    }
+
     return switch (_d.status) {
       VisitDeposit.quoted =>
         _d.isExternal

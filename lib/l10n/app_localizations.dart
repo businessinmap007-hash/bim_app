@@ -16986,6 +16986,24 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'هذا مستوى ضمان الحساب على المنصة، ويغطي عملياته حتى {amount} ج. فتعرف مع أي مستوى تتعامل.'**
   String guaranteeBadgeBody(String amount);
+
+  /// No description provided for @orderDepositQuotedCustomer.
+  ///
+  /// In ar, this message translates to:
+  /// **'يلزم لهذا الطلب غطاء {amount} ج: يُجمَّد من ضمانك أولًا ثم من محفظتك عند قبول النشاط، ويعود بعد التسليم وتأكيد الدفع.'**
+  String orderDepositQuotedCustomer(String amount);
+
+  /// No description provided for @orderDepositQuotedBusiness.
+  ///
+  /// In ar, this message translates to:
+  /// **'غطاء هذا الطلب {amount} ج: يُجمَّد من ضمان العميل أولًا ثم محفظته عند قبولك، ويعود بعد التسليم وتأكيد الدفع.'**
+  String orderDepositQuotedBusiness(String amount);
+
+  /// No description provided for @orderDepositHeld.
+  ///
+  /// In ar, this message translates to:
+  /// **'غطاء الطلب {amount} ج مجمّد حتى التسليم وتأكيد الدفع.'**
+  String orderDepositHeld(String amount);
 }
 
 class _AppLocalizationsDelegate

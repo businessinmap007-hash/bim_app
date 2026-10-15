@@ -3154,5 +3154,23 @@
     "placeholders": {
       "amount": {"type": "String"}
     }
+  },
+  "orderDepositQuotedCustomer": "This order needs {amount} EGP of cover: frozen from your guarantee first, then your wallet, when the business accepts; it goes back after delivery and payment confirmation.",
+  "@orderDepositQuotedCustomer": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "orderDepositQuotedBusiness": "This order’s cover is {amount} EGP: frozen from the customer’s guarantee first, then his wallet, when you accept; it goes back after delivery and payment confirmation.",
+  "@orderDepositQuotedBusiness": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "orderDepositHeld": "The order’s {amount} EGP cover is frozen until delivery and payment confirmation.",
+  "@orderDepositHeld": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
   }
 }

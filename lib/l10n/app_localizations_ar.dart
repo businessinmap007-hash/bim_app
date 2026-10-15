@@ -9279,4 +9279,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String guaranteeBadgeBody(String amount) {
     return 'هذا مستوى ضمان الحساب على المنصة، ويغطي عملياته حتى $amount ج. فتعرف مع أي مستوى تتعامل.';
   }
+
+  @override
+  String orderDepositQuotedCustomer(String amount) {
+    return 'يلزم لهذا الطلب غطاء $amount ج: يُجمَّد من ضمانك أولًا ثم من محفظتك عند قبول النشاط، ويعود بعد التسليم وتأكيد الدفع.';
+  }
+
+  @override
+  String orderDepositQuotedBusiness(String amount) {
+    return 'غطاء هذا الطلب $amount ج: يُجمَّد من ضمان العميل أولًا ثم محفظته عند قبولك، ويعود بعد التسليم وتأكيد الدفع.';
+  }
+
+  @override
+  String orderDepositHeld(String amount) {
+    return 'غطاء الطلب $amount ج مجمّد حتى التسليم وتأكيد الدفع.';
+  }
 }

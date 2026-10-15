@@ -2,6 +2,8 @@ import '../../../cart/presentation/widgets/weight_picker.dart';
 import '../widgets/order_line_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/deposit/visit_deposit.dart';
+import '../../../../core/deposit/widgets/visit_deposit_card.dart';
 import '../../../../core/guarantee_badge/widgets/account_name.dart';
 
 import '../../../../app/theme/app_colors.dart';
@@ -615,6 +617,8 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                   ),
                   if (order.depositReleased)
                     Text(l10n.businessOrdersDepositReleased, style: TextStyle(color: AppColors.success)),
+                  if (order.deposit != null)
+                    VisitDepositCard(deposit: order.deposit!, kind: VisitKind.order, subjectId: order.id, forBusiness: true),
                 ],
                 if (order.shipping != null) ...[
                   const Divider(height: 24),

@@ -10,6 +10,7 @@ import 'package:bim_app/features/clinic/data/models/clinic_appointment.dart';
 import 'package:bim_app/features/clinic_management/data/models/business_clinic_appointment.dart';
 import 'package:bim_app/features/hospital/data/models/hospital_procedure.dart';
 import 'package:bim_app/features/investigations/data/models/investigation.dart';
+import 'package:bim_app/features/orders/data/models/placed_order.dart';
 import 'package:bim_app/l10n/app_localizations.dart';
 
 Widget _host(Widget child) => ProviderScope(
@@ -61,6 +62,40 @@ void main() {
       expect(BookingTerms.fromJson({'enabled': true, 'security_mode': 'deposit_freeze', 'has_guarantee': true}).hasGuarantee, isTrue);
       // an older server says nothing: nothing is closed
       expect(BookingTerms.fromJson({'enabled': true}).hasGuarantee, isTrue);
+    });
+
+    test('an order carries where its deposit stands', () {
+      final held = PlacedOrder.fromJson({
+        'id': 1,
+        'status': 'pending',
+        'deposit': {
+          'required': true,
+          'amount': 300,
+          'covered': true,
+          'state': {'mode': 'wallet', 'status': 'held', 'amount': 300, 'guarantee_amount': 100},
+        },
+      });
+      final none = PlacedOrder.fromJson({'id': 2, 'status': 'pending'});
+
+      expect(held.deposit!.status, VisitDeposit.held);
+      expect(held.deposit!.guaranteeAmount, 100);
+      expect(none.deposit, isNull);
+    });
+
+    testWidgets('an order speaks of the customer and the order, not of a patient', (tester) async {
+      await tester.pumpWidget(
+        _host(
+          const VisitDepositCard(
+            deposit: VisitDeposit(mode: 'wallet', status: VisitDeposit.quoted, amount: 300),
+            kind: VisitKind.order,
+            subjectId: 1,
+            forBusiness: false,
+          ),
+        ),
+      );
+
+      expect(find.textContaining('الطلب'), findsOneWidget);
+      expect(find.textContaining('المريض'), findsNothing);
     });
 
     test('every kind of visit carries it', () {

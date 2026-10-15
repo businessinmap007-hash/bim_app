@@ -69,7 +69,10 @@ class VisitDeposit {
 enum VisitKind {
   clinicAppointment('clinic-appointment', 'clinic-appointments'),
   investigationOrder('investigation-order', 'investigation-orders'),
-  procedureRequest('procedure-request', 'procedure-requests');
+  procedureRequest('procedure-request', 'procedure-requests'),
+
+  /// a menu / retail order: the cover of the whole order, frozen when the business accepts
+  order('order', 'orders');
 
   /// the `{kind}` of the shared dispute door
   final String slug;
