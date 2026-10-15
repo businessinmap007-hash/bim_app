@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
+import '../../../../core/deposit/visit_deposit.dart';
+import '../../../../core/deposit/widgets/invite_guarantor_sheet.dart';
+import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../location/application/location_providers.dart';
 import '../../../location/data/models/location_models.dart';
@@ -269,8 +272,11 @@ class _TripResultTile extends ConsumerWidget {
     final notesController = TextEditingController();
     bool submitting = false;
     String? error;
+    // the deposit could not be stood for: a friend may stand for it (invited right after the reservation)
+    bool friendOption = false;
+    bool friendPath = false;
 
-    final confirmed = await showModalBottomSheet<bool>(
+    final reservedId = await showModalBottomSheet<int>(
       context: context,
       isScrollControlled: true,
       builder: (sheetContext) => StatefulBuilder(
@@ -313,16 +319,21 @@ class _TripResultTile extends ConsumerWidget {
                       : () async {
                           setSheetState(() => submitting = true);
                           try {
-                            await ref.read(schedulesApiProvider).reserve(
+                            final made = await ref.read(schedulesApiProvider).reserve(
                               result.schedule.id,
                               units: units,
                               notes: notesController.text.trim(),
+                              friendGuarantee: friendPath,
                             );
-                            if (sheetContext.mounted) Navigator.of(sheetContext).pop(true);
-                          } catch (_) {
+                            if (sheetContext.mounted) Navigator.of(sheetContext).pop(made.id);
+                          } catch (e) {
                             setSheetState(() {
                               submitting = false;
-                              error = AppLocalizations.of(sheetContext)!.commonSomethingWentWrong;
+                              final deposit = e is ApiException && e.fieldErrors.containsKey('deposit');
+                              friendOption = deposit;
+                              error = e is ApiException && e.message.isNotEmpty
+                                  ? e.message
+                                  : AppLocalizations.of(sheetContext)!.commonSomethingWentWrong;
                             });
                           }
                         },
@@ -330,6 +341,21 @@ class _TripResultTile extends ConsumerWidget {
                       ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
                       : Text(l10n.tripReserve),
                 ),
+                if (friendOption && !friendPath) ...[
+                  const SizedBox(height: 8),
+                  OutlinedButton.icon(
+                    onPressed: submitting ? null : () => setSheetState(() {
+                      friendPath = true;
+                      error = null;
+                    }),
+                    icon: const Icon(Icons.group_add_outlined),
+                    label: Text(l10n.tripReserveWithFriend),
+                  ),
+                ],
+                if (friendPath) ...[
+                  const SizedBox(height: 8),
+                  Text(l10n.tripFriendPathHint, style: Theme.of(sheetContext).textTheme.bodySmall),
+                ],
               ],
             ),
           ),
@@ -337,8 +363,13 @@ class _TripResultTile extends ConsumerWidget {
       ),
     );
 
-    if (confirmed == true && context.mounted) {
+    if (reservedId != null && context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.tripReserved)));
+
+      // reserved on a friend's word: the invitation goes out now
+      if (friendPath) {
+        await showInviteGuarantorSheet(context, kind: VisitKind.tripReservation, subjectId: reservedId);
+      }
     }
   }
 

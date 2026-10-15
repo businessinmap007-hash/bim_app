@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/deposit/visit_deposit.dart';
+import '../../../../core/deposit/widgets/visit_deposit_card.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../disputes/application/disputes_providers.dart';
@@ -150,23 +152,43 @@ class _ReservationTile extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     return Card(
       margin: EdgeInsets.zero,
-      child: ListTile(
-        leading: const Icon(Icons.local_shipping_outlined),
-        title: Text('${reservation.units} · ${(reservation.totalPrice ?? 0).toStringAsFixed(0)} ${reservation.currency}'),
-        subtitle: Text(_statusLabel(reservation.status, l10n)),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (reservation.status != 'blocked')
-              IconButton(
-                tooltip: l10n.disputeOpenTitle,
-                icon: const Icon(Icons.report_gmailerrorred_outlined),
-                onPressed: onReportProblem,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            leading: const Icon(Icons.local_shipping_outlined),
+            title: Text('${reservation.units} · ${(reservation.totalPrice ?? 0).toStringAsFixed(0)} ${reservation.currency}'),
+            subtitle: Text(_statusLabel(reservation.status, l10n)),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (reservation.status != 'blocked')
+                  IconButton(
+                    tooltip: l10n.disputeOpenTitle,
+                    icon: const Icon(Icons.report_gmailerrorred_outlined),
+                    onPressed: onReportProblem,
+                  ),
+                if (reservation.isCancellable)
+                  TextButton(onPressed: onCancel, child: Text(l10n.tripReservationCancel)),
+              ],
+            ),
+          ),
+          // «عربون الجدية»: quoted, frozen when the carrier confirms, returned after the trip
+          if (reservation.deposit != null)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+              child: Consumer(
+                builder: (context, ref, _) => VisitDepositCard(
+                  deposit: reservation.deposit!,
+                  kind: VisitKind.tripReservation,
+                  subjectId: reservation.id,
+                  forBusiness: false,
+                  visitEnded: reservation.status == 'no_show',
+                  onChanged: () => ref.read(myReservationsControllerProvider.notifier).load(),
+                ),
               ),
-            if (reservation.isCancellable)
-              TextButton(onPressed: onCancel, child: Text(l10n.tripReservationCancel)),
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }
@@ -178,5 +200,6 @@ String _statusLabel(String status, AppLocalizations l10n) => switch (status) {
   'completed' => l10n.tripStatusCompleted,
   'cancelled' => l10n.tripStatusCancelled,
   'blocked' => l10n.tripStatusBlocked,
+  'no_show' => l10n.tripStatusNoShow,
   _ => status,
 };

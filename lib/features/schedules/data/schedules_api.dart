@@ -65,6 +65,7 @@ class SchedulesApi {
     int scheduleId, {
     int units = 1,
     String? notes,
+    bool friendGuarantee = false,
   }) async {
     final data =
         await _client.post(
@@ -72,6 +73,8 @@ class SchedulesApi {
               data: {
                 'units': units,
                 if (notes != null && notes.isNotEmpty) 'notes': notes,
+                // short of the deposit and a friend will stand for him: invited right after
+                if (friendGuarantee) 'friend_guarantee': true,
               },
             )
             as Map<String, dynamic>;
@@ -168,6 +171,13 @@ class SchedulesApi {
 
   Future<void> rejectReservation(int id) =>
       _client.post('/business/schedules/reservations/$id/reject');
+
+  /// «لم يحضر»: the seats are freed and the deposit stays held until given back or disputed.
+  Future<TripReservation> noShowReservation(int id) async {
+    final data = await _client.post('/business/schedules/reservations/$id/no-show') as Map<String, dynamic>;
+
+    return TripReservation.fromJson(data['reservation'] as Map<String, dynamic>);
+  }
 
   // ─────────────────── Carrier: live run execution ───────────────────
 

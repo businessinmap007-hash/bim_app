@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/network/api_exception.dart';
+import '../../../../core/deposit/visit_deposit.dart';
+import '../../../../core/deposit/widgets/visit_deposit_card.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../application/schedules_providers.dart';
 import '../../data/models/trip_reservation.dart';
 
-const _statuses = <String?>[null, 'pending', 'confirmed', 'completed', 'cancelled'];
+const _statuses = <String?>[null, 'pending', 'confirmed', 'completed', 'cancelled', 'no_show'];
 
 /// Api\V2\TripReservationController — reservations customers made on this
 /// carrier's own published trip legs: confirm, complete (also records the
@@ -38,6 +40,7 @@ class IncomingReservationsScreen extends ConsumerWidget {
     'confirmed' => l10n.tripReservationStatusConfirmed,
     'completed' => l10n.tripReservationStatusCompleted,
     'cancelled' => l10n.tripReservationStatusCancelled,
+    'no_show' => l10n.tripReservationStatusNoShow,
     _ => status,
   };
 
@@ -151,6 +154,12 @@ class _ReservationCard extends ConsumerWidget {
                         onAct(() => ref.read(incomingReservationsControllerProvider.notifier).complete(r.id)),
                     child: Text(l10n.tripReservationCompleteAction),
                   ),
+                if (r.status == 'confirmed')
+                  OutlinedButton(
+                    onPressed: () =>
+                        onAct(() => ref.read(incomingReservationsControllerProvider.notifier).noShow(r.id)),
+                    child: Text(l10n.tripReservationNoShowAction),
+                  ),
                 if (r.status == 'pending' || r.status == 'confirmed')
                   OutlinedButton(
                     onPressed: () =>
@@ -159,6 +168,16 @@ class _ReservationCard extends ConsumerWidget {
                   ),
               ],
             ),
+            // «عربون الجدية»: what is asked, frozen when confirmed, given back or disputed after a no-show
+            if (r.deposit != null)
+              VisitDepositCard(
+                deposit: r.deposit!,
+                kind: VisitKind.tripReservation,
+                subjectId: r.id,
+                forBusiness: true,
+                visitEnded: r.status == 'no_show',
+                onChanged: () => ref.read(incomingReservationsControllerProvider.notifier).load(),
+              ),
           ],
         ),
       ),

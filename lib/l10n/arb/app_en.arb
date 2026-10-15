@@ -3211,5 +3211,10 @@
   "guarantorAmountLabel": "Amount to freeze from your guarantee",
   "guarantorAccept": "I will stand for it",
   "guarantorDecline": "Decline",
-  "guarantorAccepted": "A part of your guarantee is frozen for this operation."
+  "guarantorAccepted": "A part of your guarantee is frozen for this operation.",
+  "tripReservationNoShowAction": "No-show",
+  "tripReservationStatusNoShow": "No-show",
+  "tripStatusNoShow": "You did not show",
+  "tripReserveWithFriend": "Reserve with a friend standing for you",
+  "tripFriendPathHint": "Your friend gets a guarantee request after the reservation, and the carrier confirms once it is covered."
 }

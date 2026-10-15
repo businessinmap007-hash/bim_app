@@ -343,6 +343,11 @@ class IncomingReservationsController extends StateNotifier<IncomingReservationsS
     await _api.rejectReservation(id);
     state = state.copyWith(items: state.items.where((r) => r.id != id).toList());
   }
+
+  Future<void> noShow(int id) async {
+    final updated = await _api.noShowReservation(id);
+    state = state.copyWith(items: [for (final r in state.items) r.id == id ? updated : r]);
+  }
 }
 
 final incomingReservationsControllerProvider =

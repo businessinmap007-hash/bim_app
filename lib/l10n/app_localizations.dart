@@ -17118,6 +17118,36 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'جُمِّد جزء من ضمانك لهذه العملية.'**
   String get guarantorAccepted;
+
+  /// No description provided for @tripReservationNoShowAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يحضر'**
+  String get tripReservationNoShowAction;
+
+  /// No description provided for @tripReservationStatusNoShow.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يحضر'**
+  String get tripReservationStatusNoShow;
+
+  /// No description provided for @tripStatusNoShow.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تحضر'**
+  String get tripStatusNoShow;
+
+  /// No description provided for @tripReserveWithFriend.
+  ///
+  /// In ar, this message translates to:
+  /// **'احجز على أن يضمنك صديق'**
+  String get tripReserveWithFriend;
+
+  /// No description provided for @tripFriendPathHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيصل صديقك طلب ضمان بعد الحجز، ويؤكد الناقل بعد أن يقبل.'**
+  String get tripFriendPathHint;
 }
 
 class _AppLocalizationsDelegate

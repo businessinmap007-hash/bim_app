@@ -3237,5 +3237,10 @@
   "guarantorAmountLabel": "المبلغ الذي تجمّده من ضمانك",
   "guarantorAccept": "أضمنه",
   "guarantorDecline": "اعتذر",
-  "guarantorAccepted": "جُمِّد جزء من ضمانك لهذه العملية."
+  "guarantorAccepted": "جُمِّد جزء من ضمانك لهذه العملية.",
+  "tripReservationNoShowAction": "لم يحضر",
+  "tripReservationStatusNoShow": "لم يحضر",
+  "tripStatusNoShow": "لم تحضر",
+  "tripReserveWithFriend": "احجز على أن يضمنك صديق",
+  "tripFriendPathHint": "سيصل صديقك طلب ضمان بعد الحجز، ويؤكد الناقل بعد أن يقبل."
 }

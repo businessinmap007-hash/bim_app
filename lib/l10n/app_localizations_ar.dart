@@ -9360,4 +9360,20 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get guarantorAccepted => 'جُمِّد جزء من ضمانك لهذه العملية.';
+
+  @override
+  String get tripReservationNoShowAction => 'لم يحضر';
+
+  @override
+  String get tripReservationStatusNoShow => 'لم يحضر';
+
+  @override
+  String get tripStatusNoShow => 'لم تحضر';
+
+  @override
+  String get tripReserveWithFriend => 'احجز على أن يضمنك صديق';
+
+  @override
+  String get tripFriendPathHint =>
+      'سيصل صديقك طلب ضمان بعد الحجز، ويؤكد الناقل بعد أن يقبل.';
 }

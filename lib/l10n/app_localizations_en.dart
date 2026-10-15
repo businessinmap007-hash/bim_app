@@ -9424,4 +9424,20 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get guarantorAccepted =>
       'A part of your guarantee is frozen for this operation.';
+
+  @override
+  String get tripReservationNoShowAction => 'No-show';
+
+  @override
+  String get tripReservationStatusNoShow => 'No-show';
+
+  @override
+  String get tripStatusNoShow => 'You did not show';
+
+  @override
+  String get tripReserveWithFriend => 'Reserve with a friend standing for you';
+
+  @override
+  String get tripFriendPathHint =>
+      'Your friend gets a guarantee request after the reservation, and the carrier confirms once it is covered.';
 }

@@ -72,7 +72,10 @@ enum VisitKind {
   procedureRequest('procedure-request', 'procedure-requests'),
 
   /// a menu / retail order: the cover of the whole order, frozen when the business accepts
-  order('order', 'orders');
+  order('order', 'orders'),
+
+  /// a seat / cargo reservation on a carrier's leg
+  tripReservation('trip-reservation', 'schedules/reservations');
 
   /// the `{kind}` of the shared dispute door
   final String slug;

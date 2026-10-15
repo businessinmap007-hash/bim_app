@@ -1,3 +1,4 @@
+import '../../../../core/deposit/visit_deposit.dart';
 import '../../../../core/time/egypt_time.dart';
 /// Mirrors `TripReservationController::serialize()` — the customer's own
 /// reservation on a trip leg. Note: the backend eager-loads `schedule` and
@@ -18,6 +19,9 @@ class TripReservation {
   // serializes a client name, just the id, so that's all there is to show.
   final int? clientId;
 
+  /// «عربون الجدية» of this reservation: quoted until the carrier confirms, then held / returned / disputed.
+  final VisitDeposit? deposit;
+
   const TripReservation({
     required this.id,
     required this.tripScheduleId,
@@ -29,6 +33,7 @@ class TripReservation {
     this.notes,
     this.createdAt,
     this.clientId,
+    this.deposit,
   });
 
   bool get isCancellable => status == 'pending' || status == 'confirmed';
@@ -44,5 +49,6 @@ class TripReservation {
     notes: json['notes'] as String?,
     createdAt: json['created_at'] != null ? EgyptTime.tryParse(json['created_at'] as String) : null,
     clientId: (json['client_id'] as num?)?.toInt(),
+    deposit: VisitDeposit.fromJsonOrNull(json['deposit']),
   );
 }

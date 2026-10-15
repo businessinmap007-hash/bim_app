@@ -12,6 +12,7 @@ import 'package:bim_app/features/clinic_management/data/models/business_clinic_a
 import 'package:bim_app/features/hospital/data/models/hospital_procedure.dart';
 import 'package:bim_app/features/investigations/data/models/investigation.dart';
 import 'package:bim_app/features/orders/data/models/placed_order.dart';
+import 'package:bim_app/features/schedules/data/models/trip_reservation.dart';
 import 'package:bim_app/l10n/app_localizations.dart';
 
 Widget _host(Widget child) => ProviderScope(
@@ -222,6 +223,31 @@ void main() {
       );
 
       expect(find.byType(Container), findsNothing);
+    });
+  });
+
+  group('«عربون الجدية» of a trip reservation', () {
+    test('reads the deposit and the no-show status off the reservation', () {
+      final r = TripReservation.fromJson({
+        'id': 5,
+        'trip_schedule_id': 9,
+        'units': 2,
+        'status': 'no_show',
+        'deposit': {'mode': 'wallet', 'status': 'held', 'amount': 100, 'guarantee_amount': 30},
+      });
+
+      expect(r.status, 'no_show');
+      expect(r.isCancellable, isFalse);
+      expect(r.deposit!.status, VisitDeposit.held);
+      expect(r.deposit!.guaranteeAmount, 30);
+      expect(VisitKind.tripReservation.businessPath, 'schedules/reservations');
+    });
+
+    test('a legacy reservation has no deposit card', () {
+      final r = TripReservation.fromJson({'id': 1, 'trip_schedule_id': 2, 'status': 'confirmed'});
+
+      expect(r.deposit, isNull);
+      expect(r.isCancellable, isTrue);
     });
   });
 }
