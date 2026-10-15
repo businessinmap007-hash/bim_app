@@ -11,6 +11,7 @@ import '../../../location/data/models/location_models.dart';
 import '../../application/schedules_providers.dart';
 import '../../data/models/trip_schedule.dart';
 import 'my_reservations_screen.dart';
+import 'parcels_screens.dart';
 import '../../../../core/time/egypt_time.dart';
 import '../../../../core/time/local_format.dart';
 
@@ -144,6 +145,11 @@ class _TripSearchScreenState extends ConsumerState<TripSearchScreen> {
         title: Text(l10n.tripSearchTitle),
         actions: [
           IconButton(
+            icon: const Icon(Icons.inventory_2_outlined),
+            tooltip: l10n.myParcelsTitle,
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MyParcelsScreen())),
+          ),
+          IconButton(
             icon: const Icon(Icons.receipt_long_outlined),
             tooltip: l10n.myReservationsTitle,
             onPressed: () => Navigator.of(context).push(
@@ -267,6 +273,11 @@ class _TripResultTile extends ConsumerWidget {
   const _TripResultTile({required this.result});
 
   Future<void> _openReserveSheet(BuildContext context, WidgetRef ref) async {
+    if (result.isFull) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.tripFullNotice)));
+      return;
+    }
+
     final l10n = AppLocalizations.of(context)!;
     int units = 1;
     final notesController = TextEditingController();
@@ -340,6 +351,15 @@ class _TripResultTile extends ConsumerWidget {
                   child: submitting
                       ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
                       : Text(l10n.tripReserve),
+                ),
+                // a parcel rides with the car: the sender describes it, the driver prices it
+                TextButton.icon(
+                  onPressed: () {
+                    Navigator.of(sheetContext).pop();
+                    showParcelRequestSheet(context, scheduleId: result.schedule.id);
+                  },
+                  icon: const Icon(Icons.inventory_2_outlined),
+                  label: Text(l10n.parcelSendInstead),
                 ),
                 if (friendOption && !friendPath) ...[
                   const SizedBox(height: 8),

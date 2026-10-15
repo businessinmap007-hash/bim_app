@@ -17184,6 +17184,360 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'أو ادعُ بالهاتف أو البريد:'**
   String get guarantorOrByContact;
+
+  /// No description provided for @tripOfflineRatingVisible.
+  ///
+  /// In ar, this message translates to:
+  /// **'يظهر في التقييم (سُدّدت الرسوم)'**
+  String get tripOfflineRatingVisible;
+
+  /// No description provided for @tripOfflineNotCounted.
+  ///
+  /// In ar, this message translates to:
+  /// **'خارج التطبيق — لا يظهر في التقييم ولا في العدّ حتى تُسدَّد الرسوم'**
+  String get tripOfflineNotCounted;
+
+  /// No description provided for @tripOfflineShowInRatingAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'إظهاره في التقييم'**
+  String get tripOfflineShowInRatingAction;
+
+  /// No description provided for @tripOfflineAddTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة راكب من خارج التطبيق'**
+  String get tripOfflineAddTitle;
+
+  /// No description provided for @tripOfflineNameLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الراكب'**
+  String get tripOfflineNameLabel;
+
+  /// No description provided for @tripOfflinePhoneLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الهاتف (اختياري)'**
+  String get tripOfflinePhoneLabel;
+
+  /// No description provided for @tripOfflineUnitsLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد المقاعد'**
+  String get tripOfflineUnitsLabel;
+
+  /// No description provided for @tripOfflineAdded.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُضيف الراكب وحُجز له المقعد.'**
+  String get tripOfflineAdded;
+
+  /// No description provided for @tripAttendanceConfirmAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد الحضور'**
+  String get tripAttendanceConfirmAction;
+
+  /// No description provided for @tripAttendanceWaitingClient.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار تأكيد العميل'**
+  String get tripAttendanceWaitingClient;
+
+  /// No description provided for @tripAttendanceConfirmAsClient.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصلت — أؤكد حضوري'**
+  String get tripAttendanceConfirmAsClient;
+
+  /// No description provided for @tripAttendanceWaitingCarrier.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكّدت حضورك، بانتظار تأكيد السائق'**
+  String get tripAttendanceWaitingCarrier;
+
+  /// No description provided for @tripAttendanceBothConfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تأكيد الحضور من الطرفين'**
+  String get tripAttendanceBothConfirmed;
+
+  /// No description provided for @tripReservationStatusBlocked.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجز يدوي'**
+  String get tripReservationStatusBlocked;
+
+  /// No description provided for @tripRunPartialTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدء الرحلة ناقصة؟'**
+  String get tripRunPartialTitle;
+
+  /// No description provided for @tripRunPartialBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرحلة غير مكتملة أو لم يؤكّد كل الركاب حضورهم. هل تقرّ ببدء الرحلة كما هي؟'**
+  String get tripRunPartialBody;
+
+  /// No description provided for @tripRunPartialConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'أقرّ وأبدأ'**
+  String get tripRunPartialConfirm;
+
+  /// No description provided for @tripFullNotice.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذه الرحلة مكتملة.'**
+  String get tripFullNotice;
+
+  /// No description provided for @parcelStatusRequested.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار تسعير السائق'**
+  String get parcelStatusRequested;
+
+  /// No description provided for @parcelStatusPriced.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار قبولك للسعر'**
+  String get parcelStatusPriced;
+
+  /// No description provided for @parcelStatusAccepted.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقبولة'**
+  String get parcelStatusAccepted;
+
+  /// No description provided for @parcelStatusLoaded.
+  ///
+  /// In ar, this message translates to:
+  /// **'على السيارة'**
+  String get parcelStatusLoaded;
+
+  /// No description provided for @parcelStatusDelivered.
+  ///
+  /// In ar, this message translates to:
+  /// **'سُلِّمت'**
+  String get parcelStatusDelivered;
+
+  /// No description provided for @parcelStatusRejected.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرفوضة'**
+  String get parcelStatusRejected;
+
+  /// No description provided for @parcelStatusCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغاة'**
+  String get parcelStatusCancelled;
+
+  /// No description provided for @parcelRequestTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال طرد مع الرحلة'**
+  String get parcelRequestTitle;
+
+  /// No description provided for @parcelDescriptionLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصف الطرد'**
+  String get parcelDescriptionLabel;
+
+  /// No description provided for @parcelDescriptionHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحجم والوزن ومكانه (مثلًا: صندوق صغير، ٢٠ كجم، في شنطة السيارة)'**
+  String get parcelDescriptionHelp;
+
+  /// No description provided for @parcelReceiverTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المستلم'**
+  String get parcelReceiverTitle;
+
+  /// No description provided for @parcelReceiverNoAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'أو مستلم بلا حساب:'**
+  String get parcelReceiverNoAccount;
+
+  /// No description provided for @parcelReceiverName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم المستلم'**
+  String get parcelReceiverName;
+
+  /// No description provided for @parcelReceiverPhone.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم هاتف المستلم'**
+  String get parcelReceiverPhone;
+
+  /// No description provided for @parcelReceiverRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر المستلم من قوائمك أو اكتب اسمه ورقم هاتفه.'**
+  String get parcelReceiverRequired;
+
+  /// No description provided for @parcelSendRequest.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال الطلب'**
+  String get parcelSendRequest;
+
+  /// No description provided for @parcelRequestSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُرسل طلب الشحنة. سيحدد السائق سعرها.'**
+  String get parcelRequestSent;
+
+  /// No description provided for @parcelSendInstead.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال طرد مع هذه الرحلة'**
+  String get parcelSendInstead;
+
+  /// No description provided for @myParcelsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'شحناتي'**
+  String get myParcelsTitle;
+
+  /// No description provided for @myParcelsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا شحنات بعد.'**
+  String get myParcelsEmpty;
+
+  /// No description provided for @parcelAcceptPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'أقبل السعر'**
+  String get parcelAcceptPrice;
+
+  /// No description provided for @parcelGenerateCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'توليد كود التسليم'**
+  String get parcelGenerateCode;
+
+  /// No description provided for @parcelRegenerateCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'كود جديد'**
+  String get parcelRegenerateCode;
+
+  /// No description provided for @parcelCancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء'**
+  String get parcelCancel;
+
+  /// No description provided for @parcelCodeHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'أعطِ هذا الكود للمستلم؛ يسلّمه للسائق عند الاستلام.'**
+  String get parcelCodeHint;
+
+  /// No description provided for @parcelTakesSeats.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأخذ {count} مقعد'**
+  String parcelTakesSeats(int count);
+
+  /// No description provided for @carrierParcelsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشحنات'**
+  String get carrierParcelsTitle;
+
+  /// No description provided for @carrierParcelsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا شحنات على خطوطك.'**
+  String get carrierParcelsEmpty;
+
+  /// No description provided for @parcelSender.
+  ///
+  /// In ar, this message translates to:
+  /// **'المرسل'**
+  String get parcelSender;
+
+  /// No description provided for @parcelSetPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديد السعر'**
+  String get parcelSetPrice;
+
+  /// No description provided for @parcelPriceTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر الشحنة'**
+  String get parcelPriceTitle;
+
+  /// No description provided for @parcelPriceLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر'**
+  String get parcelPriceLabel;
+
+  /// No description provided for @parcelSeatsLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد المقاعد التي تشغلها'**
+  String get parcelSeatsLabel;
+
+  /// No description provided for @parcelSeatsHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'٠ إذا كانت في شنطة السيارة'**
+  String get parcelSeatsHelp;
+
+  /// No description provided for @parcelLoadAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحميل على السيارة'**
+  String get parcelLoadAction;
+
+  /// No description provided for @parcelWaitingForCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار كود المرسل'**
+  String get parcelWaitingForCode;
+
+  /// No description provided for @parcelDeliverAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسليم'**
+  String get parcelDeliverAction;
+
+  /// No description provided for @parcelDeliverTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسليم الشحنة'**
+  String get parcelDeliverTitle;
+
+  /// No description provided for @parcelDeliverCodeLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'كود التسليم'**
+  String get parcelDeliverCodeLabel;
+
+  /// No description provided for @parcelDeliverCodeHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلبه من المستلم — لا تُسلَّم الشحنة بدونه'**
+  String get parcelDeliverCodeHelp;
+
+  /// No description provided for @parcelDeliveredAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'سُلِّمت: {time}'**
+  String parcelDeliveredAt(String time);
 }
 
 class _AppLocalizationsDelegate

@@ -11,6 +11,7 @@ import '../../application/schedules_providers.dart';
 import '../../data/models/trip_schedule.dart';
 import '../../data/schedules_api.dart';
 import 'incoming_reservations_screen.dart';
+import 'parcels_screens.dart';
 import 'runs_list_screen.dart';
 import 'start_run_screen.dart';
 import '../../../../core/time/egypt_time.dart';
@@ -31,6 +32,64 @@ String _modeLabel(String mode, AppLocalizations l10n) => switch (mode) {
 /// served by deleting and republishing.
 class MyTripSchedulesScreen extends ConsumerWidget {
   const MyTripSchedulesScreen({super.key});
+
+  /// A passenger sold directly, outside the app: always a named person; the seat is held for him.
+  Future<void> _addOffline(BuildContext context, WidgetRef ref, TripSchedule schedule) async {
+    final l10n = AppLocalizations.of(context)!;
+    final name = TextEditingController();
+    final phone = TextEditingController();
+    final units = TextEditingController(text: '1');
+
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.tripOfflineAddTitle),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(controller: name, decoration: InputDecoration(labelText: l10n.tripOfflineNameLabel)),
+              TextField(
+                controller: phone,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(labelText: l10n.tripOfflinePhoneLabel),
+              ),
+              TextField(
+                controller: units,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(labelText: l10n.tripOfflineUnitsLabel),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: Text(l10n.commonCancel)),
+          FilledButton(onPressed: () => Navigator.pop(dialogContext, true), child: Text(l10n.commonSave)),
+        ],
+      ),
+    );
+
+    final who = name.text.trim();
+    final seats = int.tryParse(units.text.trim()) ?? 1;
+    name.dispose();
+    phone.dispose();
+    units.dispose();
+
+    if (ok != true || who.isEmpty || !context.mounted) return;
+
+    try {
+      await ref.read(schedulesApiProvider).addOfflinePassenger(schedule.id, name: who, phone: phone.text.trim(), units: seats);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.tripOfflineAdded)));
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e is ApiException && e.message.isNotEmpty ? e.message : l10n.commonSomethingWentWrong)),
+        );
+      }
+    }
+  }
 
   Future<void> _delete(BuildContext context, WidgetRef ref, TripSchedule schedule) async {
     final l10n = AppLocalizations.of(context)!;
@@ -65,6 +124,11 @@ class MyTripSchedulesScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(l10n.myTripSchedulesTitle),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.inventory_2_outlined),
+            tooltip: l10n.carrierParcelsTitle,
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CarrierParcelsScreen())),
+          ),
           IconButton(
             icon: const Icon(Icons.route_outlined),
             tooltip: l10n.tripRunsTitle,
@@ -134,6 +198,11 @@ class MyTripSchedulesScreen extends ConsumerWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           if (schedule.price != null) Text(schedule.price!.toStringAsFixed(0)),
+                          IconButton(
+                            icon: const Icon(Icons.person_add_alt_1_outlined),
+                            tooltip: l10n.tripOfflineAddTitle,
+                            onPressed: () => _addOffline(context, ref, schedule),
+                          ),
                           IconButton(
                             icon: const Icon(Icons.play_circle_outline),
                             tooltip: l10n.tripRunStart,

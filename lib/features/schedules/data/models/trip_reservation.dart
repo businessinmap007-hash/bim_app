@@ -19,6 +19,18 @@ class TripReservation {
   // serializes a client name, just the id, so that's all there is to show.
   final int? clientId;
 
+  /// `app` or `offline` — an off-app seat is held by the carrier for a named passenger with no account.
+  final String source;
+  final String? passengerName;
+  final String? passengerPhone;
+
+  /// An off-app passenger counts in ratings and in the completed/pending numbers only once the fee is paid.
+  final bool ratingVisible;
+
+  /// Attendance needs both sides: the customer first, then the carrier.
+  final DateTime? clientConfirmedAt;
+  final DateTime? carrierConfirmedAt;
+
   /// «عربون الجدية» of this reservation: quoted until the carrier confirms, then held / returned / disputed.
   final VisitDeposit? deposit;
 
@@ -33,8 +45,18 @@ class TripReservation {
     this.notes,
     this.createdAt,
     this.clientId,
+    this.source = 'app',
+    this.passengerName,
+    this.passengerPhone,
+    this.ratingVisible = false,
+    this.clientConfirmedAt,
+    this.carrierConfirmedAt,
     this.deposit,
   });
+
+  bool get isOffline => source == 'offline';
+  bool get clientConfirmed => clientConfirmedAt != null;
+  bool get carrierConfirmed => carrierConfirmedAt != null;
 
   bool get isCancellable => status == 'pending' || status == 'confirmed';
 
@@ -49,6 +71,12 @@ class TripReservation {
     notes: json['notes'] as String?,
     createdAt: json['created_at'] != null ? EgyptTime.tryParse(json['created_at'] as String) : null,
     clientId: (json['client_id'] as num?)?.toInt(),
+    source: json['source'] as String? ?? 'app',
+    passengerName: json['passenger_name'] as String?,
+    passengerPhone: json['passenger_phone'] as String?,
+    ratingVisible: json['rating_visible'] == true,
+    clientConfirmedAt: json['client_confirmed_at'] != null ? EgyptTime.tryParse(json['client_confirmed_at'] as String) : null,
+    carrierConfirmedAt: json['carrier_confirmed_at'] != null ? EgyptTime.tryParse(json['carrier_confirmed_at'] as String) : null,
     deposit: VisitDeposit.fromJsonOrNull(json['deposit']),
   );
 }

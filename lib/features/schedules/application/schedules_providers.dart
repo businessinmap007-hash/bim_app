@@ -348,6 +348,16 @@ class IncomingReservationsController extends StateNotifier<IncomingReservationsS
     final updated = await _api.noShowReservation(id);
     state = state.copyWith(items: [for (final r in state.items) r.id == id ? updated : r]);
   }
+
+  Future<void> confirmAttendance(int id) async {
+    final updated = await _api.carrierAttendance(id);
+    state = state.copyWith(items: [for (final r in state.items) r.id == id ? updated : r]);
+  }
+
+  Future<void> makeRatingVisible(int id) async {
+    final updated = await _api.ratingVisibility(id);
+    state = state.copyWith(items: [for (final r in state.items) r.id == id ? updated : r]);
+  }
 }
 
 final incomingReservationsControllerProvider =

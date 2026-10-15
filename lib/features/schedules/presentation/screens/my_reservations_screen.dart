@@ -173,6 +173,38 @@ class _ReservationTile extends StatelessWidget {
               ],
             ),
           ),
+          // attendance: the customer confirms first, the carrier after him
+          if (reservation.status == 'confirmed')
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+              child: Consumer(
+                builder: (context, ref, _) => reservation.clientConfirmed
+                    ? Align(
+                        alignment: AlignmentDirectional.centerStart,
+                        child: Text(
+                          reservation.carrierConfirmed ? l10n.tripAttendanceBothConfirmed : l10n.tripAttendanceWaitingCarrier,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      )
+                    : Align(
+                        alignment: AlignmentDirectional.centerStart,
+                        child: FilledButton.icon(
+                          onPressed: () async {
+                            try {
+                              await ref.read(schedulesApiProvider).confirmAttendance(reservation.id);
+                              await ref.read(myReservationsControllerProvider.notifier).load();
+                            } catch (_) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+                              }
+                            }
+                          },
+                          icon: const Icon(Icons.how_to_reg_outlined),
+                          label: Text(l10n.tripAttendanceConfirmAsClient),
+                        ),
+                      ),
+              ),
+            ),
           // «عربون الجدية»: quoted, frozen when the carrier confirms, returned after the trip
           if (reservation.deposit != null)
             Padding(

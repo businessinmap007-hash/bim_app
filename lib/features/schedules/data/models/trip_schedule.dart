@@ -156,12 +156,16 @@ class TripScheduleResult {
   final TripTrust trust;
   final int? remainingCapacity;
 
-  const TripScheduleResult({required this.schedule, required this.trust, this.remainingCapacity});
+  /// A leg with no free seat is shown to the other customers as complete.
+  final bool isFull;
+
+  const TripScheduleResult({required this.schedule, required this.trust, this.remainingCapacity, this.isFull = false});
 
   factory TripScheduleResult.fromJson(Map<String, dynamic> json) => TripScheduleResult(
     schedule: TripSchedule.fromJson(json['schedule'] as Map<String, dynamic>),
     trust: TripTrust.fromJson(json['trust'] as Map<String, dynamic>? ?? const {}),
     remainingCapacity: json['remaining_capacity'] as int?,
+    isFull: json['is_full'] == true,
   );
 }
 

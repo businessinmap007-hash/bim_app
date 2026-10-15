@@ -9,7 +9,7 @@ import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../application/schedules_providers.dart';
 import '../../data/models/trip_reservation.dart';
 
-const _statuses = <String?>[null, 'pending', 'confirmed', 'completed', 'cancelled', 'no_show'];
+const _statuses = <String?>[null, 'pending', 'confirmed', 'completed', 'cancelled', 'no_show', 'blocked'];
 
 /// Api\V2\TripReservationController — reservations customers made on this
 /// carrier's own published trip legs: confirm, complete (also records the
@@ -41,6 +41,7 @@ class IncomingReservationsScreen extends ConsumerWidget {
     'completed' => l10n.tripReservationStatusCompleted,
     'cancelled' => l10n.tripReservationStatusCancelled,
     'no_show' => l10n.tripReservationStatusNoShow,
+    'blocked' => l10n.tripReservationStatusBlocked,
     _ => status,
   };
 
@@ -131,9 +132,18 @@ class _ReservationCard extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              r.clientId != null ? l10n.tripReservationClient(r.clientId!) : '#${r.id}',
+              r.isOffline && (r.passengerName ?? '').isNotEmpty
+                  ? r.passengerName!
+                  : (r.clientId != null ? l10n.tripReservationClient(r.clientId!) : '#${r.id}'),
               style: Theme.of(context).textTheme.titleSmall,
             ),
+            if (r.isOffline) ...[
+              const SizedBox(height: 2),
+              Text(
+                r.ratingVisible ? l10n.tripOfflineRatingVisible : l10n.tripOfflineNotCounted,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ],
             const SizedBox(height: 4),
             Text(l10n.tripReservationUnitsCount(r.units)),
             if (r.totalPrice != null) Text('${r.totalPrice!.toStringAsFixed(2)} ${r.currency}'),
@@ -148,7 +158,23 @@ class _ReservationCard extends ConsumerWidget {
                         onAct(() => ref.read(incomingReservationsControllerProvider.notifier).confirm(r.id)),
                     child: Text(l10n.tripReservationConfirmAction),
                   ),
-                if (r.status == 'confirmed')
+                // attendance: the customer first, then the carrier
+                if ((r.status == 'confirmed' || (r.isOffline && r.status == 'blocked')) && !r.carrierConfirmed)
+                  OutlinedButton(
+                    onPressed: (r.isOffline || r.clientConfirmed)
+                        ? () => onAct(() => ref.read(incomingReservationsControllerProvider.notifier).confirmAttendance(r.id))
+                        : null,
+                    child: Text(
+                      (r.isOffline || r.clientConfirmed) ? l10n.tripAttendanceConfirmAction : l10n.tripAttendanceWaitingClient,
+                    ),
+                  ),
+                if (r.isOffline && r.status == 'blocked' && !r.ratingVisible)
+                  OutlinedButton(
+                    onPressed: () =>
+                        onAct(() => ref.read(incomingReservationsControllerProvider.notifier).makeRatingVisible(r.id)),
+                    child: Text(l10n.tripOfflineShowInRatingAction),
+                  ),
+                if (r.status == 'confirmed' || (r.isOffline && r.status == 'blocked' && r.ratingVisible))
                   OutlinedButton(
                     onPressed: () =>
                         onAct(() => ref.read(incomingReservationsControllerProvider.notifier).complete(r.id)),

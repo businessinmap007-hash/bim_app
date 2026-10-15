@@ -9466,4 +9466,193 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get guarantorOrByContact => 'Or invite by phone or email:';
+
+  @override
+  String get tripOfflineRatingVisible => 'Shown in ratings (fee paid)';
+
+  @override
+  String get tripOfflineNotCounted =>
+      'Off-app — not in ratings or counts until the fee is paid';
+
+  @override
+  String get tripOfflineShowInRatingAction => 'Show in ratings';
+
+  @override
+  String get tripOfflineAddTitle => 'Add a passenger from outside the app';
+
+  @override
+  String get tripOfflineNameLabel => 'Passenger name';
+
+  @override
+  String get tripOfflinePhoneLabel => 'Phone (optional)';
+
+  @override
+  String get tripOfflineUnitsLabel => 'Seats';
+
+  @override
+  String get tripOfflineAdded => 'The passenger was added and the seat held.';
+
+  @override
+  String get tripAttendanceConfirmAction => 'Confirm attendance';
+
+  @override
+  String get tripAttendanceWaitingClient => 'Waiting for the customer';
+
+  @override
+  String get tripAttendanceConfirmAsClient => 'I am here — confirm';
+
+  @override
+  String get tripAttendanceWaitingCarrier =>
+      'You confirmed; waiting for the driver';
+
+  @override
+  String get tripAttendanceBothConfirmed => 'Attendance confirmed by both';
+
+  @override
+  String get tripReservationStatusBlocked => 'Manual hold';
+
+  @override
+  String get tripRunPartialTitle => 'Start the trip short?';
+
+  @override
+  String get tripRunPartialBody =>
+      'The trip is not full, or not everyone confirmed attendance. Do you accept starting it as it is?';
+
+  @override
+  String get tripRunPartialConfirm => 'I accept, start';
+
+  @override
+  String get tripFullNotice => 'This trip is full.';
+
+  @override
+  String get parcelStatusRequested => 'Waiting for the driver to price it';
+
+  @override
+  String get parcelStatusPriced => 'Waiting for you to accept the price';
+
+  @override
+  String get parcelStatusAccepted => 'Accepted';
+
+  @override
+  String get parcelStatusLoaded => 'On the car';
+
+  @override
+  String get parcelStatusDelivered => 'Delivered';
+
+  @override
+  String get parcelStatusRejected => 'Rejected';
+
+  @override
+  String get parcelStatusCancelled => 'Cancelled';
+
+  @override
+  String get parcelRequestTitle => 'Send a parcel with the trip';
+
+  @override
+  String get parcelDescriptionLabel => 'Describe the parcel';
+
+  @override
+  String get parcelDescriptionHelp =>
+      'Size, weight and where it rides (e.g. small box, 20 kg, in the boot)';
+
+  @override
+  String get parcelReceiverTitle => 'Receiver';
+
+  @override
+  String get parcelReceiverNoAccount => 'Or a receiver with no account:';
+
+  @override
+  String get parcelReceiverName => 'Receiver name';
+
+  @override
+  String get parcelReceiverPhone => 'Receiver phone';
+
+  @override
+  String get parcelReceiverRequired =>
+      'Pick the receiver from your groups, or write a name and a phone.';
+
+  @override
+  String get parcelSendRequest => 'Send the request';
+
+  @override
+  String get parcelRequestSent =>
+      'The parcel request was sent. The driver will price it.';
+
+  @override
+  String get parcelSendInstead => 'Send a parcel with this trip';
+
+  @override
+  String get myParcelsTitle => 'My parcels';
+
+  @override
+  String get myParcelsEmpty => 'No parcels yet.';
+
+  @override
+  String get parcelAcceptPrice => 'Accept the price';
+
+  @override
+  String get parcelGenerateCode => 'Generate the delivery code';
+
+  @override
+  String get parcelRegenerateCode => 'New code';
+
+  @override
+  String get parcelCancel => 'Cancel';
+
+  @override
+  String get parcelCodeHint =>
+      'Give this code to the receiver; they hand it to the driver on receipt.';
+
+  @override
+  String parcelTakesSeats(int count) {
+    return 'takes $count seat(s)';
+  }
+
+  @override
+  String get carrierParcelsTitle => 'Parcels';
+
+  @override
+  String get carrierParcelsEmpty => 'No parcels on your legs.';
+
+  @override
+  String get parcelSender => 'Sender';
+
+  @override
+  String get parcelSetPrice => 'Set the price';
+
+  @override
+  String get parcelPriceTitle => 'Parcel price';
+
+  @override
+  String get parcelPriceLabel => 'Price';
+
+  @override
+  String get parcelSeatsLabel => 'Seats it takes';
+
+  @override
+  String get parcelSeatsHelp => '0 when it rides in the boot';
+
+  @override
+  String get parcelLoadAction => 'Load on the car';
+
+  @override
+  String get parcelWaitingForCode => 'Waiting for the sender code';
+
+  @override
+  String get parcelDeliverAction => 'Hand over';
+
+  @override
+  String get parcelDeliverTitle => 'Hand over the parcel';
+
+  @override
+  String get parcelDeliverCodeLabel => 'Delivery code';
+
+  @override
+  String get parcelDeliverCodeHelp =>
+      'Ask the receiver for it — the parcel is not handed over without it';
+
+  @override
+  String parcelDeliveredAt(String time) {
+    return 'Delivered: $time';
+  }
 }

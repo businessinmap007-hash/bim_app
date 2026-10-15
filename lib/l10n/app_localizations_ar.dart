@@ -9402,4 +9402,192 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get guarantorOrByContact => 'أو ادعُ بالهاتف أو البريد:';
+
+  @override
+  String get tripOfflineRatingVisible => 'يظهر في التقييم (سُدّدت الرسوم)';
+
+  @override
+  String get tripOfflineNotCounted =>
+      'خارج التطبيق — لا يظهر في التقييم ولا في العدّ حتى تُسدَّد الرسوم';
+
+  @override
+  String get tripOfflineShowInRatingAction => 'إظهاره في التقييم';
+
+  @override
+  String get tripOfflineAddTitle => 'إضافة راكب من خارج التطبيق';
+
+  @override
+  String get tripOfflineNameLabel => 'اسم الراكب';
+
+  @override
+  String get tripOfflinePhoneLabel => 'رقم الهاتف (اختياري)';
+
+  @override
+  String get tripOfflineUnitsLabel => 'عدد المقاعد';
+
+  @override
+  String get tripOfflineAdded => 'أُضيف الراكب وحُجز له المقعد.';
+
+  @override
+  String get tripAttendanceConfirmAction => 'تأكيد الحضور';
+
+  @override
+  String get tripAttendanceWaitingClient => 'بانتظار تأكيد العميل';
+
+  @override
+  String get tripAttendanceConfirmAsClient => 'وصلت — أؤكد حضوري';
+
+  @override
+  String get tripAttendanceWaitingCarrier =>
+      'أكّدت حضورك، بانتظار تأكيد السائق';
+
+  @override
+  String get tripAttendanceBothConfirmed => 'تم تأكيد الحضور من الطرفين';
+
+  @override
+  String get tripReservationStatusBlocked => 'حجز يدوي';
+
+  @override
+  String get tripRunPartialTitle => 'بدء الرحلة ناقصة؟';
+
+  @override
+  String get tripRunPartialBody =>
+      'الرحلة غير مكتملة أو لم يؤكّد كل الركاب حضورهم. هل تقرّ ببدء الرحلة كما هي؟';
+
+  @override
+  String get tripRunPartialConfirm => 'أقرّ وأبدأ';
+
+  @override
+  String get tripFullNotice => 'هذه الرحلة مكتملة.';
+
+  @override
+  String get parcelStatusRequested => 'بانتظار تسعير السائق';
+
+  @override
+  String get parcelStatusPriced => 'بانتظار قبولك للسعر';
+
+  @override
+  String get parcelStatusAccepted => 'مقبولة';
+
+  @override
+  String get parcelStatusLoaded => 'على السيارة';
+
+  @override
+  String get parcelStatusDelivered => 'سُلِّمت';
+
+  @override
+  String get parcelStatusRejected => 'مرفوضة';
+
+  @override
+  String get parcelStatusCancelled => 'ملغاة';
+
+  @override
+  String get parcelRequestTitle => 'إرسال طرد مع الرحلة';
+
+  @override
+  String get parcelDescriptionLabel => 'وصف الطرد';
+
+  @override
+  String get parcelDescriptionHelp =>
+      'الحجم والوزن ومكانه (مثلًا: صندوق صغير، ٢٠ كجم، في شنطة السيارة)';
+
+  @override
+  String get parcelReceiverTitle => 'المستلم';
+
+  @override
+  String get parcelReceiverNoAccount => 'أو مستلم بلا حساب:';
+
+  @override
+  String get parcelReceiverName => 'اسم المستلم';
+
+  @override
+  String get parcelReceiverPhone => 'رقم هاتف المستلم';
+
+  @override
+  String get parcelReceiverRequired =>
+      'اختر المستلم من قوائمك أو اكتب اسمه ورقم هاتفه.';
+
+  @override
+  String get parcelSendRequest => 'إرسال الطلب';
+
+  @override
+  String get parcelRequestSent => 'أُرسل طلب الشحنة. سيحدد السائق سعرها.';
+
+  @override
+  String get parcelSendInstead => 'إرسال طرد مع هذه الرحلة';
+
+  @override
+  String get myParcelsTitle => 'شحناتي';
+
+  @override
+  String get myParcelsEmpty => 'لا شحنات بعد.';
+
+  @override
+  String get parcelAcceptPrice => 'أقبل السعر';
+
+  @override
+  String get parcelGenerateCode => 'توليد كود التسليم';
+
+  @override
+  String get parcelRegenerateCode => 'كود جديد';
+
+  @override
+  String get parcelCancel => 'إلغاء';
+
+  @override
+  String get parcelCodeHint =>
+      'أعطِ هذا الكود للمستلم؛ يسلّمه للسائق عند الاستلام.';
+
+  @override
+  String parcelTakesSeats(int count) {
+    return 'تأخذ $count مقعد';
+  }
+
+  @override
+  String get carrierParcelsTitle => 'الشحنات';
+
+  @override
+  String get carrierParcelsEmpty => 'لا شحنات على خطوطك.';
+
+  @override
+  String get parcelSender => 'المرسل';
+
+  @override
+  String get parcelSetPrice => 'تحديد السعر';
+
+  @override
+  String get parcelPriceTitle => 'سعر الشحنة';
+
+  @override
+  String get parcelPriceLabel => 'السعر';
+
+  @override
+  String get parcelSeatsLabel => 'عدد المقاعد التي تشغلها';
+
+  @override
+  String get parcelSeatsHelp => '٠ إذا كانت في شنطة السيارة';
+
+  @override
+  String get parcelLoadAction => 'تحميل على السيارة';
+
+  @override
+  String get parcelWaitingForCode => 'بانتظار كود المرسل';
+
+  @override
+  String get parcelDeliverAction => 'تسليم';
+
+  @override
+  String get parcelDeliverTitle => 'تسليم الشحنة';
+
+  @override
+  String get parcelDeliverCodeLabel => 'كود التسليم';
+
+  @override
+  String get parcelDeliverCodeHelp =>
+      'اطلبه من المستلم — لا تُسلَّم الشحنة بدونه';
+
+  @override
+  String parcelDeliveredAt(String time) {
+    return 'سُلِّمت: $time';
+  }
 }

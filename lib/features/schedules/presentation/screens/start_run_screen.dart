@@ -91,18 +91,51 @@ class _StartRunScreenState extends ConsumerState<StartRunScreen> {
       _error = null;
     });
 
-    try {
+    Future<void> go({required bool acknowledge}) async {
       final run = await ref
           .read(schedulesApiProvider)
-          .startRun(schedule.id, passengerCount: passengerCount, manifest: manifest);
+          .startRun(schedule.id, passengerCount: passengerCount, manifest: manifest, acknowledgePartial: acknowledge);
       if (mounted) {
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => RunDetailScreen(runId: run.id)));
       }
+    }
+
+    Object? failure;
+
+    try {
+      await go(acknowledge: false);
     } catch (e) {
-      setState(() {
-        _saving = false;
-        _error = e is ApiException ? e.message : l10n.commonSomethingWentWrong;
-      });
+      failure = e;
+      // not full, or someone's attendance is unconfirmed: the trip leaves only on the carrier's own explicit word
+      if (e is ApiException && e.fieldErrors.containsKey('acknowledge_partial') && mounted) {
+        final agreed = await showDialog<bool>(
+          context: context,
+          builder: (dialogContext) => AlertDialog(
+            title: Text(l10n.tripRunPartialTitle),
+            content: Text(l10n.tripRunPartialBody),
+            actions: [
+              TextButton(onPressed: () => Navigator.of(dialogContext).pop(false), child: Text(l10n.commonCancel)),
+              FilledButton(onPressed: () => Navigator.of(dialogContext).pop(true), child: Text(l10n.tripRunPartialConfirm)),
+            ],
+          ),
+        );
+
+        if (agreed == true) {
+          try {
+            await go(acknowledge: true);
+            return;
+          } catch (e2) {
+            failure = e2;
+          }
+        }
+      }
+
+      if (mounted) {
+        setState(() {
+          _saving = false;
+          _error = failure is ApiException ? failure.message : l10n.commonSomethingWentWrong;
+        });
+      }
     }
   }
 

@@ -1,6 +1,7 @@
 import '../../../core/env/env.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/network/paginated.dart';
+import 'models/trip_parcel.dart';
 import 'models/trip_reservation.dart';
 import 'models/trip_run.dart';
 import 'models/trip_schedule.dart';
@@ -179,17 +180,115 @@ class SchedulesApi {
     return TripReservation.fromJson(data['reservation'] as Map<String, dynamic>);
   }
 
+  /// The customer says he is there — always before the carrier.
+  Future<TripReservation> confirmAttendance(int id) async {
+    final data = await _client.post('/schedules/reservations/$id/attendance') as Map<String, dynamic>;
+
+    return TripReservation.fromJson(data['reservation'] as Map<String, dynamic>);
+  }
+
+  /// The carrier confirms the passenger boarded (after the customer; an off-app seat needs only the carrier).
+  Future<TripReservation> carrierAttendance(int id) async {
+    final data = await _client.post('/business/schedules/reservations/$id/attendance') as Map<String, dynamic>;
+
+    return TripReservation.fromJson(data['reservation'] as Map<String, dynamic>);
+  }
+
+  /// An off-app passenger appears in ratings once the fee is paid — taken from the carrier's wallet.
+  Future<TripReservation> ratingVisibility(int id) async {
+    final data = await _client.post('/business/schedules/reservations/$id/rating-visibility') as Map<String, dynamic>;
+
+    return TripReservation.fromJson(data['reservation'] as Map<String, dynamic>);
+  }
+
+  /// Holds seats for a passenger sold directly, outside the app: always a NAMED person.
+  Future<TripReservation> addOfflinePassenger(int scheduleId, {required String name, String? phone, int units = 1}) async {
+    final data = await _client.post(
+      '/business/schedules/$scheduleId/block',
+      data: {'units': units, 'passenger_name': name, if (phone != null && phone.isNotEmpty) 'passenger_phone': phone},
+    ) as Map<String, dynamic>;
+
+    return TripReservation.fromJson(data['reservation'] as Map<String, dynamic>);
+  }
+
+  // ───────────────────────────── Parcels ─────────────────────────────
+
+  Future<TripParcel> requestParcel(
+    int scheduleId, {
+    required String description,
+    int? receiverUserId,
+    String? receiverName,
+    String? receiverPhone,
+  }) async {
+    final data = await _client.post(
+      '/schedules/$scheduleId/parcels',
+      data: {
+        'description': description,
+        'receiver_user_id': ?receiverUserId,
+        if (receiverName != null && receiverName.isNotEmpty) 'receiver_name': receiverName,
+        if (receiverPhone != null && receiverPhone.isNotEmpty) 'receiver_phone': receiverPhone,
+      },
+    ) as Map<String, dynamic>;
+
+    return TripParcel.fromJson(data['parcel'] as Map<String, dynamic>);
+  }
+
+  /// Parcels I send and parcels sent to me.
+  Future<Paginated<TripParcel>> myParcels({int page = 1}) async {
+    final data = await _client.get('/schedules/my-parcels', query: {'page': page}) as Map<String, dynamic>;
+
+    return Paginated.fromJson(data, TripParcel.fromJson);
+  }
+
+  Future<TripParcel> _parcelAction(String path) async {
+    final data = await _client.post(path) as Map<String, dynamic>;
+
+    return TripParcel.fromJson(data['parcel'] as Map<String, dynamic>);
+  }
+
+  Future<TripParcel> acceptParcel(int id) => _parcelAction('/schedules/parcels/$id/accept');
+  Future<TripParcel> generateParcelCode(int id) => _parcelAction('/schedules/parcels/$id/code');
+  Future<TripParcel> cancelParcel(int id) => _parcelAction('/schedules/parcels/$id/cancel');
+
+  Future<Paginated<TripParcel>> carrierParcels({String? status, int page = 1}) async {
+    final data = await _client.get('/business/schedules/parcels', query: {'status': ?status, 'page': page}) as Map<String, dynamic>;
+
+    return Paginated.fromJson(data, TripParcel.fromJson);
+  }
+
+  Future<TripParcel> priceParcel(int id, {required double price, int seats = 0}) async {
+    final data = await _client.post('/business/schedules/parcels/$id/price', data: {'price': price, 'seats': seats}) as Map<String, dynamic>;
+
+    return TripParcel.fromJson(data['parcel'] as Map<String, dynamic>);
+  }
+
+  Future<TripParcel> loadParcel(int id) => _parcelAction('/business/schedules/parcels/$id/load');
+  Future<TripParcel> rejectParcel(int id) => _parcelAction('/business/schedules/parcels/$id/reject');
+
+  /// Handed over against the code the receiver told the driver.
+  Future<TripParcel> deliverParcel(int id, String code) async {
+    final data = await _client.post('/business/schedules/parcels/$id/deliver', data: {'code': code}) as Map<String, dynamic>;
+
+    return TripParcel.fromJson(data['parcel'] as Map<String, dynamic>);
+  }
+
   // ─────────────────── Carrier: live run execution ───────────────────
 
   Future<TripRun> startRun(
     int scheduleId, {
     int? passengerCount,
     List<Map<String, dynamic>> manifest = const [],
+    bool acknowledgePartial = false,
   }) async {
     final data =
         await _client.post(
               '/business/schedules/$scheduleId/runs',
-              data: {'passenger_count': passengerCount, if (manifest.isNotEmpty) 'manifest': manifest},
+              data: {
+                'passenger_count': passengerCount,
+                if (manifest.isNotEmpty) 'manifest': manifest,
+                // leaving short of full, or with attendance unconfirmed, is the carrier's own explicit word
+                if (acknowledgePartial) 'acknowledge_partial': true,
+              },
             )
             as Map<String, dynamic>;
     return TripRun.fromJson(data['run'] as Map<String, dynamic>);
