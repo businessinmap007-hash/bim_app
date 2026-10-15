@@ -12,6 +12,7 @@ import '../../../business_groups/presentation/widgets/business_group_picker_shee
 import '../../../categories/presentation/widgets/category_picker_field.dart';
 import '../../../discovery/data/models/business_summary.dart';
 import '../../../location/application/location_providers.dart';
+import '../../../location/data/models/location_models.dart';
 import '../../application/retail_listings_providers.dart';
 import '../../data/models/catalog_product_summary.dart';
 import '../../data/models/retail_listing.dart';
@@ -1100,7 +1101,9 @@ class _GovernoratePickerSheetState extends ConsumerState<_GovernoratePickerSheet
             governoratesAsync.when(
               loading: () => const Expanded(child: Center(child: CircularProgressIndicator())),
               error: (e, _) => Expanded(child: Center(child: Text(l10n.commonSomethingWentWrong))),
-              data: (governorates) => Expanded(
+              data: (raw) {
+                final governorates = sortedGovernorates(raw, isEnglish ? 'en' : 'ar');
+                return Expanded(
                 child: Column(
                   children: [
                     Padding(
@@ -1159,7 +1162,8 @@ class _GovernoratePickerSheetState extends ConsumerState<_GovernoratePickerSheet
                     ),
                   ],
                 ),
-              ),
+              );
+              },
             ),
           ],
         ),

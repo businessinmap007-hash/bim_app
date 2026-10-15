@@ -244,8 +244,9 @@ class _GovernorateList extends ConsumerWidget {
     final languageCode = Localizations.localeOf(context).languageCode;
 
     return governorates.when(
-      data: (items) {
-        if (items.isEmpty) return Center(child: Text(l10n.locationEmpty));
+      data: (raw) {
+        if (raw.isEmpty) return Center(child: Text(l10n.locationEmpty));
+        final items = sortedGovernorates(raw, languageCode);
         return ListView.separated(
           controller: scrollController,
           itemCount: items.length,
@@ -318,7 +319,7 @@ class _CityListState extends ConsumerState<_CityList> {
         Expanded(
           child: cities.when(
             data: (items) {
-              final filtered = items;
+              final filtered = sortedCities(items, languageCode);
               if (filtered.isEmpty) return Center(child: Text(l10n.locationEmpty));
               return ListView.separated(
                 controller: widget.scrollController,

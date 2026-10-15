@@ -345,7 +345,9 @@ class _GovernorateFilterList extends ConsumerWidget {
     final languageCode = Localizations.localeOf(context).languageCode;
 
     return governorates.when(
-      data: (items) => ListView.separated(
+      data: (raw) {
+        final items = sortedGovernorates(raw, languageCode);
+        return ListView.separated(
         controller: scrollController,
         itemCount: items.length,
         separatorBuilder: (context, index) => const Divider(height: 1),
@@ -357,7 +359,8 @@ class _GovernorateFilterList extends ConsumerWidget {
             onTap: () => onSelected(governorate),
           );
         },
-      ),
+      );
+      },
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stack) => Center(child: Text(l10n.commonSomethingWentWrong)),
     );
@@ -378,7 +381,9 @@ class _CityFilterList extends ConsumerWidget {
     final governorateName = governorate.localizedName(languageCode);
 
     return cities.when(
-      data: (items) => ListView.separated(
+      data: (raw) {
+        final items = sortedCities(raw, languageCode);
+        return ListView.separated(
         controller: scrollController,
         itemCount: items.length + 1,
         separatorBuilder: (context, index) => const Divider(height: 1),
@@ -403,7 +408,8 @@ class _CityFilterList extends ConsumerWidget {
             )),
           );
         },
-      ),
+      );
+      },
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, stack) => Center(child: Text(l10n.commonSomethingWentWrong)),
     );

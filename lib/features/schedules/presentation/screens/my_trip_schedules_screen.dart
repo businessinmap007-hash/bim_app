@@ -237,7 +237,7 @@ class TripScheduleFormScreenState extends ConsumerState<TripScheduleFormScreen> 
           children: [
             Text(l10n.tripChooseGovernorate, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 12),
-            for (final gov in governorates)
+            for (final gov in sortedGovernorates(governorates, languageCode))
               ListTile(
                 title: Text(gov.localizedName(languageCode)),
                 onTap: () => Navigator.of(context).pop(gov),

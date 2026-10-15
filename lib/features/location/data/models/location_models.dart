@@ -43,6 +43,28 @@ class LocationGovernorate {
   );
 }
 
+/// The key a reader expects a list of names to be ordered by: the Arabic «ال» prefix and the hamza forms of alef
+/// are ignored (الإسكندرية sits with the alefs, not after اسوان), Latin names are compared without case.
+String locationSortKey(String name) {
+  var key = name.trim().toLowerCase();
+  if (key.startsWith('ال') && key.length > 2) key = key.substring(2);
+  return key.replaceAll(RegExp('[أإآٱ]'), 'ا').replaceAll('ة', 'ه').replaceAll('ى', 'ي');
+}
+
+/// Governorates in alphabetical order of the name the person actually reads (the API order follows the Arabic
+/// name, which is the wrong order on an English screen).
+List<LocationGovernorate> sortedGovernorates(Iterable<LocationGovernorate> items, String languageCode) {
+  final list = items.toList();
+  list.sort((a, b) => locationSortKey(a.localizedName(languageCode)).compareTo(locationSortKey(b.localizedName(languageCode))));
+  return list;
+}
+
+List<LocationCity> sortedCities(Iterable<LocationCity> items, String languageCode) {
+  final list = items.toList();
+  list.sort((a, b) => locationSortKey(a.localizedName(languageCode)).compareTo(locationSortKey(b.localizedName(languageCode))));
+  return list;
+}
+
 class LocationCity {
   final int id;
   final int governorateId;
