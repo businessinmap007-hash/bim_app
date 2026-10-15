@@ -3311,5 +3311,48 @@
     "placeholders": {
       "time": {"type": "String"}
     }
-  }
+  },
+  "parcelStatusReturned": "Not handed over (came back)",
+  "parcelWhoPaysTitle": "Who pays the driver (cash)",
+  "parcelPayerSender": "The sender, handing it to the driver",
+  "parcelPayerReceiver": "The receiver, on receipt",
+  "parcelPickupCodeHint": "The driver scans this QR (or types its code) to take the parcel from you.",
+  "parcelPickupTitle": "Take the parcel from the sender",
+  "parcelPickupHint": "Scan the sender QR or type its code",
+  "parcelExpectedArrival": "Expected arrival (approximate): {time}",
+  "@parcelExpectedArrival": {
+    "placeholders": {
+      "time": {"type": "String"}
+    }
+  },
+  "parcelExpectedArrivalPick": "Set the approximate arrival",
+  "parcelCashTitle": "Collect the amount",
+  "parcelCashBody": "Did you collect {amount} {currency} in cash now? (recorded only)",
+  "@parcelCashBody": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "currency": {"type": "String"}
+    }
+  },
+  "parcelCashNotYet": "Not yet",
+  "parcelCashCollected": "Yes, collected",
+  "handoverScanQr": "Scan QR",
+  "handoverOrTypeCode": "Or type the code:",
+  "handoverCodeLabel": "Code",
+  "handoverConfirmTyped": "Confirm the typed code",
+  "clinicOptionsTitle": "Clinic options",
+  "clinicArrivalQrTitle": "Arrival QR",
+  "clinicArrivalQrHint": "The patient scans it on arrival to be activated in the queue. Optional.",
+  "clinicArrivalQrRotate": "New code",
+  "clinicDayClosureTitle": "Day is full",
+  "clinicDayClosureBody": "Closes new bookings for today. Optional — you may add working hours instead.",
+  "clinicDayClosureClosedOn": "Closed to new bookings on {date}",
+  "@clinicDayClosureClosedOn": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "clinicArriveAction": "I arrived — scan the clinic QR",
+  "clinicArriveHint": "Scan the code shown at the clinic to confirm you arrived",
+  "clinicArriveDone": "Your arrival is recorded. You are in the queue now."
 }

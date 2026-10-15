@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/deposit/screens/guarantor_request_screen.dart';
+import '../../schedules/presentation/screens/incoming_reservations_screen.dart';
+import '../../schedules/presentation/screens/my_reservations_screen.dart';
+import '../../schedules/presentation/screens/parcels_screens.dart';
 import '../../auth/application/auth_controller.dart';
 import '../../booking/presentation/screens/business_bookings_screen.dart';
 import '../../business/presentation/screens/business_detail_screen.dart';
@@ -44,6 +47,15 @@ Future<void> openNotificationTarget(BuildContext context, WidgetRef ref, AppNoti
       if (id != null) {
         Navigator.of(context).push(MaterialPageRoute(builder: (_) => GuarantorRequestScreen(guarantorId: id)));
       }
+    // Trips: a parcel's own screens (sender / receiver, or the driver's list) and the reservation lists.
+    case 'open_trip_parcel':
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MyParcelsScreen()));
+    case 'open_carrier_parcel':
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CarrierParcelsScreen()));
+    case 'open_trip_reservation':
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MyReservationsScreen()));
+    case 'open_carrier_reservation':
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const IncomingReservationsScreen()));
     case 'open_business_order':
       if (id != null) {
         Navigator.of(context).push(

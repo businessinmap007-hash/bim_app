@@ -219,11 +219,13 @@ class SchedulesApi {
     int? receiverUserId,
     String? receiverName,
     String? receiverPhone,
+    String payer = 'receiver',
   }) async {
     final data = await _client.post(
       '/schedules/$scheduleId/parcels',
       data: {
         'description': description,
+        'payer': payer,
         'receiver_user_id': ?receiverUserId,
         if (receiverName != null && receiverName.isNotEmpty) 'receiver_name': receiverName,
         if (receiverPhone != null && receiverPhone.isNotEmpty) 'receiver_phone': receiverPhone,
@@ -256,18 +258,36 @@ class SchedulesApi {
     return Paginated.fromJson(data, TripParcel.fromJson);
   }
 
-  Future<TripParcel> priceParcel(int id, {required double price, int seats = 0}) async {
-    final data = await _client.post('/business/schedules/parcels/$id/price', data: {'price': price, 'seats': seats}) as Map<String, dynamic>;
+  Future<TripParcel> priceParcel(int id, {required double price, int seats = 0, DateTime? expectedArrivalAt}) async {
+    final data = await _client.post(
+      '/business/schedules/parcels/$id/price',
+      data: {'price': price, 'seats': seats, if (expectedArrivalAt != null) 'expected_arrival_at': expectedArrivalAt.toIso8601String()},
+    ) as Map<String, dynamic>;
 
     return TripParcel.fromJson(data['parcel'] as Map<String, dynamic>);
   }
 
-  Future<TripParcel> loadParcel(int id) => _parcelAction('/business/schedules/parcels/$id/load');
+  /// Taken from the sender: the code he shows as a QR (scanned) or reads out (typed).
+  Future<TripParcel> loadParcel(int id, String code, {bool cashCollected = false}) async {
+    final data = await _client.post(
+      '/business/schedules/parcels/$id/load',
+      data: {'code': code, if (cashCollected) 'cash_collected': true},
+    ) as Map<String, dynamic>;
+
+    return TripParcel.fromJson(data['parcel'] as Map<String, dynamic>);
+  }
+
+  /// A parcel is a paid service: either side may dispute it through the shared dispute flow.
+  Future<void> disputeParcel(int id, {required String reasonCode, String? reasonText}) =>
+      _client.post('/schedules/parcels/$id/disputes', data: {'reason_code': reasonCode, if (reasonText != null && reasonText.isNotEmpty) 'reason_text': reasonText});
   Future<TripParcel> rejectParcel(int id) => _parcelAction('/business/schedules/parcels/$id/reject');
 
   /// Handed over against the code the receiver told the driver.
-  Future<TripParcel> deliverParcel(int id, String code) async {
-    final data = await _client.post('/business/schedules/parcels/$id/deliver', data: {'code': code}) as Map<String, dynamic>;
+  Future<TripParcel> deliverParcel(int id, String code, {bool cashCollected = false}) async {
+    final data = await _client.post(
+      '/business/schedules/parcels/$id/deliver',
+      data: {'code': code, if (cashCollected) 'cash_collected': true},
+    ) as Map<String, dynamic>;
 
     return TripParcel.fromJson(data['parcel'] as Map<String, dynamic>);
   }

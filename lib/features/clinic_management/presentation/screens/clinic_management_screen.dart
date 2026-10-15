@@ -27,6 +27,7 @@ import '../../../../core/time/egypt_time.dart';
 import '../../../../core/time/clock_format.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../../core/providers/core_providers.dart';
+import '../widgets/clinic_options_sheet.dart';
 
 /// Api\V2\BusinessClinicAppointmentController — the clinic's own side. Two
 /// tabs: the appointments queue (confirm/reject/complete/no-show/reschedule)
@@ -81,6 +82,11 @@ class _ClinicManagementScreenState extends ConsumerState<ClinicManagementScreen>
       appBar: AppBar(
         title: Text(widget.actingBusinessId != null ? l10n.myAppointmentsTitle : l10n.clinicManagementTitle),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.qr_code_2_outlined),
+            tooltip: l10n.clinicOptionsTitle,
+            onPressed: () => showClinicOptionsSheet(context),
+          ),
           IconButton(
             icon: const Icon(Icons.event_available_outlined),
             tooltip: l10n.clinicSlotsTab,

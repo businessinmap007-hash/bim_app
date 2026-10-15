@@ -9590,4 +9590,94 @@ class AppLocalizationsAr extends AppLocalizations {
   String parcelDeliveredAt(String time) {
     return 'سُلِّمت: $time';
   }
+
+  @override
+  String get parcelStatusReturned => 'لم تُسلَّم (عادت)';
+
+  @override
+  String get parcelWhoPaysTitle => 'من يدفع للسائق (نقدًا)';
+
+  @override
+  String get parcelPayerSender => 'المرسل عند التسليم للسائق';
+
+  @override
+  String get parcelPayerReceiver => 'المستلم عند الاستلام';
+
+  @override
+  String get parcelPickupCodeHint =>
+      'يمسح السائق هذا الـQR (أو يكتب كوده) ليستلم الشحنة منك.';
+
+  @override
+  String get parcelPickupTitle => 'استلام الشحنة من المرسل';
+
+  @override
+  String get parcelPickupHint => 'امسح QR المرسل أو اكتب كوده';
+
+  @override
+  String parcelExpectedArrival(String time) {
+    return 'الوصول المتوقع (تقريبي): $time';
+  }
+
+  @override
+  String get parcelExpectedArrivalPick => 'تحديد موعد الوصول التقريبي';
+
+  @override
+  String get parcelCashTitle => 'تحصيل المبلغ';
+
+  @override
+  String parcelCashBody(String amount, String currency) {
+    return 'هل حصّلت $amount $currency نقدًا الآن؟ (يُسجَّل فقط)';
+  }
+
+  @override
+  String get parcelCashNotYet => 'ليس بعد';
+
+  @override
+  String get parcelCashCollected => 'نعم، حصّلته';
+
+  @override
+  String get handoverScanQr => 'مسح QR';
+
+  @override
+  String get handoverOrTypeCode => 'أو اكتب الكود:';
+
+  @override
+  String get handoverCodeLabel => 'الكود';
+
+  @override
+  String get handoverConfirmTyped => 'تأكيد الكود المكتوب';
+
+  @override
+  String get clinicOptionsTitle => 'خيارات العيادة';
+
+  @override
+  String get clinicArrivalQrTitle => 'QR الوصول';
+
+  @override
+  String get clinicArrivalQrHint =>
+      'يمسحه المريض عند وصوله ليُفعَّل دوره في الطابور. اختياري.';
+
+  @override
+  String get clinicArrivalQrRotate => 'كود جديد';
+
+  @override
+  String get clinicDayClosureTitle => 'اكتمل العدد اليوم';
+
+  @override
+  String get clinicDayClosureBody =>
+      'يغلق الحجوزات الجديدة لهذا اليوم. اختياري — يمكنك بدلًا منه زيادة ساعات العمل.';
+
+  @override
+  String clinicDayClosureClosedOn(String date) {
+    return 'مغلق للحجز الجديد في $date';
+  }
+
+  @override
+  String get clinicArriveAction => 'وصلت — امسح QR العيادة';
+
+  @override
+  String get clinicArriveHint => 'امسح الكود المعروض في العيادة لتأكيد وصولك';
+
+  @override
+  String get clinicArriveDone => 'تم تسجيل وصولك. أنت الآن في الطابور.';
 }

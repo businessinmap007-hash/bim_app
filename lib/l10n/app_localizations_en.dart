@@ -9655,4 +9655,96 @@ class AppLocalizationsEn extends AppLocalizations {
   String parcelDeliveredAt(String time) {
     return 'Delivered: $time';
   }
+
+  @override
+  String get parcelStatusReturned => 'Not handed over (came back)';
+
+  @override
+  String get parcelWhoPaysTitle => 'Who pays the driver (cash)';
+
+  @override
+  String get parcelPayerSender => 'The sender, handing it to the driver';
+
+  @override
+  String get parcelPayerReceiver => 'The receiver, on receipt';
+
+  @override
+  String get parcelPickupCodeHint =>
+      'The driver scans this QR (or types its code) to take the parcel from you.';
+
+  @override
+  String get parcelPickupTitle => 'Take the parcel from the sender';
+
+  @override
+  String get parcelPickupHint => 'Scan the sender QR or type its code';
+
+  @override
+  String parcelExpectedArrival(String time) {
+    return 'Expected arrival (approximate): $time';
+  }
+
+  @override
+  String get parcelExpectedArrivalPick => 'Set the approximate arrival';
+
+  @override
+  String get parcelCashTitle => 'Collect the amount';
+
+  @override
+  String parcelCashBody(String amount, String currency) {
+    return 'Did you collect $amount $currency in cash now? (recorded only)';
+  }
+
+  @override
+  String get parcelCashNotYet => 'Not yet';
+
+  @override
+  String get parcelCashCollected => 'Yes, collected';
+
+  @override
+  String get handoverScanQr => 'Scan QR';
+
+  @override
+  String get handoverOrTypeCode => 'Or type the code:';
+
+  @override
+  String get handoverCodeLabel => 'Code';
+
+  @override
+  String get handoverConfirmTyped => 'Confirm the typed code';
+
+  @override
+  String get clinicOptionsTitle => 'Clinic options';
+
+  @override
+  String get clinicArrivalQrTitle => 'Arrival QR';
+
+  @override
+  String get clinicArrivalQrHint =>
+      'The patient scans it on arrival to be activated in the queue. Optional.';
+
+  @override
+  String get clinicArrivalQrRotate => 'New code';
+
+  @override
+  String get clinicDayClosureTitle => 'Day is full';
+
+  @override
+  String get clinicDayClosureBody =>
+      'Closes new bookings for today. Optional — you may add working hours instead.';
+
+  @override
+  String clinicDayClosureClosedOn(String date) {
+    return 'Closed to new bookings on $date';
+  }
+
+  @override
+  String get clinicArriveAction => 'I arrived — scan the clinic QR';
+
+  @override
+  String get clinicArriveHint =>
+      'Scan the code shown at the clinic to confirm you arrived';
+
+  @override
+  String get clinicArriveDone =>
+      'Your arrival is recorded. You are in the queue now.';
 }

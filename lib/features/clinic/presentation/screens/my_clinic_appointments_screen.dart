@@ -10,6 +10,9 @@ import '../../application/clinic_providers.dart';
 import '../../data/models/clinic_appointment.dart';
 import '../../../prescriptions/presentation/screens/prescription_detail_screen.dart';
 import '../../../../core/time/clock_format.dart';
+import '../../../../core/handover/handover_code.dart';
+import '../../../../core/network/api_exception.dart';
+import '../../../../core/providers/core_providers.dart';
 
 class MyClinicAppointmentsScreen extends ConsumerStatefulWidget {
   const MyClinicAppointmentsScreen({super.key});
@@ -25,6 +28,26 @@ class _MyClinicAppointmentsScreenState extends ConsumerState<MyClinicAppointment
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+  }
+
+  /// «وصلت»: scan the clinic's arrival QR (or type its code) — that is what activates his turn in the queue.
+  Future<void> _arrive(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
+    final code = await askHandoverCode(context, title: l10n.clinicArriveAction, hint: l10n.clinicArriveHint);
+    if (code == null || !context.mounted) return;
+
+    try {
+      await ref.read(apiClientProvider).post('/clinic-appointments/arrive', data: {'code': code});
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.clinicArriveDone)));
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e is ApiException && e.message.isNotEmpty ? e.message : l10n.commonSomethingWentWrong)),
+        );
+      }
+    }
   }
 
   void _onScroll() {
@@ -72,7 +95,16 @@ class _MyClinicAppointmentsScreenState extends ConsumerState<MyClinicAppointment
     final state = ref.watch(myClinicAppointmentsControllerProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.myClinicAppointmentsTitle)),
+      appBar: AppBar(
+        title: Text(l10n.myClinicAppointmentsTitle),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.qr_code_scanner),
+            tooltip: l10n.clinicArriveAction,
+            onPressed: () => _arrive(context),
+          ),
+        ],
+      ),
       body: state.isLoading
           ? const Center(child: CircularProgressIndicator())
           : state.error != null

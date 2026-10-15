@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
+import '../../../../core/handover/handover_code.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../contact_groups/application/contact_groups_providers.dart';
+import '../../../disputes/presentation/widgets/dispute_reason_picker.dart';
 import '../../application/schedules_providers.dart';
 import '../../data/models/trip_parcel.dart';
 
@@ -17,10 +17,13 @@ String _statusLabel(AppLocalizations l10n, String status) => switch (status) {
   TripParcel.delivered => l10n.parcelStatusDelivered,
   TripParcel.rejected => l10n.parcelStatusRejected,
   TripParcel.cancelled => l10n.parcelStatusCancelled,
+  TripParcel.returned => l10n.parcelStatusReturned,
   _ => status,
 };
 
 String _money(double v) => v == v.roundToDouble() ? v.toStringAsFixed(0) : v.toStringAsFixed(2);
+
+String _when(DateTime t) => t.toLocal().toString().substring(0, 16);
 
 void _toast(BuildContext context, Object e) {
   final l10n = AppLocalizations.of(context)!;
@@ -28,6 +31,10 @@ void _toast(BuildContext context, Object e) {
     SnackBar(content: Text(e is ApiException && e.message.isNotEmpty ? e.message : l10n.commonSomethingWentWrong)),
   );
 }
+
+/// Who pays the driver, in cash: the label that reads the same on both sides.
+String _payerLabel(AppLocalizations l10n, TripParcel p) =>
+    p.payer == 'sender' ? l10n.parcelPayerSender : l10n.parcelPayerReceiver;
 
 /// The sender (an app account) describes a parcel to send with a trip leg. The receiver is a friend/family account
 /// picked from the contact groups, or a name and a phone for someone with no account. The driver prices it next.
@@ -54,6 +61,7 @@ class _ParcelRequestSheetState extends ConsumerState<_ParcelRequestSheet> {
   final _phone = TextEditingController();
   int? _receiverUserId;
   String? _receiverLabel;
+  String _payer = 'receiver';
   bool _busy = false;
 
   @override
@@ -81,6 +89,7 @@ class _ParcelRequestSheetState extends ConsumerState<_ParcelRequestSheet> {
         receiverUserId: _receiverUserId,
         receiverName: _receiverUserId == null ? _name.text.trim() : null,
         receiverPhone: _receiverUserId == null ? _phone.text.trim() : null,
+        payer: _payer,
       );
       if (!mounted) return;
       Navigator.of(context).pop();
@@ -156,6 +165,18 @@ class _ParcelRequestSheetState extends ConsumerState<_ParcelRequestSheet> {
                   decoration: InputDecoration(labelText: l10n.parcelReceiverPhone),
                 ),
               ],
+              const SizedBox(height: 14),
+              // paid in cash to the driver — recorded only; the wallet is for fees, deposits and guarantees
+              Text(l10n.parcelWhoPaysTitle, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+              const SizedBox(height: 6),
+              SegmentedButton<String>(
+                segments: [
+                  ButtonSegment(value: 'sender', label: Text(l10n.parcelPayerSender)),
+                  ButtonSegment(value: 'receiver', label: Text(l10n.parcelPayerReceiver)),
+                ],
+                selected: {_payer},
+                onSelectionChanged: (v) => setState(() => _payer = v.first),
+              ),
               const SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,
@@ -169,8 +190,8 @@ class _ParcelRequestSheetState extends ConsumerState<_ParcelRequestSheet> {
   }
 }
 
-/// «شحناتي»: what I send and what is sent to me — accept the driver's price, generate the delivery code, and (as the
-/// receiver with an account) read it as a QR.
+/// «شحناتي»: what I send and what is sent to me — accept the driver's price, show the pickup QR, generate the delivery
+/// code (the receiver with an account sees it as a QR too), and dispute it like any paid service.
 class MyParcelsScreen extends ConsumerStatefulWidget {
   const MyParcelsScreen({super.key});
 
@@ -201,6 +222,21 @@ class _MyParcelsScreenState extends ConsumerState<MyParcelsScreen> {
     try {
       await action();
       await _load();
+    } catch (e) {
+      if (mounted) _toast(context, e);
+    }
+  }
+
+  Future<void> _dispute(TripParcel p) async {
+    final l10n = AppLocalizations.of(context)!;
+    final result = await showDisputeReasonPicker(context, ref);
+    if (result == null || !mounted) return;
+
+    try {
+      await ref.read(schedulesApiProvider).disputeParcel(p.id, reasonCode: result.reasonCode, reasonText: result.reasonText);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.visitDepositDisputeOpened)));
+      }
     } catch (e) {
       if (mounted) _toast(context, e);
     }
@@ -247,7 +283,16 @@ class _MyParcelsScreenState extends ConsumerState<MyParcelsScreen> {
                             '${l10n.parcelReceiverTitle}: ${p.receiverName ?? '—'}${p.receiverPhone != null ? ' · ${p.receiverPhone}' : ''}',
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
-                          if (p.price != null) Text('${_money(p.price!)} ${p.currency}${p.seats > 0 ? ' · ${l10n.parcelTakesSeats(p.seats)}' : ''}'),
+                          if (p.price != null)
+                            Text(
+                              '${_money(p.price!)} ${p.currency}${p.seats > 0 ? ' · ${l10n.parcelTakesSeats(p.seats)}' : ''}'
+                              ' · ${_payerLabel(l10n, p)}${p.isPaid ? ' ✓' : ''}',
+                            ),
+                          // approximate (the driver's word) vs the actual hour it was handed over
+                          if (p.expectedArrivalAt != null)
+                            Text(l10n.parcelExpectedArrival(_when(p.expectedArrivalAt!)), style: Theme.of(context).textTheme.bodySmall),
+                          if (p.deliveredAt != null)
+                            Text(l10n.parcelDeliveredAt(_when(p.deliveredAt!)), style: Theme.of(context).textTheme.bodySmall),
                           const SizedBox(height: 8),
                           Wrap(
                             spacing: 8,
@@ -263,35 +308,24 @@ class _MyParcelsScreenState extends ConsumerState<MyParcelsScreen> {
                                   child: Text(p.hasCode ? l10n.parcelRegenerateCode : l10n.parcelGenerateCode),
                                 ),
                               if (p.isOpenForSender)
-                                TextButton(
-                                  onPressed: () => _run(() => api.cancelParcel(p.id)),
-                                  child: Text(l10n.parcelCancel),
-                                ),
+                                TextButton(onPressed: () => _run(() => api.cancelParcel(p.id)), child: Text(l10n.parcelCancel)),
+                              if (p.canDispute)
+                                TextButton(onPressed: () => _dispute(p), child: Text(l10n.disputeOpenTitle)),
                             ],
                           ),
+                          // the QR the driver scans to TAKE the parcel (the sender only)
+                          if (p.pickupCode != null) ...[
+                            const Divider(height: 24),
+                            HandoverCodeCard(code: p.pickupCode!, caption: l10n.parcelPickupCodeHint),
+                          ],
+                          // the QR / code the receiver gives the driver to GET it
                           if (p.deliveryCode != null) ...[
-                            const SizedBox(height: 10),
-                            Text(l10n.parcelCodeHint, style: Theme.of(context).textTheme.bodySmall),
-                            const SizedBox(height: 6),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: SelectableText(
-                                    p.deliveryCode!,
-                                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(letterSpacing: 4, fontWeight: FontWeight.w800),
-                                  ),
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.copy_outlined),
-                                  onPressed: () => Clipboard.setData(ClipboardData(text: p.deliveryCode!)),
-                                ),
-                              ],
+                            const Divider(height: 24),
+                            HandoverCodeCard(
+                              code: p.deliveryCode!,
+                              caption: l10n.parcelCodeHint,
+                              showQr: p.receiverUserId != null,
                             ),
-                            // a receiver who has an account shows this to the driver instead of saying it
-                            if (p.receiverUserId != null)
-                              Center(
-                                child: QrImageView(data: p.deliveryCode!, size: 160, backgroundColor: Colors.white),
-                              ),
                           ],
                         ],
                       ),
@@ -304,7 +338,8 @@ class _MyParcelsScreenState extends ConsumerState<MyParcelsScreen> {
   }
 }
 
-/// The driver's parcels: price (and say whether it takes a seat), load, hand over against the code, or refuse.
+/// The driver's parcels: price (and say whether it takes a seat, and roughly when it arrives), take it from the sender
+/// by QR/code, hand it over by QR/code, or refuse. The cash is only recorded.
 class CarrierParcelsScreen extends ConsumerStatefulWidget {
   const CarrierParcelsScreen({super.key});
 
@@ -344,31 +379,53 @@ class _CarrierParcelsScreenState extends ConsumerState<CarrierParcelsScreen> {
     final l10n = AppLocalizations.of(context)!;
     final price = TextEditingController(text: p.price != null ? _money(p.price!) : '');
     final seats = TextEditingController(text: '${p.seats}');
+    DateTime? arrival = p.expectedArrivalAt;
 
     final ok = await showDialog<bool>(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(l10n.parcelPriceTitle),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(p.description, maxLines: 3, overflow: TextOverflow.ellipsis),
-            TextField(
-              controller: price,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              decoration: InputDecoration(labelText: l10n.parcelPriceLabel),
+      builder: (dialogContext) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: Text(l10n.parcelPriceTitle),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(p.description, maxLines: 3, overflow: TextOverflow.ellipsis),
+                TextField(
+                  controller: price,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  decoration: InputDecoration(labelText: l10n.parcelPriceLabel),
+                ),
+                TextField(
+                  controller: seats,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(labelText: l10n.parcelSeatsLabel, helperText: l10n.parcelSeatsHelp),
+                ),
+                const SizedBox(height: 8),
+                OutlinedButton.icon(
+                  icon: const Icon(Icons.schedule),
+                  label: Text(arrival == null ? l10n.parcelExpectedArrivalPick : l10n.parcelExpectedArrival(_when(arrival!))),
+                  onPressed: () async {
+                    final day = await showDatePicker(
+                      context: dialogContext,
+                      initialDate: arrival ?? DateTime.now(),
+                      firstDate: DateTime.now().subtract(const Duration(days: 1)),
+                      lastDate: DateTime.now().add(const Duration(days: 60)),
+                    );
+                    if (day == null || !dialogContext.mounted) return;
+                    final time = await showTimePicker(context: dialogContext, initialTime: TimeOfDay.fromDateTime(arrival ?? DateTime.now()));
+                    if (time == null) return;
+                    setDialogState(() => arrival = DateTime(day.year, day.month, day.day, time.hour, time.minute));
+                  },
+                ),
+              ],
             ),
-            TextField(
-              controller: seats,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: l10n.parcelSeatsLabel, helperText: l10n.parcelSeatsHelp),
-            ),
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: Text(l10n.commonCancel)),
+            FilledButton(onPressed: () => Navigator.pop(dialogContext, true), child: Text(l10n.commonSave)),
           ],
         ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: Text(l10n.commonCancel)),
-          FilledButton(onPressed: () => Navigator.pop(dialogContext, true), child: Text(l10n.commonSave)),
-        ],
       ),
     );
 
@@ -378,35 +435,58 @@ class _CarrierParcelsScreenState extends ConsumerState<CarrierParcelsScreen> {
     seats.dispose();
 
     if (ok != true || value == null) return;
-    await _run(() => ref.read(schedulesApiProvider).priceParcel(p.id, price: value, seats: seatCount));
+    await _run(() => ref.read(schedulesApiProvider).priceParcel(p.id, price: value, seats: seatCount, expectedArrivalAt: arrival));
   }
 
-  Future<void> _deliver(TripParcel p) async {
+  /// Asks for the code (scan or type) and — when this is the moment the cash changes hands — whether it was collected.
+  Future<void> _handover(TripParcel p, {required bool pickup}) async {
     final l10n = AppLocalizations.of(context)!;
-    final code = TextEditingController();
 
-    final ok = await showDialog<bool>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(l10n.parcelDeliverTitle),
-        content: TextField(
-          controller: code,
-          autofocus: true,
-          textCapitalization: TextCapitalization.none,
-          decoration: InputDecoration(labelText: l10n.parcelDeliverCodeLabel, helperText: l10n.parcelDeliverCodeHelp),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: Text(l10n.commonCancel)),
-          FilledButton(onPressed: () => Navigator.pop(dialogContext, true), child: Text(l10n.parcelDeliverAction)),
-        ],
-      ),
+    final code = await askHandoverCode(
+      context,
+      title: pickup ? l10n.parcelPickupTitle : l10n.parcelDeliverTitle,
+      hint: pickup ? l10n.parcelPickupHint : l10n.parcelDeliverCodeHelp,
     );
+    if (code == null || !mounted) return;
 
-    final typed = code.text.trim();
-    code.dispose();
+    var cash = false;
+    final payerNow = pickup ? p.payer == 'sender' : p.payer == 'receiver';
 
-    if (ok != true || typed.isEmpty) return;
-    await _run(() => ref.read(schedulesApiProvider).deliverParcel(p.id, typed));
+    if (payerNow && p.price != null && p.price! > 0 && !p.isPaid) {
+      final collected = await showDialog<bool>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          title: Text(l10n.parcelCashTitle),
+          content: Text(l10n.parcelCashBody(_money(p.price!), p.currency)),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: Text(l10n.parcelCashNotYet)),
+            FilledButton(onPressed: () => Navigator.pop(dialogContext, true), child: Text(l10n.parcelCashCollected)),
+          ],
+        ),
+      );
+      cash = collected == true;
+    }
+
+    await _run(() {
+      final api = ref.read(schedulesApiProvider);
+
+      return pickup ? api.loadParcel(p.id, code, cashCollected: cash) : api.deliverParcel(p.id, code, cashCollected: cash);
+    });
+  }
+
+  Future<void> _dispute(TripParcel p) async {
+    final l10n = AppLocalizations.of(context)!;
+    final result = await showDisputeReasonPicker(context, ref);
+    if (result == null || !mounted) return;
+
+    try {
+      await ref.read(schedulesApiProvider).disputeParcel(p.id, reasonCode: result.reasonCode, reasonText: result.reasonText);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.visitDepositDisputeOpened)));
+      }
+    } catch (e) {
+      if (mounted) _toast(context, e);
+    }
   }
 
   @override
@@ -451,9 +531,15 @@ class _CarrierParcelsScreenState extends ConsumerState<CarrierParcelsScreen> {
                             '${l10n.parcelReceiverTitle}: ${p.receiverName ?? '—'}${p.receiverPhone != null ? ' · ${p.receiverPhone}' : ''}',
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
-                          if (p.price != null) Text('${_money(p.price!)} ${p.currency}${p.seats > 0 ? ' · ${l10n.parcelTakesSeats(p.seats)}' : ''}'),
-                          if (p.status == TripParcel.delivered && p.deliveredAt != null)
-                            Text(l10n.parcelDeliveredAt(p.deliveredAt!.toLocal().toString().substring(0, 16)), style: Theme.of(context).textTheme.bodySmall),
+                          if (p.price != null)
+                            Text(
+                              '${_money(p.price!)} ${p.currency}${p.seats > 0 ? ' · ${l10n.parcelTakesSeats(p.seats)}' : ''}'
+                              ' · ${_payerLabel(l10n, p)}${p.isPaid ? ' ✓' : ''}',
+                            ),
+                          if (p.expectedArrivalAt != null)
+                            Text(l10n.parcelExpectedArrival(_when(p.expectedArrivalAt!)), style: Theme.of(context).textTheme.bodySmall),
+                          if (p.deliveredAt != null)
+                            Text(l10n.parcelDeliveredAt(_when(p.deliveredAt!)), style: Theme.of(context).textTheme.bodySmall),
                           const SizedBox(height: 8),
                           Wrap(
                             spacing: 8,
@@ -462,13 +548,15 @@ class _CarrierParcelsScreenState extends ConsumerState<CarrierParcelsScreen> {
                                 FilledButton(onPressed: () => _price(p), child: Text(l10n.parcelSetPrice)),
                               if (p.status == TripParcel.accepted)
                                 OutlinedButton(
-                                  onPressed: p.hasCode ? () => _run(() => api.loadParcel(p.id)) : null,
+                                  onPressed: p.hasCode ? () => _handover(p, pickup: true) : null,
                                   child: Text(p.hasCode ? l10n.parcelLoadAction : l10n.parcelWaitingForCode),
                                 ),
                               if (p.status == TripParcel.loaded)
-                                FilledButton(onPressed: () => _deliver(p), child: Text(l10n.parcelDeliverAction)),
+                                FilledButton(onPressed: () => _handover(p, pickup: false), child: Text(l10n.parcelDeliverAction)),
                               if (p.status == TripParcel.requested || p.status == TripParcel.priced)
                                 TextButton(onPressed: () => _run(() => api.rejectParcel(p.id)), child: Text(l10n.tripReservationRejectAction)),
+                              if (p.canDispute)
+                                TextButton(onPressed: () => _dispute(p), child: Text(l10n.disputeOpenTitle)),
                             ],
                           ),
                         ],

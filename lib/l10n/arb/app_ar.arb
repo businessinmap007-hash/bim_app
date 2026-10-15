@@ -3337,5 +3337,48 @@
     "placeholders": {
       "time": {"type": "String"}
     }
-  }
+  },
+  "parcelStatusReturned": "لم تُسلَّم (عادت)",
+  "parcelWhoPaysTitle": "من يدفع للسائق (نقدًا)",
+  "parcelPayerSender": "المرسل عند التسليم للسائق",
+  "parcelPayerReceiver": "المستلم عند الاستلام",
+  "parcelPickupCodeHint": "يمسح السائق هذا الـQR (أو يكتب كوده) ليستلم الشحنة منك.",
+  "parcelPickupTitle": "استلام الشحنة من المرسل",
+  "parcelPickupHint": "امسح QR المرسل أو اكتب كوده",
+  "parcelExpectedArrival": "الوصول المتوقع (تقريبي): {time}",
+  "@parcelExpectedArrival": {
+    "placeholders": {
+      "time": {"type": "String"}
+    }
+  },
+  "parcelExpectedArrivalPick": "تحديد موعد الوصول التقريبي",
+  "parcelCashTitle": "تحصيل المبلغ",
+  "parcelCashBody": "هل حصّلت {amount} {currency} نقدًا الآن؟ (يُسجَّل فقط)",
+  "@parcelCashBody": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "currency": {"type": "String"}
+    }
+  },
+  "parcelCashNotYet": "ليس بعد",
+  "parcelCashCollected": "نعم، حصّلته",
+  "handoverScanQr": "مسح QR",
+  "handoverOrTypeCode": "أو اكتب الكود:",
+  "handoverCodeLabel": "الكود",
+  "handoverConfirmTyped": "تأكيد الكود المكتوب",
+  "clinicOptionsTitle": "خيارات العيادة",
+  "clinicArrivalQrTitle": "QR الوصول",
+  "clinicArrivalQrHint": "يمسحه المريض عند وصوله ليُفعَّل دوره في الطابور. اختياري.",
+  "clinicArrivalQrRotate": "كود جديد",
+  "clinicDayClosureTitle": "اكتمل العدد اليوم",
+  "clinicDayClosureBody": "يغلق الحجوزات الجديدة لهذا اليوم. اختياري — يمكنك بدلًا منه زيادة ساعات العمل.",
+  "clinicDayClosureClosedOn": "مغلق للحجز الجديد في {date}",
+  "@clinicDayClosureClosedOn": {
+    "placeholders": {
+      "date": {"type": "String"}
+    }
+  },
+  "clinicArriveAction": "وصلت — امسح QR العيادة",
+  "clinicArriveHint": "امسح الكود المعروض في العيادة لتأكيد وصولك",
+  "clinicArriveDone": "تم تسجيل وصولك. أنت الآن في الطابور."
 }

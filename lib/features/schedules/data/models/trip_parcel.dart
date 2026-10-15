@@ -13,6 +13,9 @@ class TripParcel {
   static const rejected = 'rejected';
   static const cancelled = 'cancelled';
 
+  /// Still on the car when the run ended: not handed over.
+  static const returned = 'returned';
+
   final int id;
   final int tripScheduleId;
   final int businessId;
@@ -28,6 +31,17 @@ class TripParcel {
   final String currency;
   final String status;
   final bool hasCode;
+
+  /// `sender` pays the driver in cash at pickup, `receiver` at delivery — recorded only (the wallet is not used).
+  final String payer;
+  final DateTime? paidAt;
+
+  /// The sender's QR the driver scans to take the parcel — the sender only, while it is accepted.
+  final String? pickupCode;
+
+  /// Approximate (the driver's word); the actual hour is [deliveredAt].
+  final DateTime? expectedArrivalAt;
+  final DateTime? pickedUpAt;
 
   /// Only for the sender and an account receiver; null for the carrier and once delivered.
   final String? deliveryCode;
@@ -49,11 +63,21 @@ class TripParcel {
     this.currency = 'EGP',
     required this.status,
     this.hasCode = false,
+    this.payer = 'receiver',
+    this.paidAt,
+    this.pickupCode,
+    this.expectedArrivalAt,
+    this.pickedUpAt,
     this.deliveryCode,
     this.deliveredAt,
   });
 
   bool get isOpenForSender => status == requested || status == priced || status == accepted;
+
+  /// A service with a price: either side may open a dispute once it is accepted.
+  bool get canDispute => status == accepted || status == loaded || status == delivered || status == returned;
+
+  bool get isPaid => paidAt != null;
 
   factory TripParcel.fromJson(Map<String, dynamic> json) {
     final sender = json['sender'] as Map<String, dynamic>? ?? const {};
@@ -75,6 +99,11 @@ class TripParcel {
       currency: json['currency'] as String? ?? 'EGP',
       status: json['status'] as String? ?? requested,
       hasCode: json['has_code'] == true,
+      payer: json['payer'] as String? ?? 'receiver',
+      paidAt: json['paid_at'] != null ? EgyptTime.tryParse(json['paid_at'] as String) : null,
+      pickupCode: json['pickup_code'] as String?,
+      expectedArrivalAt: json['expected_arrival_at'] != null ? EgyptTime.tryParse(json['expected_arrival_at'] as String) : null,
+      pickedUpAt: json['picked_up_at'] != null ? EgyptTime.tryParse(json['picked_up_at'] as String) : null,
       deliveryCode: json['delivery_code'] as String?,
       deliveredAt: json['delivered_at'] != null ? EgyptTime.tryParse(json['delivered_at'] as String) : null,
     );

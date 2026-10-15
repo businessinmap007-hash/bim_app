@@ -17538,6 +17538,168 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'سُلِّمت: {time}'**
   String parcelDeliveredAt(String time);
+
+  /// No description provided for @parcelStatusReturned.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تُسلَّم (عادت)'**
+  String get parcelStatusReturned;
+
+  /// No description provided for @parcelWhoPaysTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'من يدفع للسائق (نقدًا)'**
+  String get parcelWhoPaysTitle;
+
+  /// No description provided for @parcelPayerSender.
+  ///
+  /// In ar, this message translates to:
+  /// **'المرسل عند التسليم للسائق'**
+  String get parcelPayerSender;
+
+  /// No description provided for @parcelPayerReceiver.
+  ///
+  /// In ar, this message translates to:
+  /// **'المستلم عند الاستلام'**
+  String get parcelPayerReceiver;
+
+  /// No description provided for @parcelPickupCodeHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يمسح السائق هذا الـQR (أو يكتب كوده) ليستلم الشحنة منك.'**
+  String get parcelPickupCodeHint;
+
+  /// No description provided for @parcelPickupTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'استلام الشحنة من المرسل'**
+  String get parcelPickupTitle;
+
+  /// No description provided for @parcelPickupHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'امسح QR المرسل أو اكتب كوده'**
+  String get parcelPickupHint;
+
+  /// No description provided for @parcelExpectedArrival.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوصول المتوقع (تقريبي): {time}'**
+  String parcelExpectedArrival(String time);
+
+  /// No description provided for @parcelExpectedArrivalPick.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديد موعد الوصول التقريبي'**
+  String get parcelExpectedArrivalPick;
+
+  /// No description provided for @parcelCashTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحصيل المبلغ'**
+  String get parcelCashTitle;
+
+  /// No description provided for @parcelCashBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل حصّلت {amount} {currency} نقدًا الآن؟ (يُسجَّل فقط)'**
+  String parcelCashBody(String amount, String currency);
+
+  /// No description provided for @parcelCashNotYet.
+  ///
+  /// In ar, this message translates to:
+  /// **'ليس بعد'**
+  String get parcelCashNotYet;
+
+  /// No description provided for @parcelCashCollected.
+  ///
+  /// In ar, this message translates to:
+  /// **'نعم، حصّلته'**
+  String get parcelCashCollected;
+
+  /// No description provided for @handoverScanQr.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسح QR'**
+  String get handoverScanQr;
+
+  /// No description provided for @handoverOrTypeCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'أو اكتب الكود:'**
+  String get handoverOrTypeCode;
+
+  /// No description provided for @handoverCodeLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكود'**
+  String get handoverCodeLabel;
+
+  /// No description provided for @handoverConfirmTyped.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد الكود المكتوب'**
+  String get handoverConfirmTyped;
+
+  /// No description provided for @clinicOptionsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'خيارات العيادة'**
+  String get clinicOptionsTitle;
+
+  /// No description provided for @clinicArrivalQrTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'QR الوصول'**
+  String get clinicArrivalQrTitle;
+
+  /// No description provided for @clinicArrivalQrHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يمسحه المريض عند وصوله ليُفعَّل دوره في الطابور. اختياري.'**
+  String get clinicArrivalQrHint;
+
+  /// No description provided for @clinicArrivalQrRotate.
+  ///
+  /// In ar, this message translates to:
+  /// **'كود جديد'**
+  String get clinicArrivalQrRotate;
+
+  /// No description provided for @clinicDayClosureTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتمل العدد اليوم'**
+  String get clinicDayClosureTitle;
+
+  /// No description provided for @clinicDayClosureBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'يغلق الحجوزات الجديدة لهذا اليوم. اختياري — يمكنك بدلًا منه زيادة ساعات العمل.'**
+  String get clinicDayClosureBody;
+
+  /// No description provided for @clinicDayClosureClosedOn.
+  ///
+  /// In ar, this message translates to:
+  /// **'مغلق للحجز الجديد في {date}'**
+  String clinicDayClosureClosedOn(String date);
+
+  /// No description provided for @clinicArriveAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصلت — امسح QR العيادة'**
+  String get clinicArriveAction;
+
+  /// No description provided for @clinicArriveHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'امسح الكود المعروض في العيادة لتأكيد وصولك'**
+  String get clinicArriveHint;
+
+  /// No description provided for @clinicArriveDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تسجيل وصولك. أنت الآن في الطابور.'**
+  String get clinicArriveDone;
 }
 
 class _AppLocalizationsDelegate
