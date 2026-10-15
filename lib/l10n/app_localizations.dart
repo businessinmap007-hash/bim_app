@@ -17148,6 +17148,30 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'سيصل صديقك طلب ضمان بعد الحجز، ويؤكد الناقل بعد أن يقبل.'**
   String get tripFriendPathHint;
+
+  /// No description provided for @tripDepositQuotedBusiness.
+  ///
+  /// In ar, this message translates to:
+  /// **'عربون الجدية {amount} ج يُجمَّد من الراكب عند تأكيدك الحجز.'**
+  String tripDepositQuotedBusiness(String amount);
+
+  /// No description provided for @tripDepositQuotedCustomer.
+  ///
+  /// In ar, this message translates to:
+  /// **'الناقل يطلب عربون {amount} ج؛ يُجمَّد من ضمانك أو محفظتك عندما يؤكد الناقل الحجز، ويعود إليك بعد الرحلة.'**
+  String tripDepositQuotedCustomer(String amount);
+
+  /// No description provided for @tripDepositHeld.
+  ///
+  /// In ar, this message translates to:
+  /// **'العربون {amount} ج مجمَّد، ويعود بعد إتمام الرحلة.'**
+  String tripDepositHeld(String amount);
+
+  /// No description provided for @visitDepositQuotedWalletBusinessNoCounter.
+  ///
+  /// In ar, this message translates to:
+  /// **'عربون {amount} ج يُجمَّد من المريض عند تأكيدك.'**
+  String visitDepositQuotedWalletBusinessNoCounter(String amount);
 }
 
 class _AppLocalizationsDelegate

@@ -3216,5 +3216,29 @@
   "tripReservationStatusNoShow": "No-show",
   "tripStatusNoShow": "You did not show",
   "tripReserveWithFriend": "Reserve with a friend standing for you",
-  "tripFriendPathHint": "Your friend gets a guarantee request after the reservation, and the carrier confirms once it is covered."
+  "tripFriendPathHint": "Your friend gets a guarantee request after the reservation, and the carrier confirms once it is covered.",
+  "tripDepositQuotedBusiness": "A {amount} EGP deposit is frozen from the passenger when you confirm the reservation.",
+  "@tripDepositQuotedBusiness": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "tripDepositQuotedCustomer": "The carrier asks for a {amount} EGP deposit; it is frozen from your guarantee or wallet when the carrier confirms, and goes back to you after the trip.",
+  "@tripDepositQuotedCustomer": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "tripDepositHeld": "The {amount} EGP deposit is frozen and goes back once the trip is done.",
+  "@tripDepositHeld": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "visitDepositQuotedWalletBusinessNoCounter": "A {amount} EGP deposit is frozen from the patient when you confirm.",
+  "@visitDepositQuotedWalletBusinessNoCounter": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  }
 }

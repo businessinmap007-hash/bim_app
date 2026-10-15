@@ -351,6 +351,6 @@ class IncomingReservationsController extends StateNotifier<IncomingReservationsS
 }
 
 final incomingReservationsControllerProvider =
-    StateNotifierProvider<IncomingReservationsController, IncomingReservationsState>((ref) {
+    StateNotifierProvider.autoDispose<IncomingReservationsController, IncomingReservationsState>((ref) {
       return IncomingReservationsController(ref.watch(schedulesApiProvider));
     });

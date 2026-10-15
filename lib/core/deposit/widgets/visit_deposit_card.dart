@@ -60,12 +60,22 @@ class _VisitDepositCardState extends ConsumerState<VisitDepositCard> {
       };
     }
 
+    // a trip reservation talks about a passenger and a trip, not a patient and a visit
+    if (widget.kind == VisitKind.tripReservation && (_d.status == VisitDeposit.quoted || _d.status == VisitDeposit.held)) {
+      return switch (_d.status) {
+        VisitDeposit.quoted => widget.forBusiness ? l10n.tripDepositQuotedBusiness(amount) : l10n.tripDepositQuotedCustomer(amount),
+        _ => l10n.tripDepositHeld(amount),
+      };
+    }
+
     return switch (_d.status) {
       VisitDeposit.quoted =>
         _d.isExternal
             ? (widget.forBusiness ? l10n.visitDepositQuotedExternalBusiness(amount) : l10n.visitDepositQuotedExternalPatient(amount))
             : (widget.forBusiness
-                  ? l10n.visitDepositQuotedWalletBusiness(amount, counter)
+                  ? (_d.counterAmount > 0
+                        ? l10n.visitDepositQuotedWalletBusiness(amount, counter)
+                        : l10n.visitDepositQuotedWalletBusinessNoCounter(amount))
                   : l10n.visitDepositQuotedWalletPatient(amount)),
       VisitDeposit.held => _d.counterAmount > 0 ? l10n.visitDepositHeld(amount, counter) : l10n.visitDepositHeldClientOnly(amount),
       VisitDeposit.pending =>

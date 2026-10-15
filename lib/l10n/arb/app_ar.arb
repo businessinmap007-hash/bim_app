@@ -3242,5 +3242,29 @@
   "tripReservationStatusNoShow": "لم يحضر",
   "tripStatusNoShow": "لم تحضر",
   "tripReserveWithFriend": "احجز على أن يضمنك صديق",
-  "tripFriendPathHint": "سيصل صديقك طلب ضمان بعد الحجز، ويؤكد الناقل بعد أن يقبل."
+  "tripFriendPathHint": "سيصل صديقك طلب ضمان بعد الحجز، ويؤكد الناقل بعد أن يقبل.",
+  "tripDepositQuotedBusiness": "عربون الجدية {amount} ج يُجمَّد من الراكب عند تأكيدك الحجز.",
+  "@tripDepositQuotedBusiness": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "tripDepositQuotedCustomer": "الناقل يطلب عربون {amount} ج؛ يُجمَّد من ضمانك أو محفظتك عندما يؤكد الناقل الحجز، ويعود إليك بعد الرحلة.",
+  "@tripDepositQuotedCustomer": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "tripDepositHeld": "العربون {amount} ج مجمَّد، ويعود بعد إتمام الرحلة.",
+  "@tripDepositHeld": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "visitDepositQuotedWalletBusinessNoCounter": "عربون {amount} ج يُجمَّد من المريض عند تأكيدك.",
+  "@visitDepositQuotedWalletBusinessNoCounter": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  }
 }

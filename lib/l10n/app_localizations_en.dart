@@ -9440,4 +9440,24 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get tripFriendPathHint =>
       'Your friend gets a guarantee request after the reservation, and the carrier confirms once it is covered.';
+
+  @override
+  String tripDepositQuotedBusiness(String amount) {
+    return 'A $amount EGP deposit is frozen from the passenger when you confirm the reservation.';
+  }
+
+  @override
+  String tripDepositQuotedCustomer(String amount) {
+    return 'The carrier asks for a $amount EGP deposit; it is frozen from your guarantee or wallet when the carrier confirms, and goes back to you after the trip.';
+  }
+
+  @override
+  String tripDepositHeld(String amount) {
+    return 'The $amount EGP deposit is frozen and goes back once the trip is done.';
+  }
+
+  @override
+  String visitDepositQuotedWalletBusinessNoCounter(String amount) {
+    return 'A $amount EGP deposit is frozen from the patient when you confirm.';
+  }
 }

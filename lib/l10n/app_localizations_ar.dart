@@ -9376,4 +9376,24 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get tripFriendPathHint =>
       'سيصل صديقك طلب ضمان بعد الحجز، ويؤكد الناقل بعد أن يقبل.';
+
+  @override
+  String tripDepositQuotedBusiness(String amount) {
+    return 'عربون الجدية $amount ج يُجمَّد من الراكب عند تأكيدك الحجز.';
+  }
+
+  @override
+  String tripDepositQuotedCustomer(String amount) {
+    return 'الناقل يطلب عربون $amount ج؛ يُجمَّد من ضمانك أو محفظتك عندما يؤكد الناقل الحجز، ويعود إليك بعد الرحلة.';
+  }
+
+  @override
+  String tripDepositHeld(String amount) {
+    return 'العربون $amount ج مجمَّد، ويعود بعد إتمام الرحلة.';
+  }
+
+  @override
+  String visitDepositQuotedWalletBusinessNoCounter(String amount) {
+    return 'عربون $amount ج يُجمَّد من المريض عند تأكيدك.';
+  }
 }
