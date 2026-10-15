@@ -17172,6 +17172,18 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'عربون {amount} ج يُجمَّد من المريض عند تأكيدك.'**
   String visitDepositQuotedWalletBusinessNoCounter(String amount);
+
+  /// No description provided for @guarantorFromContacts.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر من أصدقائك وعائلتك'**
+  String get guarantorFromContacts;
+
+  /// No description provided for @guarantorOrByContact.
+  ///
+  /// In ar, this message translates to:
+  /// **'أو ادعُ بالهاتف أو البريد:'**
+  String get guarantorOrByContact;
 }
 
 class _AppLocalizationsDelegate

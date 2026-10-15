@@ -3266,5 +3266,7 @@
     "placeholders": {
       "amount": {"type": "String"}
     }
-  }
+  },
+  "guarantorFromContacts": "اختر من أصدقائك وعائلتك",
+  "guarantorOrByContact": "أو ادعُ بالهاتف أو البريد:"
 }

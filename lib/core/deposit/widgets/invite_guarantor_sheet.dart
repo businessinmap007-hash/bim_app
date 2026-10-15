@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../features/contact_groups/application/contact_groups_providers.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../network/api_exception.dart';
 import '../guarantor.dart';
@@ -59,17 +60,25 @@ class _InviteGuarantorSheetState extends ConsumerState<_InviteGuarantorSheet> {
     final text = _who.text.trim();
     if (text.isEmpty) return;
 
+    final byEmail = text.contains('@');
+    await _send(phone: byEmail ? null : text, email: byEmail ? text : null);
+  }
+
+  /// One tap on a person of the customer's own friends-and-family groups: invited by account id.
+  Future<void> _inviteUser(int userId) => _send(userId: userId);
+
+  Future<void> _send({String? phone, String? email, int? userId}) async {
     final l10n = AppLocalizations.of(context)!;
     final messenger = ScaffoldMessenger.of(context);
     setState(() => _busy = true);
 
     try {
-      final byEmail = text.contains('@');
       await ref.read(visitDepositApiProvider).inviteGuarantor(
         widget.kind,
         widget.subjectId,
-        phone: byEmail ? null : text,
-        email: byEmail ? text : null,
+        phone: phone,
+        email: email,
+        userId: userId,
       );
       _who.clear();
       messenger.showSnackBar(SnackBar(content: Text(l10n.guarantorSent)));
@@ -81,6 +90,51 @@ class _InviteGuarantorSheetState extends ConsumerState<_InviteGuarantorSheet> {
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+  }
+
+  /// The people of «الأصدقاء والعائلة» as one-tap choices (those already invited are left out).
+  List<Widget> _contactChoices(AppLocalizations l10n, ThemeData theme, GuarantorList list) {
+    final invited = {for (final g in list.items) if (g.guarantorId != null) g.guarantorId!};
+    final groups = ref.watch(contactGroupsControllerProvider).groups.where((g) => g.members.isNotEmpty).toList();
+    final seen = <int>{};
+    final out = <Widget>[];
+
+    for (final group in groups) {
+      final people = [
+        for (final m in group.members)
+          if (!invited.contains(m.userId) && seen.add(m.userId)) m,
+      ];
+      if (people.isEmpty) continue;
+
+      out
+        ..add(Text(group.name, style: theme.textTheme.labelLarge))
+        ..add(const SizedBox(height: 6))
+        ..add(
+          Wrap(
+            spacing: 8,
+            runSpacing: 4,
+            children: [
+              for (final m in people)
+                ActionChip(
+                  avatar: const Icon(Icons.person_outline, size: 18),
+                  label: Text(m.name),
+                  onPressed: _busy ? null : () => _inviteUser(m.userId),
+                ),
+            ],
+          ),
+        )
+        ..add(const SizedBox(height: 10));
+    }
+
+    if (out.isEmpty) return const [];
+
+    return [
+      Text(l10n.guarantorFromContacts, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+      const SizedBox(height: 6),
+      ...out,
+      Text(l10n.guarantorOrByContact, style: theme.textTheme.bodySmall),
+      const SizedBox(height: 6),
+    ];
   }
 
   String _status(AppLocalizations l10n, Guarantor g) => switch (g.status) {
@@ -121,6 +175,7 @@ class _InviteGuarantorSheetState extends ConsumerState<_InviteGuarantorSheet> {
                   style: theme.textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 12),
+                ..._contactChoices(l10n, theme, list),
                 TextField(
                   controller: _who,
                   keyboardType: TextInputType.emailAddress,

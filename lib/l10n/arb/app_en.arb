@@ -3240,5 +3240,7 @@
     "placeholders": {
       "amount": {"type": "String"}
     }
-  }
+  },
+  "guarantorFromContacts": "Pick from your friends and family",
+  "guarantorOrByContact": "Or invite by phone or email:"
 }

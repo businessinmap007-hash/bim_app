@@ -9396,4 +9396,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String visitDepositQuotedWalletBusinessNoCounter(String amount) {
     return 'عربون $amount ج يُجمَّد من المريض عند تأكيدك.';
   }
+
+  @override
+  String get guarantorFromContacts => 'اختر من أصدقائك وعائلتك';
+
+  @override
+  String get guarantorOrByContact => 'أو ادعُ بالهاتف أو البريد:';
 }

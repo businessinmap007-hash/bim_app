@@ -9460,4 +9460,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String visitDepositQuotedWalletBusinessNoCounter(String amount) {
     return 'A $amount EGP deposit is frozen from the patient when you confirm.';
   }
+
+  @override
+  String get guarantorFromContacts => 'Pick from your friends and family';
+
+  @override
+  String get guarantorOrByContact => 'Or invite by phone or email:';
 }
