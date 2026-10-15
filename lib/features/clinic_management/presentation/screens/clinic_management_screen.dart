@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
+import '../../../../core/deposit/visit_deposit.dart';
+import '../../../../core/deposit/widgets/visit_deposit_card.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
@@ -447,6 +449,16 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
               ),
             ],
             if (a.billing != null && (a.status == 'confirmed' || a.status == 'completed')) VisitBillingCard(appointment: a),
+            // «عربون الجدية»: what the terms ask of this visit; recorded here when it is owed outside the platform
+            if (a.deposit != null)
+              VisitDepositCard(
+                deposit: a.deposit!,
+                kind: VisitKind.clinicAppointment,
+                subjectId: a.id,
+                forBusiness: true,
+                visitEnded: a.status == 'no_show',
+                onChanged: () => notifier.load(),
+              ),
             if (a.reason != null && a.reason!.isNotEmpty) ...[
               const SizedBox(height: 6),
               Text(a.reason!, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),

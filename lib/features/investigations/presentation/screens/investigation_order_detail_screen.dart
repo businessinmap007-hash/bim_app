@@ -7,6 +7,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../core/deposit/visit_deposit.dart';
+import '../../../../core/deposit/widgets/visit_deposit_card.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
@@ -350,6 +352,15 @@ class _InvestigationOrderDetailScreenState extends ConsumerState<InvestigationOr
             ),
           ),
         ],
+        // «عربون الجدية» of the centre the patient sent it to
+        if (order.deposit != null && isPatient)
+          VisitDepositCard(
+            deposit: order.deposit!,
+            kind: VisitKind.investigationOrder,
+            subjectId: order.id,
+            forBusiness: false,
+            onChanged: () async => ref.invalidate(investigationOrderProvider(widget.orderId)),
+          ),
         if (order.requestFiles.isNotEmpty) ...[
           const SizedBox(height: 12),
           _thumbs(context, order.requestFiles),

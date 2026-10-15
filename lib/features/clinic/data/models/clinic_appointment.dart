@@ -1,3 +1,4 @@
+import '../../../../core/deposit/visit_deposit.dart';
 import '../../../../core/env/env.dart';
 import '../../../../core/time/egypt_time.dart';
 
@@ -23,6 +24,9 @@ class ClinicAppointment {
   /// «يجب التواجد قبل الموعد بـ ١٥ دقيقة» — the clinic's own notice.
   final String? arrivalNotice;
 
+  /// «عربون الجدية» the clinic's terms ask of this visit and where it stands (null: asks none).
+  final VisitDeposit? deposit;
+
   /// the physician the visit is with (a hospital's staff physician) and his title there
   final String? physicianName;
   final String? physicianTitle;
@@ -40,6 +44,7 @@ class ClinicAppointment {
     this.services = const [],
     this.billing,
     this.arrivalNotice,
+    this.deposit,
     this.physicianName,
     this.physicianTitle,
   });
@@ -63,6 +68,7 @@ class ClinicAppointment {
     int? durationMinutes,
     String? reason,
     VisitBilling? billing,
+    VisitDeposit? deposit,
   }) {
     return ClinicAppointment(
       id: id,
@@ -77,6 +83,7 @@ class ClinicAppointment {
       services: services,
       billing: billing ?? this.billing,
       arrivalNotice: arrivalNotice,
+      deposit: deposit ?? this.deposit,
       physicianName: physicianName,
       physicianTitle: physicianTitle,
     );
@@ -96,6 +103,7 @@ class ClinicAppointment {
       prescriptionId: json['prescription_id'] as int?,
       services: BookedService.listFrom(json['specialty_services']),
       billing: VisitBilling.fromJsonOrNull(json['billing']),
+      deposit: VisitDeposit.fromJsonOrNull(json['deposit']),
       arrivalNotice: json['arrival_notice'] is Map<String, dynamic> ? (json['arrival_notice'] as Map<String, dynamic>)['message'] as String? : null,
       physicianName: (json['physician'] as Map<String, dynamic>?)?['name'] as String?,
       physicianTitle: (json['physician'] as Map<String, dynamic>?)?['title'] as String?,

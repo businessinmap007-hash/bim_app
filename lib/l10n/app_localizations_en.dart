@@ -9194,7 +9194,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get externalDepositWaiting =>
-      'The customer’s account cannot start new dealings until you confirm you received it or accept the booking without it.';
+      'The booking does not start until you confirm you received it or accept the booking without it.';
 
   @override
   String get externalDepositCash => 'Received in cash';
@@ -9215,7 +9215,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String externalDepositCustomerNote(String amount) {
-    return 'Pay the deposit ($amount EGP) to the business directly, in cash or by transfer. Your account cannot start new dealings until the business confirms it, and you may cancel the booking to end the wait.';
+    return 'Pay the deposit ($amount EGP) to the business directly, in cash or by transfer. The booking does not start until the business confirms it.';
   }
 
   @override
@@ -9231,4 +9231,86 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get bookingsRescheduled =>
       'Time changed. If the booking was accepted, the business answers the new time.';
+
+  @override
+  String get visitDepositTitle => 'Seriousness deposit';
+
+  @override
+  String visitDepositQuotedWalletPatient(String amount) {
+    return 'The business asks for a $amount EGP deposit, frozen in your wallet when the visit is confirmed and returned to you afterwards.';
+  }
+
+  @override
+  String visitDepositQuotedExternalPatient(String amount) {
+    return 'The business asks for a $amount EGP deposit, paid to it directly in cash or by transfer outside the platform.';
+  }
+
+  @override
+  String visitDepositQuotedWalletBusiness(String amount, String counter) {
+    return 'A $amount EGP deposit is frozen from the patient, and you freeze $counter EGP when you confirm.';
+  }
+
+  @override
+  String visitDepositQuotedExternalBusiness(String amount) {
+    return 'The patient pays you the $amount EGP deposit directly; you record that it arrived after confirming.';
+  }
+
+  @override
+  String visitDepositHeld(String amount, String counter) {
+    return 'Deposit frozen: $amount EGP from the patient and $counter EGP from the business. Both go back after the visit is done.';
+  }
+
+  @override
+  String visitDepositHeldClientOnly(String amount) {
+    return 'Deposit frozen: $amount EGP from the patient. It goes back to them after the visit is done.';
+  }
+
+  @override
+  String visitDepositPendingPatient(String amount) {
+    return 'Pay the deposit ($amount EGP) to the business directly, in cash or by transfer outside the platform.';
+  }
+
+  @override
+  String visitDepositPendingBusiness(String amount) {
+    return 'The $amount EGP deposit is owed outside the platform — record that it arrived, or accept without it.';
+  }
+
+  @override
+  String get visitDepositReceivedCash =>
+      'The business received the deposit in cash.';
+
+  @override
+  String get visitDepositReceivedTransfer =>
+      'The business received the deposit by transfer.';
+
+  @override
+  String get visitDepositWaived =>
+      'The business accepted the visit without a deposit.';
+
+  @override
+  String get visitDepositReleased =>
+      'The deposit went back to both after the visit.';
+
+  @override
+  String get visitDepositRefunded => 'The deposit went back to both.';
+
+  @override
+  String get visitDepositDisputed =>
+      'The deposit is under an open dispute until a ruling.';
+
+  @override
+  String get visitDepositResolved =>
+      'The deposit was settled by an arbitration ruling.';
+
+  @override
+  String get visitDepositGiveBack => 'Give the deposit back';
+
+  @override
+  String get visitDepositGiveBackDone => 'The deposit went back to both.';
+
+  @override
+  String get visitDepositDispute => 'Open a dispute over the deposit';
+
+  @override
+  String get visitDepositDisputeOpened => 'The dispute was opened.';
 }

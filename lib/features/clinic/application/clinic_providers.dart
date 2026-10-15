@@ -117,7 +117,7 @@ class MyClinicAppointmentsController extends StateNotifier<MyClinicAppointmentsS
   Future<void> cancel(int id) async {
     final updated = await _api.cancel(id);
     state = state.copyWith(
-      items: [for (final a in state.items) a.id == id ? a.copyWith(status: updated.status) : a],
+      items: [for (final a in state.items) a.id == id ? a.copyWith(status: updated.status, deposit: updated.deposit) : a],
     );
   }
 

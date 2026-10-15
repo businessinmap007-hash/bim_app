@@ -309,7 +309,9 @@ class _ServiceList extends StatelessWidget {
         builder: (_) => const BookingSettingsScreen(),
       ),
       _Tile(
-        show: _has('bookings'),
+        // a hotel or salon (bookings), a clinic or hospital (clinic), a lab or radiology centre (investigations),
+        // a physician (procedures): each may ask a deposit for its appointments and orders
+        show: _has('bookings') || _has('clinic') || _has('investigations') || _has('procedures'),
         leading: Icons.shield_outlined,
         title: l10n.bookingTermsTitle,
         builder: (_) => const BookingTermsScreen(),

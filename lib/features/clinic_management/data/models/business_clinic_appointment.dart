@@ -1,4 +1,5 @@
 import '../../../clinic/data/models/clinic_appointment.dart' show BookedService, VisitBilling;
+import '../../../../core/deposit/visit_deposit.dart';
 import '../../../../core/time/egypt_time.dart';
 /// The clinic's own view of an appointment — see
 /// Api\V2\BusinessClinicAppointmentController::serialize.
@@ -23,6 +24,9 @@ class BusinessClinicAppointment {
 
   /// The account of the visit (see VisitBillingCard).
   final VisitBilling? billing;
+
+  /// «عربون الجدية» the clinic's terms ask of this visit and where it stands (null: asks none).
+  final VisitDeposit? deposit;
 
   /// the physician the visit is with — a hospital shows its owner whose it is
   final String? physicianName;
@@ -49,6 +53,7 @@ class BusinessClinicAppointment {
     this.attendeePhone,
     this.services = const [],
     this.billing,
+    this.deposit,
   });
 
   BusinessClinicAppointment withBilling(VisitBilling b) => BusinessClinicAppointment(
@@ -66,6 +71,7 @@ class BusinessClinicAppointment {
     attendeePhone: attendeePhone,
     services: services,
     billing: b,
+    deposit: deposit,
   );
 
   factory BusinessClinicAppointment.fromJson(Map<String, dynamic> json) {
@@ -86,6 +92,7 @@ class BusinessClinicAppointment {
       attendeePhone: attendee?['phone'] as String?,
       services: BookedService.listFrom(json['specialty_services']),
       billing: VisitBilling.fromJsonOrNull(json['billing']),
+      deposit: VisitDeposit.fromJsonOrNull(json['deposit']),
       physicianName: (json['physician'] as Map<String, dynamic>?)?['name'] as String?,
       physicianTitle: (json['physician'] as Map<String, dynamic>?)?['title'] as String?,
     );

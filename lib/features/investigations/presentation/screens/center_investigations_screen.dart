@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/deposit/visit_deposit.dart';
+import '../../../../core/deposit/widgets/visit_deposit_card.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/app_bar_tab_bar.dart';
@@ -150,6 +152,18 @@ class _CenterTabState extends ConsumerState<_CenterTab> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(14, 6, 14, 0),
                       child: Text(l10n.invDoctorNote(o.notes!), style: Theme.of(context).textTheme.bodySmall),
+                    ),
+                  // «عربون الجدية» the centre's terms ask of this order: recorded here when owed outside the platform
+                  if (o.deposit != null)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(14, 0, 14, 0),
+                      child: VisitDepositCard(
+                        deposit: o.deposit!,
+                        kind: VisitKind.investigationOrder,
+                        subjectId: o.id,
+                        forBusiness: true,
+                        onChanged: () async => _refresh(),
+                      ),
                     ),
                   if (o.requestFiles.isNotEmpty)
                     Align(

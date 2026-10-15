@@ -3071,13 +3071,13 @@
       "amount": {"type": "String"}
     }
   },
-  "externalDepositWaiting": "حساب العميل متوقف عن العمليات الجديدة حتى تؤكد أنك استلمته أو تقبل الحجز بدونه.",
+  "externalDepositWaiting": "لا يبدأ التنفيذ قبل أن تؤكد أنك استلمته أو تقبل الحجز بدونه.",
   "externalDepositCash": "استلمت كاش",
   "externalDepositTransfer": "استلمت تحويلًا",
   "externalDepositWaive": "قبول العربون — بلا دفع خارج المنصة",
   "externalDepositReceived": "تم تأكيد استلام العربون.",
   "externalDepositWaived": "قُبل الحجز بلا عربون.",
-  "externalDepositCustomerNote": "ادفع العربون ({amount} ج) للنشاط مباشرة كاش أو تحويلًا. حسابك لا يستطيع إجراء عمليات جديدة حتى يؤكد النشاط استلامه، ويمكنك إلغاء الحجز لإنهاء الانتظار.",
+  "externalDepositCustomerNote": "ادفع العربون ({amount} ج) للنشاط مباشرة كاش أو تحويلًا. لا يبدأ التنفيذ حتى يؤكد النشاط استلامه.",
   "@externalDepositCustomerNote": {
     "placeholders": {
       "amount": {"type": "String"}
@@ -3086,5 +3086,67 @@
   "depositAsPaymentOffer": "يمكنك قبول العربون المجمّد دفعةً من قيمة الحجز بدل الدفع خارج المنصة.",
   "bookingsReschedule": "تغيير الموعد",
   "bookingsRescheduleTitle": "اختر اليوم الجديد",
-  "bookingsRescheduled": "تم تغيير الموعد. إن كان الحجز مقبولًا فبانتظار رد النشاط على الموعد الجديد."
+  "bookingsRescheduled": "تم تغيير الموعد. إن كان الحجز مقبولًا فبانتظار رد النشاط على الموعد الجديد.",
+  "visitDepositTitle": "عربون الجدية",
+  "visitDepositQuotedWalletPatient": "يطلب النشاط عربونًا {amount} ج يُجمَّد في محفظتك عند تأكيد الموعد، ويعود إليك بعد الزيارة.",
+  "@visitDepositQuotedWalletPatient": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "visitDepositQuotedExternalPatient": "يطلب النشاط عربونًا {amount} ج تدفعه للنشاط مباشرة كاش أو تحويلًا خارج المنصة.",
+  "@visitDepositQuotedExternalPatient": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "visitDepositQuotedWalletBusiness": "العربون {amount} ج يُجمَّد من المريض، وتُجمِّد أنت {counter} ج عند التأكيد.",
+  "@visitDepositQuotedWalletBusiness": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "counter": {"type": "String"}
+    }
+  },
+  "visitDepositQuotedExternalBusiness": "العربون {amount} ج يدفعه المريض إليك مباشرة، وتسجّل استلامه بعد التأكيد.",
+  "@visitDepositQuotedExternalBusiness": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "visitDepositHeld": "عربون مجمّد: {amount} ج من المريض و{counter} ج من النشاط. يعود للطرفين بعد إتمام الزيارة.",
+  "@visitDepositHeld": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "counter": {"type": "String"}
+    }
+  },
+  "visitDepositHeldClientOnly": "عربون مجمّد: {amount} ج من المريض. يعود إليه بعد إتمام الزيارة.",
+  "@visitDepositHeldClientOnly": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "visitDepositPendingPatient": "ادفع العربون ({amount} ج) للنشاط مباشرة كاش أو تحويلًا خارج المنصة.",
+  "@visitDepositPendingPatient": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "visitDepositPendingBusiness": "العربون {amount} ج مستحق خارج المنصة — سجّل استلامه أو اقبل بدونه.",
+  "@visitDepositPendingBusiness": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "visitDepositReceivedCash": "استلم النشاط العربون كاش.",
+  "visitDepositReceivedTransfer": "استلم النشاط العربون تحويلًا.",
+  "visitDepositWaived": "قبل النشاط الزيارة بلا عربون.",
+  "visitDepositReleased": "أُعيد العربون للطرفين بعد الزيارة.",
+  "visitDepositRefunded": "أُعيد العربون للطرفين.",
+  "visitDepositDisputed": "العربون تحت نزاع مفتوح حتى يصدر قرار.",
+  "visitDepositResolved": "فُصل في العربون بقرار تحكيم.",
+  "visitDepositGiveBack": "إعادة العربون",
+  "visitDepositGiveBackDone": "أُعيد العربون للطرفين.",
+  "visitDepositDispute": "فتح نزاع على العربون",
+  "visitDepositDisputeOpened": "فُتح النزاع على العربون."
 }

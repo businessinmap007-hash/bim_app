@@ -1,3 +1,4 @@
+import '../../../../core/deposit/visit_deposit.dart';
 import '../../../../core/env/env.dart';
 import '../../../../core/time/egypt_time.dart';
 
@@ -90,6 +91,9 @@ class InvestigationOrder {
   /// When the photos will go if nobody keeps them (null once kept or deleted).
   final DateTime? filesExpireAt;
 
+  /// «عربون الجدية» the centre's terms ask of this order and where it stands (null: asks none).
+  final VisitDeposit? deposit;
+
   const InvestigationOrder({
     required this.id,
     required this.status,
@@ -113,6 +117,7 @@ class InvestigationOrder {
     this.filesPurged = false,
     this.patientSaved = false,
     this.filesExpireAt,
+    this.deposit,
   });
 
   bool get canSend => status == issued;
@@ -170,6 +175,7 @@ class InvestigationOrder {
       filesPurged: json['files_purged'] as bool? ?? false,
       patientSaved: json['patient_saved'] as bool? ?? false,
       filesExpireAt: EgyptTime.tryParse(json['files_expire_at'] as String? ?? '')?.toLocal(),
+      deposit: VisitDeposit.fromJsonOrNull(json['deposit']),
     );
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/deposit/visit_deposit.dart';
+import '../../../../core/deposit/widgets/visit_deposit_card.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/app_bar_tab_bar.dart';
@@ -124,6 +126,15 @@ class _TabState extends ConsumerState<_Tab> {
               return ProcedureRequestCard(
                 request: r,
                 forHospital: true,
+                extra: r.deposit == null
+                    ? null
+                    : VisitDepositCard(
+                        deposit: r.deposit!,
+                        kind: VisitKind.procedureRequest,
+                        subjectId: r.id,
+                        forBusiness: true,
+                        onChanged: () async => _refresh(),
+                      ),
                 actions: [
                   if (r.status == ProcedureRequestItem.requested) ...[
                     FilledButton(onPressed: () => _accept(r), child: Text(l10n.procAcceptSchedule)),

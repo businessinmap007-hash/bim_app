@@ -43,7 +43,10 @@ class ProcedureRequestCard extends StatelessWidget {
   final bool forHospital;
   final List<Widget> actions;
 
-  const ProcedureRequestCard({super.key, required this.request, this.forHospital = false, this.actions = const []});
+  /// A block under the request's details — the «عربون الجدية» card of this procedure.
+  final Widget? extra;
+
+  const ProcedureRequestCard({super.key, required this.request, this.forHospital = false, this.actions = const [], this.extra});
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +90,7 @@ class ProcedureRequestCard extends StatelessWidget {
             if ((r.notes ?? '').isNotEmpty) Padding(padding: const EdgeInsets.only(top: 4), child: Text(r.notes!, style: theme.textTheme.bodySmall)),
             if ((r.hospitalNote ?? '').isNotEmpty)
               Padding(padding: const EdgeInsets.only(top: 4), child: Text(l10n.procHospitalNote(r.hospitalNote!), style: theme.textTheme.bodySmall)),
+            ?extra,
             if (actions.isNotEmpty) ...[
               const SizedBox(height: 10),
               Wrap(spacing: 8, runSpacing: 8, children: actions),

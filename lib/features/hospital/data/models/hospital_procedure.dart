@@ -1,3 +1,4 @@
+import '../../../../core/deposit/visit_deposit.dart';
 import '../../../../core/time/egypt_time.dart';
 /// The kinds of medical procedure a hospital offers, in the order a patient reads them: the surgical specialties
 /// (`surgery` is the general one), then the endoscopies and the treatment procedures.
@@ -110,6 +111,9 @@ class ProcedureRequestItem {
   /// «قرار الطبيب»: who decided it (name + his title at the hospital), when a physician did.
   final String? physicianLine;
 
+  /// «عربون الجدية» the hospital's terms ask of this procedure and where it stands (null: asks none).
+  final VisitDeposit? deposit;
+
   const ProcedureRequestItem({
     required this.id,
     required this.status,
@@ -124,6 +128,7 @@ class ProcedureRequestItem {
     this.patientName,
     this.patientPhone,
     this.physicianLine,
+    this.deposit,
   });
 
   bool get isAdvised => status == advised;
@@ -149,6 +154,7 @@ class ProcedureRequestItem {
       patientName: patient?['name'] as String?,
       patientPhone: patient?['phone'] as String?,
       physicianLine: _physicianLine(json['physician']),
+      deposit: VisitDeposit.fromJsonOrNull(json['deposit']),
     );
   }
 }

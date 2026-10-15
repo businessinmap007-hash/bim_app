@@ -2,6 +2,8 @@ import '../../../../shared/widgets/arrival_notice_banner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/deposit/visit_deposit.dart';
+import '../../../../core/deposit/widgets/visit_deposit_card.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/clinic_providers.dart';
 import '../../data/models/clinic_appointment.dart';
@@ -160,6 +162,21 @@ class _AppointmentTile extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
           child: ArrivalNoticeBanner(message: appointment.arrivalNotice),
+        ),
+      // «عربون الجدية»: what the clinic asks and where it stands
+      if (appointment.deposit != null)
+        Padding(
+          padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+          child: Consumer(
+            builder: (context, ref, _) => VisitDepositCard(
+              deposit: appointment.deposit!,
+              kind: VisitKind.clinicAppointment,
+              subjectId: appointment.id,
+              forBusiness: false,
+              visitEnded: appointment.status == 'no_show',
+              onChanged: () => ref.read(myClinicAppointmentsControllerProvider.notifier).load(),
+            ),
+          ),
         ),
         ],
       ),

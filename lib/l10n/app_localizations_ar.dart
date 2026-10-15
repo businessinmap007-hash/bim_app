@@ -9139,7 +9139,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get externalDepositWaiting =>
-      'حساب العميل متوقف عن العمليات الجديدة حتى تؤكد أنك استلمته أو تقبل الحجز بدونه.';
+      'لا يبدأ التنفيذ قبل أن تؤكد أنك استلمته أو تقبل الحجز بدونه.';
 
   @override
   String get externalDepositCash => 'استلمت كاش';
@@ -9158,7 +9158,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String externalDepositCustomerNote(String amount) {
-    return 'ادفع العربون ($amount ج) للنشاط مباشرة كاش أو تحويلًا. حسابك لا يستطيع إجراء عمليات جديدة حتى يؤكد النشاط استلامه، ويمكنك إلغاء الحجز لإنهاء الانتظار.';
+    return 'ادفع العربون ($amount ج) للنشاط مباشرة كاش أو تحويلًا. لا يبدأ التنفيذ حتى يؤكد النشاط استلامه.';
   }
 
   @override
@@ -9174,4 +9174,80 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get bookingsRescheduled =>
       'تم تغيير الموعد. إن كان الحجز مقبولًا فبانتظار رد النشاط على الموعد الجديد.';
+
+  @override
+  String get visitDepositTitle => 'عربون الجدية';
+
+  @override
+  String visitDepositQuotedWalletPatient(String amount) {
+    return 'يطلب النشاط عربونًا $amount ج يُجمَّد في محفظتك عند تأكيد الموعد، ويعود إليك بعد الزيارة.';
+  }
+
+  @override
+  String visitDepositQuotedExternalPatient(String amount) {
+    return 'يطلب النشاط عربونًا $amount ج تدفعه للنشاط مباشرة كاش أو تحويلًا خارج المنصة.';
+  }
+
+  @override
+  String visitDepositQuotedWalletBusiness(String amount, String counter) {
+    return 'العربون $amount ج يُجمَّد من المريض، وتُجمِّد أنت $counter ج عند التأكيد.';
+  }
+
+  @override
+  String visitDepositQuotedExternalBusiness(String amount) {
+    return 'العربون $amount ج يدفعه المريض إليك مباشرة، وتسجّل استلامه بعد التأكيد.';
+  }
+
+  @override
+  String visitDepositHeld(String amount, String counter) {
+    return 'عربون مجمّد: $amount ج من المريض و$counter ج من النشاط. يعود للطرفين بعد إتمام الزيارة.';
+  }
+
+  @override
+  String visitDepositHeldClientOnly(String amount) {
+    return 'عربون مجمّد: $amount ج من المريض. يعود إليه بعد إتمام الزيارة.';
+  }
+
+  @override
+  String visitDepositPendingPatient(String amount) {
+    return 'ادفع العربون ($amount ج) للنشاط مباشرة كاش أو تحويلًا خارج المنصة.';
+  }
+
+  @override
+  String visitDepositPendingBusiness(String amount) {
+    return 'العربون $amount ج مستحق خارج المنصة — سجّل استلامه أو اقبل بدونه.';
+  }
+
+  @override
+  String get visitDepositReceivedCash => 'استلم النشاط العربون كاش.';
+
+  @override
+  String get visitDepositReceivedTransfer => 'استلم النشاط العربون تحويلًا.';
+
+  @override
+  String get visitDepositWaived => 'قبل النشاط الزيارة بلا عربون.';
+
+  @override
+  String get visitDepositReleased => 'أُعيد العربون للطرفين بعد الزيارة.';
+
+  @override
+  String get visitDepositRefunded => 'أُعيد العربون للطرفين.';
+
+  @override
+  String get visitDepositDisputed => 'العربون تحت نزاع مفتوح حتى يصدر قرار.';
+
+  @override
+  String get visitDepositResolved => 'فُصل في العربون بقرار تحكيم.';
+
+  @override
+  String get visitDepositGiveBack => 'إعادة العربون';
+
+  @override
+  String get visitDepositGiveBackDone => 'أُعيد العربون للطرفين.';
+
+  @override
+  String get visitDepositDispute => 'فتح نزاع على العربون';
+
+  @override
+  String get visitDepositDisputeOpened => 'فُتح النزاع على العربون.';
 }

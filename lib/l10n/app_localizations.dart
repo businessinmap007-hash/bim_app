@@ -16768,7 +16768,7 @@ abstract class AppLocalizations {
   /// No description provided for @externalDepositWaiting.
   ///
   /// In ar, this message translates to:
-  /// **'حساب العميل متوقف عن العمليات الجديدة حتى تؤكد أنك استلمته أو تقبل الحجز بدونه.'**
+  /// **'لا يبدأ التنفيذ قبل أن تؤكد أنك استلمته أو تقبل الحجز بدونه.'**
   String get externalDepositWaiting;
 
   /// No description provided for @externalDepositCash.
@@ -16804,7 +16804,7 @@ abstract class AppLocalizations {
   /// No description provided for @externalDepositCustomerNote.
   ///
   /// In ar, this message translates to:
-  /// **'ادفع العربون ({amount} ج) للنشاط مباشرة كاش أو تحويلًا. حسابك لا يستطيع إجراء عمليات جديدة حتى يؤكد النشاط استلامه، ويمكنك إلغاء الحجز لإنهاء الانتظار.'**
+  /// **'ادفع العربون ({amount} ج) للنشاط مباشرة كاش أو تحويلًا. لا يبدأ التنفيذ حتى يؤكد النشاط استلامه.'**
   String externalDepositCustomerNote(String amount);
 
   /// No description provided for @depositAsPaymentOffer.
@@ -16830,6 +16830,126 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تم تغيير الموعد. إن كان الحجز مقبولًا فبانتظار رد النشاط على الموعد الجديد.'**
   String get bookingsRescheduled;
+
+  /// No description provided for @visitDepositTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عربون الجدية'**
+  String get visitDepositTitle;
+
+  /// No description provided for @visitDepositQuotedWalletPatient.
+  ///
+  /// In ar, this message translates to:
+  /// **'يطلب النشاط عربونًا {amount} ج يُجمَّد في محفظتك عند تأكيد الموعد، ويعود إليك بعد الزيارة.'**
+  String visitDepositQuotedWalletPatient(String amount);
+
+  /// No description provided for @visitDepositQuotedExternalPatient.
+  ///
+  /// In ar, this message translates to:
+  /// **'يطلب النشاط عربونًا {amount} ج تدفعه للنشاط مباشرة كاش أو تحويلًا خارج المنصة.'**
+  String visitDepositQuotedExternalPatient(String amount);
+
+  /// No description provided for @visitDepositQuotedWalletBusiness.
+  ///
+  /// In ar, this message translates to:
+  /// **'العربون {amount} ج يُجمَّد من المريض، وتُجمِّد أنت {counter} ج عند التأكيد.'**
+  String visitDepositQuotedWalletBusiness(String amount, String counter);
+
+  /// No description provided for @visitDepositQuotedExternalBusiness.
+  ///
+  /// In ar, this message translates to:
+  /// **'العربون {amount} ج يدفعه المريض إليك مباشرة، وتسجّل استلامه بعد التأكيد.'**
+  String visitDepositQuotedExternalBusiness(String amount);
+
+  /// No description provided for @visitDepositHeld.
+  ///
+  /// In ar, this message translates to:
+  /// **'عربون مجمّد: {amount} ج من المريض و{counter} ج من النشاط. يعود للطرفين بعد إتمام الزيارة.'**
+  String visitDepositHeld(String amount, String counter);
+
+  /// No description provided for @visitDepositHeldClientOnly.
+  ///
+  /// In ar, this message translates to:
+  /// **'عربون مجمّد: {amount} ج من المريض. يعود إليه بعد إتمام الزيارة.'**
+  String visitDepositHeldClientOnly(String amount);
+
+  /// No description provided for @visitDepositPendingPatient.
+  ///
+  /// In ar, this message translates to:
+  /// **'ادفع العربون ({amount} ج) للنشاط مباشرة كاش أو تحويلًا خارج المنصة.'**
+  String visitDepositPendingPatient(String amount);
+
+  /// No description provided for @visitDepositPendingBusiness.
+  ///
+  /// In ar, this message translates to:
+  /// **'العربون {amount} ج مستحق خارج المنصة — سجّل استلامه أو اقبل بدونه.'**
+  String visitDepositPendingBusiness(String amount);
+
+  /// No description provided for @visitDepositReceivedCash.
+  ///
+  /// In ar, this message translates to:
+  /// **'استلم النشاط العربون كاش.'**
+  String get visitDepositReceivedCash;
+
+  /// No description provided for @visitDepositReceivedTransfer.
+  ///
+  /// In ar, this message translates to:
+  /// **'استلم النشاط العربون تحويلًا.'**
+  String get visitDepositReceivedTransfer;
+
+  /// No description provided for @visitDepositWaived.
+  ///
+  /// In ar, this message translates to:
+  /// **'قبل النشاط الزيارة بلا عربون.'**
+  String get visitDepositWaived;
+
+  /// No description provided for @visitDepositReleased.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُعيد العربون للطرفين بعد الزيارة.'**
+  String get visitDepositReleased;
+
+  /// No description provided for @visitDepositRefunded.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُعيد العربون للطرفين.'**
+  String get visitDepositRefunded;
+
+  /// No description provided for @visitDepositDisputed.
+  ///
+  /// In ar, this message translates to:
+  /// **'العربون تحت نزاع مفتوح حتى يصدر قرار.'**
+  String get visitDepositDisputed;
+
+  /// No description provided for @visitDepositResolved.
+  ///
+  /// In ar, this message translates to:
+  /// **'فُصل في العربون بقرار تحكيم.'**
+  String get visitDepositResolved;
+
+  /// No description provided for @visitDepositGiveBack.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة العربون'**
+  String get visitDepositGiveBack;
+
+  /// No description provided for @visitDepositGiveBackDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُعيد العربون للطرفين.'**
+  String get visitDepositGiveBackDone;
+
+  /// No description provided for @visitDepositDispute.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح نزاع على العربون'**
+  String get visitDepositDispute;
+
+  /// No description provided for @visitDepositDisputeOpened.
+  ///
+  /// In ar, this message translates to:
+  /// **'فُتح النزاع على العربون.'**
+  String get visitDepositDisputeOpened;
 }
 
 class _AppLocalizationsDelegate

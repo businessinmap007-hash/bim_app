@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/deposit/visit_deposit.dart';
+import '../../../../core/deposit/widgets/visit_deposit_card.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
@@ -35,6 +37,15 @@ class MyProcedureRequestsScreen extends ConsumerWidget {
 
                 return ProcedureRequestCard(
                   request: r,
+                  extra: r.deposit == null
+                      ? null
+                      : VisitDepositCard(
+                          deposit: r.deposit!,
+                          kind: VisitKind.procedureRequest,
+                          subjectId: r.id,
+                          forBusiness: false,
+                          onChanged: () async => ref.invalidate(myProcedureRequestsProvider),
+                        ),
                   actions: [
                     // the physician's decision waits for his answer
                     if (r.isAdvised)

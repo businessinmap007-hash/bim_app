@@ -3045,13 +3045,13 @@
       "amount": {"type": "String"}
     }
   },
-  "externalDepositWaiting": "The customer’s account cannot start new dealings until you confirm you received it or accept the booking without it.",
+  "externalDepositWaiting": "The booking does not start until you confirm you received it or accept the booking without it.",
   "externalDepositCash": "Received in cash",
   "externalDepositTransfer": "Received by transfer",
   "externalDepositWaive": "Accept the deposit — no payment outside",
   "externalDepositReceived": "The deposit was confirmed as received.",
   "externalDepositWaived": "The booking was accepted with no deposit.",
-  "externalDepositCustomerNote": "Pay the deposit ({amount} EGP) to the business directly, in cash or by transfer. Your account cannot start new dealings until the business confirms it, and you may cancel the booking to end the wait.",
+  "externalDepositCustomerNote": "Pay the deposit ({amount} EGP) to the business directly, in cash or by transfer. The booking does not start until the business confirms it.",
   "@externalDepositCustomerNote": {
     "placeholders": {
       "amount": {"type": "String"}
@@ -3060,5 +3060,67 @@
   "depositAsPaymentOffer": "You may take the frozen deposit as a payment toward the booking instead of a payment outside the platform.",
   "bookingsReschedule": "Change the time",
   "bookingsRescheduleTitle": "Pick the new day",
-  "bookingsRescheduled": "Time changed. If the booking was accepted, the business answers the new time."
+  "bookingsRescheduled": "Time changed. If the booking was accepted, the business answers the new time.",
+  "visitDepositTitle": "Seriousness deposit",
+  "visitDepositQuotedWalletPatient": "The business asks for a {amount} EGP deposit, frozen in your wallet when the visit is confirmed and returned to you afterwards.",
+  "@visitDepositQuotedWalletPatient": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "visitDepositQuotedExternalPatient": "The business asks for a {amount} EGP deposit, paid to it directly in cash or by transfer outside the platform.",
+  "@visitDepositQuotedExternalPatient": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "visitDepositQuotedWalletBusiness": "A {amount} EGP deposit is frozen from the patient, and you freeze {counter} EGP when you confirm.",
+  "@visitDepositQuotedWalletBusiness": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "counter": {"type": "String"}
+    }
+  },
+  "visitDepositQuotedExternalBusiness": "The patient pays you the {amount} EGP deposit directly; you record that it arrived after confirming.",
+  "@visitDepositQuotedExternalBusiness": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "visitDepositHeld": "Deposit frozen: {amount} EGP from the patient and {counter} EGP from the business. Both go back after the visit is done.",
+  "@visitDepositHeld": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "counter": {"type": "String"}
+    }
+  },
+  "visitDepositHeldClientOnly": "Deposit frozen: {amount} EGP from the patient. It goes back to them after the visit is done.",
+  "@visitDepositHeldClientOnly": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "visitDepositPendingPatient": "Pay the deposit ({amount} EGP) to the business directly, in cash or by transfer outside the platform.",
+  "@visitDepositPendingPatient": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "visitDepositPendingBusiness": "The {amount} EGP deposit is owed outside the platform — record that it arrived, or accept without it.",
+  "@visitDepositPendingBusiness": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "visitDepositReceivedCash": "The business received the deposit in cash.",
+  "visitDepositReceivedTransfer": "The business received the deposit by transfer.",
+  "visitDepositWaived": "The business accepted the visit without a deposit.",
+  "visitDepositReleased": "The deposit went back to both after the visit.",
+  "visitDepositRefunded": "The deposit went back to both.",
+  "visitDepositDisputed": "The deposit is under an open dispute until a ruling.",
+  "visitDepositResolved": "The deposit was settled by an arbitration ruling.",
+  "visitDepositGiveBack": "Give the deposit back",
+  "visitDepositGiveBackDone": "The deposit went back to both.",
+  "visitDepositDispute": "Open a dispute over the deposit",
+  "visitDepositDisputeOpened": "The dispute was opened."
 }
