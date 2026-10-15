@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../app/theme/app_colors.dart';
+import '../../core/guarantee_badge/widgets/guarantee_badge.dart';
 import 'full_screen_gallery.dart';
 
 /// The shape of a profile cover — width over height. The header draws the cover in it, the edit screen's preview is it,
@@ -19,6 +20,10 @@ class ProfileCoverHeader extends StatelessWidget {
   final String? avatarImageUrl;
   final String title;
   final String? subtitle;
+
+  /// The account whose guarantee level is shown as a coin beside the title (null = none).
+  final int? badgeUserId;
+
   /// Fixed height; by default the cover keeps the shape [kCoverAspect] at the width it is given (capped on wide screens).
   final double? coverHeight;
   final double avatarRadius;
@@ -29,6 +34,7 @@ class ProfileCoverHeader extends StatelessWidget {
     required this.avatarImageUrl,
     required this.title,
     this.subtitle,
+    this.badgeUserId,
     this.coverHeight,
     this.avatarRadius = 40,
   });
@@ -72,11 +78,18 @@ class ProfileCoverHeader extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.titleLarge,
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ),
+                    GuaranteeBadge(userId: badgeUserId, size: 24),
+                  ],
                 ),
                 if (subtitle != null)
                   Text(

@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/deposit/visit_deposit.dart';
+import '../../../../core/guarantee_badge/widgets/account_name.dart';
 import '../../../../core/deposit/widgets/visit_deposit_card.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -395,8 +396,9 @@ class _AppointmentTileState extends ConsumerState<_AppointmentTile> {
             Row(
               children: [
                 Expanded(
-                  child: Text(
-                    a.patientName ?? '#${a.patientId}',
+                  child: AccountName(
+                    text: a.patientName ?? '#${a.patientId}',
+                    userId: a.patientId,
                     style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
                   ),
                 ),

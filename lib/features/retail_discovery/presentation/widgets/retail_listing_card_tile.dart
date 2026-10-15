@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../app/theme/app_colors.dart';
+import '../../../../core/guarantee_badge/widgets/account_name.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/utils/produce_emoji.dart';
 import '../../../../shared/utils/retail_quantity_format.dart';
@@ -73,10 +74,10 @@ class RetailListingCardTile extends StatelessWidget {
                           ),
                           const SizedBox(width: 6),
                           Expanded(
-                            child: Text(
-                              listing.businessName,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                            child: AccountName(
+                              text: listing.businessName,
+                              userId: listing.businessId,
+                              badgeSize: 14,
                               style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
                             ),
                           ),

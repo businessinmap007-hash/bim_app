@@ -3135,5 +3135,24 @@
     "placeholders": {
       "amount": {"type": "String"}
     }
+  },
+  "guaranteeBadgeTooltip": "Guarantee level: {level} — covers up to {amount} EGP",
+  "@guaranteeBadgeTooltip": {
+    "placeholders": {
+      "level": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+  "guaranteeBadgeTitle": "Guarantee level: {level}",
+  "@guaranteeBadgeTitle": {
+    "placeholders": {
+      "level": {"type": "String"}
+    }
+  },
+  "guaranteeBadgeBody": "This is the account’s guarantee level on the platform; it covers its operations up to {amount} EGP, so you know which level you are dealing with.",
+  "@guaranteeBadgeBody": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
   }
 }

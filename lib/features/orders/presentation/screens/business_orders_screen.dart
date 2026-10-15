@@ -2,6 +2,7 @@ import '../../../cart/presentation/widgets/weight_picker.dart';
 import '../widgets/order_line_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/guarantee_badge/widgets/account_name.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/network/api_exception.dart';
@@ -162,7 +163,7 @@ class _OrderTile extends StatelessWidget {
       margin: EdgeInsets.zero,
       child: ListTile(
         onTap: onTap,
-        title: Text('#${order.id} · ${order.customerName ?? ''}'),
+        title: AccountName(text: '#${order.id} · ${order.customerName ?? ''}', userId: order.customerId),
         subtitle: Text(
           [
             if (order.tableLabel != null) order.tableLabel!,
@@ -495,7 +496,7 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: Text(order.customerName ?? '', style: Theme.of(context).textTheme.titleMedium),
+                      child: AccountName(text: order.customerName ?? '', userId: order.customerId, style: Theme.of(context).textTheme.titleMedium, badgeSize: 22),
                     ),
                     _StatusBadge(order: order),
                   ],

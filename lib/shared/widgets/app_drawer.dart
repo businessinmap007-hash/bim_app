@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../app/theme/app_colors.dart';
+import '../../core/guarantee_badge/widgets/account_name.dart';
 import '../../features/auth/application/auth_controller.dart';
 import '../../features/business_groups/presentation/screens/business_groups_screen.dart';
 import '../../features/contact_groups/presentation/screens/contact_groups_screen.dart';
@@ -135,16 +136,15 @@ class _AppDrawerContent extends ConsumerWidget {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   if (user != null)
-                                    Text(
-                                      localizedName(user.name, user.nameEn, isEnglish),
+                                    AccountName(
+                                      text: localizedName(user.name, user.nameEn, isEnglish),
+                                      userId: user.id,
                                       style: Theme.of(context)
                                           .textTheme
                                           .titleSmall
                                           ?.copyWith(
                                             fontWeight: FontWeight.w700,
                                           ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   if (user != null)
                                     Text(

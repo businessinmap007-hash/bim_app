@@ -16968,6 +16968,24 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'وحصة النشاط ({amount} ج) على ضمانه.'**
   String visitDepositBusinessFromGuarantee(String amount);
+
+  /// No description provided for @guaranteeBadgeTooltip.
+  ///
+  /// In ar, this message translates to:
+  /// **'مستوى الضمان: {level} — يغطي حتى {amount} ج'**
+  String guaranteeBadgeTooltip(String level, String amount);
+
+  /// No description provided for @guaranteeBadgeTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مستوى الضمان: {level}'**
+  String guaranteeBadgeTitle(String level);
+
+  /// No description provided for @guaranteeBadgeBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا مستوى ضمان الحساب على المنصة، ويغطي عملياته حتى {amount} ج. فتعرف مع أي مستوى تتعامل.'**
+  String guaranteeBadgeBody(String amount);
 }
 
 class _AppLocalizationsDelegate

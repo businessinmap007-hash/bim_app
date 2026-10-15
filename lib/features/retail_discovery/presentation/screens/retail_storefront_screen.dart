@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/guarantee_badge/widgets/account_name.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -84,7 +85,10 @@ class _RetailStorefrontScreenState extends ConsumerState<RetailStorefrontScreen>
 
     return Scaffold(
       appBar: AppBar(
-        title: storefrontAsync.maybeWhen(data: (s) => Text(s.businessName), orElse: () => const SizedBox.shrink()),
+        title: storefrontAsync.maybeWhen(
+          data: (s) => AccountName(text: s.businessName, userId: businessId, style: Theme.of(context).appBarTheme.titleTextStyle),
+          orElse: () => const SizedBox.shrink(),
+        ),
       ),
       body: AsyncValueView<RetailStorefront>(
         value: storefrontAsync,

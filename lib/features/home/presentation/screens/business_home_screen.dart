@@ -69,6 +69,7 @@ class BusinessHomeScreen extends ConsumerWidget {
                 coverImageUrl: business?.coverUrl,
                 avatarImageUrl: business?.logoUrl,
                 title: name,
+                badgeUserId: business?.id,
               ),
             ),
             SliverOverlapAbsorber(

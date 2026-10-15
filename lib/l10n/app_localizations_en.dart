@@ -9327,4 +9327,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String visitDepositBusinessFromGuarantee(String amount) {
     return 'The business’s share ($amount EGP) stands on its guarantee.';
   }
+
+  @override
+  String guaranteeBadgeTooltip(String level, String amount) {
+    return 'Guarantee level: $level — covers up to $amount EGP';
+  }
+
+  @override
+  String guaranteeBadgeTitle(String level) {
+    return 'Guarantee level: $level';
+  }
+
+  @override
+  String guaranteeBadgeBody(String amount) {
+    return 'This is the account’s guarantee level on the platform; it covers its operations up to $amount EGP, so you know which level you are dealing with.';
+  }
 }

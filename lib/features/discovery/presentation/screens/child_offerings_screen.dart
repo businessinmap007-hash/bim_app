@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/guarantee_badge/widgets/account_name.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../l10n/app_localizations.dart';
@@ -139,11 +140,11 @@ class _ChildOfferingsScreenState extends ConsumerState<ChildOfferingsScreen> {
                                   const SizedBox(height: 10),
                                   Text(o.label, maxLines: 2, overflow: TextOverflow.ellipsis, style: theme.textTheme.titleSmall),
                                   const SizedBox(height: 2),
-                                  Text(
-                                    o.businessName,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                                  AccountName(
+                                    text: o.businessName,
+                                    userId: o.businessId,
                                     style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
+                                    badgeSize: 16,
                                   ),
                                   const Spacer(),
                                   if (o.installment != null)

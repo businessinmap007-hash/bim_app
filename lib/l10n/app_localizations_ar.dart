@@ -9264,4 +9264,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String visitDepositBusinessFromGuarantee(String amount) {
     return 'وحصة النشاط ($amount ج) على ضمانه.';
   }
+
+  @override
+  String guaranteeBadgeTooltip(String level, String amount) {
+    return 'مستوى الضمان: $level — يغطي حتى $amount ج';
+  }
+
+  @override
+  String guaranteeBadgeTitle(String level) {
+    return 'مستوى الضمان: $level';
+  }
+
+  @override
+  String guaranteeBadgeBody(String amount) {
+    return 'هذا مستوى ضمان الحساب على المنصة، ويغطي عملياته حتى $amount ج. فتعرف مع أي مستوى تتعامل.';
+  }
 }

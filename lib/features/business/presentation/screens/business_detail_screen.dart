@@ -256,6 +256,7 @@ class _BusinessDetailBody extends StatelessWidget {
       coverImageUrl: profile.coverUrl,
       avatarImageUrl: profile.logoUrl,
       title: profile.name,
+      badgeUserId: profile.id,
     );
 
     // NestedScrollView so the cover/avatar scroll away like any collapsing

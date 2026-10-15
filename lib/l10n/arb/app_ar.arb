@@ -3161,5 +3161,24 @@
     "placeholders": {
       "amount": {"type": "String"}
     }
+  },
+  "guaranteeBadgeTooltip": "مستوى الضمان: {level} — يغطي حتى {amount} ج",
+  "@guaranteeBadgeTooltip": {
+    "placeholders": {
+      "level": {"type": "String"},
+      "amount": {"type": "String"}
+    }
+  },
+  "guaranteeBadgeTitle": "مستوى الضمان: {level}",
+  "@guaranteeBadgeTitle": {
+    "placeholders": {
+      "level": {"type": "String"}
+    }
+  },
+  "guaranteeBadgeBody": "هذا مستوى ضمان الحساب على المنصة، ويغطي عملياته حتى {amount} ج. فتعرف مع أي مستوى تتعامل.",
+  "@guaranteeBadgeBody": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
   }
 }

@@ -5,6 +5,7 @@ import '../../../cart/presentation/widgets/weight_picker.dart';
 import '../widgets/order_line_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/guarantee_badge/widgets/account_name.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/network/api_exception.dart';
@@ -158,7 +159,7 @@ class _OrderTile extends StatelessWidget {
               ? const Icon(Icons.storefront_outlined)
               : null,
         ),
-        title: Text(order.businessName ?? '', maxLines: 1, overflow: TextOverflow.ellipsis),
+        title: AccountName(text: order.businessName ?? '', userId: order.businessId),
         subtitle: Text(
           '${order.itemsCount} · ${order.finalTotal.toStringAsFixed(0)}',
         ),
@@ -487,7 +488,7 @@ class _OrderDetailSheetState extends ConsumerState<OrderDetailSheet> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: Text(order.businessName ?? '', style: Theme.of(context).textTheme.titleMedium),
+                child: AccountName(text: order.businessName ?? '', userId: order.businessId, style: Theme.of(context).textTheme.titleMedium, badgeSize: 22),
               ),
               IconButton(
                 tooltip: l10n.chatOpenChat,
@@ -896,7 +897,7 @@ class _BookingTile extends StatelessWidget {
               ? const Icon(Icons.event_available_outlined)
               : null,
         ),
-        title: Text(booking.businessName ?? '', maxLines: 1, overflow: TextOverflow.ellipsis),
+        title: AccountName(text: booking.businessName ?? '', userId: booking.businessId),
         subtitle: Text('${booking.serviceName(languageCode)} · ${booking.price.toStringAsFixed(0)}'),
         trailing: _StatusBadge(
           label: _bookingStatusLabel(booking.status, l10n),
@@ -1180,7 +1181,7 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Text(booking.businessName ?? '', style: Theme.of(context).textTheme.titleMedium),
+                  child: AccountName(text: booking.businessName ?? '', userId: booking.businessId, style: Theme.of(context).textTheme.titleMedium, badgeSize: 22),
                 ),
                 IconButton(
                   tooltip: l10n.chatOpenChat,

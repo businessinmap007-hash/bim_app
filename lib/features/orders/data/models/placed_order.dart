@@ -192,6 +192,7 @@ class PlacedOrder {
   final bool hasProject;
   final DateTime? createdAt;
   final String? customerName;
+  final int? customerId;
   final String? customerPhone;
   final String? tableLabel;
   final bool depositRequired;
@@ -240,6 +241,7 @@ class PlacedOrder {
     this.hasProject = false,
     this.createdAt,
     this.customerName,
+    this.customerId,
     this.customerPhone,
     this.tableLabel,
     this.depositRequired = false,
@@ -313,6 +315,7 @@ class PlacedOrder {
       hasProject: json['has_project'] as bool? ?? false,
       createdAt: json['created_at'] != null ? EgyptTime.tryParse(json['created_at'] as String) : null,
       customerName: customer?['name'] as String?,
+      customerId: (customer?['id'] as num?)?.toInt(),
       customerPhone: customer?['phone'] as String?,
       tableLabel: json['table_label'] as String?,
       depositRequired: deposit['required'] as bool? ?? false,

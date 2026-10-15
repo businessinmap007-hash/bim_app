@@ -1,6 +1,7 @@
 import '../../../../shared/widgets/arrival_notice_banner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/guarantee_badge/widgets/account_name.dart';
 
 import '../../../../core/deposit/visit_deposit.dart';
 import '../../../../core/deposit/widgets/visit_deposit_card.dart';
@@ -131,7 +132,7 @@ class _AppointmentTile extends StatelessWidget {
           backgroundImage: appointment.clinicLogoUrl != null ? NetworkImage(appointment.clinicLogoUrl!) : null,
           child: appointment.clinicLogoUrl == null ? const Icon(Icons.local_hospital_outlined) : null,
         ),
-        title: Text(appointment.clinicName ?? ''),
+        title: AccountName(text: appointment.clinicName ?? '', userId: appointment.clinicId),
         subtitle: Text(
           '${appointment.physicianLine != null ? '${l10n.clinicWithPhysician(appointment.physicianLine!)}\n' : ''}'
           '${_statusLabel(appointment.status, l10n)}'

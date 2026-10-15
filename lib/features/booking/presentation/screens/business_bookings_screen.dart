@@ -2,6 +2,7 @@ import '../../../../core/assignment/assignment_providers.dart';
 import '../../../../core/assignment/widgets/assignee_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/guarantee_badge/widgets/account_name.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/network/api_exception.dart';
@@ -283,7 +284,7 @@ class BusinessBookingDetailScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 16),
                 if (booking.customerName != null)
-                  _DetailRow(label: l10n.businessBookingsCustomer, value: booking.customerName!),
+                  _DetailRow(label: l10n.businessBookingsCustomer, value: booking.customerName!, badgeUserId: booking.customerId),
                 if (booking.customerPhone != null)
                   _DetailRow(label: l10n.businessBookingsCustomer, value: booking.customerPhone!),
                 if (booking.bookableLabel != null)
@@ -544,7 +545,10 @@ class BusinessBookingDetailScreen extends ConsumerWidget {
 class _DetailRow extends StatelessWidget {
   final String label;
   final String value;
-  const _DetailRow({required this.label, required this.value});
+
+  /// The account whose guarantee level shows beside the value (the customer's, on the customer row).
+  final int? badgeUserId;
+  const _DetailRow({required this.label, required this.value, this.badgeUserId});
 
   @override
   Widget build(BuildContext context) {
@@ -557,7 +561,7 @@ class _DetailRow extends StatelessWidget {
             width: 110,
             child: Text(label, style: TextStyle(color: Theme.of(context).hintColor)),
           ),
-          Expanded(child: Text(value)),
+          Expanded(child: badgeUserId == null ? Text(value) : AccountName(text: value, userId: badgeUserId, maxLines: 2)),
         ],
       ),
     );
