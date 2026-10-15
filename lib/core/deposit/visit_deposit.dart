@@ -23,6 +23,10 @@ class VisitDeposit {
   final double amount;
   final double counterAmount;
 
+  /// How much of each side's share stands on its guarantee coverage instead of its wallet.
+  final double guaranteeAmount;
+  final double businessGuaranteeAmount;
+
   /// `cash` or `transfer` — an external deposit the business confirmed.
   final String? method;
   final int? disputeId;
@@ -32,6 +36,8 @@ class VisitDeposit {
     required this.status,
     required this.amount,
     this.counterAmount = 0,
+    this.guaranteeAmount = 0,
+    this.businessGuaranteeAmount = 0,
     this.method,
     this.disputeId,
   });
@@ -51,6 +57,8 @@ class VisitDeposit {
       status: json['status'] as String? ?? quoted,
       amount: amount,
       counterAmount: (json['counter_amount'] as num?)?.toDouble() ?? 0,
+      guaranteeAmount: (json['guarantee_amount'] as num?)?.toDouble() ?? 0,
+      businessGuaranteeAmount: (json['business_guarantee_amount'] as num?)?.toDouble() ?? 0,
       method: json['method'] as String?,
       disputeId: (json['dispute_id'] as num?)?.toInt(),
     );

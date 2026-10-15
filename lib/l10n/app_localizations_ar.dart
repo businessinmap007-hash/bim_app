@@ -9250,4 +9250,18 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get visitDepositDisputeOpened => 'فُتح النزاع على العربون.';
+
+  @override
+  String get bookingTermsNeedGuarantee =>
+      'لتفعيل العربون المجمّد أو ضمان العميل يلزم أن يكون لنشاطك ضمان فعّال يقف خلف نصيبك. فعّل ضمانك أولًا، أو اختر «تحويل خارج المنصة».';
+
+  @override
+  String visitDepositFromGuarantee(String amount) {
+    return 'منه $amount ج على ضمان المريض بدل المحفظة.';
+  }
+
+  @override
+  String visitDepositBusinessFromGuarantee(String amount) {
+    return 'وحصة النشاط ($amount ج) على ضمانه.';
+  }
 }

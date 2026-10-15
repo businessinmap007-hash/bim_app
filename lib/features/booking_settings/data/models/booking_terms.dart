@@ -59,6 +59,10 @@ class BookingTerms {
   final bool acceptDepositAsPayment;
   final double maxPercent;
   final bool hasSpecificPolicies;
+
+  /// The business holds an active guarantee of its own: the two in-app modes (a frozen deposit, the customer's
+  /// guarantee) are open only then — its share is frozen from that coverage first, its wallet for the rest.
+  final bool hasGuarantee;
   final BookingTermsExample? example;
 
   const BookingTerms({
@@ -72,6 +76,7 @@ class BookingTerms {
     this.acceptDepositAsPayment = false,
     this.maxPercent = 50,
     this.hasSpecificPolicies = false,
+    this.hasGuarantee = true,
     this.example,
   });
 
@@ -95,6 +100,7 @@ class BookingTerms {
     acceptDepositAsPayment: acceptDepositAsPayment ?? this.acceptDepositAsPayment,
     maxPercent: maxPercent,
     hasSpecificPolicies: hasSpecificPolicies,
+    hasGuarantee: hasGuarantee,
     example: example,
   );
 
@@ -109,6 +115,7 @@ class BookingTerms {
     acceptDepositAsPayment: json['accept_deposit_as_payment'] as bool? ?? false,
     maxPercent: (json['max_percent'] as num?)?.toDouble() ?? 50,
     hasSpecificPolicies: json['has_specific_policies'] as bool? ?? false,
+    hasGuarantee: json['has_guarantee'] as bool? ?? true,
     example: json['example'] is Map<String, dynamic> ? BookingTermsExample.fromJson(json['example'] as Map<String, dynamic>) : null,
   );
 

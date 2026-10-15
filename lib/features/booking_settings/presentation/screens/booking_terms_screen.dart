@@ -115,7 +115,10 @@ class _BookingTermsScreenState extends ConsumerState<BookingTermsScreen> {
           title: Text(l10n.bookingTermsEnabled),
           subtitle: Text(l10n.bookingTermsEnabledHint),
           value: terms.enabled,
-          onChanged: (v) => _change((t) => t.copyWith(enabled: v)),
+          // a business with no guarantee of its own can only ask for a deposit outside the app
+          onChanged: (v) => _change(
+            (t) => t.copyWith(enabled: v, mode: v && !t.hasGuarantee ? BookingSecurityMode.externalTransfer : t.mode),
+          ),
         ),
         if (terms.hasSpecificPolicies)
           Container(
@@ -132,17 +135,32 @@ class _BookingTermsScreenState extends ConsumerState<BookingTermsScreen> {
           ),
         if (terms.enabled) ...[
           heading(l10n.bookingTermsModeTitle),
+          if (!terms.hasGuarantee)
+            Container(
+              margin: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(color: AppColors.accentGold.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(10)),
+              child: Row(
+                children: [
+                  const Icon(Icons.shield_outlined, size: 18),
+                  const SizedBox(width: 8),
+                  Expanded(child: Text(l10n.bookingTermsNeedGuarantee, style: theme.textTheme.bodySmall)),
+                ],
+              ),
+            ),
           _ModeCard(
             title: l10n.bookingTermsModeDeposit,
             hint: l10n.bookingTermsModeDepositHint,
             badge: l10n.bookingTermsRecommended,
             selected: terms.mode == BookingSecurityMode.depositFreeze,
+            enabled: terms.hasGuarantee,
             onTap: () => _change((t) => t.copyWith(mode: BookingSecurityMode.depositFreeze)),
           ),
           _ModeCard(
             title: l10n.bookingTermsModeGuarantee,
             hint: l10n.bookingTermsModeGuaranteeHint,
             selected: guarantee,
+            enabled: terms.hasGuarantee,
             onTap: () => _change((t) => t.copyWith(mode: BookingSecurityMode.guaranteeFreeze)),
           ),
           _ModeCard(
@@ -250,14 +268,24 @@ class _ModeCard extends StatelessWidget {
   final String hint;
   final String? badge;
   final bool selected;
+  final bool enabled;
   final VoidCallback onTap;
-  const _ModeCard({required this.title, required this.hint, this.badge, required this.selected, required this.onTap});
+  const _ModeCard({
+    required this.title,
+    required this.hint,
+    this.badge,
+    required this.selected,
+    this.enabled = true,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Card(
+    return Opacity(
+      opacity: enabled ? 1 : 0.5,
+      child: Card(
       margin: const EdgeInsets.only(bottom: 8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -265,7 +293,7 @@ class _ModeCard extends StatelessWidget {
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: onTap,
+        onTap: enabled ? onTap : null,
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(
@@ -298,6 +326,7 @@ class _ModeCard extends StatelessWidget {
             ],
           ),
         ),
+      ),
       ),
     );
   }

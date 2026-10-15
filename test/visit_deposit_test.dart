@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:bim_app/core/deposit/visit_deposit.dart';
 import 'package:bim_app/core/deposit/widgets/visit_deposit_card.dart';
+import 'package:bim_app/features/booking_settings/data/models/booking_terms.dart';
 import 'package:bim_app/features/clinic/data/models/clinic_appointment.dart';
 import 'package:bim_app/features/clinic_management/data/models/business_clinic_appointment.dart';
 import 'package:bim_app/features/hospital/data/models/hospital_procedure.dart';
@@ -38,6 +39,28 @@ void main() {
       expect(VisitDeposit.fromJsonOrNull(null), isNull);
       expect(VisitDeposit.fromJsonOrNull({'mode': 'wallet', 'status': 'quoted', 'amount': 0}), isNull);
       expect(VisitDeposit.fromJsonOrNull({'mode': 'external', 'status': 'void', 'amount': 20})!.isHidden, isTrue);
+    });
+
+    test('says how much of each share stands on a guarantee', () {
+      final d = VisitDeposit.fromJsonOrNull({
+        'mode': 'wallet',
+        'status': 'held',
+        'amount': 20,
+        'counter_amount': 10,
+        'guarantee_amount': 8,
+        'business_guarantee_amount': 10,
+      })!;
+
+      expect(d.guaranteeAmount, 8);
+      expect(d.businessGuaranteeAmount, 10);
+      expect(VisitDeposit.fromJsonOrNull({'mode': 'wallet', 'status': 'held', 'amount': 20})!.guaranteeAmount, 0);
+    });
+
+    test('a business with no guarantee of its own reads the in-app modes as closed', () {
+      expect(BookingTerms.fromJson({'enabled': true, 'security_mode': 'external_transfer', 'has_guarantee': false}).hasGuarantee, isFalse);
+      expect(BookingTerms.fromJson({'enabled': true, 'security_mode': 'deposit_freeze', 'has_guarantee': true}).hasGuarantee, isTrue);
+      // an older server says nothing: nothing is closed
+      expect(BookingTerms.fromJson({'enabled': true}).hasGuarantee, isTrue);
     });
 
     test('every kind of visit carries it', () {

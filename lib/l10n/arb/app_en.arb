@@ -3122,5 +3122,18 @@
   "visitDepositGiveBack": "Give the deposit back",
   "visitDepositGiveBackDone": "The deposit went back to both.",
   "visitDepositDispute": "Open a dispute over the deposit",
-  "visitDepositDisputeOpened": "The dispute was opened."
+  "visitDepositDisputeOpened": "The dispute was opened.",
+  "bookingTermsNeedGuarantee": "To switch on the frozen deposit or the customer’s guarantee your business needs an active guarantee standing behind its share. Activate your guarantee first, or choose «transfer outside the platform».",
+  "visitDepositFromGuarantee": "{amount} EGP of it stands on the patient’s guarantee instead of the wallet.",
+  "@visitDepositFromGuarantee": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "visitDepositBusinessFromGuarantee": "The business’s share ({amount} EGP) stands on its guarantee.",
+  "@visitDepositBusinessFromGuarantee": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  }
 }

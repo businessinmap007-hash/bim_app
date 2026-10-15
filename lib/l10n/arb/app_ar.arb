@@ -3148,5 +3148,18 @@
   "visitDepositGiveBack": "إعادة العربون",
   "visitDepositGiveBackDone": "أُعيد العربون للطرفين.",
   "visitDepositDispute": "فتح نزاع على العربون",
-  "visitDepositDisputeOpened": "فُتح النزاع على العربون."
+  "visitDepositDisputeOpened": "فُتح النزاع على العربون.",
+  "bookingTermsNeedGuarantee": "لتفعيل العربون المجمّد أو ضمان العميل يلزم أن يكون لنشاطك ضمان فعّال يقف خلف نصيبك. فعّل ضمانك أولًا، أو اختر «تحويل خارج المنصة».",
+  "visitDepositFromGuarantee": "منه {amount} ج على ضمان المريض بدل المحفظة.",
+  "@visitDepositFromGuarantee": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "visitDepositBusinessFromGuarantee": "وحصة النشاط ({amount} ج) على ضمانه.",
+  "@visitDepositBusinessFromGuarantee": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  }
 }

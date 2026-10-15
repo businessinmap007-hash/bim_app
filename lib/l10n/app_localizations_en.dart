@@ -9313,4 +9313,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get visitDepositDisputeOpened => 'The dispute was opened.';
+
+  @override
+  String get bookingTermsNeedGuarantee =>
+      'To switch on the frozen deposit or the customer’s guarantee your business needs an active guarantee standing behind its share. Activate your guarantee first, or choose «transfer outside the platform».';
+
+  @override
+  String visitDepositFromGuarantee(String amount) {
+    return '$amount EGP of it stands on the patient’s guarantee instead of the wallet.';
+  }
+
+  @override
+  String visitDepositBusinessFromGuarantee(String amount) {
+    return 'The business’s share ($amount EGP) stands on its guarantee.';
+  }
 }

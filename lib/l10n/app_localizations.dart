@@ -16950,6 +16950,24 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'فُتح النزاع على العربون.'**
   String get visitDepositDisputeOpened;
+
+  /// No description provided for @bookingTermsNeedGuarantee.
+  ///
+  /// In ar, this message translates to:
+  /// **'لتفعيل العربون المجمّد أو ضمان العميل يلزم أن يكون لنشاطك ضمان فعّال يقف خلف نصيبك. فعّل ضمانك أولًا، أو اختر «تحويل خارج المنصة».'**
+  String get bookingTermsNeedGuarantee;
+
+  /// No description provided for @visitDepositFromGuarantee.
+  ///
+  /// In ar, this message translates to:
+  /// **'منه {amount} ج على ضمان المريض بدل المحفظة.'**
+  String visitDepositFromGuarantee(String amount);
+
+  /// No description provided for @visitDepositBusinessFromGuarantee.
+  ///
+  /// In ar, this message translates to:
+  /// **'وحصة النشاط ({amount} ج) على ضمانه.'**
+  String visitDepositBusinessFromGuarantee(String amount);
 }
 
 class _AppLocalizationsDelegate

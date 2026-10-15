@@ -137,6 +137,16 @@ class _VisitDepositCardState extends ConsumerState<VisitDepositCard> {
           ),
           const SizedBox(height: 6),
           Text(text, style: theme.textTheme.bodyMedium),
+          if (_d.status != VisitDeposit.quoted && _d.guaranteeAmount > 0)
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Text(l10n.visitDepositFromGuarantee(_money(_d.guaranteeAmount)), style: theme.textTheme.bodySmall),
+            ),
+          if (_d.status != VisitDeposit.quoted && _d.businessGuaranteeAmount > 0)
+            Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: Text(l10n.visitDepositBusinessFromGuarantee(_money(_d.businessGuaranteeAmount)), style: theme.textTheme.bodySmall),
+            ),
           if (answersExternal) ...[
             const SizedBox(height: 10),
             Row(
