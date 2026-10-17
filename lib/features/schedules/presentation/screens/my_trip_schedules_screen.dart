@@ -36,49 +36,16 @@ class MyTripSchedulesScreen extends ConsumerWidget {
   /// A passenger sold directly, outside the app: always a named person; the seat is held for him.
   Future<void> _addOffline(BuildContext context, WidgetRef ref, TripSchedule schedule) async {
     final l10n = AppLocalizations.of(context)!;
-    final name = TextEditingController();
-    final phone = TextEditingController();
-    final units = TextEditingController(text: '1');
 
-    final ok = await showDialog<bool>(
+    final result = await showDialog<({String name, String phone, int units})>(
       context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(l10n.tripOfflineAddTitle),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(controller: name, decoration: InputDecoration(labelText: l10n.tripOfflineNameLabel)),
-              TextField(
-                controller: phone,
-                keyboardType: TextInputType.phone,
-                decoration: InputDecoration(labelText: l10n.tripOfflinePhoneLabel),
-              ),
-              TextField(
-                controller: units,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(labelText: l10n.tripOfflineUnitsLabel),
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: Text(l10n.commonCancel)),
-          FilledButton(onPressed: () => Navigator.pop(dialogContext, true), child: Text(l10n.commonSave)),
-        ],
-      ),
+      builder: (_) => const _OfflinePassengerDialog(),
     );
 
-    final who = name.text.trim();
-    final seats = int.tryParse(units.text.trim()) ?? 1;
-    name.dispose();
-    phone.dispose();
-    units.dispose();
-
-    if (ok != true || who.isEmpty || !context.mounted) return;
+    if (result == null || result.name.isEmpty || !context.mounted) return;
 
     try {
-      await ref.read(schedulesApiProvider).addOfflinePassenger(schedule.id, name: who, phone: phone.text.trim(), units: seats);
+      await ref.read(schedulesApiProvider).addOfflinePassenger(schedule.id, name: result.name, phone: result.phone, units: result.units);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.tripOfflineAdded)));
       }
@@ -803,6 +770,66 @@ class _BusinessPickerSheetState extends ConsumerState<_BusinessPickerSheet> {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Owns its controllers: they are disposed with the dialog, after its exit animation — not the moment the route returns.
+class _OfflinePassengerDialog extends StatefulWidget {
+  const _OfflinePassengerDialog();
+
+  @override
+  State<_OfflinePassengerDialog> createState() => _OfflinePassengerDialogState();
+}
+
+class _OfflinePassengerDialogState extends State<_OfflinePassengerDialog> {
+  final _name = TextEditingController();
+  final _phone = TextEditingController();
+  final _units = TextEditingController(text: '1');
+
+  @override
+  void dispose() {
+    _name.dispose();
+    _phone.dispose();
+    _units.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return AlertDialog(
+      title: Text(l10n.tripOfflineAddTitle),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(controller: _name, decoration: InputDecoration(labelText: l10n.tripOfflineNameLabel)),
+            TextField(
+              controller: _phone,
+              keyboardType: TextInputType.phone,
+              decoration: InputDecoration(labelText: l10n.tripOfflinePhoneLabel),
+            ),
+            TextField(
+              controller: _units,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: l10n.tripOfflineUnitsLabel),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.commonCancel)),
+        FilledButton(
+          onPressed: () => Navigator.pop(context, (
+            name: _name.text.trim(),
+            phone: _phone.text.trim(),
+            units: int.tryParse(_units.text.trim()) ?? 1,
+          )),
+          child: Text(l10n.commonSave),
+        ),
+      ],
     );
   }
 }

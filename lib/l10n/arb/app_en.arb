@@ -3282,7 +3282,6 @@
   "myParcelsTitle": "My parcels",
   "myParcelsEmpty": "No parcels yet.",
   "parcelAcceptPrice": "Accept the price",
-  "parcelGenerateCode": "Generate the delivery code",
   "parcelRegenerateCode": "New code",
   "parcelCancel": "Cancel",
   "parcelCodeHint": "Give this code to the receiver; they hand it to the driver on receipt.",
@@ -3301,7 +3300,6 @@
   "parcelSeatsLabel": "Seats it takes",
   "parcelSeatsHelp": "0 when it rides in the boot",
   "parcelLoadAction": "Load on the car",
-  "parcelWaitingForCode": "Waiting for the sender code",
   "parcelDeliverAction": "Hand over",
   "parcelDeliverTitle": "Hand over the parcel",
   "parcelDeliverCodeLabel": "Delivery code",
@@ -3354,5 +3352,8 @@
   },
   "clinicArriveAction": "I arrived — scan the clinic QR",
   "clinicArriveHint": "Scan the code shown at the clinic to confirm you arrived",
-  "clinicArriveDone": "Your arrival is recorded. You are in the queue now."
+  "clinicArriveDone": "Your arrival is recorded. You are in the queue now.",
+  "tripFullBadge": "Full",
+  "handoverShowCode": "Show the code",
+  "handoverHideCode": "Hide the code"
 }

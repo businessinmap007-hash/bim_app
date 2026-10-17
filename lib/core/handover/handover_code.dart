@@ -108,34 +108,54 @@ class _AskHandoverCodeSheetState extends State<_AskHandoverCodeSheet> {
 }
 
 /// A handover code to show: the QR the other party scans, and the same code in big letters to read out / copy.
-class HandoverCodeCard extends StatelessWidget {
+class HandoverCodeCard extends StatefulWidget {
   final String code;
   final String caption;
   final bool showQr;
-  const HandoverCodeCard({super.key, required this.code, required this.caption, this.showQr = true});
+
+  /// The typed code stays behind a «إظهار الكود» button: the QR is what is normally shown, the text is for whoever has
+  /// no app to scan with (the sender tells it to him).
+  final bool hideCode;
+  const HandoverCodeCard({super.key, required this.code, required this.caption, this.showQr = true, this.hideCode = false});
+
+  @override
+  State<HandoverCodeCard> createState() => _HandoverCodeCardState();
+}
+
+class _HandoverCodeCardState extends State<HandoverCodeCard> {
+  bool _revealed = false;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final textVisible = !widget.hideCode || _revealed;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(caption, style: theme.textTheme.bodySmall),
+        Text(widget.caption, style: theme.textTheme.bodySmall),
         const SizedBox(height: 6),
-        Row(
-          children: [
-            Expanded(
-              child: SelectableText(
-                code,
-                style: theme.textTheme.headlineSmall?.copyWith(letterSpacing: 4, fontWeight: FontWeight.w800),
+        if (widget.showQr)
+          Center(child: QrImageView(data: widget.code, size: 160, backgroundColor: Colors.white)),
+        if (widget.hideCode)
+          TextButton.icon(
+            onPressed: () => setState(() => _revealed = !_revealed),
+            icon: Icon(_revealed ? Icons.visibility_off_outlined : Icons.visibility_outlined),
+            label: Text(_revealed ? l10n.handoverHideCode : l10n.handoverShowCode),
+          ),
+        if (textVisible)
+          Row(
+            children: [
+              Expanded(
+                child: SelectableText(
+                  widget.code,
+                  style: theme.textTheme.headlineSmall?.copyWith(letterSpacing: 4, fontWeight: FontWeight.w800),
+                ),
               ),
-            ),
-            IconButton(icon: const Icon(Icons.copy_outlined), onPressed: () => Clipboard.setData(ClipboardData(text: code))),
-          ],
-        ),
-        if (showQr)
-          Center(child: QrImageView(data: code, size: 160, backgroundColor: Colors.white)),
+              IconButton(icon: const Icon(Icons.copy_outlined), onPressed: () => Clipboard.setData(ClipboardData(text: widget.code))),
+            ],
+          ),
       ],
     );
   }

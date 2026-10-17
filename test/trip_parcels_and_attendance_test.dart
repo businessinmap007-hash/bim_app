@@ -42,8 +42,7 @@ void main() {
       'description': 'box',
       'sender': {'id': 1, 'name': 'A'},
       'receiver': {'user_id': null, 'name': 'Omar', 'phone': '010'},
-      'has_code': true,
-      'delivery_code': null,
+      'handover_code': null,
     });
     final senderView = TripParcel.fromJson({
       'id': 5,
@@ -51,15 +50,14 @@ void main() {
       'description': 'box',
       'sender': {'id': 1, 'name': 'A'},
       'receiver': {'user_id': 9, 'name': 'Mona'},
-      'has_code': true,
-      'delivery_code': '2954gh',
+      'handover_code': '2954gh',
+      'handover_kind': 'pickup',
       'price': 150,
       'seats': 1,
     });
 
-    expect(carrierView.deliveryCode, isNull);
-    expect(carrierView.hasCode, isTrue);
-    expect(senderView.deliveryCode, '2954gh');
+    expect(carrierView.handoverCode, isNull);
+    expect(senderView.handoverCode, '2954gh');
     expect(senderView.receiverUserId, 9);
     expect(senderView.isOpenForSender, isTrue);
     expect(senderView.price, 150);

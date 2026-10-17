@@ -30,21 +30,20 @@ class TripParcel {
   final int seats;
   final String currency;
   final String status;
-  final bool hasCode;
 
   /// `sender` pays the driver in cash at pickup, `receiver` at delivery — recorded only (the wallet is not used).
   final String payer;
   final DateTime? paidAt;
 
-  /// The sender's QR the driver scans to take the parcel — the sender only, while it is accepted.
-  final String? pickupCode;
+  /// The ONE code of the parcel, as the sender (or an account receiver) sees it: `pickup` while it waits for the driver
+  /// to take it, then `delivery`. Never carried for the carrier.
+  final String? handoverCode;
+  final String? handoverKind;
 
   /// Approximate (the driver's word); the actual hour is [deliveredAt].
   final DateTime? expectedArrivalAt;
   final DateTime? pickedUpAt;
 
-  /// Only for the sender and an account receiver; null for the carrier and once delivered.
-  final String? deliveryCode;
   final DateTime? deliveredAt;
 
   const TripParcel({
@@ -62,13 +61,12 @@ class TripParcel {
     this.seats = 0,
     this.currency = 'EGP',
     required this.status,
-    this.hasCode = false,
     this.payer = 'receiver',
     this.paidAt,
-    this.pickupCode,
+    this.handoverCode,
+    this.handoverKind,
     this.expectedArrivalAt,
     this.pickedUpAt,
-    this.deliveryCode,
     this.deliveredAt,
   });
 
@@ -98,13 +96,12 @@ class TripParcel {
       seats: (json['seats'] as num?)?.toInt() ?? 0,
       currency: json['currency'] as String? ?? 'EGP',
       status: json['status'] as String? ?? requested,
-      hasCode: json['has_code'] == true,
       payer: json['payer'] as String? ?? 'receiver',
       paidAt: json['paid_at'] != null ? EgyptTime.tryParse(json['paid_at'] as String) : null,
-      pickupCode: json['pickup_code'] as String?,
+      handoverCode: json['handover_code'] as String?,
+      handoverKind: json['handover_kind'] as String?,
       expectedArrivalAt: json['expected_arrival_at'] != null ? EgyptTime.tryParse(json['expected_arrival_at'] as String) : null,
       pickedUpAt: json['picked_up_at'] != null ? EgyptTime.tryParse(json['picked_up_at'] as String) : null,
-      deliveryCode: json['delivery_code'] as String?,
       deliveredAt: json['delivered_at'] != null ? EgyptTime.tryParse(json['delivered_at'] as String) : null,
     );
   }

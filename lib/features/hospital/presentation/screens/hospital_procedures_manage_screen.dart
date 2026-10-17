@@ -119,7 +119,6 @@ class _HospitalProceduresManageScreenState extends ConsumerState<HospitalProcedu
       ),
     );
     final text = name.text.trim();
-    name.dispose();
     if (ok != true || text.isEmpty) return;
 
     try {

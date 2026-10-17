@@ -3308,7 +3308,6 @@
   "myParcelsTitle": "شحناتي",
   "myParcelsEmpty": "لا شحنات بعد.",
   "parcelAcceptPrice": "أقبل السعر",
-  "parcelGenerateCode": "توليد كود التسليم",
   "parcelRegenerateCode": "كود جديد",
   "parcelCancel": "إلغاء",
   "parcelCodeHint": "أعطِ هذا الكود للمستلم؛ يسلّمه للسائق عند الاستلام.",
@@ -3327,7 +3326,6 @@
   "parcelSeatsLabel": "عدد المقاعد التي تشغلها",
   "parcelSeatsHelp": "٠ إذا كانت في شنطة السيارة",
   "parcelLoadAction": "تحميل على السيارة",
-  "parcelWaitingForCode": "بانتظار كود المرسل",
   "parcelDeliverAction": "تسليم",
   "parcelDeliverTitle": "تسليم الشحنة",
   "parcelDeliverCodeLabel": "كود التسليم",
@@ -3380,5 +3378,8 @@
   },
   "clinicArriveAction": "وصلت — امسح QR العيادة",
   "clinicArriveHint": "امسح الكود المعروض في العيادة لتأكيد وصولك",
-  "clinicArriveDone": "تم تسجيل وصولك. أنت الآن في الطابور."
+  "clinicArriveDone": "تم تسجيل وصولك. أنت الآن في الطابور.",
+  "tripFullBadge": "مكتملة",
+  "handoverShowCode": "إظهار الكود",
+  "handoverHideCode": "إخفاء الكود"
 }

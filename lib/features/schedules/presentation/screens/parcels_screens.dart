@@ -302,10 +302,10 @@ class _MyParcelsScreenState extends ConsumerState<MyParcelsScreen> {
                                   onPressed: () => _run(() => api.acceptParcel(p.id)),
                                   child: Text(l10n.parcelAcceptPrice),
                                 ),
-                              if (p.isOpenForSender)
+                              if (p.handoverCode != null && p.handoverKind != null)
                                 OutlinedButton(
-                                  onPressed: () => _run(() => api.generateParcelCode(p.id)),
-                                  child: Text(p.hasCode ? l10n.parcelRegenerateCode : l10n.parcelGenerateCode),
+                                  onPressed: () => _run(() => api.regenerateParcelCode(p.id)),
+                                  child: Text(l10n.parcelRegenerateCode),
                                 ),
                               if (p.isOpenForSender)
                                 TextButton(onPressed: () => _run(() => api.cancelParcel(p.id)), child: Text(l10n.parcelCancel)),
@@ -313,18 +313,16 @@ class _MyParcelsScreenState extends ConsumerState<MyParcelsScreen> {
                                 TextButton(onPressed: () => _dispute(p), child: Text(l10n.disputeOpenTitle)),
                             ],
                           ),
-                          // the QR the driver scans to TAKE the parcel (the sender only)
-                          if (p.pickupCode != null) ...[
-                            const Divider(height: 24),
-                            HandoverCodeCard(code: p.pickupCode!, caption: l10n.parcelPickupCodeHint),
-                          ],
-                          // the QR / code the receiver gives the driver to GET it
-                          if (p.deliveryCode != null) ...[
+                          // the ONE code: the QR the driver scans to TAKE the parcel, and — once it is on the car — the
+                          // QR/code the receiver gives the driver to GET it (a receiver without the app is told the typed code)
+                          if (p.handoverCode != null) ...[
                             const Divider(height: 24),
                             HandoverCodeCard(
-                              code: p.deliveryCode!,
-                              caption: l10n.parcelCodeHint,
-                              showQr: p.receiverUserId != null,
+                              key: ValueKey('${p.id}-${p.handoverKind}'),
+                              code: p.handoverCode!,
+                              caption: p.handoverKind == 'delivery' ? l10n.parcelCodeHint : l10n.parcelPickupCodeHint,
+                              showQr: p.handoverKind == 'pickup' || p.receiverUserId != null,
+                              hideCode: true,
                             ),
                           ],
                         ],
@@ -376,66 +374,13 @@ class _CarrierParcelsScreenState extends ConsumerState<CarrierParcelsScreen> {
   }
 
   Future<void> _price(TripParcel p) async {
-    final l10n = AppLocalizations.of(context)!;
-    final price = TextEditingController(text: p.price != null ? _money(p.price!) : '');
-    final seats = TextEditingController(text: '${p.seats}');
-    DateTime? arrival = p.expectedArrivalAt;
-
-    final ok = await showDialog<bool>(
+    final result = await showDialog<({double price, int seats, DateTime? arrival})>(
       context: context,
-      builder: (dialogContext) => StatefulBuilder(
-        builder: (context, setDialogState) => AlertDialog(
-          title: Text(l10n.parcelPriceTitle),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(p.description, maxLines: 3, overflow: TextOverflow.ellipsis),
-                TextField(
-                  controller: price,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  decoration: InputDecoration(labelText: l10n.parcelPriceLabel),
-                ),
-                TextField(
-                  controller: seats,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(labelText: l10n.parcelSeatsLabel, helperText: l10n.parcelSeatsHelp),
-                ),
-                const SizedBox(height: 8),
-                OutlinedButton.icon(
-                  icon: const Icon(Icons.schedule),
-                  label: Text(arrival == null ? l10n.parcelExpectedArrivalPick : l10n.parcelExpectedArrival(_when(arrival!))),
-                  onPressed: () async {
-                    final day = await showDatePicker(
-                      context: dialogContext,
-                      initialDate: arrival ?? DateTime.now(),
-                      firstDate: DateTime.now().subtract(const Duration(days: 1)),
-                      lastDate: DateTime.now().add(const Duration(days: 60)),
-                    );
-                    if (day == null || !dialogContext.mounted) return;
-                    final time = await showTimePicker(context: dialogContext, initialTime: TimeOfDay.fromDateTime(arrival ?? DateTime.now()));
-                    if (time == null) return;
-                    setDialogState(() => arrival = DateTime(day.year, day.month, day.day, time.hour, time.minute));
-                  },
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: Text(l10n.commonCancel)),
-            FilledButton(onPressed: () => Navigator.pop(dialogContext, true), child: Text(l10n.commonSave)),
-          ],
-        ),
-      ),
+      builder: (_) => _ParcelPriceDialog(parcel: p),
     );
 
-    final value = double.tryParse(price.text.trim().replaceAll(',', '.'));
-    final seatCount = int.tryParse(seats.text.trim()) ?? 0;
-    price.dispose();
-    seats.dispose();
-
-    if (ok != true || value == null) return;
-    await _run(() => ref.read(schedulesApiProvider).priceParcel(p.id, price: value, seats: seatCount, expectedArrivalAt: arrival));
+    if (result == null) return;
+    await _run(() => ref.read(schedulesApiProvider).priceParcel(p.id, price: result.price, seats: result.seats, expectedArrivalAt: result.arrival));
   }
 
   /// Asks for the code (scan or type) and — when this is the moment the cash changes hands — whether it was collected.
@@ -548,8 +493,8 @@ class _CarrierParcelsScreenState extends ConsumerState<CarrierParcelsScreen> {
                                 FilledButton(onPressed: () => _price(p), child: Text(l10n.parcelSetPrice)),
                               if (p.status == TripParcel.accepted)
                                 OutlinedButton(
-                                  onPressed: p.hasCode ? () => _handover(p, pickup: true) : null,
-                                  child: Text(p.hasCode ? l10n.parcelLoadAction : l10n.parcelWaitingForCode),
+                                  onPressed: () => _handover(p, pickup: true),
+                                  child: Text(l10n.parcelLoadAction),
                                 ),
                               if (p.status == TripParcel.loaded)
                                 FilledButton(onPressed: () => _handover(p, pickup: false), child: Text(l10n.parcelDeliverAction)),
@@ -566,6 +511,88 @@ class _CarrierParcelsScreenState extends ConsumerState<CarrierParcelsScreen> {
                 },
               ),
             ),
+    );
+  }
+}
+
+/// The driver's price (and whether it takes a seat, and roughly when it arrives). Owns its controllers so they outlive
+/// the dialog's exit animation.
+class _ParcelPriceDialog extends StatefulWidget {
+  final TripParcel parcel;
+
+  const _ParcelPriceDialog({required this.parcel});
+
+  @override
+  State<_ParcelPriceDialog> createState() => _ParcelPriceDialogState();
+}
+
+class _ParcelPriceDialogState extends State<_ParcelPriceDialog> {
+  late final TextEditingController _price = TextEditingController(text: widget.parcel.price != null ? _money(widget.parcel.price!) : '');
+  late final TextEditingController _seats = TextEditingController(text: '${widget.parcel.seats}');
+  late DateTime? _arrival = widget.parcel.expectedArrivalAt;
+
+  @override
+  void dispose() {
+    _price.dispose();
+    _seats.dispose();
+    super.dispose();
+  }
+
+  Future<void> _pickArrival() async {
+    final day = await showDatePicker(
+      context: context,
+      initialDate: _arrival ?? DateTime.now(),
+      firstDate: DateTime.now().subtract(const Duration(days: 1)),
+      lastDate: DateTime.now().add(const Duration(days: 60)),
+    );
+    if (day == null || !mounted) return;
+    final time = await showTimePicker(context: context, initialTime: TimeOfDay.fromDateTime(_arrival ?? DateTime.now()));
+    if (time == null || !mounted) return;
+    setState(() => _arrival = DateTime(day.year, day.month, day.day, time.hour, time.minute));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final arrival = _arrival;
+
+    return AlertDialog(
+      title: Text(l10n.parcelPriceTitle),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(widget.parcel.description, maxLines: 3, overflow: TextOverflow.ellipsis),
+            TextField(
+              controller: _price,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(labelText: l10n.parcelPriceLabel),
+            ),
+            TextField(
+              controller: _seats,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: l10n.parcelSeatsLabel, helperText: l10n.parcelSeatsHelp),
+            ),
+            const SizedBox(height: 8),
+            OutlinedButton.icon(
+              icon: const Icon(Icons.schedule),
+              label: Text(arrival == null ? l10n.parcelExpectedArrivalPick : l10n.parcelExpectedArrival(_when(arrival))),
+              onPressed: _pickArrival,
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.commonCancel)),
+        FilledButton(
+          onPressed: () {
+            final value = double.tryParse(_price.text.trim().replaceAll(',', '.'));
+            if (value == null) return;
+            Navigator.pop(context, (price: value, seats: int.tryParse(_seats.text.trim()) ?? 0, arrival: _arrival));
+          },
+          child: Text(l10n.commonSave),
+        ),
+      ],
     );
   }
 }

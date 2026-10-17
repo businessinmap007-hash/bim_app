@@ -9591,9 +9591,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get parcelAcceptPrice => 'Accept the price';
 
   @override
-  String get parcelGenerateCode => 'Generate the delivery code';
-
-  @override
   String get parcelRegenerateCode => 'New code';
 
   @override
@@ -9634,9 +9631,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get parcelLoadAction => 'Load on the car';
-
-  @override
-  String get parcelWaitingForCode => 'Waiting for the sender code';
 
   @override
   String get parcelDeliverAction => 'Hand over';
@@ -9747,4 +9741,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get clinicArriveDone =>
       'Your arrival is recorded. You are in the queue now.';
+
+  @override
+  String get tripFullBadge => 'Full';
+
+  @override
+  String get handoverShowCode => 'Show the code';
+
+  @override
+  String get handoverHideCode => 'Hide the code';
 }

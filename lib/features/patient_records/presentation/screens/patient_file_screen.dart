@@ -85,8 +85,6 @@ class PatientFileScreen extends ConsumerWidget {
 
     final t = title.text.trim();
     final d = detail.text.trim();
-    title.dispose();
-    detail.dispose();
     if (ok != true || t.isEmpty) return;
 
     final entry = RecordEntry(id: newRecordId(), date: DateTime(date.year, date.month, date.day), kind: kind, title: t, detail: d);

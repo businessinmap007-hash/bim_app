@@ -414,6 +414,11 @@ class _TripResultTile extends ConsumerWidget {
               '${_modeLabel(schedule.mode, l10n)}${schedule.vehicleLabel != null ? ' · ${schedule.vehicleLabel}' : ''}'
               '${schedule.isInternational ? ' · ${schedule.routeLabel}' : ''}',
             ),
+            if (result.isFull)
+              Text(
+                l10n.tripFullBadge,
+                style: TextStyle(color: Theme.of(context).colorScheme.error, fontWeight: FontWeight.w700),
+              ),
             if (schedule.departureTime != null)
               Text(
                 schedule.returnTime != null

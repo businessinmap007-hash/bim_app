@@ -17419,12 +17419,6 @@ abstract class AppLocalizations {
   /// **'أقبل السعر'**
   String get parcelAcceptPrice;
 
-  /// No description provided for @parcelGenerateCode.
-  ///
-  /// In ar, this message translates to:
-  /// **'توليد كود التسليم'**
-  String get parcelGenerateCode;
-
   /// No description provided for @parcelRegenerateCode.
   ///
   /// In ar, this message translates to:
@@ -17502,12 +17496,6 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تحميل على السيارة'**
   String get parcelLoadAction;
-
-  /// No description provided for @parcelWaitingForCode.
-  ///
-  /// In ar, this message translates to:
-  /// **'بانتظار كود المرسل'**
-  String get parcelWaitingForCode;
 
   /// No description provided for @parcelDeliverAction.
   ///
@@ -17700,6 +17688,24 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تم تسجيل وصولك. أنت الآن في الطابور.'**
   String get clinicArriveDone;
+
+  /// No description provided for @tripFullBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتملة'**
+  String get tripFullBadge;
+
+  /// No description provided for @handoverShowCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'إظهار الكود'**
+  String get handoverShowCode;
+
+  /// No description provided for @handoverHideCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'إخفاء الكود'**
+  String get handoverHideCode;
 }
 
 class _AppLocalizationsDelegate

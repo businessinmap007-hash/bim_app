@@ -9526,9 +9526,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get parcelAcceptPrice => 'أقبل السعر';
 
   @override
-  String get parcelGenerateCode => 'توليد كود التسليم';
-
-  @override
   String get parcelRegenerateCode => 'كود جديد';
 
   @override
@@ -9569,9 +9566,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get parcelLoadAction => 'تحميل على السيارة';
-
-  @override
-  String get parcelWaitingForCode => 'بانتظار كود المرسل';
 
   @override
   String get parcelDeliverAction => 'تسليم';
@@ -9680,4 +9674,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get clinicArriveDone => 'تم تسجيل وصولك. أنت الآن في الطابور.';
+
+  @override
+  String get tripFullBadge => 'مكتملة';
+
+  @override
+  String get handoverShowCode => 'إظهار الكود';
+
+  @override
+  String get handoverHideCode => 'إخفاء الكود';
 }

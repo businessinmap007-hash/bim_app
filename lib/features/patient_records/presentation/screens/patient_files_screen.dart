@@ -67,8 +67,6 @@ class _PatientFilesScreenState extends ConsumerState<PatientFilesScreen> {
     );
     final n = name.text.trim();
     final p = phone.text.trim();
-    name.dispose();
-    phone.dispose();
     if (ok != true || n.isEmpty || !mounted) return;
 
     final record = PatientRecord(id: newRecordId(), name: n, phone: p, updatedAt: EgyptTime.now());

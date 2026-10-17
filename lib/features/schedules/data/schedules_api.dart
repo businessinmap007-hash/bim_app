@@ -249,7 +249,7 @@ class SchedulesApi {
   }
 
   Future<TripParcel> acceptParcel(int id) => _parcelAction('/schedules/parcels/$id/accept');
-  Future<TripParcel> generateParcelCode(int id) => _parcelAction('/schedules/parcels/$id/code');
+  Future<TripParcel> regenerateParcelCode(int id) => _parcelAction('/schedules/parcels/$id/code');
   Future<TripParcel> cancelParcel(int id) => _parcelAction('/schedules/parcels/$id/cancel');
 
   Future<Paginated<TripParcel>> carrierParcels({String? status, int page = 1}) async {

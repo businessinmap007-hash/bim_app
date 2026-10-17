@@ -50,13 +50,15 @@ void main() {
       'receiver': <String, dynamic>{},
       'payer': 'sender',
       'paid_at': '2026-10-15T10:00:00+03:00',
-      'pickup_code': '1234ab',
+      'handover_code': '1234ab',
+      'handover_kind': 'pickup',
       'expected_arrival_at': '2026-10-15T18:00:00+03:00',
     });
 
     expect(p.payer, 'sender');
     expect(p.isPaid, isTrue);
-    expect(p.pickupCode, '1234ab');
+    expect(p.handoverCode, '1234ab');
+    expect(p.handoverKind, 'pickup');
     expect(p.expectedArrivalAt, isNotNull);
     expect(p.canDispute, isTrue);
     expect(TripParcel.fromJson({'id': 2, 'status': 'requested', 'description': 'x', 'sender': {'id': 1}, 'receiver': <String, dynamic>{}}).canDispute, isFalse);
