@@ -17706,6 +17706,120 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'إخفاء الكود'**
   String get handoverHideCode;
+
+  /// No description provided for @guestBookingTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة ضيف'**
+  String get guestBookingTitle;
+
+  /// No description provided for @guestBookingAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجز للضيف'**
+  String get guestBookingAction;
+
+  /// No description provided for @guestNameLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الضيف'**
+  String get guestNameLabel;
+
+  /// No description provided for @guestPhoneLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'هاتف الضيف'**
+  String get guestPhoneLabel;
+
+  /// No description provided for @guestPhoneHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'لو كان له حساب يُسجَّل الحجز على حسابه'**
+  String get guestPhoneHint;
+
+  /// No description provided for @guestLookupAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'بحث'**
+  String get guestLookupAction;
+
+  /// No description provided for @guestAccountFound.
+  ///
+  /// In ar, this message translates to:
+  /// **'له حساب: {name}'**
+  String guestAccountFound(String name);
+
+  /// No description provided for @guestNoAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا حساب بهذا الرقم — يُسجَّل باسمه فقط ولا يُحتسب في التقييم أو العدّاد.'**
+  String get guestNoAccount;
+
+  /// No description provided for @guestOfferingLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخدمة'**
+  String get guestOfferingLabel;
+
+  /// No description provided for @guestUnitLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوحدة'**
+  String get guestUnitLabel;
+
+  /// No description provided for @guestStartLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'البداية'**
+  String get guestStartLabel;
+
+  /// No description provided for @guestEndLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'النهاية (اختياري)'**
+  String get guestEndLabel;
+
+  /// No description provided for @guestPartySizeLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد الأفراد'**
+  String get guestPartySizeLabel;
+
+  /// No description provided for @guestBookingDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الحجز للضيف'**
+  String get guestBookingDone;
+
+  /// No description provided for @guestChip.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضيف خارج التطبيق'**
+  String get guestChip;
+
+  /// No description provided for @returningCustomerBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'عميل سابق · {count} تعاملات'**
+  String returningCustomerBadge(int count);
+
+  /// No description provided for @bookingAttendanceCustomerDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'العميل أكّد حضوره'**
+  String get bookingAttendanceCustomerDone;
+
+  /// No description provided for @bookingAttendanceCustomerWaiting.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار تأكيد العميل لحضوره'**
+  String get bookingAttendanceCustomerWaiting;
+
+  /// No description provided for @bookingAttendanceBusinessDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكّدتَ الحضور'**
+  String get bookingAttendanceBusinessDone;
 }
 
 class _AppLocalizationsDelegate

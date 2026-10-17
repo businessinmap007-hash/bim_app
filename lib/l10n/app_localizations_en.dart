@@ -9750,4 +9750,68 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get handoverHideCode => 'Hide the code';
+
+  @override
+  String get guestBookingTitle => 'Add a guest';
+
+  @override
+  String get guestBookingAction => 'Book for the guest';
+
+  @override
+  String get guestNameLabel => 'Guest name';
+
+  @override
+  String get guestPhoneLabel => 'Guest\'s phone';
+
+  @override
+  String get guestPhoneHint => 'If he has an account the booking goes on it';
+
+  @override
+  String get guestLookupAction => 'Look up';
+
+  @override
+  String guestAccountFound(String name) {
+    return 'Has an account: $name';
+  }
+
+  @override
+  String get guestNoAccount =>
+      'No account for this phone — recorded by name only, never counted or rated.';
+
+  @override
+  String get guestOfferingLabel => 'Service';
+
+  @override
+  String get guestUnitLabel => 'Unit';
+
+  @override
+  String get guestStartLabel => 'Start';
+
+  @override
+  String get guestEndLabel => 'End (optional)';
+
+  @override
+  String get guestPartySizeLabel => 'People';
+
+  @override
+  String get guestBookingDone => 'Booked for the guest';
+
+  @override
+  String get guestChip => 'Off-app guest';
+
+  @override
+  String returningCustomerBadge(int count) {
+    return 'Returning customer · $count previous dealings';
+  }
+
+  @override
+  String get bookingAttendanceCustomerDone =>
+      'The customer confirmed attendance';
+
+  @override
+  String get bookingAttendanceCustomerWaiting =>
+      'Waiting for the customer to confirm attendance';
+
+  @override
+  String get bookingAttendanceBusinessDone => 'You confirmed attendance';
 }

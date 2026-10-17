@@ -281,6 +281,57 @@ class BookingApi {
     return _booking(data);
   }
 
+  /// «جاء عميل بدون حجز»: the business books a customer who is standing there. A phone that belongs to an account puts
+  /// the booking on that account; with none it is a NAMED guest ([guestName] required), never counted or rated.
+  Future<Booking> createForGuest({
+    required int serviceId,
+    int? bookableId,
+    int? offeringId,
+    DateTime? startsAt,
+    DateTime? endsAt,
+    int? partySize,
+    int? quantity,
+    String? notes,
+    String? guestName,
+    String? guestPhone,
+    int? clientId,
+  }) async {
+    final data =
+        await _client.post(
+              '/bookings/by-business',
+              data: {
+                'service_id': serviceId,
+                'bookable_id': ?bookableId,
+                'offering_id': ?offeringId,
+                if (offeringId != null) 'offering_type': 'service_price',
+                if (startsAt != null) 'starts_at': startsAt.toIso8601String(),
+                if (endsAt != null) 'ends_at': endsAt.toIso8601String(),
+                'all_day': false,
+                'party_size': ?partySize,
+                'quantity': ?quantity,
+                if (notes != null && notes.isNotEmpty) 'notes': notes,
+                if (guestName != null && guestName.isNotEmpty) 'guest_name': guestName,
+                if (guestPhone != null && guestPhone.isNotEmpty) 'guest_phone': guestPhone,
+                'client_id': ?clientId,
+              },
+            )
+            as Map<String, dynamic>;
+    return _booking(data);
+  }
+
+  /// Does this phone belong to an account — and how many dealings has he already completed with this business.
+  Future<CustomerLookup> customerLookup(String phone) async {
+    final data = await _client.get('/bookings/customer-lookup', query: {'phone': phone}) as Map<String, dynamic>;
+    final customer = data['customer'] as Map<String, dynamic>?;
+
+    return CustomerLookup(
+      found: data['found'] == true,
+      customerId: (customer?['id'] as num?)?.toInt(),
+      name: customer?['name'] as String?,
+      previousDealings: (data['previous_dealings'] as num?)?.toInt() ?? 0,
+    );
+  }
+
   /// Same price math as [create] — line + selected modifiers per period,
   /// summed then multiplied by quantity — with no booking row created. See
   /// Api\V2\BookingController::preview. Null fields mean "not chosen yet"
@@ -435,4 +486,14 @@ class BookingApi {
         .map((e) => UnitKindGroup.fromJson(e as Map<String, dynamic>))
         .toList();
   }
+}
+
+/// The answer to «does this phone belong to an account»: his name and his earlier dealings with the asking business.
+class CustomerLookup {
+  final bool found;
+  final int? customerId;
+  final String? name;
+  final int previousDealings;
+
+  const CustomerLookup({required this.found, this.customerId, this.name, this.previousDealings = 0});
 }

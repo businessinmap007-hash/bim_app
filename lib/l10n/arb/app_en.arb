@@ -3355,5 +3355,34 @@
   "clinicArriveDone": "Your arrival is recorded. You are in the queue now.",
   "tripFullBadge": "Full",
   "handoverShowCode": "Show the code",
-  "handoverHideCode": "Hide the code"
+  "handoverHideCode": "Hide the code",
+  "guestBookingTitle": "Add a guest",
+  "guestBookingAction": "Book for the guest",
+  "guestNameLabel": "Guest name",
+  "guestPhoneLabel": "Guest's phone",
+  "guestPhoneHint": "If he has an account the booking goes on it",
+  "guestLookupAction": "Look up",
+  "guestAccountFound": "Has an account: {name}",
+  "@guestAccountFound": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "guestNoAccount": "No account for this phone — recorded by name only, never counted or rated.",
+  "guestOfferingLabel": "Service",
+  "guestUnitLabel": "Unit",
+  "guestStartLabel": "Start",
+  "guestEndLabel": "End (optional)",
+  "guestPartySizeLabel": "People",
+  "guestBookingDone": "Booked for the guest",
+  "guestChip": "Off-app guest",
+  "returningCustomerBadge": "Returning customer · {count} previous dealings",
+  "@returningCustomerBadge": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "bookingAttendanceCustomerDone": "The customer confirmed attendance",
+  "bookingAttendanceCustomerWaiting": "Waiting for the customer to confirm attendance",
+  "bookingAttendanceBusinessDone": "You confirmed attendance"
 }

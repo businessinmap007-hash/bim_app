@@ -10,6 +10,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../application/booking_providers.dart' show bookingApiProvider;
 import '../../application/business_bookings_providers.dart';
 import '../widgets/booking_money_card.dart';
+import 'guest_booking_screen.dart';
 import '../widgets/day_use_tag.dart';
 import '../../data/models/booking.dart';
 
@@ -76,7 +77,22 @@ class _BusinessBookingsScreenState extends ConsumerState<BusinessBookingsScreen>
     final state = ref.watch(businessBookingsControllerProvider(widget.businessId));
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.businessBookingsTitle)),
+      appBar: AppBar(
+        title: Text(l10n.businessBookingsTitle),
+        actions: [
+          // «جاء عميل بدون حجز»: book a customer who is standing there (an account, or a named guest)
+          IconButton(
+            icon: const Icon(Icons.person_add_alt_1_outlined),
+            tooltip: l10n.guestBookingTitle,
+            onPressed: () async {
+              final booked = await Navigator.of(context).push<bool>(MaterialPageRoute(builder: (_) => const GuestBookingScreen()));
+              if (booked == true && context.mounted) {
+                ref.read(businessBookingsControllerProvider(widget.businessId).notifier).load(status: _status);
+              }
+            },
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Padding(
@@ -196,7 +212,27 @@ class _BookingTile extends StatelessWidget {
       child: ListTile(
         onTap: onTap,
         title: Text('#${booking.id} · ${booking.serviceName(locale)}'),
-        subtitle: Text(subtitleParts.join(' · ')),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(subtitleParts.join(' · ')),
+            if (booking.isGuest || (booking.previousDealings ?? 0) > 0)
+              Wrap(
+                spacing: 6,
+                children: [
+                  if (booking.isGuest)
+                    Chip(label: Text(l10n.guestChip, style: const TextStyle(fontSize: 11)), visualDensity: VisualDensity.compact, side: BorderSide.none),
+                  if ((booking.previousDealings ?? 0) > 0)
+                    Chip(
+                      avatar: const Icon(Icons.verified_outlined, size: 14),
+                      label: Text(l10n.returningCustomerBadge(booking.previousDealings!), style: const TextStyle(fontSize: 11)),
+                      visualDensity: VisualDensity.compact,
+                      side: BorderSide.none,
+                    ),
+                ],
+              ),
+          ],
+        ),
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -287,6 +323,23 @@ class BusinessBookingDetailScreen extends ConsumerWidget {
                   _DetailRow(label: l10n.businessBookingsCustomer, value: booking.customerName!, badgeUserId: booking.customerId),
                 if (booking.customerPhone != null)
                   _DetailRow(label: l10n.businessBookingsCustomer, value: booking.customerPhone!),
+                // a guest with no account is never counted; a returning customer wears his history
+                if (booking.isGuest || (booking.previousDealings ?? 0) > 0)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Wrap(
+                      spacing: 8,
+                      children: [
+                        if (booking.isGuest) Chip(label: Text(l10n.guestChip), visualDensity: VisualDensity.compact),
+                        if ((booking.previousDealings ?? 0) > 0)
+                          Chip(
+                            avatar: const Icon(Icons.verified_outlined, size: 16),
+                            label: Text(l10n.returningCustomerBadge(booking.previousDealings!)),
+                            visualDensity: VisualDensity.compact,
+                          ),
+                      ],
+                    ),
+                  ),
                 if (booking.bookableLabel != null)
                   _DetailRow(label: l10n.businessBookingsUnit, value: booking.bookableLabel!),
                 // the hotel's own room number — given when the stay starts, changeable by the hotel before and after
@@ -367,7 +420,7 @@ class BusinessBookingDetailScreen extends ConsumerWidget {
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
-                if (booking.status == 'pending' || booking.status == 'accepted')
+                if ((booking.status == 'pending' || booking.status == 'accepted') && !booking.isGuest)
                   BookingMoneyCard(bookingId: bookingId),
                 const SizedBox(height: 24),
                 if (state.isBusy)
@@ -395,21 +448,34 @@ class BusinessBookingDetailScreen extends ConsumerWidget {
                     ],
                   ),
                 ] else if (booking.status == 'accepted') ...[
-                  OutlinedButton(
-                    onPressed: () => _run(
-                      context,
-                      ref,
-                      () => ref.read(businessBookingDetailControllerProvider(bookingId).notifier).businessConfirm(),
-                    ),
-                    child: Text(l10n.businessBookingsConfirm),
+                  // attendance is by BOTH, the customer first — it is what gives a booking its seriousness
+                  Text(
+                    booking.clientAttended ? l10n.bookingAttendanceCustomerDone : l10n.bookingAttendanceCustomerWaiting,
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                   const SizedBox(height: 8),
-                  FilledButton(
-                    onPressed: () => _run(
-                      context,
-                      ref,
-                      () => ref.read(businessBookingDetailControllerProvider(bookingId).notifier).start(),
+                  if (booking.businessAttended)
+                    Text(l10n.bookingAttendanceBusinessDone, style: Theme.of(context).textTheme.bodySmall)
+                  else
+                    OutlinedButton(
+                      onPressed: booking.clientAttended
+                          ? () => _run(
+                              context,
+                              ref,
+                              () => ref.read(businessBookingDetailControllerProvider(bookingId).notifier).businessConfirm(),
+                            )
+                          : null,
+                      child: Text(l10n.businessBookingsConfirm),
                     ),
+                  const SizedBox(height: 8),
+                  FilledButton(
+                    onPressed: booking.clientAttended && booking.businessAttended
+                        ? () => _run(
+                            context,
+                            ref,
+                            () => ref.read(businessBookingDetailControllerProvider(bookingId).notifier).start(),
+                          )
+                        : null,
                     child: Text(l10n.businessBookingsStart),
                   ),
                 ] else if (booking.status == 'in_progress')

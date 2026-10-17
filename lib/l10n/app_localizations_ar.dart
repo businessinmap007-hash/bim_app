@@ -9683,4 +9683,66 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get handoverHideCode => 'إخفاء الكود';
+
+  @override
+  String get guestBookingTitle => 'إضافة ضيف';
+
+  @override
+  String get guestBookingAction => 'حجز للضيف';
+
+  @override
+  String get guestNameLabel => 'اسم الضيف';
+
+  @override
+  String get guestPhoneLabel => 'هاتف الضيف';
+
+  @override
+  String get guestPhoneHint => 'لو كان له حساب يُسجَّل الحجز على حسابه';
+
+  @override
+  String get guestLookupAction => 'بحث';
+
+  @override
+  String guestAccountFound(String name) {
+    return 'له حساب: $name';
+  }
+
+  @override
+  String get guestNoAccount =>
+      'لا حساب بهذا الرقم — يُسجَّل باسمه فقط ولا يُحتسب في التقييم أو العدّاد.';
+
+  @override
+  String get guestOfferingLabel => 'الخدمة';
+
+  @override
+  String get guestUnitLabel => 'الوحدة';
+
+  @override
+  String get guestStartLabel => 'البداية';
+
+  @override
+  String get guestEndLabel => 'النهاية (اختياري)';
+
+  @override
+  String get guestPartySizeLabel => 'عدد الأفراد';
+
+  @override
+  String get guestBookingDone => 'تم الحجز للضيف';
+
+  @override
+  String get guestChip => 'ضيف خارج التطبيق';
+
+  @override
+  String returningCustomerBadge(int count) {
+    return 'عميل سابق · $count تعاملات';
+  }
+
+  @override
+  String get bookingAttendanceCustomerDone => 'العميل أكّد حضوره';
+
+  @override
+  String get bookingAttendanceCustomerWaiting => 'بانتظار تأكيد العميل لحضوره';
+
+  @override
+  String get bookingAttendanceBusinessDone => 'أكّدتَ الحضور';
 }

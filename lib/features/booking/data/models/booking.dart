@@ -172,6 +172,18 @@ class Booking {
   /// The business linked a build/manufacturing timeline to this booking — only then is «متابعة التنفيذ» offered.
   final bool hasProject;
 
+  /// «جاء عميل بدون حجز»: a guest the business booked who has no account — the name (and phone) it wrote. The booking's
+  /// `user` is then the business's own account standing in, so [customerName] is the guest's name instead.
+  final bool isGuest;
+
+  /// Who has confirmed attendance — by BOTH, the customer first.
+  final bool clientAttended;
+  final bool businessAttended;
+
+  /// The business's own view only: how many dealings this customer has already COMPLETED with it («عميل سابق»); null when
+  /// not told (the customer's own view, a guest with no account).
+  final int? previousDealings;
+
   const Booking({
     required this.id,
     required this.status,
@@ -209,6 +221,10 @@ class Booking {
     this.room,
     this.isDayUse = false,
     this.hasProject = false,
+    this.isGuest = false,
+    this.clientAttended = false,
+    this.businessAttended = false,
+    this.previousDealings,
   });
 
   bool get isCancellable => status == 'pending' || status == 'accepted';
@@ -245,9 +261,11 @@ class Booking {
       title: json['title'] as String?,
       serviceNameEn: service?['name_en'] as String?,
       createdAt: json['created_at'] != null ? EgyptTime.tryParse(json['created_at'] as String) : null,
-      customerName: customer?['name'] as String?,
-      customerPhone: customer?['phone'] as String?,
-      customerId: (customer?['id'] as num?)?.toInt(),
+      customerName: ((json['guest'] as Map<String, dynamic>?)?['name'] as String?) ?? customer?['name'] as String?,
+      customerPhone: json['guest'] is Map<String, dynamic>
+          ? (json['guest'] as Map<String, dynamic>)['phone'] as String?
+          : customer?['phone'] as String?,
+      customerId: json['guest'] is Map<String, dynamic> ? null : (customer?['id'] as num?)?.toInt(),
       bookableLabel: bookable == null
           ? null
           : ((bookable['title'] as String?)?.trim().isNotEmpty == true
@@ -259,6 +277,10 @@ class Booking {
       bookableItemType: bookable?['item_type'] as String?,
       isDayUse: json['meta'] is Map<String, dynamic> && (json['meta'] as Map<String, dynamic>)['day_use'] == true,
       hasProject: json['has_project'] as bool? ?? false,
+      isGuest: json['guest'] is Map<String, dynamic>,
+      clientAttended: (json['attendance'] as Map<String, dynamic>?)?['client'] == true,
+      businessAttended: (json['attendance'] as Map<String, dynamic>?)?['business'] == true,
+      previousDealings: ((json['client_history'] as Map<String, dynamic>?)?['previous_dealings'] as num?)?.toInt(),
       room: json['room'] is Map<String, dynamic> ? BookingRoom(id: (json['room'] as Map<String, dynamic>)['id'] as int, number: '${(json['room'] as Map<String, dynamic>)['number']}') : null,
       queueTurn: (json['queue_turn'] as num?)?.toInt(),
       chair: json['chair'] is Map<String, dynamic> ? ServiceChair.fromJson(json['chair'] as Map<String, dynamic>) : null,

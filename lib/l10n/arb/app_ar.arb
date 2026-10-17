@@ -3381,5 +3381,34 @@
   "clinicArriveDone": "تم تسجيل وصولك. أنت الآن في الطابور.",
   "tripFullBadge": "مكتملة",
   "handoverShowCode": "إظهار الكود",
-  "handoverHideCode": "إخفاء الكود"
+  "handoverHideCode": "إخفاء الكود",
+  "guestBookingTitle": "إضافة ضيف",
+  "guestBookingAction": "حجز للضيف",
+  "guestNameLabel": "اسم الضيف",
+  "guestPhoneLabel": "هاتف الضيف",
+  "guestPhoneHint": "لو كان له حساب يُسجَّل الحجز على حسابه",
+  "guestLookupAction": "بحث",
+  "guestAccountFound": "له حساب: {name}",
+  "@guestAccountFound": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "guestNoAccount": "لا حساب بهذا الرقم — يُسجَّل باسمه فقط ولا يُحتسب في التقييم أو العدّاد.",
+  "guestOfferingLabel": "الخدمة",
+  "guestUnitLabel": "الوحدة",
+  "guestStartLabel": "البداية",
+  "guestEndLabel": "النهاية (اختياري)",
+  "guestPartySizeLabel": "عدد الأفراد",
+  "guestBookingDone": "تم الحجز للضيف",
+  "guestChip": "ضيف خارج التطبيق",
+  "returningCustomerBadge": "عميل سابق · {count} تعاملات",
+  "@returningCustomerBadge": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "bookingAttendanceCustomerDone": "العميل أكّد حضوره",
+  "bookingAttendanceCustomerWaiting": "بانتظار تأكيد العميل لحضوره",
+  "bookingAttendanceBusinessDone": "أكّدتَ الحضور"
 }
