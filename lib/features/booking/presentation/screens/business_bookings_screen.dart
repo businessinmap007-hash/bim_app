@@ -489,7 +489,8 @@ class BusinessBookingDetailScreen extends ConsumerWidget {
                     ),
                     child: Text(l10n.businessBookingsComplete),
                   ),
-                if (!state.isBusy && (booking.status == 'in_progress' || booking.status == 'completed')) ...[
+                // a guest with no account has nobody to confirm the cash with: the section is for account customers
+                if (!state.isBusy && !booking.isGuest && (booking.status == 'in_progress' || booking.status == 'completed')) ...[
                   const Divider(height: 32),
                   Text(l10n.paymentConfirmSectionTitle, style: Theme.of(context).textTheme.titleSmall),
                   const SizedBox(height: 8),
