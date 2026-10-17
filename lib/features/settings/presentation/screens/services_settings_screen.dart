@@ -27,6 +27,7 @@ import '../../../prescriptions/presentation/screens/pharmacy_queue_screen.dart';
 import '../../../projects/presentation/screens/projects_screen.dart';
 import '../../../retail_listings/presentation/screens/retail_listings_screen.dart';
 import '../../../schedules/presentation/screens/my_trip_schedules_screen.dart';
+import '../../../service_requests/presentation/screens/incoming_requests_screen.dart';
 import '../../../staff/application/staff_providers.dart';
 import '../../../stay_requests/application/stay_requests_providers.dart';
 import '../../../stay_requests/presentation/screens/stay_requests_screen.dart';
@@ -435,6 +436,12 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.local_shipping_outlined,
         title: l10n.myTripSchedulesTitle,
         builder: (_) => const MyTripSchedulesScreen(),
+      ),
+      _Tile(
+        show: _has('schedules'),
+        leading: Icons.local_taxi_outlined,
+        title: l10n.rideIncomingTitle,
+        builder: (_) => const IncomingRequestsScreen(),
       ),
       _Tile(
         show: true, // account management — no capability of its own.

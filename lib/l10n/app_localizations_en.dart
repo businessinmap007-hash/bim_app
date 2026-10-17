@@ -9833,4 +9833,186 @@ class AppLocalizationsEn extends AppLocalizations {
   String relationshipDisputes(int count, int open) {
     return 'Disputes: $count ($open open)';
   }
+
+  @override
+  String get rideRequestTitle => 'Request a ride';
+
+  @override
+  String get rideRequestIntro =>
+      'Say from where to where and for how much; drivers answer with their prices and you pick the best.';
+
+  @override
+  String get rideFromLabel => 'From';
+
+  @override
+  String get rideToLabel => 'To';
+
+  @override
+  String get ridePassengersLabel => 'Passengers';
+
+  @override
+  String get rideWhenLabel => 'When';
+
+  @override
+  String get rideWhenNow => 'Now';
+
+  @override
+  String get rideWhenPick => 'Pick a time';
+
+  @override
+  String get rideDistanceLabel => 'Approximate distance (km)';
+
+  @override
+  String get rideDistanceNeeded =>
+      'The ride stays in one city: write the approximate distance.';
+
+  @override
+  String rideDistanceKm(String km) {
+    return 'About $km km';
+  }
+
+  @override
+  String rideSuggestedPrice(String price) {
+    return 'Suggested price $price EGP';
+  }
+
+  @override
+  String get ridePriceLabel => 'The price you offer (EGP)';
+
+  @override
+  String get rideDetailsLabel => 'Notes for the driver (optional)';
+
+  @override
+  String get rideSubmit => 'Post the request';
+
+  @override
+  String get rideFieldsRequired => 'Choose where from and where to.';
+
+  @override
+  String get rideAllRequestsTitle => 'My requests';
+
+  @override
+  String get rideIncomingTitle => 'Ride requests';
+
+  @override
+  String get requestStatusOpen => 'Open';
+
+  @override
+  String get requestStatusAccepted => 'Chosen';
+
+  @override
+  String get requestStatusCancelled => 'Cancelled';
+
+  @override
+  String get requestStatusExpired => 'Expired';
+
+  @override
+  String requestOffersCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count offers',
+      one: '1 offer',
+      zero: 'No offers',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get requestsEmpty => 'No requests yet.';
+
+  @override
+  String get requestNoOffers => 'No offers yet. You are told at the first one.';
+
+  @override
+  String requestYourPrice(String price) {
+    return 'Your price $price EGP';
+  }
+
+  @override
+  String requestPassengersCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count passengers',
+      one: '1 passenger',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get requestOfferAccept => 'Accept this offer';
+
+  @override
+  String get requestOfferAcceptsYourPrice => 'Takes your price';
+
+  @override
+  String requestOfferEta(int minutes) {
+    return 'Reaches you in $minutes min';
+  }
+
+  @override
+  String get requestChangePrice => 'Change the price';
+
+  @override
+  String get requestCancel => 'Cancel the request';
+
+  @override
+  String get requestCancelConfirm =>
+      'The offers are turned down and the drivers told. Cancel the request?';
+
+  @override
+  String get requestCancelled => 'The request is cancelled.';
+
+  @override
+  String get requestBookingMade =>
+      'The offer is chosen and your booking is made.';
+
+  @override
+  String get requestOpenBooking => 'Open the booking';
+
+  @override
+  String get requestOfferPriceLabel => 'Your price (EGP)';
+
+  @override
+  String requestOfferAcceptBudget(String price) {
+    return 'Take the customer\'s price ($price EGP)';
+  }
+
+  @override
+  String get requestOfferMessageLabel =>
+      'A message for the customer (optional)';
+
+  @override
+  String get requestOfferEtaLabel => 'I reach him in (minutes)';
+
+  @override
+  String get requestOfferSend => 'Send my offer';
+
+  @override
+  String get requestOfferWithdraw => 'Withdraw my offer';
+
+  @override
+  String get requestOfferSent => 'Your offer was sent.';
+
+  @override
+  String get requestOfferWithdrawn => 'Your offer was withdrawn.';
+
+  @override
+  String requestMyOffer(String price) {
+    return 'Your offer: $price EGP';
+  }
+
+  @override
+  String requestCustomerPrice(String price) {
+    return 'Customer\'s price: $price EGP';
+  }
+
+  @override
+  String get requestsIncomingEmpty => 'No open requests in your area now.';
+
+  @override
+  String requestFrom(String name) {
+    return 'From $name';
+  }
 }

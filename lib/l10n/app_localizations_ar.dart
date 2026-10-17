@@ -9764,4 +9764,184 @@ class AppLocalizationsAr extends AppLocalizations {
   String relationshipDisputes(int count, int open) {
     return 'نزاعات: $count ($open مفتوح)';
   }
+
+  @override
+  String get rideRequestTitle => 'اطلب ليموزين';
+
+  @override
+  String get rideRequestIntro =>
+      'اكتب من أين إلى أين وبكم، والسائقون يردّون بأسعارهم وتختار أنسبها.';
+
+  @override
+  String get rideFromLabel => 'من';
+
+  @override
+  String get rideToLabel => 'إلى';
+
+  @override
+  String get ridePassengersLabel => 'عدد الركاب';
+
+  @override
+  String get rideWhenLabel => 'الموعد';
+
+  @override
+  String get rideWhenNow => 'الآن';
+
+  @override
+  String get rideWhenPick => 'اختر موعدًا';
+
+  @override
+  String get rideDistanceLabel => 'المسافة التقريبية (كم)';
+
+  @override
+  String get rideDistanceNeeded =>
+      'المشوار داخل مدينة واحدة، اكتب المسافة التقريبية.';
+
+  @override
+  String rideDistanceKm(String km) {
+    return 'المسافة نحو $km كم';
+  }
+
+  @override
+  String rideSuggestedPrice(String price) {
+    return 'السعر المقترح $price جنيه';
+  }
+
+  @override
+  String get ridePriceLabel => 'السعر الذي تعرضه (جنيه)';
+
+  @override
+  String get rideDetailsLabel => 'ملاحظات للسائق (اختياري)';
+
+  @override
+  String get rideSubmit => 'انشر الطلب';
+
+  @override
+  String get rideFieldsRequired => 'اختر نقطة الانطلاق والوصول.';
+
+  @override
+  String get rideAllRequestsTitle => 'طلباتي';
+
+  @override
+  String get rideIncomingTitle => 'طلبات المشاوير';
+
+  @override
+  String get requestStatusOpen => 'مفتوح';
+
+  @override
+  String get requestStatusAccepted => 'تم الاختيار';
+
+  @override
+  String get requestStatusCancelled => 'ملغى';
+
+  @override
+  String get requestStatusExpired => 'انتهى';
+
+  @override
+  String requestOffersCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count عروض',
+      one: 'عرض واحد',
+      zero: 'لا عروض',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get requestsEmpty => 'لا طلبات بعد.';
+
+  @override
+  String get requestNoOffers => 'لا عروض بعد. سيصلك إشعار عند أول عرض.';
+
+  @override
+  String requestYourPrice(String price) {
+    return 'سعرك $price جنيه';
+  }
+
+  @override
+  String requestPassengersCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ركاب',
+      one: 'راكب واحد',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get requestOfferAccept => 'اقبل هذا العرض';
+
+  @override
+  String get requestOfferAcceptsYourPrice => 'يقبل سعرك';
+
+  @override
+  String requestOfferEta(int minutes) {
+    return 'يصلك خلال $minutes دقيقة';
+  }
+
+  @override
+  String get requestChangePrice => 'غيّر السعر';
+
+  @override
+  String get requestCancel => 'ألغِ الطلب';
+
+  @override
+  String get requestCancelConfirm =>
+      'تُرفض العروض وتُخطر السائقين. ألغِ الطلب؟';
+
+  @override
+  String get requestCancelled => 'أُلغي الطلب.';
+
+  @override
+  String get requestBookingMade => 'تم اختيار العرض وأُنشئ حجزك.';
+
+  @override
+  String get requestOpenBooking => 'افتح الحجز';
+
+  @override
+  String get requestOfferPriceLabel => 'سعرك (جنيه)';
+
+  @override
+  String requestOfferAcceptBudget(String price) {
+    return 'اقبل سعر العميل ($price جنيه)';
+  }
+
+  @override
+  String get requestOfferMessageLabel => 'رسالة للعميل (اختياري)';
+
+  @override
+  String get requestOfferEtaLabel => 'أصل خلال (دقيقة)';
+
+  @override
+  String get requestOfferSend => 'أرسل عرضي';
+
+  @override
+  String get requestOfferWithdraw => 'اسحب عرضي';
+
+  @override
+  String get requestOfferSent => 'أُرسل عرضك.';
+
+  @override
+  String get requestOfferWithdrawn => 'سُحب عرضك.';
+
+  @override
+  String requestMyOffer(String price) {
+    return 'عرضك: $price جنيه';
+  }
+
+  @override
+  String requestCustomerPrice(String price) {
+    return 'سعر العميل: $price جنيه';
+  }
+
+  @override
+  String get requestsIncomingEmpty => 'لا طلبات مفتوحة في منطقتك الآن.';
+
+  @override
+  String requestFrom(String name) {
+    return 'من $name';
+  }
 }

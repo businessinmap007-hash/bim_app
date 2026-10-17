@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/deposit/screens/guarantor_request_screen.dart';
 import '../../schedules/presentation/screens/incoming_reservations_screen.dart';
+import '../../service_requests/presentation/screens/incoming_requests_screen.dart';
+import '../../service_requests/presentation/screens/service_request_detail_screen.dart';
 import '../../schedules/presentation/screens/my_reservations_screen.dart';
 import '../../schedules/presentation/screens/parcels_screens.dart';
 import '../../auth/application/auth_controller.dart';
@@ -56,6 +58,19 @@ Future<void> openNotificationTarget(BuildContext context, WidgetRef ref, AppNoti
       Navigator.of(context).push(MaterialPageRoute(builder: (_) => const MyReservationsScreen()));
     case 'open_carrier_reservation':
       Navigator.of(context).push(MaterialPageRoute(builder: (_) => const IncomingReservationsScreen()));
+    // Requests and offers: the customer's request (offers arrive on it), the driver's list of open requests, and the
+    // booking a chosen offer became (the driver's side of it).
+    case 'open_service_request':
+      if (id != null) {
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => ServiceRequestDetailScreen(requestId: id)));
+      }
+    case 'open_incoming_requests':
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const IncomingRequestsScreen()));
+    case 'open_ride_booking':
+      final bookingId = (notification.meta['booking_id'] as num?)?.toInt();
+      if (bookingId != null) {
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => BusinessBookingDetailScreen(bookingId: bookingId)));
+      }
     case 'open_business_order':
       if (id != null) {
         Navigator.of(context).push(

@@ -17850,6 +17850,294 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'نزاعات: {count} ({open} مفتوح)'**
   String relationshipDisputes(int count, int open);
+
+  /// No description provided for @rideRequestTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلب ليموزين'**
+  String get rideRequestTitle;
+
+  /// No description provided for @rideRequestIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب من أين إلى أين وبكم، والسائقون يردّون بأسعارهم وتختار أنسبها.'**
+  String get rideRequestIntro;
+
+  /// No description provided for @rideFromLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'من'**
+  String get rideFromLabel;
+
+  /// No description provided for @rideToLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلى'**
+  String get rideToLabel;
+
+  /// No description provided for @ridePassengersLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد الركاب'**
+  String get ridePassengersLabel;
+
+  /// No description provided for @rideWhenLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموعد'**
+  String get rideWhenLabel;
+
+  /// No description provided for @rideWhenNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'الآن'**
+  String get rideWhenNow;
+
+  /// No description provided for @rideWhenPick.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر موعدًا'**
+  String get rideWhenPick;
+
+  /// No description provided for @rideDistanceLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المسافة التقريبية (كم)'**
+  String get rideDistanceLabel;
+
+  /// No description provided for @rideDistanceNeeded.
+  ///
+  /// In ar, this message translates to:
+  /// **'المشوار داخل مدينة واحدة، اكتب المسافة التقريبية.'**
+  String get rideDistanceNeeded;
+
+  /// No description provided for @rideDistanceKm.
+  ///
+  /// In ar, this message translates to:
+  /// **'المسافة نحو {km} كم'**
+  String rideDistanceKm(String km);
+
+  /// No description provided for @rideSuggestedPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر المقترح {price} جنيه'**
+  String rideSuggestedPrice(String price);
+
+  /// No description provided for @ridePriceLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر الذي تعرضه (جنيه)'**
+  String get ridePriceLabel;
+
+  /// No description provided for @rideDetailsLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات للسائق (اختياري)'**
+  String get rideDetailsLabel;
+
+  /// No description provided for @rideSubmit.
+  ///
+  /// In ar, this message translates to:
+  /// **'انشر الطلب'**
+  String get rideSubmit;
+
+  /// No description provided for @rideFieldsRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر نقطة الانطلاق والوصول.'**
+  String get rideFieldsRequired;
+
+  /// No description provided for @rideAllRequestsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلباتي'**
+  String get rideAllRequestsTitle;
+
+  /// No description provided for @rideIncomingTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلبات المشاوير'**
+  String get rideIncomingTitle;
+
+  /// No description provided for @requestStatusOpen.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفتوح'**
+  String get requestStatusOpen;
+
+  /// No description provided for @requestStatusAccepted.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الاختيار'**
+  String get requestStatusAccepted;
+
+  /// No description provided for @requestStatusCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغى'**
+  String get requestStatusCancelled;
+
+  /// No description provided for @requestStatusExpired.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتهى'**
+  String get requestStatusExpired;
+
+  /// No description provided for @requestOffersCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{لا عروض} =1{عرض واحد} other{{count} عروض}}'**
+  String requestOffersCount(int count);
+
+  /// No description provided for @requestsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا طلبات بعد.'**
+  String get requestsEmpty;
+
+  /// No description provided for @requestNoOffers.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا عروض بعد. سيصلك إشعار عند أول عرض.'**
+  String get requestNoOffers;
+
+  /// No description provided for @requestYourPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعرك {price} جنيه'**
+  String requestYourPrice(String price);
+
+  /// No description provided for @requestPassengersCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{راكب واحد} other{{count} ركاب}}'**
+  String requestPassengersCount(int count);
+
+  /// No description provided for @requestOfferAccept.
+  ///
+  /// In ar, this message translates to:
+  /// **'اقبل هذا العرض'**
+  String get requestOfferAccept;
+
+  /// No description provided for @requestOfferAcceptsYourPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'يقبل سعرك'**
+  String get requestOfferAcceptsYourPrice;
+
+  /// No description provided for @requestOfferEta.
+  ///
+  /// In ar, this message translates to:
+  /// **'يصلك خلال {minutes} دقيقة'**
+  String requestOfferEta(int minutes);
+
+  /// No description provided for @requestChangePrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'غيّر السعر'**
+  String get requestChangePrice;
+
+  /// No description provided for @requestCancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'ألغِ الطلب'**
+  String get requestCancel;
+
+  /// No description provided for @requestCancelConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'تُرفض العروض وتُخطر السائقين. ألغِ الطلب؟'**
+  String get requestCancelConfirm;
+
+  /// No description provided for @requestCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُلغي الطلب.'**
+  String get requestCancelled;
+
+  /// No description provided for @requestBookingMade.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم اختيار العرض وأُنشئ حجزك.'**
+  String get requestBookingMade;
+
+  /// No description provided for @requestOpenBooking.
+  ///
+  /// In ar, this message translates to:
+  /// **'افتح الحجز'**
+  String get requestOpenBooking;
+
+  /// No description provided for @requestOfferPriceLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعرك (جنيه)'**
+  String get requestOfferPriceLabel;
+
+  /// No description provided for @requestOfferAcceptBudget.
+  ///
+  /// In ar, this message translates to:
+  /// **'اقبل سعر العميل ({price} جنيه)'**
+  String requestOfferAcceptBudget(String price);
+
+  /// No description provided for @requestOfferMessageLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسالة للعميل (اختياري)'**
+  String get requestOfferMessageLabel;
+
+  /// No description provided for @requestOfferEtaLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'أصل خلال (دقيقة)'**
+  String get requestOfferEtaLabel;
+
+  /// No description provided for @requestOfferSend.
+  ///
+  /// In ar, this message translates to:
+  /// **'أرسل عرضي'**
+  String get requestOfferSend;
+
+  /// No description provided for @requestOfferWithdraw.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسحب عرضي'**
+  String get requestOfferWithdraw;
+
+  /// No description provided for @requestOfferSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُرسل عرضك.'**
+  String get requestOfferSent;
+
+  /// No description provided for @requestOfferWithdrawn.
+  ///
+  /// In ar, this message translates to:
+  /// **'سُحب عرضك.'**
+  String get requestOfferWithdrawn;
+
+  /// No description provided for @requestMyOffer.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرضك: {price} جنيه'**
+  String requestMyOffer(String price);
+
+  /// No description provided for @requestCustomerPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر العميل: {price} جنيه'**
+  String requestCustomerPrice(String price);
+
+  /// No description provided for @requestsIncomingEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا طلبات مفتوحة في منطقتك الآن.'**
+  String get requestsIncomingEmpty;
+
+  /// No description provided for @requestFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'من {name}'**
+  String requestFrom(String name);
 }
 
 class _AppLocalizationsDelegate
