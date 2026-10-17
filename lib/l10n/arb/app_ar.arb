@@ -3410,5 +3410,23 @@
   },
   "bookingAttendanceCustomerDone": "العميل أكّد حضوره",
   "bookingAttendanceCustomerWaiting": "بانتظار تأكيد العميل لحضوره",
-  "bookingAttendanceBusinessDone": "أكّدتَ الحضور"
+  "bookingAttendanceBusinessDone": "أكّدتَ الحضور",
+  "relationshipTitleBusiness": "تعاملات هذا العميل معك",
+  "relationshipTitleCustomer": "تعاملاتك مع هذا النشاط",
+  "relationshipSummaryLine": "{total} تعاملات · {completed} ناجحة · {notCompleted} لم تكتمل",
+  "@relationshipSummaryLine": {
+    "placeholders": {
+      "total": {"type": "int"},
+      "completed": {"type": "int"},
+      "notCompleted": {"type": "int"}
+    }
+  },
+  "relationshipNoDisputes": "لا نزاعات ولا مشاكل",
+  "relationshipDisputes": "نزاعات: {count} ({open} مفتوح)",
+  "@relationshipDisputes": {
+    "placeholders": {
+      "count": {"type": "int"},
+      "open": {"type": "int"}
+    }
+  }
 }

@@ -39,6 +39,7 @@ import '../widgets/order_driver_card.dart';
 import '../widgets/installment_schedule.dart';
 import '../widgets/order_tracker_timeline.dart';
 import '../widgets/order_trust_section.dart';
+import '../../../booking/presentation/widgets/relationship_card.dart';
 import '../../../../core/time/clock_format.dart';
 import '../../../../core/time/egypt_time.dart';
 
@@ -1208,6 +1209,8 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
             ),
             const SizedBox(height: 8),
             Text(booking.serviceName(languageCode), style: Theme.of(context).textTheme.bodyMedium),
+            // how often he has dealt with this business, how many succeeded, and whether there was a dispute
+            if (booking.relationship != null) RelationshipCard(summary: booking.relationship!),
             DayUseTag(booking: booking),
             // the hotel gives the room when the stay starts — only then does the server send its number
             // «العربون خارج المنصة»: pay it to the business directly; the account waits until the business confirms

@@ -9814,4 +9814,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bookingAttendanceBusinessDone => 'You confirmed attendance';
+
+  @override
+  String get relationshipTitleBusiness => 'This customer’s dealings with you';
+
+  @override
+  String get relationshipTitleCustomer => 'Your dealings with this business';
+
+  @override
+  String relationshipSummaryLine(int total, int completed, int notCompleted) {
+    return '$total dealings · $completed successful · $notCompleted not completed';
+  }
+
+  @override
+  String get relationshipNoDisputes => 'No disputes, no problems';
+
+  @override
+  String relationshipDisputes(int count, int open) {
+    return 'Disputes: $count ($open open)';
+  }
 }

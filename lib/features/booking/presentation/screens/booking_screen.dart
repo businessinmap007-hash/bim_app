@@ -18,6 +18,7 @@ import '../../../../core/time/clock_format.dart';
 import '../../../../core/time/local_format.dart';
 import '../../../course/data/models/course.dart';
 import '../widgets/booking_unit_icon.dart';
+import '../widgets/relationship_card.dart';
 
 /// Booking a specific priced offering («غرفة مزدوجة», «كشف عظام») at a
 /// business. The form itself is entirely shape-driven — see
@@ -441,6 +442,8 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
+              // what he and this business have been through together — before he books
+              RelationshipCard(summary: form.relationship),
               if (widget.initialUnit != null)
                 _selectedUnitCard(context, widget.initialUnit!)
               else ...[

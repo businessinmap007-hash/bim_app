@@ -2,6 +2,7 @@ import '../../../../core/env/env.dart';
 import '../../../../core/assignment/assignee.dart';
 import '../../../chairs/data/models/service_chair.dart';
 import '../../../../core/time/egypt_time.dart';
+import 'relationship_summary.dart';
 
 /// Mirrors `latest_deposit` on a booking response — a plain `Deposit` row,
 /// present only once the deposit has actually been frozen (i.e. the booking
@@ -184,6 +185,10 @@ class Booking {
   /// not told (the customer's own view, a guest with no account).
   final int? previousDealings;
 
+  /// The full account of what the customer and the business have been through (the booking in hand left out) — the
+  /// booking's DETAIL only, told to both parties.
+  final RelationshipSummary? relationship;
+
   const Booking({
     required this.id,
     required this.status,
@@ -225,6 +230,7 @@ class Booking {
     this.clientAttended = false,
     this.businessAttended = false,
     this.previousDealings,
+    this.relationship,
   });
 
   bool get isCancellable => status == 'pending' || status == 'accepted';
@@ -281,6 +287,7 @@ class Booking {
       clientAttended: (json['attendance'] as Map<String, dynamic>?)?['client'] == true,
       businessAttended: (json['attendance'] as Map<String, dynamic>?)?['business'] == true,
       previousDealings: ((json['client_history'] as Map<String, dynamic>?)?['previous_dealings'] as num?)?.toInt(),
+      relationship: json['relationship'] is Map<String, dynamic> ? RelationshipSummary.fromJson(json['relationship'] as Map<String, dynamic>) : null,
       room: json['room'] is Map<String, dynamic> ? BookingRoom(id: (json['room'] as Map<String, dynamic>)['id'] as int, number: '${(json['room'] as Map<String, dynamic>)['number']}') : null,
       queueTurn: (json['queue_turn'] as num?)?.toInt(),
       chair: json['chair'] is Map<String, dynamic> ? ServiceChair.fromJson(json['chair'] as Map<String, dynamic>) : null,

@@ -3384,5 +3384,23 @@
   },
   "bookingAttendanceCustomerDone": "The customer confirmed attendance",
   "bookingAttendanceCustomerWaiting": "Waiting for the customer to confirm attendance",
-  "bookingAttendanceBusinessDone": "You confirmed attendance"
+  "bookingAttendanceBusinessDone": "You confirmed attendance",
+  "relationshipTitleBusiness": "This customer’s dealings with you",
+  "relationshipTitleCustomer": "Your dealings with this business",
+  "relationshipSummaryLine": "{total} dealings · {completed} successful · {notCompleted} not completed",
+  "@relationshipSummaryLine": {
+    "placeholders": {
+      "total": {"type": "int"},
+      "completed": {"type": "int"},
+      "notCompleted": {"type": "int"}
+    }
+  },
+  "relationshipNoDisputes": "No disputes, no problems",
+  "relationshipDisputes": "Disputes: {count} ({open} open)",
+  "@relationshipDisputes": {
+    "placeholders": {
+      "count": {"type": "int"},
+      "open": {"type": "int"}
+    }
+  }
 }

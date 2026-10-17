@@ -17820,6 +17820,36 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'أكّدتَ الحضور'**
   String get bookingAttendanceBusinessDone;
+
+  /// No description provided for @relationshipTitleBusiness.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعاملات هذا العميل معك'**
+  String get relationshipTitleBusiness;
+
+  /// No description provided for @relationshipTitleCustomer.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعاملاتك مع هذا النشاط'**
+  String get relationshipTitleCustomer;
+
+  /// No description provided for @relationshipSummaryLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'{total} تعاملات · {completed} ناجحة · {notCompleted} لم تكتمل'**
+  String relationshipSummaryLine(int total, int completed, int notCompleted);
+
+  /// No description provided for @relationshipNoDisputes.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا نزاعات ولا مشاكل'**
+  String get relationshipNoDisputes;
+
+  /// No description provided for @relationshipDisputes.
+  ///
+  /// In ar, this message translates to:
+  /// **'نزاعات: {count} ({open} مفتوح)'**
+  String relationshipDisputes(int count, int open);
 }
 
 class _AppLocalizationsDelegate

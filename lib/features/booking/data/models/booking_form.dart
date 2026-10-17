@@ -1,3 +1,5 @@
+import 'relationship_summary.dart';
+
 /// Mirrors `BookingController::form()` — what this business's booking
 /// screen must ask, in what order, and which of it is required. The app
 /// knows nothing about hotels or clinics; it draws whatever this says.
@@ -199,12 +201,16 @@ class BookingFormPayload {
   /// «يجب التواجد قبل الموعد بـ ١٥ دقيقة» — what the business asks of whoever it books.
   final String? arrivalNotice;
 
+  /// What this customer and this business have been through together — told before he books.
+  final RelationshipSummary relationship;
+
   const BookingFormPayload({
     required this.businessId,
     this.shape,
     required this.units,
     required this.modifiers,
     this.arrivalNotice,
+    this.relationship = const RelationshipSummary(),
   });
 
   factory BookingFormPayload.fromJson(Map<String, dynamic> json) => BookingFormPayload(
@@ -217,5 +223,6 @@ class BookingFormPayload {
         .map((e) => BookingModifier.fromJson(e as Map<String, dynamic>))
         .toList(),
     arrivalNotice: json['arrival_notice'] is Map<String, dynamic> ? (json['arrival_notice'] as Map<String, dynamic>)['message'] as String? : null,
+    relationship: json['relationship'] is Map<String, dynamic> ? RelationshipSummary.fromJson(json['relationship'] as Map<String, dynamic>) : const RelationshipSummary(),
   );
 }

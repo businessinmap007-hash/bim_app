@@ -1,4 +1,5 @@
 import 'package:bim_app/features/booking/data/models/booking.dart';
+import 'package:bim_app/features/booking/data/models/relationship_summary.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Map<String, dynamic> _base(Map<String, dynamic> extra) => {
@@ -47,5 +48,21 @@ void main() {
     expect(b.isGuest, isFalse);
     expect(b.clientAttended, isFalse);
     expect(b.previousDealings, isNull);
+  });
+
+  test('what a customer and a business have been through is read from the detail and from the form', () {
+    final b = Booking.fromJson(_base({
+      'relationship': {'total': 5, 'completed': 3, 'not_completed': 1, 'ongoing': 1, 'disputes': 2, 'open_disputes': 1},
+    }));
+
+    expect(b.relationship!.total, 5);
+    expect(b.relationship!.completed, 3);
+    expect(b.relationship!.notCompleted, 1);
+    expect(b.relationship!.disputes, 2);
+    expect(b.relationship!.openDisputes, 1);
+    expect(b.relationship!.isEmpty, isFalse);
+
+    expect(Booking.fromJson(_base({})).relationship, isNull);
+    expect(const RelationshipSummary().isEmpty, isTrue);
   });
 }

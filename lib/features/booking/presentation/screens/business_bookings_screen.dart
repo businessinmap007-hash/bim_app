@@ -10,6 +10,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../application/booking_providers.dart' show bookingApiProvider;
 import '../../application/business_bookings_providers.dart';
 import '../widgets/booking_money_card.dart';
+import '../widgets/relationship_card.dart';
 import 'guest_booking_screen.dart';
 import '../widgets/day_use_tag.dart';
 import '../../data/models/booking.dart';
@@ -324,6 +325,7 @@ class BusinessBookingDetailScreen extends ConsumerWidget {
                 if (booking.customerPhone != null)
                   _DetailRow(label: l10n.businessBookingsCustomer, value: booking.customerPhone!),
                 // a guest with no account is never counted; a returning customer wears his history
+                if (booking.relationship != null) RelationshipCard(summary: booking.relationship!, forBusiness: true),
                 if (booking.isGuest || (booking.previousDealings ?? 0) > 0)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8),
