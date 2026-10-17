@@ -134,7 +134,9 @@ class _ReservationCard extends ConsumerWidget {
             Text(
               r.isOffline && (r.passengerName ?? '').isNotEmpty
                   ? r.passengerName!
-                  : (r.clientId != null ? l10n.tripReservationClient(r.clientId!) : '#${r.id}'),
+                  : ((r.clientName ?? '').isNotEmpty
+                        ? r.clientName!
+                        : (r.clientId != null ? l10n.tripReservationClient(r.clientId!) : '#${r.id}')),
               style: Theme.of(context).textTheme.titleSmall,
             ),
             if (r.isOffline) ...[

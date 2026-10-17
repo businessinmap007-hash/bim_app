@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import '../../../../core/booking/day_closure_tile.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/providers/core_providers.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -31,7 +32,6 @@ class _ClinicOptionsSheetState extends ConsumerState<_ClinicOptionsSheet> {
   bool _busy = false;
   bool _qrEnabled = false;
   String? _qrToken;
-  String? _closedDate;
 
   @override
   void initState() {
@@ -44,13 +44,11 @@ class _ClinicOptionsSheetState extends ConsumerState<_ClinicOptionsSheet> {
 
     try {
       final qr = await client.get('/business/clinic-arrival-qr') as Map<String, dynamic>;
-      final closure = await client.get('/business/booking-day-closure') as Map<String, dynamic>;
 
       if (!mounted) return;
       setState(() {
         _qrEnabled = qr['enabled'] == true;
         _qrToken = qr['token'] as String?;
-        _closedDate = closure['closed_date'] as String?;
         _loaded = true;
       });
     } catch (_) {
@@ -72,20 +70,6 @@ class _ClinicOptionsSheetState extends ConsumerState<_ClinicOptionsSheet> {
         _qrEnabled = data['enabled'] == true;
         _qrToken = data['token'] as String?;
       });
-    } catch (e) {
-      if (mounted) _toast(e);
-    } finally {
-      if (mounted) setState(() => _busy = false);
-    }
-  }
-
-  Future<void> _setClosure(bool closed) async {
-    setState(() => _busy = true);
-
-    try {
-      final data = await ref.read(apiClientProvider).put('/business/booking-day-closure', data: {'closed': closed}) as Map<String, dynamic>;
-
-      if (mounted) setState(() => _closedDate = data['closed_date'] as String?);
     } catch (e) {
       if (mounted) _toast(e);
     } finally {
@@ -137,13 +121,7 @@ class _ClinicOptionsSheetState extends ConsumerState<_ClinicOptionsSheet> {
                     ),
                   ],
                   const Divider(height: 28),
-                  SwitchListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(l10n.clinicDayClosureTitle),
-                    subtitle: Text(_closedDate != null ? l10n.clinicDayClosureClosedOn(_closedDate!) : l10n.clinicDayClosureBody),
-                    value: _closedDate != null,
-                    onChanged: _busy ? null : _setClosure,
-                  ),
+                  const DayClosureTile(),
                 ],
               ),
       ),

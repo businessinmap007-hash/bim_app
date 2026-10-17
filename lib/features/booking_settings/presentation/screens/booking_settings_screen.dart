@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
+import '../../../../core/booking/day_closure_tile.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/booking_settings_controller.dart';
 import '../../data/models/booking_settings_models.dart';
@@ -678,6 +679,17 @@ class _CheckTimesTabState extends ConsumerState<_CheckTimesTab> {
               ),
             ],
           ),
+        ),
+        const SizedBox(height: 16),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: Theme.of(context).cardTheme.color,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: AppColors.softShadow(),
+          ),
+          // «اكتمل العدد اليوم»: the same optional button every business that takes dated bookings has
+          child: const DayClosureTile(),
         ),
       ],
     );

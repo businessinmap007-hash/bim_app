@@ -19,6 +19,9 @@ class TripReservation {
   // serializes a client name, just the id, so that's all there is to show.
   final int? clientId;
 
+  /// Only the carrier is told the passenger's name; null for everyone else.
+  final String? clientName;
+
   /// `app` or `offline` — an off-app seat is held by the carrier for a named passenger with no account.
   final String source;
   final String? passengerName;
@@ -45,6 +48,7 @@ class TripReservation {
     this.notes,
     this.createdAt,
     this.clientId,
+    this.clientName,
     this.source = 'app',
     this.passengerName,
     this.passengerPhone,
@@ -71,6 +75,7 @@ class TripReservation {
     notes: json['notes'] as String?,
     createdAt: json['created_at'] != null ? EgyptTime.tryParse(json['created_at'] as String) : null,
     clientId: (json['client_id'] as num?)?.toInt(),
+    clientName: json['client_name'] as String?,
     source: json['source'] as String? ?? 'app',
     passengerName: json['passenger_name'] as String?,
     passengerPhone: json['passenger_phone'] as String?,
