@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
+import '../../../hotel_rooms/presentation/screens/hotel_rooms_screen.dart';
 import '../../application/categories_providers.dart';
 import '../../data/models/specialty.dart';
 import '../category_icon_mapping.dart';
@@ -23,6 +24,12 @@ class SpecialtiesScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final specialties = ref.watch(specialtiesProvider(categoryId));
+    // the hotels root also offers the rooms of every hotel by class, place and price
+    final isHotels = ref
+            .watch(categoryRootsProvider)
+            .valueOrNull
+            ?.any((r) => r.id == categoryId && r.slug == 'tourist-hotels') ??
+        false;
 
     return Scaffold(
       appBar: AppBar(title: Text(categoryName)),
@@ -40,10 +47,24 @@ class SpecialtiesScreen extends ConsumerWidget {
               maxWidth: 800,
               child: ListView.separated(
                 padding: const EdgeInsets.all(16),
-                itemCount: items.length,
+                itemCount: items.length + (isHotels ? 1 : 0),
                 separatorBuilder: (context, index) => const SizedBox(height: 8),
                 itemBuilder: (context, index) {
-                  final specialty = items[index];
+                  if (isHotels && index == 0) {
+                    return Card(
+                      margin: EdgeInsets.zero,
+                      child: ListTile(
+                        leading: const Icon(Icons.hotel_outlined),
+                        title: Text(l10n.hotelRoomsTitle),
+                        subtitle: Text(l10n.hotelRoomsSearchEntry),
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => const HotelRoomsScreen()),
+                        ),
+                      ),
+                    );
+                  }
+                  final specialty = items[index - (isHotels ? 1 : 0)];
                   final displayName = specialty.localizedName(
                     Localizations.localeOf(context).languageCode,
                   );

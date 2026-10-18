@@ -10073,4 +10073,65 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get requestNewTitle => 'طلب جديد';
+
+  @override
+  String get hotelRoomsTitle => 'احجز غرفة';
+
+  @override
+  String get hotelRoomsFilter => 'فلتر';
+
+  @override
+  String hotelRoomsFilterCount(int count) {
+    return 'فلتر · $count';
+  }
+
+  @override
+  String get hotelRoomsClear => 'مسح الكل';
+
+  @override
+  String get hotelRoomsApply => 'أظهر الغرف';
+
+  @override
+  String get hotelRoomsClassLabel => 'تصنيف الفندق';
+
+  @override
+  String get hotelRoomsPriceLabel => 'السعر لليلة';
+
+  @override
+  String get hotelRoomsPriceFrom => 'من';
+
+  @override
+  String get hotelRoomsPriceTo => 'إلى';
+
+  @override
+  String get hotelRoomsCityChip => 'المدينة';
+
+  @override
+  String get hotelRoomsEmpty => 'لا غرف تناسب فلترك.';
+
+  @override
+  String hotelRoomsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count غرف',
+      one: 'غرفة واحدة',
+      zero: 'لا غرف',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String hotelRoomsPricePerNight(String price, String currency) {
+    return '$price $currency لليلة';
+  }
+
+  @override
+  String get hotelRoomsOtherPrices => 'أسعار أخرى لنفس الغرفة';
+
+  @override
+  String get hotelRoomsCheaperThanHotel => 'أقل من سعر الفندق نفسه.';
+
+  @override
+  String get hotelRoomsSearchEntry => 'ابحث عن غرفة حسب التصنيف';
 }

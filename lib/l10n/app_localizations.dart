@@ -18360,6 +18360,102 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'طلب جديد'**
   String get requestNewTitle;
+
+  /// No description provided for @hotelRoomsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'احجز غرفة'**
+  String get hotelRoomsTitle;
+
+  /// No description provided for @hotelRoomsFilter.
+  ///
+  /// In ar, this message translates to:
+  /// **'فلتر'**
+  String get hotelRoomsFilter;
+
+  /// No description provided for @hotelRoomsFilterCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'فلتر · {count}'**
+  String hotelRoomsFilterCount(int count);
+
+  /// No description provided for @hotelRoomsClear.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسح الكل'**
+  String get hotelRoomsClear;
+
+  /// No description provided for @hotelRoomsApply.
+  ///
+  /// In ar, this message translates to:
+  /// **'أظهر الغرف'**
+  String get hotelRoomsApply;
+
+  /// No description provided for @hotelRoomsClassLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصنيف الفندق'**
+  String get hotelRoomsClassLabel;
+
+  /// No description provided for @hotelRoomsPriceLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر لليلة'**
+  String get hotelRoomsPriceLabel;
+
+  /// No description provided for @hotelRoomsPriceFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'من'**
+  String get hotelRoomsPriceFrom;
+
+  /// No description provided for @hotelRoomsPriceTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلى'**
+  String get hotelRoomsPriceTo;
+
+  /// No description provided for @hotelRoomsCityChip.
+  ///
+  /// In ar, this message translates to:
+  /// **'المدينة'**
+  String get hotelRoomsCityChip;
+
+  /// No description provided for @hotelRoomsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا غرف تناسب فلترك.'**
+  String get hotelRoomsEmpty;
+
+  /// No description provided for @hotelRoomsCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{لا غرف} =1{غرفة واحدة} other{{count} غرف}}'**
+  String hotelRoomsCount(int count);
+
+  /// No description provided for @hotelRoomsPricePerNight.
+  ///
+  /// In ar, this message translates to:
+  /// **'{price} {currency} لليلة'**
+  String hotelRoomsPricePerNight(String price, String currency);
+
+  /// No description provided for @hotelRoomsOtherPrices.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسعار أخرى لنفس الغرفة'**
+  String get hotelRoomsOtherPrices;
+
+  /// No description provided for @hotelRoomsCheaperThanHotel.
+  ///
+  /// In ar, this message translates to:
+  /// **'أقل من سعر الفندق نفسه.'**
+  String get hotelRoomsCheaperThanHotel;
+
+  /// No description provided for @hotelRoomsSearchEntry.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث عن غرفة حسب التصنيف'**
+  String get hotelRoomsSearchEntry;
 }
 
 class _AppLocalizationsDelegate

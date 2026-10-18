@@ -10144,4 +10144,65 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get requestNewTitle => 'New request';
+
+  @override
+  String get hotelRoomsTitle => 'Book a room';
+
+  @override
+  String get hotelRoomsFilter => 'Filter';
+
+  @override
+  String hotelRoomsFilterCount(int count) {
+    return 'Filter · $count';
+  }
+
+  @override
+  String get hotelRoomsClear => 'Clear all';
+
+  @override
+  String get hotelRoomsApply => 'Show rooms';
+
+  @override
+  String get hotelRoomsClassLabel => 'Hotel class';
+
+  @override
+  String get hotelRoomsPriceLabel => 'Price per night';
+
+  @override
+  String get hotelRoomsPriceFrom => 'From';
+
+  @override
+  String get hotelRoomsPriceTo => 'To';
+
+  @override
+  String get hotelRoomsCityChip => 'City';
+
+  @override
+  String get hotelRoomsEmpty => 'No rooms match your filter.';
+
+  @override
+  String hotelRoomsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count rooms',
+      one: '1 room',
+      zero: 'No rooms',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String hotelRoomsPricePerNight(String price, String currency) {
+    return '$price $currency per night';
+  }
+
+  @override
+  String get hotelRoomsOtherPrices => 'Other prices for the same room';
+
+  @override
+  String get hotelRoomsCheaperThanHotel => 'Lower than the hotel\'s own price.';
+
+  @override
+  String get hotelRoomsSearchEntry => 'Find a room by hotel class';
 }
