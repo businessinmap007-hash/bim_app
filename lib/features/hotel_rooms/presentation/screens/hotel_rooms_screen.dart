@@ -293,7 +293,13 @@ class _FilterSheetState extends ConsumerState<_FilterSheet> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final filters = ref.watch(hotelRoomFiltersProvider(_q.governorateId)).valueOrNull;
+    // The classes and governorates never depend on the governorate picked; only the cities do. Reading both from the keyed
+    // provider emptied the governorate list for a moment after a pick, and a dropdown whose value is not among its items
+    // is a red screen.
+    final base = ref.watch(hotelRoomFiltersProvider(null)).valueOrNull;
+    final cities = _q.governorateId == null ? null : ref.watch(hotelRoomFiltersProvider(_q.governorateId)).valueOrNull?.cities;
+    final governorates = base?.governorates ?? const <FilterOption>[];
+    final cityOptions = cities ?? const <FilterOption>[];
     final dates = LocalFormat.date(context);
 
     return Padding(
@@ -321,7 +327,7 @@ class _FilterSheetState extends ConsumerState<_FilterSheet> {
                   selected: _q.classId == null,
                   onSelected: (_) => setState(() => _q = _q.copyWith(clearClass: true)),
                 ),
-                for (final c in filters?.classes ?? const <FilterOption>[])
+                for (final c in base?.classes ?? const <FilterOption>[])
                   ChoiceChip(
                     label: Text(c.name),
                     selected: _q.classId == c.id,
@@ -345,26 +351,27 @@ class _FilterSheetState extends ConsumerState<_FilterSheet> {
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<int?>(
-              initialValue: _q.governorateId,
+              initialValue: governorates.any((g) => g.id == _q.governorateId) ? _q.governorateId : null,
               isExpanded: true,
               decoration: InputDecoration(labelText: l10n.locationGovernorateLabel),
               items: [
                 DropdownMenuItem<int?>(value: null, child: Text(l10n.carAnyChoice)),
-                for (final g in filters?.governorates ?? const <FilterOption>[])
+                for (final g in governorates)
                   DropdownMenuItem<int?>(value: g.id, child: Text('${g.name} (${g.count})')),
               ],
-              onChanged: (v) => setState(() => _q = v == null ? _q.copyWith(clearGovernorate: true) : _q.copyWith(governorateId: v)),
+              onChanged: (v) => setState(() => _q = v == null ? _q.copyWith(clearGovernorate: true) : _q.copyWith(governorateId: v, clearCity: true)),
             ),
             if (_q.governorateId != null) ...[
               const SizedBox(height: 12),
               DropdownButtonFormField<int?>(
-                key: ValueKey('city-${_q.governorateId}'),
-                initialValue: _q.cityId,
+                // a new key per governorate and per loaded list, so the field is rebuilt when the cities arrive
+                key: ValueKey('city-${_q.governorateId}-${cityOptions.length}'),
+                initialValue: cityOptions.any((c) => c.id == _q.cityId) ? _q.cityId : null,
                 isExpanded: true,
                 decoration: InputDecoration(labelText: l10n.locationCityLabel),
                 items: [
                   DropdownMenuItem<int?>(value: null, child: Text(l10n.carAnyChoice)),
-                  for (final c in filters?.cities ?? const <FilterOption>[])
+                  for (final c in cityOptions)
                     DropdownMenuItem<int?>(value: c.id, child: Text('${c.name} (${c.count})')),
                 ],
                 onChanged: (v) => setState(() => _q = v == null ? _q.copyWith(clearCity: true) : _q.copyWith(cityId: v)),
