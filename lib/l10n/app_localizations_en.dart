@@ -10138,4 +10138,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get requestKindCar => 'Cars';
+
+  @override
+  String get carDetailsLabel => 'Notes (optional)';
+
+  @override
+  String get requestNewTitle => 'New request';
 }

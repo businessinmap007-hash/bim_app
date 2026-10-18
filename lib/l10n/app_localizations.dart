@@ -18348,6 +18348,18 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'سيارات'**
   String get requestKindCar;
+
+  /// No description provided for @carDetailsLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات (اختياري)'**
+  String get carDetailsLabel;
+
+  /// No description provided for @requestNewTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب جديد'**
+  String get requestNewTitle;
 }
 
 class _AppLocalizationsDelegate

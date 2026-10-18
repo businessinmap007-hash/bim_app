@@ -10067,4 +10067,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get requestKindCar => 'سيارات';
+
+  @override
+  String get carDetailsLabel => 'ملاحظات (اختياري)';
+
+  @override
+  String get requestNewTitle => 'طلب جديد';
 }

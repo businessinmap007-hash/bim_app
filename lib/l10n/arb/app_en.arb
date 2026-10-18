@@ -3499,5 +3499,7 @@
   "@carMaxPriceIs": {"placeholders": {"price": {"type": "String"}}},
   "requestsAnswerTitle": "Customers' requests",
   "requestKindRide": "Rides",
-  "requestKindCar": "Cars"
+  "requestKindCar": "Cars",
+  "carDetailsLabel": "Notes (optional)",
+  "requestNewTitle": "New request"
 }

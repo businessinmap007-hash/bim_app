@@ -3525,5 +3525,7 @@
   "@carMaxPriceIs": {"placeholders": {"price": {"type": "String"}}},
   "requestsAnswerTitle": "طلبات العملاء",
   "requestKindRide": "مشاوير",
-  "requestKindCar": "سيارات"
+  "requestKindCar": "سيارات",
+  "carDetailsLabel": "ملاحظات (اختياري)",
+  "requestNewTitle": "طلب جديد"
 }

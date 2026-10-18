@@ -229,7 +229,7 @@ class _CarWantedScreenState extends ConsumerState<CarWantedScreen> {
             controller: _details,
             maxLines: 3,
             maxLength: 1000,
-            decoration: InputDecoration(labelText: l10n.rideDetailsLabel),
+            decoration: InputDecoration(labelText: l10n.carDetailsLabel),
           ),
           if (_error != null) ...[
             const SizedBox(height: 8),
