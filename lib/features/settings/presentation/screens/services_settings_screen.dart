@@ -28,6 +28,7 @@ import '../../../projects/presentation/screens/projects_screen.dart';
 import '../../../retail_listings/presentation/screens/retail_listings_screen.dart';
 import '../../../schedules/presentation/screens/my_trip_schedules_screen.dart';
 import '../../../service_requests/application/service_requests_providers.dart';
+import '../../../empty_returns/presentation/screens/my_empty_returns_screen.dart';
 import '../../../service_requests/presentation/screens/incoming_requests_screen.dart';
 import '../../../staff/application/staff_providers.dart';
 import '../../../stay_requests/application/stay_requests_providers.dart';
@@ -80,7 +81,10 @@ class ServicesSettingsScreen extends ConsumerWidget {
     final hasShopAddons = ref.watch(shopAddonsProvider).valueOrNull?.isNotEmpty ?? false;
     final hasStayUnits = ref.watch(hasStayUnitsProvider).valueOrNull ?? false;
     // a limousine driver, a showroom or a private car seller has customers' requests to answer
-    final hasRequests = ref.watch(answerableRequestKindsProvider).valueOrNull?.isNotEmpty ?? false;
+    final requestKinds = ref.watch(answerableRequestKindsProvider).valueOrNull ?? const <String>[];
+    final hasRequests = requestKinds.isNotEmpty;
+    // only a limousine driver can go back empty
+    final isRideDriver = requestKinds.contains('ride');
     // only a business that sells courses has groups to open
     final hasCourses = ref.watch(myCoursesProvider).valueOrNull?.courses.isNotEmpty ?? false;
     final authState = ref.watch(authControllerProvider);
@@ -114,6 +118,7 @@ class ServicesSettingsScreen extends ConsumerWidget {
           hasShopAddons: hasShopAddons,
           hasStayUnits: hasStayUnits,
           hasRequests: hasRequests,
+          isRideDriver: isRideDriver,
           hasCourses: hasCourses,
           isAppointment: isAppointment,
         ),
@@ -128,6 +133,7 @@ class ServicesSettingsScreen extends ConsumerWidget {
           hasShopAddons: hasShopAddons,
           hasStayUnits: hasStayUnits,
           hasRequests: hasRequests,
+          isRideDriver: isRideDriver,
           hasCourses: hasCourses,
           isAppointment: isAppointment,
         ),
@@ -163,6 +169,9 @@ class _ServiceList extends StatelessWidget {
   /// Its trade answers customers' requests (rides, cars) — the tile to the open ones.
   final bool hasRequests;
 
+  /// A limousine driver: he may publish «راجع فاضي».
+  final bool isRideDriver;
+
   /// The business sells courses (it has a priced course) — it opens groups of them.
   final bool hasCourses;
 
@@ -179,6 +188,7 @@ class _ServiceList extends StatelessWidget {
     this.hasShopAddons = false,
     this.hasStayUnits = false,
     this.hasRequests = false,
+    this.isRideDriver = false,
     this.hasCourses = false,
     this.isAppointment = false,
   });
@@ -451,6 +461,12 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.local_taxi_outlined,
         title: l10n.requestsAnswerTitle,
         builder: (_) => const IncomingRequestsScreen(),
+      ),
+      _Tile(
+        show: isRideDriver,
+        leading: Icons.u_turn_left,
+        title: l10n.emptyReturnTitle,
+        builder: (_) => const MyEmptyReturnsScreen(),
       ),
       _Tile(
         show: true, // account management — no capability of its own.

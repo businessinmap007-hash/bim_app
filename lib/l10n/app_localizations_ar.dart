@@ -10175,4 +10175,117 @@ class AppLocalizationsAr extends AppLocalizations {
   String bookingStayCheckInOut(String checkIn, String checkOut) {
     return 'الحضور $checkIn والمغادرة $checkOut';
   }
+
+  @override
+  String get emptyReturnTitle => 'راجع فاضي';
+
+  @override
+  String get emptyReturnSectionTitle => 'سائقون راجعون فاضيين على هذا الخط';
+
+  @override
+  String get emptyReturnSectionHint =>
+      'مشوار أرخص: السائق راجع على أي حال وهو من يحدد سعره.';
+
+  @override
+  String emptyReturnSaving(String percent) {
+    return 'وفّر $percent٪';
+  }
+
+  @override
+  String emptyReturnPriceEgp(String price) {
+    return '$price جنيه';
+  }
+
+  @override
+  String emptyReturnUsualFare(String price) {
+    return 'السعر المعتاد $price جنيه';
+  }
+
+  @override
+  String emptyReturnDeparts(String when) {
+    return 'يتحرك $when';
+  }
+
+  @override
+  String emptyReturnSeats(String n) {
+    return 'حتى $n ركاب';
+  }
+
+  @override
+  String get emptyReturnBook => 'احجز هذا المشوار';
+
+  @override
+  String get emptyReturnBookTitle => 'حجز مشوار راجع فاضي؟';
+
+  @override
+  String emptyReturnBookBody(String driver, String when, String price) {
+    return '$driver · $when · $price جنيه. يتأكد الحجز بعد أن يقبله السائق.';
+  }
+
+  @override
+  String get emptyReturnBooked => 'تم الحجز — بانتظار تأكيد السائق.';
+
+  @override
+  String get emptyReturnDriverIntro =>
+      'راجع من غير ركاب؟ اعرض الطريق بسعر أقل واكسب من رحلة الرجوع.';
+
+  @override
+  String get emptyReturnPublishTitle => 'انشر رحلة رجوع';
+
+  @override
+  String get emptyReturnFrom => 'أنا راجع من';
+
+  @override
+  String get emptyReturnTo => 'إلى';
+
+  @override
+  String get emptyReturnWhen => 'موعد التحرك';
+
+  @override
+  String get emptyReturnPriceLabel => 'سعرك للسيارة كلها (جنيه)';
+
+  @override
+  String emptyReturnPriceHelp(String price, String ref) {
+    return 'المقترح $price جنيه — المشوار المعتاد $ref جنيه ولا يجوز تجاوزه.';
+  }
+
+  @override
+  String get emptyReturnSeatsLabel => 'عدد الركاب';
+
+  @override
+  String get emptyReturnNotesLabel => 'ملاحظات (اختياري)';
+
+  @override
+  String get emptyReturnPublish => 'انشر';
+
+  @override
+  String get emptyReturnPublished =>
+      'تم النشر — العملاء على هذا الخط يستطيعون حجزه.';
+
+  @override
+  String get emptyReturnMineTitle => 'عروضي';
+
+  @override
+  String get emptyReturnNone => 'لم تنشر أي رحلة رجوع بعد.';
+
+  @override
+  String get emptyReturnCancel => 'إلغاء العرض';
+
+  @override
+  String get emptyReturnCancelled => 'تم إلغاء العرض.';
+
+  @override
+  String get emptyReturnStatusLive => 'ظاهر للعملاء';
+
+  @override
+  String get emptyReturnStatusPassed => 'انتهى موعده';
+
+  @override
+  String get emptyReturnStatusCancelled => 'ملغي';
+
+  @override
+  String get emptyReturnChooseCities => 'اختر المدينتين.';
+
+  @override
+  String get emptyReturnChooseWhen => 'اختر موعد التحرك.';
 }

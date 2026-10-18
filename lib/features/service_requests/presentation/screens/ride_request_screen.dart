@@ -5,6 +5,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/time/egypt_time.dart';
 import '../../../../core/time/local_format.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../empty_returns/presentation/widgets/empty_returns_section.dart';
 import '../../../location/presentation/widgets/location_picker_field.dart';
 import '../../application/service_requests_providers.dart';
 import '../../data/service_requests_api.dart';
@@ -202,6 +203,9 @@ class _RideRequestScreenState extends ConsumerState<RideRequestScreen> {
               l10n.rideDistanceKm((quote.distanceKm ?? 0).toStringAsFixed(0)),
             ),
           ],
+          // the drivers going back empty on this very line, at a lower price (booked as an ordinary trip reservation)
+          if (_from != null && _to != null && _from!.cityId != _to!.cityId)
+            EmptyReturnsSection(fromCityId: _from!.cityId, toCityId: _to!.cityId),
           const SizedBox(height: 16),
           Row(
             children: [

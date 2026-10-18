@@ -10246,4 +10246,117 @@ class AppLocalizationsEn extends AppLocalizations {
   String bookingStayCheckInOut(String checkIn, String checkOut) {
     return 'Check-in $checkIn, check-out $checkOut';
   }
+
+  @override
+  String get emptyReturnTitle => 'Empty return';
+
+  @override
+  String get emptyReturnSectionTitle => 'Drivers going back empty on this line';
+
+  @override
+  String get emptyReturnSectionHint =>
+      'A cheaper ride: the driver is heading back anyway and sets his own price.';
+
+  @override
+  String emptyReturnSaving(String percent) {
+    return 'Save $percent%';
+  }
+
+  @override
+  String emptyReturnPriceEgp(String price) {
+    return '$price EGP';
+  }
+
+  @override
+  String emptyReturnUsualFare(String price) {
+    return 'Usual fare $price EGP';
+  }
+
+  @override
+  String emptyReturnDeparts(String when) {
+    return 'Leaves $when';
+  }
+
+  @override
+  String emptyReturnSeats(String n) {
+    return 'Up to $n passengers';
+  }
+
+  @override
+  String get emptyReturnBook => 'Book this ride';
+
+  @override
+  String get emptyReturnBookTitle => 'Book this return ride?';
+
+  @override
+  String emptyReturnBookBody(String driver, String when, String price) {
+    return '$driver · $when · $price EGP. The booking is confirmed once the driver accepts it.';
+  }
+
+  @override
+  String get emptyReturnBooked => 'Booked — waiting for the driver to confirm.';
+
+  @override
+  String get emptyReturnDriverIntro =>
+      'Going back without a passenger? Offer the way home at a lower price and earn on the trip back.';
+
+  @override
+  String get emptyReturnPublishTitle => 'Publish a return';
+
+  @override
+  String get emptyReturnFrom => 'I am going from';
+
+  @override
+  String get emptyReturnTo => 'to';
+
+  @override
+  String get emptyReturnWhen => 'Leaving at';
+
+  @override
+  String get emptyReturnPriceLabel => 'Your price for the whole car (EGP)';
+
+  @override
+  String emptyReturnPriceHelp(String price, String ref) {
+    return 'Suggested $price EGP — the usual fare is $ref EGP and you cannot go above it.';
+  }
+
+  @override
+  String get emptyReturnSeatsLabel => 'Passengers it takes';
+
+  @override
+  String get emptyReturnNotesLabel => 'Notes (optional)';
+
+  @override
+  String get emptyReturnPublish => 'Publish';
+
+  @override
+  String get emptyReturnPublished =>
+      'Published — customers on this line can book it.';
+
+  @override
+  String get emptyReturnMineTitle => 'My offers';
+
+  @override
+  String get emptyReturnNone => 'You have not published any return yet.';
+
+  @override
+  String get emptyReturnCancel => 'Take it down';
+
+  @override
+  String get emptyReturnCancelled => 'The offer was taken down.';
+
+  @override
+  String get emptyReturnStatusLive => 'Shown to customers';
+
+  @override
+  String get emptyReturnStatusPassed => 'Time passed';
+
+  @override
+  String get emptyReturnStatusCancelled => 'Taken down';
+
+  @override
+  String get emptyReturnChooseCities => 'Choose both cities.';
+
+  @override
+  String get emptyReturnChooseWhen => 'Choose when you leave.';
 }

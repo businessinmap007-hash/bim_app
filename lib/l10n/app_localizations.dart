@@ -18498,6 +18498,198 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الحضور {checkIn} والمغادرة {checkOut}'**
   String bookingStayCheckInOut(String checkIn, String checkOut);
+
+  /// No description provided for @emptyReturnTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'راجع فاضي'**
+  String get emptyReturnTitle;
+
+  /// No description provided for @emptyReturnSectionTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'سائقون راجعون فاضيين على هذا الخط'**
+  String get emptyReturnSectionTitle;
+
+  /// No description provided for @emptyReturnSectionHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشوار أرخص: السائق راجع على أي حال وهو من يحدد سعره.'**
+  String get emptyReturnSectionHint;
+
+  /// No description provided for @emptyReturnSaving.
+  ///
+  /// In ar, this message translates to:
+  /// **'وفّر {percent}٪'**
+  String emptyReturnSaving(String percent);
+
+  /// No description provided for @emptyReturnPriceEgp.
+  ///
+  /// In ar, this message translates to:
+  /// **'{price} جنيه'**
+  String emptyReturnPriceEgp(String price);
+
+  /// No description provided for @emptyReturnUsualFare.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر المعتاد {price} جنيه'**
+  String emptyReturnUsualFare(String price);
+
+  /// No description provided for @emptyReturnDeparts.
+  ///
+  /// In ar, this message translates to:
+  /// **'يتحرك {when}'**
+  String emptyReturnDeparts(String when);
+
+  /// No description provided for @emptyReturnSeats.
+  ///
+  /// In ar, this message translates to:
+  /// **'حتى {n} ركاب'**
+  String emptyReturnSeats(String n);
+
+  /// No description provided for @emptyReturnBook.
+  ///
+  /// In ar, this message translates to:
+  /// **'احجز هذا المشوار'**
+  String get emptyReturnBook;
+
+  /// No description provided for @emptyReturnBookTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجز مشوار راجع فاضي؟'**
+  String get emptyReturnBookTitle;
+
+  /// No description provided for @emptyReturnBookBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'{driver} · {when} · {price} جنيه. يتأكد الحجز بعد أن يقبله السائق.'**
+  String emptyReturnBookBody(String driver, String when, String price);
+
+  /// No description provided for @emptyReturnBooked.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الحجز — بانتظار تأكيد السائق.'**
+  String get emptyReturnBooked;
+
+  /// No description provided for @emptyReturnDriverIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'راجع من غير ركاب؟ اعرض الطريق بسعر أقل واكسب من رحلة الرجوع.'**
+  String get emptyReturnDriverIntro;
+
+  /// No description provided for @emptyReturnPublishTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'انشر رحلة رجوع'**
+  String get emptyReturnPublishTitle;
+
+  /// No description provided for @emptyReturnFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنا راجع من'**
+  String get emptyReturnFrom;
+
+  /// No description provided for @emptyReturnTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلى'**
+  String get emptyReturnTo;
+
+  /// No description provided for @emptyReturnWhen.
+  ///
+  /// In ar, this message translates to:
+  /// **'موعد التحرك'**
+  String get emptyReturnWhen;
+
+  /// No description provided for @emptyReturnPriceLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعرك للسيارة كلها (جنيه)'**
+  String get emptyReturnPriceLabel;
+
+  /// No description provided for @emptyReturnPriceHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'المقترح {price} جنيه — المشوار المعتاد {ref} جنيه ولا يجوز تجاوزه.'**
+  String emptyReturnPriceHelp(String price, String ref);
+
+  /// No description provided for @emptyReturnSeatsLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد الركاب'**
+  String get emptyReturnSeatsLabel;
+
+  /// No description provided for @emptyReturnNotesLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظات (اختياري)'**
+  String get emptyReturnNotesLabel;
+
+  /// No description provided for @emptyReturnPublish.
+  ///
+  /// In ar, this message translates to:
+  /// **'انشر'**
+  String get emptyReturnPublish;
+
+  /// No description provided for @emptyReturnPublished.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم النشر — العملاء على هذا الخط يستطيعون حجزه.'**
+  String get emptyReturnPublished;
+
+  /// No description provided for @emptyReturnMineTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عروضي'**
+  String get emptyReturnMineTitle;
+
+  /// No description provided for @emptyReturnNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تنشر أي رحلة رجوع بعد.'**
+  String get emptyReturnNone;
+
+  /// No description provided for @emptyReturnCancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء العرض'**
+  String get emptyReturnCancel;
+
+  /// No description provided for @emptyReturnCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إلغاء العرض.'**
+  String get emptyReturnCancelled;
+
+  /// No description provided for @emptyReturnStatusLive.
+  ///
+  /// In ar, this message translates to:
+  /// **'ظاهر للعملاء'**
+  String get emptyReturnStatusLive;
+
+  /// No description provided for @emptyReturnStatusPassed.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتهى موعده'**
+  String get emptyReturnStatusPassed;
+
+  /// No description provided for @emptyReturnStatusCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغي'**
+  String get emptyReturnStatusCancelled;
+
+  /// No description provided for @emptyReturnChooseCities.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر المدينتين.'**
+  String get emptyReturnChooseCities;
+
+  /// No description provided for @emptyReturnChooseWhen.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر موعد التحرك.'**
+  String get emptyReturnChooseWhen;
 }
 
 class _AppLocalizationsDelegate
