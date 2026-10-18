@@ -260,7 +260,8 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
                               crossAxisCount: 2,
                               mainAxisSpacing: 10,
                               crossAxisSpacing: 10,
-                              mainAxisExtent: 224,
+                              // 224 held the logo, name and rating; a hotel's stars line is one more row
+                              mainAxisExtent: 246,
                             ),
                             itemCount: state.items.length,
                             itemBuilder: (context, index) {
