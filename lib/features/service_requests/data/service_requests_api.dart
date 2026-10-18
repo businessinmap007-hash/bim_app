@@ -164,6 +164,7 @@ class ServiceRequestModel {
 
   bool get isOpen => status == 'open';
   bool get isCarWanted => kind == 'car_wanted';
+  bool get isHomeService => kind == 'home_service';
   bool get isRentalWanted => deal == 'rent';
 
   factory ServiceRequestModel.fromJson(Map<String, dynamic> json) {
@@ -295,6 +296,43 @@ class ServiceRequestsApi {
         await _client.get('/service-requests/car-options')
             as Map<String, dynamic>;
     return CarOptions.fromJson(data);
+  }
+
+  /// The trades a «أحتاج فنيًا» request picks from.
+  Future<List<CarOption>> homeTrades() async {
+    final data =
+        await _client.get('/service-requests/home-trades')
+            as Map<String, dynamic>;
+    return (data['trades'] as List<dynamic>? ?? const [])
+        .map((e) => CarOption.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
+  Future<ServiceRequestModel> createHomeService({
+    required int tradeId,
+    required int governorateId,
+    required int cityId,
+    required String details,
+    DateTime? startsAt,
+    double? maxPrice,
+  }) async {
+    final data =
+        await _client.post(
+              '/service-requests',
+              data: {
+                'kind': 'home_service',
+                'trade_child_id': tradeId,
+                'governorate_id': governorateId,
+                'city_id': cityId,
+                'details': details.trim(),
+                if (startsAt != null) 'starts_at': _stamp(startsAt),
+                'max_price': ?maxPrice,
+              },
+            )
+            as Map<String, dynamic>;
+    return ServiceRequestModel.fromJson(
+      data['request'] as Map<String, dynamic>,
+    );
   }
 
   Future<ServiceRequestModel> createCarWanted({

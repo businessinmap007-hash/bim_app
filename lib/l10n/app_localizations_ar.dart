@@ -10330,4 +10330,44 @@ class AppLocalizationsAr extends AppLocalizations {
   String emptyReturnForRide(String when) {
     return 'طريق العودة لمشوارك $when';
   }
+
+  @override
+  String get homeServiceTitle => 'أحتاج فنيًا';
+
+  @override
+  String get homeServiceIntro =>
+      'اختر نوع الفني واكتب المشكلة. فنيّو هذا التخصص في محافظتك يرسلون لك أسعارهم وتختار منهم.';
+
+  @override
+  String get homeServiceTradeLabel => 'نوع الفني';
+
+  @override
+  String get homeServiceJobLabel => 'ما المشكلة؟';
+
+  @override
+  String get homeServiceNoAddress =>
+      'تُرسل المدينة فقط. العنوان بالتفصيل تتفق عليه مع الفني الذي تختاره.';
+
+  @override
+  String get homeServiceWhenLabel => 'متى تريده؟ (اختياري)';
+
+  @override
+  String get homeServiceAnyTime => 'في أي وقت';
+
+  @override
+  String get homeServiceBudgetLabel => 'أقصى ما تدفعه (اختياري)';
+
+  @override
+  String homeServiceBudgetIs(String price) {
+    return 'حتى $price جنيه';
+  }
+
+  @override
+  String get homeServiceSubmit => 'اطلب عروض الأسعار';
+
+  @override
+  String get homeServiceTradeRequired => 'اختر نوع الفني ومدينتك.';
+
+  @override
+  String get requestKindHome => 'الفنيون';
 }

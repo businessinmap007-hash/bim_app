@@ -33,6 +33,11 @@ final answerableRequestKindsProvider = FutureProvider.autoDispose<List<String>>(
   },
 );
 
+/// The trades a «أحتاج فنيًا» request picks from.
+final homeTradesProvider = FutureProvider.autoDispose<List<CarOption>>((ref) {
+  return ref.watch(serviceRequestsApiProvider).homeTrades();
+});
+
 /// «استراحة»: is this business taking customers' requests right now?
 final requestsAvailableProvider = FutureProvider.autoDispose<bool>((ref) {
   return ref.watch(serviceRequestsApiProvider).available();

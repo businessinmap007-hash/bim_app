@@ -18750,6 +18750,78 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'طريق العودة لمشوارك {when}'**
   String emptyReturnForRide(String when);
+
+  /// No description provided for @homeServiceTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أحتاج فنيًا'**
+  String get homeServiceTitle;
+
+  /// No description provided for @homeServiceIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر نوع الفني واكتب المشكلة. فنيّو هذا التخصص في محافظتك يرسلون لك أسعارهم وتختار منهم.'**
+  String get homeServiceIntro;
+
+  /// No description provided for @homeServiceTradeLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع الفني'**
+  String get homeServiceTradeLabel;
+
+  /// No description provided for @homeServiceJobLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما المشكلة؟'**
+  String get homeServiceJobLabel;
+
+  /// No description provided for @homeServiceNoAddress.
+  ///
+  /// In ar, this message translates to:
+  /// **'تُرسل المدينة فقط. العنوان بالتفصيل تتفق عليه مع الفني الذي تختاره.'**
+  String get homeServiceNoAddress;
+
+  /// No description provided for @homeServiceWhenLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'متى تريده؟ (اختياري)'**
+  String get homeServiceWhenLabel;
+
+  /// No description provided for @homeServiceAnyTime.
+  ///
+  /// In ar, this message translates to:
+  /// **'في أي وقت'**
+  String get homeServiceAnyTime;
+
+  /// No description provided for @homeServiceBudgetLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'أقصى ما تدفعه (اختياري)'**
+  String get homeServiceBudgetLabel;
+
+  /// No description provided for @homeServiceBudgetIs.
+  ///
+  /// In ar, this message translates to:
+  /// **'حتى {price} جنيه'**
+  String homeServiceBudgetIs(String price);
+
+  /// No description provided for @homeServiceSubmit.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلب عروض الأسعار'**
+  String get homeServiceSubmit;
+
+  /// No description provided for @homeServiceTradeRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر نوع الفني ومدينتك.'**
+  String get homeServiceTradeRequired;
+
+  /// No description provided for @requestKindHome.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفنيون'**
+  String get requestKindHome;
 }
 
 class _AppLocalizationsDelegate

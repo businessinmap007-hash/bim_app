@@ -3611,5 +3611,18 @@
   "@emptyReturnSuggestionAfter": {"placeholders": {"when": {"type": "String"}}},
   "emptyReturnSuggestionUse": "اعرض طريق العودة",
   "emptyReturnForRide": "طريق العودة لمشوارك {when}",
-  "@emptyReturnForRide": {"placeholders": {"when": {"type": "String"}}}
+  "@emptyReturnForRide": {"placeholders": {"when": {"type": "String"}}},
+  "homeServiceTitle": "أحتاج فنيًا",
+  "homeServiceIntro": "اختر نوع الفني واكتب المشكلة. فنيّو هذا التخصص في محافظتك يرسلون لك أسعارهم وتختار منهم.",
+  "homeServiceTradeLabel": "نوع الفني",
+  "homeServiceJobLabel": "ما المشكلة؟",
+  "homeServiceNoAddress": "تُرسل المدينة فقط. العنوان بالتفصيل تتفق عليه مع الفني الذي تختاره.",
+  "homeServiceWhenLabel": "متى تريده؟ (اختياري)",
+  "homeServiceAnyTime": "في أي وقت",
+  "homeServiceBudgetLabel": "أقصى ما تدفعه (اختياري)",
+  "homeServiceBudgetIs": "حتى {price} جنيه",
+  "@homeServiceBudgetIs": {"placeholders": {"price": {"type": "String"}}},
+  "homeServiceSubmit": "اطلب عروض الأسعار",
+  "homeServiceTradeRequired": "اختر نوع الفني ومدينتك.",
+  "requestKindHome": "الفنيون"
 }

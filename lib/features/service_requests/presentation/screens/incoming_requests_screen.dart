@@ -25,8 +25,11 @@ class _IncomingRequestsScreenState
     extends ConsumerState<IncomingRequestsScreen> {
   String? _kind;
 
-  static String _label(AppLocalizations l10n, String kind) =>
-      kind == 'car_wanted' ? l10n.requestKindCar : l10n.requestKindRide;
+  static String _label(AppLocalizations l10n, String kind) => switch (kind) {
+    'car_wanted' => l10n.requestKindCar,
+    'home_service' => l10n.requestKindHome,
+    _ => l10n.requestKindRide,
+  };
 
   @override
   Widget build(BuildContext context) {

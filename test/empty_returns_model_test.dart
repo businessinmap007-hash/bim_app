@@ -1,9 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:bim_app/features/empty_returns/data/empty_returns_api.dart';
+import 'package:bim_app/features/service_requests/data/service_requests_api.dart';
 
 void main() {
   suggestionTests();
+  homeServiceTests();
   test(
     'an empty return reads its price, the saving, the time as Cairo digits and the driver trust',
     () {
@@ -89,6 +91,31 @@ void suggestionTests() {
       // 18:00 UTC on 20 Oct is 21:00 in Cairo
       expect(s.suggestedDepartsAt!.hour, 21);
       expect(s.passengers, 2);
+    },
+  );
+}
+
+void homeServiceTests() {
+  test(
+    'a home-service request reads its trade and is told apart from a ride',
+    () {
+      final r = ServiceRequestModel.fromJson({
+        'id': 3,
+        'kind': 'home_service',
+        'title': 'أحتاج سباك · القاهرة',
+        'details': 'The tap leaks',
+        'status': 'open',
+        'params': {
+          'trade': {'id': 227, 'name': 'سباك'},
+          'city': 'القاهرة',
+        },
+        'budget': 300,
+      });
+
+      expect(r.isHomeService, isTrue);
+      expect(r.isCarWanted, isFalse);
+      expect(r.budget, 300);
+      expect(r.origin, isNull);
     },
   );
 }

@@ -10401,4 +10401,45 @@ class AppLocalizationsEn extends AppLocalizations {
   String emptyReturnForRide(String when) {
     return 'The way back of your ride at $when';
   }
+
+  @override
+  String get homeServiceTitle => 'I need a technician';
+
+  @override
+  String get homeServiceIntro =>
+      'Say which trade and what is wrong. The technicians of that trade in your governorate send you their quotes and you pick one.';
+
+  @override
+  String get homeServiceTradeLabel => 'Type of technician';
+
+  @override
+  String get homeServiceJobLabel => 'What is the problem?';
+
+  @override
+  String get homeServiceNoAddress =>
+      'Only the city is shared. The exact address is agreed with the technician you choose.';
+
+  @override
+  String get homeServiceWhenLabel => 'When do you want him? (optional)';
+
+  @override
+  String get homeServiceAnyTime => 'Any time';
+
+  @override
+  String get homeServiceBudgetLabel => 'The most you would pay (optional)';
+
+  @override
+  String homeServiceBudgetIs(String price) {
+    return 'Up to $price EGP';
+  }
+
+  @override
+  String get homeServiceSubmit => 'Ask for quotes';
+
+  @override
+  String get homeServiceTradeRequired =>
+      'Choose the type of technician and your city.';
+
+  @override
+  String get requestKindHome => 'Technicians';
 }

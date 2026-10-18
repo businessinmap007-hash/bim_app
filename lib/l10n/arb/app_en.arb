@@ -3585,5 +3585,18 @@
   "@emptyReturnSuggestionAfter": {"placeholders": {"when": {"type": "String"}}},
   "emptyReturnSuggestionUse": "Offer the way back",
   "emptyReturnForRide": "The way back of your ride at {when}",
-  "@emptyReturnForRide": {"placeholders": {"when": {"type": "String"}}}
+  "@emptyReturnForRide": {"placeholders": {"when": {"type": "String"}}},
+  "homeServiceTitle": "I need a technician",
+  "homeServiceIntro": "Say which trade and what is wrong. The technicians of that trade in your governorate send you their quotes and you pick one.",
+  "homeServiceTradeLabel": "Type of technician",
+  "homeServiceJobLabel": "What is the problem?",
+  "homeServiceNoAddress": "Only the city is shared. The exact address is agreed with the technician you choose.",
+  "homeServiceWhenLabel": "When do you want him? (optional)",
+  "homeServiceAnyTime": "Any time",
+  "homeServiceBudgetLabel": "The most you would pay (optional)",
+  "homeServiceBudgetIs": "Up to {price} EGP",
+  "@homeServiceBudgetIs": {"placeholders": {"price": {"type": "String"}}},
+  "homeServiceSubmit": "Ask for quotes",
+  "homeServiceTradeRequired": "Choose the type of technician and your city.",
+  "requestKindHome": "Technicians"
 }

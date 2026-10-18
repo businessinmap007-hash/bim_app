@@ -207,7 +207,7 @@ class RequestSummaryCard extends StatelessWidget {
   const RequestSummaryCard({super.key, required this.request});
 
   static String title(ServiceRequestModel r) {
-    if (r.isCarWanted) return r.title;
+    if (r.isCarWanted || r.isHomeService) return r.title;
     final from = r.origin?.city ?? '';
     final to = r.destination?.city ?? '';
     return from.isEmpty || to.isEmpty ? r.title : '$from ← $to';
@@ -225,7 +225,15 @@ class RequestSummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final parts = request.isCarWanted
+    final parts = request.isHomeService
+        ? <String>[
+            request.startsAt == null
+                ? l10n.homeServiceAnyTime
+                : LocalFormat.dayDate(context).addClock().format(request.startsAt!),
+            if (request.budget != null)
+              l10n.homeServiceBudgetIs(request.budget!.toStringAsFixed(0)),
+          ]
+        : request.isCarWanted
         ? <String>[
             request.isRentalWanted ? l10n.carDealRent : l10n.carDealBuy,
             if (request.days != null) l10n.carRentDaysCount(request.days!),
