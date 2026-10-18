@@ -51,17 +51,12 @@ class SpecialtiesScreen extends ConsumerWidget {
                     margin: EdgeInsets.zero,
                     child: ListTile(
                       leading: Icon(iconForCategoryChild(specialty.nameAr)),
-                      // Same size/weight as the bottom nav bar's labels
-                      // (NavigationBar has no style override, so it reads
-                      // straight off textTheme.labelMedium too) — matched
-                      // on request rather than the list-row default.
-                      title: Text(
-                        displayName,
-                        style: Theme.of(context).textTheme.labelMedium,
-                      ),
+                      // The list's own title size (the theme's ListTile style) — it was matched to the bottom
+                      // bar's tiny labels once and read as too small on the phone.
+                      title: Text(displayName),
                       trailing: Text(
                         l10n.businessCount(specialty.businessCount),
-                        style: Theme.of(context).textTheme.labelMedium,
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                       onTap: () => context.push(
                         '/discovery',
