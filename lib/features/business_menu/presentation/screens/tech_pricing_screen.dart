@@ -174,6 +174,10 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
     super.dispose();
   }
 
+  /// What the merchant has ticked on this unit so far — the describing choices and the condition. A field of the kind
+  /// that depends on one of them (rental terms ← «إيجار») shows or hides with it.
+  Set<int> _ticked() => {..._choiceIds, ?_conditionOptionId};
+
   /// The unit's own fields once the kind is known (the vocabulary loads after
   /// the screen opens) — seeded from the item being edited, once.
   void _seedUnitFields(DetailProfile? profile) {
@@ -199,7 +203,8 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
   /// sends '' so an edit can remove a value it once stated. null = nothing to
   /// say (a basic menu, or a kind with no per-unit fields).
   Map<int, String>? _unitValues(DetailProfile? profile) {
-    final fields = profile?.fields.where((f) => f.perItem).toList() ?? const <DetailField>[];
+    final ticked = _ticked();
+    final fields = profile?.fields.where((f) => f.perItem && f.appliesTo(ticked)).toList() ?? const <DetailField>[];
     if (fields.isEmpty) return null;
     return {
       for (final f in fields)
@@ -211,7 +216,8 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
 
   /// The first per-unit figure that is not a number, as the field's name.
   String? _badUnitNumber(DetailProfile? profile) {
-    for (final f in profile?.fields.where((f) => f.perItem && f.dataType == 'number') ?? const <DetailField>[]) {
+    final ticked = _ticked();
+    for (final f in profile?.fields.where((f) => f.perItem && f.dataType == 'number' && f.appliesTo(ticked)) ?? const <DetailField>[]) {
       final t = _unitText[f.id]?.text.trim() ?? '';
       if (t.isNotEmpty && double.tryParse(t.replaceAll(',', '').replaceAll('٫', '.')) == null) return f.name;
     }
@@ -560,8 +566,9 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
           // from the option groups below) would be a box over nothing.
           if (detailProfile != null)
             Builder(builder: (context) {
+              final ticked = _ticked();
               final unitFields = detailProfile.fields
-                  .where((f) => f.perItem && !(f.dataType == 'select' && f.options.isEmpty))
+                  .where((f) => f.perItem && f.appliesTo(ticked) && !(f.dataType == 'select' && f.options.isEmpty))
                   .toList();
               if (unitFields.isEmpty && describing.isEmpty) return const SizedBox.shrink();
               return Column(
@@ -711,7 +718,10 @@ class _TechPricingScreenState extends ConsumerState<TechPricingScreen> {
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9.,٫]')),
                   ],
                   decoration: InputDecoration(
-                    hintText: l10n.menuItemBasePriceHint,
+                    // a rental is priced by the day; everything else by what the hint always said
+                    hintText: describing.any((g) => g.options.any((o) => _choiceIds.contains(o.id) && o.nameAr == 'إيجار'))
+                        ? l10n.techPricingRentPerDay
+                        : l10n.menuItemBasePriceHint,
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: const BorderSide(

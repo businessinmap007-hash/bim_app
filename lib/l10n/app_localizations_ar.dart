@@ -9944,4 +9944,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String requestFrom(String name) {
     return 'من $name';
   }
+
+  @override
+  String get techPricingRentPerDay => 'سعر اليوم (جنيه)';
 }

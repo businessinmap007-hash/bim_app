@@ -18138,6 +18138,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'من {name}'**
   String requestFrom(String name);
+
+  /// No description provided for @techPricingRentPerDay.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر اليوم (جنيه)'**
+  String get techPricingRentPerDay;
 }
 
 class _AppLocalizationsDelegate

@@ -3486,5 +3486,6 @@
   "@requestCustomerPrice": {"placeholders": {"price": {"type": "String"}}},
   "requestsIncomingEmpty": "لا طلبات مفتوحة في منطقتك الآن.",
   "requestFrom": "من {name}",
-  "@requestFrom": {"placeholders": {"name": {"type": "String"}}}
+  "@requestFrom": {"placeholders": {"name": {"type": "String"}}},
+  "techPricingRentPerDay": "سعر اليوم (جنيه)"
 }

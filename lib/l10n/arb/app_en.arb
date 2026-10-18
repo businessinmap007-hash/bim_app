@@ -3460,5 +3460,6 @@
   "@requestCustomerPrice": {"placeholders": {"price": {"type": "String"}}},
   "requestsIncomingEmpty": "No open requests in your area now.",
   "requestFrom": "From {name}",
-  "@requestFrom": {"placeholders": {"name": {"type": "String"}}}
+  "@requestFrom": {"placeholders": {"name": {"type": "String"}}},
+  "techPricingRentPerDay": "Price per day (EGP)"
 }

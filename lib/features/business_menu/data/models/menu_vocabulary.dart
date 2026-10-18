@@ -134,6 +134,10 @@ class DetailField {
   /// How a list field is drawn, as the admin set it in «أشكال المنيو»:
   /// 'chips' (buttons) | 'dropdown' | 'auto' (buttons up to [DetailDisplay.autoChipsMax]).
   final String display;
+  /// The field follows one of the unit's own ticks: asked only of a unit that carries [onlyWithOptionId] (rental terms
+  /// ← «إيجار») and not asked of one that carries [notWithOptionId] (the mileage of a rental).
+  final int? onlyWithOptionId;
+  final int? notWithOptionId;
   const DetailField({
     required this.id,
     required this.code,
@@ -144,7 +148,17 @@ class DetailField {
     this.dataType = 'text',
     this.options = const [],
     this.display = 'auto',
+    this.onlyWithOptionId,
+    this.notWithOptionId,
   });
+
+  /// Is this field asked of a unit that carries [ticked] options?
+  bool appliesTo(Set<int> ticked) {
+    final only = onlyWithOptionId;
+    final not = notWithOptionId;
+    if (only != null && !ticked.contains(only)) return false;
+    return not == null || !ticked.contains(not);
+  }
 
   factory DetailField.fromJson(Map<String, dynamic> json) => DetailField(
     id: json['id'] as int,
@@ -155,6 +169,8 @@ class DetailField {
     perItem: json['per_item'] as bool? ?? false,
     dataType: json['data_type'] as String? ?? 'text',
     display: json['display'] as String? ?? 'auto',
+    onlyWithOptionId: (json['only_with_option_id'] as num?)?.toInt(),
+    notWithOptionId: (json['not_with_option_id'] as num?)?.toInt(),
     options: (json['options'] as List<dynamic>? ?? [])
         .map((e) => DetailOption.fromJson(e as Map<String, dynamic>))
         .toList(),

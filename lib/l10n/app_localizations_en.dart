@@ -10015,4 +10015,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String requestFrom(String name) {
     return 'From $name';
   }
+
+  @override
+  String get techPricingRentPerDay => 'Price per day (EGP)';
 }
