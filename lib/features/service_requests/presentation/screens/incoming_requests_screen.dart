@@ -155,6 +155,15 @@ class _IncomingCard extends ConsumerWidget {
                 style: theme.textTheme.bodySmall,
               ),
             const SizedBox(height: 4),
+            // when, how many, how far — and the job in the customer's own words: a quote cannot be given without it
+            Text(
+              RequestSummaryCard.parts(context, request).join(' · '),
+              style: theme.textTheme.bodySmall,
+            ),
+            if (request.details != null && request.details!.isNotEmpty) ...[
+              const SizedBox(height: 4),
+              Text(request.details!),
+            ],
             if (request.budget != null)
               Text(
                 l10n.requestCustomerPrice(request.budget!.toStringAsFixed(0)),

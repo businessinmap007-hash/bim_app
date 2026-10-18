@@ -134,12 +134,15 @@ class _ServiceRequestDetailScreenState
               if (request.isOpen) ...[
                 Row(
                   children: [
+                    // a car or a technician is often asked without a price: no «0 جنيه» then
                     Expanded(
-                      child: Text(
-                        l10n.requestYourPrice(
-                          (request.budget ?? 0).toStringAsFixed(0),
-                        ),
-                      ),
+                      child: request.budget == null
+                          ? const SizedBox.shrink()
+                          : Text(
+                              l10n.requestYourPrice(
+                                request.budget!.toStringAsFixed(0),
+                              ),
+                            ),
                     ),
                     OutlinedButton(
                       onPressed: _busy ? null : () => _changePrice(request),
@@ -213,23 +216,16 @@ class RequestSummaryCard extends StatelessWidget {
     return from.isEmpty || to.isEmpty ? r.title : '$from ← $to';
   }
 
-  static String statusLabel(AppLocalizations l10n, String status) =>
-      switch (status) {
-        'open' => l10n.requestStatusOpen,
-        'accepted' => l10n.requestStatusAccepted,
-        'cancelled' => l10n.requestStatusCancelled,
-        _ => l10n.requestStatusExpired,
-      };
-
-  @override
-  Widget build(BuildContext context) {
+  /// «when · how many · how far» (a ride), «buy/rent · price · when» (a car), «when · budget» (a technician).
+  static List<String> parts(BuildContext context, ServiceRequestModel request) {
     final l10n = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
-    final parts = request.isHomeService
+    return request.isHomeService
         ? <String>[
             request.startsAt == null
                 ? l10n.homeServiceAnyTime
-                : LocalFormat.dayDate(context).addClock().format(request.startsAt!),
+                : LocalFormat.dayDate(
+                    context,
+                  ).addClock().format(request.startsAt!),
             if (request.budget != null)
               l10n.homeServiceBudgetIs(request.budget!.toStringAsFixed(0)),
           ]
@@ -252,6 +248,21 @@ class RequestSummaryCard extends StatelessWidget {
             if (request.distanceKm != null)
               l10n.rideDistanceKm(request.distanceKm!.toStringAsFixed(0)),
           ];
+  }
+
+  static String statusLabel(AppLocalizations l10n, String status) =>
+      switch (status) {
+        'open' => l10n.requestStatusOpen,
+        'accepted' => l10n.requestStatusAccepted,
+        'cancelled' => l10n.requestStatusCancelled,
+        _ => l10n.requestStatusExpired,
+      };
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final parts = RequestSummaryCard.parts(context, request);
 
     return Card(
       margin: EdgeInsets.zero,
