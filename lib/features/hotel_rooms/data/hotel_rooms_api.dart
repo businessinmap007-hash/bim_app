@@ -13,7 +13,19 @@ class HotelRoomQuery {
   final DateTime? checkIn;
   final DateTime? checkOut;
 
-  const HotelRoomQuery({this.classId, this.governorateId, this.cityId, this.priceMin, this.priceMax, this.checkIn, this.checkOut});
+  /// One hotel's rooms (the hotel list opens this once a stay is picked).
+  final int? businessId;
+
+  const HotelRoomQuery({
+    this.classId,
+    this.governorateId,
+    this.cityId,
+    this.priceMin,
+    this.priceMax,
+    this.checkIn,
+    this.checkOut,
+    this.businessId,
+  });
 
   bool get hasDates => checkIn != null && checkOut != null;
 
@@ -42,6 +54,7 @@ class HotelRoomQuery {
       priceMax: clearPrice ? null : (priceMax ?? this.priceMax),
       checkIn: clearDates ? null : (checkIn ?? this.checkIn),
       checkOut: clearDates ? null : (checkOut ?? this.checkOut),
+      businessId: businessId,
     );
   }
 
@@ -54,10 +67,11 @@ class HotelRoomQuery {
       other.priceMin == priceMin &&
       other.priceMax == priceMax &&
       other.checkIn == checkIn &&
-      other.checkOut == checkOut;
+      other.checkOut == checkOut &&
+      other.businessId == businessId;
 
   @override
-  int get hashCode => Object.hash(classId, governorateId, cityId, priceMin, priceMax, checkIn, checkOut);
+  int get hashCode => Object.hash(classId, governorateId, cityId, priceMin, priceMax, checkIn, checkOut, businessId);
 }
 
 class FilterOption {
@@ -221,6 +235,7 @@ class HotelRoomsApi {
                 'city_id': ?q.cityId,
                 'price_min': ?q.priceMin,
                 'price_max': ?q.priceMax,
+                'business_id': ?q.businessId,
                 if (q.hasDates) ...{'starts_at': _day(q.checkIn!), 'ends_at': _day(q.checkOut!)},
                 'per_page': 50,
               },

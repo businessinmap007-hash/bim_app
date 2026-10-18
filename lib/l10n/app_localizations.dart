@@ -18480,6 +18480,24 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الإجمالي {total} {currency} لـ{nights}'**
   String hotelRoomsTotalFor(String total, String currency, String nights);
+
+  /// No description provided for @bookingChooseStay.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر أيام الإقامة'**
+  String get bookingChooseStay;
+
+  /// No description provided for @bookingStayNights.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{ليلة واحدة} other{{count} ليالٍ}}'**
+  String bookingStayNights(int count);
+
+  /// No description provided for @bookingStayCheckInOut.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحضور {checkIn} والمغادرة {checkOut}'**
+  String bookingStayCheckInOut(String checkIn, String checkOut);
 }
 
 class _AppLocalizationsDelegate

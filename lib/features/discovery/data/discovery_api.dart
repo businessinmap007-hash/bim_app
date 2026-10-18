@@ -28,9 +28,13 @@ class DiscoveryApi {
     int? nearGovernorateId,
     int? nearCityId,
     List<int> optionIds = const [],
+    // A stay (hotels): only businesses with a room free for these nights.
+    DateTime? checkIn,
+    DateTime? checkOut,
     int page = 1,
     int perPage = 20,
   }) async {
+    String day(DateTime d) => '${d.year.toString().padLeft(4, '0')}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
     final data = await _client.get(
       '/discovery/businesses',
       query: {
@@ -42,6 +46,7 @@ class DiscoveryApi {
         'city_id': ?cityId,
         'near_governorate_id': ?nearGovernorateId,
         'near_city_id': ?nearCityId,
+        if (checkIn != null && checkOut != null) ...{'starts_at': day(checkIn), 'ends_at': day(checkOut)},
         // Dio's default list encoding repeats the bare key with no `[]`
         // (`option_ids=1&option_ids=2`), which PHP's query parser reads as
         // a scalar (last value wins), not an array — Laravel's `array`

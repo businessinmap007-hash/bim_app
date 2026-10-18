@@ -283,6 +283,9 @@ class BusinessProfile {
   final String? checkInTime;
   final String? checkOutTime;
 
+  /// A hotel's stars, shown as a badge on its page; null for a trade that does not let rooms.
+  final String? stayClass;
+
   /// The weekly opening hours the business wrote, or null while it has written none.
   final WorkingHours? workingHours;
 
@@ -314,6 +317,7 @@ class BusinessProfile {
     required this.fulfillment,
     this.checkInTime,
     this.checkOutTime,
+    this.stayClass,
     this.workingHours,
   });
 
@@ -348,6 +352,7 @@ class BusinessProfile {
     fulfillment: fulfillment,
     checkInTime: checkInTime,
     checkOutTime: checkOutTime,
+    stayClass: stayClass,
     workingHours: workingHours,
   );
 
@@ -398,6 +403,7 @@ class BusinessProfile {
       fulfillment: BusinessFulfillment.fromJson(json['fulfillment'] as Map<String, dynamic>? ?? const {}),
       checkInTime: _trimSeconds(json['check_in_time'] as String?),
       checkOutTime: _trimSeconds(json['check_out_time'] as String?),
+      stayClass: (json['stay_class'] as Map<String, dynamic>?)?['name'] as String?,
       workingHours: WorkingHours.fromJsonOrNull(json['working_hours']),
     );
   }

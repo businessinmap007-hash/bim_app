@@ -3526,5 +3526,10 @@
   "hotelRoomsNights": "{count, plural, =1{1 night} other{{count} nights}}",
   "@hotelRoomsNights": {"placeholders": {"count": {"type": "int"}}},
   "hotelRoomsTotalFor": "Total {total} {currency} for {nights}",
-  "@hotelRoomsTotalFor": {"placeholders": {"total": {"type": "String"}, "currency": {"type": "String"}, "nights": {"type": "String"}}}
+  "@hotelRoomsTotalFor": {"placeholders": {"total": {"type": "String"}, "currency": {"type": "String"}, "nights": {"type": "String"}}},
+  "bookingChooseStay": "Choose the days of your stay",
+  "bookingStayNights": "{count, plural, =1{1 night} other{{count} nights}}",
+  "@bookingStayNights": {"placeholders": {"count": {"type": "int"}}},
+  "bookingStayCheckInOut": "Check-in {checkIn}, check-out {checkOut}",
+  "@bookingStayCheckInOut": {"placeholders": {"checkIn": {"type": "String"}, "checkOut": {"type": "String"}}}
 }

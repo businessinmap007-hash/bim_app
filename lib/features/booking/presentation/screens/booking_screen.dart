@@ -274,6 +274,28 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     _schedulePreview();
   }
 
+  /// One screen for the whole stay: tap the first day and then the last, and every day between is selected. Replaces the two
+  /// separate «من» and «إلى» pickers of a period booking.
+  Future<void> _pickDateRange() async {
+    final now = EgyptTime.today();
+    final start = _startsAt;
+    final end = _endsAt;
+    final range = await showDateRangePicker(
+      context: context,
+      firstDate: now,
+      lastDate: now.add(const Duration(days: 730)),
+      initialDateRange: start != null && end != null && !end.isBefore(start) && !start.isBefore(now)
+          ? DateTimeRange(start: DateTime(start.year, start.month, start.day), end: DateTime(end.year, end.month, end.day))
+          : null,
+    );
+    if (range == null) return;
+    setState(() {
+      _startsAt = range.start;
+      _endsAt = range.end;
+    });
+    _schedulePreview();
+  }
+
   Future<void> _pickDateTime({required bool isEnd}) async {
     final now = EgyptTime.now();
     final initial = (isEnd ? _endsAt : _startsAt) ?? now;
@@ -877,25 +899,23 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(labelText, style: theme.textTheme.titleSmall),
-              Row(
-                children: [
-                  Expanded(
-                    child: ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(l10n.bookingFrom),
-                      subtitle: Text(_startsAt != null ? LocalFormat.numeric(context).format(_startsAt!) : l10n.bookingChoosePlaceholder),
-                      onTap: () => _pickDate(isEnd: false),
-                    ),
-                  ),
-                  Expanded(
-                    child: ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(l10n.bookingTo),
-                      subtitle: Text(_endsAt != null ? LocalFormat.numeric(context).format(_endsAt!) : l10n.bookingChoosePlaceholder),
-                      onTap: () => _pickDate(isEnd: true),
-                    ),
-                  ),
-                ],
+              // one control for the whole stay: from the first night to the day he leaves
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(
+                  _startsAt != null && _endsAt != null
+                      ? '${LocalFormat.numeric(context).format(_startsAt!)}  →  ${LocalFormat.numeric(context).format(_endsAt!)}'
+                      : l10n.bookingChooseStay,
+                ),
+                // «الحضور يوم 20 أكتوبر والمغادرة يوم 25 أكتوبر · 5 ليالٍ»
+                subtitle: _startsAt != null && _endsAt != null
+                    ? Text(
+                        '${l10n.bookingStayCheckInOut(LocalFormat.weekdayMonthDay(context).format(_startsAt!), LocalFormat.weekdayMonthDay(context).format(_endsAt!))}'
+                        ' · ${l10n.bookingStayNights(_endsAt!.difference(_startsAt!).inDays.clamp(1, 100000))}',
+                      )
+                    : null,
+                trailing: const Icon(Icons.date_range_outlined),
+                onTap: _pickDateRange,
               ),
             ],
           ),

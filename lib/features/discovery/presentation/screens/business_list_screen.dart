@@ -7,9 +7,14 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/responsive/breakpoints.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/local_format.dart';
+import '../../../hotel_rooms/data/hotel_rooms_api.dart';
+import '../../../hotel_rooms/presentation/screens/hotel_rooms_screen.dart';
 import '../../../location/application/location_providers.dart';
 import '../../../location/data/models/location_models.dart';
 import '../../application/discovery_providers.dart';
+import '../../data/models/business_summary.dart';
 import '../widgets/business_card.dart';
 import 'child_offerings_screen.dart';
 
@@ -76,6 +81,36 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
     ref
         .read(businessListControllerProvider(_scope).notifier)
         .setLocation(governorateId: result.governorateId, cityId: result.cityId, label: result.label);
+  }
+
+  /// One screen for the stay: tap the first day and then the last, every day between is selected.
+  Future<void> _pickStay(BuildContext context, BusinessListState state) async {
+    final today = EgyptTime.today();
+    final range = await showDateRangePicker(
+      context: context,
+      firstDate: today,
+      lastDate: today.add(const Duration(days: 365)),
+      initialDateRange: state.hasStay ? DateTimeRange(start: state.checkIn!, end: state.checkOut!) : null,
+    );
+    if (range == null || !mounted) return;
+    ref.read(businessListControllerProvider(_scope).notifier).setStay(range.start, range.end);
+  }
+
+  /// A hotel opened with a stay picked shows only ITS rooms free for those nights, each ready to book; anything else
+  /// opens the business page as it always did.
+  void _open(BuildContext context, BusinessSummary business, BusinessListState state) {
+    if (state.hasStay && business.stayClass != null) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => HotelRoomsScreen(
+            title: business.name,
+            initial: HotelRoomQuery(checkIn: state.checkIn, checkOut: state.checkOut, businessId: business.id),
+          ),
+        ),
+      );
+      return;
+    }
+    context.push('/business/${business.id}');
   }
 
   Future<void> _openAttributesFilter(BuildContext context, Set<int> current) async {
@@ -146,6 +181,18 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
                         ? () => ref.read(businessListControllerProvider(_scope).notifier).clearLocation()
                         : null,
                   ),
+                  // the stay: shown for a trade that lets rooms (its rows carry the stars) or once one is picked
+                  if (state.hasStay || state.items.any((b) => b.stayClass != null))
+                    InputChip(
+                      avatar: const Icon(Icons.event, size: 18),
+                      label: Text(
+                        state.hasStay
+                            ? '${LocalFormat.monthDay(context).format(state.checkIn!)} → ${LocalFormat.monthDay(context).format(state.checkOut!)}'
+                            : l10n.hotelRoomsDatesLabel,
+                      ),
+                      onPressed: () => _pickStay(context, state),
+                      onDeleted: state.hasStay ? () => ref.read(businessListControllerProvider(_scope).notifier).setStay(null, null) : null,
+                    ),
                   InputChip(
                     avatar: const Icon(Icons.tune, size: 18),
                     label: Text(
@@ -220,7 +267,7 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
                               final business = state.items[index];
                               return BusinessGridCard(
                                 business: business,
-                                onTap: () => context.push('/business/${business.id}'),
+                                onTap: () => _open(context, business, state),
                               );
                             },
                           )
@@ -241,7 +288,7 @@ class _BusinessListScreenState extends ConsumerState<BusinessListScreen> {
                         final business = state.items[index];
                         return BusinessCard(
                           business: business,
-                          onTap: () => context.push('/business/${business.id}'),
+                          onTap: () => _open(context, business, state),
                         );
                       },
                     ),

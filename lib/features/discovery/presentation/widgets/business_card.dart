@@ -11,6 +11,19 @@ class BusinessCard extends StatelessWidget {
 
   const BusinessCard({super.key, required this.business, required this.onTap});
 
+  /// A hotel's stars first, then its rating (or «اتصل للسعر»).
+  Widget? _subtitle(BuildContext context, AppLocalizations l10n) {
+    final rating = business.reviewCount > 0
+        ? _RatingLine(stars: business.starsAverage ?? 0, reviewCount: business.reviewCount)
+        : (!business.hasPrices ? Text(l10n.businessCallForPrice) : null);
+    final stars = business.stayClass == null ? null : _StayClassBadge(label: business.stayClass!);
+
+    if (stars == null) return rating;
+    if (rating == null) return stars;
+
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [stars, rating]);
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -39,12 +52,7 @@ class BusinessCard extends StatelessWidget {
           business.name,
           style: const TextStyle(fontWeight: FontWeight.w600),
         ),
-        subtitle: business.reviewCount > 0
-            ? _RatingLine(
-                stars: business.starsAverage ?? 0,
-                reviewCount: business.reviewCount,
-              )
-            : (!business.hasPrices ? Text(l10n.businessCallForPrice) : null),
+        subtitle: _subtitle(context, l10n),
         trailing: _OpenBadge(isOpenNow: business.isOpenNow),
       ),
     );
@@ -93,6 +101,10 @@ class BusinessGridCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
+                  if (business.stayClass != null) ...[
+                    const SizedBox(height: 2),
+                    _StayClassBadge(label: business.stayClass!),
+                  ],
                   const SizedBox(height: 4),
                   business.reviewCount > 0
                       ? _RatingLine(stars: business.starsAverage ?? 0, reviewCount: business.reviewCount)
@@ -108,6 +120,25 @@ class BusinessGridCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// «★ خمس نجوم» — a hotel's class beside its name (a hotel that ticked none reads «غير مصنّف»).
+class _StayClassBadge extends StatelessWidget {
+  final String label;
+
+  const _StayClassBadge({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Icon(Icons.star_rounded, size: 16, color: AppColors.accentGold),
+        const SizedBox(width: 4),
+        Flexible(child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.bodySmall)),
+      ],
     );
   }
 }

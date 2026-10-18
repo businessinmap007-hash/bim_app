@@ -10,6 +10,9 @@ class BusinessSummary {
   final bool hasPrices;
   final bool isOpenNow;
 
+  /// A hotel's stars («خمس نجوم», «غير مصنّف»); null for a trade that does not let rooms.
+  final String? stayClass;
+
   /// Only present on GET /discovery/recommended — null on /discovery/
   /// businesses, which never selects them. `reviewCount == 0` reads as
   /// "not yet rated", not "rated zero".
@@ -24,6 +27,7 @@ class BusinessSummary {
     required this.categoryChildId,
     required this.hasPrices,
     required this.isOpenNow,
+    this.stayClass,
     this.starsAverage,
     this.reviewCount = 0,
   });
@@ -37,6 +41,7 @@ class BusinessSummary {
         categoryChildId: (json['category_child_id'] as num?)?.toInt() ?? 0,
         hasPrices: json['has_prices'] as bool? ?? false,
         isOpenNow: json['is_open_now'] as bool? ?? true,
+        stayClass: (json['stay_class'] as Map<String, dynamic>?)?['name'] as String?,
         starsAverage: (json['stars_average'] as num?)?.toDouble(),
         reviewCount: (json['review_count'] as num?)?.toInt() ?? 0,
       );

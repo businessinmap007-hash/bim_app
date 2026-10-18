@@ -3,6 +3,7 @@ import '../../../hospital/presentation/widgets/hospital_departments_tab.dart';
 import '../../../../app/theme/app_button_styles.dart';
 import '../../../business_menu/presentation/widgets/store_terms_view.dart';
 import 'package:flutter/material.dart';
+import '../../../../app/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/network/api_exception.dart';
@@ -216,6 +217,16 @@ class _BusinessDetailBody extends StatelessWidget {
               _FollowButton(businessId: profile.id, isFollowing: profile.isFollowing),
             ],
           ),
+          if (profile.stayClass != null) ...[
+            const SizedBox(height: 6),
+            Row(
+              children: [
+                const Icon(Icons.star_rounded, size: 18, color: AppColors.accentGold),
+                const SizedBox(width: 4),
+                Text(profile.stayClass!, style: Theme.of(context).textTheme.titleSmall),
+              ],
+            ),
+          ],
           const SizedBox(height: 4),
           Text(
             l10n.businessFollowersCount(profile.followersCount),

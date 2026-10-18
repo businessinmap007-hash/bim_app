@@ -198,6 +198,10 @@ class BusinessListState {
   final String? locationLabel;
   final Set<int> optionIds;
 
+  /// The stay (hotels): the list keeps only hotels with a room free for these nights.
+  final DateTime? checkIn;
+  final DateTime? checkOut;
+
   const BusinessListState({
     this.items = const [],
     this.isLoading = false,
@@ -209,7 +213,11 @@ class BusinessListState {
     this.cityId,
     this.locationLabel,
     this.optionIds = const {},
+    this.checkIn,
+    this.checkOut,
   });
+
+  bool get hasStay => checkIn != null && checkOut != null;
 
   BusinessListState copyWith({
     List<BusinessSummary>? items,
@@ -224,6 +232,9 @@ class BusinessListState {
     String? locationLabel,
     bool clearLocation = false,
     Set<int>? optionIds,
+    DateTime? checkIn,
+    DateTime? checkOut,
+    bool clearStay = false,
   }) {
     return BusinessListState(
       items: items ?? this.items,
@@ -240,6 +251,8 @@ class BusinessListState {
           ? null
           : (locationLabel ?? this.locationLabel),
       optionIds: optionIds ?? this.optionIds,
+      checkIn: clearStay ? null : (checkIn ?? this.checkIn),
+      checkOut: clearStay ? null : (checkOut ?? this.checkOut),
     );
   }
 }
@@ -273,6 +286,8 @@ class BusinessListController extends StateNotifier<BusinessListState> {
         nearGovernorateId: nearGovernorateId,
         nearCityId: nearCityId,
         optionIds: state.optionIds.toList(),
+        checkIn: state.checkIn,
+        checkOut: state.checkOut,
         page: _page,
       );
       state = state.copyWith(
@@ -298,6 +313,8 @@ class BusinessListController extends StateNotifier<BusinessListState> {
         nearGovernorateId: nearGovernorateId,
         nearCityId: nearCityId,
         optionIds: state.optionIds.toList(),
+        checkIn: state.checkIn,
+        checkOut: state.checkOut,
         page: _page + 1,
       );
       _page += 1;
@@ -334,7 +351,16 @@ class BusinessListController extends StateNotifier<BusinessListState> {
       governorateId: governorateId,
       cityId: cityId,
       locationLabel: label,
+      optionIds: state.optionIds,
+      checkIn: state.checkIn,
+      checkOut: state.checkOut,
     );
+    load();
+  }
+
+  /// The stay: only hotels with a free room for these nights are listed. Null clears it.
+  void setStay(DateTime? checkIn, DateTime? checkOut) {
+    state = checkIn == null || checkOut == null ? state.copyWith(clearStay: true) : state.copyWith(checkIn: checkIn, checkOut: checkOut);
     load();
   }
 

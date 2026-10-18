@@ -17,14 +17,18 @@ import '../../data/hotel_rooms_api.dart';
 /// (the dates already filled in). A partner company that holds an allocation of the same room and offers it at its own
 /// price is shown on the card beside the hotel's price.
 class HotelRoomsScreen extends ConsumerStatefulWidget {
-  const HotelRoomsScreen({super.key});
+  /// What to start from (the hotel list passes its stay and the hotel), and the title to show instead of «احجز غرفة».
+  final HotelRoomQuery initial;
+  final String? title;
+
+  const HotelRoomsScreen({super.key, this.initial = const HotelRoomQuery(), this.title});
 
   @override
   ConsumerState<HotelRoomsScreen> createState() => _HotelRoomsScreenState();
 }
 
 class _HotelRoomsScreenState extends ConsumerState<HotelRoomsScreen> {
-  HotelRoomQuery _query = const HotelRoomQuery();
+  late HotelRoomQuery _query = widget.initial;
 
   Future<void> _openFilter() async {
     final picked = await showModalBottomSheet<HotelRoomQuery>(
@@ -60,7 +64,7 @@ class _HotelRoomsScreenState extends ConsumerState<HotelRoomsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.hotelRoomsTitle),
+        title: Text(widget.title ?? l10n.hotelRoomsTitle),
         actions: [
           TextButton.icon(
             onPressed: _openFilter,
@@ -287,6 +291,7 @@ class _FilterSheetState extends ConsumerState<_FilterSheet> {
     priceMax: double.tryParse(_max.text.trim()),
     checkIn: _q.checkIn,
     checkOut: _q.checkOut,
+    businessId: _q.businessId,
   );
 
   @override

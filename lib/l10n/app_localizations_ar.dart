@@ -10156,4 +10156,23 @@ class AppLocalizationsAr extends AppLocalizations {
   String hotelRoomsTotalFor(String total, String currency, String nights) {
     return 'الإجمالي $total $currency لـ$nights';
   }
+
+  @override
+  String get bookingChooseStay => 'اختر أيام الإقامة';
+
+  @override
+  String bookingStayNights(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ليالٍ',
+      one: 'ليلة واحدة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String bookingStayCheckInOut(String checkIn, String checkOut) {
+    return 'الحضور $checkIn والمغادرة $checkOut';
+  }
 }

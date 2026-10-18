@@ -3552,5 +3552,10 @@
   "hotelRoomsNights": "{count, plural, =1{ليلة واحدة} other{{count} ليالٍ}}",
   "@hotelRoomsNights": {"placeholders": {"count": {"type": "int"}}},
   "hotelRoomsTotalFor": "الإجمالي {total} {currency} لـ{nights}",
-  "@hotelRoomsTotalFor": {"placeholders": {"total": {"type": "String"}, "currency": {"type": "String"}, "nights": {"type": "String"}}}
+  "@hotelRoomsTotalFor": {"placeholders": {"total": {"type": "String"}, "currency": {"type": "String"}, "nights": {"type": "String"}}},
+  "bookingChooseStay": "اختر أيام الإقامة",
+  "bookingStayNights": "{count, plural, =1{ليلة واحدة} other{{count} ليالٍ}}",
+  "@bookingStayNights": {"placeholders": {"count": {"type": "int"}}},
+  "bookingStayCheckInOut": "الحضور {checkIn} والمغادرة {checkOut}",
+  "@bookingStayCheckInOut": {"placeholders": {"checkIn": {"type": "String"}, "checkOut": {"type": "String"}}}
 }
