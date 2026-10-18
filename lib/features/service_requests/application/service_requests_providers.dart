@@ -19,8 +19,21 @@ final serviceRequestProvider = FutureProvider.autoDispose
       return ref.watch(serviceRequestsApiProvider).show(id);
     });
 
-/// The open requests this business may answer.
-final incomingServiceRequestsProvider =
-    FutureProvider.autoDispose<List<ServiceRequestModel>>((ref) async {
-      return (await ref.watch(serviceRequestsApiProvider).incoming()).items;
+/// The open requests of one kind this business may answer.
+final incomingServiceRequestsProvider = FutureProvider.autoDispose
+    .family<List<ServiceRequestModel>, String>((ref, kind) async {
+      return (await ref.watch(serviceRequestsApiProvider).incoming(kind: kind))
+          .items;
     });
+
+/// The kinds of request this business's trade answers — empty hides the requests tile.
+final answerableRequestKindsProvider = FutureProvider.autoDispose<List<String>>(
+  (ref) {
+    return ref.watch(serviceRequestsApiProvider).answerableKinds();
+  },
+);
+
+/// The kinds of car and the makes a «أريد سيارة» request picks from.
+final carOptionsProvider = FutureProvider.autoDispose<CarOptions>((ref) {
+  return ref.watch(serviceRequestsApiProvider).carOptions();
+});

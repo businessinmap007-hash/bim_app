@@ -84,4 +84,39 @@ void main() {
     expect(quote.needsDistance, isTrue);
     expect(quote.suggestedPrice, isNull);
   });
+
+  test('a car request reads its words and the listing an offer points at', () {
+    final request = ServiceRequestModel.fromJson({
+      'id': 9,
+      'kind': 'car_wanted',
+      'title': 'أريد سيارة · سيدان',
+      'status': 'open',
+      'budget': 450000,
+      'params': {
+        'deal': 'rent',
+        'days': 7,
+        'year_min': 2018,
+        'vehicle_type': {'id': 3, 'name': 'سيدان'},
+        'brand': {'id': 5, 'name': 'تويوتا'},
+      },
+      'offers': [
+        {
+          'id': 1,
+          'price': 430000,
+          'status': 'pending',
+          'item': {'id': 77, 'name': 'كورولا ٢٠٢٠', 'price': 430000},
+          'business': {'id': 4, 'name': 'معرض النور'},
+        },
+      ],
+    });
+
+    expect(request.isCarWanted, isTrue);
+    expect(request.isRentalWanted, isTrue);
+    expect(request.days, 7);
+    expect(request.yearMin, 2018);
+    expect(request.vehicleTypeName, 'سيدان');
+    expect(request.brandName, 'تويوتا');
+    expect(request.offers.single.itemName, 'كورولا ٢٠٢٠');
+    expect(request.offers.single.itemId, 77);
+  });
 }

@@ -27,6 +27,7 @@ import '../../../prescriptions/presentation/screens/pharmacy_queue_screen.dart';
 import '../../../projects/presentation/screens/projects_screen.dart';
 import '../../../retail_listings/presentation/screens/retail_listings_screen.dart';
 import '../../../schedules/presentation/screens/my_trip_schedules_screen.dart';
+import '../../../service_requests/application/service_requests_providers.dart';
 import '../../../service_requests/presentation/screens/incoming_requests_screen.dart';
 import '../../../staff/application/staff_providers.dart';
 import '../../../stay_requests/application/stay_requests_providers.dart';
@@ -78,6 +79,8 @@ class ServicesSettingsScreen extends ConsumerWidget {
     // «خدمات المحل» (cooking method…) only for a trade that offers services.
     final hasShopAddons = ref.watch(shopAddonsProvider).valueOrNull?.isNotEmpty ?? false;
     final hasStayUnits = ref.watch(hasStayUnitsProvider).valueOrNull ?? false;
+    // a limousine driver, a showroom or a private car seller has customers' requests to answer
+    final hasRequests = ref.watch(answerableRequestKindsProvider).valueOrNull?.isNotEmpty ?? false;
     // only a business that sells courses has groups to open
     final hasCourses = ref.watch(myCoursesProvider).valueOrNull?.courses.isNotEmpty ?? false;
     final authState = ref.watch(authControllerProvider);
@@ -110,6 +113,7 @@ class ServicesSettingsScreen extends ConsumerWidget {
           hasSpecialtyServices: hasSpecialtyServices,
           hasShopAddons: hasShopAddons,
           hasStayUnits: hasStayUnits,
+          hasRequests: hasRequests,
           hasCourses: hasCourses,
           isAppointment: isAppointment,
         ),
@@ -123,6 +127,7 @@ class ServicesSettingsScreen extends ConsumerWidget {
           hasSpecialtyServices: hasSpecialtyServices,
           hasShopAddons: hasShopAddons,
           hasStayUnits: hasStayUnits,
+          hasRequests: hasRequests,
           hasCourses: hasCourses,
           isAppointment: isAppointment,
         ),
@@ -155,6 +160,9 @@ class _ServiceList extends StatelessWidget {
   /// The business lets rooms (a `booking_stay` unit) — it is a hotel, and hotels hear from their guests.
   final bool hasStayUnits;
 
+  /// Its trade answers customers' requests (rides, cars) — the tile to the open ones.
+  final bool hasRequests;
+
   /// The business sells courses (it has a priced course) — it opens groups of them.
   final bool hasCourses;
 
@@ -170,6 +178,7 @@ class _ServiceList extends StatelessWidget {
     this.hasSpecialtyServices = false,
     this.hasShopAddons = false,
     this.hasStayUnits = false,
+    this.hasRequests = false,
     this.hasCourses = false,
     this.isAppointment = false,
   });
@@ -438,9 +447,9 @@ class _ServiceList extends StatelessWidget {
         builder: (_) => const MyTripSchedulesScreen(),
       ),
       _Tile(
-        show: _has('schedules'),
+        show: hasRequests,
         leading: Icons.local_taxi_outlined,
-        title: l10n.rideIncomingTitle,
+        title: l10n.requestsAnswerTitle,
         builder: (_) => const IncomingRequestsScreen(),
       ),
       _Tile(

@@ -64,6 +64,11 @@ class RequestOffer {
   final String? businessName;
   final String? businessLogo;
 
+  /// The listing the business pointed at (a dealer answering «أريد سيارة» with the car he has).
+  final int? itemId;
+  final String? itemName;
+  final double? itemPrice;
+
   const RequestOffer({
     required this.id,
     required this.price,
@@ -74,6 +79,9 @@ class RequestOffer {
     this.businessId,
     this.businessName,
     this.businessLogo,
+    this.itemId,
+    this.itemName,
+    this.itemPrice,
   });
 
   bool get isPending => status == 'pending';
@@ -81,6 +89,7 @@ class RequestOffer {
 
   factory RequestOffer.fromJson(Map<String, dynamic> json) {
     final business = json['business'] as Map<String, dynamic>?;
+    final item = json['item'] as Map<String, dynamic>?;
     return RequestOffer(
       id: (json['id'] as num).toInt(),
       price: (json['price'] as num?)?.toDouble() ?? 0,
@@ -91,6 +100,9 @@ class RequestOffer {
       businessId: (business?['id'] as num?)?.toInt(),
       businessName: business?['name'] as String?,
       businessLogo: business?['logo'] as String?,
+      itemId: (item?['id'] as num?)?.toInt(),
+      itemName: item?['name'] as String?,
+      itemPrice: (item?['price'] as num?)?.toDouble(),
     );
   }
 }
@@ -117,6 +129,13 @@ class ServiceRequestModel {
   final RequestOffer? myOffer;
   final String? requesterFirstName;
 
+  /// «أريد سيارة»: 'buy' | 'rent', and the words of what he wants.
+  final String? deal;
+  final String? vehicleTypeName;
+  final String? brandName;
+  final int? yearMin;
+  final int? days;
+
   const ServiceRequestModel({
     required this.id,
     required this.kind,
@@ -136,9 +155,16 @@ class ServiceRequestModel {
     this.offers = const [],
     this.myOffer,
     this.requesterFirstName,
+    this.deal,
+    this.vehicleTypeName,
+    this.brandName,
+    this.yearMin,
+    this.days,
   });
 
   bool get isOpen => status == 'open';
+  bool get isCarWanted => kind == 'car_wanted';
+  bool get isRentalWanted => deal == 'rent';
 
   factory ServiceRequestModel.fromJson(Map<String, dynamic> json) {
     final params = json['params'] as Map<String, dynamic>? ?? const {};
@@ -168,8 +194,41 @@ class ServiceRequestModel {
           .toList(),
       myOffer: my == null ? null : RequestOffer.fromJson(my),
       requesterFirstName: requester?['first_name'] as String?,
+      deal: params['deal'] as String?,
+      vehicleTypeName:
+          (params['vehicle_type'] as Map<String, dynamic>?)?['name'] as String?,
+      brandName: (params['brand'] as Map<String, dynamic>?)?['name'] as String?,
+      yearMin: (params['year_min'] as num?)?.toInt(),
+      days: (params['days'] as num?)?.toInt(),
     );
   }
+}
+
+/// A kind of car or a make a «أريد سيارة» request picks from.
+class CarOption {
+  final int id;
+  final String name;
+  const CarOption({required this.id, required this.name});
+
+  factory CarOption.fromJson(Map<String, dynamic> json) => CarOption(
+    id: (json['id'] as num).toInt(),
+    name: json['name'] as String? ?? '',
+  );
+}
+
+class CarOptions {
+  final List<CarOption> vehicleTypes;
+  final List<CarOption> brands;
+  const CarOptions({this.vehicleTypes = const [], this.brands = const []});
+
+  factory CarOptions.fromJson(Map<String, dynamic> json) => CarOptions(
+    vehicleTypes: (json['vehicle_types'] as List<dynamic>? ?? const [])
+        .map((e) => CarOption.fromJson(e as Map<String, dynamic>))
+        .toList(),
+    brands: (json['brands'] as List<dynamic>? ?? const [])
+        .map((e) => CarOption.fromJson(e as Map<String, dynamic>))
+        .toList(),
+  );
 }
 
 /// The requests-and-offers core over HTTP — see Api\V2\ServiceRequestController. The customer posts, watches the offers
@@ -231,6 +290,49 @@ class ServiceRequestsApi {
     );
   }
 
+  Future<CarOptions> carOptions() async {
+    final data =
+        await _client.get('/service-requests/car-options')
+            as Map<String, dynamic>;
+    return CarOptions.fromJson(data);
+  }
+
+  Future<ServiceRequestModel> createCarWanted({
+    required String deal,
+    required int governorateId,
+    int? cityId,
+    int? vehicleTypeOptionId,
+    int? brandOptionId,
+    int? yearMin,
+    double? maxPrice,
+    int? days,
+    DateTime? startsAt,
+    String? details,
+  }) async {
+    final data =
+        await _client.post(
+              '/service-requests',
+              data: {
+                'kind': 'car_wanted',
+                'deal': deal,
+                'governorate_id': governorateId,
+                'city_id': ?cityId,
+                'vehicle_type_option_id': ?vehicleTypeOptionId,
+                'brand_option_id': ?brandOptionId,
+                'year_min': ?yearMin,
+                'max_price': ?maxPrice,
+                if (deal == 'rent') 'days': ?days,
+                if (startsAt != null) 'starts_at': _stamp(startsAt),
+                if (details != null && details.trim().isNotEmpty)
+                  'details': details.trim(),
+              },
+            )
+            as Map<String, dynamic>;
+    return ServiceRequestModel.fromJson(
+      data['request'] as Map<String, dynamic>,
+    );
+  }
+
   Future<Paginated<ServiceRequestModel>> mine({int page = 1}) async {
     final data =
         await _client.get('/service-requests', query: {'page': page})
@@ -270,11 +372,27 @@ class ServiceRequestsApi {
 
   // ─────────────────────── Business side ───────────────────────
 
-  Future<Paginated<ServiceRequestModel>> incoming({int page = 1}) async {
+  Future<Paginated<ServiceRequestModel>> incoming({
+    String kind = 'ride',
+    int page = 1,
+  }) async {
     final data =
-        await _client.get('/business/service-requests', query: {'page': page})
+        await _client.get(
+              '/business/service-requests',
+              query: {'kind': kind, 'page': page},
+            )
             as Map<String, dynamic>;
     return Paginated.fromJson(data, ServiceRequestModel.fromJson);
+  }
+
+  /// Which kinds of request this business's trade may answer (none: the requests tile stays hidden).
+  Future<List<String>> answerableKinds() async {
+    final data =
+        await _client.get('/business/service-requests/kinds')
+            as Map<String, dynamic>;
+    return (data['kinds'] as List<dynamic>? ?? const [])
+        .map((e) => e as String)
+        .toList();
   }
 
   Future<void> offer(
@@ -283,6 +401,7 @@ class ServiceRequestsApi {
     bool acceptsBudget = false,
     String? message,
     int? etaMinutes,
+    int? menuItemId,
   }) {
     return _client.post(
       '/business/service-requests/$id/offers',
@@ -291,6 +410,7 @@ class ServiceRequestsApi {
         if (message != null && message.trim().isNotEmpty)
           'message': message.trim(),
         'eta_minutes': ?etaMinutes,
+        'menu_item_id': ?menuItemId,
       },
     );
   }

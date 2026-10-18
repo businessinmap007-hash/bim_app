@@ -3,56 +3,96 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../business_menu/application/business_menu_providers.dart';
+import '../../../business_menu/data/models/menu_item.dart';
 import '../../application/service_requests_providers.dart';
 import '../../data/service_requests_api.dart';
 import 'service_request_detail_screen.dart' show RequestSummaryCard;
 
 /// The business side: the open requests this account may answer (its trade, its governorate), its own offer on each,
-/// and the sheet to offer a price — see Api\V2\ServiceRequestController::incoming / offer / withdraw.
-class IncomingRequestsScreen extends ConsumerWidget {
+/// and the sheet to offer a price — see Api\V2\ServiceRequestController::incoming / offer / withdraw. A trade that
+/// answers more than one kind (rides and cars) gets a switch between them.
+class IncomingRequestsScreen extends ConsumerStatefulWidget {
   const IncomingRequestsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<IncomingRequestsScreen> createState() =>
+      _IncomingRequestsScreenState();
+}
+
+class _IncomingRequestsScreenState
+    extends ConsumerState<IncomingRequestsScreen> {
+  String? _kind;
+
+  static String _label(AppLocalizations l10n, String kind) =>
+      kind == 'car_wanted' ? l10n.requestKindCar : l10n.requestKindRide;
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final async = ref.watch(incomingServiceRequestsProvider);
+    final kinds =
+        ref.watch(answerableRequestKindsProvider).valueOrNull ??
+        const <String>[];
+    final kind = _kind ?? (kinds.isNotEmpty ? kinds.first : 'ride');
+    final async = ref.watch(incomingServiceRequestsProvider(kind));
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.rideIncomingTitle)),
-      body: async.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                e is ApiException ? e.message : l10n.commonSomethingWentWrong,
+      appBar: AppBar(title: Text(l10n.requestsAnswerTitle)),
+      body: Column(
+        children: [
+          if (kinds.length > 1)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+              child: SegmentedButton<String>(
+                segments: [
+                  for (final k in kinds)
+                    ButtonSegment(value: k, label: Text(_label(l10n, k))),
+                ],
+                selected: {kind},
+                onSelectionChanged: (s) => setState(() => _kind = s.first),
               ),
-              TextButton(
-                onPressed: () =>
-                    ref.invalidate(incomingServiceRequestsProvider),
-                child: Text(l10n.commonRetry),
-              ),
-            ],
-          ),
-        ),
-        data: (items) => RefreshIndicator(
-          onRefresh: () async =>
-              ref.refresh(incomingServiceRequestsProvider.future),
-          child: items.isEmpty
-              ? ListView(
+            ),
+          Expanded(
+            child: async.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (e, _) => Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    const SizedBox(height: 120),
-                    Center(child: Text(l10n.requestsIncomingEmpty)),
+                    Text(
+                      e is ApiException
+                          ? e.message
+                          : l10n.commonSomethingWentWrong,
+                    ),
+                    TextButton(
+                      onPressed: () =>
+                          ref.invalidate(incomingServiceRequestsProvider(kind)),
+                      child: Text(l10n.commonRetry),
+                    ),
                   ],
-                )
-              : ListView.separated(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: items.length,
-                  separatorBuilder: (_, _) => const SizedBox(height: 8),
-                  itemBuilder: (context, i) => _IncomingCard(request: items[i]),
                 ),
-        ),
+              ),
+              data: (items) => RefreshIndicator(
+                onRefresh: () async =>
+                    ref.refresh(incomingServiceRequestsProvider(kind).future),
+                child: items.isEmpty
+                    ? ListView(
+                        children: [
+                          const SizedBox(height: 120),
+                          Center(child: Text(l10n.requestsIncomingEmpty)),
+                        ],
+                      )
+                    : ListView.separated(
+                        padding: const EdgeInsets.all(16),
+                        itemCount: items.length,
+                        separatorBuilder: (_, _) => const SizedBox(height: 8),
+                        itemBuilder: (context, i) =>
+                            _IncomingCard(request: items[i]),
+                      ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -67,7 +107,7 @@ class _IncomingCard extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     try {
       await ref.read(serviceRequestsApiProvider).withdraw(request.id);
-      ref.invalidate(incomingServiceRequestsProvider);
+      ref.invalidate(incomingServiceRequestsProvider(request.kind));
       if (context.mounted) {
         ScaffoldMessenger.of(
           context,
@@ -110,11 +150,10 @@ class _IncomingCard extends ConsumerWidget {
                 style: theme.textTheme.bodySmall,
               ),
             const SizedBox(height: 4),
-            Text(
-              l10n.requestCustomerPrice(
-                (request.budget ?? 0).toStringAsFixed(0),
+            if (request.budget != null)
+              Text(
+                l10n.requestCustomerPrice(request.budget!.toStringAsFixed(0)),
               ),
-            ),
             Text(
               l10n.requestOffersCount(request.offersCount),
               style: theme.textTheme.bodySmall,
@@ -179,6 +218,26 @@ class _OfferSheetState extends ConsumerState<_OfferSheet> {
   bool _acceptBudget = false;
   bool _busy = false;
   String? _error;
+  int? _itemId;
+  List<BusinessMenuItem> _items = const [];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.request.isCarWanted) _loadItems();
+  }
+
+  /// A dealer answers «أريد سيارة» with one of his own cars.
+  Future<void> _loadItems() async {
+    try {
+      final page = await ref
+          .read(businessMenuApiProvider)
+          .items(isActive: true);
+      if (mounted) setState(() => _items = page.items);
+    } catch (_) {
+      // the picker is optional: the offer can go without a particular car
+    }
+  }
 
   @override
   void dispose() {
@@ -203,8 +262,9 @@ class _OfferSheetState extends ConsumerState<_OfferSheet> {
             acceptsBudget: _acceptBudget,
             message: _message.text,
             etaMinutes: int.tryParse(_eta.text.trim()),
+            menuItemId: _itemId,
           );
-      ref.invalidate(incomingServiceRequestsProvider);
+      ref.invalidate(incomingServiceRequestsProvider(widget.request.kind));
       if (!mounted) return;
       Navigator.of(context).pop();
       ScaffoldMessenger.of(
@@ -241,12 +301,13 @@ class _OfferSheetState extends ConsumerState<_OfferSheet> {
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 12),
-            CheckboxListTile(
-              contentPadding: EdgeInsets.zero,
-              value: _acceptBudget,
-              onChanged: (v) => setState(() => _acceptBudget = v ?? false),
-              title: Text(l10n.requestOfferAcceptBudget(budget)),
-            ),
+            if (widget.request.budget != null)
+              CheckboxListTile(
+                contentPadding: EdgeInsets.zero,
+                value: _acceptBudget,
+                onChanged: (v) => setState(() => _acceptBudget = v ?? false),
+                title: Text(l10n.requestOfferAcceptBudget(budget)),
+              ),
             if (!_acceptBudget)
               TextField(
                 controller: _price,
@@ -257,12 +318,38 @@ class _OfferSheetState extends ConsumerState<_OfferSheet> {
                   labelText: l10n.requestOfferPriceLabel,
                 ),
               ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: _eta,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: l10n.requestOfferEtaLabel),
-            ),
+            if (widget.request.isCarWanted && _items.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              DropdownButtonFormField<int?>(
+                initialValue: _itemId,
+                isExpanded: true,
+                decoration: InputDecoration(labelText: l10n.carOfferPickItem),
+                items: [
+                  DropdownMenuItem<int?>(
+                    value: null,
+                    child: Text(l10n.carOfferNoItem),
+                  ),
+                  for (final i in _items)
+                    DropdownMenuItem<int?>(
+                      value: i.id,
+                      child: Text(
+                        '${i.nameAr} · ${i.basePrice.toStringAsFixed(0)}',
+                      ),
+                    ),
+                ],
+                onChanged: (v) => setState(() => _itemId = v),
+              ),
+            ],
+            if (!widget.request.isCarWanted) ...[
+              const SizedBox(height: 12),
+              TextField(
+                controller: _eta,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: l10n.requestOfferEtaLabel,
+                ),
+              ),
+            ],
             const SizedBox(height: 12),
             TextField(
               controller: _message,

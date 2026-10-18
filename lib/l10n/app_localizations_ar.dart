@@ -9980,4 +9980,91 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get stayDiscountMonthly => 'خصم الشهر %';
+
+  @override
+  String get carWantedTitle => 'أريد سيارة';
+
+  @override
+  String get carWantedIntro =>
+      'اكتب ما تريده وأصحاب المعارض والملاك في محافظتك يردّون بما عندهم. اختر أنسب عرض واحجز معاينة.';
+
+  @override
+  String get carDealBuy => 'شراء';
+
+  @override
+  String get carDealRent => 'إيجار';
+
+  @override
+  String get carTypeLabel => 'نوع السيارة';
+
+  @override
+  String get carBrandLabel => 'الماركة';
+
+  @override
+  String get carAnyChoice => 'أي';
+
+  @override
+  String get carYearMinLabel => 'من سنة';
+
+  @override
+  String get carMaxPriceBuy => 'أقصى سعر (جنيه)';
+
+  @override
+  String get carMaxPriceRent => 'أقصى سعر لليوم (جنيه)';
+
+  @override
+  String get carDaysLabel => 'عدد الأيام';
+
+  @override
+  String get carViewingWhen => 'موعد المعاينة (اختياري)';
+
+  @override
+  String get carWantedSubmit => 'انشر طلبي';
+
+  @override
+  String get carGovernorateRequired => 'اختر المحافظة والمدينة.';
+
+  @override
+  String get carWantedAcceptViewing => 'اقبل واحجز المعاينة';
+
+  @override
+  String carOfferItem(String name) {
+    return 'السيارة: $name';
+  }
+
+  @override
+  String get carOfferPickItem => 'اربط عرضك بسيارة من عندك (اختياري)';
+
+  @override
+  String get carOfferNoItem => 'بدون سيارة محددة';
+
+  @override
+  String carRentDaysCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count أيام',
+      one: 'يوم واحد',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String carYearFrom(String year) {
+    return 'من $year';
+  }
+
+  @override
+  String carMaxPriceIs(String price) {
+    return 'حتى $price جنيه';
+  }
+
+  @override
+  String get requestsAnswerTitle => 'طلبات العملاء';
+
+  @override
+  String get requestKindRide => 'مشاوير';
+
+  @override
+  String get requestKindCar => 'سيارات';
 }

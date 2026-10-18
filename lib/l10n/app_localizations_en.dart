@@ -10051,4 +10051,91 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get stayDiscountMonthly => 'Month discount %';
+
+  @override
+  String get carWantedTitle => 'I want a car';
+
+  @override
+  String get carWantedIntro =>
+      'Say what you are after; showrooms and owners in your governorate answer with what they have. Pick the best offer and book a viewing.';
+
+  @override
+  String get carDealBuy => 'Buy';
+
+  @override
+  String get carDealRent => 'Rent';
+
+  @override
+  String get carTypeLabel => 'Kind of car';
+
+  @override
+  String get carBrandLabel => 'Make';
+
+  @override
+  String get carAnyChoice => 'Any';
+
+  @override
+  String get carYearMinLabel => 'From year';
+
+  @override
+  String get carMaxPriceBuy => 'Highest price (EGP)';
+
+  @override
+  String get carMaxPriceRent => 'Highest price per day (EGP)';
+
+  @override
+  String get carDaysLabel => 'Number of days';
+
+  @override
+  String get carViewingWhen => 'Viewing time (optional)';
+
+  @override
+  String get carWantedSubmit => 'Post my request';
+
+  @override
+  String get carGovernorateRequired => 'Choose the governorate and city.';
+
+  @override
+  String get carWantedAcceptViewing => 'Accept and book the viewing';
+
+  @override
+  String carOfferItem(String name) {
+    return 'The car: $name';
+  }
+
+  @override
+  String get carOfferPickItem => 'Point at one of your cars (optional)';
+
+  @override
+  String get carOfferNoItem => 'No particular car';
+
+  @override
+  String carRentDaysCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count days',
+      one: '1 day',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String carYearFrom(String year) {
+    return 'From $year';
+  }
+
+  @override
+  String carMaxPriceIs(String price) {
+    return 'Up to $price EGP';
+  }
+
+  @override
+  String get requestsAnswerTitle => 'Customers\' requests';
+
+  @override
+  String get requestKindRide => 'Rides';
+
+  @override
+  String get requestKindCar => 'Cars';
 }

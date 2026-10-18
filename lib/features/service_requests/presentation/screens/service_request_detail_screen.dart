@@ -177,6 +177,9 @@ class _ServiceRequestDetailScreenState
                   _OfferCard(
                     offer: offer,
                     canAccept: request.isOpen && offer.isPending && !_busy,
+                    acceptLabel: request.isCarWanted
+                        ? l10n.carWantedAcceptViewing
+                        : l10n.requestOfferAccept,
                     onAccept: () => _accept(request, offer),
                   ),
               if (request.isOpen) ...[
@@ -204,6 +207,7 @@ class RequestSummaryCard extends StatelessWidget {
   const RequestSummaryCard({super.key, required this.request});
 
   static String title(ServiceRequestModel r) {
+    if (r.isCarWanted) return r.title;
     final from = r.origin?.city ?? '';
     final to = r.destination?.city ?? '';
     return from.isEmpty || to.isEmpty ? r.title : '$from ← $to';
@@ -221,14 +225,25 @@ class RequestSummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final parts = <String>[
-      request.startsAt == null
-          ? l10n.rideWhenNow
-          : LocalFormat.dayDate(context).addClock().format(request.startsAt!),
-      l10n.requestPassengersCount(request.passengers),
-      if (request.distanceKm != null)
-        l10n.rideDistanceKm(request.distanceKm!.toStringAsFixed(0)),
-    ];
+    final parts = request.isCarWanted
+        ? <String>[
+            request.isRentalWanted ? l10n.carDealRent : l10n.carDealBuy,
+            if (request.days != null) l10n.carRentDaysCount(request.days!),
+            if (request.budget != null)
+              l10n.carMaxPriceIs(request.budget!.toStringAsFixed(0)),
+            if (request.startsAt != null)
+              LocalFormat.dayDate(context).addClock().format(request.startsAt!),
+          ]
+        : <String>[
+            request.startsAt == null
+                ? l10n.rideWhenNow
+                : LocalFormat.dayDate(
+                    context,
+                  ).addClock().format(request.startsAt!),
+            l10n.requestPassengersCount(request.passengers),
+            if (request.distanceKm != null)
+              l10n.rideDistanceKm(request.distanceKm!.toStringAsFixed(0)),
+          ];
 
     return Card(
       margin: EdgeInsets.zero,
@@ -263,11 +278,13 @@ class RequestSummaryCard extends StatelessWidget {
 class _OfferCard extends StatelessWidget {
   final RequestOffer offer;
   final bool canAccept;
+  final String acceptLabel;
   final VoidCallback onAccept;
 
   const _OfferCard({
     required this.offer,
     required this.canAccept,
+    required this.acceptLabel,
     required this.onAccept,
   });
 
@@ -301,6 +318,11 @@ class _OfferCard extends StatelessWidget {
                 ),
               ],
             ),
+            if (offer.itemName != null)
+              Text(
+                l10n.carOfferItem(offer.itemName!),
+                style: theme.textTheme.bodyMedium,
+              ),
             if (notes.isNotEmpty)
               Text(notes.join(' · '), style: theme.textTheme.bodySmall),
             if (offer.acceptsBudget) ...[
@@ -316,7 +338,7 @@ class _OfferCard extends StatelessWidget {
                 width: double.infinity,
                 child: FilledButton(
                   onPressed: onAccept,
-                  child: Text(l10n.requestOfferAccept),
+                  child: Text(acceptLabel),
                 ),
               ),
             ],

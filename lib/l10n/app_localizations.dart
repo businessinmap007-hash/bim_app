@@ -18204,6 +18204,150 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'خصم الشهر %'**
   String get stayDiscountMonthly;
+
+  /// No description provided for @carWantedTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أريد سيارة'**
+  String get carWantedTitle;
+
+  /// No description provided for @carWantedIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب ما تريده وأصحاب المعارض والملاك في محافظتك يردّون بما عندهم. اختر أنسب عرض واحجز معاينة.'**
+  String get carWantedIntro;
+
+  /// No description provided for @carDealBuy.
+  ///
+  /// In ar, this message translates to:
+  /// **'شراء'**
+  String get carDealBuy;
+
+  /// No description provided for @carDealRent.
+  ///
+  /// In ar, this message translates to:
+  /// **'إيجار'**
+  String get carDealRent;
+
+  /// No description provided for @carTypeLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع السيارة'**
+  String get carTypeLabel;
+
+  /// No description provided for @carBrandLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الماركة'**
+  String get carBrandLabel;
+
+  /// No description provided for @carAnyChoice.
+  ///
+  /// In ar, this message translates to:
+  /// **'أي'**
+  String get carAnyChoice;
+
+  /// No description provided for @carYearMinLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'من سنة'**
+  String get carYearMinLabel;
+
+  /// No description provided for @carMaxPriceBuy.
+  ///
+  /// In ar, this message translates to:
+  /// **'أقصى سعر (جنيه)'**
+  String get carMaxPriceBuy;
+
+  /// No description provided for @carMaxPriceRent.
+  ///
+  /// In ar, this message translates to:
+  /// **'أقصى سعر لليوم (جنيه)'**
+  String get carMaxPriceRent;
+
+  /// No description provided for @carDaysLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد الأيام'**
+  String get carDaysLabel;
+
+  /// No description provided for @carViewingWhen.
+  ///
+  /// In ar, this message translates to:
+  /// **'موعد المعاينة (اختياري)'**
+  String get carViewingWhen;
+
+  /// No description provided for @carWantedSubmit.
+  ///
+  /// In ar, this message translates to:
+  /// **'انشر طلبي'**
+  String get carWantedSubmit;
+
+  /// No description provided for @carGovernorateRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر المحافظة والمدينة.'**
+  String get carGovernorateRequired;
+
+  /// No description provided for @carWantedAcceptViewing.
+  ///
+  /// In ar, this message translates to:
+  /// **'اقبل واحجز المعاينة'**
+  String get carWantedAcceptViewing;
+
+  /// No description provided for @carOfferItem.
+  ///
+  /// In ar, this message translates to:
+  /// **'السيارة: {name}'**
+  String carOfferItem(String name);
+
+  /// No description provided for @carOfferPickItem.
+  ///
+  /// In ar, this message translates to:
+  /// **'اربط عرضك بسيارة من عندك (اختياري)'**
+  String get carOfferPickItem;
+
+  /// No description provided for @carOfferNoItem.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون سيارة محددة'**
+  String get carOfferNoItem;
+
+  /// No description provided for @carRentDaysCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{يوم واحد} other{{count} أيام}}'**
+  String carRentDaysCount(int count);
+
+  /// No description provided for @carYearFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'من {year}'**
+  String carYearFrom(String year);
+
+  /// No description provided for @carMaxPriceIs.
+  ///
+  /// In ar, this message translates to:
+  /// **'حتى {price} جنيه'**
+  String carMaxPriceIs(String price);
+
+  /// No description provided for @requestsAnswerTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلبات العملاء'**
+  String get requestsAnswerTitle;
+
+  /// No description provided for @requestKindRide.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشاوير'**
+  String get requestKindRide;
+
+  /// No description provided for @requestKindCar.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيارات'**
+  String get requestKindCar;
 }
 
 class _AppLocalizationsDelegate
