@@ -10,7 +10,26 @@ import '../../application/schedules_providers.dart';
 import '../../data/models/trip_reservation.dart';
 import '../widgets/trip_leg_summary.dart';
 
-const _statuses = <String?>[null, 'pending', 'confirmed', 'completed', 'cancelled', 'no_show', 'blocked'];
+const _statuses = <String?>[
+  null,
+  'pending',
+  'confirmed',
+  'completed',
+  'cancelled',
+  'no_show',
+  'blocked',
+];
+
+String _statusLabel(AppLocalizations l10n, String? status) => switch (status) {
+  null => l10n.tripReservationStatusAll,
+  'pending' => l10n.tripReservationStatusPending,
+  'confirmed' => l10n.tripReservationStatusConfirmed,
+  'completed' => l10n.tripReservationStatusCompleted,
+  'cancelled' => l10n.tripReservationStatusCancelled,
+  'no_show' => l10n.tripReservationStatusNoShow,
+  'blocked' => l10n.tripReservationStatusBlocked,
+  _ => status,
+};
 
 /// Api\V2\TripReservationController — reservations customers made on this
 /// carrier's own published trip legs: confirm, complete (also records the
@@ -28,23 +47,16 @@ class IncomingReservationsScreen extends ConsumerWidget {
       await action();
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(e is ApiException ? e.message : l10n.commonSomethingWentWrong)));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              e is ApiException ? e.message : l10n.commonSomethingWentWrong,
+            ),
+          ),
+        );
       }
     }
   }
-
-  String _statusLabel(AppLocalizations l10n, String? status) => switch (status) {
-    null => l10n.tripReservationStatusAll,
-    'pending' => l10n.tripReservationStatusPending,
-    'confirmed' => l10n.tripReservationStatusConfirmed,
-    'completed' => l10n.tripReservationStatusCompleted,
-    'cancelled' => l10n.tripReservationStatusCancelled,
-    'no_show' => l10n.tripReservationStatusNoShow,
-    'blocked' => l10n.tripReservationStatusBlocked,
-    _ => status,
-  };
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -61,7 +73,10 @@ class IncomingReservationsScreen extends ConsumerWidget {
               builder: (context, controller) => ListView(
                 controller: controller,
                 scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 4,
+                ),
                 children: [
                   for (final status in _statuses)
                     Padding(
@@ -69,8 +84,11 @@ class IncomingReservationsScreen extends ConsumerWidget {
                       child: ChoiceChip(
                         label: Text(_statusLabel(l10n, status)),
                         selected: state.status == status,
-                        onSelected: (_) =>
-                            ref.read(incomingReservationsControllerProvider.notifier).setStatus(status),
+                        onSelected: (_) => ref
+                            .read(
+                              incomingReservationsControllerProvider.notifier,
+                            )
+                            .setStatus(status),
                       ),
                     ),
                 ],
@@ -88,7 +106,11 @@ class IncomingReservationsScreen extends ConsumerWidget {
                         Text(l10n.commonSomethingWentWrong),
                         const SizedBox(height: 8),
                         OutlinedButton(
-                          onPressed: () => ref.read(incomingReservationsControllerProvider.notifier).load(),
+                          onPressed: () => ref
+                              .read(
+                                incomingReservationsControllerProvider.notifier,
+                              )
+                              .load(),
                           child: Text(l10n.commonRetry),
                         ),
                       ],
@@ -97,11 +119,14 @@ class IncomingReservationsScreen extends ConsumerWidget {
                 : state.items.isEmpty
                 ? Center(child: Text(l10n.incomingReservationsEmpty))
                 : RefreshIndicator(
-                    onRefresh: () => ref.read(incomingReservationsControllerProvider.notifier).load(),
+                    onRefresh: () => ref
+                        .read(incomingReservationsControllerProvider.notifier)
+                        .load(),
                     child: ListView.separated(
                       padding: const EdgeInsets.all(16),
                       itemCount: state.items.length,
-                      separatorBuilder: (context, index) => const SizedBox(height: 8),
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 8),
                       itemBuilder: (context, index) => _ReservationCard(
                         reservation: state.items[index],
                         onAct: (fn) => _act(context, ref, fn),
@@ -142,19 +167,28 @@ class _ReservationCard extends ConsumerWidget {
                   ? r.passengerName!
                   : ((r.clientName ?? '').isNotEmpty
                         ? r.clientName!
-                        : (r.clientId != null ? l10n.tripReservationClient(r.clientId!) : '#${r.id}')),
+                        : (r.clientId != null
+                              ? l10n.tripReservationClient(r.clientId!)
+                              : '#${r.id}')),
               style: Theme.of(context).textTheme.titleSmall,
             ),
             if (r.isOffline) ...[
               const SizedBox(height: 2),
               Text(
-                r.ratingVisible ? l10n.tripOfflineRatingVisible : l10n.tripOfflineNotCounted,
+                r.ratingVisible
+                    ? l10n.tripOfflineRatingVisible
+                    : l10n.tripOfflineNotCounted,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ],
             const SizedBox(height: 4),
+            Text(
+              _statusLabel(l10n, r.status),
+              style: Theme.of(context).textTheme.labelMedium,
+            ),
             Text(l10n.tripReservationUnitsCount(r.units)),
-            if (r.totalPrice != null) Text('${r.totalPrice!.toStringAsFixed(2)} ${r.currency}'),
+            if (r.totalPrice != null)
+              Text('${r.totalPrice!.toStringAsFixed(2)} ${r.currency}'),
             if (r.notes != null && r.notes!.isNotEmpty) Text(r.notes!),
             const SizedBox(height: 8),
             Wrap(
@@ -162,42 +196,69 @@ class _ReservationCard extends ConsumerWidget {
               children: [
                 if (r.status == 'pending')
                   OutlinedButton(
-                    onPressed: () =>
-                        onAct(() => ref.read(incomingReservationsControllerProvider.notifier).confirm(r.id)),
+                    onPressed: () => onAct(
+                      () => ref
+                          .read(incomingReservationsControllerProvider.notifier)
+                          .confirm(r.id),
+                    ),
                     child: Text(l10n.tripReservationConfirmAction),
                   ),
                 // attendance: the customer first, then the carrier
-                if ((r.status == 'confirmed' || (r.isOffline && r.status == 'blocked')) && !r.carrierConfirmed)
+                if ((r.status == 'confirmed' ||
+                        (r.isOffline && r.status == 'blocked')) &&
+                    !r.carrierConfirmed)
                   OutlinedButton(
                     onPressed: (r.isOffline || r.clientConfirmed)
-                        ? () => onAct(() => ref.read(incomingReservationsControllerProvider.notifier).confirmAttendance(r.id))
+                        ? () => onAct(
+                            () => ref
+                                .read(
+                                  incomingReservationsControllerProvider
+                                      .notifier,
+                                )
+                                .confirmAttendance(r.id),
+                          )
                         : null,
                     child: Text(
-                      (r.isOffline || r.clientConfirmed) ? l10n.tripAttendanceConfirmAction : l10n.tripAttendanceWaitingClient,
+                      (r.isOffline || r.clientConfirmed)
+                          ? l10n.tripAttendanceConfirmAction
+                          : l10n.tripAttendanceWaitingClient,
                     ),
                   ),
                 if (r.isOffline && r.status == 'blocked' && !r.ratingVisible)
                   OutlinedButton(
-                    onPressed: () =>
-                        onAct(() => ref.read(incomingReservationsControllerProvider.notifier).makeRatingVisible(r.id)),
+                    onPressed: () => onAct(
+                      () => ref
+                          .read(incomingReservationsControllerProvider.notifier)
+                          .makeRatingVisible(r.id),
+                    ),
                     child: Text(l10n.tripOfflineShowInRatingAction),
                   ),
-                if (r.status == 'confirmed' || (r.isOffline && r.status == 'blocked' && r.ratingVisible))
+                if (r.status == 'confirmed' ||
+                    (r.isOffline && r.status == 'blocked' && r.ratingVisible))
                   OutlinedButton(
-                    onPressed: () =>
-                        onAct(() => ref.read(incomingReservationsControllerProvider.notifier).complete(r.id)),
+                    onPressed: () => onAct(
+                      () => ref
+                          .read(incomingReservationsControllerProvider.notifier)
+                          .complete(r.id),
+                    ),
                     child: Text(l10n.tripReservationCompleteAction),
                   ),
                 if (r.status == 'confirmed')
                   OutlinedButton(
-                    onPressed: () =>
-                        onAct(() => ref.read(incomingReservationsControllerProvider.notifier).noShow(r.id)),
+                    onPressed: () => onAct(
+                      () => ref
+                          .read(incomingReservationsControllerProvider.notifier)
+                          .noShow(r.id),
+                    ),
                     child: Text(l10n.tripReservationNoShowAction),
                   ),
                 if (r.status == 'pending' || r.status == 'confirmed')
                   OutlinedButton(
-                    onPressed: () =>
-                        onAct(() => ref.read(incomingReservationsControllerProvider.notifier).reject(r.id)),
+                    onPressed: () => onAct(
+                      () => ref
+                          .read(incomingReservationsControllerProvider.notifier)
+                          .reject(r.id),
+                    ),
                     child: Text(l10n.tripReservationRejectAction),
                   ),
               ],
@@ -210,7 +271,9 @@ class _ReservationCard extends ConsumerWidget {
                 subjectId: r.id,
                 forBusiness: true,
                 visitEnded: r.status == 'no_show',
-                onChanged: () => ref.read(incomingReservationsControllerProvider.notifier).load(),
+                onChanged: () => ref
+                    .read(incomingReservationsControllerProvider.notifier)
+                    .load(),
               ),
           ],
         ),
