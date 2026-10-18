@@ -10134,4 +10134,26 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get hotelRoomsSearchEntry => 'ابحث عن غرفة حسب التصنيف';
+
+  @override
+  String get hotelRoomsDatesLabel => 'تواريخ الإقامة';
+
+  @override
+  String get hotelRoomsDatesPick => 'اختر تاريخ الوصول والمغادرة';
+
+  @override
+  String hotelRoomsNights(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ليالٍ',
+      one: 'ليلة واحدة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String hotelRoomsTotalFor(String total, String currency, String nights) {
+    return 'الإجمالي $total $currency لـ$nights';
+  }
 }

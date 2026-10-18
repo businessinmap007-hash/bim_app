@@ -10205,4 +10205,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hotelRoomsSearchEntry => 'Find a room by hotel class';
+
+  @override
+  String get hotelRoomsDatesLabel => 'Dates of stay';
+
+  @override
+  String get hotelRoomsDatesPick => 'Pick check-in and check-out';
+
+  @override
+  String hotelRoomsNights(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count nights',
+      one: '1 night',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String hotelRoomsTotalFor(String total, String currency, String nights) {
+    return 'Total $total $currency for $nights';
+  }
 }

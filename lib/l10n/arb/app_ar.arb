@@ -3546,5 +3546,11 @@
   "@hotelRoomsPricePerNight": {"placeholders": {"price": {"type": "String"}, "currency": {"type": "String"}}},
   "hotelRoomsOtherPrices": "أسعار أخرى لنفس الغرفة",
   "hotelRoomsCheaperThanHotel": "أقل من سعر الفندق نفسه.",
-  "hotelRoomsSearchEntry": "ابحث عن غرفة حسب التصنيف"
+  "hotelRoomsSearchEntry": "ابحث عن غرفة حسب التصنيف",
+  "hotelRoomsDatesLabel": "تواريخ الإقامة",
+  "hotelRoomsDatesPick": "اختر تاريخ الوصول والمغادرة",
+  "hotelRoomsNights": "{count, plural, =1{ليلة واحدة} other{{count} ليالٍ}}",
+  "@hotelRoomsNights": {"placeholders": {"count": {"type": "int"}}},
+  "hotelRoomsTotalFor": "الإجمالي {total} {currency} لـ{nights}",
+  "@hotelRoomsTotalFor": {"placeholders": {"total": {"type": "String"}, "currency": {"type": "String"}, "nights": {"type": "String"}}}
 }

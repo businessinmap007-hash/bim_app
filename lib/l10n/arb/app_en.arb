@@ -3520,5 +3520,11 @@
   "@hotelRoomsPricePerNight": {"placeholders": {"price": {"type": "String"}, "currency": {"type": "String"}}},
   "hotelRoomsOtherPrices": "Other prices for the same room",
   "hotelRoomsCheaperThanHotel": "Lower than the hotel's own price.",
-  "hotelRoomsSearchEntry": "Find a room by hotel class"
+  "hotelRoomsSearchEntry": "Find a room by hotel class",
+  "hotelRoomsDatesLabel": "Dates of stay",
+  "hotelRoomsDatesPick": "Pick check-in and check-out",
+  "hotelRoomsNights": "{count, plural, =1{1 night} other{{count} nights}}",
+  "@hotelRoomsNights": {"placeholders": {"count": {"type": "int"}}},
+  "hotelRoomsTotalFor": "Total {total} {currency} for {nights}",
+  "@hotelRoomsTotalFor": {"placeholders": {"total": {"type": "String"}, "currency": {"type": "String"}, "nights": {"type": "String"}}}
 }

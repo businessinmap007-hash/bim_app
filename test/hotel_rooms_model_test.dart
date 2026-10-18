@@ -71,10 +71,42 @@ void main() {
       expect(q.copyWith(clearGovernorate: true).cityId, isNull);
       expect(q.copyWith(clearGovernorate: true).classId, 1);
       expect(const HotelRoomQuery().activeCount, 0);
+      final stay = HotelRoomQuery(
+        checkIn: DateTime(2026, 11, 1),
+        checkOut: DateTime(2026, 11, 4),
+      );
+      expect(stay.hasDates, isTrue);
+      expect(stay.activeCount, 1);
+      expect(stay.copyWith(clearDates: true).hasDates, isFalse);
       expect(
         const HotelRoomQuery(classId: 1) == const HotelRoomQuery(classId: 1),
         isTrue,
       );
+    },
+  );
+
+  test(
+    'a room carries what a booking of it needs and, with dates, the stays total',
+    () {
+      final room = HotelRoom.fromJson({
+        'hotel': {'id': 5, 'name': 'h'},
+        'room': {
+          'unit_id': 11,
+          'offering_id': 40,
+          'service_id': 2,
+          'item_type': 'booking_stay',
+          'name': 'r',
+        },
+        'price': 1000,
+        'total': 3000,
+        'nights': 3,
+      });
+
+      expect(room.offeringId, 40);
+      expect(room.serviceId, 2);
+      expect(room.itemType, 'booking_stay');
+      expect(room.total, 3000);
+      expect(room.nights, 3);
     },
   );
 }

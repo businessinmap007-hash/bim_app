@@ -2,15 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/network/api_exception.dart';
+import '../../../../core/time/egypt_time.dart';
+import '../../../../core/time/local_format.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../../business/presentation/screens/business_detail_screen.dart';
+import '../../../booking/data/models/unit_discovery.dart';
+import '../../../booking/presentation/screens/booking_screen.dart';
+import '../../../business/data/models/offering_item.dart';
 import '../../../offers/presentation/screens/offer_detail_screen.dart';
 import '../../application/hotel_rooms_providers.dart';
 import '../../data/hotel_rooms_api.dart';
 
-/// «احجز غرفة»: the rooms of every hotel that matches the class (the stars), the governorate and the city the customer
-/// picked in the filter sheet, cheapest first. A partner company that holds an allocation of the same room and offers it
-/// at its own price is shown on the card beside the hotel's price.
+/// «احجز غرفة»: the rooms of every hotel that matches the class (the stars), the governorate, the city, the price and the
+/// stay the customer picked in the filter sheet, cheapest first. A tap on a room opens the booking form on that very room
+/// (the dates already filled in). A partner company that holds an allocation of the same room and offers it at its own
+/// price is shown on the card beside the hotel's price.
 class HotelRoomsScreen extends ConsumerStatefulWidget {
   const HotelRoomsScreen({super.key});
 
@@ -36,23 +41,16 @@ class _HotelRoomsScreenState extends ConsumerState<HotelRoomsScreen> {
     final async = ref.watch(hotelRoomsProvider(_query));
     final filters = ref.watch(hotelRoomFiltersProvider(null)).valueOrNull;
 
-    String? nameOf(List<FilterOption>? options, int? id) =>
-        id == null ? null : options?.where((o) => o.id == id).firstOrNull?.name;
+    String? nameOf(List<FilterOption>? options, int? id) => id == null ? null : options?.where((o) => o.id == id).firstOrNull?.name;
 
+    final dates = LocalFormat.monthDay(context);
     final chips = <(String, VoidCallback)>[
-      if (nameOf(filters?.classes, _query.classId) case final n?)
-        (n, () => setState(() => _query = _query.copyWith(clearClass: true))),
+      if (nameOf(filters?.classes, _query.classId) case final n?) (n, () => setState(() => _query = _query.copyWith(clearClass: true))),
       if (nameOf(filters?.governorates, _query.governorateId) case final n?)
-        (
-          n,
-          () =>
-              setState(() => _query = _query.copyWith(clearGovernorate: true)),
-        ),
-      if (_query.cityId != null)
-        (
-          l10n.hotelRoomsCityChip,
-          () => setState(() => _query = _query.copyWith(clearCity: true)),
-        ),
+        (n, () => setState(() => _query = _query.copyWith(clearGovernorate: true))),
+      if (_query.cityId != null) (l10n.hotelRoomsCityChip, () => setState(() => _query = _query.copyWith(clearCity: true))),
+      if (_query.hasDates)
+        ('${dates.format(_query.checkIn!)} → ${dates.format(_query.checkOut!)}', () => setState(() => _query = _query.copyWith(clearDates: true))),
       if (_query.priceMin != null || _query.priceMax != null)
         (
           '${_query.priceMin?.toStringAsFixed(0) ?? '0'}–${_query.priceMax?.toStringAsFixed(0) ?? '∞'}',
@@ -67,11 +65,7 @@ class _HotelRoomsScreenState extends ConsumerState<HotelRoomsScreen> {
           TextButton.icon(
             onPressed: _openFilter,
             icon: const Icon(Icons.tune),
-            label: Text(
-              _query.activeCount == 0
-                  ? l10n.hotelRoomsFilter
-                  : l10n.hotelRoomsFilterCount(_query.activeCount),
-            ),
+            label: Text(_query.activeCount == 0 ? l10n.hotelRoomsFilter : l10n.hotelRoomsFilterCount(_query.activeCount)),
           ),
         ],
       ),
@@ -82,10 +76,7 @@ class _HotelRoomsScreenState extends ConsumerState<HotelRoomsScreen> {
               height: 48,
               child: ListView(
                 scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 children: [
                   for (final c in chips)
                     Padding(
@@ -102,39 +93,22 @@ class _HotelRoomsScreenState extends ConsumerState<HotelRoomsScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      e is ApiException
-                          ? e.message
-                          : l10n.commonSomethingWentWrong,
-                    ),
-                    TextButton(
-                      onPressed: () =>
-                          ref.invalidate(hotelRoomsProvider(_query)),
-                      child: Text(l10n.commonRetry),
-                    ),
+                    Text(e is ApiException ? e.message : l10n.commonSomethingWentWrong),
+                    TextButton(onPressed: () => ref.invalidate(hotelRoomsProvider(_query)), child: Text(l10n.commonRetry)),
                   ],
                 ),
               ),
               data: (page) => RefreshIndicator(
-                onRefresh: () async =>
-                    ref.refresh(hotelRoomsProvider(_query).future),
+                onRefresh: () async => ref.refresh(hotelRoomsProvider(_query).future),
                 child: page.rooms.isEmpty
-                    ? ListView(
-                        children: [
-                          const SizedBox(height: 120),
-                          Center(child: Text(l10n.hotelRoomsEmpty)),
-                        ],
-                      )
+                    ? ListView(children: [const SizedBox(height: 120), Center(child: Text(l10n.hotelRoomsEmpty))])
                     : ListView.separated(
                         padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
                         itemCount: page.rooms.length + 1,
                         separatorBuilder: (_, _) => const SizedBox(height: 10),
                         itemBuilder: (context, i) => i == 0
-                            ? Text(
-                                l10n.hotelRoomsCount(page.total),
-                                style: Theme.of(context).textTheme.titleSmall,
-                              )
-                            : _RoomCard(room: page.rooms[i - 1]),
+                            ? Text(l10n.hotelRoomsCount(page.total), style: Theme.of(context).textTheme.titleSmall)
+                            : _RoomCard(room: page.rooms[i - 1], query: _query),
                       ),
               ),
             ),
@@ -147,28 +121,56 @@ class _HotelRoomsScreenState extends ConsumerState<HotelRoomsScreen> {
 
 class _RoomCard extends StatelessWidget {
   final HotelRoom room;
+  final HotelRoomQuery query;
 
-  const _RoomCard({required this.room});
+  const _RoomCard({required this.room, required this.query});
+
+  /// A tap books this very room: the form opens on it, the dates (if any) already filled.
+  void _book(BuildContext context) {
+    final offeringId = room.offeringId;
+    if (offeringId == null) return;
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => BookingScreen(
+          businessId: room.hotelId,
+          initialUnit: DiscoveredUnit(
+            id: room.unitId,
+            label: room.roomName,
+            capacity: room.capacity,
+            images: [?room.imageUrl],
+            price: room.price,
+          ),
+          initialStartsAt: query.checkIn,
+          initialEndsAt: query.checkOut,
+          offering: OfferingItem(
+            id: offeringId,
+            source: 'price',
+            label: room.roomName,
+            price: room.price,
+            currency: room.currency,
+            serviceId: room.serviceId,
+            itemType: room.itemType,
+            imageUrl: room.imageUrl,
+            action: 'book',
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final place = [
-      room.className,
-      room.city ?? room.governorate,
-    ].whereType<String>().join(' · ');
+    final place = [room.className, room.city ?? room.governorate].whereType<String>().join(' · ');
     final cheaper = room.cheaperPartner;
 
     return Card(
       margin: EdgeInsets.zero,
       clipBehavior: Clip.antiAlias,
       child: InkWell(
-        onTap: () => Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => BusinessDetailScreen(businessId: room.hotelId),
-          ),
-        ),
+        onTap: () => _book(context),
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: Column(
@@ -183,18 +185,11 @@ class _RoomCard extends StatelessWidget {
                       width: 84,
                       height: 84,
                       child: room.imageUrl == null
-                          ? ColoredBox(
-                              color: theme.colorScheme.surfaceContainerHighest,
-                              child: const Icon(Icons.hotel_outlined),
-                            )
+                          ? ColoredBox(color: theme.colorScheme.surfaceContainerHighest, child: const Icon(Icons.hotel_outlined))
                           : Image.network(
                               room.imageUrl!,
                               fit: BoxFit.cover,
-                              errorBuilder: (_, _, _) => ColoredBox(
-                                color:
-                                    theme.colorScheme.surfaceContainerHighest,
-                                child: const Icon(Icons.hotel_outlined),
-                              ),
+                              errorBuilder: (_, _, _) => ColoredBox(color: theme.colorScheme.surfaceContainerHighest, child: const Icon(Icons.hotel_outlined)),
                             ),
                     ),
                   ),
@@ -205,16 +200,17 @@ class _RoomCard extends StatelessWidget {
                       children: [
                         Text(room.roomName, style: theme.textTheme.titleSmall),
                         Text(room.hotelName, style: theme.textTheme.bodyMedium),
-                        if (place.isNotEmpty)
-                          Text(place, style: theme.textTheme.bodySmall),
+                        if (place.isNotEmpty) Text(place, style: theme.textTheme.bodySmall),
                         const SizedBox(height: 4),
                         Text(
-                          l10n.hotelRoomsPricePerNight(
-                            room.price.toStringAsFixed(0),
-                            room.currency,
-                          ),
+                          l10n.hotelRoomsPricePerNight(room.price.toStringAsFixed(0), room.currency),
                           style: theme.textTheme.titleMedium,
                         ),
+                        if (room.total != null && room.nights != null)
+                          Text(
+                            l10n.hotelRoomsTotalFor(room.total!.toStringAsFixed(0), room.currency, l10n.hotelRoomsNights(room.nights!)),
+                            style: theme.textTheme.bodySmall,
+                          ),
                       ],
                     ),
                   ),
@@ -222,45 +218,25 @@ class _RoomCard extends StatelessWidget {
               ),
               if (room.partnerOffers.isNotEmpty) ...[
                 const Divider(height: 20),
-                Text(
-                  l10n.hotelRoomsOtherPrices,
-                  style: theme.textTheme.labelMedium,
-                ),
+                Text(l10n.hotelRoomsOtherPrices, style: theme.textTheme.labelMedium),
                 for (final o in room.partnerOffers)
                   InkWell(
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => OfferDetailScreen(offerId: o.offerId),
-                      ),
-                    ),
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => OfferDetailScreen(offerId: o.offerId))),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       child: Row(
                         children: [
-                          Expanded(
-                            child: Text(
-                              o.sellerName ?? '',
-                              style: theme.textTheme.bodyMedium,
-                            ),
-                          ),
+                          Expanded(child: Text(o.sellerName ?? '', style: theme.textTheme.bodyMedium)),
                           Text(
                             '${o.price.toStringAsFixed(0)} ${room.currency}',
-                            style: theme.textTheme.titleSmall?.copyWith(
-                              color: o.price < room.price
-                                  ? theme.colorScheme.primary
-                                  : null,
-                            ),
+                            style: theme.textTheme.titleSmall?.copyWith(color: o.price < room.price ? theme.colorScheme.primary : null),
                           ),
                           const Icon(Icons.chevron_right, size: 18),
                         ],
                       ),
                     ),
                   ),
-                if (cheaper != null)
-                  Text(
-                    l10n.hotelRoomsCheaperThanHotel,
-                    style: theme.textTheme.bodySmall,
-                  ),
+                if (cheaper != null) Text(l10n.hotelRoomsCheaperThanHotel, style: theme.textTheme.bodySmall),
               ],
             ],
           ),
@@ -270,7 +246,7 @@ class _RoomCard extends StatelessWidget {
   }
 }
 
-/// The filter sheet: the class first (the stars), then governorate and — once one is chosen — city, then the price.
+/// The filter sheet: the class first (the stars), then the stay, governorate and — once one is chosen — city, then the price.
 class _FilterSheet extends ConsumerStatefulWidget {
   final HotelRoomQuery initial;
 
@@ -282,12 +258,8 @@ class _FilterSheet extends ConsumerStatefulWidget {
 
 class _FilterSheetState extends ConsumerState<_FilterSheet> {
   late HotelRoomQuery _q = widget.initial;
-  late final _min = TextEditingController(
-    text: widget.initial.priceMin?.toStringAsFixed(0) ?? '',
-  );
-  late final _max = TextEditingController(
-    text: widget.initial.priceMax?.toStringAsFixed(0) ?? '',
-  );
+  late final _min = TextEditingController(text: widget.initial.priceMin?.toStringAsFixed(0) ?? '');
+  late final _max = TextEditingController(text: widget.initial.priceMax?.toStringAsFixed(0) ?? '');
 
   @override
   void dispose() {
@@ -296,29 +268,36 @@ class _FilterSheetState extends ConsumerState<_FilterSheet> {
     super.dispose();
   }
 
+  Future<void> _pickDates() async {
+    final today = EgyptTime.today();
+    final range = await showDateRangePicker(
+      context: context,
+      firstDate: today,
+      lastDate: today.add(const Duration(days: 365)),
+      initialDateRange: _q.hasDates ? DateTimeRange(start: _q.checkIn!, end: _q.checkOut!) : null,
+    );
+    if (range != null) setState(() => _q = _q.copyWith(checkIn: range.start, checkOut: range.end));
+  }
+
   HotelRoomQuery _withPrice() => HotelRoomQuery(
     classId: _q.classId,
     governorateId: _q.governorateId,
     cityId: _q.cityId,
     priceMin: double.tryParse(_min.text.trim()),
     priceMax: double.tryParse(_max.text.trim()),
+    checkIn: _q.checkIn,
+    checkOut: _q.checkOut,
   );
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final filters = ref
-        .watch(hotelRoomFiltersProvider(_q.governorateId))
-        .valueOrNull;
+    final filters = ref.watch(hotelRoomFiltersProvider(_q.governorateId)).valueOrNull;
+    final dates = LocalFormat.date(context);
 
     return Padding(
-      padding: EdgeInsets.fromLTRB(
-        16,
-        16,
-        16,
-        16 + MediaQuery.of(context).viewInsets.bottom,
-      ),
+      padding: EdgeInsets.fromLTRB(16, 16, 16, 16 + MediaQuery.of(context).viewInsets.bottom),
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -326,17 +305,8 @@ class _FilterSheetState extends ConsumerState<_FilterSheet> {
           children: [
             Row(
               children: [
-                Expanded(
-                  child: Text(
-                    l10n.hotelRoomsFilter,
-                    style: theme.textTheme.titleMedium,
-                  ),
-                ),
-                TextButton(
-                  onPressed: () =>
-                      Navigator.pop(context, const HotelRoomQuery()),
-                  child: Text(l10n.hotelRoomsClear),
-                ),
+                Expanded(child: Text(l10n.hotelRoomsFilter, style: theme.textTheme.titleMedium)),
+                TextButton(onPressed: () => Navigator.pop(context, const HotelRoomQuery()), child: Text(l10n.hotelRoomsClear)),
               ],
             ),
             const SizedBox(height: 8),
@@ -349,41 +319,41 @@ class _FilterSheetState extends ConsumerState<_FilterSheet> {
                 ChoiceChip(
                   label: Text(l10n.carAnyChoice),
                   selected: _q.classId == null,
-                  onSelected: (_) =>
-                      setState(() => _q = _q.copyWith(clearClass: true)),
+                  onSelected: (_) => setState(() => _q = _q.copyWith(clearClass: true)),
                 ),
                 for (final c in filters?.classes ?? const <FilterOption>[])
                   ChoiceChip(
                     label: Text(c.name),
                     selected: _q.classId == c.id,
-                    onSelected: (_) =>
-                        setState(() => _q = _q.copyWith(classId: c.id)),
+                    onSelected: (_) => setState(() => _q = _q.copyWith(classId: c.id)),
                   ),
               ],
             ),
             const SizedBox(height: 16),
+            InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: _pickDates,
+              child: InputDecorator(
+                decoration: InputDecoration(
+                  labelText: l10n.hotelRoomsDatesLabel,
+                  suffixIcon: _q.hasDates
+                      ? IconButton(icon: const Icon(Icons.close), onPressed: () => setState(() => _q = _q.copyWith(clearDates: true)))
+                      : const Icon(Icons.event),
+                ),
+                child: Text(_q.hasDates ? '${dates.format(_q.checkIn!)} → ${dates.format(_q.checkOut!)}' : l10n.hotelRoomsDatesPick),
+              ),
+            ),
+            const SizedBox(height: 12),
             DropdownButtonFormField<int?>(
               initialValue: _q.governorateId,
               isExpanded: true,
-              decoration: InputDecoration(
-                labelText: l10n.locationGovernorateLabel,
-              ),
+              decoration: InputDecoration(labelText: l10n.locationGovernorateLabel),
               items: [
-                DropdownMenuItem<int?>(
-                  value: null,
-                  child: Text(l10n.carAnyChoice),
-                ),
+                DropdownMenuItem<int?>(value: null, child: Text(l10n.carAnyChoice)),
                 for (final g in filters?.governorates ?? const <FilterOption>[])
-                  DropdownMenuItem<int?>(
-                    value: g.id,
-                    child: Text('${g.name} (${g.count})'),
-                  ),
+                  DropdownMenuItem<int?>(value: g.id, child: Text('${g.name} (${g.count})')),
               ],
-              onChanged: (v) => setState(
-                () => _q = v == null
-                    ? _q.copyWith(clearGovernorate: true)
-                    : _q.copyWith(governorateId: v),
-              ),
+              onChanged: (v) => setState(() => _q = v == null ? _q.copyWith(clearGovernorate: true) : _q.copyWith(governorateId: v)),
             ),
             if (_q.governorateId != null) ...[
               const SizedBox(height: 12),
@@ -393,21 +363,11 @@ class _FilterSheetState extends ConsumerState<_FilterSheet> {
                 isExpanded: true,
                 decoration: InputDecoration(labelText: l10n.locationCityLabel),
                 items: [
-                  DropdownMenuItem<int?>(
-                    value: null,
-                    child: Text(l10n.carAnyChoice),
-                  ),
+                  DropdownMenuItem<int?>(value: null, child: Text(l10n.carAnyChoice)),
                   for (final c in filters?.cities ?? const <FilterOption>[])
-                    DropdownMenuItem<int?>(
-                      value: c.id,
-                      child: Text('${c.name} (${c.count})'),
-                    ),
+                    DropdownMenuItem<int?>(value: c.id, child: Text('${c.name} (${c.count})')),
                 ],
-                onChanged: (v) => setState(
-                  () => _q = v == null
-                      ? _q.copyWith(clearCity: true)
-                      : _q.copyWith(cityId: v),
-                ),
+                onChanged: (v) => setState(() => _q = v == null ? _q.copyWith(clearCity: true) : _q.copyWith(cityId: v)),
               ),
             ],
             const SizedBox(height: 16),
@@ -419,9 +379,7 @@ class _FilterSheetState extends ConsumerState<_FilterSheet> {
                   child: TextField(
                     controller: _min,
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: l10n.hotelRoomsPriceFrom,
-                    ),
+                    decoration: InputDecoration(labelText: l10n.hotelRoomsPriceFrom),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -429,9 +387,7 @@ class _FilterSheetState extends ConsumerState<_FilterSheet> {
                   child: TextField(
                     controller: _max,
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: l10n.hotelRoomsPriceTo,
-                    ),
+                    decoration: InputDecoration(labelText: l10n.hotelRoomsPriceTo),
                   ),
                 ),
               ],
@@ -439,10 +395,7 @@ class _FilterSheetState extends ConsumerState<_FilterSheet> {
             const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
-              child: FilledButton(
-                onPressed: () => Navigator.pop(context, _withPrice()),
-                child: Text(l10n.hotelRoomsApply),
-              ),
+              child: FilledButton(onPressed: () => Navigator.pop(context, _withPrice()), child: Text(l10n.hotelRoomsApply)),
             ),
           ],
         ),

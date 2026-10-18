@@ -18456,6 +18456,30 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'ابحث عن غرفة حسب التصنيف'**
   String get hotelRoomsSearchEntry;
+
+  /// No description provided for @hotelRoomsDatesLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'تواريخ الإقامة'**
+  String get hotelRoomsDatesLabel;
+
+  /// No description provided for @hotelRoomsDatesPick.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر تاريخ الوصول والمغادرة'**
+  String get hotelRoomsDatesPick;
+
+  /// No description provided for @hotelRoomsNights.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{ليلة واحدة} other{{count} ليالٍ}}'**
+  String hotelRoomsNights(int count);
+
+  /// No description provided for @hotelRoomsTotalFor.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجمالي {total} {currency} لـ{nights}'**
+  String hotelRoomsTotalFor(String total, String currency, String nights);
 }
 
 class _AppLocalizationsDelegate
