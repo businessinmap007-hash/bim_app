@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:bim_app/features/empty_returns/data/empty_returns_api.dart';
 
 void main() {
+  suggestionTests();
   test(
     'an empty return reads its price, the saving, the time as Cairo digits and the driver trust',
     () {
@@ -52,4 +53,42 @@ void main() {
     expect(q.needsDistance, isTrue);
     expect(q.suggestedPrice, isNull);
   });
+}
+
+void suggestionTests() {
+  test(
+    'a suggestion carries the way back: the swapped places, the fare and the time to leave',
+    () {
+      final s = EmptyReturnSuggestion.fromJson({
+        'booking_id': 5,
+        'ride_starts_at': '2026-10-20T14:00:00Z',
+        'from': {
+          'country_id': 1,
+          'governorate_id': 1,
+          'governorate': 'Cairo',
+          'city_id': 9915,
+          'city': 'Cairo International Airport',
+        },
+        'to': {
+          'country_id': 1,
+          'governorate_id': 10,
+          'governorate': 'Damietta',
+          'city_id': 543,
+          'city': 'Damietta',
+        },
+        'reference_price': 1360,
+        'suggested_price': 680,
+        'suggested_departs_at': '2026-10-20T18:00:00Z',
+        'passengers': 2,
+      });
+
+      expect(s.bookingId, 5);
+      expect(s.from.label, 'Cairo — Cairo International Airport');
+      expect(s.to.cityId, 543);
+      expect(s.suggestedPrice, 680);
+      // 18:00 UTC on 20 Oct is 21:00 in Cairo
+      expect(s.suggestedDepartsAt!.hour, 21);
+      expect(s.passengers, 2);
+    },
+  );
 }

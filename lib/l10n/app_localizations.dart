@@ -18726,6 +18726,30 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'في استراحة: لا تصلك طلبات جديدة ولا تستطيع الرد، وعروض «راجع فاضي» لديك مخفية.'**
   String get requestsAvailableOff;
+
+  /// No description provided for @emptyReturnSuggestionsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشاويرك — اعرض طريق العودة'**
+  String get emptyReturnSuggestionsTitle;
+
+  /// No description provided for @emptyReturnSuggestionAfter.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعد مشوارك {when}'**
+  String emptyReturnSuggestionAfter(String when);
+
+  /// No description provided for @emptyReturnSuggestionUse.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعرض طريق العودة'**
+  String get emptyReturnSuggestionUse;
+
+  /// No description provided for @emptyReturnForRide.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريق العودة لمشوارك {when}'**
+  String emptyReturnForRide(String when);
 }
 
 class _AppLocalizationsDelegate

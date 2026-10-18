@@ -27,9 +27,15 @@ class _MyEmptyReturnsScreenState extends ConsumerState<MyEmptyReturnsScreen> {
   final _distance = TextEditingController();
   final _notes = TextEditingController();
 
+  final _scroll = ScrollController();
+  final _formKey = GlobalKey();
+
   LocationSelection? _from;
   LocationSelection? _to;
   DateTime? _departsAt;
+
+  /// The ride this way back is for (picked from the suggestions); sent with the offer.
+  EmptyReturnSuggestion? _forRide;
   int _seats = 4;
   EmptyReturnQuote? _quote;
   bool _priceTouched = false;
@@ -41,7 +47,42 @@ class _MyEmptyReturnsScreenState extends ConsumerState<MyEmptyReturnsScreen> {
     _price.dispose();
     _distance.dispose();
     _notes.dispose();
+    _scroll.dispose();
     super.dispose();
+  }
+
+  /// Fill the form with the way back of one of his rides — he only has to check it and publish.
+  void _useSuggestion(EmptyReturnSuggestion s) {
+    setState(() {
+      _forRide = s;
+      _from = LocationSelection(
+        countryId: s.from.countryId,
+        governorateId: s.from.governorateId,
+        cityId: s.from.cityId,
+        label: s.from.label,
+      );
+      _to = LocationSelection(
+        countryId: s.to.countryId,
+        governorateId: s.to.governorateId,
+        cityId: s.to.cityId,
+        label: s.to.label,
+      );
+      _departsAt = s.suggestedDepartsAt;
+      _priceTouched = false;
+      _price.text = s.suggestedPrice?.toStringAsFixed(0) ?? '';
+      _error = null;
+    });
+    _requote();
+    // the form is further down the list: bring it into view
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final ctx = _formKey.currentContext;
+      if (ctx != null) {
+        Scrollable.ensureVisible(
+          ctx,
+          duration: const Duration(milliseconds: 300),
+        );
+      }
+    });
   }
 
   Future<void> _requote() async {
@@ -135,8 +176,10 @@ class _MyEmptyReturnsScreenState extends ConsumerState<MyEmptyReturnsScreen> {
             seats: _seats,
             distanceKm: double.tryParse(_distance.text.trim()),
             notes: _notes.text,
+            fromBookingId: _forRide?.bookingId,
           );
       ref.invalidate(myEmptyReturnsProvider);
+      ref.invalidate(emptyReturnSuggestionsProvider);
       if (!mounted) return;
       ScaffoldMessenger.of(
         context,
@@ -144,6 +187,7 @@ class _MyEmptyReturnsScreenState extends ConsumerState<MyEmptyReturnsScreen> {
       setState(() {
         _busy = false;
         _departsAt = null;
+        _forRide = null;
         _notes.clear();
       });
     } catch (e) {
@@ -161,6 +205,8 @@ class _MyEmptyReturnsScreenState extends ConsumerState<MyEmptyReturnsScreen> {
     try {
       await ref.read(emptyReturnsApiProvider).cancel(offer.id);
       ref.invalidate(myEmptyReturnsProvider);
+      // a ride whose way back was taken down is offered again
+      ref.invalidate(emptyReturnSuggestionsProvider);
       messenger.showSnackBar(
         SnackBar(content: Text(l10n.emptyReturnCancelled)),
       );
@@ -175,6 +221,61 @@ class _MyEmptyReturnsScreenState extends ConsumerState<MyEmptyReturnsScreen> {
     }
   }
 
+  static String _clock(BuildContext context, DateTime? at) =>
+      at == null ? '' : LocalFormat.dayDate(context).addClock().format(at);
+
+  /// «Your rides»: one card per ride that has no way back yet, nothing at all when there is none.
+  List<Widget> _suggestionCards(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final list = ref.watch(emptyReturnSuggestionsProvider).valueOrNull;
+    if (list == null || list.isEmpty) return const [];
+
+    return [
+      const SizedBox(height: 16),
+      Text(
+        l10n.emptyReturnSuggestionsTitle,
+        style: theme.textTheme.titleMedium,
+      ),
+      const SizedBox(height: 8),
+      for (final s in list)
+        Card(
+          margin: const EdgeInsets.only(bottom: 8),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${s.from.city} ${routeArrow(context)} ${s.to.city}',
+                  style: theme.textTheme.titleSmall,
+                ),
+                Text(
+                  l10n.emptyReturnSuggestionAfter(
+                    _clock(context, s.rideStartsAt),
+                  ),
+                  style: theme.textTheme.bodySmall,
+                ),
+                if (s.suggestedPrice != null)
+                  Text(
+                    l10n.emptyReturnPriceEgp(
+                      s.suggestedPrice!.toStringAsFixed(0),
+                    ),
+                  ),
+                Align(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: FilledButton(
+                    onPressed: () => _useSuggestion(s),
+                    child: Text(l10n.emptyReturnSuggestionUse),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -185,15 +286,26 @@ class _MyEmptyReturnsScreenState extends ConsumerState<MyEmptyReturnsScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.emptyReturnTitle)),
       body: ListView(
+        controller: _scroll,
         padding: const EdgeInsets.all(16),
         children: [
           const RequestsAvailabilitySwitch(margin: EdgeInsets.only(bottom: 12)),
           Text(l10n.emptyReturnDriverIntro, style: theme.textTheme.bodyMedium),
+          // his own rides, each with its way back ready: one tap fills the form below
+          ..._suggestionCards(context),
           const SizedBox(height: 16),
           Text(
             l10n.emptyReturnPublishTitle,
+            key: _formKey,
             style: theme.textTheme.titleMedium,
           ),
+          if (_forRide != null) ...[
+            const SizedBox(height: 4),
+            Text(
+              l10n.emptyReturnForRide(_clock(context, _forRide!.rideStartsAt)),
+              style: theme.textTheme.bodySmall,
+            ),
+          ],
           const SizedBox(height: 12),
           Text(l10n.emptyReturnFrom, style: theme.textTheme.titleSmall),
           const SizedBox(height: 8),

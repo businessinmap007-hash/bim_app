@@ -10385,4 +10385,20 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get requestsAvailableOff =>
       'On a break: no new requests reach you, you cannot answer, and your return offers are hidden.';
+
+  @override
+  String get emptyReturnSuggestionsTitle => 'Your rides — offer the way back';
+
+  @override
+  String emptyReturnSuggestionAfter(String when) {
+    return 'After your ride at $when';
+  }
+
+  @override
+  String get emptyReturnSuggestionUse => 'Offer the way back';
+
+  @override
+  String emptyReturnForRide(String when) {
+    return 'The way back of your ride at $when';
+  }
 }

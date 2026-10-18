@@ -10314,4 +10314,20 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get requestsAvailableOff =>
       'في استراحة: لا تصلك طلبات جديدة ولا تستطيع الرد، وعروض «راجع فاضي» لديك مخفية.';
+
+  @override
+  String get emptyReturnSuggestionsTitle => 'مشاويرك — اعرض طريق العودة';
+
+  @override
+  String emptyReturnSuggestionAfter(String when) {
+    return 'بعد مشوارك $when';
+  }
+
+  @override
+  String get emptyReturnSuggestionUse => 'اعرض طريق العودة';
+
+  @override
+  String emptyReturnForRide(String when) {
+    return 'طريق العودة لمشوارك $when';
+  }
 }

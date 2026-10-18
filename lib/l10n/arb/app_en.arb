@@ -3579,5 +3579,11 @@
   "@tripReservationWithCarrier": {"placeholders": {"name": {"type": "String"}}},
   "requestsAvailableTitle": "Taking requests",
   "requestsAvailableOn": "Customers' requests reach you. Switch off when you want a break.",
-  "requestsAvailableOff": "On a break: no new requests reach you, you cannot answer, and your return offers are hidden."
+  "requestsAvailableOff": "On a break: no new requests reach you, you cannot answer, and your return offers are hidden.",
+  "emptyReturnSuggestionsTitle": "Your rides — offer the way back",
+  "emptyReturnSuggestionAfter": "After your ride at {when}",
+  "@emptyReturnSuggestionAfter": {"placeholders": {"when": {"type": "String"}}},
+  "emptyReturnSuggestionUse": "Offer the way back",
+  "emptyReturnForRide": "The way back of your ride at {when}",
+  "@emptyReturnForRide": {"placeholders": {"when": {"type": "String"}}}
 }

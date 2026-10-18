@@ -104,6 +104,72 @@ class EmptyReturnOffer {
   }
 }
 
+/// A place on the way back, with the ids the location picker needs.
+class SuggestedPlace {
+  final int countryId;
+  final int governorateId;
+  final int cityId;
+  final String governorate;
+  final String city;
+
+  const SuggestedPlace({
+    required this.countryId,
+    required this.governorateId,
+    required this.cityId,
+    required this.governorate,
+    required this.city,
+  });
+
+  /// «governorate — city», the label every producer of a location selection builds.
+  String get label => '$governorate — $city';
+
+  factory SuggestedPlace.fromJson(Map<String, dynamic> json) => SuggestedPlace(
+    countryId: (json['country_id'] as num?)?.toInt() ?? 0,
+    governorateId: (json['governorate_id'] as num).toInt(),
+    cityId: (json['city_id'] as num).toInt(),
+    governorate: json['governorate'] as String? ?? '',
+    city: json['city'] as String? ?? '',
+  );
+}
+
+/// The way back of one of the driver's own rides, worked out by the server (the line swapped, the usual fare, a
+/// starting price and a time to leave).
+class EmptyReturnSuggestion {
+  final int bookingId;
+  final DateTime? rideStartsAt;
+  final SuggestedPlace from;
+  final SuggestedPlace to;
+  final double? referencePrice;
+  final double? suggestedPrice;
+  final DateTime? suggestedDepartsAt;
+  final int passengers;
+
+  const EmptyReturnSuggestion({
+    required this.bookingId,
+    required this.from,
+    required this.to,
+    required this.passengers,
+    this.rideStartsAt,
+    this.referencePrice,
+    this.suggestedPrice,
+    this.suggestedDepartsAt,
+  });
+
+  factory EmptyReturnSuggestion.fromJson(Map<String, dynamic> json) =>
+      EmptyReturnSuggestion(
+        bookingId: (json['booking_id'] as num).toInt(),
+        rideStartsAt: EgyptTime.tryParse(json['ride_starts_at'] as String?),
+        from: SuggestedPlace.fromJson(json['from'] as Map<String, dynamic>),
+        to: SuggestedPlace.fromJson(json['to'] as Map<String, dynamic>),
+        referencePrice: (json['reference_price'] as num?)?.toDouble(),
+        suggestedPrice: (json['suggested_price'] as num?)?.toDouble(),
+        suggestedDepartsAt: EgyptTime.tryParse(
+          json['suggested_departs_at'] as String?,
+        ),
+        passengers: (json['passengers'] as num?)?.toInt() ?? 1,
+      );
+}
+
 /// «راجع فاضي» — see Api\V2\EmptyReturnController.
 class EmptyReturnsApi {
   final ApiClient _client;
@@ -146,6 +212,16 @@ class EmptyReturnsApi {
         .toList();
   }
 
+  /// The driver's own rides, each with its way back worked out.
+  Future<List<EmptyReturnSuggestion>> suggestions() async {
+    final data =
+        await _client.get('/business/empty-returns/suggestions')
+            as Map<String, dynamic>;
+    return (data['results'] as List<dynamic>? ?? const [])
+        .map((e) => EmptyReturnSuggestion.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
   Future<List<EmptyReturnOffer>> mine() async {
     final data =
         await _client.get('/business/empty-returns') as Map<String, dynamic>;
@@ -162,6 +238,7 @@ class EmptyReturnsApi {
     int? seats,
     double? distanceKm,
     String? notes,
+    int? fromBookingId,
   }) async {
     await _client.post(
       '/business/empty-returns',
@@ -173,6 +250,7 @@ class EmptyReturnsApi {
         'price': price,
         'seats': ?seats,
         'distance_km': ?distanceKm,
+        'from_booking_id': ?fromBookingId,
         if (notes != null && notes.trim().isNotEmpty) 'notes': notes.trim(),
       },
     );

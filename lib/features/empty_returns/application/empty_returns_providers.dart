@@ -17,6 +17,12 @@ final emptyReturnsForLineProvider = FutureProvider.autoDispose
           .forLine(originCityId: line.from, destinationCityId: line.to);
     });
 
+/// The driver's own rides with their way back ready.
+final emptyReturnSuggestionsProvider =
+    FutureProvider.autoDispose<List<EmptyReturnSuggestion>>((ref) {
+      return ref.watch(emptyReturnsApiProvider).suggestions();
+    });
+
 final myEmptyReturnsProvider =
     FutureProvider.autoDispose<List<EmptyReturnOffer>>((ref) {
       return ref.watch(emptyReturnsApiProvider).mine();
