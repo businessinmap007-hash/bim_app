@@ -9947,4 +9947,37 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get techPricingRentPerDay => 'سعر اليوم (جنيه)';
+
+  @override
+  String get roomsTitleCar => 'السيارات';
+
+  @override
+  String get roomsTitleUnit => 'الوحدات';
+
+  @override
+  String get roomsHintCar =>
+      'قائمة شركتك الخاصة. العميل يحجز نوع السيارة ولا يرى هذه الأرقام قبل بدء الإيجار. اكتب أرقام اللوحات.';
+
+  @override
+  String get roomsHintUnit =>
+      'قائمتك الخاصة. العميل يحجز النوع ولا يرى هذه الرموز قبل البدء. اكتب رموزًا أو مدى مثل 1-10.';
+
+  @override
+  String get roomsNumbersFieldCar => 'أرقام اللوحات';
+
+  @override
+  String get roomsNumbersFieldUnit => 'رموز الوحدات';
+
+  @override
+  String get stayDiscountTitle => 'خصم الأسبوع والشهر';
+
+  @override
+  String get stayDiscountHint =>
+      'كلما طالت المدة نقص السعر: نسبة تُخصم من الإجمالي لمدة 7 أيام فأكثر، ونسبة أكبر لمدة 30 يومًا فأكثر.';
+
+  @override
+  String get stayDiscountWeekly => 'خصم الأسبوع %';
+
+  @override
+  String get stayDiscountMonthly => 'خصم الشهر %';
 }

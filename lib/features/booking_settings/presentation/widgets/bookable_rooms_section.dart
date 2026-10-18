@@ -9,7 +9,9 @@ import '../../data/models/room_models.dart';
 /// type; a room is given to the stay when it starts, and only then does the customer see its number.
 class BookableRoomsSection extends ConsumerStatefulWidget {
   final int itemId;
-  const BookableRoomsSection({super.key, required this.itemId});
+  /// 'room' (a hotel) | 'car' (a rental company) | 'unit' — what the list is called.
+  final String noun;
+  const BookableRoomsSection({super.key, required this.itemId, this.noun = 'room'});
 
   @override
   ConsumerState<BookableRoomsSection> createState() => _BookableRoomsSectionState();
@@ -108,12 +110,12 @@ class _BookableRoomsSectionState extends ConsumerState<BookableRoomsSection> {
       children: [
         Row(
           children: [
-            Expanded(child: Text(l10n.roomsTitle, style: theme.textTheme.titleSmall)),
+            Expanded(child: Text(switch (widget.noun) { 'car' => l10n.roomsTitleCar, 'unit' => l10n.roomsTitleUnit, _ => l10n.roomsTitle }, style: theme.textTheme.titleSmall)),
             if (payload != null) Text(l10n.roomsOpenCount('${payload.openCount}'), style: theme.textTheme.bodySmall),
           ],
         ),
         const SizedBox(height: 4),
-        Text(l10n.roomsHint, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+        Text(switch (widget.noun) { 'car' => l10n.roomsHintCar, 'unit' => l10n.roomsHintUnit, _ => l10n.roomsHint }, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
         const SizedBox(height: 10),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,7 +124,10 @@ class _BookableRoomsSectionState extends ConsumerState<BookableRoomsSection> {
               child: TextField(
                 controller: _numbers,
                 enabled: !_busy,
-                decoration: InputDecoration(labelText: l10n.roomsNumbersField, hintText: '101، 102، 110-115'),
+                decoration: InputDecoration(
+                  labelText: switch (widget.noun) { 'car' => l10n.roomsNumbersFieldCar, 'unit' => l10n.roomsNumbersFieldUnit, _ => l10n.roomsNumbersField },
+                  hintText: widget.noun == 'room' ? '101، 102، 110-115' : '1، 2، 10-15',
+                ),
                 onSubmitted: (_) => _add(),
               ),
             ),

@@ -3487,5 +3487,15 @@
   "requestsIncomingEmpty": "لا طلبات مفتوحة في منطقتك الآن.",
   "requestFrom": "من {name}",
   "@requestFrom": {"placeholders": {"name": {"type": "String"}}},
-  "techPricingRentPerDay": "سعر اليوم (جنيه)"
+  "techPricingRentPerDay": "سعر اليوم (جنيه)",
+  "roomsTitleCar": "السيارات",
+  "roomsTitleUnit": "الوحدات",
+  "roomsHintCar": "قائمة شركتك الخاصة. العميل يحجز نوع السيارة ولا يرى هذه الأرقام قبل بدء الإيجار. اكتب أرقام اللوحات.",
+  "roomsHintUnit": "قائمتك الخاصة. العميل يحجز النوع ولا يرى هذه الرموز قبل البدء. اكتب رموزًا أو مدى مثل 1-10.",
+  "roomsNumbersFieldCar": "أرقام اللوحات",
+  "roomsNumbersFieldUnit": "رموز الوحدات",
+  "stayDiscountTitle": "خصم الأسبوع والشهر",
+  "stayDiscountHint": "كلما طالت المدة نقص السعر: نسبة تُخصم من الإجمالي لمدة 7 أيام فأكثر، ونسبة أكبر لمدة 30 يومًا فأكثر.",
+  "stayDiscountWeekly": "خصم الأسبوع %",
+  "stayDiscountMonthly": "خصم الشهر %"
 }

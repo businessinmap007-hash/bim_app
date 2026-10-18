@@ -18144,6 +18144,66 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'سعر اليوم (جنيه)'**
   String get techPricingRentPerDay;
+
+  /// No description provided for @roomsTitleCar.
+  ///
+  /// In ar, this message translates to:
+  /// **'السيارات'**
+  String get roomsTitleCar;
+
+  /// No description provided for @roomsTitleUnit.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوحدات'**
+  String get roomsTitleUnit;
+
+  /// No description provided for @roomsHintCar.
+  ///
+  /// In ar, this message translates to:
+  /// **'قائمة شركتك الخاصة. العميل يحجز نوع السيارة ولا يرى هذه الأرقام قبل بدء الإيجار. اكتب أرقام اللوحات.'**
+  String get roomsHintCar;
+
+  /// No description provided for @roomsHintUnit.
+  ///
+  /// In ar, this message translates to:
+  /// **'قائمتك الخاصة. العميل يحجز النوع ولا يرى هذه الرموز قبل البدء. اكتب رموزًا أو مدى مثل 1-10.'**
+  String get roomsHintUnit;
+
+  /// No description provided for @roomsNumbersFieldCar.
+  ///
+  /// In ar, this message translates to:
+  /// **'أرقام اللوحات'**
+  String get roomsNumbersFieldCar;
+
+  /// No description provided for @roomsNumbersFieldUnit.
+  ///
+  /// In ar, this message translates to:
+  /// **'رموز الوحدات'**
+  String get roomsNumbersFieldUnit;
+
+  /// No description provided for @stayDiscountTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'خصم الأسبوع والشهر'**
+  String get stayDiscountTitle;
+
+  /// No description provided for @stayDiscountHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'كلما طالت المدة نقص السعر: نسبة تُخصم من الإجمالي لمدة 7 أيام فأكثر، ونسبة أكبر لمدة 30 يومًا فأكثر.'**
+  String get stayDiscountHint;
+
+  /// No description provided for @stayDiscountWeekly.
+  ///
+  /// In ar, this message translates to:
+  /// **'خصم الأسبوع %'**
+  String get stayDiscountWeekly;
+
+  /// No description provided for @stayDiscountMonthly.
+  ///
+  /// In ar, this message translates to:
+  /// **'خصم الشهر %'**
+  String get stayDiscountMonthly;
 }
 
 class _AppLocalizationsDelegate

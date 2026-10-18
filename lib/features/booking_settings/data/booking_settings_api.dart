@@ -192,6 +192,11 @@ class BookingSettingsApi {
     return DayUseSettings.fromJson(data['day_use'] as Map<String, dynamic>);
   }
 
+  /// «خصم الأسبوع والشهر» of a unit let by the period — percentages off the total for 7+ and 30+ days.
+  Future<void> saveStayDiscounts(int itemId, {required double weekly, required double monthly}) {
+    return _client.put('/business/bookable-items/$itemId/stay-discounts', data: {'weekly_percent': weekly, 'monthly_percent': monthly});
+  }
+
   /// The hotel's own numbered rooms behind a room type (booking_stay only).
   Future<RoomsPayload> rooms(int itemId) async {
     final data = await _client.get('/business/bookable-items/$itemId/rooms') as Map<String, dynamic>;

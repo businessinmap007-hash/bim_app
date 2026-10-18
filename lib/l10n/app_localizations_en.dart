@@ -10018,4 +10018,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get techPricingRentPerDay => 'Price per day (EGP)';
+
+  @override
+  String get roomsTitleCar => 'Cars';
+
+  @override
+  String get roomsTitleUnit => 'Units';
+
+  @override
+  String get roomsHintCar =>
+      'Your own list. The customer books the kind of car and does not see these numbers until the rental starts. Write the plate numbers.';
+
+  @override
+  String get roomsHintUnit =>
+      'Your own list. The customer books the kind and does not see these codes before it starts. Write codes or a range like 1-10.';
+
+  @override
+  String get roomsNumbersFieldCar => 'Plate numbers';
+
+  @override
+  String get roomsNumbersFieldUnit => 'Unit codes';
+
+  @override
+  String get stayDiscountTitle => 'Week and month discount';
+
+  @override
+  String get stayDiscountHint =>
+      'The longer the stay the less it costs: a percentage off the total for 7 days or more, a larger one for 30 days or more.';
+
+  @override
+  String get stayDiscountWeekly => 'Week discount %';
+
+  @override
+  String get stayDiscountMonthly => 'Month discount %';
 }

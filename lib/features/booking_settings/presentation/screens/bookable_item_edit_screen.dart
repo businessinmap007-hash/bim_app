@@ -168,6 +168,8 @@ class _EditorState extends ConsumerState<_Editor> {
   late final TextEditingController _capacity;
   late final TextEditingController _quantity;
   final _dayUsePrice = TextEditingController();
+  late final TextEditingController _weeklyDiscount;
+  late final TextEditingController _monthlyDiscount;
   late String _status;
   DayUseSettings _dayUse = const DayUseSettings();
   bool _dayUseLoaded = false;
@@ -185,6 +187,8 @@ class _EditorState extends ConsumerState<_Editor> {
     _capacity.text.trim(),
     _quantity.text.trim(),
     _status,
+    _weeklyDiscount.text.trim(),
+    _monthlyDiscount.text.trim(),
     _dayUse.enabled,
     _dayUse.from,
     _dayUse.to,
@@ -201,7 +205,9 @@ class _EditorState extends ConsumerState<_Editor> {
     _capacity = TextEditingController(text: widget.row.capacity?.toString() ?? '');
     _quantity = TextEditingController(text: widget.row.quantity.toString());
     _status = widget.row.status;
-    for (final c in [_description, _capacity, _quantity, _dayUsePrice]) {
+    _weeklyDiscount = TextEditingController(text: _percent(widget.row.weeklyDiscount));
+    _monthlyDiscount = TextEditingController(text: _percent(widget.row.monthlyDiscount));
+    for (final c in [_description, _capacity, _quantity, _dayUsePrice, _weeklyDiscount, _monthlyDiscount]) {
       c.addListener(_refresh);
     }
     if (_isStay) {
@@ -213,12 +219,17 @@ class _EditorState extends ConsumerState<_Editor> {
 
   void _refresh() => setState(() {});
 
+  /// 0 reads as an empty box, 12.5 as «12.5».
+  static String _percent(double v) => v <= 0 ? '' : (v % 1 == 0 ? v.toStringAsFixed(0) : v.toString());
+
   @override
   void dispose() {
     _description.dispose();
     _capacity.dispose();
     _quantity.dispose();
     _dayUsePrice.dispose();
+    _weeklyDiscount.dispose();
+    _monthlyDiscount.dispose();
     super.dispose();
   }
 
@@ -265,7 +276,14 @@ class _EditorState extends ConsumerState<_Editor> {
             quantity: int.tryParse(_quantity.text.trim()),
             status: _status,
           );
-      if (_isStay && _dayUseLoaded) {
+      if (_isStay) {
+        await ref.read(bookingSettingsApiProvider).saveStayDiscounts(
+          widget.row.id,
+          weekly: double.tryParse(_weeklyDiscount.text.trim().replaceAll(',', '.')) ?? 0,
+          monthly: double.tryParse(_monthlyDiscount.text.trim().replaceAll(',', '.')) ?? 0,
+        );
+      }
+      if (_isStay && _dayUseLoaded && widget.row.isHotelRoom) {
         final saved = await ref.read(bookingSettingsApiProvider).saveDayUse(
           widget.row.id,
           DayUseSettings(
@@ -301,7 +319,7 @@ class _EditorState extends ConsumerState<_Editor> {
           _ImagesSection(row: row),
           if (_isStay) ...[
             const SizedBox(height: 20),
-            BookableRoomsSection(itemId: row.id),
+            BookableRoomsSection(itemId: row.id, noun: row.unitNoun),
             if (_dayUseLoaded && _features.isNotEmpty) ...[
               const SizedBox(height: 20),
               Text(l10n.unitFeaturesTitle, style: Theme.of(context).textTheme.titleMedium),
@@ -321,10 +339,34 @@ class _EditorState extends ConsumerState<_Editor> {
                 ],
               ),
             ],
-            if (_dayUseLoaded) ...[
+            if (_dayUseLoaded && row.isHotelRoom) ...[
               const SizedBox(height: 20),
               DayUseFields(value: _dayUse, price: _dayUsePrice, onChanged: (v) => setState(() => _dayUse = v)),
             ],
+            const SizedBox(height: 20),
+            Text(l10n.stayDiscountTitle, style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 4),
+            Text(l10n.stayDiscountHint, style: Theme.of(context).textTheme.bodySmall),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _weeklyDiscount,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    decoration: InputDecoration(labelText: l10n.stayDiscountWeekly, suffixText: '%'),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: TextField(
+                    controller: _monthlyDiscount,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    decoration: InputDecoration(labelText: l10n.stayDiscountMonthly, suffixText: '%'),
+                  ),
+                ),
+              ],
+            ),
           ],
           const SizedBox(height: 20),
           TextField(

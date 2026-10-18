@@ -171,6 +171,11 @@ class BookableItemRow {
   final bool isActive;
   final String status;
   final bool isCurrentlyBooked;
+  /// What the unit is to its owner: 'room' (a hotel), 'car' (a rental company) or 'unit' (a flat, a shop).
+  final String unitNoun;
+  /// «خصم الأسبوع والشهر» in percent (stay units only; 0 until set).
+  final double weeklyDiscount;
+  final double monthlyDiscount;
 
   const BookableItemRow({
     required this.id,
@@ -187,7 +192,12 @@ class BookableItemRow {
     required this.isActive,
     this.status = 'available',
     this.isCurrentlyBooked = false,
+    this.unitNoun = 'unit',
+    this.weeklyDiscount = 0,
+    this.monthlyDiscount = 0,
   });
+
+  bool get isHotelRoom => unitNoun == 'room';
 
   bool get isUnderMaintenance => status == 'maintenance';
 
@@ -213,6 +223,9 @@ class BookableItemRow {
       isActive: json['is_active'] as bool? ?? true,
       status: json['status'] as String? ?? 'available',
       isCurrentlyBooked: json['is_currently_booked'] as bool? ?? false,
+      unitNoun: json['unit_noun'] as String? ?? 'unit',
+      weeklyDiscount: ((json['stay_discounts'] as Map<String, dynamic>?)?['weekly_percent'] as num?)?.toDouble() ?? 0,
+      monthlyDiscount: ((json['stay_discounts'] as Map<String, dynamic>?)?['monthly_percent'] as num?)?.toDouble() ?? 0,
     );
   }
 }
