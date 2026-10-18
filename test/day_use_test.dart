@@ -26,6 +26,9 @@ class _FakeApi implements BookingSettingsApi {
   Future<DayUseSettings> dayUse(int itemId) async => current;
 
   @override
+  Future<void> saveStayDiscounts(int itemId, {required double weekly, required double monthly}) async {}
+
+  @override
   Future<List<UnitFeature>> unitFeatures(int itemId) async => const [];
 
   @override
@@ -57,7 +60,7 @@ class _FakeApi implements BookingSettingsApi {
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
-const _room = BookableItemRow(id: 5, serviceId: 1, itemType: 'booking_stay', code: 'A', label: 'غرفة مزدوجة', quantity: 1, isActive: true);
+const _room = BookableItemRow(id: 5, serviceId: 1, itemType: 'booking_stay', code: 'A', label: 'غرفة مزدوجة', quantity: 1, isActive: true, unitNoun: 'room');
 
 /// The controller's own load needs a whole API; the editor only needs the item it edits.
 class _Controller extends BookingSettingsController {
