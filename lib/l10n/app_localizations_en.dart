@@ -10359,4 +10359,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get emptyReturnChooseWhen => 'Choose when you leave.';
+
+  @override
+  String tripLegEveryDay(String day) {
+    return 'Every $day';
+  }
+
+  @override
+  String tripLegEveryDayAt(String day, String time) {
+    return 'Every $day · $time';
+  }
+
+  @override
+  String tripReservationWithCarrier(String name) {
+    return 'With $name';
+  }
+
+  @override
+  String get requestsAvailableTitle => 'Taking requests';
+
+  @override
+  String get requestsAvailableOn =>
+      'Customers\' requests reach you. Switch off when you want a break.';
+
+  @override
+  String get requestsAvailableOff =>
+      'On a break: no new requests reach you, you cannot answer, and your return offers are hidden.';
 }

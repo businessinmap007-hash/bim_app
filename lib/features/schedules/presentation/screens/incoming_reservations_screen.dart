@@ -8,6 +8,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../application/schedules_providers.dart';
 import '../../data/models/trip_reservation.dart';
+import '../widgets/trip_leg_summary.dart';
 
 const _statuses = <String?>[null, 'pending', 'confirmed', 'completed', 'cancelled', 'no_show', 'blocked'];
 
@@ -131,6 +132,11 @@ class _ReservationCard extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // the line and the time of the leg this seat is on, before who sits in it
+            if (r.leg != null) ...[
+              TripLegSummary(leg: r.leg!),
+              const SizedBox(height: 6),
+            ],
             Text(
               r.isOffline && (r.passengerName ?? '').isNotEmpty
                   ? r.passengerName!

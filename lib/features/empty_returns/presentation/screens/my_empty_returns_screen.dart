@@ -6,6 +6,9 @@ import '../../../../core/time/egypt_time.dart';
 import '../../../../core/time/local_format.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../location/presentation/widgets/location_picker_field.dart';
+import '../../../service_requests/presentation/widgets/requests_availability_switch.dart';
+import '../../../schedules/presentation/widgets/trip_leg_summary.dart'
+    show routeArrow;
 import '../../application/empty_returns_providers.dart';
 import '../../data/empty_returns_api.dart';
 
@@ -184,6 +187,7 @@ class _MyEmptyReturnsScreenState extends ConsumerState<MyEmptyReturnsScreen> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          const RequestsAvailabilitySwitch(margin: EdgeInsets.only(bottom: 12)),
           Text(l10n.emptyReturnDriverIntro, style: theme.textTheme.bodyMedium),
           const SizedBox(height: 16),
           Text(
@@ -354,7 +358,9 @@ class _MineTile extends StatelessWidget {
       child: Column(
         children: [
           ListTile(
-            title: Text('${offer.originCity} ← ${offer.destinationCity}'),
+            title: Text(
+              '${offer.originCity} ${routeArrow(context)} ${offer.destinationCity}',
+            ),
             subtitle: Text(
               '$when · ${l10n.emptyReturnPriceEgp(offer.price.toStringAsFixed(0))}\n$status',
             ),

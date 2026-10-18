@@ -37,6 +37,10 @@ class TripReservation {
   /// «عربون الجدية» of this reservation: quoted until the carrier confirms, then held / returned / disputed.
   final VisitDeposit? deposit;
 
+  /// Where and when it is, and the carrier the customer booked (null on an old payload).
+  final TripReservationLeg? leg;
+  final String? businessName;
+
   const TripReservation({
     required this.id,
     required this.tripScheduleId,
@@ -56,6 +60,8 @@ class TripReservation {
     this.clientConfirmedAt,
     this.carrierConfirmedAt,
     this.deposit,
+    this.leg,
+    this.businessName,
   });
 
   bool get isOffline => source == 'offline';
@@ -83,5 +89,75 @@ class TripReservation {
     clientConfirmedAt: json['client_confirmed_at'] != null ? EgyptTime.tryParse(json['client_confirmed_at'] as String) : null,
     carrierConfirmedAt: json['carrier_confirmed_at'] != null ? EgyptTime.tryParse(json['carrier_confirmed_at'] as String) : null,
     deposit: VisitDeposit.fromJsonOrNull(json['deposit']),
+    leg: json['leg'] is Map<String, dynamic> ? TripReservationLeg.fromJson(json['leg'] as Map<String, dynamic>) : null,
+    businessName: (json['business'] as Map<String, dynamic>?)?['name'] as String?,
   );
+}
+
+/// The leg a reservation is on, named for the screen: where, when and what kind (mirrors
+/// `TripReservationController::leg()`).
+class TripReservationLeg {
+  final int id;
+  final String mode;
+  final bool isReturnLeg;
+  final String originCity;
+  final String originGovernorate;
+  final String destinationCity;
+  final String destinationGovernorate;
+  final String pattern;
+  final int? dayOfWeek;
+
+  /// The day of a one-off leg and the time of day (Cairo wall clock), combined; null when the leg has none.
+  final DateTime? departsAt;
+
+  /// Only the time of day, for a weekly leg that has no single date.
+  final String? departureTime;
+  final String? vehicleLabel;
+
+  const TripReservationLeg({
+    required this.id,
+    required this.mode,
+    required this.isReturnLeg,
+    required this.originCity,
+    required this.originGovernorate,
+    required this.destinationCity,
+    required this.destinationGovernorate,
+    required this.pattern,
+    this.dayOfWeek,
+    this.departsAt,
+    this.departureTime,
+    this.vehicleLabel,
+  });
+
+  /// «Abu Dirda ← Cairo airport»; the governorate stands in for a leg with no city.
+  String get originLabel => originCity.isNotEmpty ? originCity : originGovernorate;
+  String get destinationLabel => destinationCity.isNotEmpty ? destinationCity : destinationGovernorate;
+
+  factory TripReservationLeg.fromJson(Map<String, dynamic> json) {
+    final origin = json['origin'] as Map<String, dynamic>? ?? const {};
+    final destination = json['destination'] as Map<String, dynamic>? ?? const {};
+    final date = json['trip_date'] as String?;
+    final time = json['departure_time'] as String?;
+
+    DateTime? departs;
+    if (date != null) {
+      // «2026-10-20» + «14:30:00»: wall-clock digits that are already Cairo's
+      departs = DateTime.tryParse('$date ${time ?? '00:00:00'}');
+    }
+
+    return TripReservationLeg(
+      id: (json['id'] as num).toInt(),
+      mode: json['mode'] as String? ?? '',
+      isReturnLeg: json['is_return_leg'] as bool? ?? false,
+      originCity: origin['city'] as String? ?? '',
+      originGovernorate: origin['governorate'] as String? ?? '',
+      destinationCity: destination['city'] as String? ?? '',
+      destinationGovernorate: destination['governorate'] as String? ?? '',
+      pattern: json['pattern'] as String? ?? '',
+      dayOfWeek: (json['day_of_week'] as num?)?.toInt(),
+      departsAt: departs,
+      departureTime: time,
+      vehicleLabel: json['vehicle_label'] as String?,
+    );
+  }
 }

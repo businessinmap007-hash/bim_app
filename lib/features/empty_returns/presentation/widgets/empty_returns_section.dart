@@ -6,6 +6,8 @@ import '../../../../core/time/local_format.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../schedules/application/schedules_providers.dart';
 import '../../../schedules/presentation/screens/my_reservations_screen.dart';
+import '../../../schedules/presentation/widgets/trip_leg_summary.dart'
+    show routeArrow;
 import '../../application/empty_returns_providers.dart';
 import '../../data/empty_returns_api.dart';
 
@@ -166,7 +168,7 @@ class _OfferCard extends StatelessWidget {
             // the exact cities when they are not the ones asked for (the same governorate pair, other cities)
             if (!offer.exactMatch)
               Text(
-                '${offer.originCity} ← ${offer.destinationCity}',
+                '${offer.originCity} ${routeArrow(context)} ${offer.destinationCity}',
                 style: theme.textTheme.bodySmall,
               ),
             if (when != null)

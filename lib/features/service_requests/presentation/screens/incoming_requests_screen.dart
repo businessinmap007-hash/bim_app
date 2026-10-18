@@ -7,6 +7,7 @@ import '../../../business_menu/application/business_menu_providers.dart';
 import '../../../business_menu/data/models/menu_item.dart';
 import '../../application/service_requests_providers.dart';
 import '../../data/service_requests_api.dart';
+import '../widgets/requests_availability_switch.dart';
 import 'service_request_detail_screen.dart' show RequestSummaryCard;
 
 /// The business side: the open requests this account may answer (its trade, its governorate), its own offer on each,
@@ -40,6 +41,7 @@ class _IncomingRequestsScreenState
       appBar: AppBar(title: Text(l10n.requestsAnswerTitle)),
       body: Column(
         children: [
+          const RequestsAvailabilitySwitch(),
           if (kinds.length > 1)
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),

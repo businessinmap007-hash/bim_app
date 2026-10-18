@@ -10288,4 +10288,30 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get emptyReturnChooseWhen => 'اختر موعد التحرك.';
+
+  @override
+  String tripLegEveryDay(String day) {
+    return 'كل $day';
+  }
+
+  @override
+  String tripLegEveryDayAt(String day, String time) {
+    return 'كل $day · $time';
+  }
+
+  @override
+  String tripReservationWithCarrier(String name) {
+    return 'مع $name';
+  }
+
+  @override
+  String get requestsAvailableTitle => 'أستقبل الطلبات';
+
+  @override
+  String get requestsAvailableOn =>
+      'تصلك طلبات العملاء. أوقفها حين تريد استراحة.';
+
+  @override
+  String get requestsAvailableOff =>
+      'في استراحة: لا تصلك طلبات جديدة ولا تستطيع الرد، وعروض «راجع فاضي» لديك مخفية.';
 }

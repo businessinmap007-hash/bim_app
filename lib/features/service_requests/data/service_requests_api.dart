@@ -395,6 +395,19 @@ class ServiceRequestsApi {
         .toList();
   }
 
+  /// «استراحة»: is the business taking requests (false = on a break)?
+  Future<bool> available() async {
+    final data =
+        await _client.get('/business/service-requests/availability')
+            as Map<String, dynamic>;
+    return data['available'] as bool? ?? true;
+  }
+
+  Future<void> setAvailable(bool available) => _client.put(
+    '/business/service-requests/availability',
+    data: {'available': available},
+  );
+
   Future<void> offer(
     int id, {
     double? price,

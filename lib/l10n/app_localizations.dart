@@ -18690,6 +18690,42 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'اختر موعد التحرك.'**
   String get emptyReturnChooseWhen;
+
+  /// No description provided for @tripLegEveryDay.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل {day}'**
+  String tripLegEveryDay(String day);
+
+  /// No description provided for @tripLegEveryDayAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل {day} · {time}'**
+  String tripLegEveryDayAt(String day, String time);
+
+  /// No description provided for @tripReservationWithCarrier.
+  ///
+  /// In ar, this message translates to:
+  /// **'مع {name}'**
+  String tripReservationWithCarrier(String name);
+
+  /// No description provided for @requestsAvailableTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أستقبل الطلبات'**
+  String get requestsAvailableTitle;
+
+  /// No description provided for @requestsAvailableOn.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصلك طلبات العملاء. أوقفها حين تريد استراحة.'**
+  String get requestsAvailableOn;
+
+  /// No description provided for @requestsAvailableOff.
+  ///
+  /// In ar, this message translates to:
+  /// **'في استراحة: لا تصلك طلبات جديدة ولا تستطيع الرد، وعروض «راجع فاضي» لديك مخفية.'**
+  String get requestsAvailableOff;
 }
 
 class _AppLocalizationsDelegate

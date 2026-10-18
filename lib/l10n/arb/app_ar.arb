@@ -3596,5 +3596,14 @@
   "emptyReturnStatusPassed": "انتهى موعده",
   "emptyReturnStatusCancelled": "ملغي",
   "emptyReturnChooseCities": "اختر المدينتين.",
-  "emptyReturnChooseWhen": "اختر موعد التحرك."
+  "emptyReturnChooseWhen": "اختر موعد التحرك.",
+  "tripLegEveryDay": "كل {day}",
+  "@tripLegEveryDay": {"placeholders": {"day": {"type": "String"}}},
+  "tripLegEveryDayAt": "كل {day} · {time}",
+  "@tripLegEveryDayAt": {"placeholders": {"day": {"type": "String"}, "time": {"type": "String"}}},
+  "tripReservationWithCarrier": "مع {name}",
+  "@tripReservationWithCarrier": {"placeholders": {"name": {"type": "String"}}},
+  "requestsAvailableTitle": "أستقبل الطلبات",
+  "requestsAvailableOn": "تصلك طلبات العملاء. أوقفها حين تريد استراحة.",
+  "requestsAvailableOff": "في استراحة: لا تصلك طلبات جديدة ولا تستطيع الرد، وعروض «راجع فاضي» لديك مخفية."
 }

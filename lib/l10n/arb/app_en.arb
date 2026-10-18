@@ -3570,5 +3570,14 @@
   "emptyReturnStatusPassed": "Time passed",
   "emptyReturnStatusCancelled": "Taken down",
   "emptyReturnChooseCities": "Choose both cities.",
-  "emptyReturnChooseWhen": "Choose when you leave."
+  "emptyReturnChooseWhen": "Choose when you leave.",
+  "tripLegEveryDay": "Every {day}",
+  "@tripLegEveryDay": {"placeholders": {"day": {"type": "String"}}},
+  "tripLegEveryDayAt": "Every {day} · {time}",
+  "@tripLegEveryDayAt": {"placeholders": {"day": {"type": "String"}, "time": {"type": "String"}}},
+  "tripReservationWithCarrier": "With {name}",
+  "@tripReservationWithCarrier": {"placeholders": {"name": {"type": "String"}}},
+  "requestsAvailableTitle": "Taking requests",
+  "requestsAvailableOn": "Customers' requests reach you. Switch off when you want a break.",
+  "requestsAvailableOff": "On a break: no new requests reach you, you cannot answer, and your return offers are hidden."
 }

@@ -10,6 +10,7 @@ import '../../../disputes/presentation/screens/dispute_detail_screen.dart';
 import '../../../disputes/presentation/widgets/dispute_reason_picker.dart';
 import '../../application/schedules_providers.dart';
 import '../../data/models/trip_reservation.dart';
+import '../widgets/trip_leg_summary.dart';
 
 class MyReservationsScreen extends ConsumerStatefulWidget {
   const MyReservationsScreen({super.key});
@@ -155,22 +156,50 @@ class _ReservationTile extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ListTile(
-            leading: const Icon(Icons.local_shipping_outlined),
-            title: Text('${reservation.units} · ${(reservation.totalPrice ?? 0).toStringAsFixed(0)} ${reservation.currency}'),
-            subtitle: Text(_statusLabel(reservation.status, l10n)),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (reservation.status != 'blocked')
-                  IconButton(
-                    tooltip: l10n.disputeOpenTitle,
-                    icon: const Icon(Icons.report_gmailerrorred_outlined),
-                    onPressed: onReportProblem,
+                Padding(
+                  padding: const EdgeInsets.only(top: 2, right: 12),
+                  child: Icon(reservation.leg?.mode == 'limousine' ? Icons.local_taxi_outlined : Icons.local_shipping_outlined),
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // where and when first: that is what the customer looks for in this list
+                      if (reservation.leg != null) TripLegSummary(leg: reservation.leg!),
+                      if ((reservation.businessName ?? '').isNotEmpty)
+                        Text(l10n.tripReservationWithCarrier(reservation.businessName!), style: Theme.of(context).textTheme.bodySmall),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${reservation.units} · ${(reservation.totalPrice ?? 0).toStringAsFixed(0)} ${reservation.currency} · ${_statusLabel(reservation.status, l10n)}',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
                   ),
-                if (reservation.isCancellable)
-                  TextButton(onPressed: onCancel, child: Text(l10n.tripReservationCancel)),
+                ),
               ],
+            ),
+          ),
+          Align(
+            alignment: AlignmentDirectional.centerEnd,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (reservation.status != 'blocked')
+                    IconButton(
+                      tooltip: l10n.disputeOpenTitle,
+                      icon: const Icon(Icons.report_gmailerrorred_outlined),
+                      onPressed: onReportProblem,
+                    ),
+                  if (reservation.isCancellable) TextButton(onPressed: onCancel, child: Text(l10n.tripReservationCancel)),
+                ],
+              ),
             ),
           ),
           // attendance: the customer confirms first, the carrier after him
