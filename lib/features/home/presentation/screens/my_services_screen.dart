@@ -16,6 +16,7 @@ import '../../../schedules/presentation/screens/trip_search_screen.dart';
 import '../../../service_requests/presentation/screens/car_wanted_screen.dart';
 import '../../../service_requests/presentation/screens/home_service_screen.dart';
 import '../../../service_requests/presentation/screens/work_quote_screen.dart';
+import '../../../owner_listings/presentation/screens/owner_listings_screen.dart';
 import '../../../service_requests/presentation/screens/my_requests_screen.dart';
 import '../../../service_requests/presentation/screens/ride_request_screen.dart';
 import '../../../table/presentation/screens/table_scan_screen.dart';
@@ -196,6 +197,16 @@ class MyServicesScreen extends StatelessWidget {
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => const HomeServiceScreen()),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.sell_outlined),
+                  title: Text(l10n.olTitle),
+                  subtitle: Text(l10n.olTileSubtitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const OwnerListingsScreen()),
                   ),
                 ),
                 const Divider(height: 1),

@@ -10513,4 +10513,253 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get requestKindQuote => 'Quotes';
+
+  @override
+  String get olTitle => 'Owner listings';
+
+  @override
+  String get olTileSubtitle =>
+      'Sell or rent a car, a flat or any used thing — no business account';
+
+  @override
+  String get olCarsEntry => 'Cars from their owners — buy, rent, or list yours';
+
+  @override
+  String get olPropertyEntry =>
+      'Flats from their owners — buy, rent, or list yours';
+
+  @override
+  String get olMine => 'My listings';
+
+  @override
+  String get olMyChats => 'My conversations';
+
+  @override
+  String get olAll => 'All';
+
+  @override
+  String get olSearchHint => 'Search listings';
+
+  @override
+  String get olEmpty => 'No listings here yet.';
+
+  @override
+  String get olMineEmpty => 'You have not posted anything yet.';
+
+  @override
+  String get olChatsEmpty => 'No conversations yet.';
+
+  @override
+  String get olAdd => 'Add a listing';
+
+  @override
+  String get olDealSale => 'For sale';
+
+  @override
+  String get olDealRent => 'For rent';
+
+  @override
+  String get olDealSwap => 'Swap';
+
+  @override
+  String get olPerDay => 'per day';
+
+  @override
+  String get olPerWeek => 'per week';
+
+  @override
+  String get olPerMonth => 'per month';
+
+  @override
+  String get olPriceOpen => 'Price on agreement';
+
+  @override
+  String get olCurrency => 'EGP';
+
+  @override
+  String get olFormTitleNew => 'New listing';
+
+  @override
+  String get olFormTitleEdit => 'Edit listing';
+
+  @override
+  String get olCategoryLabel => 'Category';
+
+  @override
+  String get olTitleLabel => 'Title (at least 3 letters)';
+
+  @override
+  String get olDescriptionLabel => 'Description';
+
+  @override
+  String get olPriceLabel => 'Price (EGP)';
+
+  @override
+  String get olPriceOptionalLabel => 'Value (optional)';
+
+  @override
+  String get olPriceUnitLabel => 'Rent period';
+
+  @override
+  String get olPlaceRequired => 'Choose the governorate and the city.';
+
+  @override
+  String get olNeedPhoto =>
+      'Add at least one photo so people can see your listing.';
+
+  @override
+  String get olDetails => 'Details';
+
+  @override
+  String get olPhotosTitle => 'Photos (at least one)';
+
+  @override
+  String get olAddPhotoCamera => 'Camera';
+
+  @override
+  String get olAddPhotoGallery => 'Gallery';
+
+  @override
+  String get olSave => 'Publish';
+
+  @override
+  String get olSaveEdit => 'Save changes';
+
+  @override
+  String olOwnerIs(String name) {
+    return 'Listed by $name';
+  }
+
+  @override
+  String get olNoPhoneNote =>
+      'The phone number is hidden. Chat here; when you agree, swap numbers (the platform charges a fee).';
+
+  @override
+  String get olContact => 'Message the owner';
+
+  @override
+  String get olReport => 'Report this listing';
+
+  @override
+  String get olReported => 'We received your report, thank you.';
+
+  @override
+  String get olFinish => 'Sold / rented — finish it';
+
+  @override
+  String get olFinishHint =>
+      'The listing is hidden now and deleted after 3 days.';
+
+  @override
+  String get olFinishSold => 'Sold';
+
+  @override
+  String get olFinishRented => 'Rented';
+
+  @override
+  String get olFinishSwapped => 'Swapped';
+
+  @override
+  String get olFinishWithdrawn => 'I withdraw it';
+
+  @override
+  String get olRenew => 'Renew for 60 days';
+
+  @override
+  String get olDelete => 'Delete now';
+
+  @override
+  String get olDeleteConfirm => 'Delete the listing, its photos and its chats?';
+
+  @override
+  String get olEdit => 'Edit';
+
+  @override
+  String get olStatusActive => 'Live';
+
+  @override
+  String get olStatusFlagged => 'Hidden: people reported it';
+
+  @override
+  String get olStatusDone => 'Finished';
+
+  @override
+  String get olStatusExpired => 'Expired';
+
+  @override
+  String get olNoPhotoHidden => 'Not shown yet: add a photo';
+
+  @override
+  String olDeletesOn(String date) {
+    return 'Deleted on $date';
+  }
+
+  @override
+  String olExpiresOn(String date) {
+    return 'Live until $date';
+  }
+
+  @override
+  String olInquiriesCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n conversations',
+      one: '1 conversation',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get olIAmBuyer => 'I am the buyer';
+
+  @override
+  String get olIAmSeller => 'I am the seller';
+
+  @override
+  String get olNumbersSwapped => 'numbers swapped';
+
+  @override
+  String get olAsksToSwap => 'asks to swap numbers';
+
+  @override
+  String get olWeAgree => 'We agree — swap numbers';
+
+  @override
+  String olFeeLine(String fee, String share) {
+    return 'Platform fee $fee EGP, your share $share EGP';
+  }
+
+  @override
+  String olFeeLineOther(String fee) {
+    return 'Platform fee $fee EGP (paid by the other side)';
+  }
+
+  @override
+  String get olRevealWaiting => 'Waiting for the other side to accept.';
+
+  @override
+  String olRevealAsked(String name) {
+    return '$name asks to swap numbers.';
+  }
+
+  @override
+  String get olRevealAccept => 'Accept and pay my share';
+
+  @override
+  String get olRevealDecline => 'Not yet';
+
+  @override
+  String get olRevealWithdraw => 'Withdraw the request';
+
+  @override
+  String olPhoneIs(String name, String phone) {
+    return '$name\'s number: $phone';
+  }
+
+  @override
+  String get olCopy => 'Copy';
+
+  @override
+  String get olListingEnded => 'This listing has ended.';
 }

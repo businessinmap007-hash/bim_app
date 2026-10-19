@@ -10439,4 +10439,252 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get requestKindQuote => 'عروض الأسعار';
+
+  @override
+  String get olTitle => 'إعلانات من المالك';
+
+  @override
+  String get olTileSubtitle =>
+      'بيع أو أجّر سيارة أو شقة أو أي غرض مستعمل — بدون حساب بزنس';
+
+  @override
+  String get olCarsEntry =>
+      'سيارات من المالك — اشترِ أو استأجر أو أعلن عن سيارتك';
+
+  @override
+  String get olPropertyEntry =>
+      'شقق من المالك — اشترِ أو استأجر أو أعلن عن شقتك';
+
+  @override
+  String get olMine => 'إعلاناتي';
+
+  @override
+  String get olMyChats => 'محادثاتي';
+
+  @override
+  String get olAll => 'الكل';
+
+  @override
+  String get olSearchHint => 'ابحث في الإعلانات';
+
+  @override
+  String get olEmpty => 'لا توجد إعلانات هنا بعد.';
+
+  @override
+  String get olMineEmpty => 'لم تنشر أي إعلان بعد.';
+
+  @override
+  String get olChatsEmpty => 'لا توجد محادثات بعد.';
+
+  @override
+  String get olAdd => 'أضف إعلانًا';
+
+  @override
+  String get olDealSale => 'للبيع';
+
+  @override
+  String get olDealRent => 'للإيجار';
+
+  @override
+  String get olDealSwap => 'للتبديل';
+
+  @override
+  String get olPerDay => 'في اليوم';
+
+  @override
+  String get olPerWeek => 'في الأسبوع';
+
+  @override
+  String get olPerMonth => 'في الشهر';
+
+  @override
+  String get olPriceOpen => 'السعر بالاتفاق';
+
+  @override
+  String get olCurrency => 'جنيه';
+
+  @override
+  String get olFormTitleNew => 'إعلان جديد';
+
+  @override
+  String get olFormTitleEdit => 'تعديل الإعلان';
+
+  @override
+  String get olCategoryLabel => 'التصنيف';
+
+  @override
+  String get olTitleLabel => 'العنوان (3 أحرف على الأقل)';
+
+  @override
+  String get olDescriptionLabel => 'الوصف';
+
+  @override
+  String get olPriceLabel => 'السعر (جنيه)';
+
+  @override
+  String get olPriceOptionalLabel => 'القيمة (اختياري)';
+
+  @override
+  String get olPriceUnitLabel => 'مدة الإيجار';
+
+  @override
+  String get olPlaceRequired => 'اختر المحافظة والمدينة.';
+
+  @override
+  String get olNeedPhoto => 'أضف صورة واحدة على الأقل ليراه الناس.';
+
+  @override
+  String get olDetails => 'التفاصيل';
+
+  @override
+  String get olPhotosTitle => 'الصور (واحدة على الأقل)';
+
+  @override
+  String get olAddPhotoCamera => 'الكاميرا';
+
+  @override
+  String get olAddPhotoGallery => 'المعرض';
+
+  @override
+  String get olSave => 'انشر الإعلان';
+
+  @override
+  String get olSaveEdit => 'احفظ التعديلات';
+
+  @override
+  String olOwnerIs(String name) {
+    return 'المعلن: $name';
+  }
+
+  @override
+  String get olNoPhoneNote =>
+      'رقم الهاتف مخفي. تحدثا هنا، وعند الاتفاق تبادلا الأرقام (تحصّل المنصة رسمًا).';
+
+  @override
+  String get olContact => 'راسل المالك';
+
+  @override
+  String get olReport => 'أبلغ عن الإعلان';
+
+  @override
+  String get olReported => 'وصلنا بلاغك، شكرًا.';
+
+  @override
+  String get olFinish => 'تم البيع أو التأجير — أنهِ الإعلان';
+
+  @override
+  String get olFinishHint => 'يختفي الإعلان الآن ويُحذف بعد 3 أيام.';
+
+  @override
+  String get olFinishSold => 'تم البيع';
+
+  @override
+  String get olFinishRented => 'تم التأجير';
+
+  @override
+  String get olFinishSwapped => 'تم التبديل';
+
+  @override
+  String get olFinishWithdrawn => 'سحبت الإعلان';
+
+  @override
+  String get olRenew => 'جدّد 60 يومًا';
+
+  @override
+  String get olDelete => 'احذف الآن';
+
+  @override
+  String get olDeleteConfirm => 'حذف الإعلان وصوره ومحادثاته؟';
+
+  @override
+  String get olEdit => 'تعديل';
+
+  @override
+  String get olStatusActive => 'ظاهر للناس';
+
+  @override
+  String get olStatusFlagged => 'مخفي: أبلغ عنه أشخاص';
+
+  @override
+  String get olStatusDone => 'منتهٍ';
+
+  @override
+  String get olStatusExpired => 'انتهت مدته';
+
+  @override
+  String get olNoPhotoHidden => 'لن يظهر قبل إضافة صورة';
+
+  @override
+  String olDeletesOn(String date) {
+    return 'يُحذف في $date';
+  }
+
+  @override
+  String olExpiresOn(String date) {
+    return 'ظاهر حتى $date';
+  }
+
+  @override
+  String olInquiriesCount(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n محادثات',
+      one: 'محادثة واحدة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get olIAmBuyer => 'أنا المشتري';
+
+  @override
+  String get olIAmSeller => 'أنا البائع';
+
+  @override
+  String get olNumbersSwapped => 'تم تبادل الأرقام';
+
+  @override
+  String get olAsksToSwap => 'يطلب تبادل الأرقام';
+
+  @override
+  String get olWeAgree => 'اتفقنا — تبادل الأرقام';
+
+  @override
+  String olFeeLine(String fee, String share) {
+    return 'رسوم المنصة $fee جنيه، نصيبك $share جنيه';
+  }
+
+  @override
+  String olFeeLineOther(String fee) {
+    return 'رسوم المنصة $fee جنيه (يدفعها الطرف الآخر)';
+  }
+
+  @override
+  String get olRevealWaiting => 'بانتظار موافقة الطرف الآخر.';
+
+  @override
+  String olRevealAsked(String name) {
+    return '$name يطلب تبادل الأرقام.';
+  }
+
+  @override
+  String get olRevealAccept => 'أوافق وأدفع نصيبي';
+
+  @override
+  String get olRevealDecline => 'ليس الآن';
+
+  @override
+  String get olRevealWithdraw => 'سحب الطلب';
+
+  @override
+  String olPhoneIs(String name, String phone) {
+    return 'رقم $name: $phone';
+  }
+
+  @override
+  String get olCopy => 'نسخ';
+
+  @override
+  String get olListingEnded => 'انتهى هذا الإعلان.';
 }

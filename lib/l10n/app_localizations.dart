@@ -18930,6 +18930,450 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'عروض الأسعار'**
   String get requestKindQuote;
+
+  /// No description provided for @olTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعلانات من المالك'**
+  String get olTitle;
+
+  /// No description provided for @olTileSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'بيع أو أجّر سيارة أو شقة أو أي غرض مستعمل — بدون حساب بزنس'**
+  String get olTileSubtitle;
+
+  /// No description provided for @olCarsEntry.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيارات من المالك — اشترِ أو استأجر أو أعلن عن سيارتك'**
+  String get olCarsEntry;
+
+  /// No description provided for @olPropertyEntry.
+  ///
+  /// In ar, this message translates to:
+  /// **'شقق من المالك — اشترِ أو استأجر أو أعلن عن شقتك'**
+  String get olPropertyEntry;
+
+  /// No description provided for @olMine.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعلاناتي'**
+  String get olMine;
+
+  /// No description provided for @olMyChats.
+  ///
+  /// In ar, this message translates to:
+  /// **'محادثاتي'**
+  String get olMyChats;
+
+  /// No description provided for @olAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get olAll;
+
+  /// No description provided for @olSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث في الإعلانات'**
+  String get olSearchHint;
+
+  /// No description provided for @olEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد إعلانات هنا بعد.'**
+  String get olEmpty;
+
+  /// No description provided for @olMineEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تنشر أي إعلان بعد.'**
+  String get olMineEmpty;
+
+  /// No description provided for @olChatsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد محادثات بعد.'**
+  String get olChatsEmpty;
+
+  /// No description provided for @olAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف إعلانًا'**
+  String get olAdd;
+
+  /// No description provided for @olDealSale.
+  ///
+  /// In ar, this message translates to:
+  /// **'للبيع'**
+  String get olDealSale;
+
+  /// No description provided for @olDealRent.
+  ///
+  /// In ar, this message translates to:
+  /// **'للإيجار'**
+  String get olDealRent;
+
+  /// No description provided for @olDealSwap.
+  ///
+  /// In ar, this message translates to:
+  /// **'للتبديل'**
+  String get olDealSwap;
+
+  /// No description provided for @olPerDay.
+  ///
+  /// In ar, this message translates to:
+  /// **'في اليوم'**
+  String get olPerDay;
+
+  /// No description provided for @olPerWeek.
+  ///
+  /// In ar, this message translates to:
+  /// **'في الأسبوع'**
+  String get olPerWeek;
+
+  /// No description provided for @olPerMonth.
+  ///
+  /// In ar, this message translates to:
+  /// **'في الشهر'**
+  String get olPerMonth;
+
+  /// No description provided for @olPriceOpen.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر بالاتفاق'**
+  String get olPriceOpen;
+
+  /// No description provided for @olCurrency.
+  ///
+  /// In ar, this message translates to:
+  /// **'جنيه'**
+  String get olCurrency;
+
+  /// No description provided for @olFormTitleNew.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعلان جديد'**
+  String get olFormTitleNew;
+
+  /// No description provided for @olFormTitleEdit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل الإعلان'**
+  String get olFormTitleEdit;
+
+  /// No description provided for @olCategoryLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'التصنيف'**
+  String get olCategoryLabel;
+
+  /// No description provided for @olTitleLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'العنوان (3 أحرف على الأقل)'**
+  String get olTitleLabel;
+
+  /// No description provided for @olDescriptionLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوصف'**
+  String get olDescriptionLabel;
+
+  /// No description provided for @olPriceLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر (جنيه)'**
+  String get olPriceLabel;
+
+  /// No description provided for @olPriceOptionalLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'القيمة (اختياري)'**
+  String get olPriceOptionalLabel;
+
+  /// No description provided for @olPriceUnitLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'مدة الإيجار'**
+  String get olPriceUnitLabel;
+
+  /// No description provided for @olPlaceRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر المحافظة والمدينة.'**
+  String get olPlaceRequired;
+
+  /// No description provided for @olNeedPhoto.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف صورة واحدة على الأقل ليراه الناس.'**
+  String get olNeedPhoto;
+
+  /// No description provided for @olDetails.
+  ///
+  /// In ar, this message translates to:
+  /// **'التفاصيل'**
+  String get olDetails;
+
+  /// No description provided for @olPhotosTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصور (واحدة على الأقل)'**
+  String get olPhotosTitle;
+
+  /// No description provided for @olAddPhotoCamera.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكاميرا'**
+  String get olAddPhotoCamera;
+
+  /// No description provided for @olAddPhotoGallery.
+  ///
+  /// In ar, this message translates to:
+  /// **'المعرض'**
+  String get olAddPhotoGallery;
+
+  /// No description provided for @olSave.
+  ///
+  /// In ar, this message translates to:
+  /// **'انشر الإعلان'**
+  String get olSave;
+
+  /// No description provided for @olSaveEdit.
+  ///
+  /// In ar, this message translates to:
+  /// **'احفظ التعديلات'**
+  String get olSaveEdit;
+
+  /// No description provided for @olOwnerIs.
+  ///
+  /// In ar, this message translates to:
+  /// **'المعلن: {name}'**
+  String olOwnerIs(String name);
+
+  /// No description provided for @olNoPhoneNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الهاتف مخفي. تحدثا هنا، وعند الاتفاق تبادلا الأرقام (تحصّل المنصة رسمًا).'**
+  String get olNoPhoneNote;
+
+  /// No description provided for @olContact.
+  ///
+  /// In ar, this message translates to:
+  /// **'راسل المالك'**
+  String get olContact;
+
+  /// No description provided for @olReport.
+  ///
+  /// In ar, this message translates to:
+  /// **'أبلغ عن الإعلان'**
+  String get olReport;
+
+  /// No description provided for @olReported.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصلنا بلاغك، شكرًا.'**
+  String get olReported;
+
+  /// No description provided for @olFinish.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم البيع أو التأجير — أنهِ الإعلان'**
+  String get olFinish;
+
+  /// No description provided for @olFinishHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يختفي الإعلان الآن ويُحذف بعد 3 أيام.'**
+  String get olFinishHint;
+
+  /// No description provided for @olFinishSold.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم البيع'**
+  String get olFinishSold;
+
+  /// No description provided for @olFinishRented.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التأجير'**
+  String get olFinishRented;
+
+  /// No description provided for @olFinishSwapped.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التبديل'**
+  String get olFinishSwapped;
+
+  /// No description provided for @olFinishWithdrawn.
+  ///
+  /// In ar, this message translates to:
+  /// **'سحبت الإعلان'**
+  String get olFinishWithdrawn;
+
+  /// No description provided for @olRenew.
+  ///
+  /// In ar, this message translates to:
+  /// **'جدّد 60 يومًا'**
+  String get olRenew;
+
+  /// No description provided for @olDelete.
+  ///
+  /// In ar, this message translates to:
+  /// **'احذف الآن'**
+  String get olDelete;
+
+  /// No description provided for @olDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف الإعلان وصوره ومحادثاته؟'**
+  String get olDeleteConfirm;
+
+  /// No description provided for @olEdit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل'**
+  String get olEdit;
+
+  /// No description provided for @olStatusActive.
+  ///
+  /// In ar, this message translates to:
+  /// **'ظاهر للناس'**
+  String get olStatusActive;
+
+  /// No description provided for @olStatusFlagged.
+  ///
+  /// In ar, this message translates to:
+  /// **'مخفي: أبلغ عنه أشخاص'**
+  String get olStatusFlagged;
+
+  /// No description provided for @olStatusDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'منتهٍ'**
+  String get olStatusDone;
+
+  /// No description provided for @olStatusExpired.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتهت مدته'**
+  String get olStatusExpired;
+
+  /// No description provided for @olNoPhotoHidden.
+  ///
+  /// In ar, this message translates to:
+  /// **'لن يظهر قبل إضافة صورة'**
+  String get olNoPhotoHidden;
+
+  /// No description provided for @olDeletesOn.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُحذف في {date}'**
+  String olDeletesOn(String date);
+
+  /// No description provided for @olExpiresOn.
+  ///
+  /// In ar, this message translates to:
+  /// **'ظاهر حتى {date}'**
+  String olExpiresOn(String date);
+
+  /// No description provided for @olInquiriesCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{n, plural, =1{محادثة واحدة} other{{n} محادثات}}'**
+  String olInquiriesCount(int n);
+
+  /// No description provided for @olIAmBuyer.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنا المشتري'**
+  String get olIAmBuyer;
+
+  /// No description provided for @olIAmSeller.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنا البائع'**
+  String get olIAmSeller;
+
+  /// No description provided for @olNumbersSwapped.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تبادل الأرقام'**
+  String get olNumbersSwapped;
+
+  /// No description provided for @olAsksToSwap.
+  ///
+  /// In ar, this message translates to:
+  /// **'يطلب تبادل الأرقام'**
+  String get olAsksToSwap;
+
+  /// No description provided for @olWeAgree.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتفقنا — تبادل الأرقام'**
+  String get olWeAgree;
+
+  /// No description provided for @olFeeLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسوم المنصة {fee} جنيه، نصيبك {share} جنيه'**
+  String olFeeLine(String fee, String share);
+
+  /// No description provided for @olFeeLineOther.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسوم المنصة {fee} جنيه (يدفعها الطرف الآخر)'**
+  String olFeeLineOther(String fee);
+
+  /// No description provided for @olRevealWaiting.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار موافقة الطرف الآخر.'**
+  String get olRevealWaiting;
+
+  /// No description provided for @olRevealAsked.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} يطلب تبادل الأرقام.'**
+  String olRevealAsked(String name);
+
+  /// No description provided for @olRevealAccept.
+  ///
+  /// In ar, this message translates to:
+  /// **'أوافق وأدفع نصيبي'**
+  String get olRevealAccept;
+
+  /// No description provided for @olRevealDecline.
+  ///
+  /// In ar, this message translates to:
+  /// **'ليس الآن'**
+  String get olRevealDecline;
+
+  /// No description provided for @olRevealWithdraw.
+  ///
+  /// In ar, this message translates to:
+  /// **'سحب الطلب'**
+  String get olRevealWithdraw;
+
+  /// No description provided for @olPhoneIs.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم {name}: {phone}'**
+  String olPhoneIs(String name, String phone);
+
+  /// No description provided for @olCopy.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسخ'**
+  String get olCopy;
+
+  /// No description provided for @olListingEnded.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتهى هذا الإعلان.'**
+  String get olListingEnded;
 }
 
 class _AppLocalizationsDelegate

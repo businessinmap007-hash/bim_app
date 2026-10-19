@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/deposit/screens/guarantor_request_screen.dart';
 import '../../schedules/presentation/screens/incoming_reservations_screen.dart';
 import '../../service_requests/presentation/screens/incoming_requests_screen.dart';
+import '../../owner_listings/presentation/screens/owner_listing_chat_screen.dart';
 import '../../service_requests/presentation/screens/service_request_detail_screen.dart';
 import '../../schedules/presentation/screens/my_reservations_screen.dart';
 import '../../schedules/presentation/screens/parcels_screens.dart';
@@ -63,6 +64,11 @@ Future<void> openNotificationTarget(BuildContext context, WidgetRef ref, AppNoti
     case 'open_service_request':
       if (id != null) {
         Navigator.of(context).push(MaterialPageRoute(builder: (_) => ServiceRequestDetailScreen(requestId: id)));
+      }
+    // An owner listing: a buyer wrote, asked to swap numbers, or the swap went through — the conversation.
+    case 'open_owner_listing_chat':
+      if (id != null) {
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => OwnerListingChatScreen(inquiryId: id, title: (notification.meta['title'] as String?) ?? '')));
       }
     case 'open_incoming_requests':
       Navigator.of(context).push(MaterialPageRoute(builder: (_) => const IncomingRequestsScreen()));

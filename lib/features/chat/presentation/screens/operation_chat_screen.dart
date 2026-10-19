@@ -17,17 +17,22 @@ import '../../data/models/thread_message.dart';
 import '../../../../shared/widgets/full_screen_gallery.dart';
 
 /// The customer↔business chat on one order or booking. [operationType] is
-/// 'order' | 'booking'.
+/// 'order' | 'booking' | 'listing' (a buyer's conversation about an owner listing, with its own [banner]
+/// for the swap of phone numbers).
 class OperationChatScreen extends ConsumerStatefulWidget {
   final String operationType;
   final int operationId;
   final String title;
+
+  /// Shown above the messages (an owner listing's «اتفقنا» bar).
+  final Widget? banner;
 
   const OperationChatScreen({
     super.key,
     required this.operationType,
     required this.operationId,
     required this.title,
+    this.banner,
   });
 
   @override
@@ -141,6 +146,7 @@ class _OperationChatScreenState extends ConsumerState<OperationChatScreen> {
       body: Column(
         children: [
           if (state.thread != null) ThreadAccessBanner(threadId: state.thread!.id),
+          ?widget.banner,
           Expanded(
             child: state.isLoading
                 ? const Center(child: CircularProgressIndicator())
