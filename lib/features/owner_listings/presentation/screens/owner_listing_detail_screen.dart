@@ -175,25 +175,8 @@ class _OwnerListingDetailScreenState
     return ListView(
       padding: const EdgeInsets.only(bottom: 32),
       children: [
-        SizedBox(
-          height: 260,
-          child: urls.isEmpty
-              ? OwnerListingPhoto(path: null, height: 260)
-              : PageView.builder(
-                  itemCount: urls.length,
-                  itemBuilder: (context, i) => GestureDetector(
-                    onTap: () => FullScreenGallery.show(
-                      context,
-                      urls: urls,
-                      initialIndex: i,
-                    ),
-                    child: OwnerListingPhoto(
-                      path: l.images[i].image,
-                      height: 260,
-                    ),
-                  ),
-                ),
-        ),
+        // swipe through the photos (a counter says how many); a tap opens them full screen with thumbnails
+        _PhotoCarousel(images: l.images, urls: urls),
         Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -375,5 +358,71 @@ class _OwnerListingDetailScreenState
         ),
       ),
     ];
+  }
+}
+
+/// The listing's photos, one per page, with «2 / 5» over the corner when there is more than one.
+class _PhotoCarousel extends StatefulWidget {
+  final List<OwnerImage> images;
+  final List<String> urls;
+
+  const _PhotoCarousel({required this.images, required this.urls});
+
+  @override
+  State<_PhotoCarousel> createState() => _PhotoCarouselState();
+}
+
+class _PhotoCarouselState extends State<_PhotoCarousel> {
+  int _page = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.urls.isEmpty) {
+      return const OwnerListingPhoto(path: null, height: 260);
+    }
+
+    return SizedBox(
+      height: 260,
+      child: Stack(
+        children: [
+          PageView.builder(
+            itemCount: widget.urls.length,
+            onPageChanged: (i) => setState(() => _page = i),
+            itemBuilder: (context, i) => GestureDetector(
+              onTap: () => FullScreenGallery.show(
+                context,
+                urls: widget.urls,
+                initialIndex: i,
+              ),
+              child: SizedBox.expand(
+                child: OwnerListingPhoto(
+                  path: widget.images[i].image,
+                  height: 260,
+                ),
+              ),
+            ),
+          ),
+          if (widget.urls.length > 1)
+            PositionedDirectional(
+              bottom: 8,
+              end: 8,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.black54,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  '${_page + 1} / ${widget.urls.length}',
+                  style: const TextStyle(color: Colors.white, fontSize: 12),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
   }
 }
