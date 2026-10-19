@@ -99,6 +99,39 @@ class OwnerImage {
 }
 
 /// A listing as a card of the list (and the base of the full page).
+/// «جدية الإعلان»: what the account must do to publish (see `GET owner-listings/requirements`).
+class OwnerRequirement {
+  final bool required;
+  final bool guaranteeOk;
+  final bool needsDeposit;
+  final double depositAmount;
+  final double balance;
+  final String minLevelName;
+
+  const OwnerRequirement({
+    this.required = false,
+    this.guaranteeOk = false,
+    this.needsDeposit = false,
+    this.depositAmount = 0,
+    this.balance = 0,
+    this.minLevelName = '',
+  });
+
+  bool get enoughBalance => balance >= depositAmount;
+
+  factory OwnerRequirement.fromJson(Map<String, dynamic> json) =>
+      OwnerRequirement(
+        required: json['required'] as bool? ?? false,
+        guaranteeOk: json['guarantee_ok'] as bool? ?? false,
+        needsDeposit: json['needs_deposit'] as bool? ?? false,
+        depositAmount: (json['deposit_amount'] as num?)?.toDouble() ?? 0,
+        balance: (json['balance'] as num?)?.toDouble() ?? 0,
+        minLevelName:
+            (json['min_level'] as Map<String, dynamic>?)?['name'] as String? ??
+            '',
+      );
+}
+
 class OwnerListing {
   final int id;
   final String categoryKey;
@@ -134,6 +167,10 @@ class OwnerListing {
   final int? myInquiryId;
   final int? inquiriesCount;
 
+  /// The owner's own seriousness deposit: how much, and `held` | `released`.
+  final double? depositAmount;
+  final String? depositState;
+
   const OwnerListing({
     required this.id,
     required this.categoryKey,
@@ -162,6 +199,8 @@ class OwnerListing {
     this.ownerName,
     this.myInquiryId,
     this.inquiriesCount,
+    this.depositAmount,
+    this.depositState,
   });
 
   bool get isLive => status == 'active';
@@ -220,6 +259,11 @@ class OwnerListing {
       ownerName: owner?['name'] as String?,
       myInquiryId: (json['my_inquiry_id'] as num?)?.toInt(),
       inquiriesCount: (json['inquiries_count'] as num?)?.toInt(),
+      depositAmount:
+          ((json['deposit'] as Map<String, dynamic>?)?['amount'] as num?)
+              ?.toDouble(),
+      depositState:
+          (json['deposit'] as Map<String, dynamic>?)?['state'] as String?,
     );
   }
 }
@@ -371,6 +415,15 @@ class OwnerListingsApi {
     'attributes': attributes,
   };
 
+  Future<OwnerRequirement> requirement() async {
+    final data =
+        await _client.get('/owner-listings/requirements')
+            as Map<String, dynamic>;
+    return OwnerRequirement.fromJson(
+      data['requirements'] as Map<String, dynamic>,
+    );
+  }
+
   Future<OwnerListing> create({
     required String category,
     required String deal,
@@ -381,12 +434,14 @@ class OwnerListingsApi {
     required int governorateId,
     int? cityId,
     required Map<String, dynamic> attributes,
+    bool holdDeposit = false,
   }) async {
     final data =
         await _client.post(
               '/owner-listings',
               data: {
                 'category': category,
+                if (holdDeposit) 'hold_deposit': true,
                 ..._body(
                   deal: deal,
                   title: title,

@@ -3819,5 +3819,18 @@
   "bodyCalcKgUnit": "{kg} kg",
   "@bodyCalcKgUnit": {"placeholders": {"kg": {"type": "String"}}},
   "bodyCalcRecorded": "Last weight recorded on your account: {kg} kg ({date})",
-  "@bodyCalcRecorded": {"placeholders": {"kg": {"type": "String"}, "date": {"type": "String"}}}
+  "@bodyCalcRecorded": {"placeholders": {"kg": {"type": "String"}, "date": {"type": "String"}}},
+  "olSeriousTitle": "Seriousness of the listing",
+  "olDepositAgreeFirst": "Agree to the seriousness deposit to publish your listing.",
+  "olDepositNoBalance": "Your balance is not enough for the seriousness deposit. Top up your wallet first.",
+  "olSeriousGuaranteeOk": "Your {level}+ guarantee is enough — no deposit on your listing.",
+  "@olSeriousGuaranteeOk": {"placeholders": {"level": {"type": "String"}}},
+  "olSeriousBody": "To publish you need a {level} guarantee or higher, or a seriousness deposit of {amount} EGP held from your wallet and handed back when you sell or end the listing.",
+  "@olSeriousBody": {"placeholders": {"level": {"type": "String"}, "amount": {"type": "String"}}},
+  "olSeriousAgree": "I agree to hold {amount} EGP from my wallet until the listing ends",
+  "@olSeriousAgree": {"placeholders": {"amount": {"type": "String"}}},
+  "olDepositHeld": "Seriousness deposit: {amount} EGP held, handed back when you sell or end it.",
+  "@olDepositHeld": {"placeholders": {"amount": {"type": "String"}}},
+  "olDepositReleased": "Seriousness deposit: {amount} EGP — handed back to your wallet.",
+  "@olDepositReleased": {"placeholders": {"amount": {"type": "String"}}}
 }

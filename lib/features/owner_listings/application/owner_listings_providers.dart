@@ -40,3 +40,10 @@ final ownerInquiryProvider = FutureProvider.autoDispose
     .family<OwnerInquiry, int>((ref, id) {
       return ref.watch(ownerListingsApiProvider).inquiry(id);
     });
+
+/// What the account must do to publish: a bronze+ guarantee or a seriousness deposit (priced in the control panel).
+final ownerRequirementProvider = FutureProvider.autoDispose<OwnerRequirement>((
+  ref,
+) {
+  return ref.watch(ownerListingsApiProvider).requirement();
+});

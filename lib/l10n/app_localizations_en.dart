@@ -11114,4 +11114,40 @@ class AppLocalizationsEn extends AppLocalizations {
   String bodyCalcRecorded(String kg, String date) {
     return 'Last weight recorded on your account: $kg kg ($date)';
   }
+
+  @override
+  String get olSeriousTitle => 'Seriousness of the listing';
+
+  @override
+  String get olDepositAgreeFirst =>
+      'Agree to the seriousness deposit to publish your listing.';
+
+  @override
+  String get olDepositNoBalance =>
+      'Your balance is not enough for the seriousness deposit. Top up your wallet first.';
+
+  @override
+  String olSeriousGuaranteeOk(String level) {
+    return 'Your $level+ guarantee is enough — no deposit on your listing.';
+  }
+
+  @override
+  String olSeriousBody(String level, String amount) {
+    return 'To publish you need a $level guarantee or higher, or a seriousness deposit of $amount EGP held from your wallet and handed back when you sell or end the listing.';
+  }
+
+  @override
+  String olSeriousAgree(String amount) {
+    return 'I agree to hold $amount EGP from my wallet until the listing ends';
+  }
+
+  @override
+  String olDepositHeld(String amount) {
+    return 'Seriousness deposit: $amount EGP held, handed back when you sell or end it.';
+  }
+
+  @override
+  String olDepositReleased(String amount) {
+    return 'Seriousness deposit: $amount EGP — handed back to your wallet.';
+  }
 }

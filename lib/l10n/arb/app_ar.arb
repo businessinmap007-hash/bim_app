@@ -3845,5 +3845,18 @@
   "bodyCalcKgUnit": "{kg} كجم",
   "@bodyCalcKgUnit": {"placeholders": {"kg": {"type": "String"}}},
   "bodyCalcRecorded": "آخر وزن مسجّل في حسابك: {kg} كجم ({date})",
-  "@bodyCalcRecorded": {"placeholders": {"kg": {"type": "String"}, "date": {"type": "String"}}}
+  "@bodyCalcRecorded": {"placeholders": {"kg": {"type": "String"}, "date": {"type": "String"}}},
+  "olSeriousTitle": "جدية الإعلان",
+  "olDepositAgreeFirst": "وافق على حجز عربون الجدية لتنشر إعلانك.",
+  "olDepositNoBalance": "رصيدك لا يكفي لعربون الجدية. اشحن محفظتك أولًا.",
+  "olSeriousGuaranteeOk": "ضمانك ({level} فأعلى) يكفي — لا عربون على إعلانك.",
+  "@olSeriousGuaranteeOk": {"placeholders": {"level": {"type": "String"}}},
+  "olSeriousBody": "لنشر إعلانك: ضمان {level} فأعلى، أو عربون جدية {amount} جنيه يُحجز من محفظتك ويُردّ عند البيع أو إنهاء الإعلان.",
+  "@olSeriousBody": {"placeholders": {"level": {"type": "String"}, "amount": {"type": "String"}}},
+  "olSeriousAgree": "أوافق على حجز {amount} جنيه من محفظتي حتى ينتهي الإعلان",
+  "@olSeriousAgree": {"placeholders": {"amount": {"type": "String"}}},
+  "olDepositHeld": "عربون الجدية: {amount} جنيه محجوز، يُردّ عند البيع أو الإنهاء.",
+  "@olDepositHeld": {"placeholders": {"amount": {"type": "String"}}},
+  "olDepositReleased": "عربون الجدية: {amount} جنيه — تم رده إلى محفظتك.",
+  "@olDepositReleased": {"placeholders": {"amount": {"type": "String"}}}
 }

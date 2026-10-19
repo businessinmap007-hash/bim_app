@@ -11037,4 +11037,39 @@ class AppLocalizationsAr extends AppLocalizations {
   String bodyCalcRecorded(String kg, String date) {
     return 'آخر وزن مسجّل في حسابك: $kg كجم ($date)';
   }
+
+  @override
+  String get olSeriousTitle => 'جدية الإعلان';
+
+  @override
+  String get olDepositAgreeFirst => 'وافق على حجز عربون الجدية لتنشر إعلانك.';
+
+  @override
+  String get olDepositNoBalance =>
+      'رصيدك لا يكفي لعربون الجدية. اشحن محفظتك أولًا.';
+
+  @override
+  String olSeriousGuaranteeOk(String level) {
+    return 'ضمانك ($level فأعلى) يكفي — لا عربون على إعلانك.';
+  }
+
+  @override
+  String olSeriousBody(String level, String amount) {
+    return 'لنشر إعلانك: ضمان $level فأعلى، أو عربون جدية $amount جنيه يُحجز من محفظتك ويُردّ عند البيع أو إنهاء الإعلان.';
+  }
+
+  @override
+  String olSeriousAgree(String amount) {
+    return 'أوافق على حجز $amount جنيه من محفظتي حتى ينتهي الإعلان';
+  }
+
+  @override
+  String olDepositHeld(String amount) {
+    return 'عربون الجدية: $amount جنيه محجوز، يُردّ عند البيع أو الإنهاء.';
+  }
+
+  @override
+  String olDepositReleased(String amount) {
+    return 'عربون الجدية: $amount جنيه — تم رده إلى محفظتك.';
+  }
 }

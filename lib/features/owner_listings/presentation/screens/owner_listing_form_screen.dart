@@ -41,6 +41,7 @@ class _OwnerListingFormScreenState
   final List<PickedMedia> _photos = [];
   late List<OwnerImage> _existing = [...?widget.listing?.images];
 
+  bool _agreeDeposit = false;
   String? _categoryKey;
   String _deal = 'sale';
   String _unit = 'month';
@@ -161,6 +162,18 @@ class _OwnerListingFormScreenState
       return;
     }
 
+    final requirement = ref.read(ownerRequirementProvider).valueOrNull;
+    if (!_editing && requirement != null && requirement.needsDeposit) {
+      if (!_agreeDeposit) {
+        setState(() => _error = l10n.olDepositAgreeFirst);
+        return;
+      }
+      if (!requirement.enoughBalance) {
+        setState(() => _error = l10n.olDepositNoBalance);
+        return;
+      }
+    }
+
     setState(() {
       _busy = true;
       _error = null;
@@ -196,6 +209,7 @@ class _OwnerListingFormScreenState
           governorateId: where.governorateId,
           cityId: cityId,
           attributes: _attributes(category),
+          holdDeposit: _agreeDeposit,
         );
         id = created.id;
       }
@@ -212,6 +226,62 @@ class _OwnerListingFormScreenState
         _error = e is ApiException ? e.message : l10n.commonSomethingWentWrong;
       });
     }
+  }
+
+  /// «جدية الإعلان»: a bronze+ guarantee stands behind the listing, or a deposit is held until it ends.
+  List<Widget> _seriousness(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final r = ref.watch(ownerRequirementProvider).valueOrNull;
+    if (r == null || !r.required) return const [];
+
+    final amount = r.depositAmount.toStringAsFixed(
+      r.depositAmount == r.depositAmount.roundToDouble() ? 0 : 2,
+    );
+
+    return [
+      const SizedBox(height: 16),
+      Card(
+        margin: EdgeInsets.zero,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: r.guaranteeOk
+              ? Row(
+                  children: [
+                    const Icon(Icons.verified_outlined, color: Colors.green),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(l10n.olSeriousGuaranteeOk(r.minLevelName)),
+                    ),
+                  ],
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.olSeriousTitle,
+                      style: theme.textTheme.titleSmall,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(l10n.olSeriousBody(r.minLevelName, amount)),
+                    CheckboxListTile(
+                      contentPadding: EdgeInsets.zero,
+                      controlAffinity: ListTileControlAffinity.leading,
+                      value: _agreeDeposit,
+                      onChanged: (v) =>
+                          setState(() => _agreeDeposit = v ?? false),
+                      title: Text(l10n.olSeriousAgree(amount)),
+                    ),
+                    if (!r.enoughBalance)
+                      Text(
+                        l10n.olDepositNoBalance,
+                        style: TextStyle(color: theme.colorScheme.error),
+                      ),
+                  ],
+                ),
+        ),
+      ),
+    ];
   }
 
   @override
@@ -376,6 +446,7 @@ class _OwnerListingFormScreenState
               maxLength: 2000,
               decoration: InputDecoration(labelText: l10n.olDescriptionLabel),
             ),
+            if (!_editing) ..._seriousness(context),
             if (_error != null) ...[
               const SizedBox(height: 8),
               Text(_error!, style: TextStyle(color: theme.colorScheme.error)),

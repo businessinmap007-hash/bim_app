@@ -19956,6 +19956,54 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'آخر وزن مسجّل في حسابك: {kg} كجم ({date})'**
   String bodyCalcRecorded(String kg, String date);
+
+  /// No description provided for @olSeriousTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'جدية الإعلان'**
+  String get olSeriousTitle;
+
+  /// No description provided for @olDepositAgreeFirst.
+  ///
+  /// In ar, this message translates to:
+  /// **'وافق على حجز عربون الجدية لتنشر إعلانك.'**
+  String get olDepositAgreeFirst;
+
+  /// No description provided for @olDepositNoBalance.
+  ///
+  /// In ar, this message translates to:
+  /// **'رصيدك لا يكفي لعربون الجدية. اشحن محفظتك أولًا.'**
+  String get olDepositNoBalance;
+
+  /// No description provided for @olSeriousGuaranteeOk.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضمانك ({level} فأعلى) يكفي — لا عربون على إعلانك.'**
+  String olSeriousGuaranteeOk(String level);
+
+  /// No description provided for @olSeriousBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'لنشر إعلانك: ضمان {level} فأعلى، أو عربون جدية {amount} جنيه يُحجز من محفظتك ويُردّ عند البيع أو إنهاء الإعلان.'**
+  String olSeriousBody(String level, String amount);
+
+  /// No description provided for @olSeriousAgree.
+  ///
+  /// In ar, this message translates to:
+  /// **'أوافق على حجز {amount} جنيه من محفظتي حتى ينتهي الإعلان'**
+  String olSeriousAgree(String amount);
+
+  /// No description provided for @olDepositHeld.
+  ///
+  /// In ar, this message translates to:
+  /// **'عربون الجدية: {amount} جنيه محجوز، يُردّ عند البيع أو الإنهاء.'**
+  String olDepositHeld(String amount);
+
+  /// No description provided for @olDepositReleased.
+  ///
+  /// In ar, this message translates to:
+  /// **'عربون الجدية: {amount} جنيه — تم رده إلى محفظتك.'**
+  String olDepositReleased(String amount);
 }
 
 class _AppLocalizationsDelegate
