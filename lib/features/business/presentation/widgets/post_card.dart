@@ -30,6 +30,9 @@ class PostCard extends StatelessWidget {
   final VoidCallback? onOpenAuthor;
   final VoidCallback? onShare;
 
+  /// «إبلاغ» — set where a post by somebody else is shown (the feed, a business's wall); never on «my posts».
+  final VoidCallback? onReport;
+
   const PostCard({
     super.key,
     required this.post,
@@ -40,13 +43,14 @@ class PostCard extends StatelessWidget {
     this.onOpenComments,
     this.onOpenAuthor,
     this.onShare,
+    this.onReport,
   });
 
   /// Edit/delete, when either is set. [onImage] styles it to float over a
   /// photo (small, white-on-black-circle) instead of sitting inline in a
   /// plain header row.
   Widget? _menu(BuildContext context, AppLocalizations l10n, {required bool onImage}) {
-    if (onEdit == null && onDelete == null) return null;
+    if (onEdit == null && onDelete == null && onReport == null) return null;
 
     final button = PopupMenuButton<String>(
       padding: EdgeInsets.zero,
@@ -54,10 +58,12 @@ class PostCard extends StatelessWidget {
       onSelected: (choice) {
         if (choice == 'edit') onEdit?.call();
         if (choice == 'delete') onDelete?.call();
+        if (choice == 'report') onReport?.call();
       },
       itemBuilder: (context) => [
         if (onEdit != null) PopupMenuItem(value: 'edit', child: Text(l10n.postsEdit)),
         if (onDelete != null) PopupMenuItem(value: 'delete', child: Text(l10n.postsDelete)),
+        if (onReport != null) PopupMenuItem(value: 'report', child: Text(l10n.reportAction)),
       ],
     );
 

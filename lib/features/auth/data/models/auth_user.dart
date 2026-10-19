@@ -33,6 +33,9 @@ class AuthUser {
   /// A clinic that ticked «أسنان»: it has its own services list (see SpecialtyServicesManageScreen).
   final bool hasSpecialtyServices;
 
+  /// Holds the content ability: gets the «الإشراف» tab (reports on posts and owner listings).
+  final bool isModerator;
+
   const AuthUser({
     required this.id,
     required this.name,
@@ -56,6 +59,7 @@ class AuthUser {
     this.setupComplete = true,
     this.setupMissing = const [],
     this.hasSpecialtyServices = false,
+    this.isModerator = false,
   });
 
   bool get isBusiness => type == 'business';
@@ -96,5 +100,6 @@ class AuthUser {
         '$m',
     ],
     hasSpecialtyServices: json['specialty_services'] as bool? ?? false,
+    isModerator: json['is_moderator'] as bool? ?? false,
   );
 }

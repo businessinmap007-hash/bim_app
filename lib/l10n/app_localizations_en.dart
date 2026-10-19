@@ -10762,4 +10762,73 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get olListingEnded => 'This listing has ended.';
+
+  @override
+  String get reportTitle => 'Report';
+
+  @override
+  String get reportDetailsHint => 'More details (optional)';
+
+  @override
+  String get reportSend => 'Send report';
+
+  @override
+  String get reportSent => 'We received your report, thank you.';
+
+  @override
+  String get reportAction => 'Report';
+
+  @override
+  String get modTitle => 'Moderation';
+
+  @override
+  String get modOpen => 'Open';
+
+  @override
+  String get modHandled => 'Handled';
+
+  @override
+  String get modEmpty => 'No reports.';
+
+  @override
+  String get modDismiss => 'Dismiss report';
+
+  @override
+  String get modRemove => 'Remove';
+
+  @override
+  String get modRestore => 'Restore';
+
+  @override
+  String get modRemovePostConfirm =>
+      'Hide this post? You can restore it later.';
+
+  @override
+  String get modRemoveListingConfirm =>
+      'Delete this listing with its photos and chats for good?';
+
+  @override
+  String get modStateLive => 'Live';
+
+  @override
+  String get modStateHidden => 'Hidden';
+
+  @override
+  String get modStateGone => 'Deleted';
+
+  @override
+  String get modTypePost => 'Post';
+
+  @override
+  String get modTypeListing => 'Owner listing';
+
+  @override
+  String modByAuthor(String name) {
+    return 'By $name';
+  }
+
+  @override
+  String modReportsCount(int n) {
+    return '$n reports';
+  }
 }

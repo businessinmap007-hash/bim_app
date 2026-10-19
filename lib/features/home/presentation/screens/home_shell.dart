@@ -10,6 +10,7 @@ import '../../../categories/presentation/screens/all_categories_screen.dart';
 import '../../../notifications/application/notifications_providers.dart';
 import '../../../profile/presentation/screens/business_settings_screen.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../moderation/presentation/screens/moderation_screen.dart';
 import 'business_home_screen.dart';
 import 'customer_home_screen.dart';
 import 'my_services_screen.dart';
@@ -128,19 +129,23 @@ class _HomeShellState extends ConsumerState<HomeShell> with WidgetsBindingObserv
         ? (authState.user.logoUrl ?? authState.user.imageUrl)
         : null;
 
+    final isModerator = authState is AuthSignedIn && authState.user.isModerator;
+
     final tabs = [
       isBusiness
           ? BusinessHomeScreen(scaffoldKey: _scaffoldKeys[0])
           : CustomerHomeScreen(scaffoldKey: _scaffoldKeys[0]),
       AllCategoriesScreen(scaffoldKey: _scaffoldKeys[1]),
       MyServicesScreen(scaffoldKey: _scaffoldKeys[2]),
+      // Only an account holding the content ability gets this one (reports on posts and listings).
+      if (isModerator) const ModerationScreen(),
     ];
 
     final needsSetup = authState is AuthSignedIn && authState.user.isBusiness && !authState.user.setupComplete;
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      body: IndexedStack(index: _index, children: tabs),
+      body: IndexedStack(index: _index.clamp(0, tabs.length - 1), children: tabs),
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -169,7 +174,7 @@ class _HomeShellState extends ConsumerState<HomeShell> with WidgetsBindingObserv
               ),
             ),
           NavigationBar(
-        selectedIndex: _index,
+        selectedIndex: _index.clamp(0, tabs.length - 1),
         onDestinationSelected: _selectTab,
         indicatorColor: AppColors.accentGold.withValues(alpha: 0.2),
         labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
@@ -188,6 +193,12 @@ class _HomeShellState extends ConsumerState<HomeShell> with WidgetsBindingObserv
             selectedIcon: Icon(Icons.grid_view_rounded, size: 28),
             label: '',
           ),
+          if (isModerator)
+            const NavigationDestination(
+              icon: Icon(Icons.shield_outlined, size: 28),
+              selectedIcon: Icon(Icons.shield_rounded, size: 28),
+              label: '',
+            ),
         ],
       ),
         ],

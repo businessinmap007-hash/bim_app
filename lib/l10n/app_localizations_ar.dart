@@ -10687,4 +10687,73 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get olListingEnded => 'انتهى هذا الإعلان.';
+
+  @override
+  String get reportTitle => 'إبلاغ';
+
+  @override
+  String get reportDetailsHint => 'تفاصيل إضافية (اختياري)';
+
+  @override
+  String get reportSend => 'إرسال البلاغ';
+
+  @override
+  String get reportSent => 'وصلنا بلاغك، شكرًا.';
+
+  @override
+  String get reportAction => 'إبلاغ';
+
+  @override
+  String get modTitle => 'الإشراف';
+
+  @override
+  String get modOpen => 'مفتوحة';
+
+  @override
+  String get modHandled => 'تمت معالجتها';
+
+  @override
+  String get modEmpty => 'لا توجد بلاغات.';
+
+  @override
+  String get modDismiss => 'تجاهل البلاغ';
+
+  @override
+  String get modRemove => 'إزالة';
+
+  @override
+  String get modRestore => 'استعادة';
+
+  @override
+  String get modRemovePostConfirm =>
+      'إخفاء هذا المنشور؟ يمكنك استعادته لاحقًا.';
+
+  @override
+  String get modRemoveListingConfirm =>
+      'حذف هذا الإعلان وصوره ومحادثاته نهائيًا؟';
+
+  @override
+  String get modStateLive => 'ظاهر';
+
+  @override
+  String get modStateHidden => 'مخفي';
+
+  @override
+  String get modStateGone => 'محذوف';
+
+  @override
+  String get modTypePost => 'منشور';
+
+  @override
+  String get modTypeListing => 'إعلان من المالك';
+
+  @override
+  String modByAuthor(String name) {
+    return 'بواسطة $name';
+  }
+
+  @override
+  String modReportsCount(int n) {
+    return '$n بلاغ';
+  }
 }

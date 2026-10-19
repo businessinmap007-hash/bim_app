@@ -1,3 +1,4 @@
+import '../../../moderation/presentation/widgets/report_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -87,6 +88,7 @@ class FollowedFeedTab extends ConsumerWidget {
                         onReact: (reaction) => ref
                             .read(followedFeedControllerProvider.notifier)
                             .react(post.id, reaction),
+                        onReport: () => showReportSheet(context, type: 'post', id: post.id),
                         onOpenComments: () => Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (_) => CommentsScreen(postId: post.id),

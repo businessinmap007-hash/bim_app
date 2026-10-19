@@ -19374,6 +19374,132 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'انتهى هذا الإعلان.'**
   String get olListingEnded;
+
+  /// No description provided for @reportTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إبلاغ'**
+  String get reportTitle;
+
+  /// No description provided for @reportDetailsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل إضافية (اختياري)'**
+  String get reportDetailsHint;
+
+  /// No description provided for @reportSend.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال البلاغ'**
+  String get reportSend;
+
+  /// No description provided for @reportSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصلنا بلاغك، شكرًا.'**
+  String get reportSent;
+
+  /// No description provided for @reportAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'إبلاغ'**
+  String get reportAction;
+
+  /// No description provided for @modTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإشراف'**
+  String get modTitle;
+
+  /// No description provided for @modOpen.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفتوحة'**
+  String get modOpen;
+
+  /// No description provided for @modHandled.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت معالجتها'**
+  String get modHandled;
+
+  /// No description provided for @modEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد بلاغات.'**
+  String get modEmpty;
+
+  /// No description provided for @modDismiss.
+  ///
+  /// In ar, this message translates to:
+  /// **'تجاهل البلاغ'**
+  String get modDismiss;
+
+  /// No description provided for @modRemove.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزالة'**
+  String get modRemove;
+
+  /// No description provided for @modRestore.
+  ///
+  /// In ar, this message translates to:
+  /// **'استعادة'**
+  String get modRestore;
+
+  /// No description provided for @modRemovePostConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'إخفاء هذا المنشور؟ يمكنك استعادته لاحقًا.'**
+  String get modRemovePostConfirm;
+
+  /// No description provided for @modRemoveListingConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف هذا الإعلان وصوره ومحادثاته نهائيًا؟'**
+  String get modRemoveListingConfirm;
+
+  /// No description provided for @modStateLive.
+  ///
+  /// In ar, this message translates to:
+  /// **'ظاهر'**
+  String get modStateLive;
+
+  /// No description provided for @modStateHidden.
+  ///
+  /// In ar, this message translates to:
+  /// **'مخفي'**
+  String get modStateHidden;
+
+  /// No description provided for @modStateGone.
+  ///
+  /// In ar, this message translates to:
+  /// **'محذوف'**
+  String get modStateGone;
+
+  /// No description provided for @modTypePost.
+  ///
+  /// In ar, this message translates to:
+  /// **'منشور'**
+  String get modTypePost;
+
+  /// No description provided for @modTypeListing.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعلان من المالك'**
+  String get modTypeListing;
+
+  /// No description provided for @modByAuthor.
+  ///
+  /// In ar, this message translates to:
+  /// **'بواسطة {name}'**
+  String modByAuthor(String name);
+
+  /// No description provided for @modReportsCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{n} بلاغ'**
+  String modReportsCount(int n);
 }
 
 class _AppLocalizationsDelegate

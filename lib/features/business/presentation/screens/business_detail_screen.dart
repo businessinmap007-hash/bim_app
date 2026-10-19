@@ -1,3 +1,4 @@
+import '../../../moderation/presentation/widgets/report_sheet.dart';
 import '../../../hospital/presentation/widgets/hospital_procedures_tab.dart';
 import '../../../hospital/presentation/widgets/hospital_departments_tab.dart';
 import '../../../../app/theme/app_button_styles.dart';
@@ -424,6 +425,7 @@ class _PostsTab extends ConsumerWidget {
                     final post = state.items[index];
                     return PostCard(
                       post: post,
+                      onReport: () => showReportSheet(context, type: 'post', id: post.id),
                       onOpenComments: () => Navigator.of(context).push(
                         MaterialPageRoute(builder: (_) => CommentsScreen(postId: post.id)),
                       ),

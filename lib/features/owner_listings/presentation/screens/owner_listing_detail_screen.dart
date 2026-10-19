@@ -1,3 +1,4 @@
+import '../../../moderation/presentation/widgets/report_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -63,15 +64,8 @@ class _OwnerListingDetailScreenState
     );
   });
 
-  Future<void> _report(OwnerListing l) => _guard(() async {
-    final l10n = AppLocalizations.of(context)!;
-    await ref.read(ownerListingsApiProvider).report(l.id);
-    if (mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.olReported)));
-    }
-  });
+  Future<void> _report(OwnerListing l) =>
+      showReportSheet(context, type: 'owner_listing', id: l.id);
 
   Future<void> _finish(OwnerListing l) async {
     final l10n = AppLocalizations.of(context)!;
