@@ -87,7 +87,9 @@ class OperationChatController extends StateNotifier<OperationChatState> {
       final message = await _api.postMessage(key.type, key.id, body.trim(), attachments: attachments);
       state = state.copyWith(messages: [...state.messages, message], isSending: false);
     } catch (e) {
-      state = state.copyWith(isSending: false, error: e.toString());
+      // a refused message (a phone number in a listing's chat, a locked room) is the caller's snackbar, not a broken
+      // chat: the messages already read stay on screen
+      state = state.copyWith(isSending: false);
       rethrow;
     }
   }

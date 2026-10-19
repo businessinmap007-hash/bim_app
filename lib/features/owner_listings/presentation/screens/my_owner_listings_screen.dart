@@ -13,40 +13,53 @@ import 'owner_listing_form_screen.dart';
 
 /// «إعلاناتي» and «محادثاتي» of the owner-listings market: what I posted (in any state) and the conversations I am in,
 /// as a buyer or as a seller.
-class MyOwnerListingsScreen extends ConsumerWidget {
+class MyOwnerListingsScreen extends ConsumerStatefulWidget {
   /// 0 = my listings, 1 = my conversations.
   final int initialTab;
 
   const MyOwnerListingsScreen({super.key, this.initialTab = 0});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MyOwnerListingsScreen> createState() =>
+      _MyOwnerListingsScreenState();
+}
+
+class _MyOwnerListingsScreenState extends ConsumerState<MyOwnerListingsScreen> {
+  late int _tab = widget.initialTab;
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return DefaultTabController(
-      length: 2,
-      initialIndex: initialTab,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(l10n.olTitle),
-          bottom: TabBar(
-            tabs: [
-              Tab(text: l10n.olMine),
-              Tab(text: l10n.olMyChats),
-            ],
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.olTitle)),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          final posted = await Navigator.of(context).push<bool>(
+            MaterialPageRoute(builder: (_) => const OwnerListingFormScreen()),
+          );
+          if (posted == true) ref.invalidate(myOwnerListingsProvider);
+        },
+        icon: const Icon(Icons.add),
+        label: Text(l10n.olAdd),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+            child: SegmentedButton<int>(
+              segments: [
+                ButtonSegment(value: 0, label: Text(l10n.olMine)),
+                ButtonSegment(value: 1, label: Text(l10n.olMyChats)),
+              ],
+              selected: {_tab},
+              onSelectionChanged: (s) => setState(() => _tab = s.first),
+            ),
           ),
-        ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () async {
-            final posted = await Navigator.of(context).push<bool>(
-              MaterialPageRoute(builder: (_) => const OwnerListingFormScreen()),
-            );
-            if (posted == true) ref.invalidate(myOwnerListingsProvider);
-          },
-          icon: const Icon(Icons.add),
-          label: Text(l10n.olAdd),
-        ),
-        body: const TabBarView(children: [_MyListings(), _MyInquiries()]),
+          Expanded(
+            child: _tab == 0 ? const _MyListings() : const _MyInquiries(),
+          ),
+        ],
       ),
     );
   }

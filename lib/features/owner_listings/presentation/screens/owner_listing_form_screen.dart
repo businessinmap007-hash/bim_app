@@ -264,6 +264,51 @@ class _OwnerListingFormScreenState
               },
               onSelectionChanged: (s) => setState(() => _deal = s.first),
             ),
+            const SizedBox(height: 16),
+            Text(l10n.olPhotosTitle, style: theme.textTheme.titleSmall),
+            const SizedBox(height: 8),
+            SizedBox(
+              height: 88,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  for (final image in _existing)
+                    _thumb(
+                      OwnerListingPhoto(
+                        path: image.image,
+                        width: 88,
+                        height: 88,
+                      ),
+                      () => _removeExisting(image),
+                    ),
+                  for (var i = 0; i < _photos.length; i++)
+                    _thumb(
+                      FutureBuilder<Uint8List>(
+                        future: _photos[i].file.readAsBytes(),
+                        builder: (_, snap) => snap.hasData
+                            ? Image.memory(
+                                snap.data!,
+                                width: 88,
+                                height: 88,
+                                fit: BoxFit.cover,
+                              )
+                            : const SizedBox(width: 88, height: 88),
+                      ),
+                      () => setState(() => _photos.removeAt(i)),
+                    ),
+                  _addButton(
+                    Icons.photo_camera_outlined,
+                    l10n.olAddPhotoCamera,
+                    _addFromCamera,
+                  ),
+                  _addButton(
+                    Icons.photo_library_outlined,
+                    l10n.olAddPhotoGallery,
+                    _addFromGallery,
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(height: 12),
             TextField(
               controller: _title,
@@ -330,51 +375,6 @@ class _OwnerListingFormScreenState
               maxLines: 4,
               maxLength: 2000,
               decoration: InputDecoration(labelText: l10n.olDescriptionLabel),
-            ),
-            const SizedBox(height: 8),
-            Text(l10n.olPhotosTitle, style: theme.textTheme.titleSmall),
-            const SizedBox(height: 8),
-            SizedBox(
-              height: 88,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  for (final image in _existing)
-                    _thumb(
-                      OwnerListingPhoto(
-                        path: image.image,
-                        width: 88,
-                        height: 88,
-                      ),
-                      () => _removeExisting(image),
-                    ),
-                  for (var i = 0; i < _photos.length; i++)
-                    _thumb(
-                      FutureBuilder<Uint8List>(
-                        future: _photos[i].file.readAsBytes(),
-                        builder: (_, snap) => snap.hasData
-                            ? Image.memory(
-                                snap.data!,
-                                width: 88,
-                                height: 88,
-                                fit: BoxFit.cover,
-                              )
-                            : const SizedBox(width: 88, height: 88),
-                      ),
-                      () => setState(() => _photos.removeAt(i)),
-                    ),
-                  _addButton(
-                    Icons.photo_camera_outlined,
-                    l10n.olAddPhotoCamera,
-                    _addFromCamera,
-                  ),
-                  _addButton(
-                    Icons.photo_library_outlined,
-                    l10n.olAddPhotoGallery,
-                    _addFromGallery,
-                  ),
-                ],
-              ),
             ),
             if (_error != null) ...[
               const SizedBox(height: 8),
