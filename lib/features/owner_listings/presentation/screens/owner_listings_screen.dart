@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/async_value_view.dart';
+import '../../../location/presentation/widgets/location_filter_sheet.dart';
 import '../../application/owner_listings_providers.dart';
 import '../../data/owner_listings_api.dart';
 import '../widgets/owner_listing_card.dart';
@@ -29,14 +30,39 @@ class _OwnerListingsScreenState extends ConsumerState<OwnerListingsScreen> {
   String? _deal;
   String _term = '';
 
+  /// The place filter: governorate, optionally a city (label = what the chip says).
+  int? _governorateId;
+  int? _cityId;
+  String? _placeLabel;
+
   @override
   void dispose() {
     _search.dispose();
     super.dispose();
   }
 
-  OwnerBrowseQuery get _query =>
-      OwnerBrowseQuery(category: _category, deal: _deal, query: _term);
+  OwnerBrowseQuery get _query => OwnerBrowseQuery(
+    category: _category,
+    deal: _deal,
+    query: _term,
+    governorateId: _governorateId,
+    cityId: _cityId,
+  );
+
+  Future<void> _pickPlace() async {
+    final picked = await showModalBottomSheet<LocationFilterResult>(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) => const LocationFilterSheet(),
+    );
+    if (picked == null || !mounted) return;
+
+    setState(() {
+      _governorateId = picked.governorateId;
+      _cityId = picked.cityId;
+      _placeLabel = picked.label;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,6 +157,28 @@ class _OwnerListingsScreenState extends ConsumerState<OwnerListingsScreen> {
                     ownerDealLabel(l10n, d),
                     _deal == d,
                     () => setState(() => _deal = d),
+                  ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
+            child: Row(
+              children: [
+                ActionChip(
+                  avatar: const Icon(Icons.place_outlined, size: 18),
+                  label: Text(_placeLabel ?? l10n.olFilterPlace),
+                  onPressed: _pickPlace,
+                ),
+                if (_placeLabel != null)
+                  IconButton(
+                    tooltip: l10n.olFilterClear,
+                    icon: const Icon(Icons.close, size: 18),
+                    onPressed: () => setState(() {
+                      _governorateId = null;
+                      _cityId = null;
+                      _placeLabel = null;
+                    }),
                   ),
               ],
             ),

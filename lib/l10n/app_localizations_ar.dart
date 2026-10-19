@@ -11072,4 +11072,31 @@ class AppLocalizationsAr extends AppLocalizations {
   String olDepositReleased(String amount) {
     return 'عربون الجدية: $amount جنيه — تم رده إلى محفظتك.';
   }
+
+  @override
+  String get olFilterPlace => 'المحافظة / المدينة';
+
+  @override
+  String get olFilterClear => 'إلغاء فلتر المكان';
+
+  @override
+  String get olVisTitle => 'من يرى إعلانك؟';
+
+  @override
+  String get olVisAll => 'الجميع';
+
+  @override
+  String get olVisGovernorate => 'أهل المحافظة فقط';
+
+  @override
+  String get olVisCity => 'أهل المدينة فقط';
+
+  @override
+  String get olVisNeedsCity => 'اختر المدينة ليقتصر الإعلان على أهلها.';
+
+  @override
+  String get olVisBadgeCity => 'يظهر لأهل المدينة فقط';
+
+  @override
+  String get olVisBadgeGovernorate => 'يظهر لأهل المحافظة فقط';
 }

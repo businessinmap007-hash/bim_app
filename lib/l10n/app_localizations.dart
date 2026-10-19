@@ -20004,6 +20004,60 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'عربون الجدية: {amount} جنيه — تم رده إلى محفظتك.'**
   String olDepositReleased(String amount);
+
+  /// No description provided for @olFilterPlace.
+  ///
+  /// In ar, this message translates to:
+  /// **'المحافظة / المدينة'**
+  String get olFilterPlace;
+
+  /// No description provided for @olFilterClear.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء فلتر المكان'**
+  String get olFilterClear;
+
+  /// No description provided for @olVisTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'من يرى إعلانك؟'**
+  String get olVisTitle;
+
+  /// No description provided for @olVisAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجميع'**
+  String get olVisAll;
+
+  /// No description provided for @olVisGovernorate.
+  ///
+  /// In ar, this message translates to:
+  /// **'أهل المحافظة فقط'**
+  String get olVisGovernorate;
+
+  /// No description provided for @olVisCity.
+  ///
+  /// In ar, this message translates to:
+  /// **'أهل المدينة فقط'**
+  String get olVisCity;
+
+  /// No description provided for @olVisNeedsCity.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر المدينة ليقتصر الإعلان على أهلها.'**
+  String get olVisNeedsCity;
+
+  /// No description provided for @olVisBadgeCity.
+  ///
+  /// In ar, this message translates to:
+  /// **'يظهر لأهل المدينة فقط'**
+  String get olVisBadgeCity;
+
+  /// No description provided for @olVisBadgeGovernorate.
+  ///
+  /// In ar, this message translates to:
+  /// **'يظهر لأهل المحافظة فقط'**
+  String get olVisBadgeGovernorate;
 }
 
 class _AppLocalizationsDelegate

@@ -171,6 +171,9 @@ class OwnerListing {
   final double? depositAmount;
   final String? depositState;
 
+  /// Who may see it: `all` | `governorate` | `city` (by the viewer's own registered place).
+  final String visibility;
+
   const OwnerListing({
     required this.id,
     required this.categoryKey,
@@ -201,6 +204,7 @@ class OwnerListing {
     this.inquiriesCount,
     this.depositAmount,
     this.depositState,
+    this.visibility = 'all',
   });
 
   bool get isLive => status == 'active';
@@ -264,6 +268,7 @@ class OwnerListing {
               ?.toDouble(),
       depositState:
           (json['deposit'] as Map<String, dynamic>?)?['state'] as String?,
+      visibility: json['visibility'] as String? ?? 'all',
     );
   }
 }
@@ -340,17 +345,29 @@ class OwnerBrowseQuery {
   final String? deal;
   final String query;
 
-  const OwnerBrowseQuery({this.category, this.deal, this.query = ''});
+  /// The search's place filter: a governorate, and optionally one of its cities.
+  final int? governorateId;
+  final int? cityId;
+
+  const OwnerBrowseQuery({
+    this.category,
+    this.deal,
+    this.query = '',
+    this.governorateId,
+    this.cityId,
+  });
 
   @override
   bool operator ==(Object other) =>
       other is OwnerBrowseQuery &&
       other.category == category &&
       other.deal == deal &&
-      other.query == query;
+      other.query == query &&
+      other.governorateId == governorateId &&
+      other.cityId == cityId;
 
   @override
-  int get hashCode => Object.hash(category, deal, query);
+  int get hashCode => Object.hash(category, deal, query, governorateId, cityId);
 }
 
 /// «إعلان من المالك» — see Api\V2\OwnerListingController.
@@ -374,6 +391,8 @@ class OwnerListingsApi {
                 if (q.category != null) 'category': q.category,
                 if (q.deal != null) 'deal': q.deal,
                 if (q.query.trim().isNotEmpty) 'q': q.query.trim(),
+                if (q.governorateId != null) 'governorate_id': q.governorateId,
+                if (q.cityId != null) 'city_id': q.cityId,
                 'per_page': 50,
               },
             )
@@ -403,8 +422,10 @@ class OwnerListingsApi {
     String? priceUnit,
     required int governorateId,
     int? cityId,
+    String visibility = 'all',
     required Map<String, dynamic> attributes,
   }) => {
+    'visibility': visibility,
     'deal': deal,
     'title': title.trim(),
     'description': description?.trim() ?? '',
@@ -433,6 +454,7 @@ class OwnerListingsApi {
     String? priceUnit,
     required int governorateId,
     int? cityId,
+    String visibility = 'all',
     required Map<String, dynamic> attributes,
     bool holdDeposit = false,
   }) async {
@@ -450,6 +472,7 @@ class OwnerListingsApi {
                   priceUnit: priceUnit,
                   governorateId: governorateId,
                   cityId: cityId,
+                  visibility: visibility,
                   attributes: attributes,
                 ),
               },
@@ -467,6 +490,7 @@ class OwnerListingsApi {
     String? priceUnit,
     required int governorateId,
     int? cityId,
+    String visibility = 'all',
     required Map<String, dynamic> attributes,
   }) async {
     final data =
@@ -480,6 +504,7 @@ class OwnerListingsApi {
                 priceUnit: priceUnit,
                 governorateId: governorateId,
                 cityId: cityId,
+                visibility: visibility,
                 attributes: attributes,
               ),
             )

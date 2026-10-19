@@ -11150,4 +11150,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String olDepositReleased(String amount) {
     return 'Seriousness deposit: $amount EGP — handed back to your wallet.';
   }
+
+  @override
+  String get olFilterPlace => 'Governorate / city';
+
+  @override
+  String get olFilterClear => 'Clear the place filter';
+
+  @override
+  String get olVisTitle => 'Who sees your listing?';
+
+  @override
+  String get olVisAll => 'Everyone';
+
+  @override
+  String get olVisGovernorate => 'My governorate only';
+
+  @override
+  String get olVisCity => 'My city only';
+
+  @override
+  String get olVisNeedsCity =>
+      'Choose the city to limit the listing to its people.';
+
+  @override
+  String get olVisBadgeCity => 'Shown to the people of its city only';
+
+  @override
+  String get olVisBadgeGovernorate =>
+      'Shown to the people of its governorate only';
 }

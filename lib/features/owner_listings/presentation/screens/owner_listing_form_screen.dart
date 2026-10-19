@@ -42,6 +42,7 @@ class _OwnerListingFormScreenState
   late List<OwnerImage> _existing = [...?widget.listing?.images];
 
   bool _agreeDeposit = false;
+  String _visibility = 'all';
   String? _categoryKey;
   String _deal = 'sale';
   String _unit = 'month';
@@ -59,6 +60,7 @@ class _OwnerListingFormScreenState
 
     if (l != null) {
       _deal = l.deal;
+      _visibility = l.visibility;
       _title.text = l.title;
       _description.text = l.description ?? '';
       _price.text = l.price == null ? '' : l.price!.toStringAsFixed(0);
@@ -157,6 +159,10 @@ class _OwnerListingFormScreenState
       setState(() => _error = l10n.olPlaceRequired);
       return;
     }
+    if (_visibility == 'city' && where.cityId <= 0) {
+      setState(() => _error = l10n.olVisNeedsCity);
+      return;
+    }
     if (!_editing && _photos.isEmpty) {
       setState(() => _error = l10n.olNeedPhoto);
       return;
@@ -196,6 +202,7 @@ class _OwnerListingFormScreenState
           priceUnit: _unit,
           governorateId: where.governorateId,
           cityId: cityId,
+          visibility: _visibility,
           attributes: _attributes(category),
         );
       } else {
@@ -208,6 +215,7 @@ class _OwnerListingFormScreenState
           priceUnit: _unit,
           governorateId: where.governorateId,
           cityId: cityId,
+          visibility: _visibility,
           attributes: _attributes(category),
           holdDeposit: _agreeDeposit,
         );
@@ -325,6 +333,7 @@ class _OwnerListingFormScreenState
           if (category != null) ...[
             const SizedBox(height: 12),
             SegmentedButton<String>(
+              showSelectedIcon: false,
               segments: [
                 for (final d in category.deals)
                   ButtonSegment(value: d, label: Text(ownerDealLabel(l10n, d))),
@@ -433,6 +442,22 @@ class _OwnerListingFormScreenState
             LocationPickerField(
               value: _where,
               onChanged: (v) => setState(() => _where = v),
+            ),
+            const SizedBox(height: 12),
+            Text(l10n.olVisTitle, style: theme.textTheme.titleSmall),
+            const SizedBox(height: 6),
+            SegmentedButton<String>(
+              showSelectedIcon: false,
+              segments: [
+                ButtonSegment(value: 'all', label: Text(l10n.olVisAll)),
+                ButtonSegment(
+                  value: 'governorate',
+                  label: Text(l10n.olVisGovernorate),
+                ),
+                ButtonSegment(value: 'city', label: Text(l10n.olVisCity)),
+              ],
+              selected: {_visibility},
+              onSelectionChanged: (s) => setState(() => _visibility = s.first),
             ),
             const SizedBox(height: 16),
             Text(l10n.olDetails, style: theme.textTheme.titleSmall),

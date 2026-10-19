@@ -3832,5 +3832,14 @@
   "olDepositHeld": "Seriousness deposit: {amount} EGP held, handed back when you sell or end it.",
   "@olDepositHeld": {"placeholders": {"amount": {"type": "String"}}},
   "olDepositReleased": "Seriousness deposit: {amount} EGP — handed back to your wallet.",
-  "@olDepositReleased": {"placeholders": {"amount": {"type": "String"}}}
+  "@olDepositReleased": {"placeholders": {"amount": {"type": "String"}}},
+  "olFilterPlace": "Governorate / city",
+  "olFilterClear": "Clear the place filter",
+  "olVisTitle": "Who sees your listing?",
+  "olVisAll": "Everyone",
+  "olVisGovernorate": "My governorate only",
+  "olVisCity": "My city only",
+  "olVisNeedsCity": "Choose the city to limit the listing to its people.",
+  "olVisBadgeCity": "Shown to the people of its city only",
+  "olVisBadgeGovernorate": "Shown to the people of its governorate only"
 }

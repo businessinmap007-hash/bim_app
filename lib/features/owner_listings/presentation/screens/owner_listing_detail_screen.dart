@@ -278,6 +278,13 @@ class _OwnerListingDetailScreenState
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(status, style: theme.textTheme.titleSmall),
+              if (l.visibility != 'all')
+                Text(
+                  l.visibility == 'city'
+                      ? l10n.olVisBadgeCity
+                      : l10n.olVisBadgeGovernorate,
+                  style: theme.textTheme.bodySmall,
+                ),
               if (when != null) Text(when, style: theme.textTheme.bodySmall),
               if (l.depositAmount != null && l.depositAmount! > 0)
                 Text(
