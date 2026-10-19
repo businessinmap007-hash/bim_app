@@ -10829,7 +10829,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String modReportsCount(int n) {
-    return '$n reports';
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n reports',
+      one: '1 report',
+    );
+    return '$_temp0';
   }
 
   @override

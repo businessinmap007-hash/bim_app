@@ -10754,7 +10754,15 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String modReportsCount(int n) {
-    return '$n بلاغ';
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n بلاغًا',
+      few: '$n بلاغات',
+      two: 'بلاغان',
+      one: 'بلاغ واحد',
+    );
+    return '$_temp0';
   }
 
   @override

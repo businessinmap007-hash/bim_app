@@ -3723,7 +3723,7 @@
   "modTypeListing": "Owner listing",
   "modByAuthor": "By {name}",
   "@modByAuthor": {"placeholders": {"name": {"type": "String"}}},
-  "modReportsCount": "{n} reports",
+  "modReportsCount": "{n, plural, =1{1 report} other{{n} reports}}",
   "@modReportsCount": {"placeholders": {"n": {"type": "int"}}},
   "trainingPaidExpired": "The month is over — the plan is hidden from the client",
   "trainingPaidHint": "The service fee is taken when you share it and at every monthly renewal. Editing the plan after the month renews it.",

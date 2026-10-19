@@ -22,6 +22,9 @@ class ModerationScreen extends ConsumerWidget {
         appBar: AppBar(
           title: Text(l10n.modTitle),
           bottom: TabBar(
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.white70,
+            indicatorColor: const Color(0xFFD6A94A),
             tabs: [
               Tab(text: l10n.modOpen),
               Tab(text: l10n.modHandled),
@@ -302,6 +305,7 @@ class _ReportedCardState extends ConsumerState<_ReportedCard> {
                   FilledButton(
                     style: FilledButton.styleFrom(
                       backgroundColor: theme.colorScheme.error,
+                      foregroundColor: Colors.white,
                     ),
                     onPressed: _confirmRemove,
                     child: Text(l10n.modRemove),

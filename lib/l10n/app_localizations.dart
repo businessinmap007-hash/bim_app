@@ -19498,7 +19498,7 @@ abstract class AppLocalizations {
   /// No description provided for @modReportsCount.
   ///
   /// In ar, this message translates to:
-  /// **'{n} بلاغ'**
+  /// **'{n, plural, =1{بلاغ واحد} =2{بلاغان} few{{n} بلاغات} other{{n} بلاغًا}}'**
   String modReportsCount(int n);
 
   /// No description provided for @trainingPaidExpired.

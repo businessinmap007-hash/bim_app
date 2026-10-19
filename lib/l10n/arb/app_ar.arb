@@ -3749,7 +3749,7 @@
   "modTypeListing": "إعلان من المالك",
   "modByAuthor": "بواسطة {name}",
   "@modByAuthor": {"placeholders": {"name": {"type": "String"}}},
-  "modReportsCount": "{n} بلاغ",
+  "modReportsCount": "{n, plural, =1{بلاغ واحد} =2{بلاغان} few{{n} بلاغات} other{{n} بلاغًا}}",
   "@modReportsCount": {"placeholders": {"n": {"type": "int"}}},
   "trainingPaidExpired": "انتهى الشهر — الخطة مخفية عن العميل",
   "trainingPaidHint": "تُخصم رسوم الخدمة عند المشاركة وعند كل تجديد شهري. تعديل الخطة بعد انتهاء الشهر يجدّدها.",
