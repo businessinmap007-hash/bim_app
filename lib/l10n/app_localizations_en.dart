@@ -10831,4 +10831,127 @@ class AppLocalizationsEn extends AppLocalizations {
   String modReportsCount(int n) {
     return '$n reports';
   }
+
+  @override
+  String get trainingPaidExpired =>
+      'The month is over — the plan is hidden from the client';
+
+  @override
+  String get trainingPaidHint =>
+      'The service fee is taken when you share it and at every monthly renewal. Editing the plan after the month renews it.';
+
+  @override
+  String get trainingRenew => 'Renew for another month';
+
+  @override
+  String get trainingRenewConfirm =>
+      'Renew the plan for another month? The service fee will be taken again.';
+
+  @override
+  String get trainingRenewed => 'The plan was renewed.';
+
+  @override
+  String trainingPaidUntil(String date) {
+    return 'Paid month until $date';
+  }
+
+  @override
+  String get trainingEditDetails => 'Edit plan details';
+
+  @override
+  String get bodyCalcTitle => 'Healthy weight calculator';
+
+  @override
+  String get bodyCalcMale => 'Male';
+
+  @override
+  String get bodyCalcFemale => 'Female';
+
+  @override
+  String get bodyCalcAge => 'Age (years)';
+
+  @override
+  String get bodyCalcHeight => 'Height (cm)';
+
+  @override
+  String get bodyCalcWeight => 'Weight (kg)';
+
+  @override
+  String get bodyCalcActivity => 'Activity level';
+
+  @override
+  String get bodyCalcActSedentary => 'Little movement (desk job)';
+
+  @override
+  String get bodyCalcActLight => 'Light (exercise 1–3 days)';
+
+  @override
+  String get bodyCalcActModerate => 'Moderate (exercise 3–5 days)';
+
+  @override
+  String get bodyCalcActActive => 'High (exercise 6–7 days)';
+
+  @override
+  String get bodyCalcActVery => 'Very high (twice a day or heavy work)';
+
+  @override
+  String get bodyCalcEnter =>
+      'Enter your age, height and weight to see the result.';
+
+  @override
+  String get bodyCalcBmi => 'Body mass index';
+
+  @override
+  String get bodyCalcUnderweight => 'Underweight';
+
+  @override
+  String get bodyCalcNormal => 'Normal weight';
+
+  @override
+  String get bodyCalcOverweight => 'Overweight';
+
+  @override
+  String get bodyCalcObese => 'Obese';
+
+  @override
+  String get bodyCalcMinor =>
+      'Adult tables do not apply under 18. Ask your doctor what weight suits your age.';
+
+  @override
+  String get bodyCalcInRange =>
+      'Your weight is inside the healthy range for your height.';
+
+  @override
+  String get bodyCalcDisclaimer =>
+      'A rough estimate; it does not replace your doctor or dietitian.';
+
+  @override
+  String bodyCalcHealthyRange(String min, String max) {
+    return 'Healthy weight for your height: $min to $max kg';
+  }
+
+  @override
+  String bodyCalcIdeal(String kg) {
+    return 'Approximate ideal weight: $kg kg';
+  }
+
+  @override
+  String bodyCalcLose(String kg) {
+    return 'To reach the healthy range, lose about $kg kg.';
+  }
+
+  @override
+  String bodyCalcGain(String kg) {
+    return 'To reach the healthy range, gain about $kg kg.';
+  }
+
+  @override
+  String bodyCalcBmr(String kcal) {
+    return 'What your body burns at rest: $kcal kcal/day';
+  }
+
+  @override
+  String bodyCalcMaintain(String kcal) {
+    return 'Calories to keep your current weight: $kcal kcal/day';
+  }
 }

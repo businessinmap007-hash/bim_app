@@ -19500,6 +19500,210 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'{n} بلاغ'**
   String modReportsCount(int n);
+
+  /// No description provided for @trainingPaidExpired.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتهى الشهر — الخطة مخفية عن العميل'**
+  String get trainingPaidExpired;
+
+  /// No description provided for @trainingPaidHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'تُخصم رسوم الخدمة عند المشاركة وعند كل تجديد شهري. تعديل الخطة بعد انتهاء الشهر يجدّدها.'**
+  String get trainingPaidHint;
+
+  /// No description provided for @trainingRenew.
+  ///
+  /// In ar, this message translates to:
+  /// **'تجديد شهر آخر'**
+  String get trainingRenew;
+
+  /// No description provided for @trainingRenewConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'تجديد الخطة شهرًا آخر؟ ستُخصم رسوم الخدمة مرة أخرى.'**
+  String get trainingRenewConfirm;
+
+  /// No description provided for @trainingRenewed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تجديد الخطة.'**
+  String get trainingRenewed;
+
+  /// No description provided for @trainingPaidUntil.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشهر المدفوع حتى {date}'**
+  String trainingPaidUntil(String date);
+
+  /// No description provided for @trainingEditDetails.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل بيانات الخطة'**
+  String get trainingEditDetails;
+
+  /// No description provided for @bodyCalcTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حاسبة الوزن المناسب'**
+  String get bodyCalcTitle;
+
+  /// No description provided for @bodyCalcMale.
+  ///
+  /// In ar, this message translates to:
+  /// **'ذكر'**
+  String get bodyCalcMale;
+
+  /// No description provided for @bodyCalcFemale.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنثى'**
+  String get bodyCalcFemale;
+
+  /// No description provided for @bodyCalcAge.
+  ///
+  /// In ar, this message translates to:
+  /// **'العمر (سنة)'**
+  String get bodyCalcAge;
+
+  /// No description provided for @bodyCalcHeight.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطول (سم)'**
+  String get bodyCalcHeight;
+
+  /// No description provided for @bodyCalcWeight.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوزن (كجم)'**
+  String get bodyCalcWeight;
+
+  /// No description provided for @bodyCalcActivity.
+  ///
+  /// In ar, this message translates to:
+  /// **'مستوى النشاط'**
+  String get bodyCalcActivity;
+
+  /// No description provided for @bodyCalcActSedentary.
+  ///
+  /// In ar, this message translates to:
+  /// **'قليل الحركة (عمل مكتبي)'**
+  String get bodyCalcActSedentary;
+
+  /// No description provided for @bodyCalcActLight.
+  ///
+  /// In ar, this message translates to:
+  /// **'خفيف (تمرين 1–3 أيام)'**
+  String get bodyCalcActLight;
+
+  /// No description provided for @bodyCalcActModerate.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوسط (تمرين 3–5 أيام)'**
+  String get bodyCalcActModerate;
+
+  /// No description provided for @bodyCalcActActive.
+  ///
+  /// In ar, this message translates to:
+  /// **'عالٍ (تمرين 6–7 أيام)'**
+  String get bodyCalcActActive;
+
+  /// No description provided for @bodyCalcActVery.
+  ///
+  /// In ar, this message translates to:
+  /// **'شديد (تمرين مرتين يوميًا أو عمل شاق)'**
+  String get bodyCalcActVery;
+
+  /// No description provided for @bodyCalcEnter.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب العمر والطول والوزن لتظهر النتيجة.'**
+  String get bodyCalcEnter;
+
+  /// No description provided for @bodyCalcBmi.
+  ///
+  /// In ar, this message translates to:
+  /// **'مؤشر كتلة الجسم'**
+  String get bodyCalcBmi;
+
+  /// No description provided for @bodyCalcUnderweight.
+  ///
+  /// In ar, this message translates to:
+  /// **'نحافة'**
+  String get bodyCalcUnderweight;
+
+  /// No description provided for @bodyCalcNormal.
+  ///
+  /// In ar, this message translates to:
+  /// **'وزن طبيعي'**
+  String get bodyCalcNormal;
+
+  /// No description provided for @bodyCalcOverweight.
+  ///
+  /// In ar, this message translates to:
+  /// **'وزن زائد'**
+  String get bodyCalcOverweight;
+
+  /// No description provided for @bodyCalcObese.
+  ///
+  /// In ar, this message translates to:
+  /// **'سمنة'**
+  String get bodyCalcObese;
+
+  /// No description provided for @bodyCalcMinor.
+  ///
+  /// In ar, this message translates to:
+  /// **'جداول البالغين لا تنطبق تحت 18 سنة. اسأل طبيبك عن الوزن المناسب لعمرك.'**
+  String get bodyCalcMinor;
+
+  /// No description provided for @bodyCalcInRange.
+  ///
+  /// In ar, this message translates to:
+  /// **'وزنك داخل المدى الصحي لطولك.'**
+  String get bodyCalcInRange;
+
+  /// No description provided for @bodyCalcDisclaimer.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقدير تقريبي لا يغني عن رأي الطبيب أو أخصائي التغذية.'**
+  String get bodyCalcDisclaimer;
+
+  /// No description provided for @bodyCalcHealthyRange.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوزن الصحي لطولك: من {min} إلى {max} كجم'**
+  String bodyCalcHealthyRange(String min, String max);
+
+  /// No description provided for @bodyCalcIdeal.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوزن المثالي التقريبي: {kg} كجم'**
+  String bodyCalcIdeal(String kg);
+
+  /// No description provided for @bodyCalcLose.
+  ///
+  /// In ar, this message translates to:
+  /// **'للوصول إلى المدى الصحي أنقص نحو {kg} كجم.'**
+  String bodyCalcLose(String kg);
+
+  /// No description provided for @bodyCalcGain.
+  ///
+  /// In ar, this message translates to:
+  /// **'للوصول إلى المدى الصحي زد نحو {kg} كجم.'**
+  String bodyCalcGain(String kg);
+
+  /// No description provided for @bodyCalcBmr.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما يحرقه جسمك في الراحة: {kcal} سعر/يوم'**
+  String bodyCalcBmr(String kcal);
+
+  /// No description provided for @bodyCalcMaintain.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعرات تثبيت وزنك الحالي: {kcal} سعر/يوم'**
+  String bodyCalcMaintain(String kcal);
 }
 
 class _AppLocalizationsDelegate

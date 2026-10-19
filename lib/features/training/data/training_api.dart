@@ -311,6 +311,25 @@ class TrainingApi {
     return TrainingPlan.fromJson(data['plan'] as Map<String, dynamic>);
   }
 
+  /// The plan's own words (title, goal, notes) — free, never a new month.
+  Future<TrainingPlan> updatePlanDetails(int id, {required String title, String? goal, String? notes}) async {
+    final data =
+        await _client.patch(
+              '/business/training-plans/$id',
+              data: {'title': title, 'goal': goal, 'notes': notes},
+            )
+            as Map<String, dynamic>;
+    return TrainingPlan.fromJson(data['plan'] as Map<String, dynamic>);
+  }
+
+  /// Another paid month: the control-panel fee is taken again and the client sees the plan again.
+  Future<TrainingPlan> renewPlan(int id) async {
+    final data =
+        await _client.post('/business/training-plans/$id/renew')
+            as Map<String, dynamic>;
+    return TrainingPlan.fromJson(data['plan'] as Map<String, dynamic>);
+  }
+
   Future<TrainingPlan> setPlanStatus(int id, String status) async {
     final data =
         await _client.patch(

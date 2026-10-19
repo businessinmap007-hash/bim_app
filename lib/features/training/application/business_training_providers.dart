@@ -164,6 +164,16 @@ class TrainingPlanManageController extends StateNotifier<TrainingPlanManageState
     }
   }
 
+  Future<void> updateDetails({required String title, String? goal, String? notes}) async {
+    final plan = await _api.updatePlanDetails(planId, title: title, goal: goal, notes: notes);
+    state = state.copyWith(plan: plan);
+  }
+
+  Future<void> renew() async {
+    final plan = await _api.renewPlan(planId);
+    state = state.copyWith(plan: plan);
+  }
+
   Future<void> setStatus(String status) async {
     final plan = await _api.setPlanStatus(planId, status);
     state = state.copyWith(plan: plan);

@@ -10756,4 +10756,124 @@ class AppLocalizationsAr extends AppLocalizations {
   String modReportsCount(int n) {
     return '$n بلاغ';
   }
+
+  @override
+  String get trainingPaidExpired => 'انتهى الشهر — الخطة مخفية عن العميل';
+
+  @override
+  String get trainingPaidHint =>
+      'تُخصم رسوم الخدمة عند المشاركة وعند كل تجديد شهري. تعديل الخطة بعد انتهاء الشهر يجدّدها.';
+
+  @override
+  String get trainingRenew => 'تجديد شهر آخر';
+
+  @override
+  String get trainingRenewConfirm =>
+      'تجديد الخطة شهرًا آخر؟ ستُخصم رسوم الخدمة مرة أخرى.';
+
+  @override
+  String get trainingRenewed => 'تم تجديد الخطة.';
+
+  @override
+  String trainingPaidUntil(String date) {
+    return 'الشهر المدفوع حتى $date';
+  }
+
+  @override
+  String get trainingEditDetails => 'تعديل بيانات الخطة';
+
+  @override
+  String get bodyCalcTitle => 'حاسبة الوزن المناسب';
+
+  @override
+  String get bodyCalcMale => 'ذكر';
+
+  @override
+  String get bodyCalcFemale => 'أنثى';
+
+  @override
+  String get bodyCalcAge => 'العمر (سنة)';
+
+  @override
+  String get bodyCalcHeight => 'الطول (سم)';
+
+  @override
+  String get bodyCalcWeight => 'الوزن (كجم)';
+
+  @override
+  String get bodyCalcActivity => 'مستوى النشاط';
+
+  @override
+  String get bodyCalcActSedentary => 'قليل الحركة (عمل مكتبي)';
+
+  @override
+  String get bodyCalcActLight => 'خفيف (تمرين 1–3 أيام)';
+
+  @override
+  String get bodyCalcActModerate => 'متوسط (تمرين 3–5 أيام)';
+
+  @override
+  String get bodyCalcActActive => 'عالٍ (تمرين 6–7 أيام)';
+
+  @override
+  String get bodyCalcActVery => 'شديد (تمرين مرتين يوميًا أو عمل شاق)';
+
+  @override
+  String get bodyCalcEnter => 'اكتب العمر والطول والوزن لتظهر النتيجة.';
+
+  @override
+  String get bodyCalcBmi => 'مؤشر كتلة الجسم';
+
+  @override
+  String get bodyCalcUnderweight => 'نحافة';
+
+  @override
+  String get bodyCalcNormal => 'وزن طبيعي';
+
+  @override
+  String get bodyCalcOverweight => 'وزن زائد';
+
+  @override
+  String get bodyCalcObese => 'سمنة';
+
+  @override
+  String get bodyCalcMinor =>
+      'جداول البالغين لا تنطبق تحت 18 سنة. اسأل طبيبك عن الوزن المناسب لعمرك.';
+
+  @override
+  String get bodyCalcInRange => 'وزنك داخل المدى الصحي لطولك.';
+
+  @override
+  String get bodyCalcDisclaimer =>
+      'تقدير تقريبي لا يغني عن رأي الطبيب أو أخصائي التغذية.';
+
+  @override
+  String bodyCalcHealthyRange(String min, String max) {
+    return 'الوزن الصحي لطولك: من $min إلى $max كجم';
+  }
+
+  @override
+  String bodyCalcIdeal(String kg) {
+    return 'الوزن المثالي التقريبي: $kg كجم';
+  }
+
+  @override
+  String bodyCalcLose(String kg) {
+    return 'للوصول إلى المدى الصحي أنقص نحو $kg كجم.';
+  }
+
+  @override
+  String bodyCalcGain(String kg) {
+    return 'للوصول إلى المدى الصحي زد نحو $kg كجم.';
+  }
+
+  @override
+  String bodyCalcBmr(String kcal) {
+    return 'ما يحرقه جسمك في الراحة: $kcal سعر/يوم';
+  }
+
+  @override
+  String bodyCalcMaintain(String kcal) {
+    return 'سعرات تثبيت وزنك الحالي: $kcal سعر/يوم';
+  }
 }

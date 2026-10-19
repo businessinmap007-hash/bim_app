@@ -11,6 +11,7 @@ import '../../data/models/food_library.dart';
 import '../widgets/exercise_picker_sheet.dart';
 import '../widgets/food_picker_sheet.dart';
 import '../widgets/plan_photo_strip.dart';
+import 'body_calculator_screen.dart';
 import 'training_monthly_summary_screen.dart';
 
 const _statuses = ['active', 'paused', 'completed', 'cancelled'];
@@ -61,6 +62,67 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
           context,
         ).showSnackBar(SnackBar(content: Text(e is ApiException ? e.message : l10n.commonSomethingWentWrong)));
       }
+    }
+  }
+
+  Future<void> _editDetails(TrainingPlan plan) async {
+    final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+    final titleCtrl = TextEditingController(text: plan.title);
+    final goalCtrl = TextEditingController(text: plan.goal ?? '');
+    final notesCtrl = TextEditingController(text: plan.notes ?? '');
+
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.trainingEditDetails),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(controller: titleCtrl, decoration: InputDecoration(labelText: l10n.trainingTemplateTitleHint)),
+              TextField(controller: goalCtrl, decoration: InputDecoration(labelText: l10n.trainingTemplateGoalHint)),
+              TextField(controller: notesCtrl, maxLines: 3, decoration: InputDecoration(labelText: l10n.trainingNotesHint)),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: Text(l10n.commonCancel)),
+          FilledButton(onPressed: () => Navigator.of(ctx).pop(true), child: Text(l10n.commonSave)),
+        ],
+      ),
+    );
+    if (ok != true || titleCtrl.text.trim().isEmpty) return;
+
+    try {
+      await ref
+          .read(trainingPlanManageControllerProvider(widget.planId).notifier)
+          .updateDetails(title: titleCtrl.text.trim(), goal: goalCtrl.text.trim(), notes: notesCtrl.text.trim());
+    } catch (e) {
+      messenger.showSnackBar(SnackBar(content: Text(e is ApiException ? e.message : l10n.commonSomethingWentWrong)));
+    }
+  }
+
+  Future<void> _renew() async {
+    final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        content: Text(l10n.trainingRenewConfirm),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: Text(l10n.commonCancel)),
+          FilledButton(onPressed: () => Navigator.of(ctx).pop(true), child: Text(l10n.trainingRenew)),
+        ],
+      ),
+    );
+    if (ok != true) return;
+
+    try {
+      await ref.read(trainingPlanManageControllerProvider(widget.planId).notifier).renew();
+      messenger.showSnackBar(SnackBar(content: Text(l10n.trainingRenewed)));
+    } catch (e) {
+      messenger.showSnackBar(SnackBar(content: Text(e is ApiException ? e.message : l10n.commonSomethingWentWrong)));
     }
   }
 
@@ -484,6 +546,19 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
       appBar: AppBar(
         title: Text(plan?.title ?? l10n.trainingPlansTitle),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.monitor_weight_outlined),
+            tooltip: l10n.bodyCalcTitle,
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const BodyCalculatorScreen()),
+            ),
+          ),
+          if (plan != null)
+            IconButton(
+              icon: const Icon(Icons.edit_note_outlined),
+              tooltip: l10n.trainingEditDetails,
+              onPressed: () => _editDetails(plan),
+            ),
           if (plan != null)
             IconButton(
               icon: const Icon(Icons.insights_outlined),
@@ -530,6 +605,18 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
                       ),
                   ],
                 ),
+                if (plan.paidUntil != null) ...[
+                  const SizedBox(height: 12),
+                  Card(
+                    margin: EdgeInsets.zero,
+                    child: ListTile(
+                      leading: Icon(plan.expired ? Icons.event_busy_outlined : Icons.event_available_outlined),
+                      title: Text(plan.expired ? l10n.trainingPaidExpired : l10n.trainingPaidUntil(plan.paidUntil!.toIso8601String().substring(0, 10))),
+                      subtitle: Text(l10n.trainingPaidHint),
+                      trailing: FilledButton(onPressed: _renew, child: Text(l10n.trainingRenew)),
+                    ),
+                  ),
+                ],
                 const SizedBox(height: 12),
                 Card(
                   margin: EdgeInsets.zero,

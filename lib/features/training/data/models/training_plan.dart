@@ -154,6 +154,12 @@ class TrainingPlan {
   final String status;
   final DateTime? startsOn;
   final DateTime? endsOn;
+
+  /// The paid month: the plan stays in front of the client until this day (null = a plan from before the paid month).
+  final DateTime? paidUntil;
+
+  /// Trainer side only: the paid month ran out, so the client no longer sees the plan until it is renewed.
+  final bool expired;
   final String? notes;
   final int trainerId;
   final String? trainerName;
@@ -180,6 +186,8 @@ class TrainingPlan {
     required this.status,
     this.startsOn,
     this.endsOn,
+    this.paidUntil,
+    this.expired = false,
     this.notes,
     required this.trainerId,
     this.trainerName,
@@ -209,6 +217,8 @@ class TrainingPlan {
       status: json['status'] as String? ?? 'active',
       startsOn: json['starts_on'] != null ? EgyptTime.tryParse(json['starts_on'] as String) : null,
       endsOn: json['ends_on'] != null ? EgyptTime.tryParse(json['ends_on'] as String) : null,
+      paidUntil: json['paid_until'] != null ? EgyptTime.tryParse(json['paid_until'] as String) : null,
+      expired: json['expired'] as bool? ?? false,
       notes: json['notes'] as String?,
       trainerId: (trainer?['id'] as int?) ?? 0,
       trainerName: trainer?['name'] as String?,

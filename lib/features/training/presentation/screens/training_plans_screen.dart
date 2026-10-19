@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/training_providers.dart';
 import '../../data/models/training_plan.dart';
+import 'body_calculator_screen.dart';
 import 'training_plan_detail_screen.dart';
 
 class TrainingPlansScreen extends ConsumerStatefulWidget {
@@ -40,7 +41,18 @@ class _TrainingPlansScreenState extends ConsumerState<TrainingPlansScreen> {
     final state = ref.watch(myTrainingPlansControllerProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.trainingPlansTitle)),
+      appBar: AppBar(
+        title: Text(l10n.trainingPlansTitle),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.monitor_weight_outlined),
+            tooltip: l10n.bodyCalcTitle,
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const BodyCalculatorScreen()),
+            ),
+          ),
+        ],
+      ),
       body: state.isLoading
           ? const Center(child: CircularProgressIndicator())
           : state.error != null
