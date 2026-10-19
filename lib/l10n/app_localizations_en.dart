@@ -10442,4 +10442,75 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get requestKindHome => 'Technicians';
+
+  @override
+  String get workQuoteTitle => 'Ask a workshop or factory for a quote';
+
+  @override
+  String get workQuoteIntro =>
+      'Say what you want made or mended. The workshops or factories of that trade send you their price and how many days they need, and you pick one.';
+
+  @override
+  String get workQuoteTradeLabel => 'Type of workshop or factory';
+
+  @override
+  String get workQuoteWhatLabel => 'What do you want? (short)';
+
+  @override
+  String get workQuoteDetailsLabel =>
+      'Specification: sizes, materials, colours…';
+
+  @override
+  String get workQuoteQuantityLabel => 'Quantity';
+
+  @override
+  String get workQuoteUnitLabel => 'Unit (piece, metre…)';
+
+  @override
+  String get workQuoteDeadlineLabel => 'Needed by (optional)';
+
+  @override
+  String get workQuoteNationwide =>
+      'Any workshop or factory in Egypt may answer';
+
+  @override
+  String get workQuoteNationwideHelp =>
+      'Off: only those in your governorate. On: factories elsewhere that deliver may answer too.';
+
+  @override
+  String get workQuoteSubmit => 'Ask for quotes';
+
+  @override
+  String get workQuoteRequired =>
+      'Choose the type, say what you want and give the specification (at least 10 letters), and choose your city.';
+
+  @override
+  String workQuoteQuantityIs(String n, String unit) {
+    return 'Quantity $n $unit';
+  }
+
+  @override
+  String workQuoteDeadlineIs(String date) {
+    return 'Needed by $date';
+  }
+
+  @override
+  String get workQuoteNationwideShort => 'Any governorate';
+
+  @override
+  String get workQuoteOfferDaysLabel => 'Days I need to finish';
+
+  @override
+  String workQuoteOfferDays(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Ready in $days days',
+      one: 'Ready in 1 day',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get requestKindQuote => 'Quotes';
 }

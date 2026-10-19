@@ -18822,6 +18822,114 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الفنيون'**
   String get requestKindHome;
+
+  /// No description provided for @workQuoteTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلب عرض سعر من ورشة أو مصنع'**
+  String get workQuoteTitle;
+
+  /// No description provided for @workQuoteIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب ما تريد تصنيعه أو إصلاحه. ورش ومصانع هذا التخصص ترسل لك سعرها وعدد الأيام التي تحتاجها، وتختار منها.'**
+  String get workQuoteIntro;
+
+  /// No description provided for @workQuoteTradeLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع الورشة أو المصنع'**
+  String get workQuoteTradeLabel;
+
+  /// No description provided for @workQuoteWhatLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'ماذا تريد؟ (باختصار)'**
+  String get workQuoteWhatLabel;
+
+  /// No description provided for @workQuoteDetailsLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'المواصفات: المقاسات والخامات والألوان…'**
+  String get workQuoteDetailsLabel;
+
+  /// No description provided for @workQuoteQuantityLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكمية'**
+  String get workQuoteQuantityLabel;
+
+  /// No description provided for @workQuoteUnitLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوحدة (قطعة، متر…)'**
+  String get workQuoteUnitLabel;
+
+  /// No description provided for @workQuoteDeadlineLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'أحتاجه قبل (اختياري)'**
+  String get workQuoteDeadlineLabel;
+
+  /// No description provided for @workQuoteNationwide.
+  ///
+  /// In ar, this message translates to:
+  /// **'يحق لأي ورشة أو مصنع في مصر الرد'**
+  String get workQuoteNationwide;
+
+  /// No description provided for @workQuoteNationwideHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'مغلق: ورش محافظتك فقط. مفعّل: مصانع المحافظات الأخرى التي توصّل تستطيع الرد أيضًا.'**
+  String get workQuoteNationwideHelp;
+
+  /// No description provided for @workQuoteSubmit.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلب عروض الأسعار'**
+  String get workQuoteSubmit;
+
+  /// No description provided for @workQuoteRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر النوع واكتب ما تريد والمواصفات (10 أحرف على الأقل) واختر مدينتك.'**
+  String get workQuoteRequired;
+
+  /// No description provided for @workQuoteQuantityIs.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكمية {n} {unit}'**
+  String workQuoteQuantityIs(String n, String unit);
+
+  /// No description provided for @workQuoteDeadlineIs.
+  ///
+  /// In ar, this message translates to:
+  /// **'مطلوب قبل {date}'**
+  String workQuoteDeadlineIs(String date);
+
+  /// No description provided for @workQuoteNationwideShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'أي محافظة'**
+  String get workQuoteNationwideShort;
+
+  /// No description provided for @workQuoteOfferDaysLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد الأيام التي أحتاجها للتنفيذ'**
+  String get workQuoteOfferDaysLabel;
+
+  /// No description provided for @workQuoteOfferDays.
+  ///
+  /// In ar, this message translates to:
+  /// **'{days, plural, =1{جاهز خلال يوم} other{جاهز خلال {days} أيام}}'**
+  String workQuoteOfferDays(int days);
+
+  /// No description provided for @requestKindQuote.
+  ///
+  /// In ar, this message translates to:
+  /// **'عروض الأسعار'**
+  String get requestKindQuote;
 }
 
 class _AppLocalizationsDelegate

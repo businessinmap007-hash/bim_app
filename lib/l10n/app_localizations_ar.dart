@@ -10370,4 +10370,73 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get requestKindHome => 'الفنيون';
+
+  @override
+  String get workQuoteTitle => 'اطلب عرض سعر من ورشة أو مصنع';
+
+  @override
+  String get workQuoteIntro =>
+      'اكتب ما تريد تصنيعه أو إصلاحه. ورش ومصانع هذا التخصص ترسل لك سعرها وعدد الأيام التي تحتاجها، وتختار منها.';
+
+  @override
+  String get workQuoteTradeLabel => 'نوع الورشة أو المصنع';
+
+  @override
+  String get workQuoteWhatLabel => 'ماذا تريد؟ (باختصار)';
+
+  @override
+  String get workQuoteDetailsLabel => 'المواصفات: المقاسات والخامات والألوان…';
+
+  @override
+  String get workQuoteQuantityLabel => 'الكمية';
+
+  @override
+  String get workQuoteUnitLabel => 'الوحدة (قطعة، متر…)';
+
+  @override
+  String get workQuoteDeadlineLabel => 'أحتاجه قبل (اختياري)';
+
+  @override
+  String get workQuoteNationwide => 'يحق لأي ورشة أو مصنع في مصر الرد';
+
+  @override
+  String get workQuoteNationwideHelp =>
+      'مغلق: ورش محافظتك فقط. مفعّل: مصانع المحافظات الأخرى التي توصّل تستطيع الرد أيضًا.';
+
+  @override
+  String get workQuoteSubmit => 'اطلب عروض الأسعار';
+
+  @override
+  String get workQuoteRequired =>
+      'اختر النوع واكتب ما تريد والمواصفات (10 أحرف على الأقل) واختر مدينتك.';
+
+  @override
+  String workQuoteQuantityIs(String n, String unit) {
+    return 'الكمية $n $unit';
+  }
+
+  @override
+  String workQuoteDeadlineIs(String date) {
+    return 'مطلوب قبل $date';
+  }
+
+  @override
+  String get workQuoteNationwideShort => 'أي محافظة';
+
+  @override
+  String get workQuoteOfferDaysLabel => 'عدد الأيام التي أحتاجها للتنفيذ';
+
+  @override
+  String workQuoteOfferDays(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'جاهز خلال $days أيام',
+      one: 'جاهز خلال يوم',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get requestKindQuote => 'عروض الأسعار';
 }

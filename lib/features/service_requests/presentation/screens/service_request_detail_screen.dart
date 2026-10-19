@@ -180,6 +180,7 @@ class _ServiceRequestDetailScreenState
                   _OfferCard(
                     offer: offer,
                     canAccept: request.isOpen && offer.isPending && !_busy,
+                    etaIsDays: request.isWorkQuote,
                     acceptLabel: request.isCarWanted
                         ? l10n.carWantedAcceptViewing
                         : l10n.requestOfferAccept,
@@ -210,7 +211,7 @@ class RequestSummaryCard extends StatelessWidget {
   const RequestSummaryCard({super.key, required this.request});
 
   static String title(ServiceRequestModel r) {
-    if (r.isCarWanted || r.isHomeService) return r.title;
+    if (r.isCarWanted || r.isHomeService || r.isWorkQuote) return r.title;
     final from = r.origin?.city ?? '';
     final to = r.destination?.city ?? '';
     return from.isEmpty || to.isEmpty ? r.title : '$from ← $to';
@@ -219,7 +220,22 @@ class RequestSummaryCard extends StatelessWidget {
   /// «when · how many · how far» (a ride), «buy/rent · price · when» (a car), «when · budget» (a technician).
   static List<String> parts(BuildContext context, ServiceRequestModel request) {
     final l10n = AppLocalizations.of(context)!;
-    return request.isHomeService
+    return request.isWorkQuote
+        ? <String>[
+            if (request.quantity != null)
+              l10n.workQuoteQuantityIs(
+                '${request.quantity}',
+                request.unit ?? '',
+              ),
+            if (request.deadline != null)
+              l10n.workQuoteDeadlineIs(
+                LocalFormat.date(context).format(request.deadline!),
+              ),
+            if (request.budget != null)
+              l10n.homeServiceBudgetIs(request.budget!.toStringAsFixed(0)),
+            if (request.nationwide) l10n.workQuoteNationwideShort,
+          ]
+        : request.isHomeService
         ? <String>[
             request.startsAt == null
                 ? l10n.homeServiceAnyTime
@@ -300,11 +316,15 @@ class _OfferCard extends StatelessWidget {
   final String acceptLabel;
   final VoidCallback onAccept;
 
+  /// A quote's «eta» is the time the maker needs to finish the job, in days — not the minutes a driver needs to arrive.
+  final bool etaIsDays;
+
   const _OfferCard({
     required this.offer,
     required this.canAccept,
     required this.acceptLabel,
     required this.onAccept,
+    this.etaIsDays = false,
   });
 
   @override
@@ -312,7 +332,10 @@ class _OfferCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final notes = <String>[
-      if (offer.etaMinutes != null) l10n.requestOfferEta(offer.etaMinutes!),
+      if (offer.etaMinutes != null)
+        etaIsDays
+            ? l10n.workQuoteOfferDays((offer.etaMinutes! / 1440).ceil())
+            : l10n.requestOfferEta(offer.etaMinutes!),
       if (offer.message != null && offer.message!.isNotEmpty) offer.message!,
     ];
 

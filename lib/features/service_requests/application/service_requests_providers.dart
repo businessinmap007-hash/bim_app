@@ -38,6 +38,11 @@ final homeTradesProvider = FutureProvider.autoDispose<List<CarOption>>((ref) {
   return ref.watch(serviceRequestsApiProvider).homeTrades();
 });
 
+/// The workshops and factories a «اطلب عرض سعر» request picks from.
+final workTradesProvider = FutureProvider.autoDispose<List<CarOption>>((ref) {
+  return ref.watch(serviceRequestsApiProvider).workTrades();
+});
+
 /// «استراحة»: is this business taking customers' requests right now?
 final requestsAvailableProvider = FutureProvider.autoDispose<bool>((ref) {
   return ref.watch(serviceRequestsApiProvider).available();

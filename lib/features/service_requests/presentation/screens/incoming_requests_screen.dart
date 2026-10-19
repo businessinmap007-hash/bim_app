@@ -28,6 +28,7 @@ class _IncomingRequestsScreenState
   static String _label(AppLocalizations l10n, String kind) => switch (kind) {
     'car_wanted' => l10n.requestKindCar,
     'home_service' => l10n.requestKindHome,
+    'work_quote' => l10n.requestKindQuote,
     _ => l10n.requestKindRide,
   };
 
@@ -223,8 +224,13 @@ class _OfferSheetState extends ConsumerState<_OfferSheet> {
   late final _price = TextEditingController(
     text: widget.request.myOffer?.price.toStringAsFixed(0) ?? '',
   );
+  // a work quote's «eta» is the DAYS the job takes (sent as minutes); a ride's is the minutes to arrive
   late final _eta = TextEditingController(
-    text: widget.request.myOffer?.etaMinutes?.toString() ?? '',
+    text: widget.request.myOffer?.etaMinutes == null
+        ? ''
+        : widget.request.isWorkQuote
+        ? (widget.request.myOffer!.etaMinutes! / 1440).ceil().toString()
+        : widget.request.myOffer!.etaMinutes.toString(),
   );
   late final _message = TextEditingController(
     text: widget.request.myOffer?.message ?? '',
@@ -261,6 +267,12 @@ class _OfferSheetState extends ConsumerState<_OfferSheet> {
     super.dispose();
   }
 
+  int? _etaMinutes() {
+    final n = int.tryParse(_eta.text.trim());
+    if (n == null) return null;
+    return widget.request.isWorkQuote ? n * 1440 : n;
+  }
+
   Future<void> _send() async {
     final l10n = AppLocalizations.of(context)!;
     setState(() {
@@ -275,7 +287,7 @@ class _OfferSheetState extends ConsumerState<_OfferSheet> {
             price: double.tryParse(_price.text.trim()),
             acceptsBudget: _acceptBudget,
             message: _message.text,
-            etaMinutes: int.tryParse(_eta.text.trim()),
+            etaMinutes: _etaMinutes(),
             menuItemId: _itemId,
           );
       ref.invalidate(incomingServiceRequestsProvider(widget.request.kind));
@@ -360,7 +372,9 @@ class _OfferSheetState extends ConsumerState<_OfferSheet> {
                 controller: _eta,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  labelText: l10n.requestOfferEtaLabel,
+                  labelText: widget.request.isWorkQuote
+                      ? l10n.workQuoteOfferDaysLabel
+                      : l10n.requestOfferEtaLabel,
                 ),
               ),
             ],

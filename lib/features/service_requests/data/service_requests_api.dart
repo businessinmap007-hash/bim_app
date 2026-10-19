@@ -136,6 +136,13 @@ class ServiceRequestModel {
   final int? yearMin;
   final int? days;
 
+  /// «اطلب عرض سعر»: what is wanted, how many (and of what), by when, and whether a maker of any governorate may answer.
+  final String? what;
+  final int? quantity;
+  final String? unit;
+  final DateTime? deadline;
+  final bool nationwide;
+
   const ServiceRequestModel({
     required this.id,
     required this.kind,
@@ -160,11 +167,17 @@ class ServiceRequestModel {
     this.brandName,
     this.yearMin,
     this.days,
+    this.what,
+    this.quantity,
+    this.unit,
+    this.deadline,
+    this.nationwide = false,
   });
 
   bool get isOpen => status == 'open';
   bool get isCarWanted => kind == 'car_wanted';
   bool get isHomeService => kind == 'home_service';
+  bool get isWorkQuote => kind == 'work_quote';
   bool get isRentalWanted => deal == 'rent';
 
   factory ServiceRequestModel.fromJson(Map<String, dynamic> json) {
@@ -201,6 +214,11 @@ class ServiceRequestModel {
       brandName: (params['brand'] as Map<String, dynamic>?)?['name'] as String?,
       yearMin: (params['year_min'] as num?)?.toInt(),
       days: (params['days'] as num?)?.toInt(),
+      what: params['what'] as String?,
+      quantity: (params['quantity'] as num?)?.toInt(),
+      unit: params['unit'] as String?,
+      deadline: DateTime.tryParse(params['deadline'] as String? ?? ''),
+      nationwide: params['nationwide'] as bool? ?? false,
     );
   }
 }
@@ -306,6 +324,53 @@ class ServiceRequestsApi {
     return (data['trades'] as List<dynamic>? ?? const [])
         .map((e) => CarOption.fromJson(e as Map<String, dynamic>))
         .toList();
+  }
+
+  /// The workshops and factories a «اطلب عرض سعر» request picks from.
+  Future<List<CarOption>> workTrades() async {
+    final data =
+        await _client.get('/service-requests/work-trades')
+            as Map<String, dynamic>;
+    return (data['trades'] as List<dynamic>? ?? const [])
+        .map((e) => CarOption.fromJson(e as Map<String, dynamic>))
+        .toList();
+  }
+
+  Future<ServiceRequestModel> createWorkQuote({
+    required int tradeId,
+    required String what,
+    required String details,
+    required int governorateId,
+    int? cityId,
+    int? quantity,
+    String? unit,
+    DateTime? deadline,
+    double? maxPrice,
+    bool nationwide = false,
+  }) async {
+    String two(int n) => n.toString().padLeft(2, '0');
+    final data =
+        await _client.post(
+              '/service-requests',
+              data: {
+                'kind': 'work_quote',
+                'trade_child_id': tradeId,
+                'what': what.trim(),
+                'details': details.trim(),
+                'governorate_id': governorateId,
+                'city_id': ?cityId,
+                'quantity': ?quantity,
+                if (unit != null && unit.trim().isNotEmpty) 'unit': unit.trim(),
+                if (deadline != null)
+                  'deadline': '${deadline.year}-${two(deadline.month)}-${two(deadline.day)}',
+                'max_price': ?maxPrice,
+                if (nationwide) 'nationwide': true,
+              },
+            )
+            as Map<String, dynamic>;
+    return ServiceRequestModel.fromJson(
+      data['request'] as Map<String, dynamic>,
+    );
   }
 
   Future<ServiceRequestModel> createHomeService({

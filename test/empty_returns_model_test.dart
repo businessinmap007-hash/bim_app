@@ -6,6 +6,7 @@ import 'package:bim_app/features/service_requests/data/service_requests_api.dart
 void main() {
   suggestionTests();
   homeServiceTests();
+  workQuoteTests();
   test(
     'an empty return reads its price, the saving, the time as Cairo digits and the driver trust',
     () {
@@ -116,6 +117,36 @@ void homeServiceTests() {
       expect(r.isCarWanted, isFalse);
       expect(r.budget, 300);
       expect(r.origin, isNull);
+    },
+  );
+}
+
+void workQuoteTests() {
+  test(
+    'a work-quote request reads what, how many, the deadline and nationwide',
+    () {
+      final r = ServiceRequestModel.fromJson({
+        'id': 4,
+        'kind': 'work_quote',
+        'title': 'عرض سعر: مطبخ ألوميتال · ألمونتال',
+        'details': 'Eight metres of units',
+        'status': 'open',
+        'params': {
+          'what': 'Kitchen in aluminium',
+          'quantity': 2,
+          'unit': 'kitchen',
+          'deadline': '2026-12-01',
+          'nationwide': true,
+        },
+        'budget': 20000,
+      });
+
+      expect(r.isWorkQuote, isTrue);
+      expect(r.isHomeService, isFalse);
+      expect(r.what, 'Kitchen in aluminium');
+      expect(r.quantity, 2);
+      expect(r.deadline, DateTime(2026, 12, 1));
+      expect(r.nationwide, isTrue);
     },
   );
 }
