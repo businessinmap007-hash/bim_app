@@ -123,17 +123,31 @@ class ModerationApi {
     },
   );
 
-  Future<List<ReportedItem>> queue({required bool handled}) async {
-    final data =
-        await _client.get(
-              '/moderation/reports',
-              query: {'scope': handled ? 'handled' : 'open', 'per_page': 50},
-            )
-            as Map<String, dynamic>;
-    return [
-      for (final r in (data['items'] as List<dynamic>? ?? const []))
-        ReportedItem.fromJson(r as Map<String, dynamic>),
-    ];
+  /// One page of the moderator's queue (50 rows) and whether more follow.
+  Future<({List<ReportedItem> items, bool hasMore})> queue({
+    required bool handled,
+    int page = 1,
+  }) async {
+    final body = await _client.getForBody(
+      '/moderation/reports',
+      query: {
+        'scope': handled ? 'handled' : 'open',
+        'per_page': 50,
+        'page': page,
+      },
+    );
+    final data = body['data'] as Map<String, dynamic>? ?? const {};
+    final meta = body['meta'] as Map<String, dynamic>? ?? const {};
+
+    return (
+      items: [
+        for (final r in (data['items'] as List<dynamic>? ?? const []))
+          ReportedItem.fromJson(r as Map<String, dynamic>),
+      ],
+      hasMore:
+          ((meta['current_page'] as num?) ?? 1) <
+          ((meta['last_page'] as num?) ?? 1),
+    );
   }
 
   Future<void> claim(ReportedItem i) =>

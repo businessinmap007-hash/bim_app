@@ -140,7 +140,8 @@ class _PlanTile extends StatelessWidget {
           ],
         ),
         trailing: Chip(
-          label: Text(_statusLabel(l10n, plan.status)),
+          // a plan whose paid month ran out is hidden from the client until renewed
+          label: Text(plan.expired ? l10n.trainingExpiredShort : _statusLabel(l10n, plan.status)),
           visualDensity: VisualDensity.compact,
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         ),

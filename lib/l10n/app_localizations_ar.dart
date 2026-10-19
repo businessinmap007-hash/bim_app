@@ -10892,4 +10892,141 @@ class AppLocalizationsAr extends AppLocalizations {
   String modHandledBy(String name) {
     return 'أُغلق بواسطة $name';
   }
+
+  @override
+  String get trainingExpiredShort => 'انتهى الشهر';
+
+  @override
+  String get modTypeComment => 'تعليق';
+
+  @override
+  String get modRemoveCommentConfirm => 'إخفاء هذا التعليق عن الجميع؟';
+
+  @override
+  String get bodyCalcGoal => 'هدفك';
+
+  @override
+  String get bodyCalcGoalLose => 'إنقاص الوزن';
+
+  @override
+  String get bodyCalcGoalMaintain => 'تثبيت الوزن';
+
+  @override
+  String get bodyCalcGoalGain => 'زيادة الوزن';
+
+  @override
+  String get bodyCalcTape => 'قياسات إضافية (اختياري)';
+
+  @override
+  String get bodyCalcTapeHint =>
+      'الخصر والرقبة (والأرداف للمرأة) لتقدير نسبة الدهون';
+
+  @override
+  String get bodyCalcWaist => 'الخصر (سم)';
+
+  @override
+  String get bodyCalcNeck => 'الرقبة (سم)';
+
+  @override
+  String get bodyCalcHip => 'الأرداف (سم)';
+
+  @override
+  String get bodyCalcComposition => 'تركيب الجسم';
+
+  @override
+  String get bodyCalcFatEssential => 'أساسي';
+
+  @override
+  String get bodyCalcFatAthletic => 'رياضي';
+
+  @override
+  String get bodyCalcFatFitness => 'لياقة';
+
+  @override
+  String get bodyCalcFatAverage => 'متوسط';
+
+  @override
+  String get bodyCalcFatHigh => 'مرتفع';
+
+  @override
+  String get bodyCalcFatFromTape =>
+      'تقدير من قياسات الشريط (طريقة البحرية الأمريكية)';
+
+  @override
+  String get bodyCalcFatFromReport => 'من آخر تقرير قاسه مدربك';
+
+  @override
+  String get bodyCalcWhtOk => 'ضمن المعتاد';
+
+  @override
+  String get bodyCalcWhtHigh => 'مرتفع';
+
+  @override
+  String get bodyCalcNeeds => 'احتياجك اليومي';
+
+  @override
+  String get bodyCalcSave => 'حفظ القياس على هاتفي';
+
+  @override
+  String get bodyCalcSaved => 'تم حفظ القياس على هاتفك.';
+
+  @override
+  String get bodyCalcHistory => 'قياساتي المحفوظة';
+
+  @override
+  String get bodyCalcHistoryHint =>
+      'محفوظة على هذا الهاتف فقط ولا تُرسل لأي جهة.';
+
+  @override
+  String get bodyCalcSinceBefore => 'عن القياس السابق';
+
+  @override
+  String bodyCalcFat(String p) {
+    return 'نسبة الدهون: $p%';
+  }
+
+  @override
+  String bodyCalcLean(String kg) {
+    return 'الكتلة الخالية من الدهون: $kg كجم';
+  }
+
+  @override
+  String bodyCalcMuscle(String kg) {
+    return 'الكتلة العضلية المسجلة: $kg كجم';
+  }
+
+  @override
+  String bodyCalcWht(String r, String verdict) {
+    return 'الخصر ÷ الطول: $r — $verdict (المعتاد أقل من 0.5)';
+  }
+
+  @override
+  String bodyCalcWhr(String r, String verdict) {
+    return 'الخصر ÷ الأرداف: $r — $verdict';
+  }
+
+  @override
+  String bodyCalcTarget(String goal, String kcal) {
+    return 'سعراتك لهدف «$goal»: $kcal سعر/يوم';
+  }
+
+  @override
+  String bodyCalcProtein(String min, String max) {
+    return 'البروتين: من $min إلى $max جرام/يوم';
+  }
+
+  @override
+  String bodyCalcWater(String l) {
+    return 'الماء: نحو $l لتر/يوم';
+  }
+
+  @override
+  String bodyCalcKgUnit(String kg) {
+    return '$kg كجم';
+  }
+
+  @override
+  String bodyCalcRecorded(String kg, String date) {
+    return 'آخر وزن مسجّل في حسابك: $kg كجم ($date)';
+  }
 }

@@ -5,6 +5,7 @@ import '../../../core/deposit/screens/guarantor_request_screen.dart';
 import '../../schedules/presentation/screens/incoming_reservations_screen.dart';
 import '../../service_requests/presentation/screens/incoming_requests_screen.dart';
 import '../../owner_listings/presentation/screens/owner_listing_chat_screen.dart';
+import '../../owner_listings/presentation/screens/owner_listing_detail_screen.dart';
 import '../../service_requests/presentation/screens/service_request_detail_screen.dart';
 import '../../schedules/presentation/screens/my_reservations_screen.dart';
 import '../../schedules/presentation/screens/parcels_screens.dart';
@@ -69,6 +70,11 @@ Future<void> openNotificationTarget(BuildContext context, WidgetRef ref, AppNoti
     case 'open_owner_listing_chat':
       if (id != null) {
         Navigator.of(context).push(MaterialPageRoute(builder: (_) => OwnerListingChatScreen(inquiryId: id, title: (notification.meta['title'] as String?) ?? '')));
+      }
+    // Your own listing is about to end / has ended — its page, where it can be renewed.
+    case 'open_owner_listing':
+      if (id != null) {
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => OwnerListingDetailScreen(listingId: id)));
       }
     case 'open_incoming_requests':
       Navigator.of(context).push(MaterialPageRoute(builder: (_) => const IncomingRequestsScreen()));

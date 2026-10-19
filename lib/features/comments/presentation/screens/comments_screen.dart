@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../application/comments_providers.dart';
+import '../../../moderation/presentation/widgets/report_sheet.dart';
 import '../../data/models/comment.dart';
 
 /// Comments on one post, with one level of threaded replies. See
@@ -307,6 +308,12 @@ class _CommentBody extends StatelessWidget {
                     TextButton(onPressed: onReply, child: Text(l10n.commentReplyAction)),
                   if (comment.canDelete)
                     TextButton(onPressed: onDelete, child: Text(l10n.commentDeleteAction)),
+                  // somebody else's public comment can be reported (a private one is a talk between two people)
+                  if (!comment.isMine && !comment.isPrivate)
+                    TextButton(
+                      onPressed: () => showReportSheet(context, type: 'comment', id: comment.id),
+                      child: Text(l10n.reportAction),
+                    ),
                 ],
               ),
             ],

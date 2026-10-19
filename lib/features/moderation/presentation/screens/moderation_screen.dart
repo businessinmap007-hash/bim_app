@@ -36,51 +36,82 @@ class ModerationScreen extends ConsumerWidget {
   }
 }
 
-class _Queue extends ConsumerWidget {
+class _Queue extends ConsumerStatefulWidget {
   final bool handled;
   const _Queue({required this.handled});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context)!;
-    final queue = ref.watch(reportQueueProvider(handled));
+  ConsumerState<_Queue> createState() => _QueueState();
+}
 
-    return queue.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Center(
+class _QueueState extends ConsumerState<_Queue> {
+  final _scroll = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scroll.addListener(() {
+      if (_scroll.position.pixels >= _scroll.position.maxScrollExtent - 200) {
+        ref.read(reportQueueProvider(widget.handled).notifier).loadMore();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scroll.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final state = ref.watch(reportQueueProvider(widget.handled));
+    final controller = ref.read(reportQueueProvider(widget.handled).notifier);
+
+    if (state.isLoading && state.items.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (state.error != null && state.items.isEmpty) {
+      return Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                e is ApiException ? e.message : '$e',
-                textAlign: TextAlign.center,
-              ),
+              Text(l10n.commonSomethingWentWrong, textAlign: TextAlign.center),
               const SizedBox(height: 12),
               OutlinedButton(
-                onPressed: () => ref.invalidate(reportQueueProvider(handled)),
+                onPressed: controller.load,
                 child: Text(l10n.commonRetry),
               ),
             ],
           ),
         ),
-      ),
-      data: (items) {
-        if (items.isEmpty) return Center(child: Text(l10n.modEmpty));
+      );
+    }
 
-        return RefreshIndicator(
-          onRefresh: () async =>
-              ref.refresh(reportQueueProvider(handled).future),
-          child: ListView.separated(
-            padding: const EdgeInsets.all(16),
-            itemCount: items.length,
-            separatorBuilder: (_, _) => const SizedBox(height: 12),
-            itemBuilder: (_, i) =>
-                _ReportedCard(item: items[i], handled: handled),
-          ),
-        );
-      },
+    if (state.items.isEmpty) return Center(child: Text(l10n.modEmpty));
+
+    return RefreshIndicator(
+      onRefresh: controller.load,
+      child: ListView.separated(
+        controller: _scroll,
+        padding: const EdgeInsets.all(16),
+        itemCount: state.items.length + (state.isLoadingMore ? 1 : 0),
+        separatorBuilder: (_, _) => const SizedBox(height: 12),
+        itemBuilder: (_, i) {
+          if (i >= state.items.length) {
+            return const Padding(
+              padding: EdgeInsets.symmetric(vertical: 16),
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }
+
+          return _ReportedCard(item: state.items[i], handled: widget.handled);
+        },
+      ),
     );
   }
 }
@@ -103,8 +134,8 @@ class _ReportedCardState extends ConsumerState<_ReportedCard> {
 
     try {
       await action(ref.read(moderationApiProvider));
-      ref.invalidate(reportQueueProvider(false));
-      ref.invalidate(reportQueueProvider(true));
+      ref.read(reportQueueProvider(false).notifier).load();
+      ref.read(reportQueueProvider(true).notifier).load();
     } on ApiException catch (e) {
       messenger.showSnackBar(SnackBar(content: Text(e.message)));
     } finally {
@@ -117,11 +148,11 @@ class _ReportedCardState extends ConsumerState<_ReportedCard> {
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        content: Text(
-          widget.item.isPost
-              ? l10n.modRemovePostConfirm
-              : l10n.modRemoveListingConfirm,
-        ),
+        content: Text(switch (widget.item.type) {
+          'post' => l10n.modRemovePostConfirm,
+          'comment' => l10n.modRemoveCommentConfirm,
+          _ => l10n.modRemoveListingConfirm,
+        }),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
@@ -178,10 +209,11 @@ class _ReportedCardState extends ConsumerState<_ReportedCard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        item.isPost ? l10n.modTypePost : l10n.modTypeListing,
-                        style: theme.textTheme.labelSmall,
-                      ),
+                      Text(switch (item.type) {
+                        'post' => l10n.modTypePost,
+                        'comment' => l10n.modTypeComment,
+                        _ => l10n.modTypeListing,
+                      }, style: theme.textTheme.labelSmall),
                       if (item.title.isNotEmpty)
                         Text(
                           item.title,

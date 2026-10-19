@@ -19728,6 +19728,234 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'أُغلق بواسطة {name}'**
   String modHandledBy(String name);
+
+  /// No description provided for @trainingExpiredShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتهى الشهر'**
+  String get trainingExpiredShort;
+
+  /// No description provided for @modTypeComment.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعليق'**
+  String get modTypeComment;
+
+  /// No description provided for @modRemoveCommentConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'إخفاء هذا التعليق عن الجميع؟'**
+  String get modRemoveCommentConfirm;
+
+  /// No description provided for @bodyCalcGoal.
+  ///
+  /// In ar, this message translates to:
+  /// **'هدفك'**
+  String get bodyCalcGoal;
+
+  /// No description provided for @bodyCalcGoalLose.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنقاص الوزن'**
+  String get bodyCalcGoalLose;
+
+  /// No description provided for @bodyCalcGoalMaintain.
+  ///
+  /// In ar, this message translates to:
+  /// **'تثبيت الوزن'**
+  String get bodyCalcGoalMaintain;
+
+  /// No description provided for @bodyCalcGoalGain.
+  ///
+  /// In ar, this message translates to:
+  /// **'زيادة الوزن'**
+  String get bodyCalcGoalGain;
+
+  /// No description provided for @bodyCalcTape.
+  ///
+  /// In ar, this message translates to:
+  /// **'قياسات إضافية (اختياري)'**
+  String get bodyCalcTape;
+
+  /// No description provided for @bodyCalcTapeHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخصر والرقبة (والأرداف للمرأة) لتقدير نسبة الدهون'**
+  String get bodyCalcTapeHint;
+
+  /// No description provided for @bodyCalcWaist.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخصر (سم)'**
+  String get bodyCalcWaist;
+
+  /// No description provided for @bodyCalcNeck.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرقبة (سم)'**
+  String get bodyCalcNeck;
+
+  /// No description provided for @bodyCalcHip.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأرداف (سم)'**
+  String get bodyCalcHip;
+
+  /// No description provided for @bodyCalcComposition.
+  ///
+  /// In ar, this message translates to:
+  /// **'تركيب الجسم'**
+  String get bodyCalcComposition;
+
+  /// No description provided for @bodyCalcFatEssential.
+  ///
+  /// In ar, this message translates to:
+  /// **'أساسي'**
+  String get bodyCalcFatEssential;
+
+  /// No description provided for @bodyCalcFatAthletic.
+  ///
+  /// In ar, this message translates to:
+  /// **'رياضي'**
+  String get bodyCalcFatAthletic;
+
+  /// No description provided for @bodyCalcFatFitness.
+  ///
+  /// In ar, this message translates to:
+  /// **'لياقة'**
+  String get bodyCalcFatFitness;
+
+  /// No description provided for @bodyCalcFatAverage.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوسط'**
+  String get bodyCalcFatAverage;
+
+  /// No description provided for @bodyCalcFatHigh.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرتفع'**
+  String get bodyCalcFatHigh;
+
+  /// No description provided for @bodyCalcFatFromTape.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقدير من قياسات الشريط (طريقة البحرية الأمريكية)'**
+  String get bodyCalcFatFromTape;
+
+  /// No description provided for @bodyCalcFatFromReport.
+  ///
+  /// In ar, this message translates to:
+  /// **'من آخر تقرير قاسه مدربك'**
+  String get bodyCalcFatFromReport;
+
+  /// No description provided for @bodyCalcWhtOk.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضمن المعتاد'**
+  String get bodyCalcWhtOk;
+
+  /// No description provided for @bodyCalcWhtHigh.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرتفع'**
+  String get bodyCalcWhtHigh;
+
+  /// No description provided for @bodyCalcNeeds.
+  ///
+  /// In ar, this message translates to:
+  /// **'احتياجك اليومي'**
+  String get bodyCalcNeeds;
+
+  /// No description provided for @bodyCalcSave.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ القياس على هاتفي'**
+  String get bodyCalcSave;
+
+  /// No description provided for @bodyCalcSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم حفظ القياس على هاتفك.'**
+  String get bodyCalcSaved;
+
+  /// No description provided for @bodyCalcHistory.
+  ///
+  /// In ar, this message translates to:
+  /// **'قياساتي المحفوظة'**
+  String get bodyCalcHistory;
+
+  /// No description provided for @bodyCalcHistoryHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'محفوظة على هذا الهاتف فقط ولا تُرسل لأي جهة.'**
+  String get bodyCalcHistoryHint;
+
+  /// No description provided for @bodyCalcSinceBefore.
+  ///
+  /// In ar, this message translates to:
+  /// **'عن القياس السابق'**
+  String get bodyCalcSinceBefore;
+
+  /// No description provided for @bodyCalcFat.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة الدهون: {p}%'**
+  String bodyCalcFat(String p);
+
+  /// No description provided for @bodyCalcLean.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكتلة الخالية من الدهون: {kg} كجم'**
+  String bodyCalcLean(String kg);
+
+  /// No description provided for @bodyCalcMuscle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكتلة العضلية المسجلة: {kg} كجم'**
+  String bodyCalcMuscle(String kg);
+
+  /// No description provided for @bodyCalcWht.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخصر ÷ الطول: {r} — {verdict} (المعتاد أقل من 0.5)'**
+  String bodyCalcWht(String r, String verdict);
+
+  /// No description provided for @bodyCalcWhr.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخصر ÷ الأرداف: {r} — {verdict}'**
+  String bodyCalcWhr(String r, String verdict);
+
+  /// No description provided for @bodyCalcTarget.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعراتك لهدف «{goal}»: {kcal} سعر/يوم'**
+  String bodyCalcTarget(String goal, String kcal);
+
+  /// No description provided for @bodyCalcProtein.
+  ///
+  /// In ar, this message translates to:
+  /// **'البروتين: من {min} إلى {max} جرام/يوم'**
+  String bodyCalcProtein(String min, String max);
+
+  /// No description provided for @bodyCalcWater.
+  ///
+  /// In ar, this message translates to:
+  /// **'الماء: نحو {l} لتر/يوم'**
+  String bodyCalcWater(String l);
+
+  /// No description provided for @bodyCalcKgUnit.
+  ///
+  /// In ar, this message translates to:
+  /// **'{kg} كجم'**
+  String bodyCalcKgUnit(String kg);
+
+  /// No description provided for @bodyCalcRecorded.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر وزن مسجّل في حسابك: {kg} كجم ({date})'**
+  String bodyCalcRecorded(String kg, String date);
 }
 
 class _AppLocalizationsDelegate

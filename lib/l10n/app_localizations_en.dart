@@ -10970,4 +10970,142 @@ class AppLocalizationsEn extends AppLocalizations {
   String modHandledBy(String name) {
     return 'Closed by $name';
   }
+
+  @override
+  String get trainingExpiredShort => 'Month over';
+
+  @override
+  String get modTypeComment => 'Comment';
+
+  @override
+  String get modRemoveCommentConfirm => 'Hide this comment from everyone?';
+
+  @override
+  String get bodyCalcGoal => 'Your goal';
+
+  @override
+  String get bodyCalcGoalLose => 'Lose weight';
+
+  @override
+  String get bodyCalcGoalMaintain => 'Keep my weight';
+
+  @override
+  String get bodyCalcGoalGain => 'Gain weight';
+
+  @override
+  String get bodyCalcTape => 'More measurements (optional)';
+
+  @override
+  String get bodyCalcTapeHint =>
+      'Waist and neck (and hips for women) to estimate body fat';
+
+  @override
+  String get bodyCalcWaist => 'Waist (cm)';
+
+  @override
+  String get bodyCalcNeck => 'Neck (cm)';
+
+  @override
+  String get bodyCalcHip => 'Hips (cm)';
+
+  @override
+  String get bodyCalcComposition => 'Body composition';
+
+  @override
+  String get bodyCalcFatEssential => 'Essential';
+
+  @override
+  String get bodyCalcFatAthletic => 'Athletic';
+
+  @override
+  String get bodyCalcFatFitness => 'Fit';
+
+  @override
+  String get bodyCalcFatAverage => 'Average';
+
+  @override
+  String get bodyCalcFatHigh => 'High';
+
+  @override
+  String get bodyCalcFatFromTape =>
+      'Estimated from the tape measures (US Navy method)';
+
+  @override
+  String get bodyCalcFatFromReport =>
+      'From the last report your trainer measured';
+
+  @override
+  String get bodyCalcWhtOk => 'within the usual range';
+
+  @override
+  String get bodyCalcWhtHigh => 'high';
+
+  @override
+  String get bodyCalcNeeds => 'Your daily needs';
+
+  @override
+  String get bodyCalcSave => 'Save this measurement on my phone';
+
+  @override
+  String get bodyCalcSaved => 'The measurement was saved on your phone.';
+
+  @override
+  String get bodyCalcHistory => 'My saved measurements';
+
+  @override
+  String get bodyCalcHistoryHint =>
+      'Kept on this phone only and never sent anywhere.';
+
+  @override
+  String get bodyCalcSinceBefore => 'since the one before';
+
+  @override
+  String bodyCalcFat(String p) {
+    return 'Body fat: $p%';
+  }
+
+  @override
+  String bodyCalcLean(String kg) {
+    return 'Lean mass: $kg kg';
+  }
+
+  @override
+  String bodyCalcMuscle(String kg) {
+    return 'Recorded muscle mass: $kg kg';
+  }
+
+  @override
+  String bodyCalcWht(String r, String verdict) {
+    return 'Waist ÷ height: $r — $verdict (usually under 0.5)';
+  }
+
+  @override
+  String bodyCalcWhr(String r, String verdict) {
+    return 'Waist ÷ hip: $r — $verdict';
+  }
+
+  @override
+  String bodyCalcTarget(String goal, String kcal) {
+    return 'Calories for your goal ($goal): $kcal kcal/day';
+  }
+
+  @override
+  String bodyCalcProtein(String min, String max) {
+    return 'Protein: $min to $max g/day';
+  }
+
+  @override
+  String bodyCalcWater(String l) {
+    return 'Water: about $l L/day';
+  }
+
+  @override
+  String bodyCalcKgUnit(String kg) {
+    return '$kg kg';
+  }
+
+  @override
+  String bodyCalcRecorded(String kg, String date) {
+    return 'Last weight recorded on your account: $kg kg ($date)';
+  }
 }

@@ -91,4 +91,109 @@ void main() {
       isFalse,
     );
   });
+
+  test('body fat from the tape (US Navy), its band, the ratios', () {
+    const m = BodyMetrics(
+      sex: BodySex.male,
+      ageYears: 30,
+      heightCm: 180,
+      weightKg: 85,
+      waistCm: 90,
+      neckCm: 38,
+    );
+
+    expect(m.bodyFatNavy, closeTo(19.8, 0.1));
+    expect(m.fatIsFromTape, isTrue);
+    expect(m.fatBand, FatBand.average);
+    expect(m.leanMassKg, closeTo(85 * (1 - m.bodyFatPercent! / 100), 0.001));
+    expect(m.waistToHeight, closeTo(0.5, 0.001));
+
+    const woman = BodyMetrics(
+      sex: BodySex.female,
+      ageYears: 30,
+      heightCm: 165,
+      weightKg: 62,
+      waistCm: 75,
+      neckCm: 32,
+      hipCm: 98,
+    );
+    expect(woman.bodyFatNavy, closeTo(28, 3));
+    expect(woman.waistToHip, closeTo(75 / 98, 0.001));
+    expect(woman.waistToHipHigh, isFalse);
+  });
+
+  test(
+    'a woman without hips, or a waist under the neck, has no tape estimate; a recorded fat is used instead',
+    () {
+      const noHip = BodyMetrics(
+        sex: BodySex.female,
+        ageYears: 30,
+        heightCm: 165,
+        weightKg: 62,
+        waistCm: 75,
+        neckCm: 32,
+      );
+      expect(noHip.bodyFatNavy, isNull);
+      expect(noHip.bodyFatPercent, isNull);
+
+      const odd = BodyMetrics(
+        sex: BodySex.male,
+        ageYears: 30,
+        heightCm: 180,
+        weightKg: 85,
+        waistCm: 30,
+        neckCm: 38,
+        recordedFatPercent: 21,
+      );
+      expect(odd.bodyFatNavy, isNull);
+      expect(odd.bodyFatPercent, 21);
+      expect(odd.fatIsFromTape, isFalse);
+    },
+  );
+
+  test('calories, protein and water follow the goal', () {
+    const base = BodyMetrics(
+      sex: BodySex.male,
+      ageYears: 30,
+      heightCm: 175,
+      weightKg: 80,
+      activity: ActivityLevel.moderate,
+    );
+    final maintain = base.maintenanceKcal;
+    expect(base.targetKcal, closeTo(maintain, 0.001));
+
+    const lose = BodyMetrics(
+      sex: BodySex.male,
+      ageYears: 30,
+      heightCm: 175,
+      weightKg: 80,
+      activity: ActivityLevel.moderate,
+      goal: BodyGoal.lose,
+    );
+    expect(lose.targetKcal, closeTo(maintain - 500, 0.001));
+    expect(lose.proteinGrams.min, closeTo(144, 0.001));
+    expect(lose.proteinGrams.max, closeTo(176, 0.001));
+
+    const gain = BodyMetrics(
+      sex: BodySex.male,
+      ageYears: 30,
+      heightCm: 175,
+      weightKg: 80,
+      activity: ActivityLevel.moderate,
+      goal: BodyGoal.gain,
+    );
+    expect(gain.targetKcal, closeTo(maintain + 300, 0.001));
+    expect(base.waterLitres, closeTo(2.8, 0.001));
+
+    // never below the resting burn, however low the maintenance
+    const small = BodyMetrics(
+      sex: BodySex.female,
+      ageYears: 60,
+      heightCm: 150,
+      weightKg: 45,
+      activity: ActivityLevel.sedentary,
+      goal: BodyGoal.lose,
+    );
+    expect(small.targetKcal, small.bmr);
+  });
 }
