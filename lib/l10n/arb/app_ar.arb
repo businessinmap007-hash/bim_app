@@ -3791,5 +3791,11 @@
   "bodyCalcBmr": "ما يحرقه جسمك في الراحة: {kcal} سعر/يوم",
   "@bodyCalcBmr": {"placeholders": {"kcal": {"type": "String"}}},
   "bodyCalcMaintain": "سعرات تثبيت وزنك الحالي: {kcal} سعر/يوم",
-  "@bodyCalcMaintain": {"placeholders": {"kcal": {"type": "String"}}}
+  "@bodyCalcMaintain": {"placeholders": {"kcal": {"type": "String"}}},
+  "modOpenReport": "فتح البلاغ والتعامل معه",
+  "modRelease": "تحرير البلاغ",
+  "modInHands": "{name} يتعامل مع هذا البلاغ الآن",
+  "@modInHands": {"placeholders": {"name": {"type": "String"}}},
+  "modHandledBy": "أُغلق بواسطة {name}",
+  "@modHandledBy": {"placeholders": {"name": {"type": "String"}}}
 }

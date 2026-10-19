@@ -10876,4 +10876,20 @@ class AppLocalizationsAr extends AppLocalizations {
   String bodyCalcMaintain(String kcal) {
     return 'سعرات تثبيت وزنك الحالي: $kcal سعر/يوم';
   }
+
+  @override
+  String get modOpenReport => 'فتح البلاغ والتعامل معه';
+
+  @override
+  String get modRelease => 'تحرير البلاغ';
+
+  @override
+  String modInHands(String name) {
+    return '$name يتعامل مع هذا البلاغ الآن';
+  }
+
+  @override
+  String modHandledBy(String name) {
+    return 'أُغلق بواسطة $name';
+  }
 }

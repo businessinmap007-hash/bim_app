@@ -10954,4 +10954,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String bodyCalcMaintain(String kcal) {
     return 'Calories to keep your current weight: $kcal kcal/day';
   }
+
+  @override
+  String get modOpenReport => 'Open the report and deal with it';
+
+  @override
+  String get modRelease => 'Release the report';
+
+  @override
+  String modInHands(String name) {
+    return '$name is dealing with this report';
+  }
+
+  @override
+  String modHandledBy(String name) {
+    return 'Closed by $name';
+  }
 }

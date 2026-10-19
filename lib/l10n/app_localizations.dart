@@ -19704,6 +19704,30 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'سعرات تثبيت وزنك الحالي: {kcal} سعر/يوم'**
   String bodyCalcMaintain(String kcal);
+
+  /// No description provided for @modOpenReport.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح البلاغ والتعامل معه'**
+  String get modOpenReport;
+
+  /// No description provided for @modRelease.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحرير البلاغ'**
+  String get modRelease;
+
+  /// No description provided for @modInHands.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} يتعامل مع هذا البلاغ الآن'**
+  String modInHands(String name);
+
+  /// No description provided for @modHandledBy.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُغلق بواسطة {name}'**
+  String modHandledBy(String name);
 }
 
 class _AppLocalizationsDelegate

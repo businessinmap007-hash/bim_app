@@ -3765,5 +3765,11 @@
   "bodyCalcBmr": "What your body burns at rest: {kcal} kcal/day",
   "@bodyCalcBmr": {"placeholders": {"kcal": {"type": "String"}}},
   "bodyCalcMaintain": "Calories to keep your current weight: {kcal} kcal/day",
-  "@bodyCalcMaintain": {"placeholders": {"kcal": {"type": "String"}}}
+  "@bodyCalcMaintain": {"placeholders": {"kcal": {"type": "String"}}},
+  "modOpenReport": "Open the report and deal with it",
+  "modRelease": "Release the report",
+  "modInHands": "{name} is dealing with this report",
+  "@modInHands": {"placeholders": {"name": {"type": "String"}}},
+  "modHandledBy": "Closed by {name}",
+  "@modHandledBy": {"placeholders": {"name": {"type": "String"}}}
 }

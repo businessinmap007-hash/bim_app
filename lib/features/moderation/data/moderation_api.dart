@@ -42,6 +42,14 @@ class ReportedItem {
   final List<ReasonCount> reasons;
   final List<String> details;
 
+  /// The moderator dealing with it (recorded when he opened it), and whether that is me / somebody else.
+  final String? handlerName;
+  final bool claimedByMe;
+  final bool locked;
+
+  /// Handled list only: who closed it.
+  final String? handledBy;
+
   const ReportedItem({
     required this.type,
     required this.id,
@@ -54,6 +62,10 @@ class ReportedItem {
     this.price,
     this.reasons = const [],
     this.details = const [],
+    this.handlerName,
+    this.claimedByMe = false,
+    this.locked = false,
+    this.handledBy,
   });
 
   bool get isPost => type == 'post';
@@ -75,6 +87,10 @@ class ReportedItem {
     details: [
       for (final d in (json['details'] as List<dynamic>? ?? const [])) '$d',
     ],
+    handlerName: (json['handler'] as Map<String, dynamic>?)?['name'] as String?,
+    claimedByMe: json['claimed_by_me'] as bool? ?? false,
+    locked: json['locked'] as bool? ?? false,
+    handledBy: json['handled_by'] as String?,
   );
 }
 
@@ -119,6 +135,12 @@ class ModerationApi {
         ReportedItem.fromJson(r as Map<String, dynamic>),
     ];
   }
+
+  Future<void> claim(ReportedItem i) =>
+      _client.post('/moderation/reports/${i.type}/${i.id}/claim');
+
+  Future<void> release(ReportedItem i) =>
+      _client.post('/moderation/reports/${i.type}/${i.id}/release');
 
   Future<void> dismiss(ReportedItem i) =>
       _client.post('/moderation/reports/${i.type}/${i.id}/dismiss');

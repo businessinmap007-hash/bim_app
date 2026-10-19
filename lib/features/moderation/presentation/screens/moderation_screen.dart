@@ -231,31 +231,59 @@ class _ReportedCardState extends ConsumerState<_ReportedCard> {
                 padding: const EdgeInsets.only(top: 4),
                 child: Text('«$d»', style: theme.textTheme.bodySmall),
               ),
+            if (item.handledBy != null && widget.handled)
+              Text(
+                l10n.modHandledBy(item.handledBy!),
+                style: theme.textTheme.bodySmall,
+              ),
+            if (!widget.handled && item.locked)
+              Row(
+                children: [
+                  const Icon(Icons.lock_outline, size: 18),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      l10n.modInHands(item.handlerName ?? ''),
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                  ),
+                ],
+              ),
             const SizedBox(height: 8),
             if (_busy)
               const Center(child: CircularProgressIndicator())
-            else
-              Row(
+            else if (!widget.handled && !item.locked && !item.claimedByMe)
+              FilledButton.icon(
+                icon: const Icon(Icons.how_to_reg_outlined),
+                onPressed: () => _run((api) => api.claim(item)),
+                label: Text(l10n.modOpenReport),
+              )
+            else if (!widget.handled && item.claimedByMe)
+              Wrap(
+                spacing: 8,
+                runSpacing: 4,
                 children: [
-                  if (!widget.handled) ...[
-                    OutlinedButton(
-                      onPressed: () => _run((api) => api.dismiss(item)),
-                      child: Text(l10n.modDismiss),
+                  OutlinedButton(
+                    onPressed: () => _run((api) => api.dismiss(item)),
+                    child: Text(l10n.modDismiss),
+                  ),
+                  FilledButton(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: theme.colorScheme.error,
                     ),
-                    const SizedBox(width: 8),
-                    FilledButton(
-                      style: FilledButton.styleFrom(
-                        backgroundColor: theme.colorScheme.error,
-                      ),
-                      onPressed: _confirmRemove,
-                      child: Text(l10n.modRemove),
-                    ),
-                  ] else if (item.isPost && item.state == 'hidden')
-                    OutlinedButton(
-                      onPressed: () => _run((api) => api.restore(item)),
-                      child: Text(l10n.modRestore),
-                    ),
+                    onPressed: _confirmRemove,
+                    child: Text(l10n.modRemove),
+                  ),
+                  TextButton(
+                    onPressed: () => _run((api) => api.release(item)),
+                    child: Text(l10n.modRelease),
+                  ),
                 ],
+              )
+            else if (widget.handled && item.isPost && item.state == 'hidden')
+              OutlinedButton(
+                onPressed: () => _run((api) => api.restore(item)),
+                child: Text(l10n.modRestore),
               ),
           ],
         ),
