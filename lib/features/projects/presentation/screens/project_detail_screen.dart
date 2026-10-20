@@ -8,7 +8,10 @@ import '../../../media/application/media_picker_service.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/projects_providers.dart';
+import '../widgets/business_project_panels.dart';
+import '../../data/models/project_agreement.dart';
 import '../../data/models/project_timeline.dart';
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/time/egypt_time.dart';
 import '../../../../core/time/local_format.dart';
 
@@ -160,6 +163,61 @@ class ProjectDetailScreen extends ConsumerWidget {
     }
   }
 
+  /// Main stages (those with works inside) as folding cards; a flat project's works as plain rows.
+  List<Widget> _stages(List<ProjectTaskRow> tasks, AgreementBlock block, WidgetRef ref) {
+    final byParent = <int, List<ProjectTaskRow>>{};
+    for (final t in tasks) {
+      if (t.parentId != null) byParent.putIfAbsent(t.parentId!, () => []).add(t);
+    }
+
+    return [
+      for (final t in tasks.where((t) => t.parentId == null))
+        if (byParent[t.id]?.isNotEmpty ?? false)
+          _MainStageCard(projectId: projectId, stage: t, works: byParent[t.id]!, agreed: block.agreed)
+        else
+          _TaskTile(projectId: projectId, task: t),
+    ];
+  }
+
+  Future<void> _generateBuilding(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    final floors = TextEditingController(text: '5');
+    final flats = TextEditingController(text: '3');
+    bool basement = true;
+
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setState) => AlertDialog(
+          title: Text(l10n.buildingGenerate),
+          content: Column(mainAxisSize: MainAxisSize.min, children: [
+            TextField(controller: floors, keyboardType: TextInputType.number, decoration: InputDecoration(labelText: l10n.buildingFloors)),
+            TextField(controller: flats, keyboardType: TextInputType.number, decoration: InputDecoration(labelText: l10n.buildingFlats)),
+            SwitchListTile(contentPadding: EdgeInsets.zero, value: basement, onChanged: (v) => setState(() => basement = v), title: Text(l10n.buildingBasement)),
+          ]),
+          actions: [
+            TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: Text(l10n.commonCancel)),
+            FilledButton(onPressed: () => Navigator.of(ctx).pop(true), child: Text(l10n.commonSubmit)),
+          ],
+        ),
+      ),
+    );
+    if (ok != true || !context.mounted) return;
+
+    try {
+      final made = await ref.read(projectDetailControllerProvider(projectId).notifier).generateBuilding(
+        floors: int.tryParse(floors.text.trim()) ?? 1,
+        basement: basement,
+        flats: int.tryParse(flats.text.trim()) ?? 0,
+      );
+      if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.buildingGenerated(made))));
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e is ApiException && e.message.isNotEmpty ? e.message : l10n.commonSomethingWentWrong)));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
@@ -228,16 +286,28 @@ class ProjectDetailScreen extends ConsumerWidget {
                     const SizedBox(height: 12),
                     Text(project.description!),
                   ],
+                  const SizedBox(height: 12),
+                  BusinessAgreementPanel(projectId: projectId, project: project, block: state.block),
                   const SizedBox(height: 20),
                   Text(l10n.projectTasksTitle, style: Theme.of(context).textTheme.titleSmall),
                   const SizedBox(height: 8),
                   if (timeline == null || timeline.tasks.isEmpty)
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      child: Text(l10n.projectTasksEmpty),
+                      child: Column(
+                        children: [
+                          Text(l10n.projectTasksEmpty),
+                          const SizedBox(height: 12),
+                          OutlinedButton.icon(
+                            icon: const Icon(Icons.apartment_outlined),
+                            onPressed: () => _generateBuilding(context, ref),
+                            label: Text(l10n.buildingGenerate),
+                          ),
+                        ],
+                      ),
                     )
                   else
-                    for (final task in timeline.tasks) _TaskTile(projectId: projectId, task: task),
+                    ..._stages(timeline.tasks, state.block, ref),
                 ],
               ),
             ),
@@ -287,6 +357,12 @@ class _TaskTile extends ConsumerWidget {
                   label: Text(l10n.taskTakePhoto),
                 ),
                 const SizedBox(height: 8),
+                OutlinedButton.icon(
+                  icon: const Icon(Icons.straighten_outlined),
+                  onPressed: () => Navigator.of(sheetContext).pop('details'),
+                  label: Text(l10n.taskDetailsTitle),
+                ),
+                const SizedBox(height: 8),
                 Text('${l10n.taskProgressLabel}: $progress%'),
                 Slider(
                   value: progress.toDouble(),
@@ -334,6 +410,13 @@ class _TaskTile extends ConsumerWidget {
         await controller.updateTaskProgress(task.id, progress: progress);
       } else if (result == 'done') {
         await controller.updateTaskProgress(task.id, status: 'done');
+      } else if (result == 'details') {
+        await showModalBottomSheet<void>(
+          context: context,
+          isScrollControlled: true,
+          showDragHandle: true,
+          builder: (_) => TaskDetailSheet(projectId: projectId, taskId: task.id),
+        );
       } else if (result == 'photo') {
         final shot = await MediaPickerService().pickFromCamera();
         if (shot != null) await controller.uploadPhoto(task.id, await shot.file.readAsBytes());
@@ -392,6 +475,8 @@ class _TaskTile extends ConsumerWidget {
               '${task.plannedStart != null ? ' · ${task.plannedStart}' : ''}',
             ),
             if (task.assignee != null) AssigneeLine(task.assignee),
+            if (task.items.isNotEmpty)
+              Text(task.items.map((i) => '${i.name} ${i.line()}').join(' · '), style: Theme.of(context).textTheme.bodySmall),
             if (task.approvalStatus != null)
               Text(
                 switch (task.approvalStatus) {
@@ -425,3 +510,88 @@ String _taskStatusLabel(String status, AppLocalizations l10n) => switch (status)
   'done' => l10n.taskStatusDone,
   _ => status,
 };
+
+/// A main stage of a big project (foundations, the frame, finishing…): its progress, whether the customer approved its start,
+/// and — folded — its works grouped by place («الدور الثالث / شقة 2»).
+class _MainStageCard extends ConsumerWidget {
+  final int projectId;
+  final ProjectTaskRow stage;
+  final List<ProjectTaskRow> works;
+  final bool agreed;
+
+  const _MainStageCard({required this.projectId, required this.stage, required this.works, required this.agreed});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
+    final byZone = <String, List<ProjectTaskRow>>{};
+    for (final w in works) {
+      byZone.putIfAbsent(w.zone ?? '', () => []).add(w);
+    }
+
+    final started = stage.startStatus == 'approved';
+    final canAsk = agreed && !started && stage.startStatus != 'requested';
+
+    return Card(
+      margin: const EdgeInsets.only(bottom: 8),
+      child: ExpansionTile(
+        shape: const Border(),
+        collapsedShape: const Border(),
+        title: Row(children: [Expanded(child: Text(stage.title, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700))), Text('${stage.progress}%')]),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 4),
+            LinearProgressIndicator(value: stage.progress / 100),
+            const SizedBox(height: 4),
+            Text(
+              [
+                l10n.stageWorks(works.length),
+                if (agreed)
+                  switch (stage.startStatus) {
+                    'approved' => l10n.startApproved,
+                    'requested' => l10n.startRequested,
+                    'declined' => l10n.startDeclined(stage.startNote ?? ''),
+                    _ => l10n.startNotRequested,
+                  },
+              ].join(' · '),
+              style: theme.textTheme.bodySmall,
+            ),
+          ],
+        ),
+        children: [
+          if (canAsk)
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: FilledButton.tonal(
+                  onPressed: () async {
+                    try {
+                      await ref.read(projectDetailControllerProvider(projectId).notifier).requestStart(stage.id);
+                      if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.startRequestSent)));
+                    } catch (e) {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e is ApiException && e.message.isNotEmpty ? e.message : l10n.commonSomethingWentWrong)));
+                      }
+                    }
+                  },
+                  child: Text(l10n.startRequest),
+                ),
+              ),
+            ),
+          for (final entry in byZone.entries) ...[
+            if (entry.key.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 10, 16, 2),
+                child: Align(alignment: AlignmentDirectional.centerStart, child: Text(entry.key, style: theme.textTheme.labelLarge?.copyWith(color: theme.colorScheme.primary))),
+              ),
+            for (final w in entry.value) _TaskTile(projectId: projectId, task: w),
+          ],
+        ],
+      ),
+    );
+  }
+}

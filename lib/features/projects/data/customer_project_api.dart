@@ -21,6 +21,18 @@ class CustomerProjectApi {
     return data['viewer'] as String? ?? 'customer';
   }
 
+  String _base(String type, int id) => '/operations/$type/$id/project';
+
+  Future<void> agreeToPlan(String type, int id) => _client.post('${_base(type, id)}/agreement/agree');
+
+  Future<void> declinePlan(String type, int id, String note) => _client.post('${_base(type, id)}/agreement/decline', data: {'note': note});
+
+  Future<void> decideRequest(String type, int id, int requestId, {required bool approve, String? note}) =>
+      _client.post('${_base(type, id)}/change-requests/$requestId/${approve ? 'approve' : 'reject'}', data: {'note': ?note});
+
+  Future<void> decideStart(String type, int id, int taskId, {required bool approve, String? note}) =>
+      _client.post('${_base(type, id)}/tasks/$taskId/start/${approve ? 'approve' : 'decline'}', data: {'note': ?note});
+
   /// The customer approves a completed stage that asked for it.
   Future<void> approve(String operationType, int operationId, int taskId) =>
       _client.post('/operations/$operationType/$operationId/project/tasks/$taskId/approve');

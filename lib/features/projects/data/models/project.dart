@@ -12,6 +12,11 @@ class Project {
   final int progress;
   final DateTime? startsOn;
   final DateTime? dueOn;
+  final DateTime? graceUntil;
+  final DateTime? completedAt;
+
+  /// Linked to a customer's order / booking (so a plan can be offered to him).
+  final bool hasOperation;
   final bool isOverdue;
   final int? tasksCount;
   final DateTime? createdAt;
@@ -26,6 +31,9 @@ class Project {
     required this.progress,
     this.startsOn,
     this.dueOn,
+    this.graceUntil,
+    this.completedAt,
+    this.hasOperation = false,
     required this.isOverdue,
     this.tasksCount,
     this.createdAt,
@@ -41,6 +49,9 @@ class Project {
     progress: (json['progress'] as num?)?.toInt() ?? 0,
     startsOn: json['starts_on'] != null ? EgyptTime.tryParse(json['starts_on'] as String) : null,
     dueOn: json['due_on'] != null ? EgyptTime.tryParse(json['due_on'] as String) : null,
+    graceUntil: json['grace_until'] != null ? EgyptTime.tryParse(json['grace_until'] as String) : null,
+    completedAt: json['completed_at'] != null ? EgyptTime.tryParse(json['completed_at'] as String) : null,
+    hasOperation: json['operation'] != null,
     isOverdue: json['is_overdue'] as bool? ?? false,
     tasksCount: json['tasks_count'] as int?,
     createdAt: json['created_at'] != null ? EgyptTime.tryParse(json['created_at'] as String) : null,

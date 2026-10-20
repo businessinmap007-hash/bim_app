@@ -11513,4 +11513,210 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get projectStartForOperation => 'Start a project for this operation';
+
+  @override
+  String get agreementTitle => 'Agreement on the plan';
+
+  @override
+  String agreementDue(String date) {
+    return 'Delivery date: $date';
+  }
+
+  @override
+  String agreementGrace(String date) {
+    return 'Grace ends: $date';
+  }
+
+  @override
+  String agreementVersion(int n) {
+    return 'Version $n';
+  }
+
+  @override
+  String get agreementStatusProposed => 'Waiting for the customer';
+
+  @override
+  String get agreementStatusAgreed => 'Agreed';
+
+  @override
+  String agreementAgreedOn(String date) {
+    return 'Customer agreed $date';
+  }
+
+  @override
+  String get agreementPropose => 'Offer the plan to the customer';
+
+  @override
+  String get agreementProposeDue => 'Delivery date';
+
+  @override
+  String get agreementProposeGrace => 'Grace days after delivery';
+
+  @override
+  String get agreementNeedsOperation =>
+      'Link the project to a customer\'s order or booking to offer him the plan.';
+
+  @override
+  String get agreementWaitingCustomer => 'Waiting for the customer';
+
+  @override
+  String get agreementAgree => 'I agree to the plan';
+
+  @override
+  String get agreementDecline => 'Decline';
+
+  @override
+  String get agreementDeclineHint => 'Write the reason';
+
+  @override
+  String get extensionRequest => 'Ask for more time';
+
+  @override
+  String get requestExtensionTitle => 'Ask to extend the grace';
+
+  @override
+  String get extensionDays => 'Number of days';
+
+  @override
+  String get extensionReason => 'Reason';
+
+  @override
+  String get extensionSent => 'The request was sent to the customer';
+
+  @override
+  String requestExtensionLine(int days, String date) {
+    return 'Extend the grace by $days days, to $date';
+  }
+
+  @override
+  String requestScopePlanned(String from, String to) {
+    return 'Change a planned quantity from $from to $to';
+  }
+
+  @override
+  String requestScopeAdd(String name, String planned) {
+    return 'Add a quantity: $name = $planned';
+  }
+
+  @override
+  String requestScopeDelete(String name) {
+    return 'Remove a quantity: $name';
+  }
+
+  @override
+  String get requestScopeLine => 'Change of scope';
+
+  @override
+  String get requestApproved => 'The customer approved';
+
+  @override
+  String requestRejectedWith(String note) {
+    return 'The customer declined: $note';
+  }
+
+  @override
+  String get requestApprove => 'Approve';
+
+  @override
+  String get requestReject => 'Decline';
+
+  @override
+  String get startRequest => 'Ask to start the stage';
+
+  @override
+  String get startRequestSent => 'The start request was sent to the customer';
+
+  @override
+  String get startRequested => 'Waiting for the customer to approve the start';
+
+  @override
+  String get startApproved => 'Started with the customer\'s approval';
+
+  @override
+  String startDeclined(String note) {
+    return 'The customer declined the start: $note';
+  }
+
+  @override
+  String get startNotRequested => 'Start not requested yet';
+
+  @override
+  String get startApproveAction => 'I approve starting the stage';
+
+  @override
+  String get startDeclineAction => 'Not now';
+
+  @override
+  String stageWorks(int n) {
+    return '$n works';
+  }
+
+  @override
+  String get itemsTitle => 'Quantities';
+
+  @override
+  String get itemsEmpty => 'No quantities recorded for this work yet.';
+
+  @override
+  String get itemAdd => 'Add a quantity';
+
+  @override
+  String get itemName => 'Item (e.g. number of columns)';
+
+  @override
+  String get itemUnit => 'Unit';
+
+  @override
+  String get itemPlanned => 'Planned';
+
+  @override
+  String get itemDone => 'Done';
+
+  @override
+  String get itemReason => 'Reason for the change (optional)';
+
+  @override
+  String get itemRequestSent =>
+      'The request was sent to the customer and nothing changes before he approves';
+
+  @override
+  String get taskDetailsTitle => 'Quantities and details';
+
+  @override
+  String get taskZone => 'Place (e.g. third floor / flat 2)';
+
+  @override
+  String get taskDetails => 'Details and specifications';
+
+  @override
+  String get quantityLogTitle => 'Quantity change log';
+
+  @override
+  String get quantityLogEmpty => 'No changes yet';
+
+  @override
+  String get quantityLogViaRequest => 'with the customer\'s approval';
+
+  @override
+  String get quantityLogCreated => 'Added';
+
+  @override
+  String get quantityLogDeleted => 'Removed';
+
+  @override
+  String get buildingGenerate => 'Residential building with floors and flats';
+
+  @override
+  String get buildingFloors => 'Number of floors (including ground)';
+
+  @override
+  String get buildingFlats => 'Flats per floor';
+
+  @override
+  String get buildingBasement => 'Has a basement';
+
+  @override
+  String buildingGenerated(int n) {
+    return '$n works were generated';
+  }
 }

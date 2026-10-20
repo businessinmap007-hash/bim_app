@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/core_providers.dart';
 import '../data/models/project.dart';
+import '../data/models/project_agreement.dart';
 import '../data/models/project_template.dart';
 import '../data/models/project_timeline.dart';
 import '../data/projects_api.dart';
@@ -116,14 +117,16 @@ final projectsControllerProvider = StateNotifierProvider<ProjectsController, Pro
 class ProjectDetailState {
   final Project? project;
   final ProjectTimeline? timeline;
+  final AgreementBlock block;
   final bool isLoading;
   final String? error;
 
-  const ProjectDetailState({this.project, this.timeline, this.isLoading = false, this.error});
+  const ProjectDetailState({this.project, this.timeline, this.block = const AgreementBlock(), this.isLoading = false, this.error});
 
   ProjectDetailState copyWith({
     Project? project,
     ProjectTimeline? timeline,
+    AgreementBlock? block,
     bool? isLoading,
     String? error,
     bool clearError = false,
@@ -131,6 +134,7 @@ class ProjectDetailState {
     return ProjectDetailState(
       project: project ?? this.project,
       timeline: timeline ?? this.timeline,
+      block: block ?? this.block,
       isLoading: isLoading ?? this.isLoading,
       error: clearError ? null : (error ?? this.error),
     );
@@ -153,7 +157,7 @@ class ProjectDetailController extends StateNotifier<ProjectDetailState> {
     state = state.copyWith(isLoading: true, clearError: true);
     try {
       final detail = await _api.show(projectId);
-      state = state.copyWith(project: detail.project, timeline: detail.timeline, isLoading: false);
+      state = state.copyWith(project: detail.project, timeline: detail.timeline, block: detail.block, isLoading: false);
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
     }
@@ -177,6 +181,51 @@ class ProjectDetailController extends StateNotifier<ProjectDetailState> {
       requiresApproval: requiresApproval,
     );
     await load();
+  }
+
+  /// Quantities: the business edits them; after the agreement a change of what was planned is only SENT (returns true).
+  Future<bool> addItem(int taskId, {required String name, String? unit, required double planned}) async {
+    final sent = await _api.addItem(projectId, taskId, name: name, unit: unit, planned: planned);
+    await load();
+    return sent;
+  }
+
+  Future<bool> updateItem(int taskId, int itemId, {double? planned, double? done, String? reason}) async {
+    final sent = await _api.updateItem(projectId, taskId, itemId, planned: planned, done: done, reason: reason);
+    await load();
+    return sent;
+  }
+
+  Future<bool> deleteItem(int taskId, int itemId) async {
+    final sent = await _api.deleteItem(projectId, taskId, itemId);
+    await load();
+    return sent;
+  }
+
+  Future<void> updateTaskInfo(int taskId, {String? zone, int? weight, String? details}) async {
+    await _api.updateTaskInfo(projectId, taskId, zone: zone, weight: weight, details: details);
+    await load();
+  }
+
+  Future<void> proposeAgreement({required DateTime dueOn, required int graceDays}) async {
+    await _api.proposeAgreement(projectId, dueOn: dueOn, graceDays: graceDays);
+    await load();
+  }
+
+  Future<void> requestExtension({required int extraDays, required String reason}) async {
+    await _api.requestExtension(projectId, extraDays: extraDays, reason: reason);
+    await load();
+  }
+
+  Future<void> requestStart(int taskId) async {
+    await _api.requestStart(projectId, taskId);
+    await load();
+  }
+
+  Future<int> generateBuilding({required int floors, required bool basement, required int flats, DateTime? startsOn}) async {
+    final made = await _api.generateBuilding(projectId, floors: floors, basement: basement, flats: flats, startsOn: startsOn);
+    await load();
+    return made;
   }
 
   Future<void> assignTask(int taskId, int? assigneeId) async {

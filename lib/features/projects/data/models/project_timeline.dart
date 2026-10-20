@@ -1,4 +1,5 @@
 import '../../../../core/assignment/assignee.dart';
+import 'project_agreement.dart';
 
 /// One task's computed schedule row — mirrors `ProjectService::timeline()`'s
 /// per-task output (the critical-path/Gantt math already done server-side;
@@ -23,6 +24,16 @@ class ProjectTaskRow {
   /// Who is responsible for this stage.
   final Assignee? assignee;
 
+  /// A work inside a main stage: the main stage, its place («الدور الثالث / شقة 2»), weight, free details, whether the customer
+  /// approved its main stage's start, and its quantities.
+  final int? parentId;
+  final String? zone;
+  final int weight;
+  final String? details;
+  final String? startStatus;
+  final String? startNote;
+  final List<QuantityItem> items;
+
   const ProjectTaskRow({
     required this.id,
     required this.title,
@@ -38,6 +49,13 @@ class ProjectTaskRow {
     this.approvalStatus,
     this.approvalNote,
     this.assignee,
+    this.parentId,
+    this.zone,
+    this.weight = 0,
+    this.details,
+    this.startStatus,
+    this.startNote,
+    this.items = const [],
   });
 
   bool get isDone => status == 'done';
@@ -57,6 +75,13 @@ class ProjectTaskRow {
     approvalStatus: json['approval_status'] as String?,
     approvalNote: json['approval_note'] as String?,
     assignee: json['assignee'] is Map<String, dynamic> ? Assignee.fromJson(json['assignee'] as Map<String, dynamic>) : null,
+    parentId: (json['parent_id'] as num?)?.toInt(),
+    zone: json['zone'] as String?,
+    weight: (json['weight'] as num?)?.toInt() ?? 0,
+    details: json['details'] as String?,
+    startStatus: json['start_status'] as String?,
+    startNote: json['start_note'] as String?,
+    items: [for (final i in (json['items'] as List<dynamic>? ?? const [])) QuantityItem.fromJson(i as Map<String, dynamic>)],
   );
 }
 

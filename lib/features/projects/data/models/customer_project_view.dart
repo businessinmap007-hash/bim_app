@@ -1,6 +1,7 @@
 import '../../../../core/assignment/assignee.dart';
 import '../../../../core/env/env.dart';
 import 'project.dart';
+import 'project_agreement.dart';
 
 /// One task as the customer following an operation sees it — mirrors
 /// `ProjectService::customerView()`'s `tasks[]`: no critical-path math (that's
@@ -20,6 +21,12 @@ class CustomerProjectTask {
   final String? approvalStatus;
   final String? approvalNote;
   final Assignee? assignee;
+  final int? parentId;
+  final String? zone;
+  final String? details;
+  final String? startStatus;
+  final String? startNote;
+  final List<QuantityItem> items;
 
   const CustomerProjectTask({
     required this.id,
@@ -33,7 +40,16 @@ class CustomerProjectTask {
     this.approvalStatus,
     this.approvalNote,
     this.assignee,
+    this.parentId,
+    this.zone,
+    this.details,
+    this.startStatus,
+    this.startNote,
+    this.items = const [],
   });
+
+  bool get startRequested => startStatus == 'requested';
+  bool get isMain => parentId == null;
 
   bool get waitsForMe => approvalStatus == 'pending';
 
@@ -48,6 +64,12 @@ class CustomerProjectTask {
     approvalStatus: json['approval_status'] as String?,
     approvalNote: json['approval_note'] as String?,
     assignee: json['assignee'] is Map<String, dynamic> ? Assignee.fromJson(json['assignee'] as Map<String, dynamic>) : null,
+    parentId: (json['parent_id'] as num?)?.toInt(),
+    zone: json['zone'] as String?,
+    details: json['details'] as String?,
+    startStatus: json['start_status'] as String?,
+    startNote: json['start_note'] as String?,
+    items: [for (final i in (json['items'] as List<dynamic>? ?? const [])) QuantityItem.fromJson(i as Map<String, dynamic>)],
     photoUrls: (json['photos'] as List<dynamic>? ?? [])
         .map((e) => Env.assetUrl((e as Map<String, dynamic>)['url'] as String?))
         .whereType<String>()
@@ -64,7 +86,10 @@ class CustomerProjectView {
   /// `business` for the operation's own business, `customer` for its buyer.
   final String viewer;
 
-  const CustomerProjectView({required this.project, required this.tasks, this.viewer = 'customer'});
+  /// The agreement, the requests waiting for the customer, and the history of the quantities.
+  final AgreementBlock block;
+
+  const CustomerProjectView({required this.project, required this.tasks, this.viewer = 'customer', this.block = const AgreementBlock()});
 
   bool get viewerIsBusiness => viewer == 'business';
 
@@ -85,5 +110,6 @@ class CustomerProjectView {
         .map((e) => CustomerProjectTask.fromJson(e as Map<String, dynamic>))
         .toList(),
     viewer: json['viewer'] as String? ?? 'customer',
+    block: AgreementBlock.fromJson(json),
   );
 }

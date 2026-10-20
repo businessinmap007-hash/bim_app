@@ -5,10 +5,11 @@ import 'package:dio/dio.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/network/paginated.dart';
 import 'models/project.dart';
+import 'models/project_agreement.dart';
 import 'models/project_template.dart';
 import 'models/project_timeline.dart';
 
-typedef ProjectDetail = ({Project project, ProjectTimeline timeline});
+typedef ProjectDetail = ({Project project, ProjectTimeline timeline, AgreementBlock block});
 
 /// /business/projects — see Api\V2\BusinessProjectController +
 /// BusinessProjectTaskController. Camera-evidence photos, task dependencies
@@ -104,8 +105,55 @@ class ProjectsApi {
       timeline: ProjectTimeline.fromJson(
         data['timeline'] as Map<String, dynamic>,
       ),
+      block: AgreementBlock.fromJson(data),
     );
   }
+
+  /// Write the plan of a residential building into an empty project; returns how many works were made.
+  Future<int> generateBuilding(int projectId, {required int floors, required bool basement, required int flats, DateTime? startsOn}) async {
+    final data =
+        await _client.post(
+              '/business/projects/$projectId/generate',
+              data: {
+                'kind': 'building',
+                'floors': floors,
+                'basement': basement,
+                'apartments_per_floor': flats,
+                if (startsOn != null) 'starts_on': _dateOnly(startsOn),
+              },
+            )
+            as Map<String, dynamic>;
+    return (data['works'] as num?)?.toInt() ?? 0;
+  }
+
+  /// A quantity of a work. After the agreement a change of what was planned is a request: returns true when it was only SENT.
+  Future<bool> addItem(int projectId, int taskId, {required String name, String? unit, required double planned}) =>
+      _itemCall(() => _client.post('/business/projects/$projectId/tasks/$taskId/items', data: {'name': name, 'unit': ?unit, 'planned': planned}));
+
+  Future<bool> updateItem(int projectId, int taskId, int itemId, {double? planned, double? done, String? reason}) =>
+      _itemCall(() => _client.patch('/business/projects/$projectId/tasks/$taskId/items/$itemId', data: {'planned': ?planned, 'done': ?done, 'reason': ?reason}));
+
+  Future<bool> deleteItem(int projectId, int taskId, int itemId) =>
+      _itemCall(() => _client.delete('/business/projects/$projectId/tasks/$taskId/items/$itemId'));
+
+  Future<bool> _itemCall(Future<dynamic> Function() call) async {
+    final data = await call();
+    return data is Map<String, dynamic> && data['pending_request'] != null;
+  }
+
+  /// Zone / weight / details of a work.
+  Future<void> updateTaskInfo(int projectId, int taskId, {String? zone, int? weight, String? details}) => _client.patch(
+    '/business/projects/$projectId/tasks/$taskId',
+    data: {'zone': zone, 'weight': ?weight, 'details': details},
+  );
+
+  Future<void> proposeAgreement(int projectId, {required DateTime dueOn, required int graceDays}) =>
+      _client.post('/business/projects/$projectId/agreement', data: {'due_on': _dateOnly(dueOn), 'grace_days': graceDays});
+
+  Future<void> requestExtension(int projectId, {required int extraDays, required String reason}) =>
+      _client.post('/business/projects/$projectId/extension-requests', data: {'extra_days': extraDays, 'reason': reason});
+
+  Future<void> requestStart(int projectId, int taskId) => _client.post('/business/projects/$projectId/tasks/$taskId/request-start');
 
   Future<Project> updateStatus(int id, String status) async {
     final data =

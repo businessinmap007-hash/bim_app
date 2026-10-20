@@ -11426,4 +11426,209 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get projectStartForOperation => 'ابدأ مشروعًا لهذه العملية';
+
+  @override
+  String get agreementTitle => 'الاتفاق على الخطة';
+
+  @override
+  String agreementDue(String date) {
+    return 'موعد التسليم: $date';
+  }
+
+  @override
+  String agreementGrace(String date) {
+    return 'نهاية فترة السماح: $date';
+  }
+
+  @override
+  String agreementVersion(int n) {
+    return 'النسخة $n';
+  }
+
+  @override
+  String get agreementStatusProposed => 'بانتظار موافقة العميل';
+
+  @override
+  String get agreementStatusAgreed => 'متفق عليها';
+
+  @override
+  String agreementAgreedOn(String date) {
+    return 'وافق العميل $date';
+  }
+
+  @override
+  String get agreementPropose => 'عرض الخطة على العميل';
+
+  @override
+  String get agreementProposeDue => 'موعد التسليم';
+
+  @override
+  String get agreementProposeGrace => 'أيام السماح بعد التسليم';
+
+  @override
+  String get agreementNeedsOperation =>
+      'اربط المشروع بطلب أو حجز لعميل لتعرض عليه الخطة.';
+
+  @override
+  String get agreementWaitingCustomer => 'بانتظار رد العميل';
+
+  @override
+  String get agreementAgree => 'أوافق على الخطة';
+
+  @override
+  String get agreementDecline => 'أرفض';
+
+  @override
+  String get agreementDeclineHint => 'اكتب السبب';
+
+  @override
+  String get extensionRequest => 'طلب تمديد';
+
+  @override
+  String get requestExtensionTitle => 'طلب تمديد فترة السماح';
+
+  @override
+  String get extensionDays => 'عدد الأيام';
+
+  @override
+  String get extensionReason => 'السبب';
+
+  @override
+  String get extensionSent => 'أُرسل طلب التمديد إلى العميل';
+
+  @override
+  String requestExtensionLine(int days, String date) {
+    return 'تمديد فترة السماح $days يومًا حتى $date';
+  }
+
+  @override
+  String requestScopePlanned(String from, String to) {
+    return 'تعديل كمية مخططة من $from إلى $to';
+  }
+
+  @override
+  String requestScopeAdd(String name, String planned) {
+    return 'إضافة كمية: $name = $planned';
+  }
+
+  @override
+  String requestScopeDelete(String name) {
+    return 'حذف كمية: $name';
+  }
+
+  @override
+  String get requestScopeLine => 'تعديل نطاق العمل';
+
+  @override
+  String get requestApproved => 'وافق العميل';
+
+  @override
+  String requestRejectedWith(String note) {
+    return 'رفض العميل: $note';
+  }
+
+  @override
+  String get requestApprove => 'موافقة';
+
+  @override
+  String get requestReject => 'رفض';
+
+  @override
+  String get startRequest => 'طلب بدء المرحلة';
+
+  @override
+  String get startRequestSent => 'أُرسل طلب البدء إلى العميل';
+
+  @override
+  String get startRequested => 'بانتظار موافقة العميل على البدء';
+
+  @override
+  String get startApproved => 'بدأت بموافقة العميل';
+
+  @override
+  String startDeclined(String note) {
+    return 'رفض العميل البدء: $note';
+  }
+
+  @override
+  String get startNotRequested => 'لم يُطلب بدؤها بعد';
+
+  @override
+  String get startApproveAction => 'أوافق على بدء المرحلة';
+
+  @override
+  String get startDeclineAction => 'ليس الآن';
+
+  @override
+  String stageWorks(int n) {
+    return '$n عملًا';
+  }
+
+  @override
+  String get itemsTitle => 'الكميات';
+
+  @override
+  String get itemsEmpty => 'لم تُسجَّل كميات لهذا العمل بعد.';
+
+  @override
+  String get itemAdd => 'إضافة كمية';
+
+  @override
+  String get itemName => 'البند (مثل: عدد الأعمدة)';
+
+  @override
+  String get itemUnit => 'الوحدة';
+
+  @override
+  String get itemPlanned => 'المخطط';
+
+  @override
+  String get itemDone => 'المنفَّذ';
+
+  @override
+  String get itemReason => 'سبب التعديل (اختياري)';
+
+  @override
+  String get itemRequestSent => 'أُرسل الطلب للعميل ولن يُطبَّق قبل موافقته';
+
+  @override
+  String get taskDetailsTitle => 'الكميات والتفاصيل';
+
+  @override
+  String get taskZone => 'الموقع (مثل: الدور الثالث / شقة 2)';
+
+  @override
+  String get taskDetails => 'تفاصيل ومواصفات العمل';
+
+  @override
+  String get quantityLogTitle => 'سجل تعديل الكميات';
+
+  @override
+  String get quantityLogEmpty => 'لا توجد تعديلات بعد';
+
+  @override
+  String get quantityLogViaRequest => 'بموافقة العميل';
+
+  @override
+  String get quantityLogCreated => 'إضافة';
+
+  @override
+  String get quantityLogDeleted => 'حذف';
+
+  @override
+  String get buildingGenerate => 'مبنى سكني بأدواره وشققه';
+
+  @override
+  String get buildingFloors => 'عدد الأدوار (بالأرضي)';
+
+  @override
+  String get buildingFlats => 'الشقق في كل دور';
+
+  @override
+  String get buildingBasement => 'يوجد بدروم';
+
+  @override
+  String buildingGenerated(int n) {
+    return 'تم توليد $n عملًا';
+  }
 }

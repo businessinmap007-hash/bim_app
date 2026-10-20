@@ -20598,6 +20598,366 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'ابدأ مشروعًا لهذه العملية'**
   String get projectStartForOperation;
+
+  /// No description provided for @agreementTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاتفاق على الخطة'**
+  String get agreementTitle;
+
+  /// No description provided for @agreementDue.
+  ///
+  /// In ar, this message translates to:
+  /// **'موعد التسليم: {date}'**
+  String agreementDue(String date);
+
+  /// No description provided for @agreementGrace.
+  ///
+  /// In ar, this message translates to:
+  /// **'نهاية فترة السماح: {date}'**
+  String agreementGrace(String date);
+
+  /// No description provided for @agreementVersion.
+  ///
+  /// In ar, this message translates to:
+  /// **'النسخة {n}'**
+  String agreementVersion(int n);
+
+  /// No description provided for @agreementStatusProposed.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار موافقة العميل'**
+  String get agreementStatusProposed;
+
+  /// No description provided for @agreementStatusAgreed.
+  ///
+  /// In ar, this message translates to:
+  /// **'متفق عليها'**
+  String get agreementStatusAgreed;
+
+  /// No description provided for @agreementAgreedOn.
+  ///
+  /// In ar, this message translates to:
+  /// **'وافق العميل {date}'**
+  String agreementAgreedOn(String date);
+
+  /// No description provided for @agreementPropose.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض الخطة على العميل'**
+  String get agreementPropose;
+
+  /// No description provided for @agreementProposeDue.
+  ///
+  /// In ar, this message translates to:
+  /// **'موعد التسليم'**
+  String get agreementProposeDue;
+
+  /// No description provided for @agreementProposeGrace.
+  ///
+  /// In ar, this message translates to:
+  /// **'أيام السماح بعد التسليم'**
+  String get agreementProposeGrace;
+
+  /// No description provided for @agreementNeedsOperation.
+  ///
+  /// In ar, this message translates to:
+  /// **'اربط المشروع بطلب أو حجز لعميل لتعرض عليه الخطة.'**
+  String get agreementNeedsOperation;
+
+  /// No description provided for @agreementWaitingCustomer.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار رد العميل'**
+  String get agreementWaitingCustomer;
+
+  /// No description provided for @agreementAgree.
+  ///
+  /// In ar, this message translates to:
+  /// **'أوافق على الخطة'**
+  String get agreementAgree;
+
+  /// No description provided for @agreementDecline.
+  ///
+  /// In ar, this message translates to:
+  /// **'أرفض'**
+  String get agreementDecline;
+
+  /// No description provided for @agreementDeclineHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب السبب'**
+  String get agreementDeclineHint;
+
+  /// No description provided for @extensionRequest.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب تمديد'**
+  String get extensionRequest;
+
+  /// No description provided for @requestExtensionTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب تمديد فترة السماح'**
+  String get requestExtensionTitle;
+
+  /// No description provided for @extensionDays.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد الأيام'**
+  String get extensionDays;
+
+  /// No description provided for @extensionReason.
+  ///
+  /// In ar, this message translates to:
+  /// **'السبب'**
+  String get extensionReason;
+
+  /// No description provided for @extensionSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُرسل طلب التمديد إلى العميل'**
+  String get extensionSent;
+
+  /// No description provided for @requestExtensionLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمديد فترة السماح {days} يومًا حتى {date}'**
+  String requestExtensionLine(int days, String date);
+
+  /// No description provided for @requestScopePlanned.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل كمية مخططة من {from} إلى {to}'**
+  String requestScopePlanned(String from, String to);
+
+  /// No description provided for @requestScopeAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة كمية: {name} = {planned}'**
+  String requestScopeAdd(String name, String planned);
+
+  /// No description provided for @requestScopeDelete.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف كمية: {name}'**
+  String requestScopeDelete(String name);
+
+  /// No description provided for @requestScopeLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل نطاق العمل'**
+  String get requestScopeLine;
+
+  /// No description provided for @requestApproved.
+  ///
+  /// In ar, this message translates to:
+  /// **'وافق العميل'**
+  String get requestApproved;
+
+  /// No description provided for @requestRejectedWith.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفض العميل: {note}'**
+  String requestRejectedWith(String note);
+
+  /// No description provided for @requestApprove.
+  ///
+  /// In ar, this message translates to:
+  /// **'موافقة'**
+  String get requestApprove;
+
+  /// No description provided for @requestReject.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفض'**
+  String get requestReject;
+
+  /// No description provided for @startRequest.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب بدء المرحلة'**
+  String get startRequest;
+
+  /// No description provided for @startRequestSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُرسل طلب البدء إلى العميل'**
+  String get startRequestSent;
+
+  /// No description provided for @startRequested.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار موافقة العميل على البدء'**
+  String get startRequested;
+
+  /// No description provided for @startApproved.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدأت بموافقة العميل'**
+  String get startApproved;
+
+  /// No description provided for @startDeclined.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفض العميل البدء: {note}'**
+  String startDeclined(String note);
+
+  /// No description provided for @startNotRequested.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يُطلب بدؤها بعد'**
+  String get startNotRequested;
+
+  /// No description provided for @startApproveAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'أوافق على بدء المرحلة'**
+  String get startApproveAction;
+
+  /// No description provided for @startDeclineAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'ليس الآن'**
+  String get startDeclineAction;
+
+  /// No description provided for @stageWorks.
+  ///
+  /// In ar, this message translates to:
+  /// **'{n} عملًا'**
+  String stageWorks(int n);
+
+  /// No description provided for @itemsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكميات'**
+  String get itemsTitle;
+
+  /// No description provided for @itemsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تُسجَّل كميات لهذا العمل بعد.'**
+  String get itemsEmpty;
+
+  /// No description provided for @itemAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة كمية'**
+  String get itemAdd;
+
+  /// No description provided for @itemName.
+  ///
+  /// In ar, this message translates to:
+  /// **'البند (مثل: عدد الأعمدة)'**
+  String get itemName;
+
+  /// No description provided for @itemUnit.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوحدة'**
+  String get itemUnit;
+
+  /// No description provided for @itemPlanned.
+  ///
+  /// In ar, this message translates to:
+  /// **'المخطط'**
+  String get itemPlanned;
+
+  /// No description provided for @itemDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'المنفَّذ'**
+  String get itemDone;
+
+  /// No description provided for @itemReason.
+  ///
+  /// In ar, this message translates to:
+  /// **'سبب التعديل (اختياري)'**
+  String get itemReason;
+
+  /// No description provided for @itemRequestSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُرسل الطلب للعميل ولن يُطبَّق قبل موافقته'**
+  String get itemRequestSent;
+
+  /// No description provided for @taskDetailsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكميات والتفاصيل'**
+  String get taskDetailsTitle;
+
+  /// No description provided for @taskZone.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموقع (مثل: الدور الثالث / شقة 2)'**
+  String get taskZone;
+
+  /// No description provided for @taskDetails.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل ومواصفات العمل'**
+  String get taskDetails;
+
+  /// No description provided for @quantityLogTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجل تعديل الكميات'**
+  String get quantityLogTitle;
+
+  /// No description provided for @quantityLogEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد تعديلات بعد'**
+  String get quantityLogEmpty;
+
+  /// No description provided for @quantityLogViaRequest.
+  ///
+  /// In ar, this message translates to:
+  /// **'بموافقة العميل'**
+  String get quantityLogViaRequest;
+
+  /// No description provided for @quantityLogCreated.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة'**
+  String get quantityLogCreated;
+
+  /// No description provided for @quantityLogDeleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف'**
+  String get quantityLogDeleted;
+
+  /// No description provided for @buildingGenerate.
+  ///
+  /// In ar, this message translates to:
+  /// **'مبنى سكني بأدواره وشققه'**
+  String get buildingGenerate;
+
+  /// No description provided for @buildingFloors.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد الأدوار (بالأرضي)'**
+  String get buildingFloors;
+
+  /// No description provided for @buildingFlats.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشقق في كل دور'**
+  String get buildingFlats;
+
+  /// No description provided for @buildingBasement.
+  ///
+  /// In ar, this message translates to:
+  /// **'يوجد بدروم'**
+  String get buildingBasement;
+
+  /// No description provided for @buildingGenerated.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم توليد {n} عملًا'**
+  String buildingGenerated(int n);
 }
 
 class _AppLocalizationsDelegate
