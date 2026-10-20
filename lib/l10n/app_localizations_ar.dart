@@ -11813,18 +11813,18 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String showcaseConfirmedMonths(int n) {
-    return '$n شهرًا مؤكَّدًا';
+    return '$n أشهر موثَّقة';
   }
 
   @override
-  String get showcaseNoConfirmedYet => 'بانتظار أول نتيجة يؤكدها العميل';
+  String get showcaseNoConfirmedYet => 'بانتظار أول تقرير شهري';
 
   @override
   String get planShowcaseAskAction => 'نشر نتائج الخطة كمنشور';
 
   @override
   String get planShowcaseAskHint =>
-      'لا يُنشر شيء قبل موافقة العميل. تظهر التغيّرات التي أكدها فقط، دون اسمه أو وزنه أو أي صورة.';
+      'لا يُنشر شيء قبل موافقة العميل، وموافقته واحدة تشمل الخطة كلها: تتحدّث النتائج مع كل تقرير شهري. تظهر التغيّرات فقط، دون اسمه أو وزنه أو أي صورة.';
 
   @override
   String get planShowcaseConsentTitle => 'المدرب يطلب عرض نتائج خطتك كمنشور';
@@ -11834,48 +11834,5 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get planShowcaseConsentBody =>
-      'تظهر التغيّرات التي أكدتَّها فقط، دون اسمك أو وزنك أو أي صورة.';
-
-  @override
-  String get showcaseLiveGeneral => 'منشور الآن بموافقة العميل العامة';
-
-  @override
-  String get showcaseUnderGeneralConsent =>
-      'منشور بموافقتك العامة. يمكنك إيقافه في أي وقت.';
-
-  @override
-  String get bodyReportConfirm => 'أؤكد نتيجة هذا الشهر';
-
-  @override
-  String get bodyReportConfirmed => 'أكدتَّ هذه النتيجة';
-
-  @override
-  String get showcaseGeneralTitle => 'موافقة النشر العامة';
-
-  @override
-  String get showcaseGeneralSubtitle => 'اسمح مرة واحدة بدل أن تُسأل في كل مرة';
-
-  @override
-  String get showcaseGeneralIntro =>
-      'يمكن للنشاط أن يعرض نتائج مشاريعك وخططك كمنشور تسويقي بدون اسمك ولا عنوانك، ولا يظهر إلا ما أكدتَّه أنت. اسمح هنا مرة واحدة بدل أن يُطلب منك في كل مرة.';
-
-  @override
-  String get showcaseGeneralProjects => 'مشاريعي';
-
-  @override
-  String get showcaseGeneralProjectPhotos => 'مع صور الأعمال المعتمدة';
-
-  @override
-  String get showcaseGeneralProjectPhotosHint =>
-      'بدونها يُطلب إذنك كلما طلب النشاط إظهار الصور';
-
-  @override
-  String get showcaseGeneralTraining => 'خطط التدريب';
-
-  @override
-  String get showcaseGeneralNutrition => 'خطط التغذية';
-
-  @override
-  String get showcaseGeneralFootnote =>
-      'ما تسحبه بنفسك من النشر لا يعود بهذه الموافقة؛ يُطلب إذنك من جديد. وتستطيع إيقاف أي منشور من شاشته.';
+      'موافقة واحدة تشمل الخطة كلها: تتحدّث النتائج مع كل تقرير شهري دون أن يُطلب منك شيء كل مرة. تظهر التغيّرات فقط، دون اسمك أو وزنك أو أي صورة، وتستطيع إيقافها في أي وقت.';
 }

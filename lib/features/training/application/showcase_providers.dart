@@ -10,8 +10,3 @@ final showcaseApiProvider = Provider<ShowcaseApi>((ref) => ShowcaseApi(ref.watch
 final planShowcaseProvider = FutureProvider.autoDispose.family<ShowcaseRequest?, int>((ref, planId) {
   return ref.watch(showcaseApiProvider).trainerShowcase(planId);
 });
-
-/// My general consent to have my projects / plans shown.
-final showcaseConsentProvider = FutureProvider.autoDispose<ShowcaseConsent>((ref) {
-  return ref.watch(showcaseApiProvider).consent();
-});

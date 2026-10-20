@@ -135,9 +135,9 @@ class TrainerPlanShowcaseCard extends ConsumerWidget {
     if (ok != true || title.text.trim().isEmpty) return;
 
     try {
-      final made = await ref.read(showcaseApiProvider).requestShowcase(planId, publicTitle: title.text.trim(), note: note.text.trim());
+      await ref.read(showcaseApiProvider).requestShowcase(planId, publicTitle: title.text.trim(), note: note.text.trim());
       ref.invalidate(planShowcaseProvider(planId));
-      messenger.showSnackBar(SnackBar(content: Text(made?.isLive == true ? l10n.showcaseLiveGeneral : l10n.showcaseRequestSent)));
+      messenger.showSnackBar(SnackBar(content: Text(l10n.showcaseRequestSent)));
     } catch (e) {
       messenger.showSnackBar(SnackBar(content: Text(_msg(e, l10n))));
     }
@@ -176,7 +176,7 @@ class TrainerPlanShowcaseCard extends ConsumerWidget {
               children: [
                 Text(s.publicTitle, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
                 Text(
-                  s.isLive ? (s.viaGeneral ? l10n.showcaseLiveGeneral : l10n.showcaseLive) : l10n.showcaseWaiting,
+                  s.isLive ? l10n.showcaseLive : l10n.showcaseWaiting,
                   style: TextStyle(color: s.isLive ? AppColors.success : AppColors.accentGold, fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 6),
@@ -233,7 +233,7 @@ class ClientPlanShowcaseCard extends ConsumerWidget {
             Text(request.publicTitle, style: Theme.of(context).textTheme.bodyLarge),
             if ((request.note ?? '').isNotEmpty) Text(request.note!),
             const SizedBox(height: 4),
-            Text(request.viaGeneral && request.isLive ? l10n.showcaseUnderGeneralConsent : l10n.planShowcaseConsentBody, style: Theme.of(context).textTheme.bodySmall),
+            Text(l10n.planShowcaseConsentBody, style: Theme.of(context).textTheme.bodySmall),
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,

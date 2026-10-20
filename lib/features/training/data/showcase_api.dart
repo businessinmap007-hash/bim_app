@@ -27,17 +27,4 @@ class ShowcaseApi {
       _client.post('/training-plans/$planId/showcase/${approve ? 'approve' : 'decline'}', data: {'note': ?note});
 
   Future<void> clientWithdraw(int planId) => _client.post('/training-plans/$planId/showcase/withdraw');
-
-  /// Client: «أؤكد نتيجة هذا الشهر».
-  Future<void> confirmReport(int planId, int reportId) => _client.post('/training-plans/$planId/body-reports/$reportId/confirm');
-
-  Future<ShowcaseConsent> consent() async {
-    final data = await _client.get('/showcase-consent') as Map<String, dynamic>;
-    return ShowcaseConsent.fromJson(data['consent'] as Map<String, dynamic>? ?? const {});
-  }
-
-  Future<ShowcaseConsent> updateConsent(Map<String, bool> changes) async {
-    final data = await _client.put('/showcase-consent', data: changes) as Map<String, dynamic>;
-    return ShowcaseConsent.fromJson(data['consent'] as Map<String, dynamic>? ?? const {});
-  }
 }

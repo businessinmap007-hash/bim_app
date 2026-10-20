@@ -11,17 +11,13 @@ class ShowcaseRequest {
   final bool showPhotos;
   final String? decisionNote;
 
-  /// `request` (he answered this ask) or `general` (his standing consent covered it).
-  final String? decidedVia;
-
   /// For a plan: training | nutrition | combined.
   final String? kind;
 
-  const ShowcaseRequest({required this.id, required this.status, required this.publicTitle, this.note, this.showPhotos = false, this.decisionNote, this.decidedVia, this.kind});
+  const ShowcaseRequest({required this.id, required this.status, required this.publicTitle, this.note, this.showPhotos = false, this.decisionNote, this.kind});
 
   bool get isRequested => status == 'requested';
   bool get isLive => status == 'approved';
-  bool get viaGeneral => decidedVia == 'general';
 
   /// May the business ask (again)? Not while one is waiting or live.
   bool get canAsk => !isRequested && !isLive;
@@ -34,7 +30,6 @@ class ShowcaseRequest {
           note: json['note'] as String?,
           showPhotos: json['show_photos'] as bool? ?? false,
           decisionNote: json['decision_note'] as String?,
-          decidedVia: json['decided_via'] as String?,
           kind: json['kind'] as String?,
         )
       : null;
@@ -91,13 +86,13 @@ class PostShowcase {
   }
 }
 
-/// A month the client confirmed, as the public reads it: how far each measure moved since the first confirmed reading.
+/// A month of the programme, as the public reads it: how far each measure moved since the first confirmed reading.
 class PlanShowcaseMonth {
   final String month;
-  final String? confirmedOn;
+  final String? measuredOn;
   final Map<String, double> change;
 
-  const PlanShowcaseMonth({required this.month, this.confirmedOn, required this.change});
+  const PlanShowcaseMonth({required this.month, this.measuredOn, required this.change});
 }
 
 /// The live, anonymous results of a training / nutrition plan (`plan_showcase` on PostResource): changes only — no names, no
@@ -128,27 +123,10 @@ class PlanShowcasePost {
       confirmedMonths: (json['confirmed_months'] as num?)?.toInt() ?? 0,
       months: [
         for (final m in (json['months'] as List<dynamic>? ?? const []))
-          PlanShowcaseMonth(month: (m as Map<String, dynamic>)['month'] as String? ?? '', confirmedOn: m['confirmed_on'] as String?, change: _changes(m['change'])),
+          PlanShowcaseMonth(month: (m as Map<String, dynamic>)['month'] as String? ?? '', measuredOn: m['measured_on'] as String?, change: _changes(m['change'])),
       ],
       totalChange: _changes(json['total_change']),
       updatedOn: json['updated_on'] as String?,
     );
   }
-}
-
-/// The person's general consent: what a business may show of his projects / plans without asking each time.
-class ShowcaseConsent {
-  final bool projects;
-  final bool projectPhotos;
-  final bool training;
-  final bool nutrition;
-
-  const ShowcaseConsent({this.projects = false, this.projectPhotos = false, this.training = false, this.nutrition = false});
-
-  factory ShowcaseConsent.fromJson(Map<String, dynamic> json) => ShowcaseConsent(
-    projects: json['projects'] as bool? ?? false,
-    projectPhotos: json['project_photos'] as bool? ?? false,
-    training: json['training'] as bool? ?? false,
-    nutrition: json['nutrition'] as bool? ?? false,
-  );
 }

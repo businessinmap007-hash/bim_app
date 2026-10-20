@@ -21274,13 +21274,13 @@ abstract class AppLocalizations {
   /// No description provided for @showcaseConfirmedMonths.
   ///
   /// In ar, this message translates to:
-  /// **'{n} شهرًا مؤكَّدًا'**
+  /// **'{n} أشهر موثَّقة'**
   String showcaseConfirmedMonths(int n);
 
   /// No description provided for @showcaseNoConfirmedYet.
   ///
   /// In ar, this message translates to:
-  /// **'بانتظار أول نتيجة يؤكدها العميل'**
+  /// **'بانتظار أول تقرير شهري'**
   String get showcaseNoConfirmedYet;
 
   /// No description provided for @planShowcaseAskAction.
@@ -21292,7 +21292,7 @@ abstract class AppLocalizations {
   /// No description provided for @planShowcaseAskHint.
   ///
   /// In ar, this message translates to:
-  /// **'لا يُنشر شيء قبل موافقة العميل. تظهر التغيّرات التي أكدها فقط، دون اسمه أو وزنه أو أي صورة.'**
+  /// **'لا يُنشر شيء قبل موافقة العميل، وموافقته واحدة تشمل الخطة كلها: تتحدّث النتائج مع كل تقرير شهري. تظهر التغيّرات فقط، دون اسمه أو وزنه أو أي صورة.'**
   String get planShowcaseAskHint;
 
   /// No description provided for @planShowcaseConsentTitle.
@@ -21310,86 +21310,8 @@ abstract class AppLocalizations {
   /// No description provided for @planShowcaseConsentBody.
   ///
   /// In ar, this message translates to:
-  /// **'تظهر التغيّرات التي أكدتَّها فقط، دون اسمك أو وزنك أو أي صورة.'**
+  /// **'موافقة واحدة تشمل الخطة كلها: تتحدّث النتائج مع كل تقرير شهري دون أن يُطلب منك شيء كل مرة. تظهر التغيّرات فقط، دون اسمك أو وزنك أو أي صورة، وتستطيع إيقافها في أي وقت.'**
   String get planShowcaseConsentBody;
-
-  /// No description provided for @showcaseLiveGeneral.
-  ///
-  /// In ar, this message translates to:
-  /// **'منشور الآن بموافقة العميل العامة'**
-  String get showcaseLiveGeneral;
-
-  /// No description provided for @showcaseUnderGeneralConsent.
-  ///
-  /// In ar, this message translates to:
-  /// **'منشور بموافقتك العامة. يمكنك إيقافه في أي وقت.'**
-  String get showcaseUnderGeneralConsent;
-
-  /// No description provided for @bodyReportConfirm.
-  ///
-  /// In ar, this message translates to:
-  /// **'أؤكد نتيجة هذا الشهر'**
-  String get bodyReportConfirm;
-
-  /// No description provided for @bodyReportConfirmed.
-  ///
-  /// In ar, this message translates to:
-  /// **'أكدتَّ هذه النتيجة'**
-  String get bodyReportConfirmed;
-
-  /// No description provided for @showcaseGeneralTitle.
-  ///
-  /// In ar, this message translates to:
-  /// **'موافقة النشر العامة'**
-  String get showcaseGeneralTitle;
-
-  /// No description provided for @showcaseGeneralSubtitle.
-  ///
-  /// In ar, this message translates to:
-  /// **'اسمح مرة واحدة بدل أن تُسأل في كل مرة'**
-  String get showcaseGeneralSubtitle;
-
-  /// No description provided for @showcaseGeneralIntro.
-  ///
-  /// In ar, this message translates to:
-  /// **'يمكن للنشاط أن يعرض نتائج مشاريعك وخططك كمنشور تسويقي بدون اسمك ولا عنوانك، ولا يظهر إلا ما أكدتَّه أنت. اسمح هنا مرة واحدة بدل أن يُطلب منك في كل مرة.'**
-  String get showcaseGeneralIntro;
-
-  /// No description provided for @showcaseGeneralProjects.
-  ///
-  /// In ar, this message translates to:
-  /// **'مشاريعي'**
-  String get showcaseGeneralProjects;
-
-  /// No description provided for @showcaseGeneralProjectPhotos.
-  ///
-  /// In ar, this message translates to:
-  /// **'مع صور الأعمال المعتمدة'**
-  String get showcaseGeneralProjectPhotos;
-
-  /// No description provided for @showcaseGeneralProjectPhotosHint.
-  ///
-  /// In ar, this message translates to:
-  /// **'بدونها يُطلب إذنك كلما طلب النشاط إظهار الصور'**
-  String get showcaseGeneralProjectPhotosHint;
-
-  /// No description provided for @showcaseGeneralTraining.
-  ///
-  /// In ar, this message translates to:
-  /// **'خطط التدريب'**
-  String get showcaseGeneralTraining;
-
-  /// No description provided for @showcaseGeneralNutrition.
-  ///
-  /// In ar, this message translates to:
-  /// **'خطط التغذية'**
-  String get showcaseGeneralNutrition;
-
-  /// No description provided for @showcaseGeneralFootnote.
-  ///
-  /// In ar, this message translates to:
-  /// **'ما تسحبه بنفسك من النشر لا يعود بهذه الموافقة؛ يُطلب إذنك من جديد. وتستطيع إيقاف أي منشور من شاشته.'**
-  String get showcaseGeneralFootnote;
 }
 
 class _AppLocalizationsDelegate

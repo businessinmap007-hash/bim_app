@@ -12,7 +12,6 @@ import '../../data/models/training_plan.dart';
 import '../../data/models/weekly_summary.dart';
 import '../widgets/plan_showcase_widgets.dart';
 import '../widgets/set_log_sheet.dart';
-import '../../application/showcase_providers.dart';
 import 'training_chat_screen.dart';
 import 'training_monthly_summary_screen.dart';
 import '../../../../shared/widgets/full_screen_gallery.dart';
@@ -726,7 +725,7 @@ class _BodyReportsTab extends ConsumerWidget {
           children: [
             if (ask != null) ...[ClientPlanShowcaseCard(planId: planId, request: ask), const SizedBox(height: 12)],
             if (reports.isEmpty) Text(l10n.trainingBodyReportsEmpty),
-            for (final r in reports) ...[_BodyReportCard(planId: planId, report: r), const SizedBox(height: 8)],
+            for (final r in reports) ...[_BodyReportCard(report: r), const SizedBox(height: 8)],
           ],
         );
       },
@@ -734,13 +733,12 @@ class _BodyReportsTab extends ConsumerWidget {
   }
 }
 
-class _BodyReportCard extends ConsumerWidget {
-  final int planId;
+class _BodyReportCard extends StatelessWidget {
   final BodyReport report;
-  const _BodyReportCard({required this.planId, required this.report});
+  const _BodyReportCard({required this.report});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Card(
       margin: EdgeInsets.zero,
@@ -762,25 +760,6 @@ class _BodyReportCard extends ConsumerWidget {
               const SizedBox(height: 6),
               Text(report.notes!, style: Theme.of(context).textTheme.bodySmall),
             ],
-            const SizedBox(height: 6),
-            if (report.confirmed)
-              Row(children: [const Icon(Icons.verified_outlined, size: 16, color: Colors.green), const SizedBox(width: 4), Text(l10n.bodyReportConfirmed, style: Theme.of(context).textTheme.bodySmall)])
-            else
-              Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: OutlinedButton(
-                  onPressed: () async {
-                    final messenger = ScaffoldMessenger.of(context);
-                    try {
-                      await ref.read(showcaseApiProvider).confirmReport(planId, report.id);
-                      ref.invalidate(trainingBodyReportsProvider(planId));
-                    } catch (_) {
-                      messenger.showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
-                    }
-                  },
-                  child: Text(l10n.bodyReportConfirm),
-                ),
-              ),
           ],
         ),
       ),
