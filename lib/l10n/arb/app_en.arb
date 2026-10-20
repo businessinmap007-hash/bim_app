@@ -3915,5 +3915,8 @@
   "deletionObjected": "Your objection was received and is under review. The account is not deleted before they decide.",
   "objectAction": "Object to the deletion",
   "objectTitle": "Your objection",
-  "objectHint": "Explain clearly why your account should not be deleted"
+  "objectHint": "Explain clearly why your account should not be deleted",
+  "orderPreparingBy": "Being prepared by {name}",
+  "orderPreparedBy": "Prepared by {name}",
+  "orderAcceptedBy": "Accepted by {name}"
 }

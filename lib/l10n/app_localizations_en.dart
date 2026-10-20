@@ -11410,4 +11410,19 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get objectHint =>
       'Explain clearly why your account should not be deleted';
+
+  @override
+  String orderPreparingBy(String name) {
+    return 'Being prepared by $name';
+  }
+
+  @override
+  String orderPreparedBy(String name) {
+    return 'Prepared by $name';
+  }
+
+  @override
+  String orderAcceptedBy(String name) {
+    return 'Accepted by $name';
+  }
 }

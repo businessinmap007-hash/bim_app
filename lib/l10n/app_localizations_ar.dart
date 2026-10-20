@@ -11325,4 +11325,19 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get objectHint => 'اشرح بوضوح لماذا لا يجب حذف حسابك';
+
+  @override
+  String orderPreparingBy(String name) {
+    return 'جارٍ تجهيزه من $name';
+  }
+
+  @override
+  String orderPreparedBy(String name) {
+    return 'جهّزه $name';
+  }
+
+  @override
+  String orderAcceptedBy(String name) {
+    return 'قبِله $name';
+  }
 }

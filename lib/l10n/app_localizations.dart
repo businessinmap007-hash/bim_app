@@ -20436,6 +20436,24 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'اشرح بوضوح لماذا لا يجب حذف حسابك'**
   String get objectHint;
+
+  /// No description provided for @orderPreparingBy.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ تجهيزه من {name}'**
+  String orderPreparingBy(String name);
+
+  /// No description provided for @orderPreparedBy.
+  ///
+  /// In ar, this message translates to:
+  /// **'جهّزه {name}'**
+  String orderPreparedBy(String name);
+
+  /// No description provided for @orderAcceptedBy.
+  ///
+  /// In ar, this message translates to:
+  /// **'قبِله {name}'**
+  String orderAcceptedBy(String name);
 }
 
 class _AppLocalizationsDelegate

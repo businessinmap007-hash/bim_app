@@ -153,6 +153,18 @@ class _BusinessOrdersScreenState extends ConsumerState<BusinessOrdersScreen> {
   }
 }
 
+/// «جارٍ تجهيزه من فلان» / «جهّزه فلان» / «قبِله فلان» — who is on this order; null when nobody is recorded.
+String? handlerText(AppLocalizations l10n, PlacedOrder order) {
+  if (order.status != 'pending') return null;
+
+  return switch (order.prepStatus) {
+    'preparing' when order.preparingByName != null => l10n.orderPreparingBy(order.preparingByName!),
+    'ready' when order.preparingByName != null => l10n.orderPreparedBy(order.preparingByName!),
+    'accepted' when order.acceptedByName != null => l10n.orderAcceptedBy(order.acceptedByName!),
+    _ => null,
+  };
+}
+
 class _OrderTile extends StatelessWidget {
   final PlacedOrder order;
   final VoidCallback onTap;
@@ -170,6 +182,7 @@ class _OrderTile extends StatelessWidget {
           [
             if (order.tableLabel != null) order.tableLabel!,
             l10n.businessOrdersItemsCount(order.itemsCount),
+            ?handlerText(l10n, order),
           ].join(' · '),
         ),
         trailing: Column(
@@ -743,6 +756,17 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                       child: Text(l10n.paymentConfirmMerchantButton),
                     ),
                 ],
+                if (handlerText(l10n, order) != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.person_outline, size: 18),
+                        const SizedBox(width: 6),
+                        Expanded(child: Text(handlerText(l10n, order)!)),
+                      ],
+                    ),
+                  ),
                 OrderTrustSection(
                   key: ValueKey('trust-$orderId'),
                   order: order,

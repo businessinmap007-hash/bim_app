@@ -171,6 +171,10 @@ class PlacedOrder {
   final int id;
   final String status;
   final String? prepStatus;
+
+  /// Who took the order and who is preparing it (only the business's own people get these).
+  final String? acceptedByName;
+  final String? preparingByName;
   final String fulfillmentType;
   final DateTime? pickupAt;
   final double finalTotal;
@@ -229,6 +233,8 @@ class PlacedOrder {
     required this.id,
     required this.status,
     this.prepStatus,
+    this.acceptedByName,
+    this.preparingByName,
     required this.fulfillmentType,
     this.pickupAt,
     required this.finalTotal,
@@ -301,6 +307,8 @@ class PlacedOrder {
       id: json['id'] as int,
       status: json['status'] as String? ?? 'pending',
       prepStatus: json['prep_status'] as String?,
+      acceptedByName: ((json['handled_by'] as Map<String, dynamic>?)?['accepted_by'] as Map<String, dynamic>?)?['name'] as String?,
+      preparingByName: ((json['handled_by'] as Map<String, dynamic>?)?['preparing_by'] as Map<String, dynamic>?)?['name'] as String?,
       fulfillmentType: json['fulfillment_type'] as String? ?? 'delivery',
       pickupAt: json['pickup_at'] != null ? EgyptTime.tryParse(json['pickup_at'] as String) : null,
       finalTotal: (totals['final_total'] as num?)?.toDouble() ?? 0,

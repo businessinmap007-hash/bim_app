@@ -3943,5 +3943,11 @@
   "deletionObjected": "وصل اعتراضك وهو قيد مراجعة اللجنة. لن يُحذف الحساب قبل قرارهم.",
   "objectAction": "اعتراض على الحذف",
   "objectTitle": "اعتراضك على الحذف",
-  "objectHint": "اشرح بوضوح لماذا لا يجب حذف حسابك"
+  "objectHint": "اشرح بوضوح لماذا لا يجب حذف حسابك",
+  "orderPreparingBy": "جارٍ تجهيزه من {name}",
+  "@orderPreparingBy": {"placeholders": {"name": {"type": "String"}}},
+  "orderPreparedBy": "جهّزه {name}",
+  "@orderPreparedBy": {"placeholders": {"name": {"type": "String"}}},
+  "orderAcceptedBy": "قبِله {name}",
+  "@orderAcceptedBy": {"placeholders": {"name": {"type": "String"}}}
 }
