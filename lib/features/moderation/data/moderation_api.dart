@@ -55,6 +55,10 @@ class ReportedItem {
   final int? caseId;
   final DateTime? frozenUntil;
 
+  /// An account row: how many times it was frozen already, and the count at which it is deleted.
+  final int freezeCount;
+  final int freezesToDelete;
+
   const ReportedItem({
     required this.type,
     required this.id,
@@ -73,6 +77,8 @@ class ReportedItem {
     this.handledBy,
     this.caseId,
     this.frozenUntil,
+    this.freezeCount = 0,
+    this.freezesToDelete = 5,
   });
 
   bool get isPost => type == 'post';
@@ -101,6 +107,8 @@ class ReportedItem {
     handledBy: json['handled_by'] as String?,
     caseId: ((json['case'] as Map<String, dynamic>?)?['id'] as num?)?.toInt(),
     frozenUntil: EgyptTime.tryParse(json['frozen_until'] as String?),
+    freezeCount: (json['freeze_count'] as num?)?.toInt() ?? 0,
+    freezesToDelete: (json['freezes_to_delete'] as num?)?.toInt() ?? 5,
   );
 }
 

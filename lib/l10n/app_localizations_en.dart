@@ -11256,4 +11256,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String frozenUntil(String date) {
     return 'Your account works again after $date';
   }
+
+  @override
+  String get modAccountDeleted =>
+      'The account was deleted and its balance and guarantee were confiscated.';
+
+  @override
+  String frozenWarnTitle(int count, int limit) {
+    return 'Warning: this is freeze $count of $limit';
+  }
+
+  @override
+  String frozenWarnBody(int limit) {
+    return 'If your account is frozen $limit times it is deleted and its balance and guarantee are confiscated.';
+  }
+
+  @override
+  String modFreezeConfirmCount(int count, int limit) {
+    return 'Freeze this account for three days? This is freeze $count of $limit; the account is not deleted now.';
+  }
+
+  @override
+  String modFreezeConfirmLast(int limit) {
+    return 'This is freeze $limit: the account will be deleted and its balance and guarantee confiscated for good. Continue?';
+  }
 }

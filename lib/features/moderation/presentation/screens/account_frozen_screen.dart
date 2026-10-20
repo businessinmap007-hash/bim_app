@@ -11,7 +11,17 @@ import '../../application/moderation_providers.dart';
 /// until when, the chat with the moderators (they ask what the report is about, it answers), a refresh and the way out.
 class AccountFrozenScreen extends ConsumerWidget {
   final DateTime until;
-  const AccountFrozenScreen({super.key, required this.until});
+
+  /// How many times it has been frozen (this one included) and the count that deletes it.
+  final int freezeCount;
+  final int freezesToDelete;
+
+  const AccountFrozenScreen({
+    super.key,
+    required this.until,
+    this.freezeCount = 1,
+    this.freezesToDelete = 5,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -49,6 +59,32 @@ class AccountFrozenScreen extends ConsumerWidget {
               ),
               textAlign: TextAlign.center,
               style: theme.textTheme.titleSmall,
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.error.withValues(alpha: 0.10),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: theme.colorScheme.error),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.frozenWarnTitle(freezeCount, freezesToDelete),
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w800,
+                      color: theme.colorScheme.error,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    l10n.frozenWarnBody(freezesToDelete),
+                    style: theme.textTheme.titleMedium,
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 24),
             FilledButton.icon(

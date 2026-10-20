@@ -20190,6 +20190,36 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'يعود حسابك للعمل بعد {date}'**
   String frozenUntil(String date);
+
+  /// No description provided for @modAccountDeleted.
+  ///
+  /// In ar, this message translates to:
+  /// **'حُذف الحساب وصودر رصيده وضمانه.'**
+  String get modAccountDeleted;
+
+  /// No description provided for @frozenWarnTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنبيه: هذا التجميد رقم {count} من {limit}'**
+  String frozenWarnTitle(int count, int limit);
+
+  /// No description provided for @frozenWarnBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'إذا تكرر التجميد {limit} مرات يُحذف الحساب ويُصادَر رصيده وضمانه.'**
+  String frozenWarnBody(int limit);
+
+  /// No description provided for @modFreezeConfirmCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'تجميد هذا الحساب ثلاثة أيام؟ هذا التجميد رقم {count} من {limit}، ولا يُحذف الحساب الآن.'**
+  String modFreezeConfirmCount(int count, int limit);
+
+  /// No description provided for @modFreezeConfirmLast.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا هو التجميد رقم {limit}: سيُحذف الحساب ويُصادَر رصيده وضمانه نهائيًا. هل تتابع؟'**
+  String modFreezeConfirmLast(int limit);
 }
 
 class _AppLocalizationsDelegate

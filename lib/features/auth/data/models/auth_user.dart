@@ -40,6 +40,10 @@ class AuthUser {
   /// A moderator froze the account (reports on it) until this moment: the app shows only the chat with the moderators.
   final DateTime? frozenUntil;
 
+  /// How many times it was frozen, and the count at which the account is deleted (the freeze screen warns with both).
+  final int freezeCount;
+  final int freezesToDelete;
+
   const AuthUser({
     required this.id,
     required this.name,
@@ -65,6 +69,8 @@ class AuthUser {
     this.hasSpecialtyServices = false,
     this.isModerator = false,
     this.frozenUntil,
+    this.freezeCount = 0,
+    this.freezesToDelete = 5,
   });
 
   bool get isBusiness => type == 'business';
@@ -109,5 +115,7 @@ class AuthUser {
     hasSpecialtyServices: json['specialty_services'] as bool? ?? false,
     isModerator: json['is_moderator'] as bool? ?? false,
     frozenUntil: EgyptTime.tryParse(json['frozen_until'] as String?),
+    freezeCount: (json['freeze_count'] as num?)?.toInt() ?? 0,
+    freezesToDelete: (json['freezes_to_delete'] as num?)?.toInt() ?? 5,
   );
 }

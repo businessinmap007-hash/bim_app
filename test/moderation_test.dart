@@ -119,4 +119,32 @@ void main() {
       expect(free.isFrozen, isFalse);
     },
   );
+
+  test('the freeze count and the limit that deletes the account are read', () {
+    final u = AuthUser.fromJson({
+      'id': 3,
+      'name': 'C',
+      'email': 'c@x.test',
+      'phone': '0102',
+      'type': 'client',
+      'freeze_count': 3,
+      'freezes_to_delete': 5,
+    });
+    expect(u.freezeCount, 3);
+    expect(u.freezesToDelete, 5);
+
+    final row = ReportedItem.fromJson({
+      'type': 'account',
+      'id': 1,
+      'reports': 1,
+      'state': 'live',
+      'freeze_count': 4,
+      'freezes_to_delete': 5,
+    });
+    expect(
+      row.freezeCount + 1 >= row.freezesToDelete,
+      isTrue,
+      reason: 'the next freeze is the last',
+    );
+  });
 }

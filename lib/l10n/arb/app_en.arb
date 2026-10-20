@@ -3865,5 +3865,14 @@
   "frozenRefresh": "Refresh",
   "frozenLogout": "Log out",
   "frozenUntil": "Your account works again after {date}",
-  "@frozenUntil": {"placeholders": {"date": {"type": "String"}}}
+  "@frozenUntil": {"placeholders": {"date": {"type": "String"}}},
+  "modAccountDeleted": "The account was deleted and its balance and guarantee were confiscated.",
+  "frozenWarnTitle": "Warning: this is freeze {count} of {limit}",
+  "@frozenWarnTitle": {"placeholders": {"count": {"type": "int"}, "limit": {"type": "int"}}},
+  "frozenWarnBody": "If your account is frozen {limit} times it is deleted and its balance and guarantee are confiscated.",
+  "@frozenWarnBody": {"placeholders": {"limit": {"type": "int"}}},
+  "modFreezeConfirmCount": "Freeze this account for three days? This is freeze {count} of {limit}; the account is not deleted now.",
+  "@modFreezeConfirmCount": {"placeholders": {"count": {"type": "int"}, "limit": {"type": "int"}}},
+  "modFreezeConfirmLast": "This is freeze {limit}: the account will be deleted and its balance and guarantee confiscated for good. Continue?",
+  "@modFreezeConfirmLast": {"placeholders": {"limit": {"type": "int"}}}
 }

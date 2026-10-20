@@ -3891,5 +3891,14 @@
   "frozenRefresh": "تحديث",
   "frozenLogout": "تسجيل الخروج",
   "frozenUntil": "يعود حسابك للعمل بعد {date}",
-  "@frozenUntil": {"placeholders": {"date": {"type": "String"}}}
+  "@frozenUntil": {"placeholders": {"date": {"type": "String"}}},
+  "modAccountDeleted": "حُذف الحساب وصودر رصيده وضمانه.",
+  "frozenWarnTitle": "تنبيه: هذا التجميد رقم {count} من {limit}",
+  "@frozenWarnTitle": {"placeholders": {"count": {"type": "int"}, "limit": {"type": "int"}}},
+  "frozenWarnBody": "إذا تكرر التجميد {limit} مرات يُحذف الحساب ويُصادَر رصيده وضمانه.",
+  "@frozenWarnBody": {"placeholders": {"limit": {"type": "int"}}},
+  "modFreezeConfirmCount": "تجميد هذا الحساب ثلاثة أيام؟ هذا التجميد رقم {count} من {limit}، ولا يُحذف الحساب الآن.",
+  "@modFreezeConfirmCount": {"placeholders": {"count": {"type": "int"}, "limit": {"type": "int"}}},
+  "modFreezeConfirmLast": "هذا هو التجميد رقم {limit}: سيُحذف الحساب ويُصادَر رصيده وضمانه نهائيًا. هل تتابع؟",
+  "@modFreezeConfirmLast": {"placeholders": {"limit": {"type": "int"}}}
 }

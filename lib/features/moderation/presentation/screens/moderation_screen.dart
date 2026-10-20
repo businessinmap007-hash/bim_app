@@ -181,7 +181,14 @@ class _ReportedCardState extends ConsumerState<_ReportedCard> {
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        content: Text(l10n.modFreezeConfirm),
+        content: Text(
+          widget.item.freezeCount + 1 >= widget.item.freezesToDelete
+              ? l10n.modFreezeConfirmLast(widget.item.freezesToDelete)
+              : l10n.modFreezeConfirmCount(
+                  widget.item.freezeCount + 1,
+                  widget.item.freezesToDelete,
+                ),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
@@ -195,7 +202,15 @@ class _ReportedCardState extends ConsumerState<_ReportedCard> {
       ),
     );
 
-    if (ok == true) await _run((api) => api.freezeAccount(widget.item));
+    if (ok == true) {
+      final last = widget.item.freezeCount + 1 >= widget.item.freezesToDelete;
+      await _run((api) => api.freezeAccount(widget.item));
+      if (last && mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.modAccountDeleted)));
+      }
+    }
   }
 
   Future<void> _confirmRemove() async {

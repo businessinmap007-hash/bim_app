@@ -11175,4 +11175,27 @@ class AppLocalizationsAr extends AppLocalizations {
   String frozenUntil(String date) {
     return 'يعود حسابك للعمل بعد $date';
   }
+
+  @override
+  String get modAccountDeleted => 'حُذف الحساب وصودر رصيده وضمانه.';
+
+  @override
+  String frozenWarnTitle(int count, int limit) {
+    return 'تنبيه: هذا التجميد رقم $count من $limit';
+  }
+
+  @override
+  String frozenWarnBody(int limit) {
+    return 'إذا تكرر التجميد $limit مرات يُحذف الحساب ويُصادَر رصيده وضمانه.';
+  }
+
+  @override
+  String modFreezeConfirmCount(int count, int limit) {
+    return 'تجميد هذا الحساب ثلاثة أيام؟ هذا التجميد رقم $count من $limit، ولا يُحذف الحساب الآن.';
+  }
+
+  @override
+  String modFreezeConfirmLast(int limit) {
+    return 'هذا هو التجميد رقم $limit: سيُحذف الحساب ويُصادَر رصيده وضمانه نهائيًا. هل تتابع؟';
+  }
 }

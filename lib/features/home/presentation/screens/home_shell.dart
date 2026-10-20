@@ -129,7 +129,11 @@ class _HomeShellState extends ConsumerState<HomeShell> with WidgetsBindingObserv
     final authState = ref.watch(authControllerProvider);
     // A moderator froze this account (reports on it): it keeps only the chat with the moderators until the freeze ends.
     if (authState is AuthSignedIn && authState.user.isFrozen) {
-      return AccountFrozenScreen(until: authState.user.frozenUntil!);
+      return AccountFrozenScreen(
+        until: authState.user.frozenUntil!,
+        freezeCount: authState.user.freezeCount,
+        freezesToDelete: authState.user.freezesToDelete,
+      );
     }
     final isBusiness = authState is AuthSignedIn && authState.user.isBusiness;
     final avatarUrl = authState is AuthSignedIn
