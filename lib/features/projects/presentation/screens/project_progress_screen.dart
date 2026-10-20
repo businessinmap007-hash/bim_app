@@ -256,12 +256,31 @@ class _AgreementSection extends ConsumerWidget {
 
     if (a == null) return const SizedBox.shrink();
 
+    final req = block.requirement;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        if (req != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Text(
+              req.customerOk == true ? l10n.guaranteeRequirementMet(req.name) : l10n.guaranteeRequirementNotMet(req.name),
+              style: TextStyle(color: req.customerOk == true ? AppColors.success : AppColors.error, fontWeight: FontWeight.w700),
+            ),
+          ),
         AgreementSummary(
           agreement: a,
           actions: [
+            if (customer && a.isAgreed)
+              OutlinedButton(
+                onPressed: () async {
+                  final choice = await askShift(context, title: l10n.shiftPlanTitle, needReason: true);
+                  if (choice == null || !context.mounted) return;
+                  await _decide(context, ref, operationType, operationId, () => api.requestShift(operationType, operationId, days: choice.days, newStart: choice.newStart, reason: choice.reason));
+                },
+                child: Text(l10n.shiftAskPostpone),
+              ),
             if (customer && a.isProposed) ...[
               FilledButton(
                 onPressed: () => _decide(context, ref, operationType, operationId, () => api.agreeToPlan(operationType, operationId)),
@@ -283,7 +302,7 @@ class _AgreementSection extends ConsumerWidget {
           const SizedBox(height: 8),
           ChangeRequestCard(
             request: r,
-            actions: customer
+            actions: customer && r.requestedByBusiness
                 ? [
                     FilledButton(
                       onPressed: () => _decide(context, ref, operationType, operationId, () => api.decideRequest(operationType, operationId, r.id, approve: true)),

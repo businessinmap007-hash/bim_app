@@ -28,6 +28,7 @@ class QuantityItem {
 class AgreementInfo {
   final int version;
   final String status; // proposed | agreed | superseded | rejected
+  final String? startsOn;
   final String dueOn;
   final String graceUntil;
   final DateTime? businessAgreedAt;
@@ -38,6 +39,7 @@ class AgreementInfo {
   const AgreementInfo({
     required this.version,
     required this.status,
+    this.startsOn,
     required this.dueOn,
     required this.graceUntil,
     this.businessAgreedAt,
@@ -52,6 +54,7 @@ class AgreementInfo {
   factory AgreementInfo.fromJson(Map<String, dynamic> json) => AgreementInfo(
     version: (json['version'] as num).toInt(),
     status: json['status'] as String? ?? 'proposed',
+    startsOn: json['starts_on'] as String?,
     dueOn: json['due_on'] as String? ?? '',
     graceUntil: json['grace_until'] as String? ?? '',
     businessAgreedAt: DateTime.tryParse(json['business_agreed_at'] as String? ?? '')?.toLocal(),
@@ -64,20 +67,23 @@ class AgreementInfo {
 /// More time or a change of scope, waiting for (or answered by) the customer.
 class ChangeRequestInfo {
   final int id;
-  final String type; // extension | scope
+  final String type; // extension | scope | shift
+  final bool requestedByBusiness;
   final Map<String, dynamic> payload;
   final String? note;
   final String status; // pending | approved | rejected
   final String? decisionNote;
 
-  const ChangeRequestInfo({required this.id, required this.type, required this.payload, this.note, required this.status, this.decisionNote});
+  const ChangeRequestInfo({required this.id, required this.type, this.requestedByBusiness = true, required this.payload, this.note, required this.status, this.decisionNote});
 
   bool get isPending => status == 'pending';
   bool get isExtension => type == 'extension';
+  bool get isShift => type == 'shift';
 
   factory ChangeRequestInfo.fromJson(Map<String, dynamic> json) => ChangeRequestInfo(
     id: (json['id'] as num).toInt(),
     type: json['type'] as String? ?? 'scope',
+    requestedByBusiness: json['requested_by_business'] as bool? ?? true,
     payload: (json['payload'] as Map<String, dynamic>?) ?? const {},
     note: json['note'] as String?,
     status: json['status'] as String? ?? 'pending',
@@ -110,6 +116,21 @@ class QuantityLogEntry {
   );
 }
 
+/// The guarantee level the business asks of the customer before work begins, and whether he already holds it.
+class GuaranteeRequirement {
+  final String code;
+  final String name;
+  final bool? customerOk;
+
+  const GuaranteeRequirement({required this.code, required this.name, this.customerOk});
+
+  factory GuaranteeRequirement.fromJson(Map<String, dynamic> json) => GuaranteeRequirement(
+    code: json['code'] as String? ?? '',
+    name: json['name'] as String? ?? '',
+    customerOk: json['customer_ok'] as bool?,
+  );
+}
+
 /// What both sides read about the agreement of a project: the version in force (or waiting), the requests, the history.
 class AgreementBlock {
   final AgreementInfo? agreement;
@@ -117,8 +138,9 @@ class AgreementBlock {
   final int versions;
   final List<ChangeRequestInfo> requests;
   final List<QuantityLogEntry> log;
+  final GuaranteeRequirement? requirement;
 
-  const AgreementBlock({this.agreement, this.agreed = false, this.versions = 0, this.requests = const [], this.log = const []});
+  const AgreementBlock({this.agreement, this.agreed = false, this.versions = 0, this.requests = const [], this.log = const [], this.requirement});
 
   List<ChangeRequestInfo> get pendingRequests => requests.where((r) => r.isPending).toList();
 
@@ -129,6 +151,7 @@ class AgreementBlock {
     requests: [
       for (final r in (json['change_requests'] as List<dynamic>? ?? const [])) ChangeRequestInfo.fromJson(r as Map<String, dynamic>),
     ],
+    requirement: json['guarantee_requirement'] is Map<String, dynamic> ? GuaranteeRequirement.fromJson(json['guarantee_requirement'] as Map<String, dynamic>) : null,
     log: [
       for (final l in (json['quantity_log'] as List<dynamic>? ?? const [])) QuantityLogEntry.fromJson(l as Map<String, dynamic>),
     ],

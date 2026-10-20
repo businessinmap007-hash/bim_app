@@ -9,6 +9,7 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/projects_providers.dart';
 import '../widgets/business_project_panels.dart';
+import '../widgets/project_agreement_widgets.dart';
 import '../../data/models/project_agreement.dart';
 import '../../data/models/project_timeline.dart';
 import '../../../../core/network/api_exception.dart';
@@ -579,6 +580,33 @@ class _MainStageCard extends ConsumerWidget {
                     }
                   },
                   child: Text(l10n.startRequest),
+                ),
+              ),
+            ),
+          if (stage.status != 'done')
+            Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: TextButton.icon(
+                  icon: const Icon(Icons.event_repeat_outlined, size: 18),
+                  label: Text(l10n.shiftStage),
+                  onPressed: () async {
+                    final messenger = ScaffoldMessenger.of(context);
+                    final choice = await askShift(context, title: l10n.shiftStageTitle(stage.title), needReason: agreed);
+                    if (choice == null || !context.mounted) return;
+                    try {
+                      final sent = await ref.read(projectDetailControllerProvider(projectId).notifier).shift(
+                        taskId: stage.id,
+                        days: choice.days,
+                        newStart: choice.newStart,
+                        reason: choice.reason.isEmpty ? null : choice.reason,
+                      );
+                      messenger.showSnackBar(SnackBar(content: Text(sent ? l10n.shiftRequestSent : l10n.shiftApplied)));
+                    } catch (e) {
+                      messenger.showSnackBar(SnackBar(content: Text(e is ApiException && e.message.isNotEmpty ? e.message : l10n.commonSomethingWentWrong)));
+                    }
+                  },
                 ),
               ),
             ),

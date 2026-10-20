@@ -11631,4 +11631,88 @@ class AppLocalizationsAr extends AppLocalizations {
   String buildingGenerated(int n) {
     return 'تم توليد $n عملًا';
   }
+
+  @override
+  String get agreementProposeStart => 'بدء التنفيذ';
+
+  @override
+  String get agreementProposeStartHint =>
+      'تاريخ مستقبلي؛ المدة حتى ذلك الموعد للتفاوض';
+
+  @override
+  String get agreementRequireGuarantee => 'ضمان العميل المطلوب قبل بدء العمل';
+
+  @override
+  String get agreementNoGuarantee => 'بدون شرط';
+
+  @override
+  String get guaranteeBronze => 'برونزي فأعلى';
+
+  @override
+  String get guaranteeSilver => 'فضي فأعلى';
+
+  @override
+  String get guaranteeGold => 'ذهبي فأعلى';
+
+  @override
+  String guaranteeRequired(String level) {
+    return 'يشترط النشاط ضمانًا $level على الأقل في حساب العميل';
+  }
+
+  @override
+  String guaranteeRequirementMet(String level) {
+    return 'ضمانك يستوفي شرط النشاط: $level فأعلى';
+  }
+
+  @override
+  String guaranteeRequirementNotMet(String level) {
+    return 'يشترط النشاط ضمانًا $level فأعلى في حسابك قبل الاتفاق وبدء العمل';
+  }
+
+  @override
+  String get shiftPlan => 'ترحيل الخطة';
+
+  @override
+  String get shiftStage => 'ترحيل هذه المرحلة';
+
+  @override
+  String get shiftPlanTitle => 'ترحيل الخطة';
+
+  @override
+  String shiftStageTitle(String stage) {
+    return 'ترحيل المرحلة: $stage';
+  }
+
+  @override
+  String get shiftWeek => 'أسبوع';
+
+  @override
+  String get shiftTwoWeeks => 'أسبوعان';
+
+  @override
+  String get shiftMonth => 'شهر';
+
+  @override
+  String get shiftPickDate => 'اختيار تاريخ بدء';
+
+  @override
+  String get shiftApplied => 'تم ترحيل المواعيد';
+
+  @override
+  String get shiftRequestSent =>
+      'أُرسل طلب الترحيل للطرف الآخر ولن يُطبَّق قبل موافقته';
+
+  @override
+  String get shiftAskPostpone => 'طلب تأجيل';
+
+  @override
+  String get shiftScopePlan => 'الخطة كلها';
+
+  @override
+  String get shiftScopeStage => 'مرحلة';
+
+  @override
+  String requestShiftLine(int days, String scope) {
+    return 'ترحيل $scope $days يومًا';
+  }
 }

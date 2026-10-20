@@ -207,8 +207,20 @@ class ProjectDetailController extends StateNotifier<ProjectDetailState> {
     await load();
   }
 
-  Future<void> proposeAgreement({required DateTime dueOn, required int graceDays}) async {
-    await _api.proposeAgreement(projectId, dueOn: dueOn, graceDays: graceDays);
+  Future<void> proposeAgreement({required DateTime startsOn, required DateTime dueOn, required int graceDays, String? requiredGuarantee}) async {
+    await _api.proposeAgreement(projectId, startsOn: startsOn, dueOn: dueOn, graceDays: graceDays, requiredGuarantee: requiredGuarantee);
+    await load();
+  }
+
+  /// Postpone the plan (taskId null) or one stage. Returns true when it was only SENT to the customer.
+  Future<bool> shift({int? taskId, int? days, DateTime? newStart, String? reason}) async {
+    final sent = await _api.shift(projectId, taskId: taskId, days: days, newStart: newStart, reason: reason);
+    await load();
+    return sent;
+  }
+
+  Future<void> decideShift(int requestId, {required bool approve, String? note}) async {
+    await _api.decideShift(projectId, requestId, approve: approve, note: note);
     await load();
   }
 

@@ -26,7 +26,9 @@ class BusinessAgreementPanel extends ConsumerWidget {
   Future<void> _propose(BuildContext context, WidgetRef ref) async {
     final l10n = AppLocalizations.of(context)!;
     final messenger = ScaffoldMessenger.of(context);
+    DateTime? starts = project.startsOn != null && project.startsOn!.isAfter(DateTime.now()) ? project.startsOn : DateTime.now().add(const Duration(days: 30));
     DateTime? due = project.dueOn;
+    String? guarantee;
     final graceController = TextEditingController(text: '30');
 
     final ok = await showDialog<bool>(
@@ -37,6 +39,16 @@ class BusinessAgreementPanel extends ConsumerWidget {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(l10n.agreementProposeStart),
+                subtitle: Text(l10n.agreementProposeStartHint),
+                trailing: Text(starts == null ? '—' : projectDate(ctx, starts!.toIso8601String())),
+                onTap: () async {
+                  final picked = await showDatePicker(context: ctx, initialDate: starts ?? DateTime.now(), firstDate: DateTime.now(), lastDate: DateTime.now().add(const Duration(days: 365 * 3)));
+                  if (picked != null) setState(() => starts = picked);
+                },
+              ),
               ListTile(
                 contentPadding: EdgeInsets.zero,
                 title: Text(l10n.agreementProposeDue),
@@ -52,19 +64,48 @@ class BusinessAgreementPanel extends ConsumerWidget {
                 },
               ),
               TextField(controller: graceController, keyboardType: TextInputType.number, decoration: InputDecoration(labelText: l10n.agreementProposeGrace)),
+              const SizedBox(height: 12),
+              Align(alignment: AlignmentDirectional.centerStart, child: Text(l10n.agreementRequireGuarantee, style: Theme.of(ctx).textTheme.titleSmall)),
+              Wrap(
+                spacing: 8,
+                children: [
+                  ChoiceChip(label: Text(l10n.agreementNoGuarantee), selected: guarantee == null, onSelected: (_) => setState(() => guarantee = null)),
+                  for (final (code, label) in [('bronze', l10n.guaranteeBronze), ('silver', l10n.guaranteeSilver), ('gold', l10n.guaranteeGold)])
+                    ChoiceChip(label: Text(label), selected: guarantee == code, onSelected: (_) => setState(() => guarantee = code)),
+                ],
+              ),
             ],
           ),
           actions: [
             TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: Text(l10n.commonCancel)),
-            FilledButton(onPressed: due == null ? null : () => Navigator.of(ctx).pop(true), child: Text(l10n.commonSubmit)),
+            FilledButton(onPressed: due == null || starts == null ? null : () => Navigator.of(ctx).pop(true), child: Text(l10n.commonSubmit)),
           ],
         ),
       ),
     );
-    if (ok != true || due == null || !context.mounted) return;
+    if (ok != true || due == null || starts == null || !context.mounted) return;
 
     try {
-      await ref.read(projectDetailControllerProvider(projectId).notifier).proposeAgreement(dueOn: due!, graceDays: int.tryParse(graceController.text.trim()) ?? 0);
+      await ref.read(projectDetailControllerProvider(projectId).notifier).proposeAgreement(
+        startsOn: starts!,
+        dueOn: due!,
+        graceDays: int.tryParse(graceController.text.trim()) ?? 0,
+        requiredGuarantee: guarantee,
+      );
+    } catch (e) {
+      _say(messenger, _msg(e, l10n));
+    }
+  }
+
+  Future<void> _shift(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+    final choice = await askShift(context, title: l10n.shiftPlanTitle, needReason: block.agreed);
+    if (choice == null || !context.mounted) return;
+
+    try {
+      final sent = await ref.read(projectDetailControllerProvider(projectId).notifier).shift(days: choice.days, newStart: choice.newStart, reason: choice.reason.isEmpty ? null : choice.reason);
+      _say(messenger, sent ? l10n.shiftRequestSent : l10n.shiftApplied);
     } catch (e) {
       _say(messenger, _msg(e, l10n));
     }
@@ -115,6 +156,8 @@ class BusinessAgreementPanel extends ConsumerWidget {
       );
     }
 
+    final requirement = block.requirement;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -122,13 +165,34 @@ class BusinessAgreementPanel extends ConsumerWidget {
           agreement: a,
           actions: [
             if (a.isAgreed) OutlinedButton(onPressed: () => _extend(context, ref), child: Text(l10n.extensionRequest)),
+            if (a.isAgreed) OutlinedButton(onPressed: () => _shift(context, ref), child: Text(l10n.shiftPlan)),
             if (a.isProposed) Text(l10n.agreementWaitingCustomer, style: Theme.of(context).textTheme.bodySmall),
             OutlinedButton(onPressed: () => showQuantityLog(context, block.log), child: Text(l10n.quantityLogTitle)),
           ],
         ),
+        if (requirement != null) ...[
+          const SizedBox(height: 6),
+          Text(l10n.guaranteeRequired(requirement.name), style: Theme.of(context).textTheme.bodySmall),
+        ],
         for (final r in block.requests.where((r) => r.isPending || r.status == 'rejected').take(5)) ...[
           const SizedBox(height: 8),
-          ChangeRequestCard(request: r),
+          ChangeRequestCard(
+            request: r,
+            // a postponement the CUSTOMER asked for is answered by the business
+            actions: r.isShift && !r.requestedByBusiness
+                ? [
+                    FilledButton(onPressed: () => ref.read(projectDetailControllerProvider(projectId).notifier).decideShift(r.id, approve: true), child: Text(l10n.requestApprove)),
+                    OutlinedButton(
+                      onPressed: () async {
+                        final note = await askText(context, title: l10n.requestReject, hint: l10n.agreementDeclineHint);
+                        if (note == null || !context.mounted) return;
+                        await ref.read(projectDetailControllerProvider(projectId).notifier).decideShift(r.id, approve: false, note: note);
+                      },
+                      child: Text(l10n.requestReject),
+                    ),
+                  ]
+                : const [],
+          ),
         ],
       ],
     );

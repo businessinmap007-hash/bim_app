@@ -11719,4 +11719,89 @@ class AppLocalizationsEn extends AppLocalizations {
   String buildingGenerated(int n) {
     return '$n works were generated';
   }
+
+  @override
+  String get agreementProposeStart => 'Execution starts';
+
+  @override
+  String get agreementProposeStartHint =>
+      'A future date; the time until then is the negotiation';
+
+  @override
+  String get agreementRequireGuarantee =>
+      'Guarantee required of the customer before work begins';
+
+  @override
+  String get agreementNoGuarantee => 'No condition';
+
+  @override
+  String get guaranteeBronze => 'Bronze or higher';
+
+  @override
+  String get guaranteeSilver => 'Silver or higher';
+
+  @override
+  String get guaranteeGold => 'Gold or higher';
+
+  @override
+  String guaranteeRequired(String level) {
+    return 'The business requires a $level guarantee at least on the customer\'s account';
+  }
+
+  @override
+  String guaranteeRequirementMet(String level) {
+    return 'Your guarantee meets the business\'s condition: $level or higher';
+  }
+
+  @override
+  String guaranteeRequirementNotMet(String level) {
+    return 'The business requires a $level guarantee or higher on your account before agreeing and starting work';
+  }
+
+  @override
+  String get shiftPlan => 'Postpone the plan';
+
+  @override
+  String get shiftStage => 'Postpone this stage';
+
+  @override
+  String get shiftPlanTitle => 'Postpone the plan';
+
+  @override
+  String shiftStageTitle(String stage) {
+    return 'Postpone the stage: $stage';
+  }
+
+  @override
+  String get shiftWeek => 'A week';
+
+  @override
+  String get shiftTwoWeeks => 'Two weeks';
+
+  @override
+  String get shiftMonth => 'A month';
+
+  @override
+  String get shiftPickDate => 'Pick a start date';
+
+  @override
+  String get shiftApplied => 'The dates were postponed';
+
+  @override
+  String get shiftRequestSent =>
+      'The request was sent to the other side and nothing changes before they approve';
+
+  @override
+  String get shiftAskPostpone => 'Ask to postpone';
+
+  @override
+  String get shiftScopePlan => 'the whole plan';
+
+  @override
+  String get shiftScopeStage => 'a stage';
+
+  @override
+  String requestShiftLine(int days, String scope) {
+    return 'Postpone $scope by $days days';
+  }
 }

@@ -25,6 +25,18 @@ class CustomerProjectApi {
 
   Future<void> agreeToPlan(String type, int id) => _client.post('${_base(type, id)}/agreement/agree');
 
+  /// The customer asks to postpone the plan ([taskId] null) or a stage; the business answers.
+  Future<void> requestShift(String type, int id, {int? taskId, int? days, DateTime? newStart, required String reason}) => _client.post(
+    '${_base(type, id)}/shift-requests',
+    data: {
+      'scope': taskId == null ? 'plan' : 'stage',
+      'task_id': ?taskId,
+      'days': ?days,
+      if (newStart != null) 'new_start': '${newStart.year.toString().padLeft(4, '0')}-${newStart.month.toString().padLeft(2, '0')}-${newStart.day.toString().padLeft(2, '0')}',
+      'reason': reason,
+    },
+  );
+
   Future<void> declinePlan(String type, int id, String note) => _client.post('${_base(type, id)}/agreement/decline', data: {'note': note});
 
   Future<void> decideRequest(String type, int id, int requestId, {required bool approve, String? note}) =>

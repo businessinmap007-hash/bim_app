@@ -20958,6 +20958,150 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تم توليد {n} عملًا'**
   String buildingGenerated(int n);
+
+  /// No description provided for @agreementProposeStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدء التنفيذ'**
+  String get agreementProposeStart;
+
+  /// No description provided for @agreementProposeStartHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'تاريخ مستقبلي؛ المدة حتى ذلك الموعد للتفاوض'**
+  String get agreementProposeStartHint;
+
+  /// No description provided for @agreementRequireGuarantee.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضمان العميل المطلوب قبل بدء العمل'**
+  String get agreementRequireGuarantee;
+
+  /// No description provided for @agreementNoGuarantee.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون شرط'**
+  String get agreementNoGuarantee;
+
+  /// No description provided for @guaranteeBronze.
+  ///
+  /// In ar, this message translates to:
+  /// **'برونزي فأعلى'**
+  String get guaranteeBronze;
+
+  /// No description provided for @guaranteeSilver.
+  ///
+  /// In ar, this message translates to:
+  /// **'فضي فأعلى'**
+  String get guaranteeSilver;
+
+  /// No description provided for @guaranteeGold.
+  ///
+  /// In ar, this message translates to:
+  /// **'ذهبي فأعلى'**
+  String get guaranteeGold;
+
+  /// No description provided for @guaranteeRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'يشترط النشاط ضمانًا {level} على الأقل في حساب العميل'**
+  String guaranteeRequired(String level);
+
+  /// No description provided for @guaranteeRequirementMet.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضمانك يستوفي شرط النشاط: {level} فأعلى'**
+  String guaranteeRequirementMet(String level);
+
+  /// No description provided for @guaranteeRequirementNotMet.
+  ///
+  /// In ar, this message translates to:
+  /// **'يشترط النشاط ضمانًا {level} فأعلى في حسابك قبل الاتفاق وبدء العمل'**
+  String guaranteeRequirementNotMet(String level);
+
+  /// No description provided for @shiftPlan.
+  ///
+  /// In ar, this message translates to:
+  /// **'ترحيل الخطة'**
+  String get shiftPlan;
+
+  /// No description provided for @shiftStage.
+  ///
+  /// In ar, this message translates to:
+  /// **'ترحيل هذه المرحلة'**
+  String get shiftStage;
+
+  /// No description provided for @shiftPlanTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ترحيل الخطة'**
+  String get shiftPlanTitle;
+
+  /// No description provided for @shiftStageTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ترحيل المرحلة: {stage}'**
+  String shiftStageTitle(String stage);
+
+  /// No description provided for @shiftWeek.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسبوع'**
+  String get shiftWeek;
+
+  /// No description provided for @shiftTwoWeeks.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسبوعان'**
+  String get shiftTwoWeeks;
+
+  /// No description provided for @shiftMonth.
+  ///
+  /// In ar, this message translates to:
+  /// **'شهر'**
+  String get shiftMonth;
+
+  /// No description provided for @shiftPickDate.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيار تاريخ بدء'**
+  String get shiftPickDate;
+
+  /// No description provided for @shiftApplied.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم ترحيل المواعيد'**
+  String get shiftApplied;
+
+  /// No description provided for @shiftRequestSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُرسل طلب الترحيل للطرف الآخر ولن يُطبَّق قبل موافقته'**
+  String get shiftRequestSent;
+
+  /// No description provided for @shiftAskPostpone.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب تأجيل'**
+  String get shiftAskPostpone;
+
+  /// No description provided for @shiftScopePlan.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخطة كلها'**
+  String get shiftScopePlan;
+
+  /// No description provided for @shiftScopeStage.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرحلة'**
+  String get shiftScopeStage;
+
+  /// No description provided for @requestShiftLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'ترحيل {scope} {days} يومًا'**
+  String requestShiftLine(int days, String scope);
 }
 
 class _AppLocalizationsDelegate

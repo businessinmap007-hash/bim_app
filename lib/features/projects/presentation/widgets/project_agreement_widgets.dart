@@ -82,6 +82,8 @@ class ChangeRequestCard extends StatelessWidget {
 
     final line = request.isExtension
         ? l10n.requestExtensionLine((p['extra_days'] as num?)?.toInt() ?? 0, projectDate(context, p['grace_until'] as String?))
+        : request.isShift
+        ? l10n.requestShiftLine((p['days'] as num?)?.toInt() ?? 0, p['scope'] == 'stage' ? l10n.shiftScopeStage : l10n.shiftScopePlan)
         : switch (p['op']) {
             'planned' => l10n.requestScopePlanned('${p['from']}', '${p['to']}'),
             'add' => l10n.requestScopeAdd('${p['name']}', '${p['planned']}'),
@@ -199,6 +201,68 @@ String _fieldLabel(AppLocalizations l10n, String field) => switch (field) {
   'unit' => l10n.itemUnit,
   _ => field,
 };
+
+/// What the person chose when postponing: a number of days (a week = 7, a month = 30) or a later start date, and a reason.
+class ShiftChoice {
+  final int? days;
+  final DateTime? newStart;
+  final String reason;
+
+  const ShiftChoice({this.days, this.newStart, this.reason = ''});
+}
+
+/// «ترحيل»: a week, two weeks, a month, or a chosen start date — and why. [needReason] once the plan is agreed (the other side
+/// reads it); [title] says what is being moved. Returns null when cancelled.
+Future<ShiftChoice?> askShift(BuildContext context, {required String title, required bool needReason}) {
+  final l10n = AppLocalizations.of(context)!;
+  final reason = TextEditingController();
+  int? days = 7;
+  DateTime? picked;
+
+  return showDialog<ShiftChoice>(
+    context: context,
+    builder: (ctx) => StatefulBuilder(
+      builder: (ctx, setState) => AlertDialog(
+        title: Text(title),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Wrap(
+                spacing: 8,
+                children: [
+                  for (final (label, d) in [(l10n.shiftWeek, 7), (l10n.shiftTwoWeeks, 14), (l10n.shiftMonth, 30)])
+                    ChoiceChip(label: Text(label), selected: picked == null && days == d, onSelected: (_) => setState(() { days = d; picked = null; })),
+                  ChoiceChip(
+                    label: Text(picked == null ? l10n.shiftPickDate : projectDate(ctx, picked!.toIso8601String())),
+                    selected: picked != null,
+                    onSelected: (_) async {
+                      final d = await showDatePicker(context: ctx, initialDate: DateTime.now().add(const Duration(days: 7)), firstDate: DateTime.now(), lastDate: DateTime.now().add(const Duration(days: 365 * 3)));
+                      if (d != null) setState(() { picked = d; days = null; });
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              TextField(controller: reason, minLines: 2, maxLines: 4, decoration: InputDecoration(labelText: l10n.extensionReason)),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(ctx).pop(), child: Text(l10n.commonCancel)),
+          FilledButton(
+            onPressed: () {
+              if (needReason && reason.text.trim().isEmpty) return;
+              Navigator.of(ctx).pop(ShiftChoice(days: days, newStart: picked, reason: reason.text.trim()));
+            },
+            child: Text(l10n.commonSubmit),
+          ),
+        ],
+      ),
+    ),
+  );
+}
 
 /// Asks for a reason (or a number of days and a reason) in a small dialog; returns null when cancelled.
 Future<String?> askText(BuildContext context, {required String title, required String hint, bool required = true, int minLines = 2}) {

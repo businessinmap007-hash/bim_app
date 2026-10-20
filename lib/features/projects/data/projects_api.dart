@@ -147,8 +147,23 @@ class ProjectsApi {
     data: {'zone': zone, 'weight': ?weight, 'details': details},
   );
 
-  Future<void> proposeAgreement(int projectId, {required DateTime dueOn, required int graceDays}) =>
-      _client.post('/business/projects/$projectId/agreement', data: {'due_on': _dateOnly(dueOn), 'grace_days': graceDays});
+  Future<void> proposeAgreement(int projectId, {required DateTime startsOn, required DateTime dueOn, required int graceDays, String? requiredGuarantee}) =>
+      _client.post(
+        '/business/projects/$projectId/agreement',
+        data: {'starts_on': _dateOnly(startsOn), 'due_on': _dateOnly(dueOn), 'grace_days': graceDays, 'required_guarantee': ?requiredGuarantee},
+      );
+
+  /// Postpone the plan ([taskId] null) or one stage by [days] or to [newStart]. After the agreement it is only a request: returns true when SENT.
+  Future<bool> shift(int projectId, {int? taskId, int? days, DateTime? newStart, String? reason}) async {
+    final res = await _client.post(
+      '/business/projects/$projectId/shift',
+      data: {'scope': taskId == null ? 'plan' : 'stage', 'task_id': ?taskId, 'days': ?days, if (newStart != null) 'new_start': _dateOnly(newStart), 'reason': ?reason},
+    );
+    return res is Map<String, dynamic> && res['agreed'] == true;
+  }
+
+  Future<void> decideShift(int projectId, int requestId, {required bool approve, String? note}) =>
+      _client.post('/business/projects/$projectId/change-requests/$requestId/${approve ? 'approve' : 'reject'}', data: {'note': ?note});
 
   Future<void> requestExtension(int projectId, {required int extraDays, required String reason}) =>
       _client.post('/business/projects/$projectId/extension-requests', data: {'extra_days': extraDays, 'reason': reason});
