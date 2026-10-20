@@ -11125,4 +11125,54 @@ class AppLocalizationsAr extends AppLocalizations {
   String olGuaranteeFrozen(String amount) {
     return 'ضمانك مجمّد ($amount جنيه) طوال مدة الإعلان، ويُفرَج عنه عند البيع أو الإنهاء.';
   }
+
+  @override
+  String get modTypeAccount => 'حساب';
+
+  @override
+  String get modStateFrozen => 'مجمَّد';
+
+  @override
+  String get modOpenChat => 'فتح محادثة';
+
+  @override
+  String get modFreeze => 'تجميد 3 أيام';
+
+  @override
+  String get modUnfreeze => 'رفع التجميد';
+
+  @override
+  String get modFreezeConfirm =>
+      'تجميد هذا الحساب ثلاثة أيام؟ لا يُحذف الحساب، ويبقى له التواصل مع المشرفين فقط.';
+
+  @override
+  String get frozenTitle => 'الحساب مجمَّد';
+
+  @override
+  String get frozenHeadline => 'جُمِّد حسابك مؤقتًا';
+
+  @override
+  String get frozenBody =>
+      'وصلتنا بلاغات عن حسابك فجمّده المشرف ثلاثة أيام. يمكنك التواصل مع المشرفين ليتأكدوا من السبب.';
+
+  @override
+  String get frozenChat => 'محادثة المشرفين';
+
+  @override
+  String get frozenChatTitle => 'المشرفون';
+
+  @override
+  String get frozenNoChatYet =>
+      'سيفتح المشرف محادثة معك لتوضيح السبب، وتظهر هنا.';
+
+  @override
+  String get frozenRefresh => 'تحديث';
+
+  @override
+  String get frozenLogout => 'تسجيل الخروج';
+
+  @override
+  String frozenUntil(String date) {
+    return 'يعود حسابك للعمل بعد $date';
+  }
 }

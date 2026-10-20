@@ -3849,5 +3849,21 @@
   "modViolationTitle": "Which rule did the listing break?",
   "modConfiscate": "Confiscate the deposit or guarantee",
   "olGuaranteeFrozen": "Your guarantee is frozen ({amount} EGP) for the life of the listing and released when you sell or end it.",
-  "@olGuaranteeFrozen": {"placeholders": {"amount": {"type": "String"}}}
+  "@olGuaranteeFrozen": {"placeholders": {"amount": {"type": "String"}}},
+  "modTypeAccount": "Account",
+  "modStateFrozen": "Frozen",
+  "modOpenChat": "Open a chat",
+  "modFreeze": "Freeze 3 days",
+  "modUnfreeze": "Lift the freeze",
+  "modFreezeConfirm": "Freeze this account for three days? It is not deleted, and it can only talk to the moderators.",
+  "frozenTitle": "Account frozen",
+  "frozenHeadline": "Your account is temporarily frozen",
+  "frozenBody": "We received reports about your account and a moderator froze it for three days. You can talk to the moderators so they can check what happened.",
+  "frozenChat": "Chat with the moderators",
+  "frozenChatTitle": "Moderators",
+  "frozenNoChatYet": "A moderator will open a chat with you to clarify the reason; it will appear here.",
+  "frozenRefresh": "Refresh",
+  "frozenLogout": "Log out",
+  "frozenUntil": "Your account works again after {date}",
+  "@frozenUntil": {"placeholders": {"date": {"type": "String"}}}
 }

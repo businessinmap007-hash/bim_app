@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/time/local_format.dart';
+import '../../../chat/presentation/screens/operation_chat_screen.dart';
 import '../../application/moderation_providers.dart';
 import '../../data/moderation_api.dart';
 
@@ -146,6 +148,56 @@ class _ReportedCardState extends ConsumerState<_ReportedCard> {
     }
   }
 
+  /// Open the chat with the reported account (this also records the moderator as handling it) and go into it.
+  Future<void> _openAccountChat() async {
+    final messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+    final item = widget.item;
+    setState(() => _busy = true);
+
+    try {
+      final caseId = await ref.read(moderationApiProvider).accountChat(item);
+      if (!mounted) return;
+      setState(() => _busy = false);
+      await navigator.push(
+        MaterialPageRoute(
+          builder: (_) => OperationChatScreen(
+            operationType: 'moderation',
+            operationId: caseId,
+            title: item.title,
+          ),
+        ),
+      );
+      ref.read(reportQueueProvider(false).notifier).load();
+    } on ApiException catch (e) {
+      if (mounted) setState(() => _busy = false);
+      messenger.showSnackBar(SnackBar(content: Text(e.message)));
+    }
+  }
+
+  /// An account is never removed: it is frozen for three days, and the chat with the moderators stays open to it.
+  Future<void> _confirmFreeze() async {
+    final l10n = AppLocalizations.of(context)!;
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        content: Text(l10n.modFreezeConfirm),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(l10n.commonCancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: Text(l10n.modFreeze),
+          ),
+        ],
+      ),
+    );
+
+    if (ok == true) await _run((api) => api.freezeAccount(widget.item));
+  }
+
   Future<void> _confirmRemove() async {
     if (widget.item.type == 'owner_listing') return _removeListing();
 
@@ -258,6 +310,7 @@ class _ReportedCardState extends ConsumerState<_ReportedCard> {
     final stateLabel = switch (item.state) {
       'hidden' => l10n.modStateHidden,
       'gone' => l10n.modStateGone,
+      'frozen' => l10n.modStateFrozen,
       _ => l10n.modStateLive,
     };
 
@@ -293,6 +346,7 @@ class _ReportedCardState extends ConsumerState<_ReportedCard> {
                       Text(switch (item.type) {
                         'post' => l10n.modTypePost,
                         'comment' => l10n.modTypeComment,
+                        'account' => l10n.modTypeAccount,
                         _ => l10n.modTypeListing,
                       }, style: theme.textTheme.labelSmall),
                       if (item.title.isNotEmpty)
@@ -344,6 +398,15 @@ class _ReportedCardState extends ConsumerState<_ReportedCard> {
                 padding: const EdgeInsets.only(top: 4),
                 child: Text('«$d»', style: theme.textTheme.bodySmall),
               ),
+            if (item.isAccount && item.frozenUntil != null)
+              Text(
+                l10n.frozenUntil(
+                  LocalFormat.date(
+                    context,
+                  ).addClock().format(item.frozenUntil!),
+                ),
+                style: theme.textTheme.bodySmall,
+              ),
             if (item.handledBy != null && widget.handled)
               Text(
                 l10n.modHandledBy(item.handledBy!),
@@ -370,6 +433,39 @@ class _ReportedCardState extends ConsumerState<_ReportedCard> {
                 icon: const Icon(Icons.how_to_reg_outlined),
                 onPressed: () => _run((api) => api.claim(item)),
                 label: Text(l10n.modOpenReport),
+              )
+            else if (!widget.handled && item.claimedByMe && item.isAccount)
+              Wrap(
+                spacing: 8,
+                runSpacing: 4,
+                children: [
+                  FilledButton.icon(
+                    icon: const Icon(Icons.forum_outlined, size: 18),
+                    onPressed: _openAccountChat,
+                    label: Text(l10n.modOpenChat),
+                  ),
+                  FilledButton(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: theme.colorScheme.error,
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: _confirmFreeze,
+                    child: Text(l10n.modFreeze),
+                  ),
+                  if (item.state == 'frozen')
+                    OutlinedButton(
+                      onPressed: () => _run((api) => api.unfreezeAccount(item)),
+                      child: Text(l10n.modUnfreeze),
+                    ),
+                  OutlinedButton(
+                    onPressed: () => _run((api) => api.dismiss(item)),
+                    child: Text(l10n.modDismiss),
+                  ),
+                  TextButton(
+                    onPressed: () => _run((api) => api.release(item)),
+                    child: Text(l10n.modRelease),
+                  ),
+                ],
               )
             else if (!widget.handled && item.claimedByMe)
               Wrap(

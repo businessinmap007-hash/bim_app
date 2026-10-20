@@ -11206,4 +11206,54 @@ class AppLocalizationsEn extends AppLocalizations {
   String olGuaranteeFrozen(String amount) {
     return 'Your guarantee is frozen ($amount EGP) for the life of the listing and released when you sell or end it.';
   }
+
+  @override
+  String get modTypeAccount => 'Account';
+
+  @override
+  String get modStateFrozen => 'Frozen';
+
+  @override
+  String get modOpenChat => 'Open a chat';
+
+  @override
+  String get modFreeze => 'Freeze 3 days';
+
+  @override
+  String get modUnfreeze => 'Lift the freeze';
+
+  @override
+  String get modFreezeConfirm =>
+      'Freeze this account for three days? It is not deleted, and it can only talk to the moderators.';
+
+  @override
+  String get frozenTitle => 'Account frozen';
+
+  @override
+  String get frozenHeadline => 'Your account is temporarily frozen';
+
+  @override
+  String get frozenBody =>
+      'We received reports about your account and a moderator froze it for three days. You can talk to the moderators so they can check what happened.';
+
+  @override
+  String get frozenChat => 'Chat with the moderators';
+
+  @override
+  String get frozenChatTitle => 'Moderators';
+
+  @override
+  String get frozenNoChatYet =>
+      'A moderator will open a chat with you to clarify the reason; it will appear here.';
+
+  @override
+  String get frozenRefresh => 'Refresh';
+
+  @override
+  String get frozenLogout => 'Log out';
+
+  @override
+  String frozenUntil(String date) {
+    return 'Your account works again after $date';
+  }
 }

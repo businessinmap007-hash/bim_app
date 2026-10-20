@@ -20100,6 +20100,96 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'ضمانك مجمّد ({amount} جنيه) طوال مدة الإعلان، ويُفرَج عنه عند البيع أو الإنهاء.'**
   String olGuaranteeFrozen(String amount);
+
+  /// No description provided for @modTypeAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'حساب'**
+  String get modTypeAccount;
+
+  /// No description provided for @modStateFrozen.
+  ///
+  /// In ar, this message translates to:
+  /// **'مجمَّد'**
+  String get modStateFrozen;
+
+  /// No description provided for @modOpenChat.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح محادثة'**
+  String get modOpenChat;
+
+  /// No description provided for @modFreeze.
+  ///
+  /// In ar, this message translates to:
+  /// **'تجميد 3 أيام'**
+  String get modFreeze;
+
+  /// No description provided for @modUnfreeze.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفع التجميد'**
+  String get modUnfreeze;
+
+  /// No description provided for @modFreezeConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'تجميد هذا الحساب ثلاثة أيام؟ لا يُحذف الحساب، ويبقى له التواصل مع المشرفين فقط.'**
+  String get modFreezeConfirm;
+
+  /// No description provided for @frozenTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحساب مجمَّد'**
+  String get frozenTitle;
+
+  /// No description provided for @frozenHeadline.
+  ///
+  /// In ar, this message translates to:
+  /// **'جُمِّد حسابك مؤقتًا'**
+  String get frozenHeadline;
+
+  /// No description provided for @frozenBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصلتنا بلاغات عن حسابك فجمّده المشرف ثلاثة أيام. يمكنك التواصل مع المشرفين ليتأكدوا من السبب.'**
+  String get frozenBody;
+
+  /// No description provided for @frozenChat.
+  ///
+  /// In ar, this message translates to:
+  /// **'محادثة المشرفين'**
+  String get frozenChat;
+
+  /// No description provided for @frozenChatTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المشرفون'**
+  String get frozenChatTitle;
+
+  /// No description provided for @frozenNoChatYet.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيفتح المشرف محادثة معك لتوضيح السبب، وتظهر هنا.'**
+  String get frozenNoChatYet;
+
+  /// No description provided for @frozenRefresh.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحديث'**
+  String get frozenRefresh;
+
+  /// No description provided for @frozenLogout.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل الخروج'**
+  String get frozenLogout;
+
+  /// No description provided for @frozenUntil.
+  ///
+  /// In ar, this message translates to:
+  /// **'يعود حسابك للعمل بعد {date}'**
+  String frozenUntil(String date);
 }
 
 class _AppLocalizationsDelegate

@@ -109,6 +109,17 @@ class BusinessDetailScreen extends ConsumerWidget {
       appBar: AppBar(
         title: Text(profileAsync.valueOrNull?.name ?? ''),
         actions: [
+          // another account's page: it can be reported (a moderator may chat with it and freeze it three days)
+          if (viewer != null && viewer.id != businessId)
+            PopupMenuButton<String>(
+              onSelected: (_) => showReportSheet(context, type: 'account', id: businessId),
+              itemBuilder: (_) => [
+                PopupMenuItem(
+                  value: 'report',
+                  child: Text(AppLocalizations.of(context)!.reportAction),
+                ),
+              ],
+            ),
           if (canAddToOffersGroup)
             IconButton(
               tooltip: AppLocalizations.of(context)!.businessGroupAddToOffersGroup,

@@ -1,5 +1,6 @@
 import '../../../core/env/env.dart';
 import '../../../core/network/api_client.dart';
+import '../../../core/time/egypt_time.dart';
 
 /// One reason the report sheet offers (the server names them in the request language).
 class ReportReason {
@@ -50,6 +51,10 @@ class ReportedItem {
   /// Handled list only: who closed it.
   final String? handledBy;
 
+  /// An ACCOUNT row: the moderators' case on it (its chat is `operation-chats/moderation/{caseId}`) and until when it is frozen.
+  final int? caseId;
+  final DateTime? frozenUntil;
+
   const ReportedItem({
     required this.type,
     required this.id,
@@ -66,9 +71,12 @@ class ReportedItem {
     this.claimedByMe = false,
     this.locked = false,
     this.handledBy,
+    this.caseId,
+    this.frozenUntil,
   });
 
   bool get isPost => type == 'post';
+  bool get isAccount => type == 'account';
 
   factory ReportedItem.fromJson(Map<String, dynamic> json) => ReportedItem(
     type: json['type'] as String? ?? 'post',
@@ -91,6 +99,20 @@ class ReportedItem {
     claimedByMe: json['claimed_by_me'] as bool? ?? false,
     locked: json['locked'] as bool? ?? false,
     handledBy: json['handled_by'] as String?,
+    caseId: ((json['case'] as Map<String, dynamic>?)?['id'] as num?)?.toInt(),
+    frozenUntil: EgyptTime.tryParse(json['frozen_until'] as String?),
+  );
+}
+
+/// The moderators' case on a reported ACCOUNT, as that account sees it: the chat to answer in, and whether it is frozen.
+class MyAccountCase {
+  final int id;
+  final DateTime? frozenUntil;
+  const MyAccountCase({required this.id, this.frozenUntil});
+
+  factory MyAccountCase.fromJson(Map<String, dynamic> json) => MyAccountCase(
+    id: (json['id'] as num).toInt(),
+    frozenUntil: EgyptTime.tryParse(json['frozen_until'] as String?),
   );
 }
 
@@ -150,6 +172,29 @@ class ModerationApi {
     );
   }
 
+  /// The account's own open case (null when there is none).
+  Future<MyAccountCase?> myCase() async {
+    final data =
+        await _client.get('/moderation/my-case') as Map<String, dynamic>;
+    final c = data['case'] as Map<String, dynamic>?;
+
+    return c == null ? null : MyAccountCase.fromJson(c);
+  }
+
+  /// Open the chat with a reported account; returns the case id (the chat is `operation-chats/moderation/{id}`).
+  Future<int> accountChat(ReportedItem i) async {
+    final data =
+        await _client.post('/moderation/reports/account/${i.id}/chat')
+            as Map<String, dynamic>;
+    return (data['case_id'] as num).toInt();
+  }
+
+  Future<void> freezeAccount(ReportedItem i) =>
+      _client.post('/moderation/reports/account/${i.id}/freeze');
+
+  Future<void> unfreezeAccount(ReportedItem i) =>
+      _client.post('/moderation/reports/account/${i.id}/unfreeze');
+
   Future<void> claim(ReportedItem i) =>
       _client.post('/moderation/reports/${i.type}/${i.id}/claim');
 
@@ -179,10 +224,7 @@ class ModerationApi {
     bool confiscate = true,
   }) => _client.post(
     '/moderation/reports/${i.type}/${i.id}/remove',
-    data: {
-      'violation': ?violation,
-      'confiscate': confiscate,
-    },
+    data: {'violation': ?violation, 'confiscate': confiscate},
   );
 
   Future<void> restore(ReportedItem i) =>

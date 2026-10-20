@@ -3875,5 +3875,21 @@
   "modViolationTitle": "ما القاعدة التي خالفها الإعلان؟",
   "modConfiscate": "مصادرة العربون أو الضمان",
   "olGuaranteeFrozen": "ضمانك مجمّد ({amount} جنيه) طوال مدة الإعلان، ويُفرَج عنه عند البيع أو الإنهاء.",
-  "@olGuaranteeFrozen": {"placeholders": {"amount": {"type": "String"}}}
+  "@olGuaranteeFrozen": {"placeholders": {"amount": {"type": "String"}}},
+  "modTypeAccount": "حساب",
+  "modStateFrozen": "مجمَّد",
+  "modOpenChat": "فتح محادثة",
+  "modFreeze": "تجميد 3 أيام",
+  "modUnfreeze": "رفع التجميد",
+  "modFreezeConfirm": "تجميد هذا الحساب ثلاثة أيام؟ لا يُحذف الحساب، ويبقى له التواصل مع المشرفين فقط.",
+  "frozenTitle": "الحساب مجمَّد",
+  "frozenHeadline": "جُمِّد حسابك مؤقتًا",
+  "frozenBody": "وصلتنا بلاغات عن حسابك فجمّده المشرف ثلاثة أيام. يمكنك التواصل مع المشرفين ليتأكدوا من السبب.",
+  "frozenChat": "محادثة المشرفين",
+  "frozenChatTitle": "المشرفون",
+  "frozenNoChatYet": "سيفتح المشرف محادثة معك لتوضيح السبب، وتظهر هنا.",
+  "frozenRefresh": "تحديث",
+  "frozenLogout": "تسجيل الخروج",
+  "frozenUntil": "يعود حسابك للعمل بعد {date}",
+  "@frozenUntil": {"placeholders": {"date": {"type": "String"}}}
 }

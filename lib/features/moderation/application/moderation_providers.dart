@@ -91,3 +91,8 @@ final reportQueueProvider = StateNotifierProvider.autoDispose
     .family<ReportQueueController, ReportQueueState, bool>((ref, handled) {
       return ReportQueueController(ref.watch(moderationApiProvider), handled);
     });
+
+/// The reported account's own case: the id of its chat with the moderators.
+final myAccountCaseProvider = FutureProvider.autoDispose<MyAccountCase?>((ref) {
+  return ref.watch(moderationApiProvider).myCase();
+});

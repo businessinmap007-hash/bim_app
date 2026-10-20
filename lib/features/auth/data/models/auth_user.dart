@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import '../../../../core/time/egypt_time.dart';
 import '../../../business/data/models/business_profile.dart' show SocialLinks;
 
 /// Mirrors `App\Http\Resources\V2\AccountResource` on the backend.
@@ -36,6 +37,9 @@ class AuthUser {
   /// Holds the content ability: gets the «الإشراف» tab (reports on posts and owner listings).
   final bool isModerator;
 
+  /// A moderator froze the account (reports on it) until this moment: the app shows only the chat with the moderators.
+  final DateTime? frozenUntil;
+
   const AuthUser({
     required this.id,
     required this.name,
@@ -60,9 +64,12 @@ class AuthUser {
     this.setupMissing = const [],
     this.hasSpecialtyServices = false,
     this.isModerator = false,
+    this.frozenUntil,
   });
 
   bool get isBusiness => type == 'business';
+
+  bool get isFrozen => frozenUntil != null && frozenUntil!.isAfter(EgyptTime.now());
 
   /// A "Shipping & Delivery" business account - the only kind that runs
   /// deliveries on its own account (see DriverDashboardScreen).
@@ -101,5 +108,6 @@ class AuthUser {
     ],
     hasSpecialtyServices: json['specialty_services'] as bool? ?? false,
     isModerator: json['is_moderator'] as bool? ?? false,
+    frozenUntil: EgyptTime.tryParse(json['frozen_until'] as String?),
   );
 }

@@ -83,4 +83,40 @@ void main() {
     expect(done.handledBy, 'Fahim');
     expect(done.locked, isFalse);
   });
+
+  test(
+    'an account row carries its case and freeze, and a frozen account knows it',
+    () {
+      final row = ReportedItem.fromJson({
+        'type': 'account',
+        'id': 7,
+        'reports': 2,
+        'state': 'frozen',
+        'title': 'Shady Shop',
+        'frozen_until': '2099-01-01T00:00:00+00:00',
+        'case': {'id': 31, 'status': 'open'},
+      });
+      expect(row.isAccount, isTrue);
+      expect(row.caseId, 31);
+      expect(row.frozenUntil, isNotNull);
+
+      final frozen = AuthUser.fromJson({
+        'id': 1,
+        'name': 'A',
+        'email': 'a@x.test',
+        'phone': '0100',
+        'type': 'client',
+        'frozen_until': '2099-01-01T00:00:00+00:00',
+      });
+      final free = AuthUser.fromJson({
+        'id': 2,
+        'name': 'B',
+        'email': 'b@x.test',
+        'phone': '0101',
+        'type': 'client',
+      });
+      expect(frozen.isFrozen, isTrue);
+      expect(free.isFrozen, isFalse);
+    },
+  );
 }

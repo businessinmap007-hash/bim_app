@@ -10,6 +10,7 @@ import '../../../categories/presentation/screens/all_categories_screen.dart';
 import '../../../notifications/application/notifications_providers.dart';
 import '../../../profile/presentation/screens/business_settings_screen.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../moderation/presentation/screens/account_frozen_screen.dart';
 import '../../../moderation/presentation/screens/moderation_screen.dart';
 import 'business_home_screen.dart';
 import 'customer_home_screen.dart';
@@ -88,6 +89,8 @@ class _HomeShellState extends ConsumerState<HomeShell> with WidgetsBindingObserv
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
+      // a freeze may have started (or ended) while the app was away
+      ref.read(authControllerProvider.notifier).refreshUser();
       _checkPendingSettlements();
       // Real push isn't live yet (no Firebase project configured), and
       // neither notification provider is `autoDispose` — once fetched they
@@ -124,6 +127,10 @@ class _HomeShellState extends ConsumerState<HomeShell> with WidgetsBindingObserv
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authControllerProvider);
+    // A moderator froze this account (reports on it): it keeps only the chat with the moderators until the freeze ends.
+    if (authState is AuthSignedIn && authState.user.isFrozen) {
+      return AccountFrozenScreen(until: authState.user.frozenUntil!);
+    }
     final isBusiness = authState is AuthSignedIn && authState.user.isBusiness;
     final avatarUrl = authState is AuthSignedIn
         ? (authState.user.logoUrl ?? authState.user.imageUrl)
