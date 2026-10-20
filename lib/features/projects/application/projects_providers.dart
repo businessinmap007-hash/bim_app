@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers/core_providers.dart';
 import '../data/models/project.dart';
 import '../data/models/project_agreement.dart';
+import '../data/models/project_showcase.dart';
 import '../data/models/project_template.dart';
 import '../data/models/project_timeline.dart';
 import '../data/projects_api.dart';
@@ -234,8 +235,8 @@ class ProjectDetailController extends StateNotifier<ProjectDetailState> {
     await load();
   }
 
-  Future<int> generateBuilding({required int floors, required bool basement, required int flats, DateTime? startsOn}) async {
-    final made = await _api.generateBuilding(projectId, floors: floors, basement: basement, flats: flats, startsOn: startsOn);
+  Future<int> generateBuilding({required int floors, required bool basement, required int flats, bool elevator = true, DateTime? startsOn}) async {
+    final made = await _api.generateBuilding(projectId, floors: floors, basement: basement, flats: flats, elevator: elevator, startsOn: startsOn);
     await load();
     return made;
   }
@@ -270,6 +271,11 @@ final projectDetailControllerProvider =
     StateNotifierProvider.family<ProjectDetailController, ProjectDetailState, int>((ref, projectId) {
       return ProjectDetailController(ref.watch(projectsApiProvider), projectId);
     });
+
+/// Where the «نتائج موثَّقة» request of one project stands (business side).
+final projectShowcaseProvider = FutureProvider.autoDispose.family<ShowcaseRequest?, int>((ref, projectId) {
+  return ref.watch(projectsApiProvider).showcase(projectId);
+});
 
 /// The ready stage plans offered to my trade.
 final projectTemplatesProvider = FutureProvider.autoDispose<List<ProjectTemplate>>((ref) {

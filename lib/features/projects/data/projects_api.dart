@@ -6,6 +6,7 @@ import '../../../core/network/api_client.dart';
 import '../../../core/network/paginated.dart';
 import 'models/project.dart';
 import 'models/project_agreement.dart';
+import 'models/project_showcase.dart';
 import 'models/project_template.dart';
 import 'models/project_timeline.dart';
 
@@ -109,8 +110,21 @@ class ProjectsApi {
     );
   }
 
+  /// The state of this project's «نتائج موثَّقة» request (null = never asked).
+  Future<ShowcaseRequest?> showcase(int projectId) async {
+    final data = await _client.get('/business/projects/$projectId/showcase') as Map<String, dynamic>;
+    return ShowcaseRequest.fromJsonOrNull(data['showcase']);
+  }
+
+  Future<void> requestShowcase(int projectId, {required String publicTitle, String? note, required bool showPhotos}) => _client.post(
+    '/business/projects/$projectId/showcase',
+    data: {'public_title': publicTitle, if (note != null && note.isNotEmpty) 'note': note, 'show_photos': showPhotos},
+  );
+
+  Future<void> withdrawShowcase(int projectId) => _client.delete('/business/projects/$projectId/showcase');
+
   /// Write the plan of a residential building into an empty project; returns how many works were made.
-  Future<int> generateBuilding(int projectId, {required int floors, required bool basement, required int flats, DateTime? startsOn}) async {
+  Future<int> generateBuilding(int projectId, {required int floors, required bool basement, required int flats, bool elevator = true, DateTime? startsOn}) async {
     final data =
         await _client.post(
               '/business/projects/$projectId/generate',
@@ -119,6 +133,7 @@ class ProjectsApi {
                 'floors': floors,
                 'basement': basement,
                 'apartments_per_floor': flats,
+                'elevator': elevator,
                 if (startsOn != null) 'starts_on': _dateOnly(startsOn),
               },
             )

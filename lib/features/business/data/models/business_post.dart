@@ -1,5 +1,6 @@
 import '../../../../core/env/env.dart';
 import '../../../../core/time/egypt_time.dart';
+import '../../../projects/data/models/project_showcase.dart';
 
 /// One image attached to a post — mirrors PostResource's `images` array.
 class PostImage {
@@ -63,6 +64,9 @@ class BusinessPost {
   final List<PostImage> images;
   final PostAuthor? author;
   final PostSubject? subject;
+
+  /// «نتائج موثَّقة»: the live, anonymous results of a project shown with its customer's consent (null on an ordinary post).
+  final PostShowcase? showcase;
   final int? myReaction;
   final bool isMine;
   final int likesCount;
@@ -79,6 +83,7 @@ class BusinessPost {
     required this.images,
     this.author,
     this.subject,
+    this.showcase,
     this.myReaction,
     this.isMine = false,
     required this.likesCount,
@@ -98,6 +103,7 @@ class BusinessPost {
         .toList(),
     author: json['author'] is Map<String, dynamic> ? PostAuthor.fromJson(json['author'] as Map<String, dynamic>) : null,
     subject: json['subject'] is Map<String, dynamic> ? PostSubject.fromJson(json['subject'] as Map<String, dynamic>) : null,
+    showcase: PostShowcase.fromJsonOrNull(json['showcase']),
     myReaction: (json['my_reaction'] as num?)?.toInt(),
     isMine: json['is_mine'] as bool? ?? false,
     likesCount: (json['likes_count'] as num?)?.toInt() ?? 0,

@@ -9,6 +9,7 @@ import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../application/customer_project_providers.dart';
 import '../../data/models/customer_project_view.dart';
 import '../widgets/project_agreement_widgets.dart';
+import '../../data/models/project_showcase.dart';
 
 /// The customer's read-only view of the project a business linked to their
 /// order/booking — which build stage it reached and the camera evidence for
@@ -90,6 +91,11 @@ class ProjectProgressScreen extends ConsumerWidget {
               LinearProgressIndicator(value: view.project.progress / 100),
               const SizedBox(height: 12),
               _AgreementSection(view: view, operationType: operationType, operationId: operationId),
+              if (!view.viewerIsBusiness && view.showcase != null && (view.showcase!.isRequested || view.showcase!.isLive))
+                Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: _ShowcaseConsent(request: view.showcase!, operationType: operationType, operationId: operationId),
+                ),
               const SizedBox(height: 20),
               Text(l10n.projectTasksTitle, style: Theme.of(context).textTheme.titleSmall),
               const SizedBox(height: 8),
@@ -321,6 +327,65 @@ class _AgreementSection extends ConsumerWidget {
           ),
         ],
       ],
+    );
+  }
+}
+
+/// «نتائج موثَّقة»: the business asks to show the project as a post — without his name or address, only what he confirmed.
+/// He answers; once live he can take it down any time.
+class _ShowcaseConsent extends ConsumerWidget {
+  final ShowcaseRequest request;
+  final String operationType;
+  final int operationId;
+
+  const _ShowcaseConsent({required this.request, required this.operationType, required this.operationId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final api = ref.read(customerProjectApiProvider);
+
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(request.isLive ? l10n.showcaseConsentLive : l10n.showcaseConsentTitle, style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+            const SizedBox(height: 4),
+            Text(request.publicTitle, style: Theme.of(context).textTheme.bodyLarge),
+            if ((request.note ?? '').isNotEmpty) Text(request.note!),
+            const SizedBox(height: 4),
+            Text(request.showPhotos ? l10n.showcaseConsentWithPhotos : l10n.showcaseConsentNoPhotos, style: Theme.of(context).textTheme.bodySmall),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 6,
+              children: [
+                if (request.isRequested) ...[
+                  FilledButton(
+                    onPressed: () => _decide(context, ref, operationType, operationId, () => api.decideShowcase(operationType, operationId, approve: true)),
+                    child: Text(l10n.showcaseConsentAgree),
+                  ),
+                  OutlinedButton(
+                    onPressed: () async {
+                      final note = await askText(context, title: l10n.showcaseConsentDecline, hint: l10n.showcaseConsentDeclineHint, required: false);
+                      if (note == null || !context.mounted) return;
+                      await _decide(context, ref, operationType, operationId, () => api.decideShowcase(operationType, operationId, approve: false, note: note));
+                    },
+                    child: Text(l10n.showcaseConsentDecline),
+                  ),
+                ] else
+                  OutlinedButton(
+                    onPressed: () => _decide(context, ref, operationType, operationId, () => api.withdrawShowcase(operationType, operationId)),
+                    child: Text(l10n.showcaseTakeDown),
+                  ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

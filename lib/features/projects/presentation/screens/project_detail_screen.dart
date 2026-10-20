@@ -10,6 +10,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../application/projects_providers.dart';
 import '../widgets/business_project_panels.dart';
 import '../widgets/project_agreement_widgets.dart';
+import '../widgets/project_showcase_widgets.dart';
 import '../../data/models/project_agreement.dart';
 import '../../data/models/project_timeline.dart';
 import '../../../../core/network/api_exception.dart';
@@ -185,6 +186,7 @@ class ProjectDetailScreen extends ConsumerWidget {
     final floors = TextEditingController(text: '5');
     final flats = TextEditingController(text: '3');
     bool basement = true;
+    bool elevator = true;
 
     final ok = await showDialog<bool>(
       context: context,
@@ -195,6 +197,7 @@ class ProjectDetailScreen extends ConsumerWidget {
             TextField(controller: floors, keyboardType: TextInputType.number, decoration: InputDecoration(labelText: l10n.buildingFloors)),
             TextField(controller: flats, keyboardType: TextInputType.number, decoration: InputDecoration(labelText: l10n.buildingFlats)),
             SwitchListTile(contentPadding: EdgeInsets.zero, value: basement, onChanged: (v) => setState(() => basement = v), title: Text(l10n.buildingBasement)),
+            SwitchListTile(contentPadding: EdgeInsets.zero, value: elevator, onChanged: (v) => setState(() => elevator = v), title: Text(l10n.buildingElevator)),
           ]),
           actions: [
             TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: Text(l10n.commonCancel)),
@@ -210,6 +213,7 @@ class ProjectDetailScreen extends ConsumerWidget {
         floors: int.tryParse(floors.text.trim()) ?? 1,
         basement: basement,
         flats: int.tryParse(flats.text.trim()) ?? 0,
+        elevator: elevator,
       );
       if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.buildingGenerated(made))));
     } catch (e) {
@@ -289,6 +293,10 @@ class ProjectDetailScreen extends ConsumerWidget {
                   ],
                   const SizedBox(height: 12),
                   BusinessAgreementPanel(projectId: projectId, project: project, block: state.block),
+                  if (state.block.agreement?.isAgreed ?? false) ...[
+                    const SizedBox(height: 12),
+                    BusinessShowcasePanel(projectId: projectId),
+                  ],
                   const SizedBox(height: 20),
                   Text(l10n.projectTasksTitle, style: Theme.of(context).textTheme.titleSmall),
                   const SizedBox(height: 8),

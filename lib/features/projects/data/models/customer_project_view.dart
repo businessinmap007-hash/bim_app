@@ -2,6 +2,7 @@ import '../../../../core/assignment/assignee.dart';
 import '../../../../core/env/env.dart';
 import 'project.dart';
 import 'project_agreement.dart';
+import 'project_showcase.dart';
 
 /// One task as the customer following an operation sees it — mirrors
 /// `ProjectService::customerView()`'s `tasks[]`: no critical-path math (that's
@@ -89,7 +90,10 @@ class CustomerProjectView {
   /// The agreement, the requests waiting for the customer, and the history of the quantities.
   final AgreementBlock block;
 
-  const CustomerProjectView({required this.project, required this.tasks, this.viewer = 'customer', this.block = const AgreementBlock()});
+  /// The business's request to show the project as a post, and where it stands (null = never asked).
+  final ShowcaseRequest? showcase;
+
+  const CustomerProjectView({required this.project, required this.tasks, this.viewer = 'customer', this.block = const AgreementBlock(), this.showcase});
 
   bool get viewerIsBusiness => viewer == 'business';
 
@@ -111,5 +115,6 @@ class CustomerProjectView {
         .toList(),
     viewer: json['viewer'] as String? ?? 'customer',
     block: AgreementBlock.fromJson(json),
+    showcase: ShowcaseRequest.fromJsonOrNull(json['showcase']),
   );
 }

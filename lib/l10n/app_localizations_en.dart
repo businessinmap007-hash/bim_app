@@ -11809,4 +11809,83 @@ class AppLocalizationsEn extends AppLocalizations {
   String agreementStart(String date) {
     return 'Execution starts: $date';
   }
+
+  @override
+  String get buildingElevator => 'The building has a lift';
+
+  @override
+  String get showcaseVerifiedBadge => 'Verified by the customer';
+
+  @override
+  String get showcaseAskAction => 'Show the project as a post';
+
+  @override
+  String get showcaseAskTitle => 'Show the project as a post';
+
+  @override
+  String get showcaseAskHint =>
+      'Nothing is published before the customer agrees. Only the progress he confirmed shows — no name, address or unit numbers.';
+
+  @override
+  String get showcasePublicTitle => 'Post title';
+
+  @override
+  String get showcaseNote => 'A short description (optional)';
+
+  @override
+  String get showcaseShowPhotos => 'Show the photos of approved works';
+
+  @override
+  String get showcaseRequestSent => 'The request was sent to the customer';
+
+  @override
+  String get showcaseWaiting => 'Waiting for the customer\'s agreement';
+
+  @override
+  String get showcaseLive =>
+      'Live now and growing with the customer\'s approvals';
+
+  @override
+  String get showcaseTakeDown => 'Take it down';
+
+  @override
+  String get showcaseCancelRequest => 'Cancel the request';
+
+  @override
+  String get showcaseWithdrawn =>
+      'It was taken down. You can ask for agreement again.';
+
+  @override
+  String showcaseDeclined(String note) {
+    return 'The customer declined: $note';
+  }
+
+  @override
+  String showcaseUpdatedOn(String date) {
+    return 'Last updated: $date';
+  }
+
+  @override
+  String get showcaseConsentTitle =>
+      'The business asks to show your project as a post';
+
+  @override
+  String get showcaseConsentLive => 'Your project is shown as a post';
+
+  @override
+  String get showcaseConsentWithPhotos =>
+      'The progress you approved shows with the photos of the works you approved — without your name or address.';
+
+  @override
+  String get showcaseConsentNoPhotos =>
+      'Only the progress you approved shows — no photos, and no name or address.';
+
+  @override
+  String get showcaseConsentAgree => 'I agree';
+
+  @override
+  String get showcaseConsentDecline => 'I do not agree';
+
+  @override
+  String get showcaseConsentDeclineHint => 'An optional reason';
 }

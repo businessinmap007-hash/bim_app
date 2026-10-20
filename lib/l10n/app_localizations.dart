@@ -21108,6 +21108,144 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'بدء التنفيذ: {date}'**
   String agreementStart(String date);
+
+  /// No description provided for @buildingElevator.
+  ///
+  /// In ar, this message translates to:
+  /// **'يوجد مصعد'**
+  String get buildingElevator;
+
+  /// No description provided for @showcaseVerifiedBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'موثَّق من العميل'**
+  String get showcaseVerifiedBadge;
+
+  /// No description provided for @showcaseAskAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشر المشروع كمنشور'**
+  String get showcaseAskAction;
+
+  /// No description provided for @showcaseAskTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشر المشروع كمنشور'**
+  String get showcaseAskTitle;
+
+  /// No description provided for @showcaseAskHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يُنشر شيء قبل موافقة العميل. يظهر النسبة المعتمدة منه فقط، دون اسمه أو عنوانه أو أرقام الوحدات.'**
+  String get showcaseAskHint;
+
+  /// No description provided for @showcasePublicTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عنوان المنشور'**
+  String get showcasePublicTitle;
+
+  /// No description provided for @showcaseNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصف قصير (اختياري)'**
+  String get showcaseNote;
+
+  /// No description provided for @showcaseShowPhotos.
+  ///
+  /// In ar, this message translates to:
+  /// **'إظهار صور الأعمال المعتمدة'**
+  String get showcaseShowPhotos;
+
+  /// No description provided for @showcaseRequestSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُرسل طلب النشر إلى العميل'**
+  String get showcaseRequestSent;
+
+  /// No description provided for @showcaseWaiting.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار موافقة العميل'**
+  String get showcaseWaiting;
+
+  /// No description provided for @showcaseLive.
+  ///
+  /// In ar, this message translates to:
+  /// **'منشور الآن ويتحدّث بموافقات العميل'**
+  String get showcaseLive;
+
+  /// No description provided for @showcaseTakeDown.
+  ///
+  /// In ar, this message translates to:
+  /// **'إيقاف النشر'**
+  String get showcaseTakeDown;
+
+  /// No description provided for @showcaseCancelRequest.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء الطلب'**
+  String get showcaseCancelRequest;
+
+  /// No description provided for @showcaseWithdrawn.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُوقف النشر. يمكنك طلب الموافقة من جديد.'**
+  String get showcaseWithdrawn;
+
+  /// No description provided for @showcaseDeclined.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفض العميل النشر: {note}'**
+  String showcaseDeclined(String note);
+
+  /// No description provided for @showcaseUpdatedOn.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر تحديث: {date}'**
+  String showcaseUpdatedOn(String date);
+
+  /// No description provided for @showcaseConsentTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'النشاط يطلب عرض مشروعك كمنشور'**
+  String get showcaseConsentTitle;
+
+  /// No description provided for @showcaseConsentLive.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشروعك معروض كمنشور'**
+  String get showcaseConsentLive;
+
+  /// No description provided for @showcaseConsentWithPhotos.
+  ///
+  /// In ar, this message translates to:
+  /// **'يظهر التقدّم الذي اعتمدته مع صور الأعمال المعتمدة، دون اسمك أو عنوانك.'**
+  String get showcaseConsentWithPhotos;
+
+  /// No description provided for @showcaseConsentNoPhotos.
+  ///
+  /// In ar, this message translates to:
+  /// **'يظهر التقدّم الذي اعتمدته فقط، دون صور ودون اسمك أو عنوانك.'**
+  String get showcaseConsentNoPhotos;
+
+  /// No description provided for @showcaseConsentAgree.
+  ///
+  /// In ar, this message translates to:
+  /// **'أوافق'**
+  String get showcaseConsentAgree;
+
+  /// No description provided for @showcaseConsentDecline.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا أوافق'**
+  String get showcaseConsentDecline;
+
+  /// No description provided for @showcaseConsentDeclineHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'سبب اختياري'**
+  String get showcaseConsentDeclineHint;
 }
 
 class _AppLocalizationsDelegate

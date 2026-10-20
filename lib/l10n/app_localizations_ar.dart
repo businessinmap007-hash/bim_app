@@ -11720,4 +11720,80 @@ class AppLocalizationsAr extends AppLocalizations {
   String agreementStart(String date) {
     return 'بدء التنفيذ: $date';
   }
+
+  @override
+  String get buildingElevator => 'يوجد مصعد';
+
+  @override
+  String get showcaseVerifiedBadge => 'موثَّق من العميل';
+
+  @override
+  String get showcaseAskAction => 'نشر المشروع كمنشور';
+
+  @override
+  String get showcaseAskTitle => 'نشر المشروع كمنشور';
+
+  @override
+  String get showcaseAskHint =>
+      'لا يُنشر شيء قبل موافقة العميل. يظهر النسبة المعتمدة منه فقط، دون اسمه أو عنوانه أو أرقام الوحدات.';
+
+  @override
+  String get showcasePublicTitle => 'عنوان المنشور';
+
+  @override
+  String get showcaseNote => 'وصف قصير (اختياري)';
+
+  @override
+  String get showcaseShowPhotos => 'إظهار صور الأعمال المعتمدة';
+
+  @override
+  String get showcaseRequestSent => 'أُرسل طلب النشر إلى العميل';
+
+  @override
+  String get showcaseWaiting => 'بانتظار موافقة العميل';
+
+  @override
+  String get showcaseLive => 'منشور الآن ويتحدّث بموافقات العميل';
+
+  @override
+  String get showcaseTakeDown => 'إيقاف النشر';
+
+  @override
+  String get showcaseCancelRequest => 'إلغاء الطلب';
+
+  @override
+  String get showcaseWithdrawn => 'أُوقف النشر. يمكنك طلب الموافقة من جديد.';
+
+  @override
+  String showcaseDeclined(String note) {
+    return 'رفض العميل النشر: $note';
+  }
+
+  @override
+  String showcaseUpdatedOn(String date) {
+    return 'آخر تحديث: $date';
+  }
+
+  @override
+  String get showcaseConsentTitle => 'النشاط يطلب عرض مشروعك كمنشور';
+
+  @override
+  String get showcaseConsentLive => 'مشروعك معروض كمنشور';
+
+  @override
+  String get showcaseConsentWithPhotos =>
+      'يظهر التقدّم الذي اعتمدته مع صور الأعمال المعتمدة، دون اسمك أو عنوانك.';
+
+  @override
+  String get showcaseConsentNoPhotos =>
+      'يظهر التقدّم الذي اعتمدته فقط، دون صور ودون اسمك أو عنوانك.';
+
+  @override
+  String get showcaseConsentAgree => 'أوافق';
+
+  @override
+  String get showcaseConsentDecline => 'لا أوافق';
+
+  @override
+  String get showcaseConsentDeclineHint => 'سبب اختياري';
 }
