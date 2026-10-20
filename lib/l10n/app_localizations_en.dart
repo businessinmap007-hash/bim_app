@@ -11888,4 +11888,92 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get showcaseConsentDeclineHint => 'An optional reason';
+
+  @override
+  String get showcaseKindTraining => 'Training plan';
+
+  @override
+  String get showcaseKindNutrition => 'Nutrition plan';
+
+  @override
+  String get showcaseKindCombined => 'Training and nutrition';
+
+  @override
+  String showcaseWeeks(int n) {
+    return '$n weeks';
+  }
+
+  @override
+  String showcaseConfirmedMonths(int n) {
+    return '$n confirmed months';
+  }
+
+  @override
+  String get showcaseNoConfirmedYet =>
+      'Waiting for the first result the client confirms';
+
+  @override
+  String get planShowcaseAskAction => 'Show the plan\'s results as a post';
+
+  @override
+  String get planShowcaseAskHint =>
+      'Nothing is published before the client agrees. Only the changes he confirmed show — no name, no weight, no photo.';
+
+  @override
+  String get planShowcaseConsentTitle =>
+      'The trainer asks to show your plan\'s results as a post';
+
+  @override
+  String get planShowcaseConsentLive =>
+      'Your plan\'s results are shown as a post';
+
+  @override
+  String get planShowcaseConsentBody =>
+      'Only the changes you confirmed show — no name, no weight, no photo.';
+
+  @override
+  String get showcaseLiveGeneral =>
+      'Live now under the client\'s general consent';
+
+  @override
+  String get showcaseUnderGeneralConsent =>
+      'Shown under your general consent. You can stop it any time.';
+
+  @override
+  String get bodyReportConfirm => 'I confirm this month\'s result';
+
+  @override
+  String get bodyReportConfirmed => 'You confirmed this result';
+
+  @override
+  String get showcaseGeneralTitle => 'General consent to show';
+
+  @override
+  String get showcaseGeneralSubtitle =>
+      'Allow once instead of being asked every time';
+
+  @override
+  String get showcaseGeneralIntro =>
+      'A business can show the results of your projects and plans as a marketing post without your name or address, and only what you confirmed shows. Allow it here once instead of being asked every time.';
+
+  @override
+  String get showcaseGeneralProjects => 'My projects';
+
+  @override
+  String get showcaseGeneralProjectPhotos =>
+      'With the photos of approved works';
+
+  @override
+  String get showcaseGeneralProjectPhotosHint =>
+      'Without it you are asked whenever a business wants to show photos';
+
+  @override
+  String get showcaseGeneralTraining => 'Training plans';
+
+  @override
+  String get showcaseGeneralNutrition => 'Nutrition plans';
+
+  @override
+  String get showcaseGeneralFootnote =>
+      'What you take down yourself does not come back under this consent; you are asked again. You can stop any post from its own screen.';
 }

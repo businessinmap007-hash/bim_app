@@ -67,6 +67,9 @@ class BusinessPost {
 
   /// «نتائج موثَّقة»: the live, anonymous results of a project shown with its customer's consent (null on an ordinary post).
   final PostShowcase? showcase;
+
+  /// The same for a training / nutrition plan: anonymous changes of the months the client confirmed.
+  final PlanShowcasePost? planShowcase;
   final int? myReaction;
   final bool isMine;
   final int likesCount;
@@ -84,6 +87,7 @@ class BusinessPost {
     this.author,
     this.subject,
     this.showcase,
+    this.planShowcase,
     this.myReaction,
     this.isMine = false,
     required this.likesCount,
@@ -104,6 +108,7 @@ class BusinessPost {
     author: json['author'] is Map<String, dynamic> ? PostAuthor.fromJson(json['author'] as Map<String, dynamic>) : null,
     subject: json['subject'] is Map<String, dynamic> ? PostSubject.fromJson(json['subject'] as Map<String, dynamic>) : null,
     showcase: PostShowcase.fromJsonOrNull(json['showcase']),
+    planShowcase: PlanShowcasePost.fromJsonOrNull(json['plan_showcase']),
     myReaction: (json['my_reaction'] as num?)?.toInt(),
     isMine: json['is_mine'] as bool? ?? false,
     likesCount: (json['likes_count'] as num?)?.toInt() ?? 0,

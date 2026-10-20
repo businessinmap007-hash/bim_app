@@ -10,7 +10,9 @@ import '../../data/models/body_report.dart';
 import '../../data/models/set_log.dart';
 import '../../data/models/training_plan.dart';
 import '../../data/models/weekly_summary.dart';
+import '../widgets/plan_showcase_widgets.dart';
 import '../widgets/set_log_sheet.dart';
+import '../../application/showcase_providers.dart';
 import 'training_chat_screen.dart';
 import 'training_monthly_summary_screen.dart';
 import '../../../../shared/widgets/full_screen_gallery.dart';
@@ -82,7 +84,7 @@ class TrainingPlanDetailScreen extends ConsumerWidget {
               _ExercisesTab(planId: planId, plan: plan),
               _MealsTab(plan: plan),
               _ProgressTab(planId: planId, plan: plan),
-              _BodyReportsTab(planId: planId),
+              _BodyReportsTab(planId: planId, plan: plan),
             ],
           ),
         ),
@@ -691,7 +693,8 @@ class _WeeklySummaryCard extends StatelessWidget {
 
 class _BodyReportsTab extends ConsumerWidget {
   final int planId;
-  const _BodyReportsTab({required this.planId});
+  final TrainingPlan plan;
+  const _BodyReportsTab({required this.planId, required this.plan});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -714,26 +717,30 @@ class _BodyReportsTab extends ConsumerWidget {
         ),
       ),
       data: (reports) {
-        if (reports.isEmpty) {
+        final ask = plan.showcase != null && (plan.showcase!.isRequested || plan.showcase!.isLive) ? plan.showcase : null;
+        if (reports.isEmpty && ask == null) {
           return Center(child: Text(l10n.trainingBodyReportsEmpty));
         }
-        return ListView.separated(
+        return ListView(
           padding: const EdgeInsets.all(16),
-          itemCount: reports.length,
-          separatorBuilder: (context, index) => const SizedBox(height: 8),
-          itemBuilder: (context, index) => _BodyReportCard(report: reports[index]),
+          children: [
+            if (ask != null) ...[ClientPlanShowcaseCard(planId: planId, request: ask), const SizedBox(height: 12)],
+            if (reports.isEmpty) Text(l10n.trainingBodyReportsEmpty),
+            for (final r in reports) ...[_BodyReportCard(planId: planId, report: r), const SizedBox(height: 8)],
+          ],
         );
       },
     );
   }
 }
 
-class _BodyReportCard extends StatelessWidget {
+class _BodyReportCard extends ConsumerWidget {
+  final int planId;
   final BodyReport report;
-  const _BodyReportCard({required this.report});
+  const _BodyReportCard({required this.planId, required this.report});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     return Card(
       margin: EdgeInsets.zero,
@@ -755,6 +762,25 @@ class _BodyReportCard extends StatelessWidget {
               const SizedBox(height: 6),
               Text(report.notes!, style: Theme.of(context).textTheme.bodySmall),
             ],
+            const SizedBox(height: 6),
+            if (report.confirmed)
+              Row(children: [const Icon(Icons.verified_outlined, size: 16, color: Colors.green), const SizedBox(width: 4), Text(l10n.bodyReportConfirmed, style: Theme.of(context).textTheme.bodySmall)])
+            else
+              Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: OutlinedButton(
+                  onPressed: () async {
+                    final messenger = ScaffoldMessenger.of(context);
+                    try {
+                      await ref.read(showcaseApiProvider).confirmReport(planId, report.id);
+                      ref.invalidate(trainingBodyReportsProvider(planId));
+                    } catch (_) {
+                      messenger.showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+                    }
+                  },
+                  child: Text(l10n.bodyReportConfirm),
+                ),
+              ),
           ],
         ),
       ),

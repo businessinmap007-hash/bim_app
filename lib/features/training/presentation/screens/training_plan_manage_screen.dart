@@ -11,6 +11,7 @@ import '../../data/models/food_library.dart';
 import '../widgets/exercise_picker_sheet.dart';
 import '../widgets/food_picker_sheet.dart';
 import '../widgets/plan_photo_strip.dart';
+import '../widgets/plan_showcase_widgets.dart';
 import 'body_calculator_screen.dart';
 import 'training_monthly_summary_screen.dart';
 
@@ -725,6 +726,8 @@ class _TrainingPlanManageScreenState extends ConsumerState<TrainingPlanManageScr
                       ],
                     ),
                   ),
+                const SizedBox(height: 16),
+                TrainerPlanShowcaseCard(planId: widget.planId, planTitle: state.plan?.title ?? ''),
                 const SizedBox(height: 16),
                 Row(
                   children: [

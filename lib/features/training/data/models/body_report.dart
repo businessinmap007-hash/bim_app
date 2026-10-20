@@ -42,6 +42,9 @@ class BodyReport {
   final String? notes;
   final BodyReportChange change;
 
+  /// The client's confirmation of this month's result — what a showcase post rests on.
+  final bool confirmed;
+
   const BodyReport({
     required this.id,
     this.forMonth,
@@ -54,6 +57,7 @@ class BodyReport {
     this.visceralFat,
     this.notes,
     required this.change,
+    this.confirmed = false,
   });
 
   factory BodyReport.fromJson(Map<String, dynamic> json) => BodyReport(
@@ -68,5 +72,6 @@ class BodyReport {
     visceralFat: (json['visceral_fat'] as num?)?.toDouble(),
     notes: json['notes'] as String?,
     change: BodyReportChange.fromJson(json['change'] as Map<String, dynamic>? ?? const {}),
+    confirmed: json['confirmed'] as bool? ?? false,
   );
 }

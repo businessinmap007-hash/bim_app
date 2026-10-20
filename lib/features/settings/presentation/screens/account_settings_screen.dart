@@ -12,6 +12,7 @@ import '../../../ratings/presentation/screens/my_rating_screen.dart';
 import '../../../staff/presentation/screens/staff_team_settings_screen.dart';
 import '../widgets/settings_widgets.dart';
 import 'services_settings_screen.dart';
+import 'showcase_consent_screen.dart';
 import 'watermark_settings_screen.dart';
 
 /// «اعدادات الحساب» — المالك، 2026-10-06: one hub, in this order — the account's information, the business's
@@ -54,6 +55,8 @@ class AccountSettingsScreen extends ConsumerWidget {
               ],
               const Divider(height: 1),
               SettingsNavTile(icon: Icons.water_drop_outlined, title: l10n.mediaWatermarkTitle, onTap: () => open(const WatermarkSettingsScreen())),
+              const Divider(height: 1),
+              SettingsNavTile(icon: Icons.campaign_outlined, title: l10n.showcaseGeneralTitle, subtitle: l10n.showcaseGeneralSubtitle, onTap: () => open(const ShowcaseConsentScreen())),
             ],
           ),
           const SizedBox(height: 24),

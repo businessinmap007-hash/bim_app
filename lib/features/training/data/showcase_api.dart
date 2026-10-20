@@ -1,0 +1,43 @@
+import '../../../core/network/api_client.dart';
+import '../../projects/data/models/project_showcase.dart';
+
+/// «نتائج موثَّقة» for training / nutrition plans, and the general consent — see Api\\V2\\PlanShowcaseController.
+class ShowcaseApi {
+  final ApiClient _client;
+  const ShowcaseApi(this._client);
+
+  /// Trainer: where my request to show this plan's results stands (null = never asked).
+  Future<ShowcaseRequest?> trainerShowcase(int planId) async {
+    final data = await _client.get('/business/training-plans/$planId/showcase') as Map<String, dynamic>;
+    return ShowcaseRequest.fromJsonOrNull(data['showcase']);
+  }
+
+  Future<ShowcaseRequest?> requestShowcase(int planId, {required String publicTitle, String? note}) async {
+    final data = await _client.post(
+      '/business/training-plans/$planId/showcase',
+      data: {'public_title': publicTitle, if (note != null && note.isNotEmpty) 'note': note},
+    ) as Map<String, dynamic>;
+    return ShowcaseRequest.fromJsonOrNull(data['showcase']);
+  }
+
+  Future<void> trainerWithdraw(int planId) => _client.delete('/business/training-plans/$planId/showcase');
+
+  /// Client: answer the trainer's request, or take a live post down.
+  Future<void> decide(int planId, {required bool approve, String? note}) =>
+      _client.post('/training-plans/$planId/showcase/${approve ? 'approve' : 'decline'}', data: {'note': ?note});
+
+  Future<void> clientWithdraw(int planId) => _client.post('/training-plans/$planId/showcase/withdraw');
+
+  /// Client: «أؤكد نتيجة هذا الشهر».
+  Future<void> confirmReport(int planId, int reportId) => _client.post('/training-plans/$planId/body-reports/$reportId/confirm');
+
+  Future<ShowcaseConsent> consent() async {
+    final data = await _client.get('/showcase-consent') as Map<String, dynamic>;
+    return ShowcaseConsent.fromJson(data['consent'] as Map<String, dynamic>? ?? const {});
+  }
+
+  Future<ShowcaseConsent> updateConsent(Map<String, bool> changes) async {
+    final data = await _client.put('/showcase-consent', data: changes) as Map<String, dynamic>;
+    return ShowcaseConsent.fromJson(data['consent'] as Map<String, dynamic>? ?? const {});
+  }
+}

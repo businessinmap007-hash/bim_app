@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import '../../../projects/data/models/project_showcase.dart';
 import 'set_log.dart';
 import '../../../../core/time/egypt_time.dart';
 
@@ -179,6 +180,9 @@ class TrainingPlan {
   final int? weekNumber;
   final int? totalWeeks;
 
+  /// The trainer's request to show the plan's results as a post, and where it stands (client side only; null = never asked).
+  final ShowcaseRequest? showcase;
+
   const TrainingPlan({
     required this.id,
     required this.title,
@@ -202,6 +206,7 @@ class TrainingPlan {
     this.progress,
     this.weekNumber,
     this.totalWeeks,
+    this.showcase,
   });
 
   bool get isActive => status == 'active';
@@ -239,6 +244,7 @@ class TrainingPlan {
           .toList(),
       weekNumber: (json['week_number'] as num?)?.toInt(),
       totalWeeks: (json['total_weeks'] as num?)?.toInt(),
+      showcase: ShowcaseRequest.fromJsonOrNull(json['showcase']),
     );
   }
 }

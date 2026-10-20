@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../projects/presentation/widgets/project_showcase_widgets.dart';
+import '../../../training/presentation/widgets/plan_showcase_widgets.dart';
 import '../../data/models/business_post.dart';
 import 'post_image_carousel.dart';
 import '../../../../core/time/clock_format.dart';
@@ -165,6 +166,11 @@ class PostCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
               child: ShowcaseResultsCard(showcase: post.showcase!),
+            ),
+          if (post.planShowcase != null)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+              child: PlanResultsCard(showcase: post.planShowcase!),
             ),
           if (post.subject != null)
             Padding(

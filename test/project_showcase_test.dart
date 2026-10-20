@@ -36,4 +36,35 @@ void main() {
     expect(r('withdrawn').canAsk, isTrue);
     expect(ShowcaseRequest.fromJsonOrNull(null), isNull);
   });
+
+  test('a plan showcase post carries changes only, and the consent reads its four switches', () {
+    final post = BusinessPost.fromJson({
+      'id': 9,
+      'title': 'Eight weeks',
+      'body': '',
+      'images': [],
+      'plan_showcase': {
+        'kind': 'combined',
+        'weeks': 9,
+        'confirmed_months': 2,
+        'months': [
+          {'month': '2026-09', 'confirmed_on': '2026-10-01', 'change': {'weight_kg': -3.5, 'fat_percent': -3.5}},
+        ],
+        'total_change': {'weight_kg': -7, 'fat_percent': -7.0, 'muscle_mass_kg': null},
+        'updated_on': '2026-10-02',
+      },
+    });
+
+    final s = post.planShowcase!;
+    expect(s.kind, 'combined');
+    expect(s.totalChange['weight_kg'], -7.0);
+    expect(s.totalChange.containsKey('muscle_mass_kg'), isFalse);
+    expect(s.months.single.change['fat_percent'], -3.5);
+    expect(post.showcase, isNull);
+
+    final c = ShowcaseConsent.fromJson({'projects': true, 'training': true});
+    expect(c.projects && c.training, isTrue);
+    expect(c.nutrition || c.projectPhotos, isFalse);
+    expect(ShowcaseRequest.fromJsonOrNull({'id': 1, 'status': 'approved', 'public_title': 'x', 'decided_via': 'general'})!.viaGeneral, isTrue);
+  });
 }
