@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/arrival_notice_banner.dart';
+import '../../../../core/assignment/assignee.dart';
 import '../../../chairs/data/models/service_chair.dart';
 import '../../../chairs/presentation/widgets/chair_picker.dart';
 import '../../../../shared/widgets/async_value_view.dart';
@@ -56,6 +57,9 @@ class BookingScreen extends ConsumerStatefulWidget {
   /// «كرسي وعليه الحلاق»: the person chosen on the board — none means whoever is free.
   final ServiceChair? chair;
 
+  /// «اختر مقدّم الخدمة»: the staff member the customer chose on the board — none means the business decides.
+  final Assignee? provider;
+
   const BookingScreen({
     super.key,
     required this.businessId,
@@ -70,6 +74,7 @@ class BookingScreen extends ConsumerStatefulWidget {
     this.courseGroup,
     this.queueDate,
     this.chair,
+    this.provider,
   });
 
   @override
@@ -402,6 +407,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
         optionIds: _modifierOptionIds.toList(),
         courseGroupId: widget.courseGroupId,
         chairId: widget.chair?.id,
+        providerId: widget.provider?.id,
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.bookingSuccess)));
@@ -487,6 +493,16 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                     ChairAvatar(chair: widget.chair, size: 40),
                     const SizedBox(width: 10),
                     Expanded(child: Text(AppLocalizations.of(context)!.chairWithPerson(widget.chair!.title), style: Theme.of(context).textTheme.titleSmall)),
+                  ],
+                ),
+              ],
+              if (widget.provider != null) ...[
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    const Icon(Icons.person_outline),
+                    const SizedBox(width: 10),
+                    Expanded(child: Text(l10n.chairWithPerson(widget.provider!.line), style: Theme.of(context).textTheme.titleSmall)),
                   ],
                 ),
               ],

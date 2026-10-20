@@ -11425,4 +11425,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String orderAcceptedBy(String name) {
     return 'Accepted by $name';
   }
+
+  @override
+  String get providerPickTitle => 'Choose who serves you';
+
+  @override
+  String get providerAnyone => 'Anyone available';
 }

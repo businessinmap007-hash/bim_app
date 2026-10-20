@@ -3949,5 +3949,7 @@
   "orderPreparedBy": "جهّزه {name}",
   "@orderPreparedBy": {"placeholders": {"name": {"type": "String"}}},
   "orderAcceptedBy": "قبِله {name}",
-  "@orderAcceptedBy": {"placeholders": {"name": {"type": "String"}}}
+  "@orderAcceptedBy": {"placeholders": {"name": {"type": "String"}}},
+  "providerPickTitle": "اختر مقدّم الخدمة",
+  "providerAnyone": "أي مقدّم متاح"
 }

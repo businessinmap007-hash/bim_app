@@ -254,6 +254,8 @@ class BookingApi {
     int? courseGroupId,
     // «كرسي وعليه الحلاق»: the person the customer chose; none = whoever is free
     int? chairId,
+    // «اختر مقدّم الخدمة»: the staff member the customer wants; none = the business decides
+    int? providerId,
   }) async {
     final data =
         await _client.post(
@@ -275,6 +277,7 @@ class BookingApi {
                 if (optionIds.isNotEmpty) 'option_ids': optionIds,
                 'course_group_id': ?courseGroupId,
                 'chair_id': ?chairId,
+                'provider_id': ?providerId,
               },
             )
             as Map<String, dynamic>;
@@ -406,12 +409,12 @@ class BookingApi {
   }
 
   /// One day of an appointment with the business itself as start times (`free` 0/1) — no units.
-  Future<DayGrid> appointmentGrid({required int businessId, required DateTime date, int? offeringId, int? chairId}) async {
+  Future<DayGrid> appointmentGrid({required int businessId, required DateTime date, int? offeringId, int? chairId, int? providerId}) async {
     final day = '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
     final data =
         await _client.get(
               '/discovery/appointments/$businessId/day-grid',
-              query: {'date': day, 'offering_id': ?offeringId, 'chair_id': ?chairId},
+              query: {'date': day, 'offering_id': ?offeringId, 'chair_id': ?chairId, 'provider_id': ?providerId},
             )
             as Map<String, dynamic>;
 

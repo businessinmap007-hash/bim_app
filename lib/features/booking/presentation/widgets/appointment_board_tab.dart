@@ -4,6 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../business/application/business_page_providers.dart';
 import '../../../business/data/models/offering_item.dart';
+import '../../../../core/assignment/assignee.dart';
+import '../../../../core/assignment/assignment_providers.dart';
+import '../../../../core/assignment/widgets/provider_picker.dart';
 import '../../../chairs/application/chairs_providers.dart';
 import '../../../chairs/data/models/service_chair.dart';
 import '../../../chairs/presentation/widgets/chair_picker.dart';
@@ -39,6 +42,7 @@ class _AppointmentBoardTabState extends ConsumerState<AppointmentBoardTab> {
   int? _offeringId;
   DateTime? _slot;
   int? _chairId;
+  int? _providerId;
 
   @override
   void initState() {
@@ -69,7 +73,8 @@ class _AppointmentBoardTabState extends ConsumerState<AppointmentBoardTab> {
         if (widget.queue) return _queueBoard(context, l10n, services, chosen);
         final chairs = ref.watch(chairsDiscoveryProvider(widget.businessId)).valueOrNull ?? const <ServiceChair>[];
         final chair = chairs.where((c) => c.id == _chairId).firstOrNull;
-        final grid = ref.watch(appointmentGridProvider((businessId: widget.businessId, date: _dateKey(_day), offeringId: chosen.id, chairId: _chairId)));
+        final providers = ref.watch(publicProvidersProvider(widget.businessId)).valueOrNull ?? const <Assignee>[];
+        final grid = ref.watch(appointmentGridProvider((businessId: widget.businessId, date: _dateKey(_day), offeringId: chosen.id, chairId: _chairId, providerId: _providerId)));
         final slotData = grid.valueOrNull?.slots.where((s) => s.startsAt == _slot).firstOrNull;
 
         return BoardScaffold(
@@ -90,6 +95,7 @@ class _AppointmentBoardTabState extends ConsumerState<AppointmentBoardTab> {
                           initialStartsAt: slotData.startsAt,
                           initialEndsAt: slotData.endsAt,
                           chair: chair,
+                          provider: providers.where((p) => p.id == _providerId).firstOrNull,
                         ),
                       ),
                     );
@@ -123,6 +129,20 @@ class _AppointmentBoardTabState extends ConsumerState<AppointmentBoardTab> {
                   selected: _chairId,
                   onPick: (id) => setState(() {
                     _chairId = id;
+                    _slot = null;
+                  }),
+                ),
+              ),
+            ],
+            if (providers.isNotEmpty) ...[
+              const SizedBox(height: 14),
+              BookingSectionCard(
+                title: l10n.providerPickTitle,
+                child: ProviderPicker(
+                  providers: providers,
+                  selected: _providerId,
+                  onPick: (id) => setState(() {
+                    _providerId = id;
                     _slot = null;
                   }),
                 ),

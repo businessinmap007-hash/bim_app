@@ -3918,5 +3918,7 @@
   "objectHint": "Explain clearly why your account should not be deleted",
   "orderPreparingBy": "Being prepared by {name}",
   "orderPreparedBy": "Prepared by {name}",
-  "orderAcceptedBy": "Accepted by {name}"
+  "orderAcceptedBy": "Accepted by {name}",
+  "providerPickTitle": "Choose who serves you",
+  "providerAnyone": "Anyone available"
 }

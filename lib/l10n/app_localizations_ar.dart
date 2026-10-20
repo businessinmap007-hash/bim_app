@@ -11340,4 +11340,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String orderAcceptedBy(String name) {
     return 'قبِله $name';
   }
+
+  @override
+  String get providerPickTitle => 'اختر مقدّم الخدمة';
+
+  @override
+  String get providerAnyone => 'أي مقدّم متاح';
 }

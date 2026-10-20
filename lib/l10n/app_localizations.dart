@@ -20454,6 +20454,18 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'قبِله {name}'**
   String orderAcceptedBy(String name);
+
+  /// No description provided for @providerPickTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر مقدّم الخدمة'**
+  String get providerPickTitle;
+
+  /// No description provided for @providerAnyone.
+  ///
+  /// In ar, this message translates to:
+  /// **'أي مقدّم متاح'**
+  String get providerAnyone;
 }
 
 class _AppLocalizationsDelegate
