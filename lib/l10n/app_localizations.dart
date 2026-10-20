@@ -20466,6 +20466,138 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'أي مقدّم متاح'**
   String get providerAnyone;
+
+  /// No description provided for @projectForOperation.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشروع العملية رقم {id}'**
+  String projectForOperation(int id);
+
+  /// No description provided for @projectTemplatePick.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ من خطة جاهزة'**
+  String get projectTemplatePick;
+
+  /// No description provided for @projectTemplateSummary.
+  ///
+  /// In ar, this message translates to:
+  /// **'{stages} مراحل · نحو {days} يومًا'**
+  String projectTemplateSummary(int stages, int days);
+
+  /// No description provided for @taskRequiresApproval.
+  ///
+  /// In ar, this message translates to:
+  /// **'يطلب اعتماد العميل عند اكتمالها'**
+  String get taskRequiresApproval;
+
+  /// No description provided for @taskTakePhoto.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصوير المرحلة بالكاميرا'**
+  String get taskTakePhoto;
+
+  /// No description provided for @approvalPendingBusiness.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار اعتماد العميل'**
+  String get approvalPendingBusiness;
+
+  /// No description provided for @approvalPendingCustomer.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذه المرحلة بانتظار اعتمادك'**
+  String get approvalPendingCustomer;
+
+  /// No description provided for @approvalApproved.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتمدها العميل'**
+  String get approvalApproved;
+
+  /// No description provided for @approvalRejectedWithNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'أعادها العميل للتعديل: {note}'**
+  String approvalRejectedWithNote(String note);
+
+  /// No description provided for @approvalApprove.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتماد المرحلة'**
+  String get approvalApprove;
+
+  /// No description provided for @approvalReject.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة للتعديل'**
+  String get approvalReject;
+
+  /// No description provided for @approvalRejectTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظتك على المرحلة'**
+  String get approvalRejectTitle;
+
+  /// No description provided for @approvalRejectHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب ما يجب تعديله'**
+  String get approvalRejectHint;
+
+  /// No description provided for @myStagesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مراحلي'**
+  String get myStagesTitle;
+
+  /// No description provided for @myStagesEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد مراحل مسندة إليك الآن.'**
+  String get myStagesEmpty;
+
+  /// No description provided for @myStagesPhotoSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'حُفظت الصورة'**
+  String get myStagesPhotoSaved;
+
+  /// No description provided for @myStagesDue.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنتهي {date}'**
+  String myStagesDue(String date);
+
+  /// No description provided for @myStagesPlus25.
+  ///
+  /// In ar, this message translates to:
+  /// **'+٢٥٪'**
+  String get myStagesPlus25;
+
+  /// No description provided for @projectCardStage.
+  ///
+  /// In ar, this message translates to:
+  /// **'المرحلة الحالية: {stage}'**
+  String projectCardStage(String stage);
+
+  /// No description provided for @projectCardStageBy.
+  ///
+  /// In ar, this message translates to:
+  /// **'المرحلة الحالية: {stage} — {name}'**
+  String projectCardStageBy(String stage, String name);
+
+  /// No description provided for @projectCardWaiting.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} مرحلة بانتظار اعتمادك'**
+  String projectCardWaiting(int count);
+
+  /// No description provided for @projectStartForOperation.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابدأ مشروعًا لهذه العملية'**
+  String get projectStartForOperation;
 }
 
 class _AppLocalizationsDelegate

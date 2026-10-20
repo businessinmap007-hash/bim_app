@@ -11346,4 +11346,84 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get providerAnyone => 'أي مقدّم متاح';
+
+  @override
+  String projectForOperation(int id) {
+    return 'مشروع العملية رقم $id';
+  }
+
+  @override
+  String get projectTemplatePick => 'ابدأ من خطة جاهزة';
+
+  @override
+  String projectTemplateSummary(int stages, int days) {
+    return '$stages مراحل · نحو $days يومًا';
+  }
+
+  @override
+  String get taskRequiresApproval => 'يطلب اعتماد العميل عند اكتمالها';
+
+  @override
+  String get taskTakePhoto => 'تصوير المرحلة بالكاميرا';
+
+  @override
+  String get approvalPendingBusiness => 'بانتظار اعتماد العميل';
+
+  @override
+  String get approvalPendingCustomer => 'هذه المرحلة بانتظار اعتمادك';
+
+  @override
+  String get approvalApproved => 'اعتمدها العميل';
+
+  @override
+  String approvalRejectedWithNote(String note) {
+    return 'أعادها العميل للتعديل: $note';
+  }
+
+  @override
+  String get approvalApprove => 'اعتماد المرحلة';
+
+  @override
+  String get approvalReject => 'إعادة للتعديل';
+
+  @override
+  String get approvalRejectTitle => 'ملاحظتك على المرحلة';
+
+  @override
+  String get approvalRejectHint => 'اكتب ما يجب تعديله';
+
+  @override
+  String get myStagesTitle => 'مراحلي';
+
+  @override
+  String get myStagesEmpty => 'لا توجد مراحل مسندة إليك الآن.';
+
+  @override
+  String get myStagesPhotoSaved => 'حُفظت الصورة';
+
+  @override
+  String myStagesDue(String date) {
+    return 'تنتهي $date';
+  }
+
+  @override
+  String get myStagesPlus25 => '+٢٥٪';
+
+  @override
+  String projectCardStage(String stage) {
+    return 'المرحلة الحالية: $stage';
+  }
+
+  @override
+  String projectCardStageBy(String stage, String name) {
+    return 'المرحلة الحالية: $stage — $name';
+  }
+
+  @override
+  String projectCardWaiting(int count) {
+    return '$count مرحلة بانتظار اعتمادك';
+  }
+
+  @override
+  String get projectStartForOperation => 'ابدأ مشروعًا لهذه العملية';
 }

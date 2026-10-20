@@ -1,7 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/core_providers.dart';
 import '../data/models/project.dart';
+import '../data/models/project_template.dart';
 import '../data/models/project_timeline.dart';
 import '../data/projects_api.dart';
 
@@ -83,6 +86,9 @@ class ProjectsController extends StateNotifier<ProjectsState> {
     String? reference,
     DateTime? startsOn,
     DateTime? dueOn,
+    int? templateId,
+    String? operationType,
+    int? operationId,
   }) async {
     final project = await _api.create(
       title: title,
@@ -90,6 +96,9 @@ class ProjectsController extends StateNotifier<ProjectsState> {
       reference: reference,
       startsOn: startsOn,
       dueOn: dueOn,
+      templateId: templateId,
+      operationType: operationType,
+      operationId: operationId,
     );
     state = state.copyWith(items: [project, ...state.items]);
   }
@@ -156,6 +165,7 @@ class ProjectDetailController extends StateNotifier<ProjectDetailState> {
     DateTime? startsOn,
     DateTime? endsOn,
     bool requiresPhoto = false,
+    bool requiresApproval = false,
   }) async {
     await _api.createTask(
       projectId: projectId,
@@ -164,7 +174,18 @@ class ProjectDetailController extends StateNotifier<ProjectDetailState> {
       startsOn: startsOn,
       endsOn: endsOn,
       requiresPhoto: requiresPhoto,
+      requiresApproval: requiresApproval,
     );
+    await load();
+  }
+
+  Future<void> assignTask(int taskId, int? assigneeId) async {
+    await _api.assignTask(projectId, taskId, assigneeId);
+    await load();
+  }
+
+  Future<void> uploadPhoto(int taskId, Uint8List bytes) async {
+    await _api.uploadPhoto(projectId, taskId, bytes);
     await load();
   }
 
@@ -188,3 +209,13 @@ final projectDetailControllerProvider =
     StateNotifierProvider.family<ProjectDetailController, ProjectDetailState, int>((ref, projectId) {
       return ProjectDetailController(ref.watch(projectsApiProvider), projectId);
     });
+
+/// The ready stage plans offered to my trade.
+final projectTemplatesProvider = FutureProvider.autoDispose<List<ProjectTemplate>>((ref) {
+  return ref.watch(projectsApiProvider).templates();
+});
+
+/// The stages assigned to me that still need work (family arg = the business I work for, null = my own).
+final myStagesProvider = FutureProvider.autoDispose.family<List<MyStage>, int?>((ref, businessId) {
+  return ref.watch(projectsApiProvider).myStages(businessId: businessId);
+});

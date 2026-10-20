@@ -14,4 +14,18 @@ class CustomerProjectApi {
     if (data['project'] == null) return null;
     return CustomerProjectView.fromJson(data);
   }
+
+  /// Which side is asking (`business` / `customer`) — needed even when no project is linked yet.
+  Future<String> viewerOf(String operationType, int operationId) async {
+    final data = await _client.get('/operations/$operationType/$operationId/project') as Map<String, dynamic>;
+    return data['viewer'] as String? ?? 'customer';
+  }
+
+  /// The customer approves a completed stage that asked for it.
+  Future<void> approve(String operationType, int operationId, int taskId) =>
+      _client.post('/operations/$operationType/$operationId/project/tasks/$taskId/approve');
+
+  /// …or sends it back; [note] is required.
+  Future<void> reject(String operationType, int operationId, int taskId, String note) =>
+      _client.post('/operations/$operationType/$operationId/project/tasks/$taskId/reject', data: {'note': note});
 }

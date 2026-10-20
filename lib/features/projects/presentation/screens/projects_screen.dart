@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../application/customer_project_providers.dart';
 import '../../application/projects_providers.dart';
 import '../../data/models/project.dart';
 import 'project_detail_screen.dart';
@@ -13,7 +14,10 @@ import '../../../../core/time/local_format.dart';
 /// dated, dependent tasks with progress tracking. See
 /// Api\V2\BusinessProjectController.
 class ProjectsScreen extends ConsumerStatefulWidget {
-  const ProjectsScreen({super.key});
+  /// Open straight on the «new project» sheet, linked to this order / booking (from its chat).
+  final OperationKey? linkTo;
+
+  const ProjectsScreen({super.key, this.linkTo});
 
   @override
   ConsumerState<ProjectsScreen> createState() => _ProjectsScreenState();
@@ -26,6 +30,11 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+    if (widget.linkTo != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _createProject();
+      });
+    }
   }
 
   void _onScroll() {
@@ -49,6 +58,9 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
     DateTime? startsOn;
     DateTime? dueOn;
     String? error;
+    int? templateId;
+    final link = widget.linkTo;
+    if (link != null) titleController.text = l10n.projectForOperation(link.id);
 
     final confirmed = await showModalBottomSheet<bool>(
       context: context,
@@ -64,6 +76,45 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
                 children: [
                   Text(l10n.projectsAdd, style: Theme.of(sheetContext).textTheme.titleMedium),
                   const SizedBox(height: 16),
+                  Consumer(
+                    builder: (context, ref, _) {
+                      final plans = ref.watch(projectTemplatesProvider).valueOrNull ?? const [];
+                      if (plans.isEmpty) return const SizedBox.shrink();
+                      final picked = plans.where((t) => t.id == templateId).firstOrNull;
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(l10n.projectTemplatePick, style: Theme.of(context).textTheme.titleSmall),
+                          const SizedBox(height: 8),
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: [
+                              for (final t in plans)
+                                ChoiceChip(
+                                  label: Text(t.title),
+                                  selected: templateId == t.id,
+                                  onSelected: (on) => setSheetState(() {
+                                    templateId = on ? t.id : null;
+                                    if (on && titleController.text.trim().isEmpty) titleController.text = t.title;
+                                  }),
+                                ),
+                            ],
+                          ),
+                          if (picked != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 6),
+                              child: Text(
+                                l10n.projectTemplateSummary(picked.stages.length, picked.totalDays),
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            ),
+                          const SizedBox(height: 12),
+                        ],
+                      );
+                    },
+                  ),
                   TextField(
                     controller: titleController,
                     decoration: InputDecoration(labelText: l10n.projectTitleLabel),
@@ -140,7 +191,12 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
         reference: referenceController.text.trim(),
         startsOn: startsOn,
         dueOn: dueOn,
+        templateId: templateId,
+        operationType: link?.type,
+        operationId: link?.id,
       );
+      // the chat card reads this operation's project: let it see the new one
+      if (link != null) ref.invalidate(customerProjectViewProvider(link));
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
+import '../../../../core/assignment/widgets/assignee_widgets.dart';
+import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../application/customer_project_providers.dart';
@@ -78,7 +80,13 @@ class ProjectProgressScreen extends ConsumerWidget {
                   child: Text(l10n.projectTasksEmpty),
                 )
               else
-                for (final task in view.tasks) _CustomerTaskTile(task: task),
+                for (final task in view.tasks)
+                  _CustomerTaskTile(
+                    task: task,
+                    canDecide: !view.viewerIsBusiness,
+                    operationType: operationType,
+                    operationId: operationId,
+                  ),
             ],
           );
         },
@@ -87,12 +95,49 @@ class ProjectProgressScreen extends ConsumerWidget {
   }
 }
 
-class _CustomerTaskTile extends StatelessWidget {
+class _CustomerTaskTile extends ConsumerWidget {
   final CustomerProjectTask task;
-  const _CustomerTaskTile({required this.task});
+  final bool canDecide;
+  final String operationType;
+  final int operationId;
+  const _CustomerTaskTile({required this.task, required this.canDecide, required this.operationType, required this.operationId});
+
+  Future<void> _decide(BuildContext context, WidgetRef ref, {required bool approve}) async {
+    final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+    String? note;
+
+    if (!approve) {
+      final controller = TextEditingController();
+      note = await showDialog<String>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text(l10n.approvalRejectTitle),
+          content: TextField(controller: controller, autofocus: true, minLines: 2, maxLines: 5, decoration: InputDecoration(hintText: l10n.approvalRejectHint)),
+          actions: [
+            TextButton(onPressed: () => Navigator.of(ctx).pop(), child: Text(l10n.commonCancel)),
+            FilledButton(onPressed: () => Navigator.of(ctx).pop(controller.text.trim()), child: Text(l10n.approvalReject)),
+          ],
+        ),
+      );
+      if (note == null || note.isEmpty) return;
+    }
+
+    try {
+      final api = ref.read(customerProjectApiProvider);
+      if (approve) {
+        await api.approve(operationType, operationId, task.id);
+      } else {
+        await api.reject(operationType, operationId, task.id, note!);
+      }
+      ref.invalidate(customerProjectViewProvider(OperationKey(operationType, operationId)));
+    } on ApiException catch (e) {
+      messenger.showSnackBar(SnackBar(content: Text(e.message)));
+    }
+  }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
@@ -104,8 +149,34 @@ class _CustomerTaskTile extends StatelessWidget {
             Text(task.title, style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 4),
             Text('${_taskStatusLabel(task.status, l10n)} · ${task.progress}%'),
+            if (task.assignee != null) AssigneeLine(task.assignee),
             const SizedBox(height: 4),
             LinearProgressIndicator(value: task.progress / 100),
+            if (task.approvalStatus == 'approved')
+              Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: Text(l10n.approvalApproved, style: const TextStyle(color: AppColors.success, fontSize: 12, fontWeight: FontWeight.w600)),
+              ),
+            if (task.approvalStatus == 'rejected')
+              Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: Text(l10n.approvalRejectedWithNote(task.approvalNote ?? ''), style: const TextStyle(color: AppColors.error, fontSize: 12, fontWeight: FontWeight.w600)),
+              ),
+            if (task.waitsForMe) ...[
+              const SizedBox(height: 8),
+              Text(canDecide ? l10n.approvalPendingCustomer : l10n.approvalPendingBusiness, style: const TextStyle(color: AppColors.accentGold, fontWeight: FontWeight.w700)),
+              if (canDecide)
+                Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: Row(
+                    children: [
+                      Expanded(child: FilledButton(onPressed: () => _decide(context, ref, approve: true), child: Text(l10n.approvalApprove))),
+                      const SizedBox(width: 8),
+                      Expanded(child: OutlinedButton(onPressed: () => _decide(context, ref, approve: false), child: Text(l10n.approvalReject))),
+                    ],
+                  ),
+                ),
+            ],
             if (task.photoUrls.isNotEmpty) ...[
               const SizedBox(height: 8),
               SizedBox(

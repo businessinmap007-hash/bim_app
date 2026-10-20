@@ -8,6 +8,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../booking/presentation/screens/business_bookings_screen.dart';
 import '../../../chairs/presentation/screens/my_chair_screen.dart';
 import '../../../orders/presentation/screens/business_orders_screen.dart';
+import '../../../projects/presentation/screens/my_stages_screen.dart';
 import '../../../delivery/application/delivery_providers.dart';
 import '../../../delivery/data/models/roster_driver.dart';
 import '../../../delivery/presentation/screens/driver_dashboard_screen.dart';
@@ -290,6 +291,20 @@ class _MembershipCard extends StatelessWidget {
                   ).push(MaterialPageRoute(builder: (_) => BusinessOrdersScreen(businessId: membership.businessId))),
                   icon: const Icon(Icons.receipt_long_outlined, size: 18),
                   label: Text(l10n.businessOrdersTitle),
+                ),
+              ),
+            ],
+            // «مراحلي»: the stages of projects handed to me
+            if (membership.capabilities.contains('projects')) ...[
+              const SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: () => Navigator.of(
+                    context,
+                  ).push(MaterialPageRoute(builder: (_) => MyStagesScreen(businessId: membership.businessId))),
+                  icon: const Icon(Icons.account_tree_outlined, size: 18),
+                  label: Text(l10n.myStagesTitle),
                 ),
               ),
             ],

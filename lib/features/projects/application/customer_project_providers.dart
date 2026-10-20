@@ -20,6 +20,11 @@ class OperationKey {
   int get hashCode => Object.hash(type, id);
 }
 
+/// Which side of an operation I am (`business` / `customer`) — known even before a project is linked.
+final operationViewerProvider = FutureProvider.family<String, OperationKey>((ref, key) {
+  return ref.watch(customerProjectApiProvider).viewerOf(key.type, key.id);
+});
+
 final customerProjectViewProvider =
     FutureProvider.family<CustomerProjectView?, OperationKey>((ref, key) {
       return ref.watch(customerProjectApiProvider).show(key.type, key.id);

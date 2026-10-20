@@ -1,3 +1,5 @@
+import '../../../../core/assignment/assignee.dart';
+
 /// One task's computed schedule row — mirrors `ProjectService::timeline()`'s
 /// per-task output (the critical-path/Gantt math already done server-side;
 /// this app just displays it as a sorted list rather than drawing bars).
@@ -13,6 +15,14 @@ class ProjectTaskRow {
   final String? plannedEnd;
   final bool isOverdue;
 
+  /// «يطلب اعتماد العميل»: and where that stands (null | pending | approved | rejected).
+  final bool requiresApproval;
+  final String? approvalStatus;
+  final String? approvalNote;
+
+  /// Who is responsible for this stage.
+  final Assignee? assignee;
+
   const ProjectTaskRow({
     required this.id,
     required this.title,
@@ -24,6 +34,10 @@ class ProjectTaskRow {
     this.plannedStart,
     this.plannedEnd,
     required this.isOverdue,
+    this.requiresApproval = false,
+    this.approvalStatus,
+    this.approvalNote,
+    this.assignee,
   });
 
   bool get isDone => status == 'done';
@@ -39,6 +53,10 @@ class ProjectTaskRow {
     plannedStart: json['planned_start'] as String?,
     plannedEnd: json['planned_end'] as String?,
     isOverdue: json['is_overdue'] as bool? ?? false,
+    requiresApproval: json['requires_approval'] as bool? ?? false,
+    approvalStatus: json['approval_status'] as String?,
+    approvalNote: json['approval_note'] as String?,
+    assignee: json['assignee'] is Map<String, dynamic> ? Assignee.fromJson(json['assignee'] as Map<String, dynamic>) : null,
   );
 }
 

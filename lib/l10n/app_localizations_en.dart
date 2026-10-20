@@ -11431,4 +11431,86 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get providerAnyone => 'Anyone available';
+
+  @override
+  String projectForOperation(int id) {
+    return 'Project for operation $id';
+  }
+
+  @override
+  String get projectTemplatePick => 'Start from a ready plan';
+
+  @override
+  String projectTemplateSummary(int stages, int days) {
+    return '$stages stages · about $days days';
+  }
+
+  @override
+  String get taskRequiresApproval =>
+      'Asks for the customer\'s approval when done';
+
+  @override
+  String get taskTakePhoto => 'Take a photo of the stage';
+
+  @override
+  String get approvalPendingBusiness => 'Waiting for the customer\'s approval';
+
+  @override
+  String get approvalPendingCustomer =>
+      'This stage is waiting for your approval';
+
+  @override
+  String get approvalApproved => 'Approved by the customer';
+
+  @override
+  String approvalRejectedWithNote(String note) {
+    return 'Sent back by the customer: $note';
+  }
+
+  @override
+  String get approvalApprove => 'Approve the stage';
+
+  @override
+  String get approvalReject => 'Send back';
+
+  @override
+  String get approvalRejectTitle => 'Your note on the stage';
+
+  @override
+  String get approvalRejectHint => 'Say what has to change';
+
+  @override
+  String get myStagesTitle => 'My stages';
+
+  @override
+  String get myStagesEmpty => 'No stages are assigned to you right now.';
+
+  @override
+  String get myStagesPhotoSaved => 'Photo saved';
+
+  @override
+  String myStagesDue(String date) {
+    return 'Due $date';
+  }
+
+  @override
+  String get myStagesPlus25 => '+25%';
+
+  @override
+  String projectCardStage(String stage) {
+    return 'Current stage: $stage';
+  }
+
+  @override
+  String projectCardStageBy(String stage, String name) {
+    return 'Current stage: $stage — $name';
+  }
+
+  @override
+  String projectCardWaiting(int count) {
+    return '$count stage(s) waiting for your approval';
+  }
+
+  @override
+  String get projectStartForOperation => 'Start a project for this operation';
 }

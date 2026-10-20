@@ -14,6 +14,7 @@ import '../../../../shared/widgets/message_read_receipt.dart';
 import '../../../../shared/widgets/thread_access_banner.dart';
 import '../../../moderation/presentation/widgets/conversation_report_widgets.dart';
 import '../../../moderation/presentation/widgets/report_sheet.dart';
+import '../../../projects/presentation/widgets/project_chat_card.dart';
 import '../../application/chat_providers.dart';
 import '../../data/models/thread_message.dart';
 import '../../../../shared/widgets/full_screen_gallery.dart';
@@ -175,6 +176,7 @@ class _OperationChatScreenState extends ConsumerState<OperationChatScreen> {
         children: [
           if (state.thread != null) ThreadAccessBanner(threadId: state.thread!.id),
           ?widget.banner,
+          ProjectChatCard(operationType: widget.operationType, operationId: widget.operationId),
           if (_selecting && state.thread != null)
             ReportSelectionBar(
               count: _picked.length,

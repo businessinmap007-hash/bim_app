@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/assignment/assignment_providers.dart';
+import '../../../../core/assignment/widgets/assignee_widgets.dart';
+import '../../../media/application/media_picker_service.dart';
+
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/projects_providers.dart';
@@ -19,6 +23,7 @@ class ProjectDetailScreen extends ConsumerWidget {
     DateTime? startsOn;
     DateTime? endsOn;
     bool requiresPhoto = false;
+    bool requiresApproval = false;
     String? error;
 
     final confirmed = await showModalBottomSheet<bool>(
@@ -80,6 +85,12 @@ class ProjectDetailScreen extends ConsumerWidget {
                     onChanged: (value) => setSheetState(() => requiresPhoto = value),
                     title: Text(l10n.taskRequiresPhoto),
                   ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    value: requiresApproval,
+                    onChanged: (value) => setSheetState(() => requiresApproval = value),
+                    title: Text(l10n.taskRequiresApproval),
+                  ),
                   if (error != null) ...[
                     const SizedBox(height: 4),
                     Text(error!, style: TextStyle(color: Theme.of(sheetContext).colorScheme.error)),
@@ -112,6 +123,7 @@ class ProjectDetailScreen extends ConsumerWidget {
         startsOn: startsOn,
         endsOn: endsOn,
         requiresPhoto: requiresPhoto,
+        requiresApproval: requiresApproval,
       );
     } catch (_) {
       if (context.mounted) {
@@ -255,6 +267,26 @@ class _TaskTile extends ConsumerWidget {
               children: [
                 Text(task.title, style: Theme.of(sheetContext).textTheme.titleMedium),
                 const SizedBox(height: 12),
+                Consumer(
+                  builder: (context, ref, _) {
+                    return AssigneeTile(
+                      current: task.assignee,
+                      onAssign: (id) async {
+                        await ref.read(projectDetailControllerProvider(projectId).notifier).assignTask(task.id, id);
+                        final now = ref.read(projectDetailControllerProvider(projectId)).timeline?.tasks.where((t) => t.id == task.id).firstOrNull;
+                        return now?.assignee;
+                      },
+                      onChanged: () => ref.invalidate(businessProvidersProvider),
+                    );
+                  },
+                ),
+                const SizedBox(height: 8),
+                OutlinedButton.icon(
+                  icon: const Icon(Icons.photo_camera_outlined),
+                  onPressed: () => Navigator.of(sheetContext).pop('photo'),
+                  label: Text(l10n.taskTakePhoto),
+                ),
+                const SizedBox(height: 8),
                 Text('${l10n.taskProgressLabel}: $progress%'),
                 Slider(
                   value: progress.toDouble(),
@@ -302,6 +334,9 @@ class _TaskTile extends ConsumerWidget {
         await controller.updateTaskProgress(task.id, progress: progress);
       } else if (result == 'done') {
         await controller.updateTaskProgress(task.id, status: 'done');
+      } else if (result == 'photo') {
+        final shot = await MediaPickerService().pickFromCamera();
+        if (shot != null) await controller.uploadPhoto(task.id, await shot.file.readAsBytes());
       } else if (result == 'delete') {
         final confirmed = await showDialog<bool>(
           context: context,
@@ -356,6 +391,21 @@ class _TaskTile extends ConsumerWidget {
               '${_taskStatusLabel(task.status, l10n)} · ${task.progress}%'
               '${task.plannedStart != null ? ' · ${task.plannedStart}' : ''}',
             ),
+            if (task.assignee != null) AssigneeLine(task.assignee),
+            if (task.approvalStatus != null)
+              Text(
+                switch (task.approvalStatus) {
+                  'pending' => l10n.approvalPendingBusiness,
+                  'approved' => l10n.approvalApproved,
+                  'rejected' => l10n.approvalRejectedWithNote(task.approvalNote ?? ''),
+                  _ => '',
+                },
+                style: TextStyle(
+                  color: task.approvalStatus == 'rejected' ? AppColors.error : AppColors.success,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             const SizedBox(height: 4),
             LinearProgressIndicator(value: task.progress / 100),
           ],
