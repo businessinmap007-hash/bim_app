@@ -11268,7 +11268,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String frozenWarnBody(int limit) {
-    return 'If your account is frozen $limit times it is deleted and its balance and guarantee are confiscated.';
+    return 'If it is frozen $limit times within 12 months, deleting the account and confiscating its balance and guarantee goes to a panel of moderators, and you may object.';
   }
 
   @override
@@ -11280,4 +11280,134 @@ class AppLocalizationsEn extends AppLocalizations {
   String modFreezeConfirmLast(int limit) {
     return 'This is freeze $limit: the account will be deleted and its balance and guarantee confiscated for good. Continue?';
   }
+
+  @override
+  String get reportChatAction => 'Report this conversation';
+
+  @override
+  String get reportChatPick =>
+      'Pick the messages you want to show the moderator (optional)';
+
+  @override
+  String reportChatPickHint(int count) {
+    return 'The moderator cannot read the whole chat without both parties\' consent or a quorum of moderators. Selected: $count';
+  }
+
+  @override
+  String get reportChatContinue => 'Continue';
+
+  @override
+  String reportChatAttached(int count) {
+    return '$count messages will be shown to the moderator with the report';
+  }
+
+  @override
+  String get modTypeConversation => 'Conversation';
+
+  @override
+  String get modConversationTitle => 'Reported conversation';
+
+  @override
+  String modConversationParties(String names) {
+    return 'Between: $names';
+  }
+
+  @override
+  String get modSelectedMessages => 'Messages the reporter chose';
+
+  @override
+  String get modNoSelectedMessages => 'The reporter chose no messages.';
+
+  @override
+  String get modConsentAll => 'Both parties agreed';
+
+  @override
+  String get modConsentDeclined => 'One party declined';
+
+  @override
+  String get modConsentPending => 'Waiting for both parties';
+
+  @override
+  String modQuorumStatus(int n, int q) {
+    return 'Moderator quorum $n/$q';
+  }
+
+  @override
+  String get modConversationOpen => 'Conversation is open';
+
+  @override
+  String get modConversationClosed => 'Conversation is closed';
+
+  @override
+  String get modAskConsent => 'Ask both parties\' consent';
+
+  @override
+  String modVouch(int n, int q) {
+    return 'Vouch to read ($n/$q)';
+  }
+
+  @override
+  String get modReadConversation => 'Read the conversation';
+
+  @override
+  String get modFreezeConfirmPlain =>
+      'This account will be frozen for three days. Continue?';
+
+  @override
+  String get panelTitle => 'Deletion decisions';
+
+  @override
+  String get panelEmpty => 'No deletion decisions are waiting for a vote.';
+
+  @override
+  String get panelFifthFreeze =>
+      'Fifth freeze within 12 months: deleting the account and confiscating its balance and guarantee is proposed.';
+
+  @override
+  String get panelSecondRound =>
+      'The account owner objected: the case is reviewed a second time.';
+
+  @override
+  String get panelFreezes => 'Earlier freezes and their reasons';
+
+  @override
+  String get panelObjection => 'The account owner\'s objection';
+
+  @override
+  String panelTally(int a, int an, int r, int rn) {
+    return 'Approvals $a/$an · Rejections $r/$rn';
+  }
+
+  @override
+  String get panelApprove => 'Approve deletion';
+
+  @override
+  String get panelReject => 'Reject deletion';
+
+  @override
+  String get panelVoted =>
+      'Your vote is recorded. Waiting for the other moderators.';
+
+  @override
+  String get deletionReview =>
+      'A panel of moderators is reviewing the deletion of your account. You will be notified of the decision.';
+
+  @override
+  String deletionScheduled(String when) {
+    return 'The moderators\' panel decided to delete your account on $when and confiscate its balance and guarantee. You can object in writing before then.';
+  }
+
+  @override
+  String get deletionObjected =>
+      'Your objection was received and is under review. The account is not deleted before they decide.';
+
+  @override
+  String get objectAction => 'Object to the deletion';
+
+  @override
+  String get objectTitle => 'Your objection';
+
+  @override
+  String get objectHint =>
+      'Explain clearly why your account should not be deleted';
 }

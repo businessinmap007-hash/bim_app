@@ -12,6 +12,8 @@ import '../../../media/presentation/widgets/picked_media_tile.dart';
 import '../../../../shared/widgets/horizontal_mouse_wheel_scroll.dart';
 import '../../../../shared/widgets/message_read_receipt.dart';
 import '../../../../shared/widgets/thread_access_banner.dart';
+import '../../../moderation/presentation/widgets/conversation_report_widgets.dart';
+import '../../../moderation/presentation/widgets/report_sheet.dart';
 import '../../application/chat_providers.dart';
 import '../../data/models/thread_message.dart';
 import '../../../../shared/widgets/full_screen_gallery.dart';
@@ -45,6 +47,26 @@ class _OperationChatScreenState extends ConsumerState<OperationChatScreen> {
   final _pickerService = MediaPickerService();
   final List<PickedMedia> _pending = [];
   bool _sending = false;
+
+  bool _selecting = false;
+  final Set<int> _picked = {};
+
+  void _toggle(int id) => setState(() {
+    if (!_picked.remove(id)) {
+      if (_picked.length < 30) _picked.add(id);
+    }
+  });
+
+  void _cancelSelecting() => setState(() {
+    _selecting = false;
+    _picked.clear();
+  });
+
+  Future<void> _continueReport(int threadId) async {
+    final ids = _picked.toList();
+    _cancelSelecting();
+    await showReportSheet(context, type: 'conversation', id: threadId, messageIds: ids);
+  }
 
   OperationChatKey get _key => OperationChatKey(widget.operationType, widget.operationId);
 
@@ -135,6 +157,12 @@ class _OperationChatScreenState extends ConsumerState<OperationChatScreen> {
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
+          if (state.thread != null && widget.operationType != 'moderation' && !_selecting)
+            IconButton(
+              icon: const Icon(Icons.flag_outlined),
+              tooltip: l10n.reportChatAction,
+              onPressed: () => setState(() => _selecting = true),
+            ),
           if (expired)
             IconButton(
               icon: const Icon(Icons.delete_outline),
@@ -147,6 +175,12 @@ class _OperationChatScreenState extends ConsumerState<OperationChatScreen> {
         children: [
           if (state.thread != null) ThreadAccessBanner(threadId: state.thread!.id),
           ?widget.banner,
+          if (_selecting && state.thread != null)
+            ReportSelectionBar(
+              count: _picked.length,
+              onCancel: _cancelSelecting,
+              onContinue: () => _continueReport(state.thread!.id),
+            ),
           Expanded(
             child: state.isLoading
                 ? const Center(child: CircularProgressIndicator())
@@ -171,7 +205,16 @@ class _OperationChatScreenState extends ConsumerState<OperationChatScreen> {
                     controller: _scrollController,
                     padding: const EdgeInsets.all(12),
                     itemCount: state.messages.length,
-                    itemBuilder: (context, index) => _MessageBubble(message: state.messages[index]),
+                    itemBuilder: (context, index) {
+                      final m = state.messages[index];
+
+                      return SelectableMessage(
+                        selecting: _selecting,
+                        selected: _picked.contains(m.id),
+                        onToggle: () => _toggle(m.id),
+                        child: _MessageBubble(message: m),
+                      );
+                    },
                   ),
           ),
           if (locked)

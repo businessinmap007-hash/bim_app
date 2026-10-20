@@ -11,19 +11,23 @@ Future<void> showReportSheet(
   BuildContext context, {
   required String type,
   required int id,
+
+  /// A conversation: the messages the person chose to show the moderators.
+  List<int>? messageIds,
 }) {
   return showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
     showDragHandle: true,
-    builder: (_) => _ReportSheet(type: type, id: id),
+    builder: (_) => _ReportSheet(type: type, id: id, messageIds: messageIds),
   );
 }
 
 class _ReportSheet extends ConsumerStatefulWidget {
   final String type;
   final int id;
-  const _ReportSheet({required this.type, required this.id});
+  final List<int>? messageIds;
+  const _ReportSheet({required this.type, required this.id, this.messageIds});
 
   @override
   ConsumerState<_ReportSheet> createState() => _ReportSheetState();
@@ -54,6 +58,7 @@ class _ReportSheetState extends ConsumerState<_ReportSheet> {
             id: widget.id,
             reason: _reason!,
             details: _details.text,
+            messageIds: widget.messageIds,
           );
       navigator.pop();
       messenger.showSnackBar(SnackBar(content: Text(l10n.reportSent)));
@@ -84,6 +89,14 @@ class _ReportSheetState extends ConsumerState<_ReportSheet> {
               l10n.reportTitle,
               style: Theme.of(context).textTheme.titleMedium,
             ),
+            if (widget.messageIds != null && widget.messageIds!.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(
+                  l10n.reportChatAttached(widget.messageIds!.length),
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ),
             const SizedBox(height: 8),
             reasons.when(
               loading: () => const Padding(

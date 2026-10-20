@@ -20206,7 +20206,7 @@ abstract class AppLocalizations {
   /// No description provided for @frozenWarnBody.
   ///
   /// In ar, this message translates to:
-  /// **'إذا تكرر التجميد {limit} مرات يُحذف الحساب ويُصادَر رصيده وضمانه.'**
+  /// **'إذا تكرر التجميد {limit} مرات خلال 12 شهرًا عُرض حذف الحساب ومصادرة رصيده وضمانه على لجنة من المشرفين، ولك حق الاعتراض.'**
   String frozenWarnBody(int limit);
 
   /// No description provided for @modFreezeConfirmCount.
@@ -20220,6 +20220,222 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'هذا هو التجميد رقم {limit}: سيُحذف الحساب ويُصادَر رصيده وضمانه نهائيًا. هل تتابع؟'**
   String modFreezeConfirmLast(int limit);
+
+  /// No description provided for @reportChatAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإبلاغ عن المحادثة'**
+  String get reportChatAction;
+
+  /// No description provided for @reportChatPick.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الرسائل التي تريد عرضها على المشرف (اختياري)'**
+  String get reportChatPick;
+
+  /// No description provided for @reportChatPickHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'المشرف لا يقرأ المحادثة كلها دون موافقة الطرفين أو نصاب من المشرفين. المحدد: {count}'**
+  String reportChatPickHint(int count);
+
+  /// No description provided for @reportChatContinue.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة'**
+  String get reportChatContinue;
+
+  /// No description provided for @reportChatAttached.
+  ///
+  /// In ar, this message translates to:
+  /// **'ستُعرض {count} رسالة على المشرف مع البلاغ'**
+  String reportChatAttached(int count);
+
+  /// No description provided for @modTypeConversation.
+  ///
+  /// In ar, this message translates to:
+  /// **'محادثة'**
+  String get modTypeConversation;
+
+  /// No description provided for @modConversationTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المحادثة المُبلَّغ عنها'**
+  String get modConversationTitle;
+
+  /// No description provided for @modConversationParties.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطرفان: {names}'**
+  String modConversationParties(String names);
+
+  /// No description provided for @modSelectedMessages.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرسائل التي اختارها المُبلِّغ'**
+  String get modSelectedMessages;
+
+  /// No description provided for @modNoSelectedMessages.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يختر المُبلِّغ رسائل.'**
+  String get modNoSelectedMessages;
+
+  /// No description provided for @modConsentAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'وافق الطرفان'**
+  String get modConsentAll;
+
+  /// No description provided for @modConsentDeclined.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفض أحد الطرفين'**
+  String get modConsentDeclined;
+
+  /// No description provided for @modConsentPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار موافقة الطرفين'**
+  String get modConsentPending;
+
+  /// No description provided for @modQuorumStatus.
+  ///
+  /// In ar, this message translates to:
+  /// **'نصاب المشرفين {n}/{q}'**
+  String modQuorumStatus(int n, int q);
+
+  /// No description provided for @modConversationOpen.
+  ///
+  /// In ar, this message translates to:
+  /// **'المحادثة مفتوحة'**
+  String get modConversationOpen;
+
+  /// No description provided for @modConversationClosed.
+  ///
+  /// In ar, this message translates to:
+  /// **'المحادثة مغلقة'**
+  String get modConversationClosed;
+
+  /// No description provided for @modAskConsent.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب موافقة الطرفين'**
+  String get modAskConsent;
+
+  /// No description provided for @modVouch.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأييد الاطلاع ({n}/{q})'**
+  String modVouch(int n, int q);
+
+  /// No description provided for @modReadConversation.
+  ///
+  /// In ar, this message translates to:
+  /// **'قراءة المحادثة'**
+  String get modReadConversation;
+
+  /// No description provided for @modFreezeConfirmPlain.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيُجمَّد هذا الحساب لمدة ثلاثة أيام. هل تتابع؟'**
+  String get modFreezeConfirmPlain;
+
+  /// No description provided for @panelTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'قرارات الحذف'**
+  String get panelTitle;
+
+  /// No description provided for @panelEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد قرارات حذف بانتظار التصويت.'**
+  String get panelEmpty;
+
+  /// No description provided for @panelFifthFreeze.
+  ///
+  /// In ar, this message translates to:
+  /// **'التجميد الخامس خلال 12 شهرًا: يُقترح حذف الحساب ومصادرة رصيده وضمانه.'**
+  String get panelFifthFreeze;
+
+  /// No description provided for @panelSecondRound.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعترض صاحب الحساب: تُراجَع القضية مرة ثانية.'**
+  String get panelSecondRound;
+
+  /// No description provided for @panelFreezes.
+  ///
+  /// In ar, this message translates to:
+  /// **'التجميدات السابقة وأسبابها'**
+  String get panelFreezes;
+
+  /// No description provided for @panelObjection.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتراض صاحب الحساب'**
+  String get panelObjection;
+
+  /// No description provided for @panelTally.
+  ///
+  /// In ar, this message translates to:
+  /// **'موافقات {a}/{an} · رفض {r}/{rn}'**
+  String panelTally(int a, int an, int r, int rn);
+
+  /// No description provided for @panelApprove.
+  ///
+  /// In ar, this message translates to:
+  /// **'موافقة على الحذف'**
+  String get panelApprove;
+
+  /// No description provided for @panelReject.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفض الحذف'**
+  String get panelReject;
+
+  /// No description provided for @panelVoted.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجّلتَ صوتك. بانتظار بقية المشرفين.'**
+  String get panelVoted;
+
+  /// No description provided for @deletionReview.
+  ///
+  /// In ar, this message translates to:
+  /// **'لجنة من المشرفين تراجع حذف حسابك. ستصلك إشعارات بالقرار.'**
+  String get deletionReview;
+
+  /// No description provided for @deletionScheduled.
+  ///
+  /// In ar, this message translates to:
+  /// **'قررت لجنة المشرفين حذف حسابك في {when} ومصادرة رصيده وضمانه. يمكنك الاعتراض كتابةً قبل ذلك.'**
+  String deletionScheduled(String when);
+
+  /// No description provided for @deletionObjected.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصل اعتراضك وهو قيد مراجعة اللجنة. لن يُحذف الحساب قبل قرارهم.'**
+  String get deletionObjected;
+
+  /// No description provided for @objectAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتراض على الحذف'**
+  String get objectAction;
+
+  /// No description provided for @objectTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتراضك على الحذف'**
+  String get objectTitle;
+
+  /// No description provided for @objectHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اشرح بوضوح لماذا لا يجب حذف حسابك'**
+  String get objectHint;
 }
 
 class _AppLocalizationsDelegate

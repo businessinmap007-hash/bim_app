@@ -7,6 +7,8 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../shared/widgets/message_read_receipt.dart';
 import '../../../../shared/widgets/thread_access_banner.dart';
 import '../../../chat/data/models/thread_message.dart';
+import '../../../moderation/presentation/widgets/conversation_report_widgets.dart';
+import '../../../moderation/presentation/widgets/report_sheet.dart';
 import '../../application/general_chat_providers.dart';
 
 /// One conversation — Api\V2\ChatController::show/postMessage. Group-only
@@ -25,6 +27,26 @@ class ChatThreadScreen extends ConsumerStatefulWidget {
 class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
   final _messageController = TextEditingController();
   final _scrollController = ScrollController();
+
+  bool _selecting = false;
+  final Set<int> _picked = {};
+
+  void _toggle(int id) => setState(() {
+    if (!_picked.remove(id)) {
+      if (_picked.length < 30) _picked.add(id);
+    }
+  });
+
+  void _cancelSelecting() => setState(() {
+    _selecting = false;
+    _picked.clear();
+  });
+
+  Future<void> _continueReport(int threadId) async {
+    final ids = _picked.toList();
+    _cancelSelecting();
+    await showReportSheet(context, type: 'conversation', id: threadId, messageIds: ids);
+  }
 
   @override
   void dispose() {
@@ -121,6 +143,12 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
       appBar: AppBar(
         title: Text(thread?.displayTitle().isNotEmpty == true ? thread!.displayTitle() : widget.title),
         actions: [
+          if (!_selecting)
+            IconButton(
+              icon: const Icon(Icons.flag_outlined),
+              tooltip: l10n.reportChatAction,
+              onPressed: () => setState(() => _selecting = true),
+            ),
           if (isGroup)
             PopupMenuButton<String>(
               onSelected: (choice) {
@@ -140,6 +168,12 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
       body: Column(
         children: [
           ThreadAccessBanner(threadId: widget.threadId),
+          if (_selecting)
+            ReportSelectionBar(
+              count: _picked.length,
+              onCancel: _cancelSelecting,
+              onContinue: () => _continueReport(widget.threadId),
+            ),
           Expanded(
             child: state.isLoading
                 ? const Center(child: CircularProgressIndicator())
@@ -163,7 +197,16 @@ class _ChatThreadScreenState extends ConsumerState<ChatThreadScreen> {
                     controller: _scrollController,
                     padding: const EdgeInsets.all(12),
                     itemCount: state.messages.length,
-                    itemBuilder: (context, index) => _MessageBubble(message: state.messages[index]),
+                    itemBuilder: (context, index) {
+                      final m = state.messages[index];
+
+                      return SelectableMessage(
+                        selecting: _selecting,
+                        selected: _picked.contains(m.id),
+                        onToggle: () => _toggle(m.id),
+                        child: _MessageBubble(message: m),
+                      );
+                    },
                   ),
           ),
           SafeArea(

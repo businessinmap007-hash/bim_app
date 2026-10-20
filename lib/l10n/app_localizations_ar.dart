@@ -11186,7 +11186,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String frozenWarnBody(int limit) {
-    return 'إذا تكرر التجميد $limit مرات يُحذف الحساب ويُصادَر رصيده وضمانه.';
+    return 'إذا تكرر التجميد $limit مرات خلال 12 شهرًا عُرض حذف الحساب ومصادرة رصيده وضمانه على لجنة من المشرفين، ولك حق الاعتراض.';
   }
 
   @override
@@ -11198,4 +11198,131 @@ class AppLocalizationsAr extends AppLocalizations {
   String modFreezeConfirmLast(int limit) {
     return 'هذا هو التجميد رقم $limit: سيُحذف الحساب ويُصادَر رصيده وضمانه نهائيًا. هل تتابع؟';
   }
+
+  @override
+  String get reportChatAction => 'الإبلاغ عن المحادثة';
+
+  @override
+  String get reportChatPick =>
+      'اختر الرسائل التي تريد عرضها على المشرف (اختياري)';
+
+  @override
+  String reportChatPickHint(int count) {
+    return 'المشرف لا يقرأ المحادثة كلها دون موافقة الطرفين أو نصاب من المشرفين. المحدد: $count';
+  }
+
+  @override
+  String get reportChatContinue => 'متابعة';
+
+  @override
+  String reportChatAttached(int count) {
+    return 'ستُعرض $count رسالة على المشرف مع البلاغ';
+  }
+
+  @override
+  String get modTypeConversation => 'محادثة';
+
+  @override
+  String get modConversationTitle => 'المحادثة المُبلَّغ عنها';
+
+  @override
+  String modConversationParties(String names) {
+    return 'الطرفان: $names';
+  }
+
+  @override
+  String get modSelectedMessages => 'الرسائل التي اختارها المُبلِّغ';
+
+  @override
+  String get modNoSelectedMessages => 'لم يختر المُبلِّغ رسائل.';
+
+  @override
+  String get modConsentAll => 'وافق الطرفان';
+
+  @override
+  String get modConsentDeclined => 'رفض أحد الطرفين';
+
+  @override
+  String get modConsentPending => 'بانتظار موافقة الطرفين';
+
+  @override
+  String modQuorumStatus(int n, int q) {
+    return 'نصاب المشرفين $n/$q';
+  }
+
+  @override
+  String get modConversationOpen => 'المحادثة مفتوحة';
+
+  @override
+  String get modConversationClosed => 'المحادثة مغلقة';
+
+  @override
+  String get modAskConsent => 'طلب موافقة الطرفين';
+
+  @override
+  String modVouch(int n, int q) {
+    return 'تأييد الاطلاع ($n/$q)';
+  }
+
+  @override
+  String get modReadConversation => 'قراءة المحادثة';
+
+  @override
+  String get modFreezeConfirmPlain =>
+      'سيُجمَّد هذا الحساب لمدة ثلاثة أيام. هل تتابع؟';
+
+  @override
+  String get panelTitle => 'قرارات الحذف';
+
+  @override
+  String get panelEmpty => 'لا توجد قرارات حذف بانتظار التصويت.';
+
+  @override
+  String get panelFifthFreeze =>
+      'التجميد الخامس خلال 12 شهرًا: يُقترح حذف الحساب ومصادرة رصيده وضمانه.';
+
+  @override
+  String get panelSecondRound => 'اعترض صاحب الحساب: تُراجَع القضية مرة ثانية.';
+
+  @override
+  String get panelFreezes => 'التجميدات السابقة وأسبابها';
+
+  @override
+  String get panelObjection => 'اعتراض صاحب الحساب';
+
+  @override
+  String panelTally(int a, int an, int r, int rn) {
+    return 'موافقات $a/$an · رفض $r/$rn';
+  }
+
+  @override
+  String get panelApprove => 'موافقة على الحذف';
+
+  @override
+  String get panelReject => 'رفض الحذف';
+
+  @override
+  String get panelVoted => 'سجّلتَ صوتك. بانتظار بقية المشرفين.';
+
+  @override
+  String get deletionReview =>
+      'لجنة من المشرفين تراجع حذف حسابك. ستصلك إشعارات بالقرار.';
+
+  @override
+  String deletionScheduled(String when) {
+    return 'قررت لجنة المشرفين حذف حسابك في $when ومصادرة رصيده وضمانه. يمكنك الاعتراض كتابةً قبل ذلك.';
+  }
+
+  @override
+  String get deletionObjected =>
+      'وصل اعتراضك وهو قيد مراجعة اللجنة. لن يُحذف الحساب قبل قرارهم.';
+
+  @override
+  String get objectAction => 'اعتراض على الحذف';
+
+  @override
+  String get objectTitle => 'اعتراضك على الحذف';
+
+  @override
+  String get objectHint => 'اشرح بوضوح لماذا لا يجب حذف حسابك';
 }

@@ -7,6 +7,8 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../../core/time/local_format.dart';
 import '../../../chat/presentation/screens/operation_chat_screen.dart';
 import '../../application/moderation_providers.dart';
+import 'conversation_review_screen.dart';
+import 'deletion_proposals_screen.dart';
 import '../../data/moderation_api.dart';
 
 /// «الإشراف» — the moderator's tab: what people reported, one row per post or listing, most-reported first. A moderator
@@ -23,6 +25,15 @@ class ModerationScreen extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(l10n.modTitle),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.how_to_vote_outlined),
+              tooltip: l10n.panelTitle,
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const DeletionProposalsScreen()),
+              ),
+            ),
+          ],
           bottom: TabBar(
             labelColor: Colors.white,
             unselectedLabelColor: Colors.white70,
@@ -145,6 +156,106 @@ class _ReportedCardState extends ConsumerState<_ReportedCard> {
       messenger.showSnackBar(SnackBar(content: Text(e.message)));
     } finally {
       if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  /// The three ways to read a reported conversation, and acting on one of its people.
+  Widget _conversationActions(AppLocalizations l10n, ThemeData theme, ReportedItem item) {
+    final info = item.conversation!;
+
+    return Wrap(
+      spacing: 8,
+      runSpacing: 4,
+      children: [
+        OutlinedButton(
+          onPressed: () => _run((api) => api.requestConsent(item)),
+          child: Text(l10n.modAskConsent),
+        ),
+        OutlinedButton(
+          onPressed: info.access.iVouched ? null : () => _run((api) => api.vouch(item)),
+          child: Text(l10n.modVouch(info.access.approvals, info.access.quorum)),
+        ),
+        FilledButton.icon(
+          icon: const Icon(Icons.menu_book_outlined, size: 18),
+          onPressed: () => Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => ConversationReviewScreen(item: item)),
+          ),
+          label: Text(l10n.modReadConversation),
+        ),
+        for (final p in info.parties)
+          OutlinedButton(
+            onPressed: () => _partyActions(item, p.id, p.name),
+            child: Text(p.name),
+          ),
+        OutlinedButton(
+          onPressed: () => _run((api) => api.dismiss(item)),
+          child: Text(l10n.modDismiss),
+        ),
+        TextButton(
+          onPressed: () => _run((api) => api.release(item)),
+          child: Text(l10n.modRelease),
+        ),
+      ],
+    );
+  }
+
+  /// After reading: chat with one of the people, or freeze him.
+  Future<void> _partyActions(ReportedItem item, int userId, String name) async {
+    final l10n = AppLocalizations.of(context)!;
+    final choice = await showModalBottomSheet<String>(
+      context: context,
+      showDragHandle: true,
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Text(name, style: Theme.of(ctx).textTheme.titleMedium),
+            ),
+            ListTile(
+              leading: const Icon(Icons.forum_outlined),
+              title: Text(l10n.modOpenChat),
+              onTap: () => Navigator.of(ctx).pop('chat'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.ac_unit),
+              title: Text(l10n.modFreeze),
+              onTap: () => Navigator.of(ctx).pop('freeze'),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (choice == null || !mounted) return;
+
+    if (choice == 'freeze') {
+      final ok = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          content: Text(l10n.modFreezeConfirmPlain),
+          actions: [
+            TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: Text(l10n.commonCancel)),
+            FilledButton(onPressed: () => Navigator.of(ctx).pop(true), child: Text(l10n.modFreeze)),
+          ],
+        ),
+      );
+      if (ok == true) await _run((api) => api.partyFreeze(item, userId));
+
+      return;
+    }
+
+    final navigator = Navigator.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final caseId = await ref.read(moderationApiProvider).partyChat(item, userId);
+      await navigator.push(
+        MaterialPageRoute(
+          builder: (_) => OperationChatScreen(operationType: 'moderation', operationId: caseId, title: name),
+        ),
+      );
+    } on ApiException catch (e) {
+      messenger.showSnackBar(SnackBar(content: Text(e.message)));
     }
   }
 
@@ -362,6 +473,7 @@ class _ReportedCardState extends ConsumerState<_ReportedCard> {
                         'post' => l10n.modTypePost,
                         'comment' => l10n.modTypeComment,
                         'account' => l10n.modTypeAccount,
+                        'conversation' => l10n.modTypeConversation,
                         _ => l10n.modTypeListing,
                       }, style: theme.textTheme.labelSmall),
                       if (item.title.isNotEmpty)
@@ -408,6 +520,8 @@ class _ReportedCardState extends ConsumerState<_ReportedCard> {
                 ),
               ],
             ),
+            if (item.isConversation && item.conversation != null)
+              _ConversationBlock(info: item.conversation!),
             for (final d in item.details)
               Padding(
                 padding: const EdgeInsets.only(top: 4),
@@ -449,6 +563,8 @@ class _ReportedCardState extends ConsumerState<_ReportedCard> {
                 onPressed: () => _run((api) => api.claim(item)),
                 label: Text(l10n.modOpenReport),
               )
+            else if (!widget.handled && item.claimedByMe && item.isConversation)
+              _conversationActions(l10n, theme, item)
             else if (!widget.handled && item.claimedByMe && item.isAccount)
               Wrap(
                 spacing: 8,
@@ -512,6 +628,67 @@ class _ReportedCardState extends ConsumerState<_ReportedCard> {
               ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// What a reported conversation shows on the moderator's card: who talks, the messages the reporter chose to show, and where
+/// the other two ways of reading it (the parties' consent, a quorum of moderators) stand.
+class _ConversationBlock extends StatelessWidget {
+  final ConversationInfo info;
+  const _ConversationBlock({required this.info});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.modConversationParties(info.parties.map((p) => p.name).join(' · ')),
+            style: theme.textTheme.titleSmall,
+          ),
+          const SizedBox(height: 6),
+          Text(l10n.modSelectedMessages, style: theme.textTheme.labelLarge),
+          if (info.selected.isEmpty)
+            Text(l10n.modNoSelectedMessages, style: theme.textTheme.bodySmall)
+          else
+            for (final m in info.selected)
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text('${m.senderName ?? ''}: ${m.body}', style: theme.textTheme.bodyMedium),
+              ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 4,
+            children: [
+              Chip(
+                visualDensity: VisualDensity.compact,
+                label: Text(
+                  info.access.allConsented
+                      ? l10n.modConsentAll
+                      : info.access.anyDeclined
+                      ? l10n.modConsentDeclined
+                      : l10n.modConsentPending,
+                ),
+              ),
+              Chip(
+                visualDensity: VisualDensity.compact,
+                label: Text(l10n.modQuorumStatus(info.access.approvals, info.access.quorum)),
+              ),
+              Chip(
+                visualDensity: VisualDensity.compact,
+                label: Text(info.access.accessible ? l10n.modConversationOpen : l10n.modConversationClosed),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
