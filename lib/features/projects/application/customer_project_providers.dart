@@ -21,11 +21,11 @@ class OperationKey {
 }
 
 /// Which side of an operation I am (`business` / `customer`) — known even before a project is linked.
-final operationViewerProvider = FutureProvider.family<String, OperationKey>((ref, key) {
+final operationViewerProvider = FutureProvider.autoDispose.family<String, OperationKey>((ref, key) {
   return ref.watch(customerProjectApiProvider).viewerOf(key.type, key.id);
 });
 
 final customerProjectViewProvider =
-    FutureProvider.family<CustomerProjectView?, OperationKey>((ref, key) {
+    FutureProvider.autoDispose.family<CustomerProjectView?, OperationKey>((ref, key) {
       return ref.watch(customerProjectApiProvider).show(key.type, key.id);
     });

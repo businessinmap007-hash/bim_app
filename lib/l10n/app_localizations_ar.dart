@@ -11715,4 +11715,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String requestShiftLine(int days, String scope) {
     return 'ترحيل $scope $days يومًا';
   }
+
+  @override
+  String agreementStart(String date) {
+    return 'بدء التنفيذ: $date';
+  }
 }

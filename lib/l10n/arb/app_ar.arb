@@ -4081,5 +4081,7 @@
   "shiftScopePlan": "الخطة كلها",
   "shiftScopeStage": "مرحلة",
   "requestShiftLine": "ترحيل {scope} {days} يومًا",
-  "@requestShiftLine": {"placeholders": {"days": {"type": "int"}, "scope": {"type": "String"}}}
+  "@requestShiftLine": {"placeholders": {"days": {"type": "int"}, "scope": {"type": "String"}}},
+  "agreementStart": "بدء التنفيذ: {date}",
+  "@agreementStart": {"placeholders": {"date": {"type": "String"}}}
 }

@@ -11804,4 +11804,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String requestShiftLine(int days, String scope) {
     return 'Postpone $scope by $days days';
   }
+
+  @override
+  String agreementStart(String date) {
+    return 'Execution starts: $date';
+  }
 }

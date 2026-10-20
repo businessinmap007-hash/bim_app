@@ -434,10 +434,11 @@ class _TaskTile extends ConsumerWidget {
         );
         if (confirmed == true) await controller.deleteTask(task.id);
       }
-    } catch (_) {
+    } catch (e) {
+      // say WHY the server refused (the customer has not approved the start, a photo is missing…)
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.commonSomethingWentWrong)),
+          SnackBar(content: Text(e is ApiException && e.message.isNotEmpty ? e.message : AppLocalizations.of(context)!.commonSomethingWentWrong)),
         );
       }
     }

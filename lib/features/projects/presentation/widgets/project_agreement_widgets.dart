@@ -45,6 +45,7 @@ class AgreementSummary extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 6),
+            if (agreement.startsOn != null) Text(l10n.agreementStart(projectDate(context, agreement.startsOn)), style: theme.textTheme.bodyLarge),
             Text(l10n.agreementDue(projectDate(context, agreement.dueOn)), style: theme.textTheme.bodyLarge),
             Text(l10n.agreementGrace(projectDate(context, agreement.graceUntil)), style: theme.textTheme.bodyLarge),
             const SizedBox(height: 4),

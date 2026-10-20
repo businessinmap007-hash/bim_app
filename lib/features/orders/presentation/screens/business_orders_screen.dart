@@ -1,3 +1,4 @@
+import '../../../projects/presentation/widgets/project_chat_card.dart';
 import '../../../cart/presentation/widgets/weight_picker.dart';
 import '../widgets/order_line_services.dart';
 import 'package:flutter/material.dart';
@@ -767,6 +768,7 @@ class BusinessOrderDetailScreen extends ConsumerWidget {
                       ],
                     ),
                   ),
+                ProjectChatCard(operationType: 'order', operationId: orderId),
                 OrderTrustSection(
                   key: ValueKey('trust-$orderId'),
                   order: order,

@@ -4026,5 +4026,6 @@
   "shiftAskPostpone": "Ask to postpone",
   "shiftScopePlan": "the whole plan",
   "shiftScopeStage": "a stage",
-  "requestShiftLine": "Postpone {scope} by {days} days"
+  "requestShiftLine": "Postpone {scope} by {days} days",
+  "agreementStart": "Execution starts: {date}"
 }

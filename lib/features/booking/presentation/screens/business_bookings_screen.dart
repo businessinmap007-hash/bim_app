@@ -11,6 +11,7 @@ import '../../application/booking_providers.dart' show bookingApiProvider;
 import '../../application/business_bookings_providers.dart';
 import '../widgets/booking_money_card.dart';
 import '../widgets/relationship_card.dart';
+import '../../../projects/presentation/widgets/project_chat_card.dart';
 import 'guest_booking_screen.dart';
 import '../widgets/day_use_tag.dart';
 import '../../data/models/booking.dart';
@@ -359,6 +360,8 @@ class BusinessBookingDetailScreen extends ConsumerWidget {
                     ref.read(businessBookingsControllerProvider(businessId).notifier).load();
                   },
                 ),
+                // «متابعة المشروع»: the project of this booking (or a button to start one), for the business
+                ProjectChatCard(operationType: 'booking', operationId: bookingId),
                 if (booking.startsAt != null)
                   _DetailRow(label: l10n.businessBookingsDateTime, value: booking.startsAt!.toLocal().toString().split('.').first),
                 _DetailRow(label: l10n.businessBookingsQuantity, value: booking.quantity.toString()),

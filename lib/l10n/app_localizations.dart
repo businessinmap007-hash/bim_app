@@ -21102,6 +21102,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'ترحيل {scope} {days} يومًا'**
   String requestShiftLine(int days, String scope);
+
+  /// No description provided for @agreementStart.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدء التنفيذ: {date}'**
+  String agreementStart(String date);
 }
 
 class _AppLocalizationsDelegate
