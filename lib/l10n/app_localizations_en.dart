@@ -11164,10 +11164,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get olVisAll => 'Everyone';
 
   @override
-  String get olVisGovernorate => 'My governorate only';
+  String get olVisGovernorate => 'My governorate';
 
   @override
-  String get olVisCity => 'My city only';
+  String get olVisCity => 'My city';
 
   @override
   String get olVisNeedsCity =>

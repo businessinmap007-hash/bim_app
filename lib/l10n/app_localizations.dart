@@ -20032,13 +20032,13 @@ abstract class AppLocalizations {
   /// No description provided for @olVisGovernorate.
   ///
   /// In ar, this message translates to:
-  /// **'أهل المحافظة فقط'**
+  /// **'محافظتي فقط'**
   String get olVisGovernorate;
 
   /// No description provided for @olVisCity.
   ///
   /// In ar, this message translates to:
-  /// **'أهل المدينة فقط'**
+  /// **'مدينتي فقط'**
   String get olVisCity;
 
   /// No description provided for @olVisNeedsCity.

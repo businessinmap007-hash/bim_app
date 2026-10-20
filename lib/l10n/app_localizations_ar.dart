@@ -11086,10 +11086,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get olVisAll => 'الجميع';
 
   @override
-  String get olVisGovernorate => 'أهل المحافظة فقط';
+  String get olVisGovernorate => 'محافظتي فقط';
 
   @override
-  String get olVisCity => 'أهل المدينة فقط';
+  String get olVisCity => 'مدينتي فقط';
 
   @override
   String get olVisNeedsCity => 'اختر المدينة ليقتصر الإعلان على أهلها.';

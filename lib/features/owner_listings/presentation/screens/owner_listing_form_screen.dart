@@ -293,7 +293,7 @@ class _OwnerListingFormScreenState
       Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: theme.colorScheme.errorContainer,
+          color: theme.colorScheme.error.withValues(alpha: 0.10),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: theme.colorScheme.error),
         ),
@@ -302,14 +302,18 @@ class _OwnerListingFormScreenState
           children: [
             Row(
               children: [
-                Icon(Icons.gavel_rounded, color: theme.colorScheme.error),
+                Icon(
+                  Icons.gavel_rounded,
+                  color: theme.colorScheme.error,
+                  size: 28,
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     l10n.olRulesWarnTitle,
                     style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w800,
-                      color: theme.colorScheme.onErrorContainer,
+                      color: const Color(0xFF5C1D10),
                     ),
                   ),
                 ),
@@ -321,7 +325,7 @@ class _OwnerListingFormScreenState
                   ? l10n.olRulesWarnBodyGuarantee
                   : l10n.olRulesWarnBodyDeposit,
               style: theme.textTheme.titleMedium?.copyWith(
-                color: theme.colorScheme.onErrorContainer,
+                color: const Color(0xFF5C1D10),
               ),
             ),
             const SizedBox(height: 8),
@@ -336,7 +340,7 @@ class _OwnerListingFormScreenState
                       child: Text(
                         v,
                         style: theme.textTheme.titleMedium?.copyWith(
-                          color: theme.colorScheme.onErrorContainer,
+                          color: const Color(0xFF5C1D10),
                         ),
                       ),
                     ),
