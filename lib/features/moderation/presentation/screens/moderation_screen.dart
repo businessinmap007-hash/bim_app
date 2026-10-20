@@ -147,15 +147,17 @@ class _ReportedCardState extends ConsumerState<_ReportedCard> {
   }
 
   Future<void> _confirmRemove() async {
+    if (widget.item.type == 'owner_listing') return _removeListing();
+
     final l10n = AppLocalizations.of(context)!;
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        content: Text(switch (widget.item.type) {
-          'post' => l10n.modRemovePostConfirm,
-          'comment' => l10n.modRemoveCommentConfirm,
-          _ => l10n.modRemoveListingConfirm,
-        }),
+        content: Text(
+          widget.item.type == 'post'
+              ? l10n.modRemovePostConfirm
+              : l10n.modRemoveCommentConfirm,
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
@@ -170,6 +172,82 @@ class _ReportedCardState extends ConsumerState<_ReportedCard> {
     );
 
     if (ok == true) await _run((api) => api.remove(widget.item));
+  }
+
+  /// A listing is removed for a rule it broke, and the stake behind it (a held deposit or the frozen guarantee) is confiscated.
+  Future<void> _removeListing() async {
+    final l10n = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
+    final List<({String key, String name})> rules;
+
+    try {
+      rules = await ref.read(moderationApiProvider).violations();
+    } on ApiException catch (e) {
+      messenger.showSnackBar(SnackBar(content: Text(e.message)));
+      return;
+    }
+    if (!mounted) return;
+
+    String? chosen;
+    var confiscate = true;
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setLocal) => AlertDialog(
+          title: Text(l10n.modViolationTitle),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  RadioGroup<String>(
+                    groupValue: chosen,
+                    onChanged: (v) => setLocal(() => chosen = v),
+                    child: Column(
+                      children: [
+                        for (final r in rules)
+                          RadioListTile<String>(
+                            contentPadding: EdgeInsets.zero,
+                            value: r.key,
+                            title: Text(r.name),
+                          ),
+                      ],
+                    ),
+                  ),
+                  CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    controlAffinity: ListTileControlAffinity.leading,
+                    value: confiscate,
+                    onChanged: (v) => setLocal(() => confiscate = v ?? true),
+                    title: Text(l10n.modConfiscate),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: Text(l10n.commonCancel),
+            ),
+            FilledButton(
+              onPressed: chosen == null
+                  ? null
+                  : () => Navigator.of(ctx).pop(true),
+              child: Text(l10n.modRemove),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    if (ok == true && chosen != null) {
+      await _run(
+        (api) =>
+            api.remove(widget.item, violation: chosen, confiscate: confiscate),
+      );
+    }
   }
 
   @override

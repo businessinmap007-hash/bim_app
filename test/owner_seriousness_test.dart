@@ -62,4 +62,30 @@ void main() {
       expect(a == c, isFalse);
     },
   );
+
+  test(
+    'the requirement carries the rules the page warns about, and a listing says what kind of stake it has',
+    () {
+      final r = OwnerRequirement.fromJson({
+        'required': true,
+        'needs_deposit': true,
+        'deposit_amount': 100,
+        'balance': 500,
+        'min_level': {'code': 'bronze', 'name': 'برونزي'},
+        'violations': [
+          {'key': 'fraud', 'name': 'احتيال أو معلومات مضللة'},
+          {'key': 'spam', 'name': 'إعلان مكرر أو مزعج'},
+        ],
+      });
+      expect(r.violations, ['احتيال أو معلومات مضللة', 'إعلان مكرر أو مزعج']);
+
+      final frozen = OwnerListing.fromJson({
+        'id': 5,
+        'title': 'k',
+        'mine': true,
+        'deposit': {'amount': 100, 'state': 'held', 'kind': 'guarantee'},
+      });
+      expect(frozen.depositKind, 'guarantee');
+    },
+  );
 }

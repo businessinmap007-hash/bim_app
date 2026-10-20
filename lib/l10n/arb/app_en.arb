@@ -3841,5 +3841,13 @@
   "olVisCity": "My city only",
   "olVisNeedsCity": "Choose the city to limit the listing to its people.",
   "olVisBadgeCity": "Shown to the people of its city only",
-  "olVisBadgeGovernorate": "Shown to the people of its governorate only"
+  "olVisBadgeGovernorate": "Shown to the people of its governorate only",
+  "olRulesWarnTitle": "Warning: the deposit or guarantee can be confiscated",
+  "olRulesWarnBodyDeposit": "If your listing breaks the rules and a moderator removes it, your seriousness deposit is confiscated. It is confiscated if any of these reasons applies:",
+  "olRulesWarnBodyGuarantee": "If your listing breaks the rules and a moderator removes it, the frozen guarantee is confiscated. It is confiscated if any of these reasons applies:",
+  "olGuaranteeReleased": "The guarantee frozen for this listing was released.",
+  "modViolationTitle": "Which rule did the listing break?",
+  "modConfiscate": "Confiscate the deposit or guarantee",
+  "olGuaranteeFrozen": "Your guarantee is frozen ({amount} EGP) for the life of the listing and released when you sell or end it.",
+  "@olGuaranteeFrozen": {"placeholders": {"amount": {"type": "String"}}}
 }

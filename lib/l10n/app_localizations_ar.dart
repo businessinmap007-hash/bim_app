@@ -11099,4 +11099,30 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get olVisBadgeGovernorate => 'يظهر لأهل المحافظة فقط';
+
+  @override
+  String get olRulesWarnTitle => 'تنبيه: مصادرة العربون أو الضمان';
+
+  @override
+  String get olRulesWarnBodyDeposit =>
+      'إذا خالف إعلانك القواعد وأزاله المشرف سيتم مصادرة عربون الجدية. تتم المصادرة إذا تحقق أي سبب من هذه الأسباب:';
+
+  @override
+  String get olRulesWarnBodyGuarantee =>
+      'إذا خالف إعلانك القواعد وأزاله المشرف سيتم مصادرة قيمة الضمان المجمّد. تتم المصادرة إذا تحقق أي سبب من هذه الأسباب:';
+
+  @override
+  String get olGuaranteeReleased =>
+      'ضمانك المجمّد لهذا الإعلان تم الإفراج عنه.';
+
+  @override
+  String get modViolationTitle => 'ما القاعدة التي خالفها الإعلان؟';
+
+  @override
+  String get modConfiscate => 'مصادرة العربون أو الضمان';
+
+  @override
+  String olGuaranteeFrozen(String amount) {
+    return 'ضمانك مجمّد ($amount جنيه) طوال مدة الإعلان، ويُفرَج عنه عند البيع أو الإنهاء.';
+  }
 }

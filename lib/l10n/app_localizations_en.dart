@@ -11179,4 +11179,31 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get olVisBadgeGovernorate =>
       'Shown to the people of its governorate only';
+
+  @override
+  String get olRulesWarnTitle =>
+      'Warning: the deposit or guarantee can be confiscated';
+
+  @override
+  String get olRulesWarnBodyDeposit =>
+      'If your listing breaks the rules and a moderator removes it, your seriousness deposit is confiscated. It is confiscated if any of these reasons applies:';
+
+  @override
+  String get olRulesWarnBodyGuarantee =>
+      'If your listing breaks the rules and a moderator removes it, the frozen guarantee is confiscated. It is confiscated if any of these reasons applies:';
+
+  @override
+  String get olGuaranteeReleased =>
+      'The guarantee frozen for this listing was released.';
+
+  @override
+  String get modViolationTitle => 'Which rule did the listing break?';
+
+  @override
+  String get modConfiscate => 'Confiscate the deposit or guarantee';
+
+  @override
+  String olGuaranteeFrozen(String amount) {
+    return 'Your guarantee is frozen ($amount EGP) for the life of the listing and released when you sell or end it.';
+  }
 }

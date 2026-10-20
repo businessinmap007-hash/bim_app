@@ -108,6 +108,9 @@ class OwnerRequirement {
   final double balance;
   final String minLevelName;
 
+  /// The rules a listing is removed for — the stake is confiscated if any is broken (the page warns about them).
+  final List<String> violations;
+
   const OwnerRequirement({
     this.required = false,
     this.guaranteeOk = false,
@@ -115,6 +118,7 @@ class OwnerRequirement {
     this.depositAmount = 0,
     this.balance = 0,
     this.minLevelName = '',
+    this.violations = const [],
   });
 
   bool get enoughBalance => balance >= depositAmount;
@@ -129,6 +133,10 @@ class OwnerRequirement {
         minLevelName:
             (json['min_level'] as Map<String, dynamic>?)?['name'] as String? ??
             '',
+        violations: [
+          for (final v in (json['violations'] as List<dynamic>? ?? const []))
+            (v as Map<String, dynamic>)['name'] as String? ?? '',
+        ],
       );
 }
 
@@ -171,6 +179,9 @@ class OwnerListing {
   final double? depositAmount;
   final String? depositState;
 
+  /// `wallet` (a held deposit) | `guarantee` (coverage frozen for the life of the listing)
+  final String? depositKind;
+
   /// Who may see it: `all` | `governorate` | `city` (by the viewer's own registered place).
   final String visibility;
 
@@ -204,6 +215,7 @@ class OwnerListing {
     this.inquiriesCount,
     this.depositAmount,
     this.depositState,
+    this.depositKind,
     this.visibility = 'all',
   });
 
@@ -268,6 +280,8 @@ class OwnerListing {
               ?.toDouble(),
       depositState:
           (json['deposit'] as Map<String, dynamic>?)?['state'] as String?,
+      depositKind:
+          (json['deposit'] as Map<String, dynamic>?)?['kind'] as String?,
       visibility: json['visibility'] as String? ?? 'all',
     );
   }

@@ -288,7 +288,13 @@ class _OwnerListingDetailScreenState
               if (when != null) Text(when, style: theme.textTheme.bodySmall),
               if (l.depositAmount != null && l.depositAmount! > 0)
                 Text(
-                  l.depositState == 'held'
+                  l.depositKind == 'guarantee'
+                      ? (l.depositState == 'held'
+                            ? l10n.olGuaranteeFrozen(
+                                l.depositAmount!.toStringAsFixed(0),
+                              )
+                            : l10n.olGuaranteeReleased)
+                      : l.depositState == 'held'
                       ? l10n.olDepositHeld(l.depositAmount!.toStringAsFixed(0))
                       : l10n.olDepositReleased(
                           l.depositAmount!.toStringAsFixed(0),

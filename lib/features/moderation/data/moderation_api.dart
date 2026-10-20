@@ -159,8 +159,31 @@ class ModerationApi {
   Future<void> dismiss(ReportedItem i) =>
       _client.post('/moderation/reports/${i.type}/${i.id}/dismiss');
 
-  Future<void> remove(ReportedItem i) =>
-      _client.post('/moderation/reports/${i.type}/${i.id}/remove');
+  /// The rules a listing is removed for: `(key, name)` pairs.
+  Future<List<({String key, String name})>> violations() async {
+    final data =
+        await _client.get('/moderation/violations') as Map<String, dynamic>;
+    return [
+      for (final v in (data['violations'] as List<dynamic>? ?? const []))
+        (
+          key: (v as Map<String, dynamic>)['key'] as String? ?? '',
+          name: v['name'] as String? ?? '',
+        ),
+    ];
+  }
+
+  /// Remove the item. For a listing: the rule it broke, and whether the stake behind it is confiscated (the default).
+  Future<void> remove(
+    ReportedItem i, {
+    String? violation,
+    bool confiscate = true,
+  }) => _client.post(
+    '/moderation/reports/${i.type}/${i.id}/remove',
+    data: {
+      'violation': ?violation,
+      'confiscate': confiscate,
+    },
+  );
 
   Future<void> restore(ReportedItem i) =>
       _client.post('/moderation/reports/${i.type}/${i.id}/restore');

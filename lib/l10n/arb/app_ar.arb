@@ -3867,5 +3867,13 @@
   "olVisCity": "أهل المدينة فقط",
   "olVisNeedsCity": "اختر المدينة ليقتصر الإعلان على أهلها.",
   "olVisBadgeCity": "يظهر لأهل المدينة فقط",
-  "olVisBadgeGovernorate": "يظهر لأهل المحافظة فقط"
+  "olVisBadgeGovernorate": "يظهر لأهل المحافظة فقط",
+  "olRulesWarnTitle": "تنبيه: مصادرة العربون أو الضمان",
+  "olRulesWarnBodyDeposit": "إذا خالف إعلانك القواعد وأزاله المشرف سيتم مصادرة عربون الجدية. تتم المصادرة إذا تحقق أي سبب من هذه الأسباب:",
+  "olRulesWarnBodyGuarantee": "إذا خالف إعلانك القواعد وأزاله المشرف سيتم مصادرة قيمة الضمان المجمّد. تتم المصادرة إذا تحقق أي سبب من هذه الأسباب:",
+  "olGuaranteeReleased": "ضمانك المجمّد لهذا الإعلان تم الإفراج عنه.",
+  "modViolationTitle": "ما القاعدة التي خالفها الإعلان؟",
+  "modConfiscate": "مصادرة العربون أو الضمان",
+  "olGuaranteeFrozen": "ضمانك مجمّد ({amount} جنيه) طوال مدة الإعلان، ويُفرَج عنه عند البيع أو الإنهاء.",
+  "@olGuaranteeFrozen": {"placeholders": {"amount": {"type": "String"}}}
 }

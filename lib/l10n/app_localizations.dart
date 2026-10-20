@@ -20058,6 +20058,48 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'يظهر لأهل المحافظة فقط'**
   String get olVisBadgeGovernorate;
+
+  /// No description provided for @olRulesWarnTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنبيه: مصادرة العربون أو الضمان'**
+  String get olRulesWarnTitle;
+
+  /// No description provided for @olRulesWarnBodyDeposit.
+  ///
+  /// In ar, this message translates to:
+  /// **'إذا خالف إعلانك القواعد وأزاله المشرف سيتم مصادرة عربون الجدية. تتم المصادرة إذا تحقق أي سبب من هذه الأسباب:'**
+  String get olRulesWarnBodyDeposit;
+
+  /// No description provided for @olRulesWarnBodyGuarantee.
+  ///
+  /// In ar, this message translates to:
+  /// **'إذا خالف إعلانك القواعد وأزاله المشرف سيتم مصادرة قيمة الضمان المجمّد. تتم المصادرة إذا تحقق أي سبب من هذه الأسباب:'**
+  String get olRulesWarnBodyGuarantee;
+
+  /// No description provided for @olGuaranteeReleased.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضمانك المجمّد لهذا الإعلان تم الإفراج عنه.'**
+  String get olGuaranteeReleased;
+
+  /// No description provided for @modViolationTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما القاعدة التي خالفها الإعلان؟'**
+  String get modViolationTitle;
+
+  /// No description provided for @modConfiscate.
+  ///
+  /// In ar, this message translates to:
+  /// **'مصادرة العربون أو الضمان'**
+  String get modConfiscate;
+
+  /// No description provided for @olGuaranteeFrozen.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضمانك مجمّد ({amount} جنيه) طوال مدة الإعلان، ويُفرَج عنه عند البيع أو الإنهاء.'**
+  String olGuaranteeFrozen(String amount);
 }
 
 class _AppLocalizationsDelegate
