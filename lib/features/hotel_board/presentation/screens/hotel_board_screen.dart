@@ -26,6 +26,8 @@ class _HotelBoardScreenState extends ConsumerState<HotelBoardScreen> {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final async = ref.watch(hotelBoardProvider(_month));
+    // the arrows point the way the page reads: the previous month sits at the start edge in either direction
+    final rtl = Directionality.of(context) == TextDirection.rtl;
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.boardTitle)),
@@ -35,7 +37,7 @@ class _HotelBoardScreenState extends ConsumerState<HotelBoardScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Row(
               children: [
-                IconButton(onPressed: () => _go(-1), icon: const Icon(Icons.chevron_right)),
+                IconButton(onPressed: () => _go(-1), icon: Icon(rtl ? Icons.chevron_right : Icons.chevron_left)),
                 Expanded(
                   child: Text(
                     MaterialLocalizations.of(context).formatMonthYear(_month),
@@ -43,7 +45,7 @@ class _HotelBoardScreenState extends ConsumerState<HotelBoardScreen> {
                     style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
                   ),
                 ),
-                IconButton(onPressed: () => _go(1), icon: const Icon(Icons.chevron_left)),
+                IconButton(onPressed: () => _go(1), icon: Icon(rtl ? Icons.chevron_left : Icons.chevron_right)),
               ],
             ),
           ),
