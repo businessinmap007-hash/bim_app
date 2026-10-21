@@ -12414,4 +12414,92 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pshPerNight => 'per night';
+
+  @override
+  String get tripScreenTitle => 'Trip programmes';
+
+  @override
+  String get tripProgramsTab => 'Programmes';
+
+  @override
+  String get tripEmpty =>
+      'No programme yet. Write your trip as days and items and drop in the room cards a hotel gave you.';
+
+  @override
+  String get tripNew => 'New programme';
+
+  @override
+  String get tripTitleHint => 'Programme name';
+
+  @override
+  String get tripSummaryHint => 'A short description (optional)';
+
+  @override
+  String get tripDraft => 'Draft';
+
+  @override
+  String get tripPublished => 'Published';
+
+  @override
+  String tripDaysCount(int n) {
+    return '$n days';
+  }
+
+  @override
+  String tripDayLabel(int n) {
+    return 'Day $n';
+  }
+
+  @override
+  String get tripAddDay => 'Add a day';
+
+  @override
+  String get tripDayTitleHint => 'Day title (optional)';
+
+  @override
+  String get tripAddText => 'Text';
+
+  @override
+  String get tripAddRoom => 'Room card';
+
+  @override
+  String get tripAddPhoto => 'Photo';
+
+  @override
+  String get tripPhotoCaption => 'A caption for the photo (optional)';
+
+  @override
+  String get tripPickRoom => 'Pick one of the rooms given to your company';
+
+  @override
+  String get tripNoRooms =>
+      'No rooms given to your company yet. They appear here once a hotel grants you an allocation.';
+
+  @override
+  String get tripPublish => 'Publish the programme';
+
+  @override
+  String get tripUnpublish => 'Unpublish';
+
+  @override
+  String get tripDeleteConfirm =>
+      'The programme is deleted with its days and photos. This cannot be undone.';
+
+  @override
+  String get tripDeleteDayConfirm => 'The day is deleted with its items.';
+
+  @override
+  String get tripMoveUp => 'Move up';
+
+  @override
+  String get tripMoveDown => 'Move down';
+
+  @override
+  String get tripBookRoom => 'Book this room';
+
+  @override
+  String get tripSoldOut => 'Sold out';
+
+  @override
+  String get tripRoomGone => 'This room is no longer available';
 }

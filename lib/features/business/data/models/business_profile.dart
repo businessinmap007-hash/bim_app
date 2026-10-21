@@ -18,6 +18,10 @@ class BusinessSections {
   /// «العروض والخصومات»: something is running on this business — its page shows an offers tab.
   final bool offers;
 
+  /// A tour company that sells a hotel's rooms, and one that published trip programmes.
+  final bool partnerRooms;
+  final bool programs;
+
   const BusinessSections({
     required this.posts,
     required this.menu,
@@ -25,6 +29,8 @@ class BusinessSections {
     this.booking = false,
     this.specialtyServices = false,
     this.offers = false,
+    this.partnerRooms = false,
+    this.programs = false,
   });
 
   bool get any => posts || menu || services;
@@ -36,6 +42,8 @@ class BusinessSections {
     booking: json['booking'] as bool? ?? false,
     specialtyServices: json['specialty_services'] as bool? ?? false,
     offers: json['offers'] as bool? ?? false,
+    partnerRooms: json['partner_rooms'] as bool? ?? false,
+    programs: json['programs'] as bool? ?? false,
   );
 }
 

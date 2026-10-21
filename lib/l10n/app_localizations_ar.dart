@@ -12314,4 +12314,92 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get pshPerNight => 'لليلة';
+
+  @override
+  String get tripScreenTitle => 'برامج الرحلات';
+
+  @override
+  String get tripProgramsTab => 'البرامج';
+
+  @override
+  String get tripEmpty =>
+      'لم تكتب برنامجًا بعد. اكتب رحلتك أيامًا وبنودًا، وضع فيها كروت الغرف التي منحها لك فندق.';
+
+  @override
+  String get tripNew => 'برنامج جديد';
+
+  @override
+  String get tripTitleHint => 'اسم البرنامج';
+
+  @override
+  String get tripSummaryHint => 'وصف مختصر (اختياري)';
+
+  @override
+  String get tripDraft => 'مسودة';
+
+  @override
+  String get tripPublished => 'منشور';
+
+  @override
+  String tripDaysCount(int n) {
+    return '$n أيام';
+  }
+
+  @override
+  String tripDayLabel(int n) {
+    return 'اليوم $n';
+  }
+
+  @override
+  String get tripAddDay => 'إضافة يوم';
+
+  @override
+  String get tripDayTitleHint => 'عنوان اليوم (اختياري)';
+
+  @override
+  String get tripAddText => 'نص';
+
+  @override
+  String get tripAddRoom => 'كارت غرفة';
+
+  @override
+  String get tripAddPhoto => 'صورة';
+
+  @override
+  String get tripPhotoCaption => 'تعليق على الصورة (اختياري)';
+
+  @override
+  String get tripPickRoom => 'اختر غرفة من الغرف الممنوحة لشركتك';
+
+  @override
+  String get tripNoRooms =>
+      'لا توجد غرف ممنوحة لشركتك بعد. تظهر هنا حين يمنحك فندق حصة.';
+
+  @override
+  String get tripPublish => 'نشر البرنامج';
+
+  @override
+  String get tripUnpublish => 'إلغاء النشر';
+
+  @override
+  String get tripDeleteConfirm =>
+      'يُحذف البرنامج بأيامه وصوره. لا يمكن التراجع.';
+
+  @override
+  String get tripDeleteDayConfirm => 'يُحذف اليوم مع بنوده.';
+
+  @override
+  String get tripMoveUp => 'أعلى';
+
+  @override
+  String get tripMoveDown => 'أسفل';
+
+  @override
+  String get tripBookRoom => 'احجز هذه الغرفة';
+
+  @override
+  String get tripSoldOut => 'نفدت';
+
+  @override
+  String get tripRoomGone => 'الغرفة لم تعد متاحة';
 }

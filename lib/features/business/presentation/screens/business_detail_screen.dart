@@ -42,6 +42,7 @@ import 'business_info_screen.dart';
 import '../widgets/business_rating_row.dart';
 import '../widgets/menu_item_grid_card.dart';
 import '../../../promotions/presentation/widgets/offer_widgets.dart';
+import '../../../trip_programs/presentation/screens/trip_program_view_screen.dart';
 import '../widgets/menu_item_tile.dart';
 import '../widgets/offering_card.dart';
 import '../widgets/post_card.dart';
@@ -172,7 +173,7 @@ class _BusinessDetailBody extends StatelessWidget {
     // a clinic, a hospital or a medical centre takes appointments: its «الحجز» tab IS the booking board — the visit
     // kind, under it the service the patient came for, then the day and the time — never a button to another screen
     final isAppointmentClinic = const {513, 514, 515}.contains(profile.categoryChildId);
-    final bookingFirst = !isAppointmentClinic && profile.sections.services && profile.sections.booking;
+    final bookingFirst = !isAppointmentClinic && profile.sections.booking && (profile.sections.services || profile.sections.partnerRooms);
     if (isAppointmentClinic) {
       tabs.add(Tab(text: l10n.businessTabBooking));
       tabViews.add(ClinicBookingBoard(clinicId: profile.id, hasServices: profile.sections.specialtyServices, embedded: true));
@@ -190,6 +191,11 @@ class _BusinessDetailBody extends StatelessWidget {
       // …and the surgeries, endoscopies and treatments it performs, each asked for in a tap
       tabs.add(Tab(text: l10n.procTabTitle));
       tabViews.add(HospitalProceduresTab(hospitalId: profile.id));
+    }
+    // a tour company's published trip programmes
+    if (profile.sections.programs) {
+      tabs.add(Tab(text: l10n.tripProgramsTab));
+      tabViews.add(BusinessTripProgramsTab(businessId: profile.id));
     }
     // «العروض والخصومات»: a tab beside the menu and the booking while something is running
     if (profile.sections.offers) {

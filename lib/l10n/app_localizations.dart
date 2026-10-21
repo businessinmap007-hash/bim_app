@@ -22164,6 +22164,168 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لليلة'**
   String get pshPerNight;
+
+  /// No description provided for @tripScreenTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'برامج الرحلات'**
+  String get tripScreenTitle;
+
+  /// No description provided for @tripProgramsTab.
+  ///
+  /// In ar, this message translates to:
+  /// **'البرامج'**
+  String get tripProgramsTab;
+
+  /// No description provided for @tripEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تكتب برنامجًا بعد. اكتب رحلتك أيامًا وبنودًا، وضع فيها كروت الغرف التي منحها لك فندق.'**
+  String get tripEmpty;
+
+  /// No description provided for @tripNew.
+  ///
+  /// In ar, this message translates to:
+  /// **'برنامج جديد'**
+  String get tripNew;
+
+  /// No description provided for @tripTitleHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم البرنامج'**
+  String get tripTitleHint;
+
+  /// No description provided for @tripSummaryHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصف مختصر (اختياري)'**
+  String get tripSummaryHint;
+
+  /// No description provided for @tripDraft.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسودة'**
+  String get tripDraft;
+
+  /// No description provided for @tripPublished.
+  ///
+  /// In ar, this message translates to:
+  /// **'منشور'**
+  String get tripPublished;
+
+  /// No description provided for @tripDaysCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{n} أيام'**
+  String tripDaysCount(int n);
+
+  /// No description provided for @tripDayLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم {n}'**
+  String tripDayLabel(int n);
+
+  /// No description provided for @tripAddDay.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة يوم'**
+  String get tripAddDay;
+
+  /// No description provided for @tripDayTitleHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'عنوان اليوم (اختياري)'**
+  String get tripDayTitleHint;
+
+  /// No description provided for @tripAddText.
+  ///
+  /// In ar, this message translates to:
+  /// **'نص'**
+  String get tripAddText;
+
+  /// No description provided for @tripAddRoom.
+  ///
+  /// In ar, this message translates to:
+  /// **'كارت غرفة'**
+  String get tripAddRoom;
+
+  /// No description provided for @tripAddPhoto.
+  ///
+  /// In ar, this message translates to:
+  /// **'صورة'**
+  String get tripAddPhoto;
+
+  /// No description provided for @tripPhotoCaption.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعليق على الصورة (اختياري)'**
+  String get tripPhotoCaption;
+
+  /// No description provided for @tripPickRoom.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر غرفة من الغرف الممنوحة لشركتك'**
+  String get tripPickRoom;
+
+  /// No description provided for @tripNoRooms.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد غرف ممنوحة لشركتك بعد. تظهر هنا حين يمنحك فندق حصة.'**
+  String get tripNoRooms;
+
+  /// No description provided for @tripPublish.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشر البرنامج'**
+  String get tripPublish;
+
+  /// No description provided for @tripUnpublish.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء النشر'**
+  String get tripUnpublish;
+
+  /// No description provided for @tripDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُحذف البرنامج بأيامه وصوره. لا يمكن التراجع.'**
+  String get tripDeleteConfirm;
+
+  /// No description provided for @tripDeleteDayConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُحذف اليوم مع بنوده.'**
+  String get tripDeleteDayConfirm;
+
+  /// No description provided for @tripMoveUp.
+  ///
+  /// In ar, this message translates to:
+  /// **'أعلى'**
+  String get tripMoveUp;
+
+  /// No description provided for @tripMoveDown.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسفل'**
+  String get tripMoveDown;
+
+  /// No description provided for @tripBookRoom.
+  ///
+  /// In ar, this message translates to:
+  /// **'احجز هذه الغرفة'**
+  String get tripBookRoom;
+
+  /// No description provided for @tripSoldOut.
+  ///
+  /// In ar, this message translates to:
+  /// **'نفدت'**
+  String get tripSoldOut;
+
+  /// No description provided for @tripRoomGone.
+  ///
+  /// In ar, this message translates to:
+  /// **'الغرفة لم تعد متاحة'**
+  String get tripRoomGone;
 }
 
 class _AppLocalizationsDelegate

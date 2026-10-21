@@ -14,29 +14,20 @@ class PartnerRoomsSection extends StatelessWidget {
 
   const PartnerRoomsSection({super.key, required this.businessId, required this.rooms, this.shape});
 
-  void _book(BuildContext context, PartnerRoom r) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => BookingScreen(
-          businessId: businessId,
-          shape: shape,
-          initialUnit: DiscoveredUnit(id: r.unitId, label: r.label, capacity: r.capacity, images: r.images, price: r.price, features: r.features),
-          // id 0: the room is not on this business's own price list; the allocation prices it
-          offering: OfferingItem(
-            id: 0,
-            source: 'price',
-            label: r.label,
-            price: r.price,
-            currency: r.currency,
-            serviceId: r.serviceId,
-            itemType: r.itemType,
-            imageUrl: r.images.isEmpty ? null : r.images.first,
-            action: 'book',
-          ),
-        ),
-      ),
-    );
-  }
+  void _book(BuildContext context, PartnerRoom r) => openPartnerRoomBooking(
+    context,
+    businessId: businessId,
+    shape: shape,
+    unitId: r.unitId,
+    serviceId: r.serviceId,
+    itemType: r.itemType,
+    label: r.label,
+    capacity: r.capacity,
+    images: r.images,
+    features: r.features,
+    price: r.price,
+    currency: r.currency,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -114,6 +105,44 @@ class PartnerRoomsSection extends StatelessWidget {
       ],
     );
   }
+}
+
+/// A tap on a hotel's room sold through THIS business: the booking form opens on that room at this business's price. The offering id is 0:
+/// the room is not on this business's own price list, the allocation prices it.
+void openPartnerRoomBooking(
+  BuildContext context, {
+  required int businessId,
+  UnitShape? shape,
+  required int unitId,
+  required int serviceId,
+  required String itemType,
+  required String label,
+  int? capacity,
+  List<String> images = const [],
+  List<String> features = const [],
+  required double price,
+  String currency = 'EGP',
+}) {
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (_) => BookingScreen(
+        businessId: businessId,
+        shape: shape,
+        initialUnit: DiscoveredUnit(id: unitId, label: label, capacity: capacity, images: images, price: price, features: features),
+        offering: OfferingItem(
+          id: 0,
+          source: 'price',
+          label: label,
+          price: price,
+          currency: currency,
+          serviceId: serviceId,
+          itemType: itemType,
+          imageUrl: images.isEmpty ? null : images.first,
+          action: 'book',
+        ),
+      ),
+    ),
+  );
 }
 
 /// The whole «الحجز» tab of a business that has no rooms of its own but sells a partner's.
