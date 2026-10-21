@@ -4251,5 +4251,6 @@
   "boardDirect": "Direct booking",
   "boardRoomNumber": "Room {n}",
   "boardCheckLocal": "Check the Egyptian ID or residence",
-  "boardCheckForeign": "Check the passport"
+  "boardCheckForeign": "Check the passport",
+  "pshNightsFrom": "Stay {min} nights or more"
 }

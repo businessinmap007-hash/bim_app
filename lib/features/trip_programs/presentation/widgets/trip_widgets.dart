@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../promotions/presentation/widgets/offer_widgets.dart';
 import '../../data/models/trip_program.dart';
 
 String _money(double v, String currency) => '${v == v.roundToDouble() ? v.toStringAsFixed(0) : v.toStringAsFixed(2)} $currency';
@@ -57,7 +58,7 @@ class TripRoomTile extends StatelessWidget {
                   ),
                 const SizedBox(height: 8),
                 Row(children: [
-                  Text(_money(room.price, room.currency), style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800)),
+                  PriceWithOffer(label: _money(room.price, room.currency), offer: room.offer, style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800)),
                   const SizedBox(width: 4),
                   Text(l10n.pshPerNight, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
                   const Spacer(),

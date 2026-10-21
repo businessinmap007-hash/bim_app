@@ -12477,4 +12477,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get boardCheckForeign => 'تحقق من جواز السفر';
+
+  @override
+  String pshNightsFrom(int min) {
+    return 'إقامة $min ليالٍ فأكثر';
+  }
 }

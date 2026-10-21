@@ -484,6 +484,23 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
               RelationshipCard(summary: form.relationship),
               if (widget.initialUnit != null) ...[
                 _selectedUnitCard(context, widget.initialUnit!),
+                // the hotel's add-ons (the meal plan) for a room sold through a partner: they come with the room, not with this business's form
+                if (widget.initialUnit!.choices.isNotEmpty) ...[
+                  const SizedBox(height: 12),
+                  Text(l10n.bookingAddOnsTitle, style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+                  for (final c in widget.initialUnit!.choices)
+                    CheckboxListTile(
+                      contentPadding: EdgeInsets.zero,
+                      controlAffinity: ListTileControlAffinity.leading,
+                      value: _modifierOptionIds.contains(c.optionId),
+                      onChanged: (v) {
+                        setState(() => (v ?? false) ? _modifierOptionIds.add(c.optionId) : _modifierOptionIds.remove(c.optionId));
+                        _schedulePreview();
+                      },
+                      title: Text(c.name ?? ''),
+                      secondary: Text(c.adjustType == 'percent' ? '+${c.adjustValue.toStringAsFixed(0)}%' : '+${c.amount.toStringAsFixed(0)}'),
+                    ),
+                ],
                 // «أسعار للمصريين والمقيمين فقط»: the room is sold to one of the two; the guest says which they are, the hotel checks on arrival
                 if (_scope != 'all')
                   CheckboxListTile(

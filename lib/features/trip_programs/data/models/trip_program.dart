@@ -2,6 +2,8 @@
 library;
 
 import '../../../../core/env/env.dart';
+import '../../../booking/data/models/unit_discovery.dart' show UnitChoice;
+import '../../../promotions/data/models/promotion.dart' show ItemOffer;
 
 class TripItemKind {
   static const text = 'text';
@@ -47,6 +49,8 @@ class TripRoom {
   final int availableQuantity;
   final bool available;
   final String guestScope;
+  final List<UnitChoice> choices;
+  final ItemOffer? offer;
 
   const TripRoom({
     this.allocationId,
@@ -65,6 +69,8 @@ class TripRoom {
     this.availableQuantity = 0,
     this.available = true,
     this.guestScope = 'all',
+    this.choices = const [],
+    this.offer,
   });
 
   factory TripRoom.fromJson(Map<String, dynamic> json) => TripRoom(
@@ -86,6 +92,8 @@ class TripRoom {
     availableQuantity: (json['available_quantity'] as num?)?.toInt() ?? 0,
     available: json['available'] as bool? ?? true,
     guestScope: json['guest_scope'] as String? ?? 'all',
+    choices: [for (final c in (json['choices'] as List<dynamic>? ?? const [])) UnitChoice.fromJson(c as Map<String, dynamic>)],
+    offer: ItemOffer.fromJsonOrNull(json['offer']),
   );
 }
 

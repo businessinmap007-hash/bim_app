@@ -71,6 +71,9 @@ class DiscoveredUnit {
   /// «أسعار للمصريين والمقيمين فقط»: `all`, `locals` or `foreigners`.
   final String guestScope;
 
+  /// What a guest may add to this room — the hotel's meal plan at its listed price (a room sold through a partner carries them here).
+  final List<UnitChoice> choices;
+
   const DiscoveredUnit({
     required this.id,
     this.code,
@@ -88,6 +91,7 @@ class DiscoveredUnit {
     this.dayUse,
     this.features = const [],
     this.guestScope = 'all',
+    this.choices = const [],
   });
 
   String get displayTitle => (title != null && title!.isNotEmpty) ? title! : (label ?? code ?? '#$id');
@@ -227,6 +231,8 @@ class PartnerRoom {
   final bool available;
   final String? reason;
   final String guestScope;
+  final List<UnitChoice> choices;
+  final ItemOffer? offer;
 
   const PartnerRoom({
     required this.allocationId,
@@ -246,6 +252,8 @@ class PartnerRoom {
     this.available = true,
     this.reason,
     this.guestScope = 'all',
+    this.choices = const [],
+    this.offer,
   });
 
   factory PartnerRoom.fromJson(Map<String, dynamic> json) => PartnerRoom(
@@ -268,6 +276,8 @@ class PartnerRoom {
     available: json['available'] as bool? ?? true,
     reason: json['reason'] as String?,
     guestScope: json['guest_scope'] as String? ?? 'all',
+    choices: [for (final c in (json['choices'] as List<dynamic>? ?? const [])) UnitChoice.fromJson(c as Map<String, dynamic>)],
+    offer: ItemOffer.fromJsonOrNull(json['offer']),
   );
 }
 

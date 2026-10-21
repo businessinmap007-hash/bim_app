@@ -22452,6 +22452,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تحقق من جواز السفر'**
   String get boardCheckForeign;
+
+  /// No description provided for @pshNightsFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'إقامة {min} ليالٍ فأكثر'**
+  String pshNightsFrom(int min);
 }
 
 class _AppLocalizationsDelegate

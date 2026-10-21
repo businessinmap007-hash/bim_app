@@ -169,7 +169,7 @@ class _AllocationCard extends StatelessWidget {
               Text(l10n.pshContractLine(money(a.contractPrice, c)), style: theme.textTheme.bodyMedium),
               if (!isOwner) Text(l10n.pshSellLine(money(a.finalPrice, c)), style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800, color: AppColors.success)),
               if (a.minNights != null || a.maxNights != null)
-                Text(l10n.pshNightsRange(a.minNights ?? 1, a.maxNights ?? 0), style: theme.textTheme.bodySmall),
+                Text(a.maxNights == null ? l10n.pshNightsFrom(a.minNights ?? 1) : l10n.pshNightsRange(a.minNights ?? 1, a.maxNights!), style: theme.textTheme.bodySmall),
               if (a.releaseDaysBefore > 0) Text(l10n.pshReleaseLine(a.releaseDaysBefore), style: theme.textTheme.bodySmall),
               if (!a.isActive) Text(l10n.pshAllocationStopped, style: theme.textTheme.bodySmall?.copyWith(color: AppColors.error)),
             ]),

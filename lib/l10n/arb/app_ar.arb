@@ -4338,5 +4338,7 @@
   "boardRoomNumber": "غرفة {n}",
   "@boardRoomNumber": {"placeholders": {"n": {"type": "String"}}},
   "boardCheckLocal": "تحقق من الهوية المصرية أو الإقامة",
-  "boardCheckForeign": "تحقق من جواز السفر"
+  "boardCheckForeign": "تحقق من جواز السفر",
+  "pshNightsFrom": "إقامة {min} ليالٍ فأكثر",
+  "@pshNightsFrom": {"placeholders": {"min": {"type": "int"}}}
 }

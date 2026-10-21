@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../business/data/models/offering_item.dart';
+import '../../../promotions/presentation/widgets/offer_widgets.dart';
 import '../../data/models/unit_discovery.dart';
 import '../screens/booking_screen.dart';
 
@@ -28,6 +29,7 @@ class PartnerRoomsSection extends StatelessWidget {
     price: r.price,
     currency: r.currency,
     guestScope: r.guestScope,
+    choices: r.choices,
   );
 
   @override
@@ -81,8 +83,9 @@ class PartnerRoomsSection extends StatelessWidget {
                               const SizedBox(height: 4),
                               Row(
                                 children: [
-                                  Text(
-                                    '${r.price == r.price.roundToDouble() ? r.price.toStringAsFixed(0) : r.price.toStringAsFixed(2)} ${r.currency}',
+                                  PriceWithOffer(
+                                    label: '${r.price == r.price.roundToDouble() ? r.price.toStringAsFixed(0) : r.price.toStringAsFixed(2)} ${r.currency}',
+                                    offer: r.offer,
                                     style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
                                   ),
                                   const SizedBox(width: 4),
@@ -125,13 +128,14 @@ void openPartnerRoomBooking(
   required double price,
   String currency = 'EGP',
   String guestScope = 'all',
+  List<UnitChoice> choices = const [],
 }) {
   Navigator.of(context).push(
     MaterialPageRoute(
       builder: (_) => BookingScreen(
         businessId: businessId,
         shape: shape,
-        initialUnit: DiscoveredUnit(id: unitId, label: label, capacity: capacity, images: images, price: price, features: features, guestScope: guestScope),
+        initialUnit: DiscoveredUnit(id: unitId, label: label, capacity: capacity, images: images, price: price, features: features, guestScope: guestScope, choices: choices),
         offering: OfferingItem(
           id: 0,
           source: 'price',

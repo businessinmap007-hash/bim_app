@@ -12577,4 +12577,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get boardCheckForeign => 'Check the passport';
+
+  @override
+  String pshNightsFrom(int min) {
+    return 'Stay $min nights or more';
+  }
 }
