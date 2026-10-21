@@ -62,6 +62,9 @@ class DiscoveredUnit {
   final bool? available;
   final String? reason;
 
+  /// «تحت التعامل»: someone else is filling in a booking for it right now (it frees itself if they walk away).
+  final bool held;
+
   /// null unless the hotel sells this room type through the day as well
   final DayUseOffer? dayUse;
 
@@ -88,6 +91,7 @@ class DiscoveredUnit {
     this.periodUnit,
     this.available,
     this.reason,
+    this.held = false,
     this.dayUse,
     this.features = const [],
     this.guestScope = 'all',
@@ -113,6 +117,7 @@ class DiscoveredUnit {
     periodUnit: json['period_unit'] as String?,
     available: json['available'] as bool?,
     reason: json['reason'] as String?,
+    held: json['held'] as bool? ?? false,
     guestScope: json['guest_scope'] as String? ?? 'all',
     dayUse: json['day_use'] is Map<String, dynamic> ? DayUseOffer.fromJson(json['day_use'] as Map<String, dynamic>) : null,
     features: (json['modifiers'] as List<dynamic>? ?? [])

@@ -58,6 +58,35 @@ class OccBooking {
   );
 }
 
+/// «تحت التعامل»: someone is filling in a booking for this room right now.
+class OccDealing {
+  final DateTime startsAt;
+  final DateTime endsAt;
+  final int quantity;
+  final int minutesLeft;
+
+  /// The company it is being booked through; null when it is the hotel's own booking screen.
+  final String? seller;
+
+  const OccDealing({required this.startsAt, required this.endsAt, this.quantity = 1, this.minutesLeft = 0, this.seller});
+
+  bool holds(DateTime day) {
+    final d = DateTime(day.year, day.month, day.day);
+    final from = DateTime(startsAt.year, startsAt.month, startsAt.day);
+    final to = DateTime(endsAt.year, endsAt.month, endsAt.day);
+
+    return to == from ? d == from : (!d.isBefore(from) && d.isBefore(to));
+  }
+
+  factory OccDealing.fromJson(Map<String, dynamic> json) => OccDealing(
+    startsAt: DateTime.parse((json['starts_at'] as String? ?? '').replaceFirst(' ', 'T')),
+    endsAt: DateTime.parse((json['ends_at'] as String? ?? '').replaceFirst(' ', 'T')),
+    quantity: (json['quantity'] as num?)?.toInt() ?? 1,
+    minutesLeft: (json['minutes_left'] as num?)?.toInt() ?? 0,
+    seller: json['seller'] as String?,
+  );
+}
+
 class OccUnit {
   final int id;
   final String label;
@@ -66,6 +95,8 @@ class OccUnit {
   final int heldForPartners;
   final List<int> booked;
   final List<int> viaPartner;
+  final List<int> dealing;
+  final List<OccDealing> dealingNow;
   final List<OccBooking> bookings;
 
   const OccUnit({
@@ -76,6 +107,8 @@ class OccUnit {
     this.heldForPartners = 0,
     this.booked = const [],
     this.viaPartner = const [],
+    this.dealing = const [],
+    this.dealingNow = const [],
     this.bookings = const [],
   });
 
@@ -87,6 +120,8 @@ class OccUnit {
     heldForPartners: (json['held_for_partners'] as num?)?.toInt() ?? 0,
     booked: [for (final v in (json['booked'] as List<dynamic>? ?? const [])) (v as num).toInt()],
     viaPartner: [for (final v in (json['via_partner'] as List<dynamic>? ?? const [])) (v as num).toInt()],
+    dealing: [for (final v in (json['dealing'] as List<dynamic>? ?? const [])) (v as num).toInt()],
+    dealingNow: [for (final h in (json['dealing_now'] as List<dynamic>? ?? const [])) OccDealing.fromJson(h as Map<String, dynamic>)],
     bookings: [for (final b in (json['bookings'] as List<dynamic>? ?? const [])) OccBooking.fromJson(b as Map<String, dynamic>)],
   );
 }

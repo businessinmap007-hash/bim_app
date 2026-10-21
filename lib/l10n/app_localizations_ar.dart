@@ -12482,4 +12482,28 @@ class AppLocalizationsAr extends AppLocalizations {
   String pshNightsFrom(int min) {
     return 'إقامة $min ليالٍ فأكثر';
   }
+
+  @override
+  String bookingHoldBanner(String time) {
+    return 'الغرفة محجوزة لك مؤقتًا — تنتهي بعد $time';
+  }
+
+  @override
+  String get bookingUnitHeld => 'تحت التعامل من طرف آخر';
+
+  @override
+  String get boardDealing => 'تحت التعامل';
+
+  @override
+  String boardDealingNow(int n) {
+    return 'تحت التعامل الآن · ينتهي خلال $n د';
+  }
+
+  @override
+  String boardDealingVia(String name) {
+    return 'عبر $name';
+  }
+
+  @override
+  String get boardDealingHotel => 'من شاشة الفندق';
 }

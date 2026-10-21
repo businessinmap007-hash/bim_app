@@ -4340,5 +4340,14 @@
   "boardCheckLocal": "تحقق من الهوية المصرية أو الإقامة",
   "boardCheckForeign": "تحقق من جواز السفر",
   "pshNightsFrom": "إقامة {min} ليالٍ فأكثر",
-  "@pshNightsFrom": {"placeholders": {"min": {"type": "int"}}}
+  "@pshNightsFrom": {"placeholders": {"min": {"type": "int"}}},
+  "bookingHoldBanner": "الغرفة محجوزة لك مؤقتًا — تنتهي بعد {time}",
+  "@bookingHoldBanner": {"placeholders": {"time": {"type": "String"}}},
+  "bookingUnitHeld": "تحت التعامل من طرف آخر",
+  "boardDealing": "تحت التعامل",
+  "boardDealingNow": "تحت التعامل الآن · ينتهي خلال {n} د",
+  "@boardDealingNow": {"placeholders": {"n": {"type": "int"}}},
+  "boardDealingVia": "عبر {name}",
+  "@boardDealingVia": {"placeholders": {"name": {"type": "String"}}},
+  "boardDealingHotel": "من شاشة الفندق"
 }

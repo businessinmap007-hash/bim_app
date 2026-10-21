@@ -75,4 +75,23 @@ void main() {
     expect(find.textContaining('منى'), findsOneWidget);
     expect(find.textContaining('النيل للسياحة'), findsOneWidget);
   });
+
+  test('a room being booked right now reads its minutes and the company it is booked through', () {
+    final unit = OccUnit.fromJson({
+      'id': 2,
+      'label': 'غرفة',
+      'stock': 1,
+      'booked': [0, 0],
+      'dealing': [1, 1],
+      'dealing_now': [
+        {'starts_at': '2026-11-10 00:00:00', 'ends_at': '2026-11-12 00:00:00', 'quantity': 1, 'minutes_left': 7, 'seller': 'النيل للسياحة'},
+      ],
+    });
+
+    expect(unit.dealing, [1, 1]);
+    expect(unit.dealingNow.single.minutesLeft, 7);
+    expect(unit.dealingNow.single.seller, 'النيل للسياحة');
+    expect(unit.dealingNow.single.holds(DateTime(2026, 11, 11)), isTrue);
+    expect(unit.dealingNow.single.holds(DateTime(2026, 11, 12)), isFalse);
+  });
 }

@@ -4252,5 +4252,11 @@
   "boardRoomNumber": "Room {n}",
   "boardCheckLocal": "Check the Egyptian ID or residence",
   "boardCheckForeign": "Check the passport",
-  "pshNightsFrom": "Stay {min} nights or more"
+  "pshNightsFrom": "Stay {min} nights or more",
+  "bookingHoldBanner": "Held for you — expires in {time}",
+  "bookingUnitHeld": "Being booked by someone else",
+  "boardDealing": "Being booked",
+  "boardDealingNow": "Being booked now · ends in {n} min",
+  "boardDealingVia": "through {name}",
+  "boardDealingHotel": "from the hotel's own screen"
 }

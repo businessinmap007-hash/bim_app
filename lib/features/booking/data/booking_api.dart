@@ -342,6 +342,32 @@ class BookingApi {
   /// Api\V2\BookingController::preview. Null fields mean "not chosen yet"
   /// (e.g. no dates picked), which the backend prices as best it can (a
   /// single period) rather than rejecting.
+  /// «تحت التعامل»: hold the room for this guest while the booking is filled in. Throws (422) with the reason when it is booked or
+  /// being booked by someone else; asking again for the same room moves the hold.
+  Future<({int id, int secondsLeft})> placeHold({
+    required int businessId,
+    required int bookableId,
+    required DateTime startsAt,
+    required DateTime endsAt,
+    int quantity = 1,
+  }) async {
+    final data = await _client.post(
+      '/bookings/holds',
+      data: {
+        'business_id': businessId,
+        'bookable_id': bookableId,
+        'starts_at': startsAt.toIso8601String(),
+        'ends_at': endsAt.toIso8601String(),
+        'quantity': quantity,
+      },
+    ) as Map<String, dynamic>;
+    final hold = data['hold'] as Map<String, dynamic>;
+
+    return (id: (hold['id'] as num).toInt(), secondsLeft: (hold['seconds_left'] as num?)?.toInt() ?? 0);
+  }
+
+  Future<void> releaseHold(int id) => _client.delete('/bookings/holds/$id');
+
   Future<BookingPreview> preview({
     required int businessId,
     required int serviceId,

@@ -22458,6 +22458,42 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'إقامة {min} ليالٍ فأكثر'**
   String pshNightsFrom(int min);
+
+  /// No description provided for @bookingHoldBanner.
+  ///
+  /// In ar, this message translates to:
+  /// **'الغرفة محجوزة لك مؤقتًا — تنتهي بعد {time}'**
+  String bookingHoldBanner(String time);
+
+  /// No description provided for @bookingUnitHeld.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحت التعامل من طرف آخر'**
+  String get bookingUnitHeld;
+
+  /// No description provided for @boardDealing.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحت التعامل'**
+  String get boardDealing;
+
+  /// No description provided for @boardDealingNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحت التعامل الآن · ينتهي خلال {n} د'**
+  String boardDealingNow(int n);
+
+  /// No description provided for @boardDealingVia.
+  ///
+  /// In ar, this message translates to:
+  /// **'عبر {name}'**
+  String boardDealingVia(String name);
+
+  /// No description provided for @boardDealingHotel.
+  ///
+  /// In ar, this message translates to:
+  /// **'من شاشة الفندق'**
+  String get boardDealingHotel;
 }
 
 class _AppLocalizationsDelegate

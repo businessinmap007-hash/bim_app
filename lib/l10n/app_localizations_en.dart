@@ -12582,4 +12582,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String pshNightsFrom(int min) {
     return 'Stay $min nights or more';
   }
+
+  @override
+  String bookingHoldBanner(String time) {
+    return 'Held for you — expires in $time';
+  }
+
+  @override
+  String get bookingUnitHeld => 'Being booked by someone else';
+
+  @override
+  String get boardDealing => 'Being booked';
+
+  @override
+  String boardDealingNow(int n) {
+    return 'Being booked now · ends in $n min';
+  }
+
+  @override
+  String boardDealingVia(String name) {
+    return 'through $name';
+  }
+
+  @override
+  String get boardDealingHotel => 'from the hotel\'s own screen';
 }

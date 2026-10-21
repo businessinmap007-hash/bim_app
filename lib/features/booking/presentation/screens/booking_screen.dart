@@ -102,6 +102,11 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   final _notesController = TextEditingController();
   bool _submitting = false;
 
+  // «تحت التعامل»: the room is held for this guest while they fill the booking in
+  int? _holdId;
+  DateTime? _holdUntil;
+  Timer? _holdTicker;
+
   /// The guest ticked that they are who a scoped room type is sold to («مصري أو مقيم» / «أجنبي»).
   bool _originConfirmed = false;
 
@@ -148,6 +153,12 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
 
   @override
   void dispose() {
+    _holdTicker?.cancel();
+    final held = _holdId;
+    if (held != null) {
+      // the guest left the screen: the room is free for everyone again (fire and forget)
+      ref.read(bookingApiProvider).releaseHold(held).catchError((_) {});
+    }
     _notesController.dispose();
     _previewDebounce?.cancel();
     for (final c in _textControllers.values) {
@@ -172,6 +183,49 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   void _schedulePreview() {
     _previewDebounce?.cancel();
     _previewDebounce = Timer(const Duration(milliseconds: 350), _fetchPreview);
+  }
+
+  /// Holds the chosen room for the dates picked, so nobody else is offered it meanwhile. Refused (the reason is shown where the price
+  /// error is) when it is booked, or being booked by someone else.
+  Future<void> _holdRoom(int requestId) async {
+    final unit = _unitId;
+    final from = _startsAt;
+    final to = _endsAt;
+    if (unit == null || from == null || to == null || _dayUseActive) return;
+
+    try {
+      final hold = await ref.read(bookingApiProvider).placeHold(businessId: widget.businessId, bookableId: unit, startsAt: from, endsAt: to, quantity: _quantity);
+      if (!mounted || requestId != _previewRequestId) return;
+      setState(() {
+        _holdId = hold.id;
+        _holdUntil = DateTime.now().add(Duration(seconds: hold.secondsLeft));
+      });
+      _holdTicker ??= Timer.periodic(const Duration(seconds: 1), (_) {
+        if (!mounted) return;
+        final until = _holdUntil;
+        if (until != null && !until.isAfter(DateTime.now())) {
+          // time is up: try to hold it again; someone else may have taken it meanwhile
+          setState(() => _holdUntil = null);
+          _schedulePreview();
+        } else {
+          setState(() {});
+        }
+      });
+    } catch (e) {
+      if (!mounted || requestId != _previewRequestId) return;
+      setState(() {
+        _holdId = null;
+        _holdUntil = null;
+        _previewError = e is ApiException && e.message.isNotEmpty ? e.message : null;
+      });
+    }
+  }
+
+  String _holdLeft() {
+    final left = _holdUntil?.difference(DateTime.now()) ?? Duration.zero;
+    final s = left.inSeconds.clamp(0, 99999);
+
+    return '${(s ~/ 60).toString().padLeft(2, '0')}:${(s % 60).toString().padLeft(2, '0')}';
   }
 
   Future<void> _fetchPreview() async {
@@ -200,6 +254,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
           _previewError = null;
           _previewLoading = false;
         });
+        await _holdRoom(requestId);
       }
     } catch (e) {
       if (mounted && requestId == _previewRequestId) {
@@ -419,6 +474,8 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
         providerId: widget.provider?.id,
         guestOrigin: _scope == 'locals' ? 'local' : (_scope == 'foreigners' ? 'foreign' : null),
       );
+      // the hold became the booking on the server
+      _holdId = null;
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.bookingSuccess)));
         Navigator.of(context).pop(true);
@@ -484,6 +541,20 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
               RelationshipCard(summary: form.relationship),
               if (widget.initialUnit != null) ...[
                 _selectedUnitCard(context, widget.initialUnit!),
+                // «تحت التعامل»: the room is held for this guest while they fill the booking in
+                if (_holdUntil != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(color: Theme.of(context).colorScheme.primaryContainer, borderRadius: BorderRadius.circular(10)),
+                      child: Row(children: [
+                        const Icon(Icons.timer_outlined, size: 18),
+                        const SizedBox(width: 8),
+                        Expanded(child: Text(l10n.bookingHoldBanner(_holdLeft()), style: Theme.of(context).textTheme.bodyMedium)),
+                      ]),
+                    ),
+                  ),
                 // the hotel's add-ons (the meal plan) for a room sold through a partner: they come with the room, not with this business's form
                 if (widget.initialUnit!.choices.isNotEmpty) ...[
                   const SizedBox(height: 12),
@@ -913,7 +984,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                       Text('${entry.unit.price!.toStringAsFixed(0)} ${entry.group.currency ?? ''}'),
                     if (entry.unit.available == false)
                       Text(
-                        l10n.bookingUnitUnavailable,
+                        entry.unit.held ? l10n.bookingUnitHeld : l10n.bookingUnitUnavailable,
                         style: TextStyle(color: Theme.of(context).colorScheme.error),
                       ),
                   ],

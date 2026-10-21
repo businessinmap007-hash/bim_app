@@ -98,6 +98,7 @@ class _Legend extends StatelessWidget {
         dot(AppColors.success.withValues(alpha: 0.35), l10n.boardFree),
         dot(AppColors.warning.withValues(alpha: 0.5), l10n.boardPartly),
         dot(AppColors.error.withValues(alpha: 0.55), l10n.boardFull),
+        dot(Colors.blueGrey.withValues(alpha: 0.35), l10n.boardDealing),
         Row(mainAxisSize: MainAxisSize.min, children: [
           Icon(Icons.handshake_outlined, size: 12, color: Theme.of(context).hintColor),
           const SizedBox(width: 4),
@@ -114,8 +115,10 @@ class _UnitMonth extends StatelessWidget {
 
   const _UnitMonth({required this.board, required this.unit});
 
-  Color _color(int booked) {
+  Color _color(int booked, int dealing) {
     if (unit.stock <= 0 || booked >= unit.stock) return AppColors.error.withValues(alpha: 0.55);
+    // someone is filling in a booking for it right now: neither free nor sold
+    if (dealing > 0 && booked + dealing >= unit.stock) return Colors.blueGrey.withValues(alpha: 0.35);
     if (booked > 0) return AppColors.warning.withValues(alpha: 0.5);
 
     return AppColors.success.withValues(alpha: 0.35);
@@ -164,15 +167,16 @@ class _UnitMonth extends StatelessWidget {
 
                           final booked = i < unit.booked.length ? unit.booked[i] : 0;
                           final partner = i < unit.viaPartner.length ? unit.viaPartner[i] : 0;
+                          final dealing = i < unit.dealing.length ? unit.dealing[i] : 0;
 
                           return Padding(
                             padding: const EdgeInsets.all(1.5),
                             child: InkWell(
                               borderRadius: BorderRadius.circular(6),
-                              onTap: booked == 0 ? null : () => _showDay(context, DateTime(board.month.year, board.month.month, i + 1)),
+                              onTap: booked == 0 && dealing == 0 ? null : () => _showDay(context, DateTime(board.month.year, board.month.month, i + 1)),
                               child: Container(
                                 height: 37,
-                                decoration: BoxDecoration(color: _color(booked), borderRadius: BorderRadius.circular(6)),
+                                decoration: BoxDecoration(color: _color(booked, dealing), borderRadius: BorderRadius.circular(6)),
                                 child: Stack(
                                   alignment: Alignment.center,
                                   children: [
@@ -181,6 +185,7 @@ class _UnitMonth extends StatelessWidget {
                                       Text('$booked/${unit.stock}', style: const TextStyle(fontSize: 9)),
                                     ]),
                                     if (partner > 0) const Positioned(top: 2, right: 2, child: Icon(Icons.handshake_outlined, size: 9)),
+                                    if (dealing > 0) const Positioned(top: 2, left: 2, child: Icon(Icons.timer_outlined, size: 9)),
                                   ],
                                 ),
                               ),
@@ -201,6 +206,7 @@ class _UnitMonth extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final held = unit.bookings.where((b) => b.holds(day)).toList();
+    final dealing = unit.dealingNow.where((h) => h.holds(day)).toList();
 
     showModalBottomSheet<void>(
       context: context,
@@ -213,6 +219,14 @@ class _UnitMonth extends StatelessWidget {
             children: [
               Text('${unit.label} · ${MaterialLocalizations.of(ctx).formatMediumDate(day)}', style: theme.textTheme.titleMedium),
               const SizedBox(height: 8),
+              for (final h in dealing)
+                ListTile(
+                  dense: true,
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.timer_outlined),
+                  title: Text(l10n.boardDealingNow(h.minutesLeft)),
+                  subtitle: Text(h.seller == null ? l10n.boardDealingHotel : l10n.boardDealingVia(h.seller!)),
+                ),
               for (final b in held)
                 ListTile(
                   dense: true,
