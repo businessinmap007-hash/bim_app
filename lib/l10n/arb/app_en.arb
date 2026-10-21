@@ -4089,8 +4089,8 @@
   "promoResume": "Resume",
   "promoDelete": "Delete",
   "promoDeleteConfirm": "Delete this offer? Orders it already priced keep their discount.",
-  "promoStepProducts": "1. Choose the products",
-  "promoStepType": "2. Kind of offer",
+  "promoStepProducts": "2. Choose the products",
+  "promoStepType": "1. Kind of offer",
   "promoStepDetails": "3. Details",
   "promoWholeShop": "All my products",
   "promoWholeSection": "The whole section",
@@ -4132,5 +4132,6 @@
   "promoSameItemOnly": "The same item only",
   "promoMaxGroups": "Most times in one order (optional)",
   "promoRulesTitle": "The real-discount rule",
-  "promoRulesBody": "An item whose price rose by more than {percent}% within the last {days} days is not discounted, so the discount is never fake. Its discount starts by itself when the period passes, and you are told the day when you save the offer."
+  "promoRulesBody": "An item whose price rose by more than {percent}% within the last {days} days is not discounted, so the discount is never fake. Its discount starts by itself when the period passes, and you are told the day when you save the offer.",
+  "promoSummaryTitle": "Offer summary"
 }

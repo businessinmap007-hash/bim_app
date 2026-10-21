@@ -99,6 +99,32 @@ void main() {
 
     await tester.enterText(find.widgetWithText(TextField, 'Get (pieces taken)'), '3');
     await tester.pumpAndSettle();
-    expect(find.text('The second number must be larger than the first (up to 20 pieces).'), findsOneWidget);
+    expect(find.text('The second number must be larger than the first (up to 20 pieces).'), findsWidgets);
+  });
+
+  testWidgets('the kind of offer comes before the products, with a summary that follows the numbers', (tester) async {
+    tester.view.physicalSize = const Size(900, 2400);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [promotionCatalogProvider.overrideWith((ref) async => const PromotionCatalog())],
+        child: _wrap(const PromotionFormScreen()),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(tester.getTopLeft(find.text('1. Kind of offer')).dy, lessThan(tester.getTopLeft(find.text('2. Choose the products')).dy));
+    expect(find.text('Offer summary'), findsOneWidget);
+
+    await tester.enterText(find.widgetWithText(TextField, 'Discount %'), '25');
+    await tester.pumpAndSettle();
+    expect(find.text('25% off'), findsOneWidget);
+    expect(find.text('Choose what the offer covers'), findsOneWidget);
+
+    await tester.tap(find.text('All my products'));
+    await tester.pumpAndSettle();
+    expect(find.text('Covers all products'), findsOneWidget);
   });
 }

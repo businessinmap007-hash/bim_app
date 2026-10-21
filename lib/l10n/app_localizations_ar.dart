@@ -11922,10 +11922,10 @@ class AppLocalizationsAr extends AppLocalizations {
       'حذف هذا العرض؟ الطلبات التي سُعّرت به تحتفظ بخصمها.';
 
   @override
-  String get promoStepProducts => '١. اختر المنتجات';
+  String get promoStepProducts => '٢. اختر المنتجات';
 
   @override
-  String get promoStepType => '٢. نوع العرض';
+  String get promoStepType => '١. نوع العرض';
 
   @override
   String get promoStepDetails => '٣. التفاصيل';
@@ -12077,4 +12077,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String promoRulesBody(String percent, int days) {
     return 'لا يُخصم صنف ارتفع سعره بأكثر من $percent٪ خلال آخر $days يومًا، حتى لا يكون الخصم وهميًا. يبدأ خصمه تلقائيًا بعد انقضاء المدة، وتُخبَر باليوم عند حفظ العرض.';
   }
+
+  @override
+  String get promoSummaryTitle => 'ملخص العرض';
 }

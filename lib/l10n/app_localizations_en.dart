@@ -12016,10 +12016,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Delete this offer? Orders it already priced keep their discount.';
 
   @override
-  String get promoStepProducts => '1. Choose the products';
+  String get promoStepProducts => '2. Choose the products';
 
   @override
-  String get promoStepType => '2. Kind of offer';
+  String get promoStepType => '1. Kind of offer';
 
   @override
   String get promoStepDetails => '3. Details';
@@ -12172,4 +12172,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String promoRulesBody(String percent, int days) {
     return 'An item whose price rose by more than $percent% within the last $days days is not discounted, so the discount is never fake. Its discount starts by itself when the period passes, and you are told the day when you save the offer.';
   }
+
+  @override
+  String get promoSummaryTitle => 'Offer summary';
 }

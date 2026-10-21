@@ -4149,8 +4149,8 @@
   "promoResume": "استئناف",
   "promoDelete": "حذف",
   "promoDeleteConfirm": "حذف هذا العرض؟ الطلبات التي سُعّرت به تحتفظ بخصمها.",
-  "promoStepProducts": "١. اختر المنتجات",
-  "promoStepType": "٢. نوع العرض",
+  "promoStepProducts": "٢. اختر المنتجات",
+  "promoStepType": "١. نوع العرض",
   "promoStepDetails": "٣. التفاصيل",
   "promoWholeShop": "كل منتجاتي",
   "promoWholeSection": "القسم كله",
@@ -4204,5 +4204,6 @@
   "promoMaxGroups": "أقصى عدد مرات في الطلب (اختياري)",
   "promoRulesTitle": "قاعدة الخصم الحقيقي",
   "promoRulesBody": "لا يُخصم صنف ارتفع سعره بأكثر من {percent}٪ خلال آخر {days} يومًا، حتى لا يكون الخصم وهميًا. يبدأ خصمه تلقائيًا بعد انقضاء المدة، وتُخبَر باليوم عند حفظ العرض.",
-  "@promoRulesBody": {"placeholders": {"percent": {"type": "String"}, "days": {"type": "int"}}}
+  "@promoRulesBody": {"placeholders": {"percent": {"type": "String"}, "days": {"type": "int"}}},
+  "promoSummaryTitle": "ملخص العرض"
 }

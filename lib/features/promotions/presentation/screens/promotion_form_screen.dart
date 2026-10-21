@@ -6,6 +6,7 @@ import '../../../../core/time/local_format.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/promotions_providers.dart';
 import '../../data/models/promotion.dart';
+import '../widgets/offer_widgets.dart';
 
 /// The four ways a promotion can discount, as the merchant picks it. «اشترِ [..] واحصل على [..]» is ONE way with two typed numbers:
 /// he pays for the first and takes the second (the cheapest pieces of every group are free).
@@ -184,21 +185,7 @@ class _PromotionFormScreenState extends ConsumerState<PromotionFormScreen> {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 4, 16, 32),
         children: [
-          header(l10n.promoStepProducts),
-          CheckboxListTile(
-            contentPadding: EdgeInsets.zero,
-            value: _all,
-            onChanged: (v) => setState(() => _all = v ?? false),
-            title: Text(l10n.promoWholeShop),
-          ),
-          if (!_all)
-            catalog.when(
-              loading: () => const Padding(padding: EdgeInsets.all(16), child: Center(child: CircularProgressIndicator())),
-              error: (_, _) => OutlinedButton(onPressed: () => ref.invalidate(promotionCatalogProvider), child: Text(l10n.commonRetry)),
-              data: (c) => c.groups.isEmpty
-                  ? Text(l10n.promoNoProducts)
-                  : Column(children: [for (final g in c.groups) _group(context, g)]),
-            ),
+          _summaryCard(l10n, theme),
           header(l10n.promoStepType),
           Wrap(
             spacing: 8,
@@ -215,6 +202,21 @@ class _PromotionFormScreenState extends ConsumerState<PromotionFormScreen> {
           ),
           const SizedBox(height: 8),
           ..._ruleFields(l10n),
+          header(l10n.promoStepProducts),
+          CheckboxListTile(
+            contentPadding: EdgeInsets.zero,
+            value: _all,
+            onChanged: (v) => setState(() => _all = v ?? false),
+            title: Text(l10n.promoWholeShop),
+          ),
+          if (!_all)
+            catalog.when(
+              loading: () => const Padding(padding: EdgeInsets.all(16), child: Center(child: CircularProgressIndicator())),
+              error: (_, _) => OutlinedButton(onPressed: () => ref.invalidate(promotionCatalogProvider), child: Text(l10n.commonRetry)),
+              data: (c) => c.groups.isEmpty
+                  ? Text(l10n.promoNoProducts)
+                  : Column(children: [for (final g in c.groups) _group(context, g)]),
+            ),
           header(l10n.promoStepDetails),
           TextField(controller: _title, decoration: InputDecoration(labelText: l10n.promoTitleOptional)),
           const SizedBox(height: 8),
@@ -235,14 +237,45 @@ class _PromotionFormScreenState extends ConsumerState<PromotionFormScreen> {
     );
   }
 
+  /// «ملخص العرض»: the rule in words and what it covers, growing as the merchant fills the steps.
+  Widget _summaryCard(AppLocalizations l10n, ThemeData theme) {
+    final (kind, params) = _rule();
+    double param(String key) => (params[key] as num?)?.toDouble() ?? 0;
+
+    final valid = switch (_way) {
+      _Way.percent || _Way.amount => param('value') > 0,
+      _Way.buyGet => param('pay') >= 1 && param('n') > param('pay') && param('n') <= 20,
+      _Way.spend => param('min_total') > 0 && param('value') > 0,
+    };
+
+    final picked = _sections.length + _items.length;
+    final covers = _all ? l10n.promoCoversAll : (picked > 0 ? l10n.promoSelectedCount(picked) : l10n.promoPickSomething);
+
+    return Card(
+      margin: const EdgeInsets.only(top: 8),
+      color: const Color(0xFFD6A94A).withValues(alpha: 0.14),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(l10n.promoSummaryTitle, style: theme.textTheme.bodySmall),
+            Text(valid ? promotionSummary(l10n, kind, param) : l10n.promoBuyGetInvalid, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800)),
+            Text(covers, style: theme.textTheme.bodySmall),
+          ],
+        ),
+      ),
+    );
+  }
+
   List<Widget> _ruleFields(AppLocalizations l10n) {
     InputDecoration d(String label) => InputDecoration(labelText: label);
 
     switch (_way) {
       case _Way.percent:
-        return [TextField(controller: _value, keyboardType: TextInputType.number, decoration: d(l10n.promoValuePercent))];
+        return [TextField(controller: _value, keyboardType: TextInputType.number, onChanged: (_) => setState(() {}), decoration: d(l10n.promoValuePercent))];
       case _Way.amount:
-        return [TextField(controller: _value, keyboardType: TextInputType.number, decoration: d(l10n.promoValueAmount))];
+        return [TextField(controller: _value, keyboardType: TextInputType.number, onChanged: (_) => setState(() {}), decoration: d(l10n.promoValueAmount))];
       case _Way.buyGet:
         final pay = _read(_pay).round();
         final take = _read(_take).round();
@@ -276,8 +309,8 @@ class _PromotionFormScreenState extends ConsumerState<PromotionFormScreen> {
         ];
       case _Way.spend:
         return [
-          TextField(controller: _minTotal, keyboardType: TextInputType.number, decoration: d(l10n.promoMinTotal)),
-          TextField(controller: _value, keyboardType: TextInputType.number, decoration: d(l10n.promoValuePercent)),
+          TextField(controller: _minTotal, keyboardType: TextInputType.number, onChanged: (_) => setState(() {}), decoration: d(l10n.promoMinTotal)),
+          TextField(controller: _value, keyboardType: TextInputType.number, onChanged: (_) => setState(() {}), decoration: d(l10n.promoValuePercent)),
         ];
     }
   }

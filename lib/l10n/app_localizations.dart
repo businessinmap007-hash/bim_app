@@ -21478,13 +21478,13 @@ abstract class AppLocalizations {
   /// No description provided for @promoStepProducts.
   ///
   /// In ar, this message translates to:
-  /// **'١. اختر المنتجات'**
+  /// **'٢. اختر المنتجات'**
   String get promoStepProducts;
 
   /// No description provided for @promoStepType.
   ///
   /// In ar, this message translates to:
-  /// **'٢. نوع العرض'**
+  /// **'١. نوع العرض'**
   String get promoStepType;
 
   /// No description provided for @promoStepDetails.
@@ -21738,6 +21738,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لا يُخصم صنف ارتفع سعره بأكثر من {percent}٪ خلال آخر {days} يومًا، حتى لا يكون الخصم وهميًا. يبدأ خصمه تلقائيًا بعد انقضاء المدة، وتُخبَر باليوم عند حفظ العرض.'**
   String promoRulesBody(String percent, int days);
+
+  /// No description provided for @promoSummaryTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملخص العرض'**
+  String get promoSummaryTitle;
 }
 
 class _AppLocalizationsDelegate
