@@ -1,5 +1,20 @@
 import '../../../../core/env/env.dart';
 
+/// One stage (or month) the customer is asked about in the stage-by-stage mode.
+class ShowcaseUnit {
+  /// The main stage's id, or the month «2026-10».
+  final String key;
+  final String? title;
+
+  /// pending | approved | declined
+  final String status;
+
+  const ShowcaseUnit({required this.key, this.title, required this.status});
+
+  bool get isPending => status == 'pending';
+  bool get isApproved => status == 'approved';
+}
+
 /// The business's request to show a project as a post, and the customer's answer — mirrors `ProjectShowcaseService::block()`.
 class ShowcaseRequest {
   final int id;
@@ -14,8 +29,13 @@ class ShowcaseRequest {
   /// For a plan: training | nutrition | combined.
   final String? kind;
 
-  const ShowcaseRequest({required this.id, required this.status, required this.publicTitle, this.note, this.showPhotos = false, this.decisionNote, this.kind});
+  /// `once` (one approval covers every stage) or `each` (he approves each stage / month).
+  final String consentMode;
+  final List<ShowcaseUnit> units;
 
+  const ShowcaseRequest({required this.id, required this.status, required this.publicTitle, this.note, this.showPhotos = false, this.decisionNote, this.kind, this.consentMode = 'once', this.units = const []});
+
+  bool get isEach => consentMode == 'each';
   bool get isRequested => status == 'requested';
   bool get isLive => status == 'approved';
 
@@ -31,6 +51,11 @@ class ShowcaseRequest {
           showPhotos: json['show_photos'] as bool? ?? false,
           decisionNote: json['decision_note'] as String?,
           kind: json['kind'] as String?,
+          consentMode: json['consent_mode'] as String? ?? 'once',
+          units: [
+            for (final u in (json['units'] as List<dynamic>? ?? const []))
+              ShowcaseUnit(key: '${(u as Map<String, dynamic>)['key']}', title: u['title'] as String?, status: u['status'] as String? ?? 'pending'),
+          ],
         )
       : null;
 }

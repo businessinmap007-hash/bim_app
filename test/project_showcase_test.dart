@@ -62,4 +62,23 @@ void main() {
     expect(s.months.single.change['fat_percent'], -3.5);
     expect(post.showcase, isNull);
   });
+
+  test('the request carries its consent mode and the stages it asks about', () {
+    final r = ShowcaseRequest.fromJsonOrNull({
+      'id': 1,
+      'status': 'approved',
+      'public_title': 'x',
+      'consent_mode': 'each',
+      'units': [
+        {'key': 12, 'title': 'Frame', 'status': 'pending'},
+        {'key': '2026-10', 'status': 'approved'},
+      ],
+    })!;
+
+    expect(r.isEach, isTrue);
+    expect(r.units.first.key, '12');
+    expect(r.units.first.isPending, isTrue);
+    expect(r.units.last.isApproved, isTrue);
+    expect(ShowcaseRequest.fromJsonOrNull({'id': 2, 'status': 'requested', 'public_title': 'y'})!.isEach, isFalse);
+  });
 }

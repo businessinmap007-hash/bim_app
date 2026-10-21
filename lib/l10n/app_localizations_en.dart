@@ -11929,4 +11929,51 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get planShowcaseConsentBody =>
       'One approval covers the whole plan: the results update with every monthly report and you are not asked each time. Only the changes show — no name, no weight, no photo — and you can stop it any time.';
+
+  @override
+  String get showcaseModeTitle => 'How consent is asked';
+
+  @override
+  String get showcaseModeOnce => 'One general approval';
+
+  @override
+  String get showcaseModeEachProject => 'Approval at every stage';
+
+  @override
+  String get showcaseModeEachPlan => 'Approval every month, at renewal';
+
+  @override
+  String get showcaseModeOnceNotice => 'One approval covers every stage.';
+
+  @override
+  String get showcaseModeEachNoticeProject =>
+      'You are asked about each finished stage before it is shown.';
+
+  @override
+  String get showcaseModeEachNoticePlan =>
+      'You are asked about each month\'s results at the plan\'s renewal before they are shown.';
+
+  @override
+  String get showcaseConsentStageByStage => 'I agree stage by stage';
+
+  @override
+  String get showcaseConsentMonthByMonth => 'I agree month by month';
+
+  @override
+  String get showcaseUnitsTitleProject => 'Finished stages: show them?';
+
+  @override
+  String get showcaseUnitsTitlePlan => 'Monthly results: show them?';
+
+  @override
+  String get showcaseUnitPublish => 'Show';
+
+  @override
+  String get showcaseUnitSkip => 'Don\'t show';
+
+  @override
+  String get showcaseUnitApproved => 'Shown';
+
+  @override
+  String get showcaseUnitDeclined => 'Not shown';
 }

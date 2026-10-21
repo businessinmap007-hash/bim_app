@@ -11835,4 +11835,51 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get planShowcaseConsentBody =>
       'موافقة واحدة تشمل الخطة كلها: تتحدّث النتائج مع كل تقرير شهري دون أن يُطلب منك شيء كل مرة. تظهر التغيّرات فقط، دون اسمك أو وزنك أو أي صورة، وتستطيع إيقافها في أي وقت.';
+
+  @override
+  String get showcaseModeTitle => 'طريقة أخذ الموافقة';
+
+  @override
+  String get showcaseModeOnce => 'موافقة عامة مرة واحدة';
+
+  @override
+  String get showcaseModeEachProject => 'موافقة على كل مرحلة';
+
+  @override
+  String get showcaseModeEachPlan => 'موافقة كل شهر عند التجديد';
+
+  @override
+  String get showcaseModeOnceNotice => 'موافقة واحدة تشمل كل المراحل.';
+
+  @override
+  String get showcaseModeEachNoticeProject =>
+      'تُسأل عن كل مرحلة منتهية قبل نشرها.';
+
+  @override
+  String get showcaseModeEachNoticePlan =>
+      'تُسأل عن نتائج كل شهر عند تجديد الخطة قبل نشرها.';
+
+  @override
+  String get showcaseConsentStageByStage => 'أوافق مرحلةً مرحلة';
+
+  @override
+  String get showcaseConsentMonthByMonth => 'أوافق شهرًا بشهر';
+
+  @override
+  String get showcaseUnitsTitleProject => 'المراحل المنتهية: هل تُنشر؟';
+
+  @override
+  String get showcaseUnitsTitlePlan => 'نتائج الأشهر: هل تُنشر؟';
+
+  @override
+  String get showcaseUnitPublish => 'نشر';
+
+  @override
+  String get showcaseUnitSkip => 'لا أنشر';
+
+  @override
+  String get showcaseUnitApproved => 'منشورة';
+
+  @override
+  String get showcaseUnitDeclined => 'غير منشورة';
 }

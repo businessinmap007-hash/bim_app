@@ -12,10 +12,10 @@ class ShowcaseApi {
     return ShowcaseRequest.fromJsonOrNull(data['showcase']);
   }
 
-  Future<ShowcaseRequest?> requestShowcase(int planId, {required String publicTitle, String? note}) async {
+  Future<ShowcaseRequest?> requestShowcase(int planId, {required String publicTitle, String? note, String consentMode = 'once'}) async {
     final data = await _client.post(
       '/business/training-plans/$planId/showcase',
-      data: {'public_title': publicTitle, if (note != null && note.isNotEmpty) 'note': note},
+      data: {'public_title': publicTitle, if (note != null && note.isNotEmpty) 'note': note, 'consent_mode': consentMode},
     ) as Map<String, dynamic>;
     return ShowcaseRequest.fromJsonOrNull(data['showcase']);
   }
@@ -23,8 +23,12 @@ class ShowcaseApi {
   Future<void> trainerWithdraw(int planId) => _client.delete('/business/training-plans/$planId/showcase');
 
   /// Client: answer the trainer's request, or take a live post down.
-  Future<void> decide(int planId, {required bool approve, String? note}) =>
-      _client.post('/training-plans/$planId/showcase/${approve ? 'approve' : 'decline'}', data: {'note': ?note});
+  Future<void> decide(int planId, {required bool approve, String? note, String? consentMode}) =>
+      _client.post('/training-plans/$planId/showcase/${approve ? 'approve' : 'decline'}', data: {'note': ?note, 'consent_mode': ?consentMode});
+
+  /// Month-by-month mode: let one month's results be shown (or not).
+  Future<void> decideMonth(int planId, String month, {required bool approve}) =>
+      _client.post('/training-plans/$planId/showcase/months/$month/${approve ? 'approve' : 'decline'}');
 
   Future<void> clientWithdraw(int planId) => _client.post('/training-plans/$planId/showcase/withdraw');
 }

@@ -10,6 +10,7 @@ import '../../application/customer_project_providers.dart';
 import '../../data/models/customer_project_view.dart';
 import '../widgets/project_agreement_widgets.dart';
 import '../../data/models/project_showcase.dart';
+import '../widgets/project_showcase_widgets.dart';
 
 /// The customer's read-only view of the project a business linked to their
 /// order/booking — which build stage it reached and the camera evidence for
@@ -358,6 +359,13 @@ class _ShowcaseConsent extends ConsumerWidget {
             if ((request.note ?? '').isNotEmpty) Text(request.note!),
             const SizedBox(height: 4),
             Text(request.showPhotos ? l10n.showcaseConsentWithPhotos : l10n.showcaseConsentNoPhotos, style: Theme.of(context).textTheme.bodySmall),
+            Text(request.isEach ? l10n.showcaseModeEachNoticeProject : l10n.showcaseModeOnceNotice, style: Theme.of(context).textTheme.bodySmall),
+            if (request.isLive && request.isEach)
+              ShowcaseUnitsList(
+                title: l10n.showcaseUnitsTitleProject,
+                units: [for (final u in request.units) ShowcaseUnit(key: u.key, title: u.title, status: u.status)],
+                onDecide: (u, approve) => _decide(context, ref, operationType, operationId, () => api.decideShowcaseStage(operationType, operationId, int.parse(u.key), approve: approve)),
+              ),
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
@@ -376,6 +384,11 @@ class _ShowcaseConsent extends ConsumerWidget {
                     },
                     child: Text(l10n.showcaseConsentDecline),
                   ),
+                  if (!request.isEach)
+                    OutlinedButton(
+                      onPressed: () => _decide(context, ref, operationType, operationId, () => api.decideShowcase(operationType, operationId, approve: true, consentMode: 'each')),
+                      child: Text(l10n.showcaseConsentStageByStage),
+                    ),
                 ] else
                   OutlinedButton(
                     onPressed: () => _decide(context, ref, operationType, operationId, () => api.withdrawShowcase(operationType, operationId)),

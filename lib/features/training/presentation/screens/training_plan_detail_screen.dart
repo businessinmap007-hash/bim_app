@@ -78,12 +78,21 @@ class TrainingPlanDetailScreen extends ConsumerWidget {
               ],
             ),
           ),
-          body: TabBarView(
+          body: Column(
             children: [
-              _ExercisesTab(planId: planId, plan: plan),
-              _MealsTab(plan: plan),
-              _ProgressTab(planId: planId, plan: plan),
-              _BodyReportsTab(planId: planId, plan: plan),
+              // the trainer's request to show the plan's results is answered in the plan's own screen, above its tabs
+              if (plan.showcase != null && (plan.showcase!.isRequested || plan.showcase!.isLive))
+                Padding(padding: const EdgeInsets.fromLTRB(16, 12, 16, 0), child: ClientPlanShowcaseCard(planId: planId, request: plan.showcase!)),
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    _ExercisesTab(planId: planId, plan: plan),
+                    _MealsTab(plan: plan),
+                    _ProgressTab(planId: planId, plan: plan),
+                    _BodyReportsTab(planId: planId, plan: plan),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -716,15 +725,12 @@ class _BodyReportsTab extends ConsumerWidget {
         ),
       ),
       data: (reports) {
-        final ask = plan.showcase != null && (plan.showcase!.isRequested || plan.showcase!.isLive) ? plan.showcase : null;
-        if (reports.isEmpty && ask == null) {
+        if (reports.isEmpty) {
           return Center(child: Text(l10n.trainingBodyReportsEmpty));
         }
         return ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            if (ask != null) ...[ClientPlanShowcaseCard(planId: planId, request: ask), const SizedBox(height: 12)],
-            if (reports.isEmpty) Text(l10n.trainingBodyReportsEmpty),
             for (final r in reports) ...[_BodyReportCard(report: r), const SizedBox(height: 8)],
           ],
         );

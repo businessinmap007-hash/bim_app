@@ -79,6 +79,76 @@ class ShowcaseResultsCard extends StatelessWidget {
   }
 }
 
+/// «طريقة أخذ الموافقة»: once for all, or at every stage (every month, for a plan). Chosen in the request itself.
+class ConsentModePicker extends StatelessWidget {
+  final String value;
+  final String eachLabel;
+  final ValueChanged<String> onChanged;
+
+  const ConsentModePicker({super.key, required this.value, required this.eachLabel, required this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(l10n.showcaseModeTitle, style: Theme.of(context).textTheme.titleSmall),
+        const SizedBox(height: 4),
+        Wrap(
+          spacing: 8,
+          children: [
+            ChoiceChip(label: Text(l10n.showcaseModeOnce), selected: value == 'once', onSelected: (_) => onChanged('once')),
+            ChoiceChip(label: Text(eachLabel), selected: value == 'each', onSelected: (_) => onChanged('each')),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+/// The stages (or months) the customer is asked about in the stage-by-stage mode: each pending one with «نشر / لا أنشر», the answered
+/// ones with their state.
+class ShowcaseUnitsList extends StatelessWidget {
+  final String title;
+  final List<ShowcaseUnit> units;
+  final Future<void> Function(ShowcaseUnit unit, bool approve) onDecide;
+
+  const ShowcaseUnitsList({super.key, required this.title, required this.units, required this.onDecide});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
+    if (units.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 8),
+        Text(title, style: theme.textTheme.titleSmall),
+        for (final u in units)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Row(
+              children: [
+                Expanded(child: Directionality(textDirection: TextDirection.ltr, child: Align(alignment: AlignmentDirectional.centerStart, child: Text(u.title ?? u.key)))),
+                if (u.isPending) ...[
+                  FilledButton(onPressed: () => onDecide(u, true), child: Text(l10n.showcaseUnitPublish)),
+                  const SizedBox(width: 6),
+                  OutlinedButton(onPressed: () => onDecide(u, false), child: Text(l10n.showcaseUnitSkip)),
+                ] else
+                  Text(u.isApproved ? l10n.showcaseUnitApproved : l10n.showcaseUnitDeclined, style: TextStyle(color: u.isApproved ? AppColors.success : AppColors.error, fontWeight: FontWeight.w600)),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+}
+
 String _msg(Object e, AppLocalizations l10n) => e is ApiException && e.message.isNotEmpty ? e.message : l10n.commonSomethingWentWrong;
 
 /// The business's side: ask the customer to let the project be shown, see where the request stands, take it down.
@@ -93,6 +163,7 @@ class BusinessShowcasePanel extends ConsumerWidget {
     final title = TextEditingController(text: projectTitle);
     final note = TextEditingController();
     bool photos = false;
+    String mode = 'once';
 
     final ok = await showDialog<bool>(
       context: context,
@@ -109,6 +180,7 @@ class BusinessShowcasePanel extends ConsumerWidget {
                 TextField(controller: title, decoration: InputDecoration(labelText: l10n.showcasePublicTitle)),
                 TextField(controller: note, minLines: 2, maxLines: 4, decoration: InputDecoration(labelText: l10n.showcaseNote)),
                 SwitchListTile(contentPadding: EdgeInsets.zero, value: photos, onChanged: (v) => setState(() => photos = v), title: Text(l10n.showcaseShowPhotos)),
+                ConsentModePicker(value: mode, eachLabel: l10n.showcaseModeEachProject, onChanged: (v) => setState(() => mode = v)),
               ],
             ),
           ),
@@ -122,7 +194,7 @@ class BusinessShowcasePanel extends ConsumerWidget {
     if (ok != true || title.text.trim().isEmpty) return;
 
     try {
-      await ref.read(projectsApiProvider).requestShowcase(projectId, publicTitle: title.text.trim(), note: note.text.trim(), showPhotos: photos);
+      await ref.read(projectsApiProvider).requestShowcase(projectId, publicTitle: title.text.trim(), note: note.text.trim(), showPhotos: photos, consentMode: mode);
       ref.invalidate(projectShowcaseProvider(projectId));
       messenger.showSnackBar(SnackBar(content: Text(l10n.showcaseRequestSent)));
     } catch (e) {

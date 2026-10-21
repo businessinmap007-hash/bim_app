@@ -46,8 +46,12 @@ class CustomerProjectApi {
       _client.post('${_base(type, id)}/tasks/$taskId/start/${approve ? 'approve' : 'decline'}', data: {'note': ?note});
 
   /// «نتائج موثَّقة»: the customer lets the business show the project as a post (or declines, or takes it down later).
-  Future<void> decideShowcase(String type, int id, {required bool approve, String? note}) =>
-      _client.post('${_base(type, id)}/showcase/${approve ? 'approve' : 'decline'}', data: {'note': ?note});
+  Future<void> decideShowcase(String type, int id, {required bool approve, String? note, String? consentMode}) =>
+      _client.post('${_base(type, id)}/showcase/${approve ? 'approve' : 'decline'}', data: {'note': ?note, 'consent_mode': ?consentMode});
+
+  /// Stage-by-stage mode: let one finished main stage be shown (or not).
+  Future<void> decideShowcaseStage(String type, int id, int taskId, {required bool approve}) =>
+      _client.post('${_base(type, id)}/showcase/stages/$taskId/${approve ? 'approve' : 'decline'}');
 
   Future<void> withdrawShowcase(String type, int id) => _client.post('${_base(type, id)}/showcase/withdraw');
 

@@ -6,6 +6,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../projects/data/models/project_showcase.dart';
 import '../../../projects/presentation/widgets/project_agreement_widgets.dart';
+import '../../../projects/presentation/widgets/project_showcase_widgets.dart';
 import '../../application/showcase_providers.dart';
 import '../../application/training_providers.dart';
 
@@ -109,10 +110,11 @@ class TrainerPlanShowcaseCard extends ConsumerWidget {
     final messenger = ScaffoldMessenger.of(context);
     final title = TextEditingController();
     final note = TextEditingController();
+    String mode = 'once';
 
     final ok = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
+      builder: (ctx) => StatefulBuilder(builder: (ctx, setState) => AlertDialog(
         title: Text(l10n.showcaseAskTitle),
         content: SingleChildScrollView(
           child: Column(
@@ -123,6 +125,8 @@ class TrainerPlanShowcaseCard extends ConsumerWidget {
               const SizedBox(height: 8),
               TextField(controller: title, decoration: InputDecoration(labelText: l10n.showcasePublicTitle)),
               TextField(controller: note, minLines: 2, maxLines: 4, decoration: InputDecoration(labelText: l10n.showcaseNote)),
+              const SizedBox(height: 8),
+              ConsentModePicker(value: mode, eachLabel: l10n.showcaseModeEachPlan, onChanged: (v) => setState(() => mode = v)),
             ],
           ),
         ),
@@ -130,12 +134,12 @@ class TrainerPlanShowcaseCard extends ConsumerWidget {
           TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: Text(l10n.commonCancel)),
           FilledButton(onPressed: () => Navigator.of(ctx).pop(true), child: Text(l10n.commonSubmit)),
         ],
-      ),
+      )),
     );
     if (ok != true || title.text.trim().isEmpty) return;
 
     try {
-      await ref.read(showcaseApiProvider).requestShowcase(planId, publicTitle: title.text.trim(), note: note.text.trim());
+      await ref.read(showcaseApiProvider).requestShowcase(planId, publicTitle: title.text.trim(), note: note.text.trim(), consentMode: mode);
       ref.invalidate(planShowcaseProvider(planId));
       messenger.showSnackBar(SnackBar(content: Text(l10n.showcaseRequestSent)));
     } catch (e) {
@@ -233,7 +237,13 @@ class ClientPlanShowcaseCard extends ConsumerWidget {
             Text(request.publicTitle, style: Theme.of(context).textTheme.bodyLarge),
             if ((request.note ?? '').isNotEmpty) Text(request.note!),
             const SizedBox(height: 4),
-            Text(l10n.planShowcaseConsentBody, style: Theme.of(context).textTheme.bodySmall),
+            Text(request.isEach ? l10n.showcaseModeEachNoticePlan : l10n.planShowcaseConsentBody, style: Theme.of(context).textTheme.bodySmall),
+            if (request.isLive && request.isEach)
+              ShowcaseUnitsList(
+                title: l10n.showcaseUnitsTitlePlan,
+                units: request.units,
+                onDecide: (u, approve) => _run(context, ref, () => api.decideMonth(planId, u.key, approve: approve)),
+              ),
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
@@ -249,6 +259,7 @@ class ClientPlanShowcaseCard extends ConsumerWidget {
                     },
                     child: Text(l10n.showcaseConsentDecline),
                   ),
+                  if (!request.isEach) OutlinedButton(onPressed: () => _run(context, ref, () => api.decide(planId, approve: true, consentMode: 'each')), child: Text(l10n.showcaseConsentMonthByMonth)),
                 ] else
                   OutlinedButton(onPressed: () => _run(context, ref, () => api.clientWithdraw(planId)), child: Text(l10n.showcaseTakeDown)),
               ],

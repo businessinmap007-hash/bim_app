@@ -4061,5 +4061,20 @@
   "planShowcaseAskHint": "Nothing is published before the client agrees, and his one approval covers the whole plan: the results update with every monthly report. Only the changes show — no name, no weight, no photo.",
   "planShowcaseConsentTitle": "The trainer asks to show your plan's results as a post",
   "planShowcaseConsentLive": "Your plan's results are shown as a post",
-  "planShowcaseConsentBody": "One approval covers the whole plan: the results update with every monthly report and you are not asked each time. Only the changes show — no name, no weight, no photo — and you can stop it any time."
+  "planShowcaseConsentBody": "One approval covers the whole plan: the results update with every monthly report and you are not asked each time. Only the changes show — no name, no weight, no photo — and you can stop it any time.",
+  "showcaseModeTitle": "How consent is asked",
+  "showcaseModeOnce": "One general approval",
+  "showcaseModeEachProject": "Approval at every stage",
+  "showcaseModeEachPlan": "Approval every month, at renewal",
+  "showcaseModeOnceNotice": "One approval covers every stage.",
+  "showcaseModeEachNoticeProject": "You are asked about each finished stage before it is shown.",
+  "showcaseModeEachNoticePlan": "You are asked about each month's results at the plan's renewal before they are shown.",
+  "showcaseConsentStageByStage": "I agree stage by stage",
+  "showcaseConsentMonthByMonth": "I agree month by month",
+  "showcaseUnitsTitleProject": "Finished stages: show them?",
+  "showcaseUnitsTitlePlan": "Monthly results: show them?",
+  "showcaseUnitPublish": "Show",
+  "showcaseUnitSkip": "Don't show",
+  "showcaseUnitApproved": "Shown",
+  "showcaseUnitDeclined": "Not shown"
 }

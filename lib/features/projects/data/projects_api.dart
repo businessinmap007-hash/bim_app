@@ -116,9 +116,9 @@ class ProjectsApi {
     return ShowcaseRequest.fromJsonOrNull(data['showcase']);
   }
 
-  Future<void> requestShowcase(int projectId, {required String publicTitle, String? note, required bool showPhotos}) => _client.post(
+  Future<void> requestShowcase(int projectId, {required String publicTitle, String? note, required bool showPhotos, String consentMode = 'once'}) => _client.post(
     '/business/projects/$projectId/showcase',
-    data: {'public_title': publicTitle, if (note != null && note.isNotEmpty) 'note': note, 'show_photos': showPhotos},
+    data: {'public_title': publicTitle, if (note != null && note.isNotEmpty) 'note': note, 'show_photos': showPhotos, 'consent_mode': consentMode},
   );
 
   Future<void> withdrawShowcase(int projectId) => _client.delete('/business/projects/$projectId/showcase');

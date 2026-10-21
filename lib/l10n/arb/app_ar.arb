@@ -4121,5 +4121,20 @@
   "planShowcaseAskHint": "لا يُنشر شيء قبل موافقة العميل، وموافقته واحدة تشمل الخطة كلها: تتحدّث النتائج مع كل تقرير شهري. تظهر التغيّرات فقط، دون اسمه أو وزنه أو أي صورة.",
   "planShowcaseConsentTitle": "المدرب يطلب عرض نتائج خطتك كمنشور",
   "planShowcaseConsentLive": "نتائج خطتك معروضة كمنشور",
-  "planShowcaseConsentBody": "موافقة واحدة تشمل الخطة كلها: تتحدّث النتائج مع كل تقرير شهري دون أن يُطلب منك شيء كل مرة. تظهر التغيّرات فقط، دون اسمك أو وزنك أو أي صورة، وتستطيع إيقافها في أي وقت."
+  "planShowcaseConsentBody": "موافقة واحدة تشمل الخطة كلها: تتحدّث النتائج مع كل تقرير شهري دون أن يُطلب منك شيء كل مرة. تظهر التغيّرات فقط، دون اسمك أو وزنك أو أي صورة، وتستطيع إيقافها في أي وقت.",
+  "showcaseModeTitle": "طريقة أخذ الموافقة",
+  "showcaseModeOnce": "موافقة عامة مرة واحدة",
+  "showcaseModeEachProject": "موافقة على كل مرحلة",
+  "showcaseModeEachPlan": "موافقة كل شهر عند التجديد",
+  "showcaseModeOnceNotice": "موافقة واحدة تشمل كل المراحل.",
+  "showcaseModeEachNoticeProject": "تُسأل عن كل مرحلة منتهية قبل نشرها.",
+  "showcaseModeEachNoticePlan": "تُسأل عن نتائج كل شهر عند تجديد الخطة قبل نشرها.",
+  "showcaseConsentStageByStage": "أوافق مرحلةً مرحلة",
+  "showcaseConsentMonthByMonth": "أوافق شهرًا بشهر",
+  "showcaseUnitsTitleProject": "المراحل المنتهية: هل تُنشر؟",
+  "showcaseUnitsTitlePlan": "نتائج الأشهر: هل تُنشر؟",
+  "showcaseUnitPublish": "نشر",
+  "showcaseUnitSkip": "لا أنشر",
+  "showcaseUnitApproved": "منشورة",
+  "showcaseUnitDeclined": "غير منشورة"
 }

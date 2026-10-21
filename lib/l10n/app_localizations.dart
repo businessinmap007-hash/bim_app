@@ -21312,6 +21312,96 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'موافقة واحدة تشمل الخطة كلها: تتحدّث النتائج مع كل تقرير شهري دون أن يُطلب منك شيء كل مرة. تظهر التغيّرات فقط، دون اسمك أو وزنك أو أي صورة، وتستطيع إيقافها في أي وقت.'**
   String get planShowcaseConsentBody;
+
+  /// No description provided for @showcaseModeTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة أخذ الموافقة'**
+  String get showcaseModeTitle;
+
+  /// No description provided for @showcaseModeOnce.
+  ///
+  /// In ar, this message translates to:
+  /// **'موافقة عامة مرة واحدة'**
+  String get showcaseModeOnce;
+
+  /// No description provided for @showcaseModeEachProject.
+  ///
+  /// In ar, this message translates to:
+  /// **'موافقة على كل مرحلة'**
+  String get showcaseModeEachProject;
+
+  /// No description provided for @showcaseModeEachPlan.
+  ///
+  /// In ar, this message translates to:
+  /// **'موافقة كل شهر عند التجديد'**
+  String get showcaseModeEachPlan;
+
+  /// No description provided for @showcaseModeOnceNotice.
+  ///
+  /// In ar, this message translates to:
+  /// **'موافقة واحدة تشمل كل المراحل.'**
+  String get showcaseModeOnceNotice;
+
+  /// No description provided for @showcaseModeEachNoticeProject.
+  ///
+  /// In ar, this message translates to:
+  /// **'تُسأل عن كل مرحلة منتهية قبل نشرها.'**
+  String get showcaseModeEachNoticeProject;
+
+  /// No description provided for @showcaseModeEachNoticePlan.
+  ///
+  /// In ar, this message translates to:
+  /// **'تُسأل عن نتائج كل شهر عند تجديد الخطة قبل نشرها.'**
+  String get showcaseModeEachNoticePlan;
+
+  /// No description provided for @showcaseConsentStageByStage.
+  ///
+  /// In ar, this message translates to:
+  /// **'أوافق مرحلةً مرحلة'**
+  String get showcaseConsentStageByStage;
+
+  /// No description provided for @showcaseConsentMonthByMonth.
+  ///
+  /// In ar, this message translates to:
+  /// **'أوافق شهرًا بشهر'**
+  String get showcaseConsentMonthByMonth;
+
+  /// No description provided for @showcaseUnitsTitleProject.
+  ///
+  /// In ar, this message translates to:
+  /// **'المراحل المنتهية: هل تُنشر؟'**
+  String get showcaseUnitsTitleProject;
+
+  /// No description provided for @showcaseUnitsTitlePlan.
+  ///
+  /// In ar, this message translates to:
+  /// **'نتائج الأشهر: هل تُنشر؟'**
+  String get showcaseUnitsTitlePlan;
+
+  /// No description provided for @showcaseUnitPublish.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشر'**
+  String get showcaseUnitPublish;
+
+  /// No description provided for @showcaseUnitSkip.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا أنشر'**
+  String get showcaseUnitSkip;
+
+  /// No description provided for @showcaseUnitApproved.
+  ///
+  /// In ar, this message translates to:
+  /// **'منشورة'**
+  String get showcaseUnitApproved;
+
+  /// No description provided for @showcaseUnitDeclined.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير منشورة'**
+  String get showcaseUnitDeclined;
 }
 
 class _AppLocalizationsDelegate
