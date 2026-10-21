@@ -4205,5 +4205,12 @@
   "promoRulesTitle": "قاعدة الخصم الحقيقي",
   "promoRulesBody": "لا يُخصم صنف ارتفع سعره بأكثر من {percent}٪ خلال آخر {days} يومًا، حتى لا يكون الخصم وهميًا. يبدأ خصمه تلقائيًا بعد انقضاء المدة، وتُخبَر باليوم عند حفظ العرض.",
   "@promoRulesBody": {"placeholders": {"percent": {"type": "String"}, "days": {"type": "int"}}},
-  "promoSummaryTitle": "ملخص العرض"
+  "promoSummaryTitle": "ملخص العرض",
+  "promoStaySeason": "تسري على إقامة (اختياري): الليالي داخل هذه الفترة فقط",
+  "promoStayFrom": "إقامة من",
+  "promoStayTo": "إلى",
+  "promoNightsHint": "في الحجز الأرقام تعني ليالٍ: «اشترِ 2 واحصل على 3» = تدفع ليلتين وتقيم ثلاثًا.",
+  "bookingOfferLine": "خصم عرض النشاط",
+  "promoSummaryFill": "اكتب أرقام العرض",
+  "promoWholeKind": "النوع كله"
 }

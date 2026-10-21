@@ -12175,4 +12175,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get promoSummaryTitle => 'Offer summary';
+
+  @override
+  String get promoStaySeason =>
+      'Applies to stays (optional): only the nights inside this period';
+
+  @override
+  String get promoStayFrom => 'Stay from';
+
+  @override
+  String get promoStayTo => 'To';
+
+  @override
+  String get promoNightsHint =>
+      'In a booking the numbers mean nights: «Buy 2, get 3» = pay for two nights and stay three.';
+
+  @override
+  String get bookingOfferLine => 'Business offer discount';
+
+  @override
+  String get promoSummaryFill => 'Fill in the offer\'s numbers';
+
+  @override
+  String get promoWholeKind => 'The whole kind';
 }

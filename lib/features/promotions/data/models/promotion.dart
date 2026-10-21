@@ -43,6 +43,8 @@ class PromotionTargetType {
   static const menuItem = 'menu_item';
   static const listing = 'listing';
   static const listingCategory = 'listing_category';
+  static const bookableItem = 'bookable_item';
+  static const bookableKind = 'bookable_kind';
 }
 
 /// One thing a promotion covers: the whole shop, a section, an item…
@@ -197,12 +199,16 @@ class PromotionCatalog {
   final List<CatalogGroup> menu;
   final List<CatalogGroup> shop;
 
-  const PromotionCatalog({this.menu = const [], this.shop = const []});
+  /// «عروض الحجز»: rooms (or pitches, halls) by kind, each with the night's price.
+  final List<CatalogGroup> booking;
+
+  const PromotionCatalog({this.menu = const [], this.shop = const [], this.booking = const []});
 
   factory PromotionCatalog.fromJson(Map<String, dynamic> json) => PromotionCatalog(
     menu: [for (final g in (json['menu'] as List<dynamic>? ?? const [])) CatalogGroup.fromJson(g as Map<String, dynamic>)],
     shop: [for (final g in (json['shop'] as List<dynamic>? ?? const [])) CatalogGroup.fromJson(g as Map<String, dynamic>)],
+    booking: [for (final g in (json['booking'] as List<dynamic>? ?? const [])) CatalogGroup.fromJson(g as Map<String, dynamic>)],
   );
 
-  List<CatalogGroup> get groups => [...menu, ...shop];
+  List<CatalogGroup> get groups => [...menu, ...shop, ...booking];
 }

@@ -165,8 +165,12 @@ class BookingPreview {
   final String? periodUnit;
   final List<({String name, double amount})> lines;
 
+  /// «عروض الحجز»: what the hotel's offer took off the nights (the total is already net of it).
+  final double offerDiscount;
+
   const BookingPreview({
     required this.total,
+    this.offerDiscount = 0,
     this.unitPrice,
     this.baseUnitPrice,
     this.periods = 1,
@@ -179,6 +183,7 @@ class BookingPreview {
 
     return BookingPreview(
       total: (json['price'] as num).toDouble(),
+      offerDiscount: (breakdown['offer_discount_amount'] as num?)?.toDouble() ?? 0,
       unitPrice: (breakdown['unit_price'] as num?)?.toDouble(),
       baseUnitPrice: (breakdown['base_unit_price'] as num?)?.toDouble(),
       periods: (breakdown['periods_count'] as num?)?.toInt() ?? 1,

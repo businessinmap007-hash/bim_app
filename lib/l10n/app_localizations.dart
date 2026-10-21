@@ -21744,6 +21744,48 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'ملخص العرض'**
   String get promoSummaryTitle;
+
+  /// No description provided for @promoStaySeason.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسري على إقامة (اختياري): الليالي داخل هذه الفترة فقط'**
+  String get promoStaySeason;
+
+  /// No description provided for @promoStayFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'إقامة من'**
+  String get promoStayFrom;
+
+  /// No description provided for @promoStayTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلى'**
+  String get promoStayTo;
+
+  /// No description provided for @promoNightsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'في الحجز الأرقام تعني ليالٍ: «اشترِ 2 واحصل على 3» = تدفع ليلتين وتقيم ثلاثًا.'**
+  String get promoNightsHint;
+
+  /// No description provided for @bookingOfferLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'خصم عرض النشاط'**
+  String get bookingOfferLine;
+
+  /// No description provided for @promoSummaryFill.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب أرقام العرض'**
+  String get promoSummaryFill;
+
+  /// No description provided for @promoWholeKind.
+  ///
+  /// In ar, this message translates to:
+  /// **'النوع كله'**
+  String get promoWholeKind;
 }
 
 class _AppLocalizationsDelegate

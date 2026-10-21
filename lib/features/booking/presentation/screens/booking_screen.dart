@@ -711,6 +711,10 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
               ],
               const SizedBox(height: 8),
             ],
+            if (preview != null && preview.offerDiscount > 0) ...[
+              _summaryRow(theme, l10n.bookingOfferLine, '−${preview.offerDiscount.toStringAsFixed(0)} $currency', bold: true),
+              const SizedBox(height: 4),
+            ],
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

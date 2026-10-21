@@ -38,6 +38,8 @@ class _PromotionFormScreenState extends ConsumerState<PromotionFormScreen> {
   final _title = TextEditingController();
   DateTime? _starts;
   DateTime? _ends;
+  DateTime? _stayFrom;
+  DateTime? _stayTo;
   bool _newCustomers = false;
   bool _saving = false;
 
@@ -76,6 +78,8 @@ class _PromotionFormScreenState extends ConsumerState<PromotionFormScreen> {
         _value.text = _fmt(p.param('value'));
     }
 
+    _stayFrom = DateTime.tryParse('${p.params['stay_from'] ?? ''}');
+    _stayTo = DateTime.tryParse('${p.params['stay_to'] ?? ''}');
     _title.text = p.title ?? '';
     _starts = p.startsAt;
     _ends = p.endsAt;
@@ -104,22 +108,40 @@ class _PromotionFormScreenState extends ConsumerState<PromotionFormScreen> {
     ];
   }
 
+  /// A room offer's season: only the nights inside it are discounted.
+  Map<String, Object> _stay() => {
+    if (_hasBooking && _stayFrom != null) 'stay_from': _dateOnly(_stayFrom!),
+    if (_hasBooking && _stayTo != null) 'stay_to': _dateOnly(_stayTo!),
+  };
+
+  String _dateOnly(DateTime d) => '${d.year.toString().padLeft(4, '0')}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+
+  /// Does the offer cover rooms (a booking), not only products?
+  bool get _hasBooking => [..._sections, ..._items].any((k) => k.startsWith('${PromotionTargetType.bookableKind}:') || k.startsWith('${PromotionTargetType.bookableItem}:'));
+
   (String, Map<String, Object>) _rule() {
     switch (_way) {
       case _Way.percent:
-        return (PromotionKind.percent, {'value': _read(_value)});
+        return (PromotionKind.percent, {'value': _read(_value), ..._stay()});
       case _Way.amount:
-        return (PromotionKind.amount, {'value': _read(_value)});
+        return (PromotionKind.amount, {'value': _read(_value), ..._stay()});
       case _Way.buyGet:
         return (PromotionKind.nForPriceOf, {
           'n': _read(_take).round(),
           'pay': _read(_pay).round(),
           if (_sameItem) 'same_item': true,
           if (_maxGroups.text.trim().isNotEmpty) 'max_groups': _read(_maxGroups).round(),
+          ..._stay(),
         });
       case _Way.spend:
         return (PromotionKind.spendPercent, {'min_total': _read(_minTotal), 'value': _read(_value)});
     }
+  }
+
+  Future<void> _pickStay(bool from) async {
+    final now = DateTime.now();
+    final d = await showDatePicker(context: context, initialDate: (from ? _stayFrom : _stayTo) ?? now, firstDate: DateTime(now.year - 1), lastDate: now.add(const Duration(days: 365 * 3)));
+    if (d != null) setState(() => from ? _stayFrom = d : _stayTo = d);
   }
 
   Future<void> _pickDate(bool start) async {
@@ -195,7 +217,7 @@ class _PromotionFormScreenState extends ConsumerState<PromotionFormScreen> {
                 (_Way.percent, l10n.promoWayPercent),
                 (_Way.amount, l10n.promoWayAmount),
                 (_Way.buyGet, l10n.promoWayBuyGet),
-                (_Way.spend, l10n.promoWaySpend),
+                if (!_hasBooking) (_Way.spend, l10n.promoWaySpend),
               ])
                 ChoiceChip(label: Text(label), selected: _way == way, onSelected: (_) => setState(() => _way = way)),
             ],
@@ -220,6 +242,17 @@ class _PromotionFormScreenState extends ConsumerState<PromotionFormScreen> {
           header(l10n.promoStepDetails),
           TextField(controller: _title, decoration: InputDecoration(labelText: l10n.promoTitleOptional)),
           const SizedBox(height: 8),
+          if (_hasBooking) ...[
+            Text(l10n.promoStaySeason, style: theme.textTheme.bodySmall),
+            Row(
+              children: [
+                Expanded(child: OutlinedButton(onPressed: () => _pickStay(true), child: Text(_stayFrom == null ? l10n.promoStayFrom : LocalFormat.date(context).format(_stayFrom!)))),
+                const SizedBox(width: 8),
+                Expanded(child: OutlinedButton(onPressed: () => _pickStay(false), child: Text(_stayTo == null ? l10n.promoStayTo : LocalFormat.date(context).format(_stayTo!)))),
+              ],
+            ),
+            const SizedBox(height: 8),
+          ],
           Row(
             children: [
               Expanded(child: OutlinedButton(onPressed: () => _pickDate(true), child: Text(_starts == null ? l10n.promoStarts : LocalFormat.date(context).format(_starts!)))),
@@ -260,7 +293,7 @@ class _PromotionFormScreenState extends ConsumerState<PromotionFormScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(l10n.promoSummaryTitle, style: theme.textTheme.bodySmall),
-            Text(valid ? promotionSummary(l10n, kind, param) : l10n.promoBuyGetInvalid, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800)),
+            Text(valid ? promotionSummary(l10n, kind, param) : (_way == _Way.buyGet ? l10n.promoBuyGetInvalid : l10n.promoSummaryFill), style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800)),
             Text(covers, style: theme.textTheme.bodySmall),
           ],
         ),
@@ -306,6 +339,7 @@ class _PromotionFormScreenState extends ConsumerState<PromotionFormScreen> {
           ),
           SwitchListTile(contentPadding: EdgeInsets.zero, value: _sameItem, onChanged: (v) => setState(() => _sameItem = v), title: Text(l10n.promoSameItemOnly)),
           TextField(controller: _maxGroups, keyboardType: TextInputType.number, decoration: d(l10n.promoMaxGroups)),
+          if (_hasBooking) Text(l10n.promoNightsHint, style: Theme.of(context).textTheme.bodySmall),
         ];
       case _Way.spend:
         return [
@@ -319,6 +353,7 @@ class _PromotionFormScreenState extends ConsumerState<PromotionFormScreen> {
   Widget _group(BuildContext context, CatalogGroup g) {
     final l10n = AppLocalizations.of(context)!;
     final key = g.isSection ? '${g.type}:${g.id}' : null;
+    final wholeLabel = g.type == PromotionTargetType.bookableKind ? l10n.promoWholeKind : l10n.promoWholeSection;
     final whole = key != null && _sections.contains(key);
     final picked = g.items.where((i) => _items.contains('${i.type}:${i.id}')).length;
 
@@ -326,13 +361,13 @@ class _PromotionFormScreenState extends ConsumerState<PromotionFormScreen> {
       margin: const EdgeInsets.only(bottom: 8),
       child: ExpansionTile(
         title: Text(g.name ?? l10n.promoNoSection),
-        subtitle: Text(whole ? l10n.promoWholeSection : (picked > 0 ? l10n.promoSelectedCount(picked) : l10n.promoItemsCount(g.items.length))),
+        subtitle: Text(whole ? wholeLabel : (picked > 0 ? l10n.promoSelectedCount(picked) : l10n.promoItemsCount(g.items.length))),
         children: [
           if (key != null)
             CheckboxListTile(
               value: whole,
               onChanged: (v) => setState(() => v == true ? _sections.add(key) : _sections.remove(key)),
-              title: Text(l10n.promoWholeSection, style: const TextStyle(fontWeight: FontWeight.w700)),
+              title: Text(wholeLabel, style: const TextStyle(fontWeight: FontWeight.w700)),
             ),
           for (final i in g.items)
             CheckboxListTile(

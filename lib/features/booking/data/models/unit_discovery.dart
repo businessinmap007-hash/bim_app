@@ -1,3 +1,4 @@
+import '../../../promotions/data/models/promotion.dart';
 import '../../../../core/env/env.dart';
 import '../../../../core/time/egypt_time.dart';
 
@@ -125,6 +126,9 @@ class UnitKindGroup {
   final double? price;
   final String? currency;
   final int? offeringId;
+
+  /// «عروض الحجز»: the hotel's offer on this kind (the night after it, or the words of the rule).
+  final ItemOffer? offer;
   final List<UnitChoice> choices;
   final List<DiscoveredUnit> units;
 
@@ -137,6 +141,7 @@ class UnitKindGroup {
     this.price,
     this.currency,
     this.offeringId,
+    this.offer,
     this.choices = const [],
     this.units = const [],
   });
@@ -150,6 +155,7 @@ class UnitKindGroup {
     price: (json['price'] as num?)?.toDouble(),
     currency: json['currency'] as String?,
     offeringId: (json['offering_id'] as num?)?.toInt(),
+    offer: ItemOffer.fromJsonOrNull(json['offer']),
     choices: (json['choices'] as List<dynamic>? ?? [])
         .map((e) => UnitChoice.fromJson(e as Map<String, dynamic>))
         .toList(),

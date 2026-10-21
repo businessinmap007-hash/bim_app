@@ -1,3 +1,4 @@
+import '../../../promotions/presentation/widgets/offer_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -308,6 +309,18 @@ class _UnitCard extends StatelessWidget {
                             ? Text(
                                 l10n.bookingUnitNotPriced,
                                 style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
+                              )
+                            : (kind.offer != null && (unit.price == null || unit.price == kind.price))
+                            ? Row(
+                                children: [
+                                  PriceWithOffer(
+                                    label: price.toStringAsFixed(0),
+                                    offer: kind.offer,
+                                    style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text('${kind.currency ?? ''} ${_per(l10n)}'.trim(), style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+                                ],
                               )
                             : Row(
                                 crossAxisAlignment: CrossAxisAlignment.baseline,

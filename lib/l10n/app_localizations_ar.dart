@@ -12080,4 +12080,27 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get promoSummaryTitle => 'ملخص العرض';
+
+  @override
+  String get promoStaySeason =>
+      'تسري على إقامة (اختياري): الليالي داخل هذه الفترة فقط';
+
+  @override
+  String get promoStayFrom => 'إقامة من';
+
+  @override
+  String get promoStayTo => 'إلى';
+
+  @override
+  String get promoNightsHint =>
+      'في الحجز الأرقام تعني ليالٍ: «اشترِ 2 واحصل على 3» = تدفع ليلتين وتقيم ثلاثًا.';
+
+  @override
+  String get bookingOfferLine => 'خصم عرض النشاط';
+
+  @override
+  String get promoSummaryFill => 'اكتب أرقام العرض';
+
+  @override
+  String get promoWholeKind => 'النوع كله';
 }

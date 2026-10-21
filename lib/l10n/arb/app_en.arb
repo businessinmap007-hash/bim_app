@@ -4133,5 +4133,12 @@
   "promoMaxGroups": "Most times in one order (optional)",
   "promoRulesTitle": "The real-discount rule",
   "promoRulesBody": "An item whose price rose by more than {percent}% within the last {days} days is not discounted, so the discount is never fake. Its discount starts by itself when the period passes, and you are told the day when you save the offer.",
-  "promoSummaryTitle": "Offer summary"
+  "promoSummaryTitle": "Offer summary",
+  "promoStaySeason": "Applies to stays (optional): only the nights inside this period",
+  "promoStayFrom": "Stay from",
+  "promoStayTo": "To",
+  "promoNightsHint": "In a booking the numbers mean nights: «Buy 2, get 3» = pay for two nights and stay three.",
+  "bookingOfferLine": "Business offer discount",
+  "promoSummaryFill": "Fill in the offer's numbers",
+  "promoWholeKind": "The whole kind"
 }

@@ -149,14 +149,25 @@ class BusinessPromotionsTab extends ConsumerWidget {
     return async.when(
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (_, _) => Center(child: OutlinedButton(onPressed: () => ref.invalidate(businessPromotionsProvider(businessId)), child: Text(l10n.commonRetry))),
-      data: (list) => list.isEmpty
-          ? Center(child: Text(l10n.promoNoneRunning))
-          : ListView.separated(
-              padding: const EdgeInsets.all(16),
-              itemCount: list.length,
-              separatorBuilder: (_, _) => const SizedBox(height: 10),
-              itemBuilder: (_, i) => PromotionCard(promotion: list[i]),
-            ),
+      // inside the business page's NestedScrollView the pinned tab bar overlaps the body: the tab injects its height like the others
+      data: (list) => Builder(
+        builder: (context) => CustomScrollView(
+          slivers: [
+            SliverOverlapInjector(handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context)),
+            if (list.isEmpty)
+              SliverFillRemaining(hasScrollBody: false, child: Center(child: Text(l10n.promoNoneRunning)))
+            else
+              SliverPadding(
+                padding: const EdgeInsets.all(16),
+                sliver: SliverList.separated(
+                  itemCount: list.length,
+                  separatorBuilder: (_, _) => const SizedBox(height: 10),
+                  itemBuilder: (_, i) => PromotionCard(promotion: list[i]),
+                ),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }
