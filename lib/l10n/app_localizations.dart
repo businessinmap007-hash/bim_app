@@ -21786,6 +21786,18 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'النوع كله'**
   String get promoWholeKind;
+
+  /// No description provided for @promoMaxBookings.
+  ///
+  /// In ar, this message translates to:
+  /// **'أو ينتهي بعد عدد حجوزات'**
+  String get promoMaxBookings;
+
+  /// No description provided for @promoNeedsEndBooking.
+  ///
+  /// In ar, this message translates to:
+  /// **'لكل عرض شرط انتهاء: تاريخ أو عدد حجوزات'**
+  String get promoNeedsEndBooking;
 }
 
 class _AppLocalizationsDelegate

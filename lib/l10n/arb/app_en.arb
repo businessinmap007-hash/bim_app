@@ -4140,5 +4140,7 @@
   "promoNightsHint": "In a booking the numbers mean nights: «Buy 2, get 3» = pay for two nights and stay three.",
   "bookingOfferLine": "Business offer discount",
   "promoSummaryFill": "Fill in the offer's numbers",
-  "promoWholeKind": "The whole kind"
+  "promoWholeKind": "The whole kind",
+  "promoMaxBookings": "Or ends after a number of bookings",
+  "promoNeedsEndBooking": "Every offer needs an end: a date or a number of bookings"
 }

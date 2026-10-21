@@ -4212,5 +4212,7 @@
   "promoNightsHint": "في الحجز الأرقام تعني ليالٍ: «اشترِ 2 واحصل على 3» = تدفع ليلتين وتقيم ثلاثًا.",
   "bookingOfferLine": "خصم عرض النشاط",
   "promoSummaryFill": "اكتب أرقام العرض",
-  "promoWholeKind": "النوع كله"
+  "promoWholeKind": "النوع كله",
+  "promoMaxBookings": "أو ينتهي بعد عدد حجوزات",
+  "promoNeedsEndBooking": "لكل عرض شرط انتهاء: تاريخ أو عدد حجوزات"
 }

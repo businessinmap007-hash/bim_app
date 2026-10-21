@@ -12198,4 +12198,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get promoWholeKind => 'The whole kind';
+
+  @override
+  String get promoMaxBookings => 'Or ends after a number of bookings';
+
+  @override
+  String get promoNeedsEndBooking =>
+      'Every offer needs an end: a date or a number of bookings';
 }

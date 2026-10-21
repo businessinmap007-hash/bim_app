@@ -12103,4 +12103,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get promoWholeKind => 'النوع كله';
+
+  @override
+  String get promoMaxBookings => 'أو ينتهي بعد عدد حجوزات';
+
+  @override
+  String get promoNeedsEndBooking => 'لكل عرض شرط انتهاء: تاريخ أو عدد حجوزات';
 }

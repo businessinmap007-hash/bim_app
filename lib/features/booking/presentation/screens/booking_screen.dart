@@ -606,10 +606,19 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                   if (unit.features.isNotEmpty)
                     Text(unit.features.join(' · '), style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
                   if (unit.price != null || _dayUseActive)
-                    Text(
-                      '${(_dayUseActive ? _dayUseOffer!.price : unit.price!).toStringAsFixed(0)} ${widget.offering.currency}',
-                      style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
-                    ),
+                    // «عروض الحجز»: once the preview carries an offer, the night shows what it costs on average after it
+                    (_preview != null && _preview!.offerDiscount > 0 && !_dayUseActive && _preview!.periods > 0)
+                        ? Row(
+                            children: [
+                              Text('${(_preview!.total / _preview!.periods).toStringAsFixed(0)} ${widget.offering.currency}', style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800)),
+                              const SizedBox(width: 8),
+                              Text(unit.price!.toStringAsFixed(0), style: theme.textTheme.bodyMedium?.copyWith(decoration: TextDecoration.lineThrough, color: theme.hintColor)),
+                            ],
+                          )
+                        : Text(
+                            '${(_dayUseActive ? _dayUseOffer!.price : unit.price!).toStringAsFixed(0)} ${widget.offering.currency}',
+                            style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+                          ),
                 ],
               ),
             ),

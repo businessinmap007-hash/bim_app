@@ -261,7 +261,7 @@ class _PromotionFormScreenState extends ConsumerState<PromotionFormScreen> {
             ],
           ),
           const SizedBox(height: 8),
-          TextField(controller: _maxUses, keyboardType: TextInputType.number, decoration: InputDecoration(labelText: l10n.promoMaxUses, helperText: l10n.promoNeedsEnd)),
+          TextField(controller: _maxUses, keyboardType: TextInputType.number, decoration: InputDecoration(labelText: _hasBooking ? l10n.promoMaxBookings : l10n.promoMaxUses, helperText: _hasBooking ? l10n.promoNeedsEndBooking : l10n.promoNeedsEnd)),
           SwitchListTile(contentPadding: EdgeInsets.zero, value: _newCustomers, onChanged: (v) => setState(() => _newCustomers = v), title: Text(l10n.promoAudienceNew)),
           const SizedBox(height: 12),
           FilledButton(onPressed: _saving ? null : _save, child: _saving ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2)) : Text(l10n.promoSave)),
