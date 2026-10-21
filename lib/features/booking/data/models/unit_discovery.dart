@@ -202,16 +202,80 @@ class UnitShape {
   );
 }
 
+/// A room another business (a hotel) gave this one to sell, at THIS business's own price — `partner_rooms` of the same answer.
+/// The contract price and the quantities are the two parties' alone and never arrive here.
+class PartnerRoom {
+  final int allocationId;
+  final int unitId;
+  final int serviceId;
+  final String itemType;
+  final String label;
+  final String? kind;
+  final String? description;
+  final int? capacity;
+  final List<String> images;
+  final List<String> features;
+  final double price;
+  final String currency;
+  final String? fromName;
+  final int availableQuantity;
+  final bool available;
+  final String? reason;
+
+  const PartnerRoom({
+    required this.allocationId,
+    required this.unitId,
+    required this.serviceId,
+    required this.itemType,
+    required this.label,
+    this.kind,
+    this.description,
+    this.capacity,
+    this.images = const [],
+    this.features = const [],
+    required this.price,
+    this.currency = 'EGP',
+    this.fromName,
+    this.availableQuantity = 0,
+    this.available = true,
+    this.reason,
+  });
+
+  factory PartnerRoom.fromJson(Map<String, dynamic> json) => PartnerRoom(
+    allocationId: (json['allocation_id'] as num).toInt(),
+    unitId: (json['bookable_id'] as num).toInt(),
+    serviceId: (json['service_id'] as num?)?.toInt() ?? 0,
+    itemType: json['item_type'] as String? ?? '',
+    label: json['label'] as String? ?? '',
+    kind: json['kind'] as String?,
+    description: json['description'] as String?,
+    capacity: (json['capacity'] as num?)?.toInt(),
+    images: [
+      for (final i in (json['images'] as List<dynamic>? ?? const [])) ?Env.assetUrl(i is Map<String, dynamic> ? i['image'] as String? : i.toString()),
+    ],
+    features: [for (final f in (json['features'] as List<dynamic>? ?? const [])) f.toString()],
+    price: (json['price'] as num?)?.toDouble() ?? 0,
+    currency: json['currency'] as String? ?? 'EGP',
+    fromName: (json['from'] is Map<String, dynamic>) ? (json['from'] as Map<String, dynamic>)['name'] as String? : null,
+    availableQuantity: (json['available_quantity'] as num?)?.toInt() ?? 0,
+    available: json['available'] as bool? ?? true,
+    reason: json['reason'] as String?,
+  );
+}
+
 /// Everything `/discovery/units/{business}` says: the kinds with their units, and the shape the page is drawn in.
 class UnitCatalog {
   final int? serviceId;
   final List<UnitKindGroup> kinds;
   final UnitShape? shape;
 
+  /// «غرف الشركاء»: rooms of another business this one sells at its own price.
+  final List<PartnerRoom> partnerRooms;
+
   /// How the business takes its appointments: `slots` (the customer picks a time) or `queue` (the next turn of the day).
   final String flow;
 
-  const UnitCatalog({this.serviceId, this.kinds = const [], this.shape, this.flow = 'slots'});
+  const UnitCatalog({this.serviceId, this.kinds = const [], this.shape, this.flow = 'slots', this.partnerRooms = const []});
 
   bool get isQueue => flow == 'queue';
 
@@ -224,6 +288,7 @@ class UnitCatalog {
         .toList(),
     shape: json['shape'] is Map<String, dynamic> ? UnitShape.fromJson(json['shape'] as Map<String, dynamic>) : null,
     flow: json['flow'] as String? ?? 'slots',
+    partnerRooms: [for (final r in (json['partner_rooms'] as List<dynamic>? ?? const [])) PartnerRoom.fromJson(r as Map<String, dynamic>)],
   );
 }
 

@@ -12205,4 +12205,213 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get promoNeedsEndBooking =>
       'Every offer needs an end: a date or a number of bookings';
+
+  @override
+  String get pshTitle => 'Partnerships & allocations';
+
+  @override
+  String get pshEmpty =>
+      'No partnerships yet. Invite a business to contract with; nobody but the two of you sees its details.';
+
+  @override
+  String get pshPrivacy =>
+      'Nobody but the two of you sees the details of this partnership.';
+
+  @override
+  String get pshInvite => 'Invite a partner';
+
+  @override
+  String get pshSearchHint => 'Search by business name';
+
+  @override
+  String get pshNoteHint => 'A note for the other side (optional)';
+
+  @override
+  String get pshSend => 'Send the invitation';
+
+  @override
+  String get pshInviteSent => 'The invitation was sent';
+
+  @override
+  String get pshKindAgency => 'Tour company';
+
+  @override
+  String get pshKindReseller => 'Reseller';
+
+  @override
+  String get pshKindSupplier => 'Supplier';
+
+  @override
+  String get pshKindCorporate => 'Company';
+
+  @override
+  String get pshKindAllotment => 'Hotel allotment';
+
+  @override
+  String get pshStatusActive => 'Active';
+
+  @override
+  String get pshStatusPending => 'Waiting for an answer';
+
+  @override
+  String get pshStatusPaused => 'Paused';
+
+  @override
+  String get pshStatusRejected => 'Declined';
+
+  @override
+  String get pshStatusEnded => 'Ended';
+
+  @override
+  String get pshRoleOwner => 'You give';
+
+  @override
+  String get pshRolePartner => 'You sell';
+
+  @override
+  String get pshAwaitingYou => 'Awaiting you';
+
+  @override
+  String get pshAccept => 'Accept';
+
+  @override
+  String get pshDecline => 'Decline';
+
+  @override
+  String get pshPause => 'Pause';
+
+  @override
+  String get pshResume => 'Resume';
+
+  @override
+  String get pshEnd => 'End the partnership';
+
+  @override
+  String get pshEndConfirm =>
+      'The partnership ends and its allocations stop. This cannot be undone.';
+
+  @override
+  String get pshAllocations => 'Allocations';
+
+  @override
+  String get pshNoAllocationsOwner =>
+      'You have not granted anything yet. Tap «Grant an allocation» to give your partner some of your rooms.';
+
+  @override
+  String get pshNoAllocationsPartner =>
+      'The other side has not granted you anything yet.';
+
+  @override
+  String get pshGrant => 'Grant an allocation';
+
+  @override
+  String get pshEdit => 'Edit';
+
+  @override
+  String get pshStop => 'Stop';
+
+  @override
+  String get pshActivate => 'Activate';
+
+  @override
+  String get pshAllocationStopped => 'Stopped';
+
+  @override
+  String get pshPickRoom => 'Pick the room';
+
+  @override
+  String pshUngranted(int n) {
+    return 'Left to grant: $n';
+  }
+
+  @override
+  String get pshQuantity => 'Quantity';
+
+  @override
+  String get pshContractPrice => 'Contract price per night';
+
+  @override
+  String get pshMinNights => 'Shortest stay (nights)';
+
+  @override
+  String get pshMaxNights => 'Longest stay (nights)';
+
+  @override
+  String get pshReleaseDays => 'Release the rooms before the date by (days)';
+
+  @override
+  String get pshReleaseHelp =>
+      'Rooms not booked go back to your stock this many days before';
+
+  @override
+  String get pshGrantIncomplete =>
+      'Pick the room and write the quantity and the contract price';
+
+  @override
+  String pshAvailableOf(int available, int total) {
+    return '$available of $total left';
+  }
+
+  @override
+  String pshContractLine(String price) {
+    return 'Contract price $price';
+  }
+
+  @override
+  String pshSellLine(String price) {
+    return 'Your selling price $price';
+  }
+
+  @override
+  String pshNightsRange(int min, int max) {
+    return 'Stay $min to $max nights (0 = no limit)';
+  }
+
+  @override
+  String pshReleaseLine(int days) {
+    return 'Released $days days before';
+  }
+
+  @override
+  String get pshPriceIt => 'Set price';
+
+  @override
+  String get pshPriceTitle => 'Selling price for the customer';
+
+  @override
+  String get pshMarkupNone => 'At the contract price';
+
+  @override
+  String get pshMarkupFixed => 'An amount on top';
+
+  @override
+  String get pshMarkupPercent => 'A percentage on top';
+
+  @override
+  String get pshMarkupValue => 'The markup';
+
+  @override
+  String pshFinalPrice(String price) {
+    return 'The customer sees: $price';
+  }
+
+  @override
+  String get pshFloorHint =>
+      'Your selling price is never below the contract price.';
+
+  @override
+  String get pshPartnerRoomsTitle => 'Rooms from partner hotels';
+
+  @override
+  String pshFromHotel(String name) {
+    return 'From $name';
+  }
+
+  @override
+  String pshRoomsLeft(int n) {
+    return '$n left';
+  }
+
+  @override
+  String get pshPerNight => 'per night';
 }

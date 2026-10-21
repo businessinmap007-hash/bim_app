@@ -12109,4 +12109,209 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get promoNeedsEndBooking => 'لكل عرض شرط انتهاء: تاريخ أو عدد حجوزات';
+
+  @override
+  String get pshTitle => 'الشراكات والحصص';
+
+  @override
+  String get pshEmpty =>
+      'لا توجد شراكات بعد. ادعُ نشاطًا لتتعاقدا؛ تفاصيل التعاقد لا يراها غيركما.';
+
+  @override
+  String get pshPrivacy => 'تفاصيل هذه الشراكة لا يراها غيركما.';
+
+  @override
+  String get pshInvite => 'دعوة شريك';
+
+  @override
+  String get pshSearchHint => 'ابحث باسم النشاط';
+
+  @override
+  String get pshNoteHint => 'ملاحظة للطرف الآخر (اختياري)';
+
+  @override
+  String get pshSend => 'إرسال الدعوة';
+
+  @override
+  String get pshInviteSent => 'أُرسلت الدعوة';
+
+  @override
+  String get pshKindAgency => 'شركة سياحة';
+
+  @override
+  String get pshKindReseller => 'موزّع';
+
+  @override
+  String get pshKindSupplier => 'مورّد';
+
+  @override
+  String get pshKindCorporate => 'شركة';
+
+  @override
+  String get pshKindAllotment => 'حصة فندقية';
+
+  @override
+  String get pshStatusActive => 'فعّالة';
+
+  @override
+  String get pshStatusPending => 'بانتظار الرد';
+
+  @override
+  String get pshStatusPaused => 'موقوفة';
+
+  @override
+  String get pshStatusRejected => 'مرفوضة';
+
+  @override
+  String get pshStatusEnded => 'منتهية';
+
+  @override
+  String get pshRoleOwner => 'أنت المانح';
+
+  @override
+  String get pshRolePartner => 'أنت الشريك';
+
+  @override
+  String get pshAwaitingYou => 'بانتظار ردك';
+
+  @override
+  String get pshAccept => 'قبول';
+
+  @override
+  String get pshDecline => 'رفض';
+
+  @override
+  String get pshPause => 'إيقاف مؤقت';
+
+  @override
+  String get pshResume => 'استئناف';
+
+  @override
+  String get pshEnd => 'إنهاء الشراكة';
+
+  @override
+  String get pshEndConfirm =>
+      'تنتهي الشراكة وتتوقف الحصص التي فيها. لا يمكن التراجع.';
+
+  @override
+  String get pshAllocations => 'الحصص';
+
+  @override
+  String get pshNoAllocationsOwner =>
+      'لم تمنح حصصًا بعد. اضغط «منح حصة» لتعطي شريكك عددًا من غرفك.';
+
+  @override
+  String get pshNoAllocationsPartner => 'لم يمنحك الطرف الآخر حصصًا بعد.';
+
+  @override
+  String get pshGrant => 'منح حصة';
+
+  @override
+  String get pshEdit => 'تعديل';
+
+  @override
+  String get pshStop => 'إيقاف الحصة';
+
+  @override
+  String get pshActivate => 'تفعيل الحصة';
+
+  @override
+  String get pshAllocationStopped => 'موقوفة';
+
+  @override
+  String get pshPickRoom => 'اختر الغرفة';
+
+  @override
+  String pshUngranted(int n) {
+    return 'المتاح للمنح: $n';
+  }
+
+  @override
+  String get pshQuantity => 'الكمية';
+
+  @override
+  String get pshContractPrice => 'سعر التعاقد لليلة';
+
+  @override
+  String get pshMinNights => 'أقل إقامة (ليالٍ)';
+
+  @override
+  String get pshMaxNights => 'أقصى إقامة (ليالٍ)';
+
+  @override
+  String get pshReleaseDays => 'تُفرج الكمية قبل الموعد بـ (أيام)';
+
+  @override
+  String get pshReleaseHelp =>
+      'ما لم يُحجز يعود إلى مخزونك قبل الموعد بهذه المدة';
+
+  @override
+  String get pshGrantIncomplete => 'اختر الغرفة واكتب الكمية وسعر التعاقد';
+
+  @override
+  String pshAvailableOf(int available, int total) {
+    return 'المتبقي $available من $total';
+  }
+
+  @override
+  String pshContractLine(String price) {
+    return 'سعر التعاقد $price';
+  }
+
+  @override
+  String pshSellLine(String price) {
+    return 'سعر بيعك $price';
+  }
+
+  @override
+  String pshNightsRange(int min, int max) {
+    return 'الإقامة من $min إلى $max ليالٍ (0 = بلا حد)';
+  }
+
+  @override
+  String pshReleaseLine(int days) {
+    return 'تُفرج قبل الموعد بـ $days يومًا';
+  }
+
+  @override
+  String get pshPriceIt => 'سعّر';
+
+  @override
+  String get pshPriceTitle => 'سعر البيع للعميل';
+
+  @override
+  String get pshMarkupNone => 'بسعر التعاقد';
+
+  @override
+  String get pshMarkupFixed => 'مبلغ فوقه';
+
+  @override
+  String get pshMarkupPercent => 'نسبة فوقه';
+
+  @override
+  String get pshMarkupValue => 'قيمة الزيادة';
+
+  @override
+  String pshFinalPrice(String price) {
+    return 'يراه العميل: $price';
+  }
+
+  @override
+  String get pshFloorHint => 'لا يقل سعر بيعك عن سعر التعاقد.';
+
+  @override
+  String get pshPartnerRoomsTitle => 'غرف من فنادق شريكة';
+
+  @override
+  String pshFromHotel(String name) {
+    return 'من $name';
+  }
+
+  @override
+  String pshRoomsLeft(int n) {
+    return 'متبقي $n';
+  }
+
+  @override
+  String get pshPerNight => 'لليلة';
 }

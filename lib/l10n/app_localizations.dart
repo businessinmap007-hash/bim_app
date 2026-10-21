@@ -21798,6 +21798,372 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لكل عرض شرط انتهاء: تاريخ أو عدد حجوزات'**
   String get promoNeedsEndBooking;
+
+  /// No description provided for @pshTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشراكات والحصص'**
+  String get pshTitle;
+
+  /// No description provided for @pshEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد شراكات بعد. ادعُ نشاطًا لتتعاقدا؛ تفاصيل التعاقد لا يراها غيركما.'**
+  String get pshEmpty;
+
+  /// No description provided for @pshPrivacy.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل هذه الشراكة لا يراها غيركما.'**
+  String get pshPrivacy;
+
+  /// No description provided for @pshInvite.
+  ///
+  /// In ar, this message translates to:
+  /// **'دعوة شريك'**
+  String get pshInvite;
+
+  /// No description provided for @pshSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث باسم النشاط'**
+  String get pshSearchHint;
+
+  /// No description provided for @pshNoteHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظة للطرف الآخر (اختياري)'**
+  String get pshNoteHint;
+
+  /// No description provided for @pshSend.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال الدعوة'**
+  String get pshSend;
+
+  /// No description provided for @pshInviteSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُرسلت الدعوة'**
+  String get pshInviteSent;
+
+  /// No description provided for @pshKindAgency.
+  ///
+  /// In ar, this message translates to:
+  /// **'شركة سياحة'**
+  String get pshKindAgency;
+
+  /// No description provided for @pshKindReseller.
+  ///
+  /// In ar, this message translates to:
+  /// **'موزّع'**
+  String get pshKindReseller;
+
+  /// No description provided for @pshKindSupplier.
+  ///
+  /// In ar, this message translates to:
+  /// **'مورّد'**
+  String get pshKindSupplier;
+
+  /// No description provided for @pshKindCorporate.
+  ///
+  /// In ar, this message translates to:
+  /// **'شركة'**
+  String get pshKindCorporate;
+
+  /// No description provided for @pshKindAllotment.
+  ///
+  /// In ar, this message translates to:
+  /// **'حصة فندقية'**
+  String get pshKindAllotment;
+
+  /// No description provided for @pshStatusActive.
+  ///
+  /// In ar, this message translates to:
+  /// **'فعّالة'**
+  String get pshStatusActive;
+
+  /// No description provided for @pshStatusPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار الرد'**
+  String get pshStatusPending;
+
+  /// No description provided for @pshStatusPaused.
+  ///
+  /// In ar, this message translates to:
+  /// **'موقوفة'**
+  String get pshStatusPaused;
+
+  /// No description provided for @pshStatusRejected.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرفوضة'**
+  String get pshStatusRejected;
+
+  /// No description provided for @pshStatusEnded.
+  ///
+  /// In ar, this message translates to:
+  /// **'منتهية'**
+  String get pshStatusEnded;
+
+  /// No description provided for @pshRoleOwner.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنت المانح'**
+  String get pshRoleOwner;
+
+  /// No description provided for @pshRolePartner.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنت الشريك'**
+  String get pshRolePartner;
+
+  /// No description provided for @pshAwaitingYou.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار ردك'**
+  String get pshAwaitingYou;
+
+  /// No description provided for @pshAccept.
+  ///
+  /// In ar, this message translates to:
+  /// **'قبول'**
+  String get pshAccept;
+
+  /// No description provided for @pshDecline.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفض'**
+  String get pshDecline;
+
+  /// No description provided for @pshPause.
+  ///
+  /// In ar, this message translates to:
+  /// **'إيقاف مؤقت'**
+  String get pshPause;
+
+  /// No description provided for @pshResume.
+  ///
+  /// In ar, this message translates to:
+  /// **'استئناف'**
+  String get pshResume;
+
+  /// No description provided for @pshEnd.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنهاء الشراكة'**
+  String get pshEnd;
+
+  /// No description provided for @pshEndConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنتهي الشراكة وتتوقف الحصص التي فيها. لا يمكن التراجع.'**
+  String get pshEndConfirm;
+
+  /// No description provided for @pshAllocations.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحصص'**
+  String get pshAllocations;
+
+  /// No description provided for @pshNoAllocationsOwner.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تمنح حصصًا بعد. اضغط «منح حصة» لتعطي شريكك عددًا من غرفك.'**
+  String get pshNoAllocationsOwner;
+
+  /// No description provided for @pshNoAllocationsPartner.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يمنحك الطرف الآخر حصصًا بعد.'**
+  String get pshNoAllocationsPartner;
+
+  /// No description provided for @pshGrant.
+  ///
+  /// In ar, this message translates to:
+  /// **'منح حصة'**
+  String get pshGrant;
+
+  /// No description provided for @pshEdit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل'**
+  String get pshEdit;
+
+  /// No description provided for @pshStop.
+  ///
+  /// In ar, this message translates to:
+  /// **'إيقاف الحصة'**
+  String get pshStop;
+
+  /// No description provided for @pshActivate.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفعيل الحصة'**
+  String get pshActivate;
+
+  /// No description provided for @pshAllocationStopped.
+  ///
+  /// In ar, this message translates to:
+  /// **'موقوفة'**
+  String get pshAllocationStopped;
+
+  /// No description provided for @pshPickRoom.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الغرفة'**
+  String get pshPickRoom;
+
+  /// No description provided for @pshUngranted.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتاح للمنح: {n}'**
+  String pshUngranted(int n);
+
+  /// No description provided for @pshQuantity.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكمية'**
+  String get pshQuantity;
+
+  /// No description provided for @pshContractPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر التعاقد لليلة'**
+  String get pshContractPrice;
+
+  /// No description provided for @pshMinNights.
+  ///
+  /// In ar, this message translates to:
+  /// **'أقل إقامة (ليالٍ)'**
+  String get pshMinNights;
+
+  /// No description provided for @pshMaxNights.
+  ///
+  /// In ar, this message translates to:
+  /// **'أقصى إقامة (ليالٍ)'**
+  String get pshMaxNights;
+
+  /// No description provided for @pshReleaseDays.
+  ///
+  /// In ar, this message translates to:
+  /// **'تُفرج الكمية قبل الموعد بـ (أيام)'**
+  String get pshReleaseDays;
+
+  /// No description provided for @pshReleaseHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما لم يُحجز يعود إلى مخزونك قبل الموعد بهذه المدة'**
+  String get pshReleaseHelp;
+
+  /// No description provided for @pshGrantIncomplete.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الغرفة واكتب الكمية وسعر التعاقد'**
+  String get pshGrantIncomplete;
+
+  /// No description provided for @pshAvailableOf.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتبقي {available} من {total}'**
+  String pshAvailableOf(int available, int total);
+
+  /// No description provided for @pshContractLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر التعاقد {price}'**
+  String pshContractLine(String price);
+
+  /// No description provided for @pshSellLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر بيعك {price}'**
+  String pshSellLine(String price);
+
+  /// No description provided for @pshNightsRange.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإقامة من {min} إلى {max} ليالٍ (0 = بلا حد)'**
+  String pshNightsRange(int min, int max);
+
+  /// No description provided for @pshReleaseLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'تُفرج قبل الموعد بـ {days} يومًا'**
+  String pshReleaseLine(int days);
+
+  /// No description provided for @pshPriceIt.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعّر'**
+  String get pshPriceIt;
+
+  /// No description provided for @pshPriceTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر البيع للعميل'**
+  String get pshPriceTitle;
+
+  /// No description provided for @pshMarkupNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'بسعر التعاقد'**
+  String get pshMarkupNone;
+
+  /// No description provided for @pshMarkupFixed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مبلغ فوقه'**
+  String get pshMarkupFixed;
+
+  /// No description provided for @pshMarkupPercent.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة فوقه'**
+  String get pshMarkupPercent;
+
+  /// No description provided for @pshMarkupValue.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيمة الزيادة'**
+  String get pshMarkupValue;
+
+  /// No description provided for @pshFinalPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'يراه العميل: {price}'**
+  String pshFinalPrice(String price);
+
+  /// No description provided for @pshFloorHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يقل سعر بيعك عن سعر التعاقد.'**
+  String get pshFloorHint;
+
+  /// No description provided for @pshPartnerRoomsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'غرف من فنادق شريكة'**
+  String get pshPartnerRoomsTitle;
+
+  /// No description provided for @pshFromHotel.
+  ///
+  /// In ar, this message translates to:
+  /// **'من {name}'**
+  String pshFromHotel(String name);
+
+  /// No description provided for @pshRoomsLeft.
+  ///
+  /// In ar, this message translates to:
+  /// **'متبقي {n}'**
+  String pshRoomsLeft(int n);
+
+  /// No description provided for @pshPerNight.
+  ///
+  /// In ar, this message translates to:
+  /// **'لليلة'**
+  String get pshPerNight;
 }
 
 class _AppLocalizationsDelegate

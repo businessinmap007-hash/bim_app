@@ -15,6 +15,7 @@ import 'hourly_venue_tab.dart';
 import 'table_booking_tab.dart';
 import '../../../../core/time/clock_format.dart';
 import 'booking_unit_icon.dart';
+import 'partner_rooms_section.dart';
 
 /// The «الحجز» tab of a business page drawn by its booking shape («أشكال الحجز»): a room kind is a section with its
 /// rooms under it — photo, what it carries, its price — like the menu's sections, then one tap into the booking.
@@ -45,6 +46,8 @@ class BookingShapeTab extends ConsumerWidget {
         if (shape != null && shape.code == 'course') {
           return CourseBoardTab(businessId: businessId, shape: shape, fallback: fallback);
         }
+        // no rooms of its own but a hotel's rooms to sell (a tour company): those are its booking page
+        if (catalog.partnerRooms.isNotEmpty && !catalog.hasUnits) return PartnerRoomsPage(businessId: businessId, rooms: catalog.partnerRooms, shape: shape);
         if (shape == null || !catalog.hasUnits) return fallback;
 
         // the boards that have their own drawing: a day and a time first (a pitch, a table) or dates first (a chalet)
@@ -182,6 +185,7 @@ class _ShapedBooking extends StatelessWidget {
           ),
         const SizedBox(height: 6),
       ],
+      if (catalog.partnerRooms.isNotEmpty) ...[const SizedBox(height: 12), PartnerRoomsSection(businessId: businessId, rooms: catalog.partnerRooms, shape: shape)],
       if (dayUse != null)
         _DayUseCard(
           offer: dayUse.unit.dayUse!,

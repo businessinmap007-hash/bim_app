@@ -15,6 +15,7 @@ import '../../../delivery/presentation/screens/driver_dashboard_screen.dart';
 import '../../../delivery/presentation/screens/my_drivers_screen.dart';
 import '../../../shipping/presentation/screens/shipping_orders_screen.dart';
 import '../../../shipping/presentation/screens/shipping_rates_screen.dart';
+import '../../../partnerships/presentation/screens/partnerships_screen.dart';
 import '../../../promotions/presentation/screens/promotions_screen.dart';
 import '../../../business_menu/presentation/screens/menu_items_screen.dart';
 import '../../../clinic_management/presentation/screens/clinic_management_screen.dart';
@@ -322,6 +323,13 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.local_offer_outlined,
         title: l10n.promoScreenTitle,
         builder: (_) => const PromotionsScreen(),
+      ),
+      _Tile(
+        // «الشراكات والحصص»: a contract with another business of any trade — only the two parties read it
+        show: keys == null || keys!.isNotEmpty,
+        leading: Icons.handshake_outlined,
+        title: l10n.pshTitle,
+        builder: (_) => const PartnershipsScreen(),
       ),
       _Tile(
         show: _has('bookings'),
