@@ -1,5 +1,6 @@
 import '../../../../core/env/env.dart';
 import '../../../business_menu/data/models/menu_item_image.dart';
+import '../../../promotions/data/models/promotion.dart';
 
 class MenuItemVariant {
   final int id;
@@ -219,6 +220,9 @@ class MenuItemSummary {
   /// basic menu, where [specSummary] falls back to the first few specs.
   final String? cardSummary;
 
+  /// The best running promotion on this item: a badge and, where the rule can say it, the price after it.
+  final ItemOffer? offer;
+
   const MenuItemSummary({
     required this.id,
     this.kind = 'menu',
@@ -247,6 +251,7 @@ class MenuItemSummary {
     this.catalogBrand,
     this.series,
     this.cardSummary,
+    this.offer,
   });
 
   /// The brand a filter chip groups this item under — the catalog's own
@@ -344,6 +349,7 @@ class MenuItemSummary {
     installment: json['installment'] is Map<String, dynamic> ? CardInstalment.fromJson(json['installment'] as Map<String, dynamic>) : null,
     availableQuantity: (json['available_quantity'] as num?)?.toInt(),
     isFeatured: json['is_featured'] as bool? ?? false,
+    offer: ItemOffer.fromJsonOrNull(json['offer']),
     condition: json['condition'] != null
         ? MenuItemCondition.fromJson(json['condition'] as Map<String, dynamic>)
         : null,

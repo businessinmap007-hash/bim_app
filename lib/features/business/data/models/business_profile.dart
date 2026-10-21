@@ -15,12 +15,16 @@ class BusinessSections {
   /// A specialty clinic (dental, dermatology…) that listed its services: the booking board offers them under the visit kind.
   final bool specialtyServices;
 
+  /// «العروض والخصومات»: something is running on this business — its page shows an offers tab.
+  final bool offers;
+
   const BusinessSections({
     required this.posts,
     required this.menu,
     required this.services,
     this.booking = false,
     this.specialtyServices = false,
+    this.offers = false,
   });
 
   bool get any => posts || menu || services;
@@ -31,6 +35,7 @@ class BusinessSections {
     services: json['services'] as bool? ?? false,
     booking: json['booking'] as bool? ?? false,
     specialtyServices: json['specialty_services'] as bool? ?? false,
+    offers: json['offers'] as bool? ?? false,
   );
 }
 

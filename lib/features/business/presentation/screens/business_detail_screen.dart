@@ -41,6 +41,7 @@ import '../../data/models/offering_item.dart';
 import 'business_info_screen.dart';
 import '../widgets/business_rating_row.dart';
 import '../widgets/menu_item_grid_card.dart';
+import '../../../promotions/presentation/widgets/offer_widgets.dart';
 import '../widgets/menu_item_tile.dart';
 import '../widgets/offering_card.dart';
 import '../widgets/post_card.dart';
@@ -189,6 +190,11 @@ class _BusinessDetailBody extends StatelessWidget {
       // …and the surgeries, endoscopies and treatments it performs, each asked for in a tap
       tabs.add(Tab(text: l10n.procTabTitle));
       tabViews.add(HospitalProceduresTab(hospitalId: profile.id));
+    }
+    // «العروض والخصومات»: a tab beside the menu and the booking while something is running
+    if (profile.sections.offers) {
+      tabs.add(Tab(text: l10n.businessTabOffers));
+      tabViews.add(BusinessPromotionsTab(businessId: profile.id));
     }
     if (profile.sections.posts) {
       tabs.add(Tab(text: l10n.businessTabPosts));

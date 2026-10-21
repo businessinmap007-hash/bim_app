@@ -11976,4 +11976,192 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get showcaseUnitDeclined => 'Not shown';
+
+  @override
+  String get promoScreenTitle => 'Offers and discounts';
+
+  @override
+  String get promoAdd => 'New offer';
+
+  @override
+  String get promoEdit => 'Edit the offer';
+
+  @override
+  String get promoEmpty =>
+      'No offers yet. Tap «New offer», pick your products then the kind of discount, and it reaches the customer\'s price in the cart.';
+
+  @override
+  String get promoNoneRunning => 'No offers running right now.';
+
+  @override
+  String get promoRunning => 'Running';
+
+  @override
+  String get promoPaused => 'Paused';
+
+  @override
+  String get promoEnded => 'Ended';
+
+  @override
+  String get promoPause => 'Pause';
+
+  @override
+  String get promoResume => 'Resume';
+
+  @override
+  String get promoDelete => 'Delete';
+
+  @override
+  String get promoDeleteConfirm =>
+      'Delete this offer? Orders it already priced keep their discount.';
+
+  @override
+  String get promoStepProducts => '1. Choose the products';
+
+  @override
+  String get promoStepType => '2. Kind of offer';
+
+  @override
+  String get promoStepDetails => '3. Details';
+
+  @override
+  String get promoWholeShop => 'All my products';
+
+  @override
+  String get promoWholeSection => 'The whole section';
+
+  @override
+  String get promoNoSection => 'No section';
+
+  @override
+  String get promoNoProducts => 'You have no products yet.';
+
+  @override
+  String get promoPickSomething => 'Choose what the offer covers';
+
+  @override
+  String get promoWayPercent => 'Percentage off';
+
+  @override
+  String get promoWayAmount => 'Amount off';
+
+  @override
+  String get promoWayBuyTop => 'Buy several, pay the dearest';
+
+  @override
+  String get promoWayBuyFree => 'Buy and get pieces free';
+
+  @override
+  String get promoWaySpend => 'Discount above a minimum order';
+
+  @override
+  String get promoValuePercent => 'Discount %';
+
+  @override
+  String get promoValueAmount => 'Discount amount (EGP)';
+
+  @override
+  String get promoBuyQty => 'Buy how many pieces';
+
+  @override
+  String get promoFreeQty => 'And get how many free';
+
+  @override
+  String get promoBuyTopHint =>
+      'In every group of that many, the customer pays only for the dearest piece.';
+
+  @override
+  String get promoBuyFreeHint => 'The cheapest pieces of every group are free.';
+
+  @override
+  String get promoMinTotal => 'Minimum order (EGP)';
+
+  @override
+  String get promoTitleOptional => 'A title for the offer (optional)';
+
+  @override
+  String get promoStarts => 'Starts';
+
+  @override
+  String get promoEnds => 'Ends';
+
+  @override
+  String get promoMaxUses => 'Or ends after a number of orders';
+
+  @override
+  String get promoNeedsEnd =>
+      'Every offer needs an end: a date or a number of orders';
+
+  @override
+  String get promoAudienceNew => 'For the customer\'s first order only';
+
+  @override
+  String get promoSave => 'Save the offer';
+
+  @override
+  String get promoCoversAll => 'Covers all products';
+
+  @override
+  String get promoFirstOrder => 'For your first order';
+
+  @override
+  String get businessTabOffers => 'Offers';
+
+  @override
+  String get cartOffersSaved => 'Saved with offers';
+
+  @override
+  String promoPercent(String value) {
+    return '$value% off';
+  }
+
+  @override
+  String promoAmount(String value) {
+    return '$value EGP off';
+  }
+
+  @override
+  String promoBuyNPayTop(int n) {
+    return 'Buy $n, pay the dearest';
+  }
+
+  @override
+  String promoBuyGetFree(int pay, int free) {
+    return 'Buy $pay, get $free free';
+  }
+
+  @override
+  String promoSpend(String min, String value) {
+    return 'Spend $min EGP or more, get $value% off';
+  }
+
+  @override
+  String promoCovers(String names) {
+    return 'Covers: $names';
+  }
+
+  @override
+  String promoEndsOn(String date) {
+    return 'Until $date';
+  }
+
+  @override
+  String promoUsesLeft(int n) {
+    return '$n orders left';
+  }
+
+  @override
+  String promoSelectedCount(int n) {
+    return '$n chosen';
+  }
+
+  @override
+  String promoItemsCount(int n) {
+    return '$n products';
+  }
+
+  @override
+  String promoNotYetDiscounted(String names) {
+    return 'Not discounted yet because its price rose recently: $names';
+  }
 }

@@ -35,6 +35,9 @@ class CartItem {
   final double basePrice;
   final List<CartExtraLine> extrasDetail;
 
+  /// What a running promotion took off this line (its [totalPrice] is already net of it).
+  final double discount;
+
   /// The item's own amount on this line (before its extras).
   double get baseTotal => basePrice * qty;
 
@@ -52,6 +55,7 @@ class CartItem {
     this.extrasDetail = const [],
     this.unit,
     this.fractional = false,
+    this.discount = 0,
   });
 
   factory CartItem.fromJson(Map<String, dynamic> json) {
@@ -68,6 +72,7 @@ class CartItem {
       totalPrice: (json['total_price'] as num?)?.toDouble() ?? 0,
       unit: json['unit'] as String?,
       fractional: json['fractional'] as bool? ?? false,
+      discount: (json['discount'] as num?)?.toDouble() ?? 0,
       basePrice: (json['base_price'] as num?)?.toDouble() ?? (json['price'] as num?)?.toDouble() ?? 0,
       extrasDetail: (json['extras_detail'] as List<dynamic>? ?? [])
           .map((e) => CartExtraLine.fromJson(e as Map<String, dynamic>))
@@ -104,6 +109,9 @@ class CartBill {
   final double deliveryFee;
   final double discount;
 
+  /// «وفّرت بالعروض»: what the running promotions took off the lines (the subtotal is already net of it).
+  final double offersDiscount;
+
   const CartBill({
     required this.menuSubtotal,
     required this.retailSubtotal,
@@ -113,6 +121,7 @@ class CartBill {
     required this.taxIncluded,
     required this.deliveryFee,
     required this.discount,
+    this.offersDiscount = 0,
   });
 
   factory CartBill.fromJson(Map<String, dynamic> json) => CartBill(
@@ -124,6 +133,7 @@ class CartBill {
     taxIncluded: json['tax_included'] as bool? ?? false,
     deliveryFee: (json['delivery_fee'] as num?)?.toDouble() ?? 0,
     discount: (json['discount'] as num?)?.toDouble() ?? 0,
+    offersDiscount: (json['offers_discount'] as num?)?.toDouble() ?? 0,
   );
 }
 

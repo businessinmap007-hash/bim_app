@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../promotions/presentation/widgets/offer_widgets.dart';
+
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_text_styles.dart';
 import '../../../../l10n/app_localizations.dart';
@@ -187,8 +189,9 @@ class _MenuItemTileState extends State<MenuItemTile> {
                               ),
                             ),
                             const SizedBox(width: 8),
-                            Text(
-                              _priceLabel(item, l10n),
+                            PriceWithOffer(
+                              label: _priceLabel(item, l10n),
+                              offer: item.offer,
                               style: theme.textTheme.titleSmall?.copyWith(
                                 fontWeight: FontWeight.w700,
                               ),
@@ -248,8 +251,9 @@ class _MenuItemTileState extends State<MenuItemTile> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Expanded(
-                              child: Text(
-                                _priceLabel(item, l10n),
+                              child: PriceWithOffer(
+                                label: _priceLabel(item, l10n),
+                                offer: item.offer,
                                 style: theme.textTheme.titleSmall?.copyWith(
                                   fontWeight: FontWeight.w700,
                                 ),

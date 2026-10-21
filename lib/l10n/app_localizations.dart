@@ -21402,6 +21402,330 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'غير منشورة'**
   String get showcaseUnitDeclined;
+
+  /// No description provided for @promoScreenTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'العروض والخصومات'**
+  String get promoScreenTitle;
+
+  /// No description provided for @promoAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض جديد'**
+  String get promoAdd;
+
+  /// No description provided for @promoEdit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل العرض'**
+  String get promoEdit;
+
+  /// No description provided for @promoEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا عروض بعد. اضغط «عرض جديد»، اختر منتجاتك ثم نوع الخصم، وسيصل إلى سعر العميل في السلة.'**
+  String get promoEmpty;
+
+  /// No description provided for @promoNoneRunning.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد عروض جارية الآن.'**
+  String get promoNoneRunning;
+
+  /// No description provided for @promoRunning.
+  ///
+  /// In ar, this message translates to:
+  /// **'يعمل الآن'**
+  String get promoRunning;
+
+  /// No description provided for @promoPaused.
+  ///
+  /// In ar, this message translates to:
+  /// **'موقوف'**
+  String get promoPaused;
+
+  /// No description provided for @promoEnded.
+  ///
+  /// In ar, this message translates to:
+  /// **'منتهٍ'**
+  String get promoEnded;
+
+  /// No description provided for @promoPause.
+  ///
+  /// In ar, this message translates to:
+  /// **'إيقاف مؤقت'**
+  String get promoPause;
+
+  /// No description provided for @promoResume.
+  ///
+  /// In ar, this message translates to:
+  /// **'استئناف'**
+  String get promoResume;
+
+  /// No description provided for @promoDelete.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف'**
+  String get promoDelete;
+
+  /// No description provided for @promoDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف هذا العرض؟ الطلبات التي سُعّرت به تحتفظ بخصمها.'**
+  String get promoDeleteConfirm;
+
+  /// No description provided for @promoStepProducts.
+  ///
+  /// In ar, this message translates to:
+  /// **'١. اختر المنتجات'**
+  String get promoStepProducts;
+
+  /// No description provided for @promoStepType.
+  ///
+  /// In ar, this message translates to:
+  /// **'٢. نوع العرض'**
+  String get promoStepType;
+
+  /// No description provided for @promoStepDetails.
+  ///
+  /// In ar, this message translates to:
+  /// **'٣. التفاصيل'**
+  String get promoStepDetails;
+
+  /// No description provided for @promoWholeShop.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل منتجاتي'**
+  String get promoWholeShop;
+
+  /// No description provided for @promoWholeSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'القسم كله'**
+  String get promoWholeSection;
+
+  /// No description provided for @promoNoSection.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون قسم'**
+  String get promoNoSection;
+
+  /// No description provided for @promoNoProducts.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا منتجات لديك بعد.'**
+  String get promoNoProducts;
+
+  /// No description provided for @promoPickSomething.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر ما يشمله العرض'**
+  String get promoPickSomething;
+
+  /// No description provided for @promoWayPercent.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة خصم'**
+  String get promoWayPercent;
+
+  /// No description provided for @promoWayAmount.
+  ///
+  /// In ar, this message translates to:
+  /// **'مبلغ خصم'**
+  String get promoWayAmount;
+
+  /// No description provided for @promoWayBuyTop.
+  ///
+  /// In ar, this message translates to:
+  /// **'اشترِ عدة قطع بسعر الأغلى'**
+  String get promoWayBuyTop;
+
+  /// No description provided for @promoWayBuyFree.
+  ///
+  /// In ar, this message translates to:
+  /// **'اشترِ واحصل على قطع مجانًا'**
+  String get promoWayBuyFree;
+
+  /// No description provided for @promoWaySpend.
+  ///
+  /// In ar, this message translates to:
+  /// **'خصم عند حد أدنى للطلب'**
+  String get promoWaySpend;
+
+  /// No description provided for @promoValuePercent.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة الخصم ٪'**
+  String get promoValuePercent;
+
+  /// No description provided for @promoValueAmount.
+  ///
+  /// In ar, this message translates to:
+  /// **'مبلغ الخصم (جنيه)'**
+  String get promoValueAmount;
+
+  /// No description provided for @promoBuyQty.
+  ///
+  /// In ar, this message translates to:
+  /// **'اشترِ كم قطعة'**
+  String get promoBuyQty;
+
+  /// No description provided for @promoFreeQty.
+  ///
+  /// In ar, this message translates to:
+  /// **'وتحصل على كم قطعة مجانًا'**
+  String get promoFreeQty;
+
+  /// No description provided for @promoBuyTopHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'من كل مجموعة بهذا العدد، يدفع العميل ثمن أغلى قطعة فقط.'**
+  String get promoBuyTopHint;
+
+  /// No description provided for @promoBuyFreeHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'القطع الأرخص من كل مجموعة تصبح مجانية.'**
+  String get promoBuyFreeHint;
+
+  /// No description provided for @promoMinTotal.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحد الأدنى للطلب (جنيه)'**
+  String get promoMinTotal;
+
+  /// No description provided for @promoTitleOptional.
+  ///
+  /// In ar, this message translates to:
+  /// **'عنوان للعرض (اختياري)'**
+  String get promoTitleOptional;
+
+  /// No description provided for @promoStarts.
+  ///
+  /// In ar, this message translates to:
+  /// **'يبدأ'**
+  String get promoStarts;
+
+  /// No description provided for @promoEnds.
+  ///
+  /// In ar, this message translates to:
+  /// **'ينتهي'**
+  String get promoEnds;
+
+  /// No description provided for @promoMaxUses.
+  ///
+  /// In ar, this message translates to:
+  /// **'أو ينتهي بعد عدد طلبات'**
+  String get promoMaxUses;
+
+  /// No description provided for @promoNeedsEnd.
+  ///
+  /// In ar, this message translates to:
+  /// **'لكل عرض شرط انتهاء: تاريخ أو عدد طلبات'**
+  String get promoNeedsEnd;
+
+  /// No description provided for @promoAudienceNew.
+  ///
+  /// In ar, this message translates to:
+  /// **'لأول طلب للعميل فقط'**
+  String get promoAudienceNew;
+
+  /// No description provided for @promoSave.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ العرض'**
+  String get promoSave;
+
+  /// No description provided for @promoCoversAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'يشمل كل المنتجات'**
+  String get promoCoversAll;
+
+  /// No description provided for @promoFirstOrder.
+  ///
+  /// In ar, this message translates to:
+  /// **'لأول طلب لك'**
+  String get promoFirstOrder;
+
+  /// No description provided for @businessTabOffers.
+  ///
+  /// In ar, this message translates to:
+  /// **'العروض'**
+  String get businessTabOffers;
+
+  /// No description provided for @cartOffersSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'وفّرت بالعروض'**
+  String get cartOffersSaved;
+
+  /// No description provided for @promoPercent.
+  ///
+  /// In ar, this message translates to:
+  /// **'خصم {value}٪'**
+  String promoPercent(String value);
+
+  /// No description provided for @promoAmount.
+  ///
+  /// In ar, this message translates to:
+  /// **'خصم {value} جنيه'**
+  String promoAmount(String value);
+
+  /// No description provided for @promoBuyNPayTop.
+  ///
+  /// In ar, this message translates to:
+  /// **'اشترِ {n} وادفع ثمن الأغلى'**
+  String promoBuyNPayTop(int n);
+
+  /// No description provided for @promoBuyGetFree.
+  ///
+  /// In ar, this message translates to:
+  /// **'اشترِ {pay} واحصل على {free} مجانًا'**
+  String promoBuyGetFree(int pay, int free);
+
+  /// No description provided for @promoSpend.
+  ///
+  /// In ar, this message translates to:
+  /// **'اشترِ بـ {min} جنيه فأكثر واحصل على خصم {value}٪'**
+  String promoSpend(String min, String value);
+
+  /// No description provided for @promoCovers.
+  ///
+  /// In ar, this message translates to:
+  /// **'يشمل: {names}'**
+  String promoCovers(String names);
+
+  /// No description provided for @promoEndsOn.
+  ///
+  /// In ar, this message translates to:
+  /// **'حتى {date}'**
+  String promoEndsOn(String date);
+
+  /// No description provided for @promoUsesLeft.
+  ///
+  /// In ar, this message translates to:
+  /// **'متبقٍ {n} طلب'**
+  String promoUsesLeft(int n);
+
+  /// No description provided for @promoSelectedCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'اخترتَ {n}'**
+  String promoSelectedCount(int n);
+
+  /// No description provided for @promoItemsCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{n} منتجًا'**
+  String promoItemsCount(int n);
+
+  /// No description provided for @promoNotYetDiscounted.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يُخصم بعد لأن سعره ارتفع أخيرًا: {names}'**
+  String promoNotYetDiscounted(String names);
 }
 
 class _AppLocalizationsDelegate

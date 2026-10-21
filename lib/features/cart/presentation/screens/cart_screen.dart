@@ -203,7 +203,16 @@ class _CartItemRow extends ConsumerWidget {
           ),
           SizedBox(
             width: 56,
-            child: Text(item.totalPrice.toStringAsFixed(0), textAlign: TextAlign.end),
+            child: item.discount > 0
+                ? Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text((item.totalPrice + item.discount).toStringAsFixed(0), style: TextStyle(decoration: TextDecoration.lineThrough, fontSize: 11, color: Theme.of(context).hintColor)),
+                      Text(item.totalPrice.toStringAsFixed(0), style: const TextStyle(fontWeight: FontWeight.w800)),
+                    ],
+                  )
+                : Text(item.totalPrice.toStringAsFixed(0), textAlign: TextAlign.end),
           ),
           IconButton(
             visualDensity: VisualDensity.compact,
@@ -234,6 +243,7 @@ class _TotalsBlock extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _TotalRow(label: l10n.cartSubtotal, value: subtotal),
+        if (bill.offersDiscount > 0) _TotalRow(label: l10n.cartOffersSaved, value: bill.offersDiscount),
         if (bill.serviceFee > 0 && !bill.serviceIncluded) _TotalRow(label: l10n.cartServiceFee, value: bill.serviceFee),
         if (bill.tax > 0 && !bill.taxIncluded) _TotalRow(label: l10n.cartTax, value: bill.tax),
         if (deliveryFee > 0) _TotalRow(label: l10n.cartDeliveryFee, value: deliveryFee),

@@ -11882,4 +11882,191 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get showcaseUnitDeclined => 'غير منشورة';
+
+  @override
+  String get promoScreenTitle => 'العروض والخصومات';
+
+  @override
+  String get promoAdd => 'عرض جديد';
+
+  @override
+  String get promoEdit => 'تعديل العرض';
+
+  @override
+  String get promoEmpty =>
+      'لا عروض بعد. اضغط «عرض جديد»، اختر منتجاتك ثم نوع الخصم، وسيصل إلى سعر العميل في السلة.';
+
+  @override
+  String get promoNoneRunning => 'لا توجد عروض جارية الآن.';
+
+  @override
+  String get promoRunning => 'يعمل الآن';
+
+  @override
+  String get promoPaused => 'موقوف';
+
+  @override
+  String get promoEnded => 'منتهٍ';
+
+  @override
+  String get promoPause => 'إيقاف مؤقت';
+
+  @override
+  String get promoResume => 'استئناف';
+
+  @override
+  String get promoDelete => 'حذف';
+
+  @override
+  String get promoDeleteConfirm =>
+      'حذف هذا العرض؟ الطلبات التي سُعّرت به تحتفظ بخصمها.';
+
+  @override
+  String get promoStepProducts => '١. اختر المنتجات';
+
+  @override
+  String get promoStepType => '٢. نوع العرض';
+
+  @override
+  String get promoStepDetails => '٣. التفاصيل';
+
+  @override
+  String get promoWholeShop => 'كل منتجاتي';
+
+  @override
+  String get promoWholeSection => 'القسم كله';
+
+  @override
+  String get promoNoSection => 'بدون قسم';
+
+  @override
+  String get promoNoProducts => 'لا منتجات لديك بعد.';
+
+  @override
+  String get promoPickSomething => 'اختر ما يشمله العرض';
+
+  @override
+  String get promoWayPercent => 'نسبة خصم';
+
+  @override
+  String get promoWayAmount => 'مبلغ خصم';
+
+  @override
+  String get promoWayBuyTop => 'اشترِ عدة قطع بسعر الأغلى';
+
+  @override
+  String get promoWayBuyFree => 'اشترِ واحصل على قطع مجانًا';
+
+  @override
+  String get promoWaySpend => 'خصم عند حد أدنى للطلب';
+
+  @override
+  String get promoValuePercent => 'نسبة الخصم ٪';
+
+  @override
+  String get promoValueAmount => 'مبلغ الخصم (جنيه)';
+
+  @override
+  String get promoBuyQty => 'اشترِ كم قطعة';
+
+  @override
+  String get promoFreeQty => 'وتحصل على كم قطعة مجانًا';
+
+  @override
+  String get promoBuyTopHint =>
+      'من كل مجموعة بهذا العدد، يدفع العميل ثمن أغلى قطعة فقط.';
+
+  @override
+  String get promoBuyFreeHint => 'القطع الأرخص من كل مجموعة تصبح مجانية.';
+
+  @override
+  String get promoMinTotal => 'الحد الأدنى للطلب (جنيه)';
+
+  @override
+  String get promoTitleOptional => 'عنوان للعرض (اختياري)';
+
+  @override
+  String get promoStarts => 'يبدأ';
+
+  @override
+  String get promoEnds => 'ينتهي';
+
+  @override
+  String get promoMaxUses => 'أو ينتهي بعد عدد طلبات';
+
+  @override
+  String get promoNeedsEnd => 'لكل عرض شرط انتهاء: تاريخ أو عدد طلبات';
+
+  @override
+  String get promoAudienceNew => 'لأول طلب للعميل فقط';
+
+  @override
+  String get promoSave => 'حفظ العرض';
+
+  @override
+  String get promoCoversAll => 'يشمل كل المنتجات';
+
+  @override
+  String get promoFirstOrder => 'لأول طلب لك';
+
+  @override
+  String get businessTabOffers => 'العروض';
+
+  @override
+  String get cartOffersSaved => 'وفّرت بالعروض';
+
+  @override
+  String promoPercent(String value) {
+    return 'خصم $value٪';
+  }
+
+  @override
+  String promoAmount(String value) {
+    return 'خصم $value جنيه';
+  }
+
+  @override
+  String promoBuyNPayTop(int n) {
+    return 'اشترِ $n وادفع ثمن الأغلى';
+  }
+
+  @override
+  String promoBuyGetFree(int pay, int free) {
+    return 'اشترِ $pay واحصل على $free مجانًا';
+  }
+
+  @override
+  String promoSpend(String min, String value) {
+    return 'اشترِ بـ $min جنيه فأكثر واحصل على خصم $value٪';
+  }
+
+  @override
+  String promoCovers(String names) {
+    return 'يشمل: $names';
+  }
+
+  @override
+  String promoEndsOn(String date) {
+    return 'حتى $date';
+  }
+
+  @override
+  String promoUsesLeft(int n) {
+    return 'متبقٍ $n طلب';
+  }
+
+  @override
+  String promoSelectedCount(int n) {
+    return 'اخترتَ $n';
+  }
+
+  @override
+  String promoItemsCount(int n) {
+    return '$n منتجًا';
+  }
+
+  @override
+  String promoNotYetDiscounted(String names) {
+    return 'لم يُخصم بعد لأن سعره ارتفع أخيرًا: $names';
+  }
 }
