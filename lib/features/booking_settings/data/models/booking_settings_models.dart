@@ -177,6 +177,9 @@ class BookableItemRow {
   final double weeklyDiscount;
   final double monthlyDiscount;
 
+  /// «أسعار للمصريين والمقيمين فقط»: `all`, `locals` or `foreigners` — who this room type is sold to.
+  final String guestScope;
+
   const BookableItemRow({
     required this.id,
     required this.serviceId,
@@ -195,6 +198,7 @@ class BookableItemRow {
     this.unitNoun = 'unit',
     this.weeklyDiscount = 0,
     this.monthlyDiscount = 0,
+    this.guestScope = 'all',
   });
 
   bool get isHotelRoom => unitNoun == 'room';
@@ -226,6 +230,7 @@ class BookableItemRow {
       unitNoun: json['unit_noun'] as String? ?? 'unit',
       weeklyDiscount: ((json['stay_discounts'] as Map<String, dynamic>?)?['weekly_percent'] as num?)?.toDouble() ?? 0,
       monthlyDiscount: ((json['stay_discounts'] as Map<String, dynamic>?)?['monthly_percent'] as num?)?.toDouble() ?? 0,
+      guestScope: json['guest_scope'] as String? ?? 'all',
     );
   }
 }

@@ -77,6 +77,7 @@ class TripProgramViewScreen extends ConsumerWidget {
           features: room.features,
           price: room.price,
           currency: room.currency,
+          guestScope: room.guestScope,
         ),
       ),
     ]);

@@ -102,6 +102,11 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   final _notesController = TextEditingController();
   bool _submitting = false;
 
+  /// The guest ticked that they are who a scoped room type is sold to («مصري أو مقيم» / «أجنبي»).
+  bool _originConfirmed = false;
+
+  String get _scope => widget.initialUnit?.guestScope ?? 'all';
+
   // Live total — same math as the actual booking (line + selected
   // modifiers per day, × days/quantity), fetched from the server so it
   // never disagrees with what create() ends up charging. Debounced so
@@ -364,6 +369,10 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.bookingUnitRequired)));
       return;
     }
+    if (_scope != 'all' && !_originConfirmed) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.guestScopeConfirmRequired)));
+      return;
+    }
 
     setState(() => _submitting = true);
     try {
@@ -408,6 +417,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
         courseGroupId: widget.courseGroupId,
         chairId: widget.chair?.id,
         providerId: widget.provider?.id,
+        guestOrigin: _scope == 'locals' ? 'local' : (_scope == 'foreigners' ? 'foreign' : null),
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.bookingSuccess)));
@@ -472,8 +482,18 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
             children: [
               // what he and this business have been through together — before he books
               RelationshipCard(summary: form.relationship),
-              if (widget.initialUnit != null)
-                _selectedUnitCard(context, widget.initialUnit!)
+              if (widget.initialUnit != null) ...[
+                _selectedUnitCard(context, widget.initialUnit!),
+                // «أسعار للمصريين والمقيمين فقط»: the room is sold to one of the two; the guest says which they are, the hotel checks on arrival
+                if (_scope != 'all')
+                  CheckboxListTile(
+                    contentPadding: EdgeInsets.zero,
+                    controlAffinity: ListTileControlAffinity.leading,
+                    value: _originConfirmed,
+                    onChanged: (v) => setState(() => _originConfirmed = v ?? false),
+                    title: Text(_scope == 'locals' ? l10n.guestScopeConfirmLocals : l10n.guestScopeConfirmForeigners),
+                  ),
+              ]
               else ...[
                 Text(widget.offering.label, style: Theme.of(context).textTheme.titleLarge),
                 const SizedBox(height: 4),

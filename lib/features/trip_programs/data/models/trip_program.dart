@@ -46,6 +46,7 @@ class TripRoom {
   final String? fromName;
   final int availableQuantity;
   final bool available;
+  final String guestScope;
 
   const TripRoom({
     this.allocationId,
@@ -63,6 +64,7 @@ class TripRoom {
     this.fromName,
     this.availableQuantity = 0,
     this.available = true,
+    this.guestScope = 'all',
   });
 
   factory TripRoom.fromJson(Map<String, dynamic> json) => TripRoom(
@@ -83,6 +85,7 @@ class TripRoom {
     fromName: (json['from'] is Map<String, dynamic>) ? (json['from'] as Map<String, dynamic>)['name'] as String? : null,
     availableQuantity: (json['available_quantity'] as num?)?.toInt() ?? 0,
     available: json['available'] as bool? ?? true,
+    guestScope: json['guest_scope'] as String? ?? 'all',
   );
 }
 

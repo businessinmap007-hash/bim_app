@@ -12401,5 +12401,80 @@ class AppLocalizationsAr extends AppLocalizations {
   String get tripSoldOut => 'نفدت';
 
   @override
-  String get tripRoomGone => 'الغرفة لم تعد متاحة';
+  String get tripRoomGone => 'هذا العرض متوقف حاليًا';
+
+  @override
+  String get guestScopeLabel => 'لمن تُباع هذه الغرفة؟';
+
+  @override
+  String get guestScopeHelp =>
+      'لتسعير محلي وآخر سياحي اجعل لكل سعر نوع غرفة. يُطلب إثبات عند الوصول.';
+
+  @override
+  String get guestScopeAll => 'للجميع';
+
+  @override
+  String get guestScopeLocals => 'للمصريين والمقيمين فقط';
+
+  @override
+  String get guestScopeForeigners => 'للأجانب فقط';
+
+  @override
+  String get guestScopeConfirmRequired => 'أكّد الخانة أعلاه للمتابعة';
+
+  @override
+  String get guestScopeConfirmLocals =>
+      'أقرّ بأنني مصري أو مقيم في مصر وسأقدّم ما يثبت ذلك عند الوصول';
+
+  @override
+  String get guestScopeConfirmForeigners =>
+      'أقرّ بأنني أجنبي وسأقدّم جواز السفر عند الوصول';
+
+  @override
+  String get boardTitle => 'شاشة الغرف';
+
+  @override
+  String get boardEmpty =>
+      'لا توجد أنواع غرف للإقامة بعد. أضفها من إعدادات الحجز لتظهر هنا.';
+
+  @override
+  String get boardFree => 'شاغر';
+
+  @override
+  String get boardPartly => 'محجوز جزئيًا';
+
+  @override
+  String get boardFull => 'مكتمل';
+
+  @override
+  String get boardViaPartner => 'بيع عبر شريك';
+
+  @override
+  String boardStock(int n) {
+    return '$n غرفة';
+  }
+
+  @override
+  String boardHeld(int n) {
+    return '$n محجوزة لشركاء ولم تُبَع بعد';
+  }
+
+  @override
+  String boardSoldBy(String name) {
+    return 'باعته $name';
+  }
+
+  @override
+  String get boardDirect => 'حجز مباشر';
+
+  @override
+  String boardRoomNumber(String n) {
+    return 'غرفة $n';
+  }
+
+  @override
+  String get boardCheckLocal => 'تحقق من الهوية المصرية أو الإقامة';
+
+  @override
+  String get boardCheckForeign => 'تحقق من جواز السفر';
 }

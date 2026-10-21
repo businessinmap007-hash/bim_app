@@ -256,6 +256,8 @@ class BookingApi {
     int? chairId,
     // «اختر مقدّم الخدمة»: the staff member the customer wants; none = the business decides
     int? providerId,
+    // «مصري أو مقيم» (`local`) / «أجنبي» (`foreign`): the guest's declaration for a room type sold to one of them only
+    String? guestOrigin,
   }) async {
     final data =
         await _client.post(
@@ -271,6 +273,7 @@ class BookingApi {
                 'all_day': allDay,
                 'party_size': ?partySize,
                 'quantity': ?quantity,
+                'guest_origin': ?guestOrigin,
                 if (notes != null && notes.isNotEmpty) 'notes': notes,
                 if (meta != null && meta.isNotEmpty) 'meta': meta,
                 if (optionIds.isNotEmpty) 'option_ids': optionIds,

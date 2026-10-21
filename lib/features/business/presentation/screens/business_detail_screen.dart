@@ -211,6 +211,11 @@ class _BusinessDetailBody extends StatelessWidget {
       tabs.add(Tab(text: l10n.businessTabServices));
       tabViews.add(_ServicesTab(businessId: profile.id));
     }
+    // a business with nothing to sell or show yet still gets its two cards: what it posts, and who it is
+    if (!profile.sections.posts && tabs.isEmpty) {
+      tabs.add(Tab(text: l10n.businessTabPosts));
+      tabViews.add(_PostsTab(businessId: profile.id));
+    }
     // «عن النشاط» on EVERY business page — who it is, where, when, its links and its albums.
     tabs.add(Tab(text: l10n.businessTabAbout));
     tabViews.add(BusinessInfoBody(profile: profile, embedded: true));

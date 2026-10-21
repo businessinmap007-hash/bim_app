@@ -22324,8 +22324,134 @@ abstract class AppLocalizations {
   /// No description provided for @tripRoomGone.
   ///
   /// In ar, this message translates to:
-  /// **'الغرفة لم تعد متاحة'**
+  /// **'هذا العرض متوقف حاليًا'**
   String get tripRoomGone;
+
+  /// No description provided for @guestScopeLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'لمن تُباع هذه الغرفة؟'**
+  String get guestScopeLabel;
+
+  /// No description provided for @guestScopeHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'لتسعير محلي وآخر سياحي اجعل لكل سعر نوع غرفة. يُطلب إثبات عند الوصول.'**
+  String get guestScopeHelp;
+
+  /// No description provided for @guestScopeAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'للجميع'**
+  String get guestScopeAll;
+
+  /// No description provided for @guestScopeLocals.
+  ///
+  /// In ar, this message translates to:
+  /// **'للمصريين والمقيمين فقط'**
+  String get guestScopeLocals;
+
+  /// No description provided for @guestScopeForeigners.
+  ///
+  /// In ar, this message translates to:
+  /// **'للأجانب فقط'**
+  String get guestScopeForeigners;
+
+  /// No description provided for @guestScopeConfirmRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكّد الخانة أعلاه للمتابعة'**
+  String get guestScopeConfirmRequired;
+
+  /// No description provided for @guestScopeConfirmLocals.
+  ///
+  /// In ar, this message translates to:
+  /// **'أقرّ بأنني مصري أو مقيم في مصر وسأقدّم ما يثبت ذلك عند الوصول'**
+  String get guestScopeConfirmLocals;
+
+  /// No description provided for @guestScopeConfirmForeigners.
+  ///
+  /// In ar, this message translates to:
+  /// **'أقرّ بأنني أجنبي وسأقدّم جواز السفر عند الوصول'**
+  String get guestScopeConfirmForeigners;
+
+  /// No description provided for @boardTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'شاشة الغرف'**
+  String get boardTitle;
+
+  /// No description provided for @boardEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أنواع غرف للإقامة بعد. أضفها من إعدادات الحجز لتظهر هنا.'**
+  String get boardEmpty;
+
+  /// No description provided for @boardFree.
+  ///
+  /// In ar, this message translates to:
+  /// **'شاغر'**
+  String get boardFree;
+
+  /// No description provided for @boardPartly.
+  ///
+  /// In ar, this message translates to:
+  /// **'محجوز جزئيًا'**
+  String get boardPartly;
+
+  /// No description provided for @boardFull.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكتمل'**
+  String get boardFull;
+
+  /// No description provided for @boardViaPartner.
+  ///
+  /// In ar, this message translates to:
+  /// **'بيع عبر شريك'**
+  String get boardViaPartner;
+
+  /// No description provided for @boardStock.
+  ///
+  /// In ar, this message translates to:
+  /// **'{n} غرفة'**
+  String boardStock(int n);
+
+  /// No description provided for @boardHeld.
+  ///
+  /// In ar, this message translates to:
+  /// **'{n} محجوزة لشركاء ولم تُبَع بعد'**
+  String boardHeld(int n);
+
+  /// No description provided for @boardSoldBy.
+  ///
+  /// In ar, this message translates to:
+  /// **'باعته {name}'**
+  String boardSoldBy(String name);
+
+  /// No description provided for @boardDirect.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجز مباشر'**
+  String get boardDirect;
+
+  /// No description provided for @boardRoomNumber.
+  ///
+  /// In ar, this message translates to:
+  /// **'غرفة {n}'**
+  String boardRoomNumber(String n);
+
+  /// No description provided for @boardCheckLocal.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحقق من الهوية المصرية أو الإقامة'**
+  String get boardCheckLocal;
+
+  /// No description provided for @boardCheckForeign.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحقق من جواز السفر'**
+  String get boardCheckForeign;
 }
 
 class _AppLocalizationsDelegate

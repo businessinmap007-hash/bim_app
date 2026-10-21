@@ -127,6 +127,7 @@ class BookingSettingsApi {
     int? capacity,
     int? quantity,
     String? status,
+    String? guestScope,
   }) async {
     final data = await _client.put(
       '/business/bookable-items/$id',
@@ -139,6 +140,7 @@ class BookingSettingsApi {
         'capacity': ?capacity,
         'quantity': ?quantity,
         'status': ?status,
+        'guest_scope': ?guestScope,
       },
     );
     return BookableItemRow.fromJson(data as Map<String, dynamic>);

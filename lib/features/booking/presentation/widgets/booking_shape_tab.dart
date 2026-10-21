@@ -263,6 +263,8 @@ class _UnitCard extends StatelessWidget {
     final price = unit.price ?? kind.price;
     final facts = <String>[
       if (shape.showCapacity && unit.capacity != null) '${l10n.bookingCapacityLabel}: ${unit.capacity}',
+      if (unit.guestScope == 'locals') l10n.guestScopeLocals,
+      if (unit.guestScope == 'foreigners') l10n.guestScopeForeigners,
       ...unit.features,
     ];
 

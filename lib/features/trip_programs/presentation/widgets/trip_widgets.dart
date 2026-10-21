@@ -42,6 +42,7 @@ class TripRoomTile extends StatelessWidget {
               children: [
                 Text(room.label, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
                 if ((room.fromName ?? '').isNotEmpty) Text(l10n.pshFromHotel(room.fromName!), style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+                if (room.guestScope != 'all') Text(room.guestScope == 'locals' ? l10n.guestScopeLocals : l10n.guestScopeForeigners, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.primary, fontWeight: FontWeight.w700)),
                 if (room.features.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(top: 6),

@@ -138,6 +138,7 @@ class BookingSettingsController extends StateNotifier<BookingSettingsState> {
     int? capacity,
     int? quantity,
     String? status,
+    String? guestScope,
   }) async {
     final row = await _api.updateBookableItem(
       id,
@@ -149,6 +150,7 @@ class BookingSettingsController extends StateNotifier<BookingSettingsState> {
       capacity: capacity,
       quantity: quantity,
       status: status,
+      guestScope: guestScope,
     );
     state = state.copyWith(items: [for (final i in state.items) i.id == id ? row : i]);
   }

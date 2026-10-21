@@ -15,6 +15,7 @@ import '../../../delivery/presentation/screens/driver_dashboard_screen.dart';
 import '../../../delivery/presentation/screens/my_drivers_screen.dart';
 import '../../../shipping/presentation/screens/shipping_orders_screen.dart';
 import '../../../shipping/presentation/screens/shipping_rates_screen.dart';
+import '../../../hotel_board/presentation/screens/hotel_board_screen.dart';
 import '../../../partnerships/presentation/screens/partnerships_screen.dart';
 import '../../../trip_programs/presentation/screens/trip_programs_screen.dart';
 import '../../../promotions/presentation/screens/promotions_screen.dart';
@@ -338,6 +339,13 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.handshake_outlined,
         title: l10n.pshTitle,
         builder: (_) => const PartnershipsScreen(),
+      ),
+      _Tile(
+        // «شاشة الغرف»: the hotel's month — every room type, free and taken night by night
+        show: _has('bookings'),
+        leading: Icons.calendar_month_outlined,
+        title: l10n.boardTitle,
+        builder: (_) => const HotelBoardScreen(),
       ),
       _Tile(
         show: _has('bookings'),

@@ -42,6 +42,7 @@ class _FakeApi implements BookingSettingsApi {
     int? capacity,
     int? quantity,
     String? status,
+    String? guestScope,
   }) async {
     updated.add(id);
 
@@ -146,6 +147,7 @@ void main() {
     await tester.scrollUntilVisible(find.text('حفظ'), 300, scrollable: find.byType(Scrollable).first);
     expect(find.text('حفظ'), findsOneWidget);
 
+    await tester.scrollUntilVisible(find.widgetWithText(TextField, 'سعر Day use'), -300, scrollable: find.byType(Scrollable).first);
     await tester.enterText(find.widgetWithText(TextField, 'سعر Day use'), '350');
     await tester.pump();
     await tester.scrollUntilVisible(find.text('حفظ'), 300, scrollable: find.byType(Scrollable).first);

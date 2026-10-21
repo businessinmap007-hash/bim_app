@@ -68,6 +68,9 @@ class DiscoveredUnit {
   /// what this room carries that is already inside its price («إطلالة على المسبح») — the hotel ticked it on the room
   final List<String> features;
 
+  /// «أسعار للمصريين والمقيمين فقط»: `all`, `locals` or `foreigners`.
+  final String guestScope;
+
   const DiscoveredUnit({
     required this.id,
     this.code,
@@ -84,6 +87,7 @@ class DiscoveredUnit {
     this.reason,
     this.dayUse,
     this.features = const [],
+    this.guestScope = 'all',
   });
 
   String get displayTitle => (title != null && title!.isNotEmpty) ? title! : (label ?? code ?? '#$id');
@@ -105,6 +109,7 @@ class DiscoveredUnit {
     periodUnit: json['period_unit'] as String?,
     available: json['available'] as bool?,
     reason: json['reason'] as String?,
+    guestScope: json['guest_scope'] as String? ?? 'all',
     dayUse: json['day_use'] is Map<String, dynamic> ? DayUseOffer.fromJson(json['day_use'] as Map<String, dynamic>) : null,
     features: (json['modifiers'] as List<dynamic>? ?? [])
         .map((e) => (e as Map<String, dynamic>)['name'] as String?)
@@ -221,6 +226,7 @@ class PartnerRoom {
   final int availableQuantity;
   final bool available;
   final String? reason;
+  final String guestScope;
 
   const PartnerRoom({
     required this.allocationId,
@@ -239,6 +245,7 @@ class PartnerRoom {
     this.availableQuantity = 0,
     this.available = true,
     this.reason,
+    this.guestScope = 'all',
   });
 
   factory PartnerRoom.fromJson(Map<String, dynamic> json) => PartnerRoom(
@@ -260,6 +267,7 @@ class PartnerRoom {
     availableQuantity: (json['available_quantity'] as num?)?.toInt() ?? 0,
     available: json['available'] as bool? ?? true,
     reason: json['reason'] as String?,
+    guestScope: json['guest_scope'] as String? ?? 'all',
   );
 }
 

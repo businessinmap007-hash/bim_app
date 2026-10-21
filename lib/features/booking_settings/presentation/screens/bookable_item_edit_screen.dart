@@ -171,6 +171,7 @@ class _EditorState extends ConsumerState<_Editor> {
   late final TextEditingController _weeklyDiscount;
   late final TextEditingController _monthlyDiscount;
   late String _status;
+  late String _guestScope;
   DayUseSettings _dayUse = const DayUseSettings();
   bool _dayUseLoaded = false;
   List<UnitFeature> _features = const [];
@@ -187,6 +188,7 @@ class _EditorState extends ConsumerState<_Editor> {
     _capacity.text.trim(),
     _quantity.text.trim(),
     _status,
+    _guestScope,
     _weeklyDiscount.text.trim(),
     _monthlyDiscount.text.trim(),
     _dayUse.enabled,
@@ -205,6 +207,7 @@ class _EditorState extends ConsumerState<_Editor> {
     _capacity = TextEditingController(text: widget.row.capacity?.toString() ?? '');
     _quantity = TextEditingController(text: widget.row.quantity.toString());
     _status = widget.row.status;
+    _guestScope = widget.row.guestScope;
     _weeklyDiscount = TextEditingController(text: _percent(widget.row.weeklyDiscount));
     _monthlyDiscount = TextEditingController(text: _percent(widget.row.monthlyDiscount));
     for (final c in [_description, _capacity, _quantity, _dayUsePrice, _weeklyDiscount, _monthlyDiscount]) {
@@ -275,6 +278,7 @@ class _EditorState extends ConsumerState<_Editor> {
             capacity: int.tryParse(_capacity.text.trim()),
             quantity: int.tryParse(_quantity.text.trim()),
             status: _status,
+            guestScope: _isStay ? _guestScope : null,
           );
       if (_isStay) {
         await ref.read(bookingSettingsApiProvider).saveStayDiscounts(
@@ -404,6 +408,20 @@ class _EditorState extends ConsumerState<_Editor> {
             ],
             onChanged: (value) => setState(() => _status = value ?? _status),
           ),
+          // «أسعار للمصريين والمقيمين فقط»: a hotel sells the same rooms at a local rate and a tourist rate, as two room types
+          if (_isStay) ...[
+            const SizedBox(height: 12),
+            DropdownButtonFormField<String>(
+              initialValue: _guestScope,
+              decoration: InputDecoration(labelText: l10n.guestScopeLabel, helperText: l10n.guestScopeHelp),
+              items: [
+                DropdownMenuItem(value: 'all', child: Text(l10n.guestScopeAll)),
+                DropdownMenuItem(value: 'locals', child: Text(l10n.guestScopeLocals)),
+                DropdownMenuItem(value: 'foreigners', child: Text(l10n.guestScopeForeigners)),
+              ],
+              onChanged: (value) => setState(() => _guestScope = value ?? _guestScope),
+            ),
+          ],
           if (_error != null) ...[
             const SizedBox(height: 12),
             Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),

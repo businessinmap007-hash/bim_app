@@ -92,7 +92,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('استقبال الثامنة صباحًا'), findsOneWidget);
-    expect(find.text('الغرفة لم تعد متاحة'), findsOneWidget);
+    expect(find.text('هذا العرض متوقف حاليًا'), findsOneWidget);
     expect(find.text('احجز هذه الغرفة'), findsNothing);
   });
 }

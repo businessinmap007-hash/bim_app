@@ -27,6 +27,7 @@ class PartnerRoomsSection extends StatelessWidget {
     features: r.features,
     price: r.price,
     currency: r.currency,
+    guestScope: r.guestScope,
   );
 
   @override
@@ -75,6 +76,7 @@ class PartnerRoomsSection extends StatelessWidget {
                             children: [
                               Text(r.label, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
                               if ((r.fromName ?? '').isNotEmpty) Text(l10n.pshFromHotel(r.fromName!), style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+                              if (r.guestScope != 'all') Text(r.guestScope == 'locals' ? l10n.guestScopeLocals : l10n.guestScopeForeigners, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.primary, fontWeight: FontWeight.w700)),
                               if (r.features.isNotEmpty) Text(r.features.join(' · '), style: theme.textTheme.bodySmall, maxLines: 2, overflow: TextOverflow.ellipsis),
                               const SizedBox(height: 4),
                               Row(
@@ -122,13 +124,14 @@ void openPartnerRoomBooking(
   List<String> features = const [],
   required double price,
   String currency = 'EGP',
+  String guestScope = 'all',
 }) {
   Navigator.of(context).push(
     MaterialPageRoute(
       builder: (_) => BookingScreen(
         businessId: businessId,
         shape: shape,
-        initialUnit: DiscoveredUnit(id: unitId, label: label, capacity: capacity, images: images, price: price, features: features),
+        initialUnit: DiscoveredUnit(id: unitId, label: label, capacity: capacity, images: images, price: price, features: features, guestScope: guestScope),
         offering: OfferingItem(
           id: 0,
           source: 'price',

@@ -12501,5 +12501,80 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tripSoldOut => 'Sold out';
 
   @override
-  String get tripRoomGone => 'This room is no longer available';
+  String get tripRoomGone => 'This offer is currently stopped';
+
+  @override
+  String get guestScopeLabel => 'Who is this room sold to?';
+
+  @override
+  String get guestScopeHelp =>
+      'For a local and a tourist rate make a room type for each. Proof is asked on arrival.';
+
+  @override
+  String get guestScopeAll => 'Everyone';
+
+  @override
+  String get guestScopeLocals => 'Egyptians and residents only';
+
+  @override
+  String get guestScopeForeigners => 'Foreigners only';
+
+  @override
+  String get guestScopeConfirmRequired => 'Tick the box above to continue';
+
+  @override
+  String get guestScopeConfirmLocals =>
+      'I confirm I am an Egyptian or a resident of Egypt and will show proof on arrival';
+
+  @override
+  String get guestScopeConfirmForeigners =>
+      'I confirm I am a foreigner and will show my passport on arrival';
+
+  @override
+  String get boardTitle => 'Rooms board';
+
+  @override
+  String get boardEmpty =>
+      'No room types yet. Add them in the booking settings and they appear here.';
+
+  @override
+  String get boardFree => 'Free';
+
+  @override
+  String get boardPartly => 'Partly taken';
+
+  @override
+  String get boardFull => 'Full';
+
+  @override
+  String get boardViaPartner => 'Sold through a partner';
+
+  @override
+  String boardStock(int n) {
+    return '$n rooms';
+  }
+
+  @override
+  String boardHeld(int n) {
+    return '$n held for partners and not sold yet';
+  }
+
+  @override
+  String boardSoldBy(String name) {
+    return 'Sold by $name';
+  }
+
+  @override
+  String get boardDirect => 'Direct booking';
+
+  @override
+  String boardRoomNumber(String n) {
+    return 'Room $n';
+  }
+
+  @override
+  String get boardCheckLocal => 'Check the Egyptian ID or residence';
+
+  @override
+  String get boardCheckForeign => 'Check the passport';
 }
