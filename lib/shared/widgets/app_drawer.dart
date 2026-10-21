@@ -9,9 +9,7 @@ import '../../features/auth/application/auth_controller.dart';
 import '../../features/business_groups/presentation/screens/business_groups_screen.dart';
 import '../../features/contact_groups/presentation/screens/contact_groups_screen.dart';
 import '../../features/jobs/presentation/screens/jobs_screen.dart';
-import '../../features/offers/presentation/screens/my_offer_follows_screen.dart';
 import '../../features/menu_search/presentation/screens/menu_search_screen.dart';
-import '../../features/offers/presentation/screens/offers_screen.dart';
 import '../../features/posts/presentation/screens/my_follows_screen.dart';
 import '../../features/posts/presentation/screens/my_jobs_screen.dart';
 import '../../features/medical_file/presentation/screens/medical_file_screen.dart';
@@ -265,29 +263,6 @@ class _AppDrawerContent extends ConsumerWidget {
                     );
                   },
                 ),
-                ListTile(
-                  leading: const Icon(Icons.local_offer_outlined),
-                  title: Text(l10n.offersTitle),
-                  onTap: () {
-                    close();
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const OffersScreen()),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.notifications_none),
-                  title: Text(l10n.myOfferFollowsTitle),
-                  onTap: () {
-                    close();
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => const MyOfferFollowsScreen(),
-                      ),
-                    );
-                  },
-                ),
-
                 if (isBusiness) ...[
                   _SectionHeader(l10n.settingsServicesSection),
                   ListTile(

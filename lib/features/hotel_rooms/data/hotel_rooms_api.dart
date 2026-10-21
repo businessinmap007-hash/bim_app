@@ -109,15 +109,17 @@ class HotelRoomFilters {
 
 /// A partner company's offer on the same room, beside the hotel's own price.
 class PartnerOffer {
-  final int offerId;
+  final int allocationId;
+  final int sellerId;
   final String? sellerName;
   final double price;
   final int? availableQuantity;
 
-  const PartnerOffer({required this.offerId, required this.price, this.sellerName, this.availableQuantity});
+  const PartnerOffer({required this.allocationId, required this.sellerId, required this.price, this.sellerName, this.availableQuantity});
 
   factory PartnerOffer.fromJson(Map<String, dynamic> json) => PartnerOffer(
-    offerId: (json['offer_id'] as num).toInt(),
+    allocationId: (json['allocation_id'] as num).toInt(),
+    sellerId: ((json['seller'] as Map<String, dynamic>?)?['id'] as num?)?.toInt() ?? 0,
     sellerName: (json['seller'] as Map<String, dynamic>?)?['name'] as String?,
     price: (json['price'] as num?)?.toDouble() ?? 0,
     availableQuantity: (json['available_quantity'] as num?)?.toInt(),

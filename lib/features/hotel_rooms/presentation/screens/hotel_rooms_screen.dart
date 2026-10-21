@@ -8,7 +8,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../booking/data/models/unit_discovery.dart';
 import '../../../booking/presentation/screens/booking_screen.dart';
 import '../../../business/data/models/offering_item.dart';
-import '../../../offers/presentation/screens/offer_detail_screen.dart';
+import '../../../business/presentation/screens/business_detail_screen.dart';
 import '../../application/hotel_rooms_providers.dart';
 import '../../data/hotel_rooms_api.dart';
 
@@ -225,7 +225,7 @@ class _RoomCard extends StatelessWidget {
                 Text(l10n.hotelRoomsOtherPrices, style: theme.textTheme.labelMedium),
                 for (final o in room.partnerOffers)
                   InkWell(
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => OfferDetailScreen(offerId: o.offerId))),
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => BusinessDetailScreen(businessId: o.sellerId))),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       child: Row(

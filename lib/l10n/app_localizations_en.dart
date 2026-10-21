@@ -12046,12 +12046,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get promoWayAmount => 'Amount off';
 
   @override
-  String get promoWayBuyTop => 'Buy several, pay the dearest';
-
-  @override
-  String get promoWayBuyFree => 'Buy and get pieces free';
-
-  @override
   String get promoWaySpend => 'Discount above a minimum order';
 
   @override
@@ -12059,19 +12053,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get promoValueAmount => 'Discount amount (EGP)';
-
-  @override
-  String get promoBuyQty => 'Buy how many pieces';
-
-  @override
-  String get promoFreeQty => 'And get how many free';
-
-  @override
-  String get promoBuyTopHint =>
-      'In every group of that many, the customer pays only for the dearest piece.';
-
-  @override
-  String get promoBuyFreeHint => 'The cheapest pieces of every group are free.';
 
   @override
   String get promoMinTotal => 'Minimum order (EGP)';
@@ -12121,16 +12102,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String promoBuyNPayTop(int n) {
-    return 'Buy $n, pay the dearest';
-  }
-
-  @override
-  String promoBuyGetFree(int pay, int free) {
-    return 'Buy $pay, get $free free';
-  }
-
-  @override
   String promoSpend(String min, String value) {
     return 'Spend $min EGP or more, get $value% off';
   }
@@ -12163,5 +12134,42 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String promoNotYetDiscounted(String names) {
     return 'Not discounted yet because its price rose recently: $names';
+  }
+
+  @override
+  String get promoWayBuyGet => 'Buy … get …';
+
+  @override
+  String get promoBuyPay => 'Buy (pieces paid for)';
+
+  @override
+  String get promoGetTake => 'Get (pieces taken)';
+
+  @override
+  String promoBuyGet(int pay, int take) {
+    return 'Buy $pay, get $take';
+  }
+
+  @override
+  String promoBuyGetSentence(int pay, int take, int free) {
+    return 'You pay for $pay and take $take; $free are free';
+  }
+
+  @override
+  String get promoBuyGetInvalid =>
+      'The second number must be larger than the first (up to 20 pieces).';
+
+  @override
+  String get promoSameItemOnly => 'The same item only';
+
+  @override
+  String get promoMaxGroups => 'Most times in one order (optional)';
+
+  @override
+  String get promoRulesTitle => 'The real-discount rule';
+
+  @override
+  String promoRulesBody(String percent, int days) {
+    return 'An item whose price rose by more than $percent% within the last $days days is not discounted, so the discount is never fake. Its discount starts by itself when the period passes, and you are told the day when you save the offer.';
   }
 }

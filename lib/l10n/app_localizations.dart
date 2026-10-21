@@ -21535,18 +21535,6 @@ abstract class AppLocalizations {
   /// **'مبلغ خصم'**
   String get promoWayAmount;
 
-  /// No description provided for @promoWayBuyTop.
-  ///
-  /// In ar, this message translates to:
-  /// **'اشترِ عدة قطع بسعر الأغلى'**
-  String get promoWayBuyTop;
-
-  /// No description provided for @promoWayBuyFree.
-  ///
-  /// In ar, this message translates to:
-  /// **'اشترِ واحصل على قطع مجانًا'**
-  String get promoWayBuyFree;
-
   /// No description provided for @promoWaySpend.
   ///
   /// In ar, this message translates to:
@@ -21564,30 +21552,6 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'مبلغ الخصم (جنيه)'**
   String get promoValueAmount;
-
-  /// No description provided for @promoBuyQty.
-  ///
-  /// In ar, this message translates to:
-  /// **'اشترِ كم قطعة'**
-  String get promoBuyQty;
-
-  /// No description provided for @promoFreeQty.
-  ///
-  /// In ar, this message translates to:
-  /// **'وتحصل على كم قطعة مجانًا'**
-  String get promoFreeQty;
-
-  /// No description provided for @promoBuyTopHint.
-  ///
-  /// In ar, this message translates to:
-  /// **'من كل مجموعة بهذا العدد، يدفع العميل ثمن أغلى قطعة فقط.'**
-  String get promoBuyTopHint;
-
-  /// No description provided for @promoBuyFreeHint.
-  ///
-  /// In ar, this message translates to:
-  /// **'القطع الأرخص من كل مجموعة تصبح مجانية.'**
-  String get promoBuyFreeHint;
 
   /// No description provided for @promoMinTotal.
   ///
@@ -21673,18 +21637,6 @@ abstract class AppLocalizations {
   /// **'خصم {value} جنيه'**
   String promoAmount(String value);
 
-  /// No description provided for @promoBuyNPayTop.
-  ///
-  /// In ar, this message translates to:
-  /// **'اشترِ {n} وادفع ثمن الأغلى'**
-  String promoBuyNPayTop(int n);
-
-  /// No description provided for @promoBuyGetFree.
-  ///
-  /// In ar, this message translates to:
-  /// **'اشترِ {pay} واحصل على {free} مجانًا'**
-  String promoBuyGetFree(int pay, int free);
-
   /// No description provided for @promoSpend.
   ///
   /// In ar, this message translates to:
@@ -21726,6 +21678,66 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لم يُخصم بعد لأن سعره ارتفع أخيرًا: {names}'**
   String promoNotYetDiscounted(String names);
+
+  /// No description provided for @promoWayBuyGet.
+  ///
+  /// In ar, this message translates to:
+  /// **'اشترِ … واحصل على …'**
+  String get promoWayBuyGet;
+
+  /// No description provided for @promoBuyPay.
+  ///
+  /// In ar, this message translates to:
+  /// **'اشترِ (تدفع ثمن كم قطعة)'**
+  String get promoBuyPay;
+
+  /// No description provided for @promoGetTake.
+  ///
+  /// In ar, this message translates to:
+  /// **'واحصل على (كم قطعة تأخذ)'**
+  String get promoGetTake;
+
+  /// No description provided for @promoBuyGet.
+  ///
+  /// In ar, this message translates to:
+  /// **'اشترِ {pay} واحصل على {take}'**
+  String promoBuyGet(int pay, int take);
+
+  /// No description provided for @promoBuyGetSentence.
+  ///
+  /// In ar, this message translates to:
+  /// **'تدفع ثمن {pay} وتأخذ {take}، والمجاني {free}'**
+  String promoBuyGetSentence(int pay, int take, int free);
+
+  /// No description provided for @promoBuyGetInvalid.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب الرقم الثاني أكبر من الأول (حتى 20 قطعة).'**
+  String get promoBuyGetInvalid;
+
+  /// No description provided for @promoSameItemOnly.
+  ///
+  /// In ar, this message translates to:
+  /// **'نفس الصنف فقط'**
+  String get promoSameItemOnly;
+
+  /// No description provided for @promoMaxGroups.
+  ///
+  /// In ar, this message translates to:
+  /// **'أقصى عدد مرات في الطلب (اختياري)'**
+  String get promoMaxGroups;
+
+  /// No description provided for @promoRulesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'قاعدة الخصم الحقيقي'**
+  String get promoRulesTitle;
+
+  /// No description provided for @promoRulesBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يُخصم صنف ارتفع سعره بأكثر من {percent}٪ خلال آخر {days} يومًا، حتى لا يكون الخصم وهميًا. يبدأ خصمه تلقائيًا بعد انقضاء المدة، وتُخبَر باليوم عند حفظ العرض.'**
+  String promoRulesBody(String percent, int days);
 }
 
 class _AppLocalizationsDelegate

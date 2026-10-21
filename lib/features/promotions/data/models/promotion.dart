@@ -1,6 +1,35 @@
 /// «العروض والخصومات» — mirrors Api\V2\PromotionController / PromotionService::serialize().
 library;
 
+/// «قاعدة الخصم الحقيقي»: an item whose price rose by more than [tolerancePercent] within [quietDays] days is not discounted yet.
+class PromotionRules {
+  final int quietDays;
+  final double tolerancePercent;
+
+  const PromotionRules({this.quietDays = 15, this.tolerancePercent = 5});
+
+  factory PromotionRules.fromJson(Map<String, dynamic> json) => PromotionRules(
+    quietDays: (json['quiet_days'] as num?)?.toInt() ?? 15,
+    tolerancePercent: (json['rise_tolerance_percent'] as num?)?.toDouble() ?? 5,
+  );
+}
+
+/// An item a promotion covers that is not discounted yet, and the day it will be.
+class NotYetDiscounted {
+  final String name;
+  final String? eligibleFrom;
+
+  const NotYetDiscounted({required this.name, this.eligibleFrom});
+}
+
+/// My promotions with the rule that explains why an item may be left out.
+class MyPromotions {
+  final List<Promotion> promotions;
+  final PromotionRules rules;
+
+  const MyPromotions({required this.promotions, this.rules = const PromotionRules()});
+}
+
 class PromotionKind {
   static const percent = 'percent';
   static const amount = 'amount';

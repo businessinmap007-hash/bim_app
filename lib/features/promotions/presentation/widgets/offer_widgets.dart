@@ -17,9 +17,7 @@ String promotionSummary(AppLocalizations l10n, String kind, double Function(Stri
     case PromotionKind.amount:
       return l10n.promoAmount(_num(param('value')));
     case PromotionKind.nForPriceOf:
-      final n = param('n').round();
-      final pay = param('pay').round();
-      return pay <= 1 ? l10n.promoBuyNPayTop(n) : l10n.promoBuyGetFree(pay, n - pay);
+      return l10n.promoBuyGet(param('pay').round(), param('n').round());
     case PromotionKind.spendPercent:
       return l10n.promoSpend(_num(param('min_total')), _num(param('value')));
   }
@@ -106,6 +104,7 @@ class PromotionCard extends StatelessWidget {
                 spacing: 12,
                 children: [
                   if (p.forNewCustomers) Text(l10n.promoFirstOrder, style: theme.textTheme.bodySmall),
+                  if (p.params['same_item'] == true) Text(l10n.promoSameItemOnly, style: theme.textTheme.bodySmall),
                   if (p.endsAt != null) Text(l10n.promoEndsOn(LocalFormat.date(context).format(p.endsAt!)), style: theme.textTheme.bodySmall),
                   if (p.remainingUses != null) Text(l10n.promoUsesLeft(p.remainingUses!), style: theme.textTheme.bodySmall),
                 ],

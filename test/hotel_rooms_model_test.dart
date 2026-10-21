@@ -24,7 +24,7 @@ void main() {
         'currency': 'EGP',
         'partner_offers': [
           {
-            'offer_id': 9,
+            'allocation_id': 9,
             'seller': {'id': 7, 'name': 'وكالة السفر'},
             'price': 1650,
             'available_quantity': 3,
@@ -49,7 +49,7 @@ void main() {
         'room': {'unit_id': 1, 'name': 'r'},
         'price': 1000,
         'partner_offers': [
-          {'offer_id': 1, 'price': 1200},
+          {'allocation_id': 1, 'price': 1200},
         ],
       });
 

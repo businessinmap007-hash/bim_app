@@ -7,9 +7,9 @@ import '../../../../l10n/app_localizations.dart';
 import '../../application/promotions_providers.dart';
 import '../../data/models/promotion.dart';
 
-/// Which of the five ways a promotion can discount, as the merchant picks it. «اشترِ ٣ وادفع ثمن الأغلى» and «اشترِ ٢ واحصل على ١ مجانًا»
-/// are the same rule (`n_for_price_of`) written two ways.
-enum _Way { percent, amount, buyTop, buyFree, spend }
+/// The four ways a promotion can discount, as the merchant picks it. «اشترِ [..] واحصل على [..]» is ONE way with two typed numbers:
+/// he pays for the first and takes the second (the cheapest pieces of every group are free).
+enum _Way { percent, amount, buyGet, spend }
 
 /// «العروض والخصومات»: three steps on one page — what it covers (the whole shop, a whole section, or some products), what it does,
 /// and when and for whom.
@@ -28,8 +28,10 @@ class _PromotionFormScreenState extends ConsumerState<PromotionFormScreen> {
   final Set<String> _items = {};
   _Way _way = _Way.percent;
   final _value = TextEditingController();
-  final _n = TextEditingController(text: '3');
-  final _free = TextEditingController(text: '1');
+  final _pay = TextEditingController(text: '2');
+  final _take = TextEditingController(text: '3');
+  final _maxGroups = TextEditingController();
+  bool _sameItem = false;
   final _minTotal = TextEditingController();
   final _maxUses = TextEditingController();
   final _title = TextEditingController();
@@ -62,16 +64,11 @@ class _PromotionFormScreenState extends ConsumerState<PromotionFormScreen> {
         _way = _Way.amount;
         _value.text = _fmt(p.param('value'));
       case PromotionKind.nForPriceOf:
-        final n = p.param('n').round();
-        final pay = p.param('pay').round();
-        if (pay <= 1) {
-          _way = _Way.buyTop;
-          _n.text = '$n';
-        } else {
-          _way = _Way.buyFree;
-          _n.text = '$pay';
-          _free.text = '${n - pay}';
-        }
+        _way = _Way.buyGet;
+        _pay.text = '${p.param('pay').round()}';
+        _take.text = '${p.param('n').round()}';
+        _sameItem = p.params['same_item'] == true;
+        if (p.param('max_groups') > 0) _maxGroups.text = '${p.param('max_groups').round()}';
       case PromotionKind.spendPercent:
         _way = _Way.spend;
         _minTotal.text = _fmt(p.param('min_total'));
@@ -87,7 +84,7 @@ class _PromotionFormScreenState extends ConsumerState<PromotionFormScreen> {
 
   @override
   void dispose() {
-    for (final c in [_value, _n, _free, _minTotal, _maxUses, _title]) {
+    for (final c in [_value, _pay, _take, _maxGroups, _minTotal, _maxUses, _title]) {
       c.dispose();
     }
     super.dispose();
@@ -106,17 +103,19 @@ class _PromotionFormScreenState extends ConsumerState<PromotionFormScreen> {
     ];
   }
 
-  (String, Map<String, num>) _rule() {
+  (String, Map<String, Object>) _rule() {
     switch (_way) {
       case _Way.percent:
         return (PromotionKind.percent, {'value': _read(_value)});
       case _Way.amount:
         return (PromotionKind.amount, {'value': _read(_value)});
-      case _Way.buyTop:
-        return (PromotionKind.nForPriceOf, {'n': _read(_n).round(), 'pay': 1});
-      case _Way.buyFree:
-        final pay = _read(_n).round();
-        return (PromotionKind.nForPriceOf, {'n': pay + _read(_free).round(), 'pay': pay});
+      case _Way.buyGet:
+        return (PromotionKind.nForPriceOf, {
+          'n': _read(_take).round(),
+          'pay': _read(_pay).round(),
+          if (_sameItem) 'same_item': true,
+          if (_maxGroups.text.trim().isNotEmpty) 'max_groups': _read(_maxGroups).round(),
+        });
       case _Way.spend:
         return (PromotionKind.spendPercent, {'min_total': _read(_minTotal), 'value': _read(_value)});
     }
@@ -161,7 +160,9 @@ class _PromotionFormScreenState extends ConsumerState<PromotionFormScreen> {
 
       ref.invalidate(myPromotionsProvider);
       if (!mounted) return;
-      if (notYet.isNotEmpty) messenger.showSnackBar(SnackBar(content: Text(l10n.promoNotYetDiscounted(notYet.take(3).join('، ')))));
+      if (notYet.isNotEmpty) {
+        messenger.showSnackBar(SnackBar(content: Text(l10n.promoNotYetDiscounted(notYet.take(3).map((n) => n.eligibleFrom == null ? n.name : '${n.name} (${n.eligibleFrom})').join('، ')))));
+      }
       Navigator.of(context).pop(true);
     } catch (e) {
       messenger.showSnackBar(SnackBar(content: Text(e is ApiException && e.message.isNotEmpty ? e.message : l10n.commonSomethingWentWrong)));
@@ -206,8 +207,7 @@ class _PromotionFormScreenState extends ConsumerState<PromotionFormScreen> {
               for (final (way, label) in [
                 (_Way.percent, l10n.promoWayPercent),
                 (_Way.amount, l10n.promoWayAmount),
-                (_Way.buyTop, l10n.promoWayBuyTop),
-                (_Way.buyFree, l10n.promoWayBuyFree),
+                (_Way.buyGet, l10n.promoWayBuyGet),
                 (_Way.spend, l10n.promoWaySpend),
               ])
                 ChoiceChip(label: Text(label), selected: _way == way, onSelected: (_) => setState(() => _way = way)),
@@ -243,13 +243,36 @@ class _PromotionFormScreenState extends ConsumerState<PromotionFormScreen> {
         return [TextField(controller: _value, keyboardType: TextInputType.number, decoration: d(l10n.promoValuePercent))];
       case _Way.amount:
         return [TextField(controller: _value, keyboardType: TextInputType.number, decoration: d(l10n.promoValueAmount))];
-      case _Way.buyTop:
-        return [TextField(controller: _n, keyboardType: TextInputType.number, decoration: d(l10n.promoBuyQty)), Text(l10n.promoBuyTopHint, style: Theme.of(context).textTheme.bodySmall)];
-      case _Way.buyFree:
+      case _Way.buyGet:
+        final pay = _read(_pay).round();
+        final take = _read(_take).round();
+        final valid = pay >= 1 && take > pay && take <= 20;
+
         return [
-          TextField(controller: _n, keyboardType: TextInputType.number, decoration: d(l10n.promoBuyQty)),
-          TextField(controller: _free, keyboardType: TextInputType.number, decoration: d(l10n.promoFreeQty)),
-          Text(l10n.promoBuyFreeHint, style: Theme.of(context).textTheme.bodySmall),
+          // «اشترِ ١ واحصل على ٣» … «اشترِ ٤ واحصل على ٨»: the numbers the shops use, one tap
+          Wrap(
+            spacing: 8,
+            children: [
+              for (final (p, t) in [(1, 3), (2, 3), (2, 6), (4, 8)])
+                ActionChip(label: Text(l10n.promoBuyGet(p, t)), onPressed: () => setState(() { _pay.text = '$p'; _take.text = '$t'; })),
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(child: TextField(controller: _pay, keyboardType: TextInputType.number, onChanged: (_) => setState(() {}), decoration: d(l10n.promoBuyPay))),
+              const SizedBox(width: 12),
+              Expanded(child: TextField(controller: _take, keyboardType: TextInputType.number, onChanged: (_) => setState(() {}), decoration: d(l10n.promoGetTake))),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6),
+            child: Text(
+              valid ? l10n.promoBuyGetSentence(pay, take, take - pay) : l10n.promoBuyGetInvalid,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700),
+            ),
+          ),
+          SwitchListTile(contentPadding: EdgeInsets.zero, value: _sameItem, onChanged: (v) => setState(() => _sameItem = v), title: Text(l10n.promoSameItemOnly)),
+          TextField(controller: _maxGroups, keyboardType: TextInputType.number, decoration: d(l10n.promoMaxGroups)),
         ];
       case _Way.spend:
         return [

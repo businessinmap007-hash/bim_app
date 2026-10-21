@@ -11952,12 +11952,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get promoWayAmount => 'مبلغ خصم';
 
   @override
-  String get promoWayBuyTop => 'اشترِ عدة قطع بسعر الأغلى';
-
-  @override
-  String get promoWayBuyFree => 'اشترِ واحصل على قطع مجانًا';
-
-  @override
   String get promoWaySpend => 'خصم عند حد أدنى للطلب';
 
   @override
@@ -11965,19 +11959,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get promoValueAmount => 'مبلغ الخصم (جنيه)';
-
-  @override
-  String get promoBuyQty => 'اشترِ كم قطعة';
-
-  @override
-  String get promoFreeQty => 'وتحصل على كم قطعة مجانًا';
-
-  @override
-  String get promoBuyTopHint =>
-      'من كل مجموعة بهذا العدد، يدفع العميل ثمن أغلى قطعة فقط.';
-
-  @override
-  String get promoBuyFreeHint => 'القطع الأرخص من كل مجموعة تصبح مجانية.';
 
   @override
   String get promoMinTotal => 'الحد الأدنى للطلب (جنيه)';
@@ -12026,16 +12007,6 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String promoBuyNPayTop(int n) {
-    return 'اشترِ $n وادفع ثمن الأغلى';
-  }
-
-  @override
-  String promoBuyGetFree(int pay, int free) {
-    return 'اشترِ $pay واحصل على $free مجانًا';
-  }
-
-  @override
   String promoSpend(String min, String value) {
     return 'اشترِ بـ $min جنيه فأكثر واحصل على خصم $value٪';
   }
@@ -12068,5 +12039,42 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String promoNotYetDiscounted(String names) {
     return 'لم يُخصم بعد لأن سعره ارتفع أخيرًا: $names';
+  }
+
+  @override
+  String get promoWayBuyGet => 'اشترِ … واحصل على …';
+
+  @override
+  String get promoBuyPay => 'اشترِ (تدفع ثمن كم قطعة)';
+
+  @override
+  String get promoGetTake => 'واحصل على (كم قطعة تأخذ)';
+
+  @override
+  String promoBuyGet(int pay, int take) {
+    return 'اشترِ $pay واحصل على $take';
+  }
+
+  @override
+  String promoBuyGetSentence(int pay, int take, int free) {
+    return 'تدفع ثمن $pay وتأخذ $take، والمجاني $free';
+  }
+
+  @override
+  String get promoBuyGetInvalid =>
+      'اكتب الرقم الثاني أكبر من الأول (حتى 20 قطعة).';
+
+  @override
+  String get promoSameItemOnly => 'نفس الصنف فقط';
+
+  @override
+  String get promoMaxGroups => 'أقصى عدد مرات في الطلب (اختياري)';
+
+  @override
+  String get promoRulesTitle => 'قاعدة الخصم الحقيقي';
+
+  @override
+  String promoRulesBody(String percent, int days) {
+    return 'لا يُخصم صنف ارتفع سعره بأكثر من $percent٪ خلال آخر $days يومًا، حتى لا يكون الخصم وهميًا. يبدأ خصمه تلقائيًا بعد انقضاء المدة، وتُخبَر باليوم عند حفظ العرض.';
   }
 }

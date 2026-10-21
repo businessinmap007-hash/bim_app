@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:bim_app/features/business/data/models/menu_item_summary.dart';
 import 'package:bim_app/features/promotions/data/models/promotion.dart';
+import 'package:bim_app/features/promotions/application/promotions_providers.dart';
+import 'package:bim_app/features/promotions/presentation/screens/promotion_form_screen.dart';
 import 'package:bim_app/features/promotions/presentation/widgets/offer_widgets.dart';
 import 'package:bim_app/l10n/app_localizations.dart';
 
@@ -67,9 +70,35 @@ void main() {
 
     await tester.pumpWidget(_wrap(const PriceWithOffer(label: '100', offer: ItemOffer(promotionId: 2, kind: 'n_for_price_of', params: {'n': 3, 'pay': 1}))));
     expect(find.text('100'), findsOneWidget);
-    expect(find.text('Buy 3, pay the dearest'), findsOneWidget);
+    expect(find.text('Buy 1, get 3'), findsOneWidget);
 
     await tester.pumpWidget(_wrap(const PriceWithOffer(label: '100')));
     expect(find.text('100'), findsOneWidget);
+  });
+
+  testWidgets('«Buy … get …» is one way: the merchant types the two numbers and reads the sentence', (tester) async {
+    tester.view.physicalSize = const Size(900, 2400);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [promotionCatalogProvider.overrideWith((ref) async => const PromotionCatalog())],
+        child: _wrap(const PromotionFormScreen()),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Buy … get …'));
+    await tester.pumpAndSettle();
+    expect(find.text('You pay for 2 and take 3; 1 are free'), findsOneWidget);
+
+    await tester.tap(find.text('Buy 4, get 8'));
+    await tester.pumpAndSettle();
+    expect(find.text('You pay for 4 and take 8; 4 are free'), findsOneWidget);
+
+    await tester.enterText(find.widgetWithText(TextField, 'Get (pieces taken)'), '3');
+    await tester.pumpAndSettle();
+    expect(find.text('The second number must be larger than the first (up to 20 pieces).'), findsOneWidget);
   });
 }

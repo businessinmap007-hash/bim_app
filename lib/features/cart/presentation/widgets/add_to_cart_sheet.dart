@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../business/data/models/menu_item_summary.dart';
-import '../../../offers/presentation/screens/offer_comparison_screen.dart';
 import '../../application/cart_controller.dart';
 import '../../application/shared_cart_providers.dart';
 import '../screens/checkout_screen.dart';
@@ -196,25 +195,6 @@ class _AddToCartSheetState extends ConsumerState<_AddToCartSheet> {
                     item.description,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),
-                  ),
-                ),
-              // A bundle isn't tracked by the offer-performance system a
-              // single menu item is — nothing to compare against.
-              if (item.kind != 'bundle')
-                Align(
-                  alignment: Alignment.center,
-                  child: TextButton.icon(
-                    onPressed: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => OfferComparisonScreen(
-                          offerableType: 'menu_item',
-                          offerableId: item.id,
-                          itemTitle: item.name,
-                        ),
-                      ),
-                    ),
-                    icon: const Icon(Icons.compare_arrows, size: 18),
-                    label: Text(l10n.offerCompareButton),
                   ),
                 ),
               if (item.specs.isNotEmpty) ...[

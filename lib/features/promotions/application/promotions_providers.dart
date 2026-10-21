@@ -7,7 +7,7 @@ import '../data/promotions_api.dart';
 final promotionsApiProvider = Provider<PromotionsApi>((ref) => PromotionsApi(ref.watch(apiClientProvider)));
 
 /// My promotions (a business).
-final myPromotionsProvider = FutureProvider.autoDispose<List<Promotion>>((ref) => ref.watch(promotionsApiProvider).mine());
+final myPromotionsProvider = FutureProvider.autoDispose<MyPromotions>((ref) => ref.watch(promotionsApiProvider).mine());
 
 /// My products by section, to pick what a promotion covers.
 final promotionCatalogProvider = FutureProvider.autoDispose<PromotionCatalog>((ref) => ref.watch(promotionsApiProvider).catalog());

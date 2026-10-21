@@ -10,6 +10,37 @@ import 'promotion_form_screen.dart';
 
 /// «العروض والخصومات» of the business: its promotions, each running / paused / ended, with a button to write a new one. Open to
 /// every business — a clothes shop's products, a restaurant's menu, a salon's services.
+/// «لماذا لم يُخصم صنفي؟»: the rule against fake discounts, with its numbers, on the offers page itself.
+class _RulesCard extends StatelessWidget {
+  final PromotionRules rules;
+  final bool empty;
+
+  const _RulesCard({required this.rules, required this.empty});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
+    return Card(
+      margin: EdgeInsets.zero,
+      color: AppColors.accentGold.withValues(alpha: 0.10),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(children: [const Icon(Icons.verified_user_outlined, size: 18), const SizedBox(width: 6), Text(l10n.promoRulesTitle, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800))]),
+            const SizedBox(height: 4),
+            Text(l10n.promoRulesBody(rules.tolerancePercent.toStringAsFixed(rules.tolerancePercent == rules.tolerancePercent.roundToDouble() ? 0 : 1), rules.quietDays), style: theme.textTheme.bodySmall),
+            if (empty) ...[const SizedBox(height: 8), Text(l10n.promoEmpty, style: theme.textTheme.bodyMedium)],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class PromotionsScreen extends ConsumerWidget {
   const PromotionsScreen({super.key});
 
@@ -33,14 +64,13 @@ class PromotionsScreen extends ConsumerWidget {
       body: async.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (_, _) => Center(child: OutlinedButton(onPressed: () => ref.invalidate(myPromotionsProvider), child: Text(l10n.commonRetry))),
-        data: (list) => list.isEmpty
-            ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(l10n.promoEmpty, textAlign: TextAlign.center)))
-            : ListView.separated(
+        data: (data) => ListView.separated(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
-                itemCount: list.length,
+                itemCount: data.promotions.length + 1,
                 separatorBuilder: (_, _) => const SizedBox(height: 10),
                 itemBuilder: (context, i) {
-                  final p = list[i];
+                  if (i == 0) return _RulesCard(rules: data.rules, empty: data.promotions.isEmpty);
+                  final p = data.promotions[i - 1];
                   final (label, color) = p.isRunning
                       ? (l10n.promoRunning, AppColors.success)
                       : (!p.isActive ? (l10n.promoPaused, AppColors.warning) : (l10n.promoEnded, AppColors.error));
