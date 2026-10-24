@@ -156,8 +156,9 @@ class Allocation {
     markupValue: (json['markup_value'] as num?)?.toDouble() ?? 0,
     finalPrice: (json['final_price'] as num?)?.toDouble() ?? 0,
     currency: json['currency'] as String? ?? 'EGP',
-    startsAt: DateTime.tryParse(json['starts_at'] as String? ?? ''),
-    endsAt: DateTime.tryParse(json['ends_at'] as String? ?? ''),
+    // wall-clock nights of the stay («Y-m-d H:i:s»): read as they are, never shifted by an offset
+    startsAt: DateTime.tryParse((json['starts_at'] as String? ?? '').replaceFirst(' ', 'T')),
+    endsAt: DateTime.tryParse((json['ends_at'] as String? ?? '').replaceFirst(' ', 'T')),
     minNights: (json['min_nights'] as num?)?.toInt(),
     maxNights: (json['max_nights'] as num?)?.toInt(),
     releaseDaysBefore: (json['release_days_before'] as num?)?.toInt() ?? 0,

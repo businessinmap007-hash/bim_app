@@ -112,7 +112,11 @@ class _GrantAllocationScreenState extends ConsumerState<GrantAllocationScreen> {
                   for (final r in list)
                     Card(
                       margin: const EdgeInsets.only(bottom: 8),
-                      color: _room?.card.unitId == r.card.unitId ? theme.colorScheme.primaryContainer : null,
+                      // the chosen room is marked by its border; filling it with the dark container hid its own text
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: _room?.card.unitId == r.card.unitId ? BorderSide(color: theme.colorScheme.primary, width: 2.5) : BorderSide.none,
+                      ),
                       child: InkWell(
                         onTap: r.ungranted <= 0 ? null : () => setState(() => _room = r),
                         child: Opacity(
