@@ -68,7 +68,10 @@ class OccDealing {
   /// The company it is being booked through; null when it is the hotel's own booking screen.
   final String? seller;
 
-  const OccDealing({required this.startsAt, required this.endsAt, this.quantity = 1, this.minutesLeft = 0, this.seller});
+  /// The room NUMBER being dealt with (1001…), for the hotel's eyes only; null when the type has no listed rooms.
+  final String? room;
+
+  const OccDealing({required this.startsAt, required this.endsAt, this.quantity = 1, this.minutesLeft = 0, this.seller, this.room});
 
   bool holds(DateTime day) {
     final d = DateTime(day.year, day.month, day.day);
@@ -84,6 +87,7 @@ class OccDealing {
     quantity: (json['quantity'] as num?)?.toInt() ?? 1,
     minutesLeft: (json['minutes_left'] as num?)?.toInt() ?? 0,
     seller: json['seller'] as String?,
+    room: json['room'] as String?,
   );
 }
 

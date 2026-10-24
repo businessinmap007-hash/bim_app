@@ -167,6 +167,7 @@ class _EditorState extends ConsumerState<_Editor> {
   late final TextEditingController _description;
   late final TextEditingController _capacity;
   late final TextEditingController _quantity;
+  late final TextEditingController _reserve;
   final _dayUsePrice = TextEditingController();
   late final TextEditingController _weeklyDiscount;
   late final TextEditingController _monthlyDiscount;
@@ -187,6 +188,7 @@ class _EditorState extends ConsumerState<_Editor> {
     _description.text.trim(),
     _capacity.text.trim(),
     _quantity.text.trim(),
+    _reserve.text.trim(),
     _status,
     _guestScope,
     _weeklyDiscount.text.trim(),
@@ -206,11 +208,12 @@ class _EditorState extends ConsumerState<_Editor> {
     _description = TextEditingController(text: widget.row.description ?? '');
     _capacity = TextEditingController(text: widget.row.capacity?.toString() ?? '');
     _quantity = TextEditingController(text: widget.row.quantity.toString());
+    _reserve = TextEditingController(text: widget.row.reserveRooms == 0 ? '' : widget.row.reserveRooms.toString());
     _status = widget.row.status;
     _guestScope = widget.row.guestScope;
     _weeklyDiscount = TextEditingController(text: _percent(widget.row.weeklyDiscount));
     _monthlyDiscount = TextEditingController(text: _percent(widget.row.monthlyDiscount));
-    for (final c in [_description, _capacity, _quantity, _dayUsePrice, _weeklyDiscount, _monthlyDiscount]) {
+    for (final c in [_description, _capacity, _quantity, _reserve, _dayUsePrice, _weeklyDiscount, _monthlyDiscount]) {
       c.addListener(_refresh);
     }
     if (_isStay) {
@@ -230,6 +233,7 @@ class _EditorState extends ConsumerState<_Editor> {
     _description.dispose();
     _capacity.dispose();
     _quantity.dispose();
+    _reserve.dispose();
     _dayUsePrice.dispose();
     _weeklyDiscount.dispose();
     _monthlyDiscount.dispose();
@@ -279,6 +283,7 @@ class _EditorState extends ConsumerState<_Editor> {
             quantity: int.tryParse(_quantity.text.trim()),
             status: _status,
             guestScope: _isStay ? _guestScope : null,
+            reserveRooms: _isStay ? (int.tryParse(_reserve.text.trim()) ?? 0) : null,
           );
       if (_isStay) {
         await ref.read(bookingSettingsApiProvider).saveStayDiscounts(
@@ -408,6 +413,15 @@ class _EditorState extends ConsumerState<_Editor> {
             ],
             onChanged: (value) => setState(() => _status = value ?? _status),
           ),
+          // «غرف احتياطية للضغط»: a few rooms of the type only the hotel's own guests can take
+          if (_isStay) ...[
+            const SizedBox(height: 12),
+            TextField(
+              controller: _reserve,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: l10n.reserveRoomsLabel, helperText: l10n.reserveRoomsHelp),
+            ),
+          ],
           // «أسعار للمصريين والمقيمين فقط»: a hotel sells the same rooms at a local rate and a tourist rate, as two room types
           if (_isStay) ...[
             const SizedBox(height: 12),

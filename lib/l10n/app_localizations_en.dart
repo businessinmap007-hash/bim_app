@@ -12511,6 +12511,20 @@ class AppLocalizationsEn extends AppLocalizations {
       'For a local and a tourist rate make a room type for each. Proof is asked on arrival.';
 
   @override
+  String get reserveRoomsLabel => 'Rooms kept for peak';
+
+  @override
+  String get reserveRoomsHelp =>
+      'How many of this type only the hotel\'s own guests can take; partners cannot sell them';
+
+  @override
+  String get pshGuaranteedLabel => 'Guaranteed allotment';
+
+  @override
+  String get pshGuaranteedHelp =>
+      'On: the rooms are held for the partner alone. Off (default): the hotel and the partner sell the same stock at the same time';
+
+  @override
   String get guestScopeAll => 'Everyone';
 
   @override

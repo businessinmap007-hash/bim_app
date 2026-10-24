@@ -225,7 +225,10 @@ class _UnitMonth extends StatelessWidget {
                   contentPadding: EdgeInsets.zero,
                   leading: const Icon(Icons.timer_outlined),
                   title: Text(l10n.boardDealingNow(h.minutesLeft)),
-                  subtitle: Text(h.seller == null ? l10n.boardDealingHotel : l10n.boardDealingVia(h.seller!)),
+                  subtitle: Text([
+                    h.seller == null ? l10n.boardDealingHotel : l10n.boardDealingVia(h.seller!),
+                    if ((h.room ?? '').isNotEmpty) l10n.boardRoomNumber(h.room!),
+                  ].join(' · ')),
                 ),
               for (final b in held)
                 ListTile(

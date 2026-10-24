@@ -112,6 +112,9 @@ class Allocation {
   final int? minNights;
   final int? maxNights;
   final int releaseDaysBefore;
+
+  /// `guaranteed` holds the rooms for the partner alone; the default `non_guaranteed` shares the pool with the hotel's own guests.
+  final String allocationType;
   final RoomCard? room;
 
   /// Stays sold from it that are still ahead, and those the hotel has yet to answer — they stand when the allocation ends or stops.
@@ -136,6 +139,7 @@ class Allocation {
     this.minNights,
     this.maxNights,
     this.releaseDaysBefore = 0,
+    this.allocationType = 'non_guaranteed',
     this.room,
     this.upcomingBookings = 0,
     this.pendingBookings = 0,
@@ -162,6 +166,7 @@ class Allocation {
     minNights: (json['min_nights'] as num?)?.toInt(),
     maxNights: (json['max_nights'] as num?)?.toInt(),
     releaseDaysBefore: (json['release_days_before'] as num?)?.toInt() ?? 0,
+    allocationType: json['allocation_type'] as String? ?? 'non_guaranteed',
     room: json['room'] is Map<String, dynamic> ? RoomCard.fromJson(json['room'] as Map<String, dynamic>) : null,
     upcomingBookings: (json['upcoming_bookings'] as num?)?.toInt() ?? 0,
     pendingBookings: (json['pending_bookings'] as num?)?.toInt() ?? 0,

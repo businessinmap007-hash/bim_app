@@ -27,6 +27,7 @@ class _GrantAllocationScreenState extends ConsumerState<GrantAllocationScreen> {
   late final _maxNights = TextEditingController(text: widget.editing?.maxNights?.toString() ?? '');
   late final _release = TextEditingController(text: (widget.editing?.releaseDaysBefore ?? 0) == 0 ? '' : widget.editing!.releaseDaysBefore.toString());
   bool _saving = false;
+  late bool _guaranteed = widget.editing?.allocationType == 'guaranteed';
   DateTimeRange? _stay;
 
   @override
@@ -76,9 +77,9 @@ class _GrantAllocationScreenState extends ConsumerState<GrantAllocationScreen> {
       final release = int.tryParse(_release.text) ?? 0;
 
       if (editing == null) {
-        await api.grant(widget.partnershipId, unitId: _room!.card.unitId, quantity: quantity, contractPrice: price, minNights: min, maxNights: max, releaseDays: release, from: _stay?.start, to: _stay?.end);
+        await api.grant(widget.partnershipId, unitId: _room!.card.unitId, quantity: quantity, contractPrice: price, minNights: min, maxNights: max, releaseDays: release, from: _stay?.start, to: _stay?.end, guaranteed: _guaranteed);
       } else {
-        await api.updateAllocation(widget.partnershipId, editing.id, quantity: quantity, contractPrice: price, minNights: min, maxNights: max, releaseDays: release, from: _stay?.start, to: _stay?.end);
+        await api.updateAllocation(widget.partnershipId, editing.id, quantity: quantity, contractPrice: price, minNights: min, maxNights: max, releaseDays: release, from: _stay?.start, to: _stay?.end, guaranteed: _guaranteed);
       }
 
       navigator.pop(true);
@@ -157,6 +158,14 @@ class _GrantAllocationScreenState extends ConsumerState<GrantAllocationScreen> {
           ]),
           const SizedBox(height: 10),
           TextField(controller: _release, keyboardType: TextInputType.number, decoration: InputDecoration(labelText: l10n.pshReleaseDays, helperText: l10n.pshReleaseHelp)),
+          // a shared pool by default (hotel and partner sell the same rooms at once); guaranteed holds the rooms for the partner alone
+          SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text(l10n.pshGuaranteedLabel),
+            subtitle: Text(l10n.pshGuaranteedHelp),
+            value: _guaranteed,
+            onChanged: (v) => setState(() => _guaranteed = v),
+          ),
           const SizedBox(height: 20),
           FilledButton(onPressed: _saving ? null : _save, child: Text(l10n.commonSave)),
         ],

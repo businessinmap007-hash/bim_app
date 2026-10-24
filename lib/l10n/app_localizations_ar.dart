@@ -12411,6 +12411,20 @@ class AppLocalizationsAr extends AppLocalizations {
       'لتسعير محلي وآخر سياحي اجعل لكل سعر نوع غرفة. يُطلب إثبات عند الوصول.';
 
   @override
+  String get reserveRoomsLabel => 'غرف احتياطية للضغط';
+
+  @override
+  String get reserveRoomsHelp =>
+      'عدد من هذا النوع يحجزه الفندق لنزلائه فقط، لا يبيعه الشركاء';
+
+  @override
+  String get pshGuaranteedLabel => 'حصة مضمونة';
+
+  @override
+  String get pshGuaranteedHelp =>
+      'مغلقة: الغرف محجوزة للشريك وحده. مفتوحة (الافتراضي): يبيع الفندق والشريك من نفس المخزون في وقت واحد';
+
+  @override
   String get guestScopeAll => 'للجميع';
 
   @override

@@ -22339,6 +22339,30 @@ abstract class AppLocalizations {
   /// **'لتسعير محلي وآخر سياحي اجعل لكل سعر نوع غرفة. يُطلب إثبات عند الوصول.'**
   String get guestScopeHelp;
 
+  /// No description provided for @reserveRoomsLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'غرف احتياطية للضغط'**
+  String get reserveRoomsLabel;
+
+  /// No description provided for @reserveRoomsHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد من هذا النوع يحجزه الفندق لنزلائه فقط، لا يبيعه الشركاء'**
+  String get reserveRoomsHelp;
+
+  /// No description provided for @pshGuaranteedLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'حصة مضمونة'**
+  String get pshGuaranteedLabel;
+
+  /// No description provided for @pshGuaranteedHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'مغلقة: الغرف محجوزة للشريك وحده. مفتوحة (الافتراضي): يبيع الفندق والشريك من نفس المخزون في وقت واحد'**
+  String get pshGuaranteedHelp;
+
   /// No description provided for @guestScopeAll.
   ///
   /// In ar, this message translates to:

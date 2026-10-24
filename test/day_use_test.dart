@@ -43,6 +43,7 @@ class _FakeApi implements BookingSettingsApi {
     int? quantity,
     String? status,
     String? guestScope,
+    int? reserveRooms,
   }) async {
     updated.add(id);
 

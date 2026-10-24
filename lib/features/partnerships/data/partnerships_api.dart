@@ -41,7 +41,8 @@ class PartnershipsApi {
     return [for (final r in (data['rooms'] as List<dynamic>? ?? const [])) GrantableRoom.fromJson(r as Map<String, dynamic>)];
   }
 
-  Map<String, Object> _terms({required int quantity, required double contractPrice, int? minNights, int? maxNights, int releaseDays = 0, DateTime? from, DateTime? to}) => {
+  Map<String, Object> _terms({required int quantity, required double contractPrice, int? minNights, int? maxNights, int releaseDays = 0, DateTime? from, DateTime? to, bool guaranteed = false}) => {
+    'allocation_type': guaranteed ? 'guaranteed' : 'non_guaranteed',
     'quantity_total': quantity,
     'contract_price': contractPrice,
     'min_nights': ?minNights,
@@ -51,14 +52,14 @@ class PartnershipsApi {
     'ends_at': ?to?.toIso8601String(),
   };
 
-  Future<void> grant(int id, {required int unitId, required int quantity, required double contractPrice, int? minNights, int? maxNights, int releaseDays = 0, DateTime? from, DateTime? to}) => _client.post(
+  Future<void> grant(int id, {required int unitId, required int quantity, required double contractPrice, int? minNights, int? maxNights, int releaseDays = 0, DateTime? from, DateTime? to, bool guaranteed = false}) => _client.post(
     '/business/partnerships/$id/allocations',
-    data: {'bookable_item_id': unitId, ..._terms(quantity: quantity, contractPrice: contractPrice, minNights: minNights, maxNights: maxNights, releaseDays: releaseDays, from: from, to: to)},
+    data: {'bookable_item_id': unitId, ..._terms(quantity: quantity, contractPrice: contractPrice, minNights: minNights, maxNights: maxNights, releaseDays: releaseDays, from: from, to: to, guaranteed: guaranteed)},
   );
 
-  Future<void> updateAllocation(int id, int allocationId, {required int quantity, required double contractPrice, int? minNights, int? maxNights, int releaseDays = 0, DateTime? from, DateTime? to}) => _client.put(
+  Future<void> updateAllocation(int id, int allocationId, {required int quantity, required double contractPrice, int? minNights, int? maxNights, int releaseDays = 0, DateTime? from, DateTime? to, bool guaranteed = false}) => _client.put(
     '/business/partnerships/$id/allocations/$allocationId',
-    data: _terms(quantity: quantity, contractPrice: contractPrice, minNights: minNights, maxNights: maxNights, releaseDays: releaseDays, from: from, to: to),
+    data: _terms(quantity: quantity, contractPrice: contractPrice, minNights: minNights, maxNights: maxNights, releaseDays: releaseDays, from: from, to: to, guaranteed: guaranteed),
   );
 
   /// `stop` or `activate`.
