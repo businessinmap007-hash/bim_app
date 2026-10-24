@@ -38,6 +38,10 @@ class BookingScreen extends ConsumerStatefulWidget {
   /// The room the guest tapped on the business page — chosen already, so the picker is not shown again.
   final DiscoveredUnit? initialUnit;
 
+  /// Every kind of room behind the type the guest tapped («بدون إطلالة»، «إطلالة مسبح»، «إطلالة بحر»), each at its all-in price: shown as ONE
+  /// choice (radio) on the form, so the guest can change their mind without leaving it. Empty for a type that does not differ by room.
+  final List<DiscoveredUnit> variants;
+
   /// Opened from the Day use card: starts on the Day use side of the room type.
   final bool startInDayUse;
 
@@ -67,6 +71,7 @@ class BookingScreen extends ConsumerStatefulWidget {
     required this.offering,
     this.shape,
     this.initialUnit,
+    this.variants = const [],
     this.startInDayUse = false,
     this.initialStartsAt,
     this.initialEndsAt,
@@ -91,6 +96,9 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   String? _channel;
   String? _visitPlace;
   int? _unitId;
+
+  /// the kind of room chosen among [BookingScreen.variants] (starts as the card the guest tapped)
+  DiscoveredUnit? _unitCard;
   // the length of the time chosen on the page's own board; a form that asks only for a start still sends the end
   Duration? _boardLength;
   // «Day use»: the guest picks only a date; the room type names the window and the flat price
@@ -148,6 +156,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     if (said != null && said == _origin) _originConfirmed = true;
     if (unit != null) {
       _unitId = unit.id;
+      _unitCard = unit;
       // a card of a room type that differs by its rooms («إطلالة بحر») is booked with what it was priced with
       _modifierOptionIds.addAll(unit.variantOptionIds);
       _dayUseOffer = unit.dayUse;
@@ -613,7 +622,9 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
               // what he and this business have been through together — before he books
               RelationshipCard(summary: form.relationship),
               if (widget.initialUnit != null) ...[
-                _selectedUnitCard(context, widget.initialUnit!),
+                _selectedUnitCard(context, _unitCard ?? widget.initialUnit!),
+                // one choice among the kinds of room, each at its all-in night price — no «+150» beside a view
+                if (widget.variants.length > 1) _variantChoice(context, l10n),
                 // «تحت التعامل»: the room is held for this guest while they fill the booking in
                 if (_holdUntil != null)
                   Padding(
@@ -622,10 +633,11 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(color: Theme.of(context).colorScheme.primaryContainer, borderRadius: BorderRadius.circular(10)),
                       child: Row(children: [
-                        const Icon(Icons.timer_outlined, size: 18),
+                        Icon(Icons.timer_outlined, size: 18, color: Theme.of(context).colorScheme.onPrimaryContainer),
                         const SizedBox(width: 8),
-                        Expanded(child: Text(l10n.bookingHoldBanner(_holdLeft()), style: Theme.of(context).textTheme.bodyMedium)),
-                        TextButton(onPressed: _releaseHold, child: Text(l10n.bookingHoldRelease)),
+                        // the banner is drawn on the theme's dark container: its words take the colour made for it
+                        Expanded(child: Text(l10n.bookingHoldBanner(_holdLeft()), style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer))),
+                        TextButton(onPressed: _releaseHold, style: TextButton.styleFrom(foregroundColor: Theme.of(context).colorScheme.onPrimaryContainer), child: Text(l10n.bookingHoldRelease)),
                       ]),
                     ),
                   ),
@@ -752,6 +764,50 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _pickVariant(DiscoveredUnit next) {
+    setState(() {
+      if (_unitCard != null) _modifierOptionIds.removeAll(_unitCard!.variantOptionIds);
+      _modifierOptionIds.addAll(next.variantOptionIds);
+      _unitCard = next;
+    });
+    _schedulePreview();
+  }
+
+  Widget _variantChoice(BuildContext context, AppLocalizations l10n) {
+    final theme = Theme.of(context);
+    final current = (_unitCard ?? widget.initialUnit)!;
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(l10n.bookingRoomKindTitle, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+          RadioGroup<String>(
+            groupValue: current.selectionKey,
+            onChanged: (key) {
+              final next = widget.variants.where((v) => v.selectionKey == key).firstOrNull;
+              if (next != null && next.available != false) _pickVariant(next);
+            },
+            child: Column(
+              children: [
+                for (final v in widget.variants)
+                  RadioListTile<String>(
+                    contentPadding: EdgeInsets.zero,
+                    value: v.selectionKey,
+                    enabled: v.available != false,
+                    title: Text(v.displayTitle),
+                    subtitle: v.available == false && (v.reason ?? '').isNotEmpty ? Text(v.reason!) : null,
+                    secondary: v.price == null ? null : Text('${v.price!.toStringAsFixed(0)} ${widget.offering.currency}', style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800)),
+                  ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -889,6 +945,12 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
 
     String money(double v) => '${v.toStringAsFixed(0)} $currency';
 
+    // the view is part of WHAT the room is: «غرفة فردية · إطلالة بحرية 1300», not «غرفة 1000 + إطلالة 300»
+    final card = _unitCard;
+    final viewNames = (card != null && card.variantOptionIds.isNotEmpty) ? card.features.toSet() : <String>{};
+    final viewExtra = lines.where((l) => viewNames.contains(l.name)).fold<double>(0, (sum, l) => sum + l.amount);
+    final otherLines = lines.where((l) => !viewNames.contains(l.name)).toList();
+
     return Card(
       margin: EdgeInsets.zero,
       child: Padding(
@@ -897,8 +959,8 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (showBreakdown) ...[
-              _summaryRow(theme, l10n.bookingBasePriceLine, money(preview.baseUnitPrice ?? 0)),
-              for (final line in lines) _summaryRow(theme, line.name, '+${line.amount.toStringAsFixed(0)}'),
+              _summaryRow(theme, viewNames.isEmpty ? l10n.bookingBasePriceLine : card!.displayTitle, money((preview.baseUnitPrice ?? 0) + viewExtra)),
+              for (final line in otherLines) _summaryRow(theme, line.name, '+${line.amount.toStringAsFixed(0)}'),
               if (!dayUseOn) ...[
                 const Divider(height: 16),
                 _summaryRow(theme, l10n.bookingNightPrice, money(preview.unitPrice!), bold: true),

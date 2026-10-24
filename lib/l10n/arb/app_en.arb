@@ -4239,6 +4239,7 @@
   "roomFeaturesNone": "None set yet",
   "roomFeaturesTitle": "Features of room {number}",
   "roomFeaturesHint": "A guest who ticked a view or feature at booking is given, when the stay starts, a number that carries it",
+  "bookingRoomKindTitle": "Room",
   "roomFeaturesPrice": "This room a night: {base} + {extra} = {total}",
   "@roomFeaturesPrice": {"placeholders": {"base": {"type": "String"}, "extra": {"type": "String"}, "total": {"type": "String"}}},
   "unitFeaturesVsRoomsHint": "Tick here what EVERY room of this type has (its price is inside the type's price). What only some rooms have, tick on the room number in the list above.",

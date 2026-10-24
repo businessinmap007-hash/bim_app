@@ -12433,6 +12433,9 @@ class AppLocalizationsAr extends AppLocalizations {
       'الضيف الذي اختار إطلالة أو ميزة عند الحجز يأخذ عند بدء الإقامة رقمًا يحملها';
 
   @override
+  String get bookingRoomKindTitle => 'الغرفة';
+
+  @override
   String roomFeaturesPrice(String base, String extra, String total) {
     return 'سعر هذه الغرفة لليلة: $base + $extra = $total';
   }
