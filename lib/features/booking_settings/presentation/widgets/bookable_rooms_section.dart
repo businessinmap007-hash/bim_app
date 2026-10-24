@@ -113,8 +113,11 @@ class _BookableRoomsSectionState extends ConsumerState<BookableRoomsSection> {
     final l10n = AppLocalizations.of(context)!;
     final api = ref.read(bookingSettingsApiProvider);
     List<UnitFeature> all;
+    double? base;
     try {
-      all = await api.roomFeatures(widget.itemId, room.id);
+      final loaded = await api.roomFeatures(widget.itemId, room.id);
+      all = loaded.features;
+      base = loaded.base;
     } catch (_) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
       return;
@@ -138,6 +141,16 @@ class _BookableRoomsSectionState extends ConsumerState<BookableRoomsSection> {
                 const SizedBox(height: 4),
                 Text(l10n.roomFeaturesHint, style: Theme.of(sheet).textTheme.bodySmall?.copyWith(color: Theme.of(sheet).hintColor)),
                 const SizedBox(height: 12),
+                // «1000 + 150 = 1150»: what this room comes to a night, from the type's price and what it carries
+                if (base != null)
+                  Builder(builder: (_) {
+                    final extra = all.where((f) => chosen.contains(f.id)).fold<double>(0, (sum, f) => sum + (f.price ?? 0));
+                    String fmt(double v) => v % 1 == 0 ? v.toStringAsFixed(0) : v.toStringAsFixed(2);
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Text(l10n.roomFeaturesPrice(fmt(base!), fmt(extra), fmt(base + extra)), style: Theme.of(sheet).textTheme.titleSmall),
+                    );
+                  }),
                 Flexible(
                   child: SingleChildScrollView(
                     child: Wrap(

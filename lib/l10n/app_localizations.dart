@@ -22375,6 +22375,12 @@ abstract class AppLocalizations {
   /// **'الضيف الذي اختار إطلالة أو ميزة عند الحجز يأخذ عند بدء الإقامة رقمًا يحملها'**
   String get roomFeaturesHint;
 
+  /// No description provided for @roomFeaturesPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر هذه الغرفة لليلة: {base} + {extra} = {total}'**
+  String roomFeaturesPrice(String base, String extra, String total);
+
   /// No description provided for @unitFeaturesVsRoomsHint.
   ///
   /// In ar, this message translates to:

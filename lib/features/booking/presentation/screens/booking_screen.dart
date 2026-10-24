@@ -148,6 +148,8 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     if (said != null && said == _origin) _originConfirmed = true;
     if (unit != null) {
       _unitId = unit.id;
+      // a card of a room type that differs by its rooms («إطلالة بحر») is booked with what it was priced with
+      _modifierOptionIds.addAll(unit.variantOptionIds);
       _dayUseOffer = unit.dayUse;
       _dayUse = widget.startInDayUse && unit.dayUse != null;
     }

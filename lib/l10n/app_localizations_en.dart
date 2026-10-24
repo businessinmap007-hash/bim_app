@@ -12533,6 +12533,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'A guest who ticked a view or feature at booking is given, when the stay starts, a number that carries it';
 
   @override
+  String roomFeaturesPrice(String base, String extra, String total) {
+    return 'This room a night: $base + $extra = $total';
+  }
+
+  @override
   String get unitFeaturesVsRoomsHint =>
       'Tick here what EVERY room of this type has (its price is inside the type\'s price). What only some rooms have, tick on the room number in the list above.';
 

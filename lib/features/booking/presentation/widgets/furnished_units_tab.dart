@@ -26,7 +26,7 @@ class _FurnishedUnitsTabState extends ConsumerState<FurnishedUnitsTab> {
   late DateTime _arrival;
   late DateTime _departure;
   int _guests = 2;
-  int? _unitId;
+  String? _unitKey;
 
   @override
   void initState() {
@@ -49,7 +49,7 @@ class _FurnishedUnitsTabState extends ConsumerState<FurnishedUnitsTab> {
       final nights = _departure.difference(_arrival).inDays.clamp(1, 60);
       _arrival = picked;
       if (!_departure.isAfter(_arrival)) _departure = _arrival.add(Duration(days: nights));
-      _unitId = null;
+      _unitKey = null;
     });
   }
 
@@ -63,7 +63,7 @@ class _FurnishedUnitsTabState extends ConsumerState<FurnishedUnitsTab> {
     if (picked != null && mounted) {
       setState(() {
         _departure = picked;
-        _unitId = null;
+        _unitKey = null;
       });
     }
   }
@@ -95,7 +95,7 @@ class _FurnishedUnitsTabState extends ConsumerState<FurnishedUnitsTab> {
         entries.add((group: k, unit: u));
       }
     }
-    final chosen = entries.where((e) => e.unit.id == _unitId).firstOrNull;
+    final chosen = entries.where((e) => e.unit.selectionKey == _unitKey).firstOrNull;
 
     return BoardScaffold(
       bottom: BookingSummaryBar(
@@ -168,8 +168,8 @@ class _FurnishedUnitsTabState extends ConsumerState<FurnishedUnitsTab> {
                 unit: e.unit,
                 price: e.unit.price ?? e.group.price,
                 nights: nights,
-                selected: e.unit.id == _unitId,
-                onTap: () => setState(() => _unitId = e.unit.id),
+                selected: e.unit.selectionKey == _unitKey,
+                onTap: () => setState(() => _unitKey = e.unit.selectionKey),
               ),
             ),
       ],

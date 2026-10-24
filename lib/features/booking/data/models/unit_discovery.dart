@@ -122,6 +122,10 @@ class DiscoveredUnit {
   /// What a guest may add to this room — the hotel's meal plan at its listed price (a room sold through a partner carries them here).
   final List<UnitChoice> choices;
 
+  /// A card of a room type whose numbered rooms differ («غرفة فردية · إطلالة بحر»): the features it was priced with. The booking is made
+  /// with them, and the hotel gives a number that carries them when the stay starts.
+  final List<int> variantOptionIds;
+
   const DiscoveredUnit({
     required this.id,
     this.code,
@@ -143,7 +147,11 @@ class DiscoveredUnit {
     this.features = const [],
     this.guestScope = 'all',
     this.choices = const [],
+    this.variantOptionIds = const [],
   });
+
+  /// Two cards of one room type share an id; what tells them apart is the features they carry.
+  String get selectionKey => '$id:${variantOptionIds.join(',')}';
 
   String get displayTitle => (title != null && title!.isNotEmpty) ? title! : (label ?? code ?? '#$id');
 
@@ -168,6 +176,7 @@ class DiscoveredUnit {
     heldForPartner: json['held_for_partner'] as bool? ?? false,
     myHold: MyHold.fromJsonOrNull(json['my_hold']),
     guestScope: json['guest_scope'] as String? ?? 'all',
+    variantOptionIds: [for (final v in json['option_ids'] as List<dynamic>? ?? const []) (v as num).toInt()],
     dayUse: json['day_use'] is Map<String, dynamic> ? DayUseOffer.fromJson(json['day_use'] as Map<String, dynamic>) : null,
     features: (json['modifiers'] as List<dynamic>? ?? [])
         .map((e) => (e as Map<String, dynamic>)['name'] as String?)

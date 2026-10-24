@@ -226,9 +226,9 @@ class BookingSettingsApi {
   }
 
   /// «مواصفات لكل رقم غرفة»: the feature vocabulary with what THIS numbered room carries ticked.
-  Future<List<UnitFeature>> roomFeatures(int itemId, int roomId) async {
+  Future<({double? base, List<UnitFeature> features})> roomFeatures(int itemId, int roomId) async {
     final data = await _client.get('/business/bookable-items/$itemId/rooms/$roomId/features') as Map<String, dynamic>;
-    return parseUnitFeatures(data);
+    return (base: (data['base_price'] as num?)?.toDouble(), features: parseUnitFeatures(data));
   }
 
   Future<List<UnitFeature>> saveRoomFeatures(int itemId, int roomId, List<int> optionIds) async {
