@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../application/booking_settings_controller.dart';
+import '../../data/models/add_on_models.dart';
 import '../../data/models/room_models.dart';
 
 /// «العدد والرقم لكل غرفة يكون لدى الفندق فقط» — the numbered rooms behind this room type. The customer books the
@@ -79,6 +80,12 @@ class _BookableRoomsSectionState extends ConsumerState<BookableRoomsSection> {
           children: [
             ListTile(title: Text(room.number, style: Theme.of(context).textTheme.titleMedium)),
             ListTile(
+              leading: const Icon(Icons.star_outline),
+              title: Text(l10n.roomFeaturesAction),
+              subtitle: Text(room.features.isEmpty ? l10n.roomFeaturesNone : room.features.join('، ')),
+              onTap: () => Navigator.of(sheet).pop('features'),
+            ),
+            ListTile(
               leading: Icon(room.isMaintenance ? Icons.lock_open_outlined : Icons.build_outlined),
               title: Text(room.isMaintenance ? l10n.roomsReopen : l10n.roomMaintenance),
               onTap: () => Navigator.of(sheet).pop('maintenance'),
@@ -92,10 +99,75 @@ class _BookableRoomsSectionState extends ConsumerState<BookableRoomsSection> {
         ),
       ),
     );
-    if (choice == 'maintenance') {
+    if (choice == 'features') {
+      await _editFeatures(room);
+    } else if (choice == 'maintenance') {
       await _apply(() => api.setRoomMaintenance(widget.itemId, room.id, !room.isMaintenance));
     } else if (choice == 'delete') {
       await _apply(() => api.deleteRoom(widget.itemId, room.id));
+    }
+  }
+
+  /// «مواصفات لكل رقم غرفة»: tick what this very room carries; the guest who asked for it gets this number when the stay starts.
+  Future<void> _editFeatures(RoomRow room) async {
+    final l10n = AppLocalizations.of(context)!;
+    final api = ref.read(bookingSettingsApiProvider);
+    List<UnitFeature> all;
+    try {
+      all = await api.roomFeatures(widget.itemId, room.id);
+    } catch (_) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.commonSomethingWentWrong)));
+      return;
+    }
+    if (!mounted) return;
+
+    final chosen = {for (final f in all) if (f.selected) f.id};
+    final saved = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (sheet) => StatefulBuilder(
+        builder: (sheet, setSheet) => SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(l10n.roomFeaturesTitle(room.number), style: Theme.of(sheet).textTheme.titleMedium),
+                const SizedBox(height: 4),
+                Text(l10n.roomFeaturesHint, style: Theme.of(sheet).textTheme.bodySmall?.copyWith(color: Theme.of(sheet).hintColor)),
+                const SizedBox(height: 12),
+                Flexible(
+                  child: SingleChildScrollView(
+                    child: Wrap(
+                      spacing: 8,
+                      runSpacing: 4,
+                      children: [
+                        for (final f in all)
+                          FilterChip(
+                            label: Text(f.name),
+                            selected: chosen.contains(f.id),
+                            onSelected: (on) => setSheet(() => on ? chosen.add(f.id) : chosen.remove(f.id)),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                SizedBox(width: double.infinity, child: FilledButton(onPressed: () => Navigator.of(sheet).pop(true), child: Text(l10n.commonSave))),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+
+    if (saved == true) {
+      await _apply(() async {
+        await api.saveRoomFeatures(widget.itemId, room.id, chosen.toList());
+        return api.rooms(widget.itemId);
+      });
     }
   }
 
@@ -153,7 +225,7 @@ class _BookableRoomsSectionState extends ConsumerState<BookableRoomsSection> {
                   avatar: room.occupied
                       ? const Icon(Icons.person, size: 14)
                       : (room.isMaintenance ? const Icon(Icons.build_outlined, size: 14) : null),
-                  label: Text(room.number),
+                  label: Text(room.features.isEmpty ? room.number : '${room.number} · ${room.features.length}★'),
                   backgroundColor: room.isMaintenance ? theme.disabledColor.withValues(alpha: 0.15) : null,
                   onPressed: () => _manage(room),
                 ),

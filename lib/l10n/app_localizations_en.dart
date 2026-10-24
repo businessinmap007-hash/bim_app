@@ -12518,6 +12518,36 @@ class AppLocalizationsEn extends AppLocalizations {
       'How many of this type only the hotel\'s own guests can take; partners cannot sell them';
 
   @override
+  String get roomFeaturesAction => 'Features of this room';
+
+  @override
+  String get roomFeaturesNone => 'None set yet';
+
+  @override
+  String roomFeaturesTitle(String number) {
+    return 'Features of room $number';
+  }
+
+  @override
+  String get roomFeaturesHint =>
+      'A guest who ticked a view or feature at booking is given, when the stay starts, a number that carries it';
+
+  @override
+  String get unitFeaturesVsRoomsHint =>
+      'Tick here what EVERY room of this type has (its price is inside the type\'s price). What only some rooms have, tick on the room number in the list above.';
+
+  @override
+  String bookingRoomRequested(String names) {
+    return 'The guest asked for: $names';
+  }
+
+  @override
+  String get bookingRoomMatches => 'Has what the guest asked for';
+
+  @override
+  String get bookingRoomNoMatch => 'Lacks part of what the guest asked for';
+
+  @override
   String get pshGuaranteedLabel => 'Guaranteed allotment';
 
   @override

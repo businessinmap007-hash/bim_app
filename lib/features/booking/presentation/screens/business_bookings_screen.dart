@@ -667,10 +667,14 @@ class _RoomRow extends ConsumerWidget {
             : ListView(
                 shrinkWrap: true,
                 children: [
+                  // the guest ticked a view at booking: say so, and mark the rooms that have it
+                  if (rooms.requested.isNotEmpty)
+                    ListTile(dense: true, leading: const Icon(Icons.star_outline), title: Text(l10n.bookingRoomRequested(rooms.requested.join('، ')))),
                   for (final room in rooms.free)
                     ListTile(
                       leading: Icon(room.id == rooms.room?.id ? Icons.check_circle : Icons.meeting_room_outlined),
                       title: Text(room.number),
+                      subtitle: rooms.requested.isEmpty ? null : Text(room.matches ? l10n.bookingRoomMatches : l10n.bookingRoomNoMatch),
                       onTap: () => Navigator.of(sheet).pop(room.id),
                     ),
                 ],

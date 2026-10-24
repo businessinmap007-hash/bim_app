@@ -12418,6 +12418,36 @@ class AppLocalizationsAr extends AppLocalizations {
       'عدد من هذا النوع يحجزه الفندق لنزلائه فقط، لا يبيعه الشركاء';
 
   @override
+  String get roomFeaturesAction => 'مواصفات هذه الغرفة';
+
+  @override
+  String get roomFeaturesNone => 'لم تُحدَّد بعد';
+
+  @override
+  String roomFeaturesTitle(String number) {
+    return 'مواصفات الغرفة $number';
+  }
+
+  @override
+  String get roomFeaturesHint =>
+      'الضيف الذي اختار إطلالة أو ميزة عند الحجز يأخذ عند بدء الإقامة رقمًا يحملها';
+
+  @override
+  String get unitFeaturesVsRoomsHint =>
+      'حدّد هنا ما تحمله كل غرف هذا النوع (سعره داخل سعر النوع). وما تحمله بعض الغرف فقط حدّده على رقم الغرفة من قائمة الأرقام أعلاه.';
+
+  @override
+  String bookingRoomRequested(String names) {
+    return 'طلب الضيف: $names';
+  }
+
+  @override
+  String get bookingRoomMatches => 'تحمل ما طلبه الضيف';
+
+  @override
+  String get bookingRoomNoMatch => 'لا تحمل كل ما طلبه الضيف';
+
+  @override
   String get pshGuaranteedLabel => 'حصة مضمونة';
 
   @override

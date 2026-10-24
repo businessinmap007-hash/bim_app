@@ -334,6 +334,9 @@ class _EditorState extends ConsumerState<_Editor> {
               Text(l10n.unitFeaturesTitle, style: Theme.of(context).textTheme.titleMedium),
               const SizedBox(height: 4),
               Text(l10n.unitFeaturesHint, style: Theme.of(context).textTheme.bodySmall),
+              // the rule between the two places a feature can be ticked: here = every room of the type has it; on a room number = only some do
+              const SizedBox(height: 4),
+              Text(l10n.unitFeaturesVsRoomsHint, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor)),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 8,

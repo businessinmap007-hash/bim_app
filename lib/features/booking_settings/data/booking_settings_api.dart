@@ -225,6 +225,17 @@ class BookingSettingsApi {
     return RoomsPayload.fromJson(data);
   }
 
+  /// «مواصفات لكل رقم غرفة»: the feature vocabulary with what THIS numbered room carries ticked.
+  Future<List<UnitFeature>> roomFeatures(int itemId, int roomId) async {
+    final data = await _client.get('/business/bookable-items/$itemId/rooms/$roomId/features') as Map<String, dynamic>;
+    return parseUnitFeatures(data);
+  }
+
+  Future<List<UnitFeature>> saveRoomFeatures(int itemId, int roomId, List<int> optionIds) async {
+    final data = await _client.put('/business/bookable-items/$itemId/rooms/$roomId/features', data: {'option_ids': optionIds}) as Map<String, dynamic>;
+    return parseUnitFeatures(data);
+  }
+
   /// «شروط الحجز» — GET /business/booking-terms.
   Future<BookingTerms> bookingTerms() async {
     final data = await _client.get('/business/booking-terms') as Map<String, dynamic>;

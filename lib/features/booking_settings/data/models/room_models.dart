@@ -5,7 +5,14 @@ class RoomRow {
   final String status;
   final bool occupied;
 
-  const RoomRow({required this.id, required this.number, this.status = 'available', this.occupied = false});
+  /// What this very room carries («إطلالة بحر»): names for the list, ids for the editor.
+  final List<String> features;
+  final List<int> featureIds;
+
+  /// For a stay waiting for its room: does this free room carry everything the guest asked for?
+  final bool matches;
+
+  const RoomRow({required this.id, required this.number, this.status = 'available', this.occupied = false, this.features = const [], this.featureIds = const [], this.matches = true});
 
   bool get isMaintenance => status == 'maintenance';
 
@@ -14,6 +21,9 @@ class RoomRow {
     number: json['number'] as String? ?? '',
     status: json['status'] as String? ?? 'available',
     occupied: json['occupied'] as bool? ?? false,
+    features: [for (final f in json['features'] as List<dynamic>? ?? const []) f.toString()],
+    featureIds: [for (final f in json['feature_ids'] as List<dynamic>? ?? const []) (f as num).toInt()],
+    matches: json['matches'] as bool? ?? true,
   );
 }
 
@@ -51,12 +61,16 @@ class BookingRoomsPayload {
   final bool usesRooms;
   final RoomRow? room;
   final List<RoomRow> free;
-  const BookingRoomsPayload({this.usesRooms = false, this.room, this.free = const []});
+
+  /// What the guest asked for («إطلالة بحر»), in the hotel's words.
+  final List<String> requested;
+  const BookingRoomsPayload({this.usesRooms = false, this.room, this.free = const [], this.requested = const []});
 
   factory BookingRoomsPayload.fromJson(Map<String, dynamic> json) => BookingRoomsPayload(
     usesRooms: json['uses_rooms'] as bool? ?? false,
     room: json['room'] is Map<String, dynamic> ? RoomRow.fromJson(json['room'] as Map<String, dynamic>) : null,
     free: (json['free'] as List<dynamic>? ?? []).map((e) => RoomRow.fromJson(e as Map<String, dynamic>)).toList(),
+    requested: [for (final r in json['requested'] as List<dynamic>? ?? const []) r.toString()],
   );
 }
 

@@ -22351,6 +22351,54 @@ abstract class AppLocalizations {
   /// **'عدد من هذا النوع يحجزه الفندق لنزلائه فقط، لا يبيعه الشركاء'**
   String get reserveRoomsHelp;
 
+  /// No description provided for @roomFeaturesAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'مواصفات هذه الغرفة'**
+  String get roomFeaturesAction;
+
+  /// No description provided for @roomFeaturesNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تُحدَّد بعد'**
+  String get roomFeaturesNone;
+
+  /// No description provided for @roomFeaturesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مواصفات الغرفة {number}'**
+  String roomFeaturesTitle(String number);
+
+  /// No description provided for @roomFeaturesHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الضيف الذي اختار إطلالة أو ميزة عند الحجز يأخذ عند بدء الإقامة رقمًا يحملها'**
+  String get roomFeaturesHint;
+
+  /// No description provided for @unitFeaturesVsRoomsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدّد هنا ما تحمله كل غرف هذا النوع (سعره داخل سعر النوع). وما تحمله بعض الغرف فقط حدّده على رقم الغرفة من قائمة الأرقام أعلاه.'**
+  String get unitFeaturesVsRoomsHint;
+
+  /// No description provided for @bookingRoomRequested.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب الضيف: {names}'**
+  String bookingRoomRequested(String names);
+
+  /// No description provided for @bookingRoomMatches.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحمل ما طلبه الضيف'**
+  String get bookingRoomMatches;
+
+  /// No description provided for @bookingRoomNoMatch.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا تحمل كل ما طلبه الضيف'**
+  String get bookingRoomNoMatch;
+
   /// No description provided for @pshGuaranteedLabel.
   ///
   /// In ar, this message translates to:
