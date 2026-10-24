@@ -28,11 +28,20 @@
       "args": ["--dart-define=API_BASE_URL=http://10.0.2.2:8000/api/v2"]
     },
     {
-      "name": "BIM (real device, LAN IP)",
+      "name": "BIM (real phone, USB cable)",
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
-      "args": ["--dart-define=API_BASE_URL=http://192.168.17.21:8000/api/v2"]
+      // Run `adb reverse tcp:80 tcp:80` once after plugging the phone in: the phone's "localhost" then reaches XAMPP's Apache on this PC.
+      "args": ["--dart-define=API_BASE_URL=http://localhost/testing/public/api/v2"]
+    },
+    {
+      "name": "BIM (real phone, same Wi-Fi)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      // Put this PC's current IPv4 (ipconfig) here; it changes when the router hands out a new one.
+      "args": ["--dart-define=API_BASE_URL=http://10.125.198.200/testing/public/api/v2"]
     },
     {
       "name": "BIM (profile mode)",
