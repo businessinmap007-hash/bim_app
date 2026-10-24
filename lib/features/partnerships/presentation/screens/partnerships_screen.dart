@@ -20,6 +20,7 @@ class PartnershipsScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final async = ref.watch(myPartnershipsProvider);
+    final asked = ref.watch(releaseRequestsProvider).valueOrNull ?? const <ReleaseRequest>[];
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.pshTitle)),
@@ -36,7 +37,7 @@ class PartnershipsScreen extends ConsumerWidget {
         error: (_, _) => Center(child: OutlinedButton(onPressed: () => ref.invalidate(myPartnershipsProvider), child: Text(l10n.commonRetry))),
         data: (list) => ListView.separated(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
-          itemCount: list.length + 1,
+          itemCount: list.length + 1 + (asked.isEmpty ? 0 : 1),
           separatorBuilder: (_, _) => const SizedBox(height: 10),
           itemBuilder: (context, i) {
             if (i == 0) {
@@ -47,7 +48,10 @@ class PartnershipsScreen extends ConsumerWidget {
               ]);
             }
 
-            final p = list[i - 1];
+            // a guest of the hotel asks for a room held for this partner: the room and the dates, and two buttons
+            if (asked.isNotEmpty && i == 1) return _ReleaseRequests(requests: asked);
+
+            final p = list[i - 1 - (asked.isEmpty ? 0 : 1)];
             final (label, color) = partnershipStatusLabel(l10n, p.status);
 
             return Card(
@@ -169,6 +173,55 @@ class _InviteSheetState extends ConsumerState<_InviteSheet> {
               Text(l10n.pshPrivacy, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
               const SizedBox(height: 12),
               SizedBox(width: double.infinity, child: FilledButton(onPressed: _sending ? null : _send, child: Text(l10n.pshSend))),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// «طلبات تحرير غرف»: what the hotel's guests ask this partner to give back — agree and the room goes back to the hotel.
+class _ReleaseRequests extends ConsumerWidget {
+  final List<ReleaseRequest> requests;
+
+  const _ReleaseRequests({required this.requests});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final fmt = MaterialLocalizations.of(context);
+
+    Future<void> answer(ReleaseRequest r, bool approve) async {
+      final messenger = ScaffoldMessenger.of(context);
+      try {
+        await ref.read(partnershipsApiProvider).answerRelease(r.id, approve: approve);
+      } catch (e) {
+        messenger.showSnackBar(SnackBar(content: Text(e is ApiException && e.message.isNotEmpty ? e.message : l10n.commonSomethingWentWrong)));
+      }
+      ref.invalidate(releaseRequestsProvider);
+    }
+
+    return Card(
+      margin: EdgeInsets.zero,
+      color: theme.colorScheme.primaryContainer.withValues(alpha: 0.5),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(l10n.pshReleaseTitle, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800)),
+            Text(l10n.pshReleaseHint, style: theme.textTheme.bodySmall),
+            for (final r in requests) ...[
+              const Divider(height: 16),
+              Text(l10n.pshReleaseRoom(r.room, fmt.formatShortDate(r.startsAt), fmt.formatShortDate(r.endsAt)), style: theme.textTheme.bodyMedium),
+              const SizedBox(height: 6),
+              Row(children: [
+                FilledButton(onPressed: () => answer(r, true), child: Text(l10n.pshReleaseApprove)),
+                const SizedBox(width: 8),
+                OutlinedButton(onPressed: () => answer(r, false), child: Text(l10n.pshReleaseDecline)),
+              ]),
             ],
           ],
         ),

@@ -105,4 +105,27 @@ void main() {
     expect(money(1000, 'EGP'), '1000 EGP');
     expect(money(950.5, 'EGP'), '950.50 EGP');
   });
+
+  test('a hold the guest still has reads its dates and its minutes, and a room promised to a partner says so', () {
+    final unit = DiscoveredUnit.fromJson({
+      'id': 7,
+      'label': 'غرفة',
+      'available': false,
+      'held_for_partner': true,
+      'my_hold': {'id': 3, 'starts_at': '2026-11-10 00:00:00', 'ends_at': '2026-11-12 00:00:00', 'quantity': 1, 'seconds_left': 540},
+    });
+
+    expect(unit.heldForPartner, isTrue);
+    expect(unit.myHold?.startsAt, DateTime(2026, 11, 10));
+    expect(unit.myHold?.isLive, isTrue);
+    expect(unit.myHold?.leftLabel, matches(RegExp(r'^0[89]:\d\d$')));
+    expect(DiscoveredUnit.fromJson({'id': 8}).myHold, isNull);
+  });
+
+  test('a request to release a room reads the room and the dates', () {
+    final r = ReleaseRequest.fromJson({'id': 4, 'room': 'شاليه', 'starts_at': '2026-11-10 00:00:00', 'ends_at': '2026-11-12 00:00:00', 'quantity': 1});
+
+    expect(r.room, 'شاليه');
+    expect(r.endsAt.difference(r.startsAt).inDays, 2);
+  });
 }

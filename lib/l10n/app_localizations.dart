@@ -22024,7 +22024,7 @@ abstract class AppLocalizations {
   /// No description provided for @pshQuantity.
   ///
   /// In ar, this message translates to:
-  /// **'الكمية'**
+  /// **'عدد الغرف لكل ليلة'**
   String get pshQuantity;
 
   /// No description provided for @pshContractPrice.
@@ -22066,7 +22066,7 @@ abstract class AppLocalizations {
   /// No description provided for @pshAvailableOf.
   ///
   /// In ar, this message translates to:
-  /// **'المتبقي {available} من {total}'**
+  /// **'المتاح {available} من {total} غرفة لكل ليلة'**
   String pshAvailableOf(int available, int total);
 
   /// No description provided for @pshContractLine.
@@ -22494,6 +22494,114 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'من شاشة الفندق'**
   String get boardDealingHotel;
+
+  /// No description provided for @guestOriginQuestion.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنا…'**
+  String get guestOriginQuestion;
+
+  /// No description provided for @guestOriginLocal.
+  ///
+  /// In ar, this message translates to:
+  /// **'مصري أو مقيم'**
+  String get guestOriginLocal;
+
+  /// No description provided for @guestOriginForeign.
+  ///
+  /// In ar, this message translates to:
+  /// **'أجنبي'**
+  String get guestOriginForeign;
+
+  /// No description provided for @bookingHoldRelease.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء الحجز المؤقت'**
+  String get bookingHoldRelease;
+
+  /// No description provided for @bookingMyHold.
+  ///
+  /// In ar, this message translates to:
+  /// **'محجوزة لك — تنتهي بعد {time}'**
+  String bookingMyHold(String time);
+
+  /// No description provided for @bookingAskRelease.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلب تحريرها من الشريك'**
+  String get bookingAskRelease;
+
+  /// No description provided for @bookingReleaseWaiting.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُرسل طلبك إلى الشريك. بانتظار موافقته…'**
+  String get bookingReleaseWaiting;
+
+  /// No description provided for @bookingReleaseDeclined.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتذر الشريك عن تحرير الغرفة.'**
+  String get bookingReleaseDeclined;
+
+  /// No description provided for @bookingReleaseExpired.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتهت مهلة الطلب دون رد.'**
+  String get bookingReleaseExpired;
+
+  /// No description provided for @pshReleaseTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلبات تحرير غرف'**
+  String get pshReleaseTitle;
+
+  /// No description provided for @pshReleaseHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضيف للفندق يطلب غرفة محجوزة لكم. بالموافقة تعود الغرفة إلى الفندق.'**
+  String get pshReleaseHint;
+
+  /// No description provided for @pshReleaseRoom.
+  ///
+  /// In ar, this message translates to:
+  /// **'{room} · من {from} إلى {to}'**
+  String pshReleaseRoom(String room, String from, String to);
+
+  /// No description provided for @pshReleaseApprove.
+  ///
+  /// In ar, this message translates to:
+  /// **'موافقة'**
+  String get pshReleaseApprove;
+
+  /// No description provided for @pshReleaseDecline.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتذار'**
+  String get pshReleaseDecline;
+
+  /// No description provided for @pshStayDates.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغطي إقامات من ليلة… إلى ليلة…'**
+  String get pshStayDates;
+
+  /// No description provided for @pshStayAny.
+  ///
+  /// In ar, this message translates to:
+  /// **'بلا تحديد (كل الأيام)'**
+  String get pshStayAny;
+
+  /// No description provided for @pshStanding.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجوزات قائمة: {n} · بانتظار رد الفندق: {pending}'**
+  String pshStanding(int n, int pending);
+
+  /// No description provided for @pshStandingHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'تبقى سارية بعد انتهاء الحصة أو إيقافها؛ لا يُلغى منها شيء.'**
+  String get pshStandingHint;
 }
 
 class _AppLocalizationsDelegate

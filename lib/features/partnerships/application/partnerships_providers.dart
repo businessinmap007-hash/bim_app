@@ -11,3 +11,5 @@ final myPartnershipsProvider = FutureProvider.autoDispose<List<Partnership>>((re
 final partnershipDetailProvider = FutureProvider.autoDispose.family<PartnershipDetail, int>((ref, id) => ref.watch(partnershipsApiProvider).show(id));
 
 final grantableRoomsProvider = FutureProvider.autoDispose.family<List<GrantableRoom>, int>((ref, id) => ref.watch(partnershipsApiProvider).grantable(id));
+
+final releaseRequestsProvider = FutureProvider.autoDispose<List<ReleaseRequest>>((ref) => ref.watch(partnershipsApiProvider).releaseRequests());

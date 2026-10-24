@@ -1,3 +1,4 @@
+import '../../../booking/application/guest_origin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -28,7 +29,8 @@ class HotelRoomsScreen extends ConsumerStatefulWidget {
 }
 
 class _HotelRoomsScreenState extends ConsumerState<HotelRoomsScreen> {
-  late HotelRoomQuery _query = widget.initial;
+  // what the guest said about themselves before is the start: it narrows the rooms to those sold to them
+  late HotelRoomQuery _query = widget.initial.guestOrigin == null ? widget.initial.copyWith(guestOrigin: ref.read(guestOriginProvider)) : widget.initial;
 
   Future<void> _openFilter() async {
     final picked = await showModalBottomSheet<HotelRoomQuery>(
@@ -36,7 +38,10 @@ class _HotelRoomsScreenState extends ConsumerState<HotelRoomsScreen> {
       isScrollControlled: true,
       builder: (_) => _FilterSheet(initial: _query),
     );
-    if (picked != null) setState(() => _query = picked);
+    if (picked != null) {
+      ref.read(guestOriginProvider.notifier).set(picked.guestOrigin);
+      setState(() => _query = picked);
+    }
   }
 
   @override
@@ -55,6 +60,8 @@ class _HotelRoomsScreenState extends ConsumerState<HotelRoomsScreen> {
       if (_query.cityId != null) (l10n.hotelRoomsCityChip, () => setState(() => _query = _query.copyWith(clearCity: true))),
       if (_query.hasDates)
         ('${dates.format(_query.checkIn!)} → ${dates.format(_query.checkOut!)}', () => setState(() => _query = _query.copyWith(clearDates: true))),
+      if (_query.guestOrigin != null)
+        (_query.guestOrigin == 'local' ? l10n.guestOriginLocal : l10n.guestOriginForeign, () => setState(() => _query = _query.copyWith(clearOrigin: true))),
       if (_query.priceMin != null || _query.priceMax != null)
         (
           '${_query.priceMin?.toStringAsFixed(0) ?? '0'}–${_query.priceMax?.toStringAsFixed(0) ?? '∞'}',
@@ -139,6 +146,7 @@ class _RoomCard extends StatelessWidget {
         builder: (_) => BookingScreen(
           businessId: room.hotelId,
           initialUnit: DiscoveredUnit(
+            guestScope: room.guestScope,
             id: room.unitId,
             label: room.roomName,
             capacity: room.capacity,
@@ -292,6 +300,7 @@ class _FilterSheetState extends ConsumerState<_FilterSheet> {
     checkIn: _q.checkIn,
     checkOut: _q.checkOut,
     businessId: _q.businessId,
+    guestOrigin: _q.guestOrigin,
   );
 
   @override
@@ -321,6 +330,18 @@ class _FilterSheetState extends ConsumerState<_FilterSheet> {
               ],
             ),
             const SizedBox(height: 8),
+            Text(l10n.guestOriginQuestion, style: theme.textTheme.labelLarge),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                ChoiceChip(label: Text(l10n.carAnyChoice), selected: _q.guestOrigin == null, onSelected: (_) => setState(() => _q = _q.copyWith(clearOrigin: true))),
+                ChoiceChip(label: Text(l10n.guestOriginLocal), selected: _q.guestOrigin == 'local', onSelected: (_) => setState(() => _q = _q.copyWith(guestOrigin: 'local'))),
+                ChoiceChip(label: Text(l10n.guestOriginForeign), selected: _q.guestOrigin == 'foreign', onSelected: (_) => setState(() => _q = _q.copyWith(guestOrigin: 'foreign'))),
+              ],
+            ),
+            const SizedBox(height: 16),
             Text(l10n.hotelRoomsClassLabel, style: theme.textTheme.labelLarge),
             const SizedBox(height: 8),
             Wrap(

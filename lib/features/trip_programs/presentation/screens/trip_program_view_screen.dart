@@ -79,6 +79,8 @@ class TripProgramViewScreen extends ConsumerWidget {
           currency: room.currency,
           guestScope: room.guestScope,
           choices: room.choices,
+          holdStartsAt: room.myHold?.isLive == true ? room.myHold!.startsAt : null,
+          holdEndsAt: room.myHold?.isLive == true ? room.myHold!.endsAt : null,
         ),
       ),
     ]);

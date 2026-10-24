@@ -114,6 +114,10 @@ class Allocation {
   final int releaseDaysBefore;
   final RoomCard? room;
 
+  /// Stays sold from it that are still ahead, and those the hotel has yet to answer — they stand when the allocation ends or stops.
+  final int upcomingBookings;
+  final int pendingBookings;
+
   const Allocation({
     required this.id,
     required this.partnershipId,
@@ -133,6 +137,8 @@ class Allocation {
     this.maxNights,
     this.releaseDaysBefore = 0,
     this.room,
+    this.upcomingBookings = 0,
+    this.pendingBookings = 0,
   });
 
   bool get isActive => status == 'active';
@@ -156,6 +162,8 @@ class Allocation {
     maxNights: (json['max_nights'] as num?)?.toInt(),
     releaseDaysBefore: (json['release_days_before'] as num?)?.toInt() ?? 0,
     room: json['room'] is Map<String, dynamic> ? RoomCard.fromJson(json['room'] as Map<String, dynamic>) : null,
+    upcomingBookings: (json['upcoming_bookings'] as num?)?.toInt() ?? 0,
+    pendingBookings: (json['pending_bookings'] as num?)?.toInt() ?? 0,
   );
 }
 
@@ -195,4 +203,23 @@ class BusinessHit {
   const BusinessHit({required this.id, required this.name, this.logo});
 
   factory BusinessHit.fromJson(Map<String, dynamic> json) => BusinessHit(id: (json['id'] as num).toInt(), name: json['name'] as String? ?? '', logo: json['logo'] as String?);
+}
+
+/// A guest of the hotel asks for a room held for this partner: the room and the dates, never who asks.
+class ReleaseRequest {
+  final int id;
+  final String room;
+  final DateTime startsAt;
+  final DateTime endsAt;
+  final int quantity;
+
+  const ReleaseRequest({required this.id, required this.room, required this.startsAt, required this.endsAt, this.quantity = 1});
+
+  factory ReleaseRequest.fromJson(Map<String, dynamic> json) => ReleaseRequest(
+    id: (json['id'] as num).toInt(),
+    room: json['room'] as String? ?? '',
+    startsAt: DateTime.parse((json['starts_at'] as String? ?? '').replaceFirst(' ', 'T')),
+    endsAt: DateTime.parse((json['ends_at'] as String? ?? '').replaceFirst(' ', 'T')),
+    quantity: (json['quantity'] as num?)?.toInt() ?? 1,
+  );
 }

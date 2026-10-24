@@ -12227,7 +12227,7 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get pshQuantity => 'الكمية';
+  String get pshQuantity => 'عدد الغرف لكل ليلة';
 
   @override
   String get pshContractPrice => 'سعر التعاقد لليلة';
@@ -12250,7 +12250,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String pshAvailableOf(int available, int total) {
-    return 'المتبقي $available من $total';
+    return 'المتاح $available من $total غرفة لكل ليلة';
   }
 
   @override
@@ -12506,4 +12506,66 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get boardDealingHotel => 'من شاشة الفندق';
+
+  @override
+  String get guestOriginQuestion => 'أنا…';
+
+  @override
+  String get guestOriginLocal => 'مصري أو مقيم';
+
+  @override
+  String get guestOriginForeign => 'أجنبي';
+
+  @override
+  String get bookingHoldRelease => 'إلغاء الحجز المؤقت';
+
+  @override
+  String bookingMyHold(String time) {
+    return 'محجوزة لك — تنتهي بعد $time';
+  }
+
+  @override
+  String get bookingAskRelease => 'اطلب تحريرها من الشريك';
+
+  @override
+  String get bookingReleaseWaiting => 'أُرسل طلبك إلى الشريك. بانتظار موافقته…';
+
+  @override
+  String get bookingReleaseDeclined => 'اعتذر الشريك عن تحرير الغرفة.';
+
+  @override
+  String get bookingReleaseExpired => 'انتهت مهلة الطلب دون رد.';
+
+  @override
+  String get pshReleaseTitle => 'طلبات تحرير غرف';
+
+  @override
+  String get pshReleaseHint =>
+      'ضيف للفندق يطلب غرفة محجوزة لكم. بالموافقة تعود الغرفة إلى الفندق.';
+
+  @override
+  String pshReleaseRoom(String room, String from, String to) {
+    return '$room · من $from إلى $to';
+  }
+
+  @override
+  String get pshReleaseApprove => 'موافقة';
+
+  @override
+  String get pshReleaseDecline => 'اعتذار';
+
+  @override
+  String get pshStayDates => 'تغطي إقامات من ليلة… إلى ليلة…';
+
+  @override
+  String get pshStayAny => 'بلا تحديد (كل الأيام)';
+
+  @override
+  String pshStanding(int n, int pending) {
+    return 'حجوزات قائمة: $n · بانتظار رد الفندق: $pending';
+  }
+
+  @override
+  String get pshStandingHint =>
+      'تبقى سارية بعد انتهاء الحصة أو إيقافها؛ لا يُلغى منها شيء.';
 }

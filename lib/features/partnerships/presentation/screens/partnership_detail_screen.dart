@@ -173,6 +173,11 @@ class _AllocationCard extends StatelessWidget {
               if (a.releaseDaysBefore > 0) Text(l10n.pshReleaseLine(a.releaseDaysBefore), style: theme.textTheme.bodySmall),
               if (!a.isActive) Text(l10n.pshAllocationStopped, style: theme.textTheme.bodySmall?.copyWith(color: AppColors.error)),
             ]),
+            if (a.upcomingBookings > 0) ...[
+              const SizedBox(height: 4),
+              Text(l10n.pshStanding(a.upcomingBookings, a.pendingBookings), style: theme.textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w700)),
+              if (!a.isActive) Text(l10n.pshStandingHint, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+            ],
             const SizedBox(height: 6),
             Row(children: [
               if (isOwner) ...[

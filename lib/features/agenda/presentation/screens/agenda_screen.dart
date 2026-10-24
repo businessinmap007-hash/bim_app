@@ -37,7 +37,8 @@ class _AgendaScreenState extends ConsumerState<AgendaScreen> {
 
   void _shiftDay(int delta) {
     setState(
-      () => _date = _date.add(Duration(days: _week ? delta * 7 : delta)),
+      // calendar days, not 24-hour blocks: across the clock change `add(Duration(days: 7))` lands at 23:00 of the day before
+      () => _date = DateTime(_date.year, _date.month, _date.day + (_week ? delta * 7 : delta)),
     );
   }
 

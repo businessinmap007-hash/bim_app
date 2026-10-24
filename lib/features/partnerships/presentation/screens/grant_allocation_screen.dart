@@ -27,6 +27,25 @@ class _GrantAllocationScreenState extends ConsumerState<GrantAllocationScreen> {
   late final _maxNights = TextEditingController(text: widget.editing?.maxNights?.toString() ?? '');
   late final _release = TextEditingController(text: (widget.editing?.releaseDaysBefore ?? 0) == 0 ? '' : widget.editing!.releaseDaysBefore.toString());
   bool _saving = false;
+  DateTimeRange? _stay;
+
+  @override
+  void initState() {
+    super.initState();
+    final e = widget.editing;
+    if (e?.startsAt != null && e?.endsAt != null) _stay = DateTimeRange(start: e!.startsAt!, end: e.endsAt!);
+  }
+
+  Future<void> _pickStay() async {
+    final today = DateTime.now();
+    final picked = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(today.year, today.month, today.day),
+      lastDate: DateTime(today.year + 2, today.month, today.day),
+      initialDateRange: _stay,
+    );
+    if (picked != null) setState(() => _stay = picked);
+  }
 
   @override
   void dispose() {
@@ -57,9 +76,9 @@ class _GrantAllocationScreenState extends ConsumerState<GrantAllocationScreen> {
       final release = int.tryParse(_release.text) ?? 0;
 
       if (editing == null) {
-        await api.grant(widget.partnershipId, unitId: _room!.card.unitId, quantity: quantity, contractPrice: price, minNights: min, maxNights: max, releaseDays: release);
+        await api.grant(widget.partnershipId, unitId: _room!.card.unitId, quantity: quantity, contractPrice: price, minNights: min, maxNights: max, releaseDays: release, from: _stay?.start, to: _stay?.end);
       } else {
-        await api.updateAllocation(widget.partnershipId, editing.id, quantity: quantity, contractPrice: price, minNights: min, maxNights: max, releaseDays: release);
+        await api.updateAllocation(widget.partnershipId, editing.id, quantity: quantity, contractPrice: price, minNights: min, maxNights: max, releaseDays: release, from: _stay?.start, to: _stay?.end);
       }
 
       navigator.pop(true);
@@ -111,6 +130,18 @@ class _GrantAllocationScreenState extends ConsumerState<GrantAllocationScreen> {
             const SizedBox(height: 12),
           ],
           const SizedBox(height: 8),
+          // the dates of an allotment are the dates of the STAY: the nights it covers
+          InkWell(
+            onTap: _pickStay,
+            child: InputDecorator(
+              decoration: InputDecoration(
+                labelText: l10n.pshStayDates,
+                suffixIcon: _stay == null ? const Icon(Icons.date_range) : IconButton(icon: const Icon(Icons.close), onPressed: () => setState(() => _stay = null)),
+              ),
+              child: Text(_stay == null ? l10n.pshStayAny : '${MaterialLocalizations.of(context).formatShortDate(_stay!.start)} → ${MaterialLocalizations.of(context).formatShortDate(_stay!.end)}'),
+            ),
+          ),
+          const SizedBox(height: 10),
           TextField(controller: _quantity, keyboardType: TextInputType.number, decoration: InputDecoration(labelText: l10n.pshQuantity)),
           const SizedBox(height: 10),
           TextField(controller: _price, keyboardType: const TextInputType.numberWithOptions(decimal: true), decoration: InputDecoration(labelText: l10n.pshContractPrice)),

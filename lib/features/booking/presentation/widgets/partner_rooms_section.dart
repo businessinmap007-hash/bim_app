@@ -30,6 +30,8 @@ class PartnerRoomsSection extends StatelessWidget {
     currency: r.currency,
     guestScope: r.guestScope,
     choices: r.choices,
+    holdStartsAt: r.myHold?.isLive == true ? r.myHold!.startsAt : null,
+    holdEndsAt: r.myHold?.isLive == true ? r.myHold!.endsAt : null,
   );
 
   @override
@@ -78,6 +80,7 @@ class PartnerRoomsSection extends StatelessWidget {
                             children: [
                               Text(r.label, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
                               if ((r.fromName ?? '').isNotEmpty) Text(l10n.pshFromHotel(r.fromName!), style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+                              if (r.myHold?.isLive == true) Text(l10n.bookingMyHold(r.myHold!.leftLabel), style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.primary, fontWeight: FontWeight.w700)),
                               if (r.guestScope != 'all') Text(r.guestScope == 'locals' ? l10n.guestScopeLocals : l10n.guestScopeForeigners, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.primary, fontWeight: FontWeight.w700)),
                               if (r.features.isNotEmpty) Text(r.features.join(' · '), style: theme.textTheme.bodySmall, maxLines: 2, overflow: TextOverflow.ellipsis),
                               const SizedBox(height: 4),
@@ -129,12 +132,16 @@ void openPartnerRoomBooking(
   String currency = 'EGP',
   String guestScope = 'all',
   List<UnitChoice> choices = const [],
+  DateTime? holdStartsAt,
+  DateTime? holdEndsAt,
 }) {
   Navigator.of(context).push(
     MaterialPageRoute(
       builder: (_) => BookingScreen(
         businessId: businessId,
         shape: shape,
+        initialStartsAt: holdStartsAt,
+        initialEndsAt: holdEndsAt,
         initialUnit: DiscoveredUnit(id: unitId, label: label, capacity: capacity, images: images, price: price, features: features, guestScope: guestScope, choices: choices),
         offering: OfferingItem(
           id: 0,

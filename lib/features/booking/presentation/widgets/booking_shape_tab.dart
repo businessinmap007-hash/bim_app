@@ -147,7 +147,8 @@ class _ShapedBooking extends StatelessWidget {
   const _ShapedBooking({required this.businessId, required this.catalog, required this.shape});
 
   void _book(BuildContext context, UnitKindGroup group, DiscoveredUnit unit, {bool dayUse = false}) {
-    openUnitBooking(context, businessId: businessId, catalog: catalog, shape: shape, group: group, unit: unit, dayUse: dayUse);
+    // a room this guest already holds reopens on the dates they held it for
+    openUnitBooking(context, businessId: businessId, catalog: catalog, shape: shape, group: group, unit: unit, dayUse: dayUse, startsAt: unit.myHold?.isLive == true ? unit.myHold!.startsAt : null, endsAt: unit.myHold?.isLive == true ? unit.myHold!.endsAt : null);
   }
 
   @override
@@ -263,6 +264,7 @@ class _UnitCard extends StatelessWidget {
     final price = unit.price ?? kind.price;
     final facts = <String>[
       if (shape.showCapacity && unit.capacity != null) '${l10n.bookingCapacityLabel}: ${unit.capacity}',
+      if (unit.myHold?.isLive == true) l10n.bookingMyHold(unit.myHold!.leftLabel),
       if (unit.guestScope == 'locals') l10n.guestScopeLocals,
       if (unit.guestScope == 'foreigners') l10n.guestScopeForeigners,
       ...unit.features,

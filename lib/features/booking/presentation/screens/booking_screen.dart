@@ -1,3 +1,4 @@
+import '../../application/guest_origin.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -107,10 +108,19 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   DateTime? _holdUntil;
   Timer? _holdTicker;
 
+  // «طلب تحرير غرفة»: a room promised to a partner of the hotel, asked back
+  bool _canAskRelease = false;
+  int? _releaseId;
+  String? _releaseStatus;
+  Timer? _releasePoll;
+
   /// The guest ticked that they are who a scoped room type is sold to («مصري أو مقيم» / «أجنبي»).
   bool _originConfirmed = false;
 
   String get _scope => widget.initialUnit?.guestScope ?? 'all';
+
+  /// What the guest declares for this room: `local` for a room sold to Egyptians and residents, `foreign` for one sold to foreigners.
+  String? get _origin => _scope == 'locals' ? 'local' : (_scope == 'foreigners' ? 'foreign' : null);
 
   // Live total — same math as the actual booking (line + selected
   // modifiers per day, × days/quantity), fetched from the server so it
@@ -133,6 +143,9 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   void initState() {
     super.initState();
     final unit = widget.initialUnit;
+    // the guest has already said who they are: the declaration is ticked when it fits this room
+    final said = ref.read(guestOriginProvider);
+    if (said != null && said == _origin) _originConfirmed = true;
     if (unit != null) {
       _unitId = unit.id;
       _dayUseOffer = unit.dayUse;
@@ -154,11 +167,9 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   @override
   void dispose() {
     _holdTicker?.cancel();
-    final held = _holdId;
-    if (held != null) {
-      // the guest left the screen: the room is free for everyone again (fire and forget)
-      ref.read(bookingApiProvider).releaseHold(held).catchError((_) {});
-    }
+    _releasePoll?.cancel();
+    // the hold is NOT released here: leaving the screen keeps the room held until its minutes end, and the guest finds it «محجوزة لك»
+    // when they come back (or lets go of it with the button on the banner)
     _notesController.dispose();
     _previewDebounce?.cancel();
     for (final c in _textControllers.values) {
@@ -192,11 +203,14 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     final from = _startsAt;
     final to = _endsAt;
     if (unit == null || from == null || to == null || _dayUseActive) return;
+    // a room sold to one kind of guest is held only once the guest has said they are that kind
+    if (_scope != 'all' && !_originConfirmed) return;
 
     try {
-      final hold = await ref.read(bookingApiProvider).placeHold(businessId: widget.businessId, bookableId: unit, startsAt: from, endsAt: to, quantity: _quantity);
+      final hold = await ref.read(bookingApiProvider).placeHold(businessId: widget.businessId, bookableId: unit, startsAt: from, endsAt: to, quantity: _quantity, guestOrigin: _origin);
       if (!mounted || requestId != _previewRequestId) return;
       setState(() {
+        _canAskRelease = false;
         _holdId = hold.id;
         _holdUntil = DateTime.now().add(Duration(seconds: hold.secondsLeft));
       });
@@ -216,8 +230,65 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
       setState(() {
         _holdId = null;
         _holdUntil = null;
+        // 409: only a partner's promise stands in the way, and the guest may ask for it to be given back
+        _canAskRelease = e is ApiException && e.isConflict;
         _previewError = e is ApiException && e.message.isNotEmpty ? e.message : null;
       });
+    }
+  }
+
+  Future<void> _askRelease() async {
+    final unit = _unitId;
+    final from = _startsAt;
+    final to = _endsAt;
+    if (unit == null || from == null || to == null) return;
+    final api = ref.read(bookingApiProvider);
+
+    try {
+      final id = await api.requestRelease(bookableId: unit, startsAt: from, endsAt: to, quantity: _quantity);
+      if (!mounted) return;
+      setState(() {
+        _releaseId = id;
+        _releaseStatus = 'pending';
+      });
+      _releasePoll?.cancel();
+      _releasePoll = Timer.periodic(const Duration(seconds: 6), (t) async {
+        try {
+          final status = await api.releaseStatus(id);
+          if (!mounted) return t.cancel();
+          if (status != 'pending') {
+            t.cancel();
+            setState(() => _releaseStatus = status);
+            // approved: the room is held for this guest on the server; take it up again like any other hold
+            if (status == 'approved') {
+              setState(() {
+                _previewError = null;
+                _canAskRelease = false;
+              });
+              _schedulePreview();
+            }
+          }
+        } catch (_) {
+          // a missed poll is not an answer: try again in six seconds
+        }
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _previewError = e is ApiException && e.message.isNotEmpty ? e.message : null);
+    }
+  }
+
+  Future<void> _releaseHold() async {
+    final id = _holdId;
+    if (id == null) return;
+    setState(() {
+      _holdId = null;
+      _holdUntil = null;
+    });
+    try {
+      await ref.read(bookingApiProvider).releaseHold(id);
+    } catch (_) {
+      // it expires by itself anyway
     }
   }
 
@@ -552,6 +623,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                         const Icon(Icons.timer_outlined, size: 18),
                         const SizedBox(width: 8),
                         Expanded(child: Text(l10n.bookingHoldBanner(_holdLeft()), style: Theme.of(context).textTheme.bodyMedium)),
+                        TextButton(onPressed: _releaseHold, child: Text(l10n.bookingHoldRelease)),
                       ]),
                     ),
                   ),
@@ -578,7 +650,11 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                     contentPadding: EdgeInsets.zero,
                     controlAffinity: ListTileControlAffinity.leading,
                     value: _originConfirmed,
-                    onChanged: (v) => setState(() => _originConfirmed = v ?? false),
+                    onChanged: (v) {
+                      setState(() => _originConfirmed = v ?? false);
+                      // the hold waits for this declaration on a room sold to one kind of guest
+                      if (_originConfirmed) _schedulePreview();
+                    },
                     title: Text(_scope == 'locals' ? l10n.guestScopeConfirmLocals : l10n.guestScopeConfirmForeigners),
                   ),
               ]
@@ -855,7 +931,23 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
             if (_previewError != null) ...[
               const SizedBox(height: 6),
               Text(_previewError!, style: TextStyle(color: theme.colorScheme.error)),
+              if (_canAskRelease && _releaseId == null)
+                Padding(padding: const EdgeInsets.only(top: 6), child: OutlinedButton(onPressed: _askRelease, child: Text(l10n.bookingAskRelease))),
             ],
+            if (_releaseId != null && _releaseStatus == 'pending')
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Row(children: [
+                  const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2)),
+                  const SizedBox(width: 10),
+                  Expanded(child: Text(l10n.bookingReleaseWaiting, style: theme.textTheme.bodyMedium)),
+                ]),
+              ),
+            if (_releaseStatus == 'declined' || _releaseStatus == 'expired')
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(_releaseStatus == 'declined' ? l10n.bookingReleaseDeclined : l10n.bookingReleaseExpired, style: TextStyle(color: theme.colorScheme.error)),
+              ),
           ],
         ),
       ),

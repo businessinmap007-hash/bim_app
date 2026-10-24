@@ -350,6 +350,7 @@ class BookingApi {
     required DateTime startsAt,
     required DateTime endsAt,
     int quantity = 1,
+    String? guestOrigin,
   }) async {
     final data = await _client.post(
       '/bookings/holds',
@@ -359,6 +360,7 @@ class BookingApi {
         'starts_at': startsAt.toIso8601String(),
         'ends_at': endsAt.toIso8601String(),
         'quantity': quantity,
+        'guest_origin': ?guestOrigin,
       },
     ) as Map<String, dynamic>;
     final hold = data['hold'] as Map<String, dynamic>;
@@ -367,6 +369,23 @@ class BookingApi {
   }
 
   Future<void> releaseHold(int id) => _client.delete('/bookings/holds/$id');
+
+  /// «طلب تحرير غرفة»: a room promised to a partner of the hotel is asked back. Returns the request's id.
+  Future<int> requestRelease({required int bookableId, required DateTime startsAt, required DateTime endsAt, int quantity = 1}) async {
+    final data = await _client.post(
+      '/bookings/release-requests',
+      data: {'bookable_id': bookableId, 'starts_at': startsAt.toIso8601String(), 'ends_at': endsAt.toIso8601String(), 'quantity': quantity},
+    ) as Map<String, dynamic>;
+
+    return ((data['request'] as Map<String, dynamic>)['id'] as num).toInt();
+  }
+
+  /// `pending`, `approved`, `declined` or `expired`.
+  Future<String> releaseStatus(int id) async {
+    final data = await _client.get('/bookings/release-requests/$id') as Map<String, dynamic>;
+
+    return (data['request'] as Map<String, dynamic>)['status'] as String? ?? 'pending';
+  }
 
   Future<BookingPreview> preview({
     required int businessId,
@@ -402,8 +421,8 @@ class BookingApi {
   }
 
   /// The whole answer of `/discovery/units/{business}` — kinds, units and the booking shape the page is drawn in.
-  Future<UnitCatalog> unitCatalog(int businessId) async {
-    final data = await _client.get('/discovery/units/$businessId') as Map<String, dynamic>;
+  Future<UnitCatalog> unitCatalog(int businessId, {String? guestOrigin}) async {
+    final data = await _client.get('/discovery/units/$businessId', query: {'guest_origin': ?guestOrigin}) as Map<String, dynamic>;
     return UnitCatalog.fromJson(data);
   }
 

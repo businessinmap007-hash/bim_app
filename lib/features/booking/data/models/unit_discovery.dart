@@ -3,6 +3,45 @@ import '../../../../core/env/env.dart';
 import '../../../../core/time/egypt_time.dart';
 
 /// One priced add-on offered alongside a kind of unit («إفطار +٥٠»).
+/// «محجوزة لك»: the hold this guest still has on a room, so they find it as they left it when they come back.
+class MyHold {
+  final int id;
+  final DateTime startsAt;
+  final DateTime endsAt;
+  final int quantity;
+
+  /// When it ends, worked out from the seconds left at the moment the answer arrived.
+  final DateTime until;
+
+  const MyHold({required this.id, required this.startsAt, required this.endsAt, this.quantity = 1, required this.until});
+
+  Duration get left => until.difference(DateTime.now());
+
+  bool get isLive => left.inSeconds > 0;
+
+  /// «09:41»
+  String get leftLabel {
+    final s = left.inSeconds.clamp(0, 99999);
+
+    return '${(s ~/ 60).toString().padLeft(2, '0')}:${(s % 60).toString().padLeft(2, '0')}';
+  }
+
+  static MyHold? fromJsonOrNull(Object? json) {
+    if (json is! Map<String, dynamic>) return null;
+    final starts = DateTime.tryParse((json['starts_at'] as String? ?? '').replaceFirst(' ', 'T'));
+    final ends = DateTime.tryParse((json['ends_at'] as String? ?? '').replaceFirst(' ', 'T'));
+    if (starts == null || ends == null) return null;
+
+    return MyHold(
+      id: (json['id'] as num).toInt(),
+      startsAt: starts,
+      endsAt: ends,
+      quantity: (json['quantity'] as num?)?.toInt() ?? 1,
+      until: DateTime.now().add(Duration(seconds: (json['seconds_left'] as num?)?.toInt() ?? 0)),
+    );
+  }
+}
+
 class UnitChoice {
   final int optionId;
   final String? name;
@@ -65,6 +104,12 @@ class DiscoveredUnit {
   /// «تحت التعامل»: someone else is filling in a booking for it right now (it frees itself if they walk away).
   final bool held;
 
+  /// Promised to one of the hotel's partners: the guest may ask for it to be released.
+  final bool heldForPartner;
+
+  /// The hold this guest has on it right now, if any.
+  final MyHold? myHold;
+
   /// null unless the hotel sells this room type through the day as well
   final DayUseOffer? dayUse;
 
@@ -92,6 +137,8 @@ class DiscoveredUnit {
     this.available,
     this.reason,
     this.held = false,
+    this.heldForPartner = false,
+    this.myHold,
     this.dayUse,
     this.features = const [],
     this.guestScope = 'all',
@@ -118,6 +165,8 @@ class DiscoveredUnit {
     available: json['available'] as bool?,
     reason: json['reason'] as String?,
     held: json['held'] as bool? ?? false,
+    heldForPartner: json['held_for_partner'] as bool? ?? false,
+    myHold: MyHold.fromJsonOrNull(json['my_hold']),
     guestScope: json['guest_scope'] as String? ?? 'all',
     dayUse: json['day_use'] is Map<String, dynamic> ? DayUseOffer.fromJson(json['day_use'] as Map<String, dynamic>) : null,
     features: (json['modifiers'] as List<dynamic>? ?? [])
@@ -238,6 +287,7 @@ class PartnerRoom {
   final String guestScope;
   final List<UnitChoice> choices;
   final ItemOffer? offer;
+  final MyHold? myHold;
 
   const PartnerRoom({
     required this.allocationId,
@@ -259,6 +309,7 @@ class PartnerRoom {
     this.guestScope = 'all',
     this.choices = const [],
     this.offer,
+    this.myHold,
   });
 
   factory PartnerRoom.fromJson(Map<String, dynamic> json) => PartnerRoom(
@@ -283,6 +334,7 @@ class PartnerRoom {
     guestScope: json['guest_scope'] as String? ?? 'all',
     choices: [for (final c in (json['choices'] as List<dynamic>? ?? const [])) UnitChoice.fromJson(c as Map<String, dynamic>)],
     offer: ItemOffer.fromJsonOrNull(json['offer']),
+    myHold: MyHold.fromJsonOrNull(json['my_hold']),
   );
 }
 

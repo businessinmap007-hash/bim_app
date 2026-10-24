@@ -2,7 +2,7 @@
 library;
 
 import '../../../../core/env/env.dart';
-import '../../../booking/data/models/unit_discovery.dart' show UnitChoice;
+import '../../../booking/data/models/unit_discovery.dart' show MyHold, UnitChoice;
 import '../../../promotions/data/models/promotion.dart' show ItemOffer;
 
 class TripItemKind {
@@ -51,6 +51,7 @@ class TripRoom {
   final String guestScope;
   final List<UnitChoice> choices;
   final ItemOffer? offer;
+  final MyHold? myHold;
 
   const TripRoom({
     this.allocationId,
@@ -71,6 +72,7 @@ class TripRoom {
     this.guestScope = 'all',
     this.choices = const [],
     this.offer,
+    this.myHold,
   });
 
   factory TripRoom.fromJson(Map<String, dynamic> json) => TripRoom(
@@ -94,6 +96,7 @@ class TripRoom {
     guestScope: json['guest_scope'] as String? ?? 'all',
     choices: [for (final c in (json['choices'] as List<dynamic>? ?? const [])) UnitChoice.fromJson(c as Map<String, dynamic>)],
     offer: ItemOffer.fromJsonOrNull(json['offer']),
+    myHold: MyHold.fromJsonOrNull(json['my_hold']),
   );
 }
 

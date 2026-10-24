@@ -16,6 +16,9 @@ class HotelRoomQuery {
   /// One hotel's rooms (the hotel list opens this once a stay is picked).
   final int? businessId;
 
+  /// «أنا مصري/مقيم أم أجنبي»: only the room types sold to this kind of guest are listed.
+  final String? guestOrigin;
+
   const HotelRoomQuery({
     this.classId,
     this.governorateId,
@@ -25,12 +28,13 @@ class HotelRoomQuery {
     this.checkIn,
     this.checkOut,
     this.businessId,
+    this.guestOrigin,
   });
 
   bool get hasDates => checkIn != null && checkOut != null;
 
   /// How many filters are on — the number beside the filter button.
-  int get activeCount => [classId, governorateId, cityId, priceMin, priceMax, hasDates ? checkIn : null].where((v) => v != null).length;
+  int get activeCount => [classId, governorateId, cityId, priceMin, priceMax, guestOrigin, hasDates ? checkIn : null].where((v) => v != null).length;
 
   HotelRoomQuery copyWith({
     int? classId,
@@ -45,6 +49,8 @@ class HotelRoomQuery {
     bool clearCity = false,
     bool clearPrice = false,
     bool clearDates = false,
+    String? guestOrigin,
+    bool clearOrigin = false,
   }) {
     return HotelRoomQuery(
       classId: clearClass ? null : (classId ?? this.classId),
@@ -55,6 +61,7 @@ class HotelRoomQuery {
       checkIn: clearDates ? null : (checkIn ?? this.checkIn),
       checkOut: clearDates ? null : (checkOut ?? this.checkOut),
       businessId: businessId,
+      guestOrigin: clearOrigin ? null : (guestOrigin ?? this.guestOrigin),
     );
   }
 
@@ -68,10 +75,11 @@ class HotelRoomQuery {
       other.priceMax == priceMax &&
       other.checkIn == checkIn &&
       other.checkOut == checkOut &&
-      other.businessId == businessId;
+      other.businessId == businessId &&
+      other.guestOrigin == guestOrigin;
 
   @override
-  int get hashCode => Object.hash(classId, governorateId, cityId, priceMin, priceMax, checkIn, checkOut, businessId);
+  int get hashCode => Object.hash(classId, governorateId, cityId, priceMin, priceMax, checkIn, checkOut, businessId, guestOrigin);
 }
 
 class FilterOption {
@@ -142,6 +150,9 @@ class HotelRoom {
   final String roomName;
   final int? capacity;
   final String? imageUrl;
+
+  /// `all`, `locals` or `foreigners`: who this room type is sold to.
+  final String guestScope;
   final double price;
   final double bestPrice;
   final String currency;
@@ -164,6 +175,7 @@ class HotelRoom {
     this.city,
     this.capacity,
     this.imageUrl,
+    this.guestScope = 'all',
     this.partnerOffers = const [],
     this.offeringId,
     this.serviceId,
@@ -199,6 +211,7 @@ class HotelRoom {
       roomName: room['name'] as String? ?? '',
       capacity: (room['capacity'] as num?)?.toInt(),
       imageUrl: url,
+      guestScope: room['guest_scope'] as String? ?? 'all',
       price: (json['price'] as num?)?.toDouble() ?? 0,
       bestPrice: (json['best_price'] as num?)?.toDouble() ?? (json['price'] as num?)?.toDouble() ?? 0,
       currency: json['currency'] as String? ?? 'EGP',
@@ -238,6 +251,7 @@ class HotelRoomsApi {
                 'price_min': ?q.priceMin,
                 'price_max': ?q.priceMax,
                 'business_id': ?q.businessId,
+                'guest_origin': ?q.guestOrigin,
                 if (q.hasDates) ...{'starts_at': _day(q.checkIn!), 'ends_at': _day(q.checkOut!)},
                 'per_page': 50,
               },

@@ -327,8 +327,8 @@ class _ServiceList extends StatelessWidget {
         builder: (_) => const PromotionsScreen(),
       ),
       _Tile(
-        // «برامج الرحلات»: a tour company writes a trip as days and items, with the cards of the rooms a hotel gave it
-        show: keys == null || keys!.isNotEmpty,
+        // «برامج الرحلات»: tourism and hotels only (the server leaves the capability out for every other trade)
+        show: _has('trip_programs'),
         leading: Icons.route_outlined,
         title: l10n.tripScreenTitle,
         builder: (_) => const TripProgramsScreen(),

@@ -118,7 +118,9 @@ void main() {
     expect(api.weekRequests, hasLength(2));
     final a = DateTime.parse(api.weekRequests[0]);
     final b = DateTime.parse(api.weekRequests[1]);
-    expect(b.difference(a).inDays, 7, reason: 'one tap is a week in the week view');
+    // calendar days, not elapsed time: a week that crosses the clock change is 6 days 23 hours long and still a week
+    int dayGap(DateTime x, DateTime y) => DateTime.utc(y.year, y.month, y.day).difference(DateTime.utc(x.year, x.month, x.day)).inDays;
+    expect(dayGap(a, b), 7, reason: 'one tap is a week in the week view');
     expect(a.difference(DateTime(first.year, first.month, first.day)).inDays, 0);
 
     await tester.tap(find.byTooltip('Day view'));
@@ -126,6 +128,6 @@ void main() {
     await tester.tap(find.byIcon(Icons.chevron_right_rounded));
     await tester.pumpAndSettle();
     final days = api.dayRequests.map(DateTime.parse).toList();
-    expect(days.last.difference(days[days.length - 2]).inDays, 1, reason: 'one tap is a day in the day view');
+    expect(dayGap(days[days.length - 2], days.last), 1, reason: 'one tap is a day in the day view');
   });
 }

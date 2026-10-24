@@ -11,6 +11,14 @@ class PartnershipsApi {
     return [for (final p in (data['partnerships'] as List<dynamic>? ?? const [])) Partnership.fromJson(p as Map<String, dynamic>)];
   }
 
+  /// What this partner is asked to give back.
+  Future<List<ReleaseRequest>> releaseRequests() async {
+    final data = await _client.get('/business/partnerships/release-requests') as Map<String, dynamic>;
+    return [for (final r in (data['requests'] as List<dynamic>? ?? const [])) ReleaseRequest.fromJson(r as Map<String, dynamic>)];
+  }
+
+  Future<void> answerRelease(int id, {required bool approve}) => _client.post('/business/partnerships/release-requests/$id/${approve ? 'approve' : 'decline'}');
+
   Future<List<BusinessHit>> lookup(String q) async {
     final data = await _client.get('/business/partnerships/lookup', query: {'q': q}) as Map<String, dynamic>;
     return [for (final b in (data['businesses'] as List<dynamic>? ?? const [])) BusinessHit.fromJson(b as Map<String, dynamic>)];
@@ -33,22 +41,24 @@ class PartnershipsApi {
     return [for (final r in (data['rooms'] as List<dynamic>? ?? const [])) GrantableRoom.fromJson(r as Map<String, dynamic>)];
   }
 
-  Map<String, Object> _terms({required int quantity, required double contractPrice, int? minNights, int? maxNights, int releaseDays = 0}) => {
+  Map<String, Object> _terms({required int quantity, required double contractPrice, int? minNights, int? maxNights, int releaseDays = 0, DateTime? from, DateTime? to}) => {
     'quantity_total': quantity,
     'contract_price': contractPrice,
     'min_nights': ?minNights,
     'max_nights': ?maxNights,
     'release_days_before': releaseDays,
+    'starts_at': ?from?.toIso8601String(),
+    'ends_at': ?to?.toIso8601String(),
   };
 
-  Future<void> grant(int id, {required int unitId, required int quantity, required double contractPrice, int? minNights, int? maxNights, int releaseDays = 0}) => _client.post(
+  Future<void> grant(int id, {required int unitId, required int quantity, required double contractPrice, int? minNights, int? maxNights, int releaseDays = 0, DateTime? from, DateTime? to}) => _client.post(
     '/business/partnerships/$id/allocations',
-    data: {'bookable_item_id': unitId, ..._terms(quantity: quantity, contractPrice: contractPrice, minNights: minNights, maxNights: maxNights, releaseDays: releaseDays)},
+    data: {'bookable_item_id': unitId, ..._terms(quantity: quantity, contractPrice: contractPrice, minNights: minNights, maxNights: maxNights, releaseDays: releaseDays, from: from, to: to)},
   );
 
-  Future<void> updateAllocation(int id, int allocationId, {required int quantity, required double contractPrice, int? minNights, int? maxNights, int releaseDays = 0}) => _client.put(
+  Future<void> updateAllocation(int id, int allocationId, {required int quantity, required double contractPrice, int? minNights, int? maxNights, int releaseDays = 0, DateTime? from, DateTime? to}) => _client.put(
     '/business/partnerships/$id/allocations/$allocationId',
-    data: _terms(quantity: quantity, contractPrice: contractPrice, minNights: minNights, maxNights: maxNights, releaseDays: releaseDays),
+    data: _terms(quantity: quantity, contractPrice: contractPrice, minNights: minNights, maxNights: maxNights, releaseDays: releaseDays, from: from, to: to),
   );
 
   /// `stop` or `activate`.

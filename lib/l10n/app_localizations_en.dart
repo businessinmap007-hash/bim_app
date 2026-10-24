@@ -12325,7 +12325,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get pshQuantity => 'Quantity';
+  String get pshQuantity => 'Rooms per night';
 
   @override
   String get pshContractPrice => 'Contract price per night';
@@ -12349,7 +12349,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String pshAvailableOf(int available, int total) {
-    return '$available of $total left';
+    return '$available of $total rooms free per night';
   }
 
   @override
@@ -12606,4 +12606,69 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get boardDealingHotel => 'from the hotel\'s own screen';
+
+  @override
+  String get guestOriginQuestion => 'I am…';
+
+  @override
+  String get guestOriginLocal => 'Egyptian or resident';
+
+  @override
+  String get guestOriginForeign => 'Foreigner';
+
+  @override
+  String get bookingHoldRelease => 'Release the hold';
+
+  @override
+  String bookingMyHold(String time) {
+    return 'Held for you — ends in $time';
+  }
+
+  @override
+  String get bookingAskRelease => 'Ask the partner to release it';
+
+  @override
+  String get bookingReleaseWaiting =>
+      'Your request was sent to the partner. Waiting for its answer…';
+
+  @override
+  String get bookingReleaseDeclined =>
+      'The partner could not release the room.';
+
+  @override
+  String get bookingReleaseExpired =>
+      'The request ran out of time without an answer.';
+
+  @override
+  String get pshReleaseTitle => 'Requests to release rooms';
+
+  @override
+  String get pshReleaseHint =>
+      'A guest of the hotel asks for a room held for you. If you agree it goes back to the hotel.';
+
+  @override
+  String pshReleaseRoom(String room, String from, String to) {
+    return '$room · $from to $to';
+  }
+
+  @override
+  String get pshReleaseApprove => 'Agree';
+
+  @override
+  String get pshReleaseDecline => 'Decline';
+
+  @override
+  String get pshStayDates => 'Covers stays from night… to night…';
+
+  @override
+  String get pshStayAny => 'Not limited (any date)';
+
+  @override
+  String pshStanding(int n, int pending) {
+    return 'Bookings standing: $n · waiting for the hotel: $pending';
+  }
+
+  @override
+  String get pshStandingHint =>
+      'They stay valid after the allocation ends or stops; nothing is cancelled.';
 }

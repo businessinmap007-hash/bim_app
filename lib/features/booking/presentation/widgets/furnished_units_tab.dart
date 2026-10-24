@@ -32,7 +32,7 @@ class _FurnishedUnitsTabState extends ConsumerState<FurnishedUnitsTab> {
   void initState() {
     super.initState();
     final now = EgyptTime.now();
-    _arrival = DateTime(now.year, now.month, now.day).add(const Duration(days: 1));
+    _arrival = DateTime(now.year, now.month, now.day + 1);
     _departure = _arrival.add(const Duration(days: 3));
   }
 
@@ -57,7 +57,7 @@ class _FurnishedUnitsTabState extends ConsumerState<FurnishedUnitsTab> {
     final picked = await showDatePicker(
       context: context,
       initialDate: _departure,
-      firstDate: _arrival.add(const Duration(days: 1)),
+      firstDate: DateTime(_arrival.year, _arrival.month, _arrival.day + 1),
       lastDate: _arrival.add(const Duration(days: 365)),
     );
     if (picked != null && mounted) {

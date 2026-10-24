@@ -1,3 +1,4 @@
+import 'guest_origin.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/core_providers.dart';
@@ -37,7 +38,8 @@ final unitDiscoveryProvider = FutureProvider.autoDispose.family<List<UnitKindGro
 
 /// The units a business sells and the booking shape its page is drawn in (no dates — «what exists and what it costs»).
 final unitCatalogProvider = FutureProvider.autoDispose.family<UnitCatalog, int>((ref, businessId) {
-  return ref.watch(bookingApiProvider).unitCatalog(businessId);
+  // the guest said who they are: only the room types sold to them are listed
+  return ref.watch(bookingApiProvider).unitCatalog(businessId, guestOrigin: ref.watch(guestOriginProvider));
 });
 
 class MyBookingsState {
