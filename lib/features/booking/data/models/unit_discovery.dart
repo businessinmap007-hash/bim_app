@@ -45,6 +45,11 @@ class MyHold {
 class UnitChoice {
   final int optionId;
   final String? name;
+
+  /// the group it belongs to («نظام الوجبات») and whether the group is ONE choice (a radio) or several
+  final int? groupId;
+  final String? group;
+  final bool single;
   final String adjustType; // 'amount' | 'percent'
   final double adjustValue;
   final bool perPerson;
@@ -57,10 +62,16 @@ class UnitChoice {
     required this.adjustValue,
     required this.perPerson,
     required this.amount,
+    this.groupId,
+    this.group,
+    this.single = false,
   });
 
   factory UnitChoice.fromJson(Map<String, dynamic> json) => UnitChoice(
     optionId: (json['option_id'] as num).toInt(),
+    groupId: (json['group_id'] as num?)?.toInt(),
+    group: json['group'] as String?,
+    single: json['single'] as bool? ?? false,
     name: json['name'] as String?,
     adjustType: json['adjust_type'] as String? ?? 'amount',
     adjustValue: (json['adjust_value'] as num?)?.toDouble() ?? 0,

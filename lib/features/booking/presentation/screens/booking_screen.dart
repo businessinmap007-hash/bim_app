@@ -663,18 +663,45 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                 if (widget.initialUnit!.choices.isNotEmpty) ...[
                   const SizedBox(height: 12),
                   Text(l10n.bookingAddOnsTitle, style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
-                  for (final c in widget.initialUnit!.choices)
-                    CheckboxListTile(
-                      contentPadding: EdgeInsets.zero,
-                      controlAffinity: ListTileControlAffinity.leading,
-                      value: _modifierOptionIds.contains(c.optionId),
-                      onChanged: (v) {
-                        setState(() => (v ?? false) ? _modifierOptionIds.add(c.optionId) : _modifierOptionIds.remove(c.optionId));
-                        _schedulePreview();
-                      },
-                      title: Text(c.name ?? ''),
-                      secondary: Text(c.adjustType == 'percent' ? '+${c.adjustValue.toStringAsFixed(0)}%' : '+${c.amount.toStringAsFixed(0)}'),
-                    ),
+                  // one choice for a group the hotel sells as one («نظام الوجبات»: none, half board, full board) — a radio with «بدون»
+                  for (final group in _choiceGroups(widget.initialUnit!.choices)) ...[
+                    if (group.first.group != null && group.first.group!.isNotEmpty)
+                      Text(group.first.group!, style: Theme.of(context).textTheme.bodyMedium),
+                    if (group.first.single)
+                      RadioGroup<int>(
+                        groupValue: group.map((c) => c.optionId).where(_modifierOptionIds.contains).firstOrNull ?? 0,
+                        onChanged: (picked) {
+                          setState(() {
+                            _modifierOptionIds.removeAll(group.map((c) => c.optionId));
+                            if ((picked ?? 0) != 0) _modifierOptionIds.add(picked!);
+                          });
+                          _schedulePreview();
+                        },
+                        child: Column(children: [
+                          RadioListTile<int>(contentPadding: EdgeInsets.zero, value: 0, title: Text(l10n.bookingNoAddOn)),
+                          for (final c in group)
+                            RadioListTile<int>(
+                              contentPadding: EdgeInsets.zero,
+                              value: c.optionId,
+                              title: Text(c.name ?? ''),
+                              secondary: Text(c.adjustType == 'percent' ? '+${c.adjustValue.toStringAsFixed(0)}%' : '+${c.amount.toStringAsFixed(0)}'),
+                            ),
+                        ]),
+                      )
+                    else
+                      for (final c in group)
+                        CheckboxListTile(
+                          contentPadding: EdgeInsets.zero,
+                          controlAffinity: ListTileControlAffinity.leading,
+                          value: _modifierOptionIds.contains(c.optionId),
+                          onChanged: (v) {
+                            setState(() => (v ?? false) ? _modifierOptionIds.add(c.optionId) : _modifierOptionIds.remove(c.optionId));
+                            _schedulePreview();
+                          },
+                          title: Text(c.name ?? ''),
+                          secondary: Text(c.adjustType == 'percent' ? '+${c.adjustValue.toStringAsFixed(0)}%' : '+${c.amount.toStringAsFixed(0)}'),
+                        ),
+                  ],
                 ],
                 // «أسعار للمصريين والمقيمين فقط»: the room is sold to one of the two; the guest says which they are, the hotel checks on arrival
                 if (_scope != 'all')
@@ -784,6 +811,16 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
         ),
       ),
     );
+  }
+
+  /// The add-ons of a room grouped as the hotel groups them, in the order they came.
+  List<List<UnitChoice>> _choiceGroups(List<UnitChoice> choices) {
+    final groups = <int, List<UnitChoice>>{};
+    var loose = -1;
+    for (final c in choices) {
+      groups.putIfAbsent(c.groupId ?? loose--, () => []).add(c);
+    }
+    return groups.values.toList();
   }
 
   void _pickVariant(DiscoveredUnit next) {
