@@ -5,6 +5,7 @@ import 'models/booking_settings_models.dart';
 import 'models/booking_terms.dart';
 import 'models/add_on_models.dart';
 import 'models/room_models.dart';
+import '../../booking/data/models/child_policy.dart';
 
 /// /business/prices, /business/bookable-items, /business/working-hours —
 /// business-only self-service (the `business` middleware gate on the
@@ -223,6 +224,17 @@ class BookingSettingsApi {
   Future<RoomsPayload> deleteRoom(int itemId, int roomId) async {
     final data = await _client.delete('/business/bookable-items/$itemId/rooms/$roomId') as Map<String, dynamic>;
     return RoomsPayload.fromJson(data);
+  }
+
+  /// «سياسة الأطفال» of the hotel — null until it writes one.
+  Future<ChildPolicy?> childPolicy() async {
+    final data = await _client.get('/business/child-policy') as Map<String, dynamic>;
+    return ChildPolicy.fromJsonOrNull(data['policy']);
+  }
+
+  Future<ChildPolicy?> saveChildPolicy(ChildPolicy policy) async {
+    final data = await _client.put('/business/child-policy', data: policy.toJson()) as Map<String, dynamic>;
+    return ChildPolicy.fromJsonOrNull(data['policy']);
   }
 
   /// «مواصفات لكل رقم غرفة»: the feature vocabulary with what THIS numbered room carries ticked.

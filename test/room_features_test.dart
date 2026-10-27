@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:bim_app/features/booking/data/models/child_policy.dart';
 import 'package:bim_app/features/booking/data/models/unit_discovery.dart';
 import 'package:bim_app/features/booking_settings/data/models/room_models.dart';
 
@@ -24,6 +25,19 @@ void main() {
 }
 
 void variants() {
+  test('a hotel children policy says what each age pays and who takes a place in the room', () {
+    final p = ChildPolicy.fromJsonOrNull({
+      'adult_from_age': 12, 'counts_from_age': 6, 'meals_follow': true,
+      'bands': [{'from': 0, 'to': 5, 'percent': 0}, {'from': 6, 'to': 11, 'percent': 50}],
+    })!;
+    expect(p.percentFor(4), 0);
+    expect(p.percentFor(8), 50);
+    expect(p.percentFor(13), 0, reason: 'an adult is inside the room price');
+    expect(p.counts(4), isFalse);
+    expect(p.counts(8), isTrue);
+    expect(ChildPolicy.fromJsonOrNull(null), isNull);
+  });
+
   test('a partner room of one allocation comes as one card per kind, told apart by its features', () {
     final base = {'allocation_id': 5, 'bookable_id': 7, 'label': 'غرفة فردية', 'price': 700};
     final plain = PartnerRoom.fromJson(base);

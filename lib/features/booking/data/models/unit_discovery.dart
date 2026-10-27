@@ -1,6 +1,7 @@
 import '../../../promotions/data/models/promotion.dart';
 import '../../../../core/env/env.dart';
 import '../../../../core/time/egypt_time.dart';
+import 'child_policy.dart';
 
 /// One priced add-on offered alongside a kind of unit («إفطار +٥٠»).
 /// «محجوزة لك»: the hold this guest still has on a room, so they find it as they left it when they come back.
@@ -312,6 +313,9 @@ class PartnerRoom {
   /// A kind of room behind the partner's room («غرفة فردية · إطلالة بحرية»): the features it was priced with; empty for the plain kind.
   final List<int> optionIds;
 
+  /// The hotel's «سياسة الأطفال», which goes with its room whoever sells it.
+  final ChildPolicy? childPolicy;
+
   const PartnerRoom({
     required this.allocationId,
     required this.unitId,
@@ -334,6 +338,7 @@ class PartnerRoom {
     this.offer,
     this.myHold,
     this.optionIds = const [],
+    this.childPolicy,
   });
 
   /// Two kinds of one allocation share its ids; what tells them apart is the features.
@@ -363,12 +368,16 @@ class PartnerRoom {
     offer: ItemOffer.fromJsonOrNull(json['offer']),
     myHold: MyHold.fromJsonOrNull(json['my_hold']),
     optionIds: [for (final v in json['option_ids'] as List<dynamic>? ?? const []) (v as num).toInt()],
+    childPolicy: ChildPolicy.fromJsonOrNull(json['child_policy']),
   );
 }
 
 /// Everything `/discovery/units/{business}` says: the kinds with their units, and the shape the page is drawn in.
 class UnitCatalog {
   final int? serviceId;
+
+  /// «سياسة الأطفال» of this hotel — null when it has none (children are then free and not counted).
+  final ChildPolicy? childPolicy;
   final List<UnitKindGroup> kinds;
   final UnitShape? shape;
 
@@ -378,7 +387,7 @@ class UnitCatalog {
   /// How the business takes its appointments: `slots` (the customer picks a time) or `queue` (the next turn of the day).
   final String flow;
 
-  const UnitCatalog({this.serviceId, this.kinds = const [], this.shape, this.flow = 'slots', this.partnerRooms = const []});
+  const UnitCatalog({this.serviceId, this.kinds = const [], this.shape, this.flow = 'slots', this.partnerRooms = const [], this.childPolicy});
 
   bool get isQueue => flow == 'queue';
 
@@ -392,6 +401,7 @@ class UnitCatalog {
     shape: json['shape'] is Map<String, dynamic> ? UnitShape.fromJson(json['shape'] as Map<String, dynamic>) : null,
     flow: json['flow'] as String? ?? 'slots',
     partnerRooms: [for (final r in (json['partner_rooms'] as List<dynamic>? ?? const [])) PartnerRoom.fromJson(r as Map<String, dynamic>)],
+    childPolicy: ChildPolicy.fromJsonOrNull(json['child_policy']),
   );
 }
 

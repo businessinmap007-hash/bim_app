@@ -12433,6 +12433,68 @@ class AppLocalizationsAr extends AppLocalizations {
       'الضيف الذي اختار إطلالة أو ميزة عند الحجز يأخذ عند بدء الإقامة رقمًا يحملها';
 
   @override
+  String get childPolicyTitle => 'سياسة الأطفال';
+
+  @override
+  String get childPolicyIntro =>
+      'حدّد أعمار الأطفال وما يدفعه كل طفل من سعر الليلة. تنطبق على كل غرفك وعلى ما يبيعه شركاؤك من غرفك.';
+
+  @override
+  String get childPolicyBands => 'الشرائح';
+
+  @override
+  String get childPolicyFrom => 'من عمر';
+
+  @override
+  String get childPolicyTo => 'إلى عمر';
+
+  @override
+  String get childPolicyPercent => 'نسبة أخرى';
+
+  @override
+  String get childPolicyAddBand => 'أضف شريحة';
+
+  @override
+  String get childPolicyAdultAge => 'يُعامل كبالغ من عمر';
+
+  @override
+  String get childPolicyCountsFrom => 'يُحسب من سعة الغرفة من عمر';
+
+  @override
+  String get childPolicyMeals => 'وجبات الطفل بنفس النسبة';
+
+  @override
+  String get childPolicySaved => 'حُفظت سياسة الأطفال';
+
+  @override
+  String get childFree => 'مجانًا';
+
+  @override
+  String get childHalf => 'نصف';
+
+  @override
+  String get childThird => 'ثلث';
+
+  @override
+  String get bookingChildrenTitle => 'الأطفال';
+
+  @override
+  String get bookingAddChild => 'أضف طفلًا';
+
+  @override
+  String bookingChildN(int n) {
+    return 'الطفل $n';
+  }
+
+  @override
+  String get bookingChildAge => 'العمر';
+
+  @override
+  String bookingChildLine(int age, String pays) {
+    return 'طفل $age سنوات · $pays';
+  }
+
+  @override
   String bookingGuestsMax(int n) {
     return 'الحد الأقصى $n';
   }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../business/data/models/offering_item.dart';
 import '../../../promotions/presentation/widgets/offer_widgets.dart';
+import '../../data/models/child_policy.dart';
 import '../../data/models/unit_discovery.dart';
 import '../screens/booking_screen.dart';
 
@@ -31,6 +32,7 @@ class PartnerRoomsSection extends StatelessWidget {
     guestScope: r.guestScope,
     choices: r.choices,
     optionIds: r.optionIds,
+    childPolicy: r.childPolicy,
     // the other kinds of the same room (a view each), so the form offers them as one choice
     variants: [
       for (final k in rooms.where((x) => x.allocationId == r.allocationId))
@@ -140,6 +142,7 @@ void openPartnerRoomBooking(
   List<UnitChoice> choices = const [],
   List<int> optionIds = const [],
   List<DiscoveredUnit> variants = const [],
+  ChildPolicy? childPolicy,
   DateTime? holdStartsAt,
   DateTime? holdEndsAt,
 }) {
@@ -152,6 +155,7 @@ void openPartnerRoomBooking(
         initialEndsAt: holdEndsAt,
         initialUnit: DiscoveredUnit(id: unitId, label: label, capacity: capacity, images: images, price: price, features: features, guestScope: guestScope, choices: choices, variantOptionIds: optionIds),
         variants: variants.length > 1 ? variants : const [],
+        childPolicy: childPolicy,
         offering: OfferingItem(
           id: 0,
           source: 'price',

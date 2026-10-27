@@ -15,6 +15,7 @@ import '../../../business/data/models/offering_item.dart';
 import '../../application/booking_providers.dart';
 import '../../data/models/unit_discovery.dart';
 import '../../data/models/booking_form.dart';
+import '../../data/models/child_policy.dart';
 import '../../../../core/time/egypt_time.dart';
 import '../../../../core/time/clock_format.dart';
 import '../../../../core/time/local_format.dart';
@@ -41,6 +42,9 @@ class BookingScreen extends ConsumerStatefulWidget {
   /// Every kind of room behind the type the guest tapped («بدون إطلالة»، «إطلالة مسبح»، «إطلالة بحر»), each at its all-in price: shown as ONE
   /// choice (radio) on the form, so the guest can change their mind without leaving it. Empty for a type that does not differ by room.
   final List<DiscoveredUnit> variants;
+
+  /// The hotel's «سياسة الأطفال»: when given, a stay asks each child's age instead of a count.
+  final ChildPolicy? childPolicy;
 
   /// Opened from the Day use card: starts on the Day use side of the room type.
   final bool startInDayUse;
@@ -72,6 +76,7 @@ class BookingScreen extends ConsumerStatefulWidget {
     this.shape,
     this.initialUnit,
     this.variants = const [],
+    this.childPolicy,
     this.startInDayUse = false,
     this.initialStartsAt,
     this.initialEndsAt,
@@ -93,6 +98,14 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
   int _partySize = 1;
   int _quantity = 1;
   int _childrenCount = 0;
+
+  /// each child's age, when the hotel has a «سياسة الأطفال»
+  final List<int> _childAges = [];
+
+  bool get _asksAges => widget.childPolicy != null && widget.offering.itemType == 'booking_stay';
+
+  /// the children who take a place in the room, by the hotel's own age
+  int get _countedChildren => _asksAges ? _childAges.where(widget.childPolicy!.counts).length : 0;
   String? _channel;
   String? _visitPlace;
   int? _unitId;
@@ -109,7 +122,9 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
             .where((u) => u.id == _unitId)
             .map((u) => u.capacity)
             .firstOrNull;
-    return (unit != null && unit > 0) ? unit * _quantity : null;
+    if (unit == null || unit <= 0) return null;
+    // children from the hotel's age take places too: the adults may fill only what they leave
+    return (unit * _quantity - _countedChildren).clamp(1, 1000);
   }
 
   /// the party as it is sent: never above what the room takes, even if the guest changed room type or the number of rooms after setting it
@@ -345,6 +360,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
         quantity: _quantity,
         partySize: _partyToSend,
         optionIds: _modifierOptionIds.toList(),
+        childrenAges: _asksAges ? List<int>.of(_childAges) : const [],
       );
       // A slower earlier request landing after a newer one must not
       // overwrite it with a stale total.
@@ -499,7 +515,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
         case 'children_count':
           // 0 is a real answer ("no children"), not an unanswered field —
           // always send it once the field is on the form at all.
-          meta['children_count'] = _childrenCount;
+          meta['children_count'] = _asksAges ? _childAges.length : _childrenCount;
         default:
           final text = _textControllers[f.key]?.text.trim();
           if (text != null && text.isNotEmpty) meta[f.key] = text;
@@ -565,6 +581,8 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
         dayUseDate: dayUse ? _startsAt : null,
         allDay: !dayUse && fields.any((f) => f.key == 'date_range'),
         partySize: fields.any((f) => f.key == 'guest_count' || f.key == 'party_size') ? _partyToSend : null,
+        // each child's age, priced and counted by the hotel's «سياسة الأطفال»
+        childrenAges: _asksAges ? List<int>.of(_childAges) : const [],
         quantity: fields.any((f) => f.key == 'quantity') ? _quantity : null,
         notes: _notesController.text.trim(),
         meta: _buildMeta(fields),
@@ -813,6 +831,66 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     );
   }
 
+  /// «الأطفال»: one line per child with its age; beside it what the hotel's policy says it pays (free, or a share of the night).
+  Widget _childAgesBlock(BuildContext context, AppLocalizations l10n) {
+    final policy = widget.childPolicy!;
+    final theme = Theme.of(context);
+    final maxAge = (policy.adultFromAge - 1).clamp(0, 17);
+
+    String pays(int age) {
+      final p = policy.percentFor(age);
+      return p <= 0 ? l10n.childFree : '${p % 1 == 0 ? p.toStringAsFixed(0) : p.toStringAsFixed(2)}%';
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(children: [
+            Expanded(child: Text(l10n.bookingChildrenTitle, style: theme.textTheme.bodyMedium)),
+            TextButton.icon(
+              icon: const Icon(Icons.add),
+              label: Text(l10n.bookingAddChild),
+              onPressed: _childAges.length >= 10
+                  ? null
+                  : () {
+                      setState(() => _childAges.add(maxAge < 5 ? maxAge : 5));
+                      _schedulePreview();
+                    },
+            ),
+          ]),
+          for (var i = 0; i < _childAges.length; i++)
+            Row(children: [
+              Text(l10n.bookingChildN(i + 1)),
+              const SizedBox(width: 12),
+              Text(l10n.bookingChildAge, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+              const SizedBox(width: 6),
+              DropdownButton<int>(
+                value: _childAges[i].clamp(0, maxAge),
+                items: [for (var a = 0; a <= maxAge; a++) DropdownMenuItem(value: a, child: Text('$a'))],
+                onChanged: (v) {
+                  if (v == null) return;
+                  setState(() => _childAges[i] = v);
+                  _schedulePreview();
+                },
+              ),
+              const SizedBox(width: 8),
+              Expanded(child: Text(pays(_childAges[i]), style: theme.textTheme.bodySmall)),
+              IconButton(
+                tooltip: l10n.commonDelete,
+                icon: const Icon(Icons.close),
+                onPressed: () {
+                  setState(() => _childAges.removeAt(i));
+                  _schedulePreview();
+                },
+              ),
+            ]),
+        ],
+      ),
+    );
+  }
+
   /// The add-ons of a room grouped as the hotel groups them, in the order they came.
   List<List<UnitChoice>> _choiceGroups(List<UnitChoice> choices) {
     final groups = <int, List<UnitChoice>>{};
@@ -1016,9 +1094,11 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
             if (showBreakdown) ...[
               _summaryRow(theme, viewNames.isEmpty ? l10n.bookingBasePriceLine : card!.displayTitle, money((preview.baseUnitPrice ?? 0) + viewExtra)),
               for (final line in otherLines) _summaryRow(theme, line.name, '+${line.amount.toStringAsFixed(0)}'),
+              for (final c in preview.children.where((c) => c.perNight > 0))
+                _summaryRow(theme, l10n.bookingChildLine(c.age, '${c.percent % 1 == 0 ? c.percent.toStringAsFixed(0) : c.percent.toStringAsFixed(2)}%'), '+${c.perNight.toStringAsFixed(0)}'),
               if (!dayUseOn) ...[
                 const Divider(height: 16),
-                _summaryRow(theme, l10n.bookingNightPrice, money(preview.unitPrice!), bold: true),
+                _summaryRow(theme, l10n.bookingNightPrice, money(preview.unitPrice! + preview.children.fold<double>(0, (s, c) => s + c.perNight)), bold: true),
                 if (nights > 1) _summaryRow(theme, l10n.bookingTimesNights(nights), ''),
               ],
               const SizedBox(height: 8),
@@ -1325,6 +1405,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
           _schedulePreview();
         });
       case 'children_count':
+        if (_asksAges) return _childAgesBlock(context, l10n);
         return _stepperRow(context, labelText, _childrenCount, (v) => setState(() => _childrenCount = v), min: 0);
       case 'channel':
         return _choiceRow(

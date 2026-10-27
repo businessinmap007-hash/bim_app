@@ -248,6 +248,8 @@ class BookingApi {
     String? notes,
     Map<String, dynamic>? meta,
     List<int> optionIds = const [],
+    // «سياسة الأطفال»: each child's age, priced and counted by the hotel's own bands
+    List<int> childrenAges = const [],
     // «Day use»: the guest names only a date — the room type names the window and the flat price
     DateTime? dayUseDate,
     // «كورس»: the group joined — the booking is the enrolment
@@ -273,6 +275,7 @@ class BookingApi {
                 'all_day': allDay,
                 'party_size': ?partySize,
                 'quantity': ?quantity,
+                if (childrenAges.isNotEmpty) 'children_ages': childrenAges,
                 'guest_origin': ?guestOrigin,
                 if (notes != null && notes.isNotEmpty) 'notes': notes,
                 if (meta != null && meta.isNotEmpty) 'meta': meta,
@@ -399,6 +402,7 @@ class BookingApi {
     int? partySize,
     List<int> optionIds = const [],
     DateTime? dayUseDate,
+    List<int> childrenAges = const [],
   }) async {
     final data =
         await _client.post(
@@ -413,6 +417,7 @@ class BookingApi {
                 if (dayUseDate != null) ...{'day_use': true, 'date': _dateOnly(dayUseDate)},
                 'quantity': ?quantity,
                 'party_size': ?partySize,
+                if (childrenAges.isNotEmpty) 'children_ages': childrenAges,
                 if (optionIds.isNotEmpty) 'option_ids': optionIds,
               },
             )

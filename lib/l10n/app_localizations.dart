@@ -22375,6 +22375,120 @@ abstract class AppLocalizations {
   /// **'الضيف الذي اختار إطلالة أو ميزة عند الحجز يأخذ عند بدء الإقامة رقمًا يحملها'**
   String get roomFeaturesHint;
 
+  /// No description provided for @childPolicyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'سياسة الأطفال'**
+  String get childPolicyTitle;
+
+  /// No description provided for @childPolicyIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدّد أعمار الأطفال وما يدفعه كل طفل من سعر الليلة. تنطبق على كل غرفك وعلى ما يبيعه شركاؤك من غرفك.'**
+  String get childPolicyIntro;
+
+  /// No description provided for @childPolicyBands.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشرائح'**
+  String get childPolicyBands;
+
+  /// No description provided for @childPolicyFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'من عمر'**
+  String get childPolicyFrom;
+
+  /// No description provided for @childPolicyTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلى عمر'**
+  String get childPolicyTo;
+
+  /// No description provided for @childPolicyPercent.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة أخرى'**
+  String get childPolicyPercent;
+
+  /// No description provided for @childPolicyAddBand.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف شريحة'**
+  String get childPolicyAddBand;
+
+  /// No description provided for @childPolicyAdultAge.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُعامل كبالغ من عمر'**
+  String get childPolicyAdultAge;
+
+  /// No description provided for @childPolicyCountsFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُحسب من سعة الغرفة من عمر'**
+  String get childPolicyCountsFrom;
+
+  /// No description provided for @childPolicyMeals.
+  ///
+  /// In ar, this message translates to:
+  /// **'وجبات الطفل بنفس النسبة'**
+  String get childPolicyMeals;
+
+  /// No description provided for @childPolicySaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'حُفظت سياسة الأطفال'**
+  String get childPolicySaved;
+
+  /// No description provided for @childFree.
+  ///
+  /// In ar, this message translates to:
+  /// **'مجانًا'**
+  String get childFree;
+
+  /// No description provided for @childHalf.
+  ///
+  /// In ar, this message translates to:
+  /// **'نصف'**
+  String get childHalf;
+
+  /// No description provided for @childThird.
+  ///
+  /// In ar, this message translates to:
+  /// **'ثلث'**
+  String get childThird;
+
+  /// No description provided for @bookingChildrenTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأطفال'**
+  String get bookingChildrenTitle;
+
+  /// No description provided for @bookingAddChild.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف طفلًا'**
+  String get bookingAddChild;
+
+  /// No description provided for @bookingChildN.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطفل {n}'**
+  String bookingChildN(int n);
+
+  /// No description provided for @bookingChildAge.
+  ///
+  /// In ar, this message translates to:
+  /// **'العمر'**
+  String get bookingChildAge;
+
+  /// No description provided for @bookingChildLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'طفل {age} سنوات · {pays}'**
+  String bookingChildLine(int age, String pays);
+
   /// No description provided for @bookingGuestsMax.
   ///
   /// In ar, this message translates to:

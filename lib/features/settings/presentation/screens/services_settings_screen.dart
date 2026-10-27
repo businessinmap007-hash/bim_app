@@ -7,6 +7,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../booking/presentation/screens/business_bookings_screen.dart';
 import '../../../booking_settings/presentation/screens/booking_settings_screen.dart';
 import '../../../booking_settings/presentation/screens/booking_add_ons_screen.dart';
+import '../../../booking_settings/presentation/screens/child_policy_screen.dart';
 import '../../../booking_settings/presentation/screens/booking_terms_screen.dart';
 import '../../../delivery/application/delivery_providers.dart';
 import '../../../auth/application/auth_controller.dart';
@@ -399,6 +400,13 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.free_breakfast_outlined,
         title: l10n.bookingAddOnsTitle,
         builder: (_) => const BookingAddOnsScreen(),
+      ),
+      _Tile(
+        // «سياسة الأطفال»: what a child pays of the night, and from which age it takes a place in the room
+        show: _has('bookings') && hasStayUnits,
+        leading: Icons.child_care_outlined,
+        title: l10n.childPolicyTitle,
+        builder: (_) => const ChildPolicyScreen(),
       ),
       _Tile(
         // only a business that lets rooms has guests to hear from

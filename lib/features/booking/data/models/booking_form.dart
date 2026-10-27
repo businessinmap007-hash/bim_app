@@ -165,6 +165,9 @@ class BookingPreview {
   final String? periodUnit;
   final List<({String name, double amount})> lines;
 
+  /// What each child adds a night, by the hotel's «سياسة الأطفال».
+  final List<({int age, double percent, double perNight})> children;
+
   /// «عروض الحجز»: what the hotel's offer took off the nights (the total is already net of it).
   final double offerDiscount;
 
@@ -176,6 +179,7 @@ class BookingPreview {
     this.periods = 1,
     this.periodUnit,
     this.lines = const [],
+    this.children = const [],
   });
 
   factory BookingPreview.fromJson(Map<String, dynamic> json) {
@@ -193,6 +197,14 @@ class BookingPreview {
           .map((e) => (name: e['name'] as String? ?? '', amount: (e['amount'] as num?)?.toDouble() ?? 0))
           .where((l) => l.name.isNotEmpty && l.amount != 0)
           .toList(),
+      children: [
+        for (final c in breakdown['children'] as List<dynamic>? ?? const [])
+          (
+            age: ((c as Map<String, dynamic>)['age'] as num?)?.toInt() ?? 0,
+            percent: (c['percent'] as num?)?.toDouble() ?? 0,
+            perNight: (c['per_night'] as num?)?.toDouble() ?? 0,
+          ),
+      ],
     );
   }
 }

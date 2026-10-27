@@ -12533,6 +12533,68 @@ class AppLocalizationsEn extends AppLocalizations {
       'A guest who ticked a view or feature at booking is given, when the stay starts, a number that carries it';
 
   @override
+  String get childPolicyTitle => 'Children policy';
+
+  @override
+  String get childPolicyIntro =>
+      'Set the children\'s ages and what each pays of the night\'s price. It applies to all your rooms and to the rooms your partners sell.';
+
+  @override
+  String get childPolicyBands => 'Age bands';
+
+  @override
+  String get childPolicyFrom => 'From age';
+
+  @override
+  String get childPolicyTo => 'to age';
+
+  @override
+  String get childPolicyPercent => 'Other share';
+
+  @override
+  String get childPolicyAddBand => 'Add a band';
+
+  @override
+  String get childPolicyAdultAge => 'Adult from age';
+
+  @override
+  String get childPolicyCountsFrom => 'Takes a place in the room from age';
+
+  @override
+  String get childPolicyMeals => 'A child\'s meals at the same share';
+
+  @override
+  String get childPolicySaved => 'Children policy saved';
+
+  @override
+  String get childFree => 'Free';
+
+  @override
+  String get childHalf => 'Half';
+
+  @override
+  String get childThird => 'A third';
+
+  @override
+  String get bookingChildrenTitle => 'Children';
+
+  @override
+  String get bookingAddChild => 'Add a child';
+
+  @override
+  String bookingChildN(int n) {
+    return 'Child $n';
+  }
+
+  @override
+  String get bookingChildAge => 'Age';
+
+  @override
+  String bookingChildLine(int age, String pays) {
+    return 'Child of $age · $pays';
+  }
+
+  @override
   String bookingGuestsMax(int n) {
     return 'up to $n';
   }
