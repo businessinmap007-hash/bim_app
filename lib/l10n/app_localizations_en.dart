@@ -12533,6 +12533,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'A guest who ticked a view or feature at booking is given, when the stay starts, a number that carries it';
 
   @override
+  String bookingGuestsMax(int n) {
+    return 'up to $n';
+  }
+
+  @override
   String get bookingRoomKindTitle => 'Room';
 
   @override

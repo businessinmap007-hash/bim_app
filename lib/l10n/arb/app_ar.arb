@@ -4322,6 +4322,8 @@
   "roomFeaturesNone": "لم تُحدَّد بعد",
   "roomFeaturesTitle": "مواصفات الغرفة {number}",
   "roomFeaturesHint": "الضيف الذي اختار إطلالة أو ميزة عند الحجز يأخذ عند بدء الإقامة رقمًا يحملها",
+  "bookingGuestsMax": "الحد الأقصى {n}",
+  "@bookingGuestsMax": {"placeholders": {"n": {"type": "int"}}},
   "bookingRoomKindTitle": "الغرفة",
   "roomFeaturesPrice": "سعر هذه الغرفة لليلة: {base} + {extra} = {total}",
   "@roomFeaturesPrice": {"placeholders": {"base": {"type": "String"}, "extra": {"type": "String"}, "total": {"type": "String"}}},

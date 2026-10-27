@@ -12433,6 +12433,11 @@ class AppLocalizationsAr extends AppLocalizations {
       'الضيف الذي اختار إطلالة أو ميزة عند الحجز يأخذ عند بدء الإقامة رقمًا يحملها';
 
   @override
+  String bookingGuestsMax(int n) {
+    return 'الحد الأقصى $n';
+  }
+
+  @override
   String get bookingRoomKindTitle => 'الغرفة';
 
   @override

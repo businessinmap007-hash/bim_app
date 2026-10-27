@@ -99,6 +99,24 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
 
   /// the kind of room chosen among [BookingScreen.variants] (starts as the card the guest tapped)
   DiscoveredUnit? _unitCard;
+
+  /// «Number of guests»: a stay takes the guests the room's capacity says (one in a single, two in a double) times the rooms booked.
+  /// Null when nothing limits the party.
+  int? get _guestCap {
+    if (widget.offering.itemType != 'booking_stay') return null;
+    final unit = _unitCard?.capacity ??
+        (widget.offering.units.isNotEmpty ? widget.offering.units : (_form?.units ?? const <BookableUnitOption>[]))
+            .where((u) => u.id == _unitId)
+            .map((u) => u.capacity)
+            .firstOrNull;
+    return (unit != null && unit > 0) ? unit * _quantity : null;
+  }
+
+  /// the party as it is sent: never above what the room takes, even if the guest changed room type or the number of rooms after setting it
+  int get _partyToSend {
+    final cap = _guestCap;
+    return cap == null ? _partySize : _partySize.clamp(1, cap);
+  }
   // the length of the time chosen on the page's own board; a form that asks only for a start still sends the end
   Duration? _boardLength;
   // «Day use»: the guest picks only a date; the room type names the window and the flat price
@@ -325,7 +343,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
         endsAt: dayUse ? null : _endsAt,
         dayUseDate: dayUse ? _startsAt : null,
         quantity: _quantity,
-        partySize: _partySize,
+        partySize: _partyToSend,
         optionIds: _modifierOptionIds.toList(),
       );
       // A slower earlier request landing after a newer one must not
@@ -546,7 +564,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
             : (_boardLength != null && _startsAt != null ? _startsAt!.add(_boardLength!) : null),
         dayUseDate: dayUse ? _startsAt : null,
         allDay: !dayUse && fields.any((f) => f.key == 'date_range'),
-        partySize: fields.any((f) => f.key == 'guest_count' || f.key == 'party_size') ? _partySize : null,
+        partySize: fields.any((f) => f.key == 'guest_count' || f.key == 'party_size') ? _partyToSend : null,
         quantity: fields.any((f) => f.key == 'quantity') ? _quantity : null,
         notes: _notesController.text.trim(),
         meta: _buildMeta(fields),
@@ -1259,10 +1277,11 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
         );
       case 'guest_count':
       case 'party_size':
-        return _stepperRow(context, labelText, _partySize, (v) {
+        final cap = _guestCap;
+        return _stepperRow(context, cap == null ? labelText : '$labelText · ${l10n.bookingGuestsMax(cap)}', _partyToSend, (v) {
           setState(() => _partySize = v);
           _schedulePreview();
-        });
+        }, max: cap);
       case 'quantity':
         return _stepperRow(context, labelText, _quantity, (v) {
           setState(() => _quantity = v);
@@ -1308,7 +1327,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     }
   }
 
-  Widget _stepperRow(BuildContext context, String label, int value, ValueChanged<int> onChanged, {int min = 1}) {
+  Widget _stepperRow(BuildContext context, String label, int value, ValueChanged<int> onChanged, {int min = 1, int? max}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 4),
       child: Row(
@@ -1320,7 +1339,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
           ),
           SizedBox(width: 32, child: Text('$value', textAlign: TextAlign.center)),
           IconButton(
-            onPressed: () => onChanged(value + 1),
+            onPressed: (max == null || value < max) ? () => onChanged(value + 1) : null,
             icon: const Icon(Icons.add_circle_outline),
           ),
         ],

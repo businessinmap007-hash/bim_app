@@ -22375,6 +22375,12 @@ abstract class AppLocalizations {
   /// **'الضيف الذي اختار إطلالة أو ميزة عند الحجز يأخذ عند بدء الإقامة رقمًا يحملها'**
   String get roomFeaturesHint;
 
+  /// No description provided for @bookingGuestsMax.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحد الأقصى {n}'**
+  String bookingGuestsMax(int n);
+
   /// No description provided for @bookingRoomKindTitle.
   ///
   /// In ar, this message translates to:
