@@ -30,6 +30,12 @@ class PartnerRoomsSection extends StatelessWidget {
     currency: r.currency,
     guestScope: r.guestScope,
     choices: r.choices,
+    optionIds: r.optionIds,
+    // the other kinds of the same room (a view each), so the form offers them as one choice
+    variants: [
+      for (final k in rooms.where((x) => x.allocationId == r.allocationId))
+        DiscoveredUnit(id: k.unitId, label: k.label, capacity: k.capacity, images: k.images, price: k.price, features: k.features, guestScope: k.guestScope, choices: k.choices, variantOptionIds: k.optionIds, available: k.available, reason: k.reason),
+    ],
     holdStartsAt: r.myHold?.isLive == true ? r.myHold!.startsAt : null,
     holdEndsAt: r.myHold?.isLive == true ? r.myHold!.endsAt : null,
   );
@@ -132,6 +138,8 @@ void openPartnerRoomBooking(
   String currency = 'EGP',
   String guestScope = 'all',
   List<UnitChoice> choices = const [],
+  List<int> optionIds = const [],
+  List<DiscoveredUnit> variants = const [],
   DateTime? holdStartsAt,
   DateTime? holdEndsAt,
 }) {
@@ -142,7 +150,8 @@ void openPartnerRoomBooking(
         shape: shape,
         initialStartsAt: holdStartsAt,
         initialEndsAt: holdEndsAt,
-        initialUnit: DiscoveredUnit(id: unitId, label: label, capacity: capacity, images: images, price: price, features: features, guestScope: guestScope, choices: choices),
+        initialUnit: DiscoveredUnit(id: unitId, label: label, capacity: capacity, images: images, price: price, features: features, guestScope: guestScope, choices: choices, variantOptionIds: optionIds),
+        variants: variants.length > 1 ? variants : const [],
         offering: OfferingItem(
           id: 0,
           source: 'price',

@@ -24,6 +24,15 @@ void main() {
 }
 
 void variants() {
+  test('a partner room of one allocation comes as one card per kind, told apart by its features', () {
+    final base = {'allocation_id': 5, 'bookable_id': 7, 'label': 'غرفة فردية', 'price': 700};
+    final plain = PartnerRoom.fromJson(base);
+    final sea = PartnerRoom.fromJson({...base, 'label': 'غرفة فردية · إطلالة بحرية', 'price': 900, 'option_ids': [853]});
+
+    expect(sea.optionIds, [853]);
+    expect(plain.selectionKey, isNot(sea.selectionKey));
+  });
+
   test('two cards of one room type are told apart by the features they were priced with', () {
     final plain = DiscoveredUnit.fromJson({'id': 7, 'label': 'غرفة فردية', 'price': 1000});
     final pool = DiscoveredUnit.fromJson({'id': 7, 'label': 'غرفة فردية · إطلالة على المسبح', 'price': 1150, 'option_ids': [854]});

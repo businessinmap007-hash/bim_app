@@ -298,6 +298,9 @@ class PartnerRoom {
   final ItemOffer? offer;
   final MyHold? myHold;
 
+  /// A kind of room behind the partner's room («غرفة فردية · إطلالة بحرية»): the features it was priced with; empty for the plain kind.
+  final List<int> optionIds;
+
   const PartnerRoom({
     required this.allocationId,
     required this.unitId,
@@ -319,7 +322,11 @@ class PartnerRoom {
     this.choices = const [],
     this.offer,
     this.myHold,
+    this.optionIds = const [],
   });
+
+  /// Two kinds of one allocation share its ids; what tells them apart is the features.
+  String get selectionKey => '$allocationId:${optionIds.join(',')}';
 
   factory PartnerRoom.fromJson(Map<String, dynamic> json) => PartnerRoom(
     allocationId: (json['allocation_id'] as num).toInt(),
@@ -344,6 +351,7 @@ class PartnerRoom {
     choices: [for (final c in (json['choices'] as List<dynamic>? ?? const [])) UnitChoice.fromJson(c as Map<String, dynamic>)],
     offer: ItemOffer.fromJsonOrNull(json['offer']),
     myHold: MyHold.fromJsonOrNull(json['my_hold']),
+    optionIds: [for (final v in json['option_ids'] as List<dynamic>? ?? const []) (v as num).toInt()],
   );
 }
 
