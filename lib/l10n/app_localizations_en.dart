@@ -12576,6 +12576,200 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mealTo => 'To';
 
   @override
+  String settlementTitle(int id) {
+    return 'Settlement · booking #$id';
+  }
+
+  @override
+  String get settlementNone => 'Nothing to settle on this booking';
+
+  @override
+  String get settlementPlease => 'Please settle to release the deposit';
+
+  @override
+  String get settlementOpenButton => 'Settlement and deposit';
+
+  @override
+  String get settlementFrozen => 'Held for this booking';
+
+  @override
+  String settlementClientHold(String pct) {
+    return 'Guest\'s deposit ($pct%)';
+  }
+
+  @override
+  String settlementBusinessHold(String pct) {
+    return 'Hotel\'s counter deposit ($pct%)';
+  }
+
+  @override
+  String settlementFromGuarantee(String amount) {
+    return '$amount from the guarantee';
+  }
+
+  @override
+  String settlementFromWallet(String amount) {
+    return '$amount from the wallet';
+  }
+
+  @override
+  String get settlementSecuredNote =>
+      'Held while the booking stands. Nothing is deducted from anyone.';
+
+  @override
+  String get settlementOpenNote =>
+      'The booking was cancelled. Nothing is ever released by itself — only when both sides confirm it is settled, when the hotel confirms a payment the guest recorded, or by an arbitrator\'s ruling.';
+
+  @override
+  String get settlementSettledNote =>
+      'Settled — everything held went back to whoever posted it.';
+
+  @override
+  String get settlementArbitrationNote =>
+      'The booking is in arbitration; what is held waits for the ruling.';
+
+  @override
+  String get settlementConfirmTitle => 'Confirm the settlement';
+
+  @override
+  String get settlementHotel => 'Hotel';
+
+  @override
+  String get settlementGuest => 'Guest';
+
+  @override
+  String get settlementWaiting => 'Waiting';
+
+  @override
+  String get settlementDone => 'Settled';
+
+  @override
+  String get settlementWithdraw => 'Withdraw my confirmation';
+
+  @override
+  String get settlementBothNeeded =>
+      'The deposit is released only when both sides confirm. You can withdraw yours until the other side confirms.';
+
+  @override
+  String get settlementPaymentsTitle => 'Payments outside the app';
+
+  @override
+  String get settlementPaymentsNote =>
+      'The guest records them with their proof; only the hotel confirms them.';
+
+  @override
+  String get settlementRecordPayment => 'Record a payment made outside the app';
+
+  @override
+  String get settlementRecordSend => 'Record the payment';
+
+  @override
+  String get settlementOwnResponsibility =>
+      'Paying outside the app is at your own responsibility, and you must keep proof of payment. The app does not receive or guarantee the money; it only records what you say and your proof, and only the hotel confirms it arrived.';
+
+  @override
+  String get settlementAcknowledge =>
+      'I acknowledge that paying outside the app is at my own responsibility, and that the attached proof is genuine and belongs to this booking.';
+
+  @override
+  String get settlementAmount => 'Amount paid';
+
+  @override
+  String get settlementTransfer => 'Transfer';
+
+  @override
+  String get settlementCash => 'Cash';
+
+  @override
+  String get settlementReference =>
+      'Transaction number or reference (optional)';
+
+  @override
+  String get settlementProof =>
+      'Proof of payment (receipt or transfer screenshot)';
+
+  @override
+  String get settlementProofCamera => 'Camera';
+
+  @override
+  String get settlementProofGallery => 'Gallery';
+
+  @override
+  String get settlementPaymentMissing =>
+      'Write the amount, attach the proof and accept the acknowledgement';
+
+  @override
+  String get settlementPaymentWaiting => 'Waiting for the hotel';
+
+  @override
+  String get settlementPaymentReceived => 'The hotel confirmed it';
+
+  @override
+  String get settlementPaymentRefused => 'The hotel says it did not arrive';
+
+  @override
+  String get settlementPaymentConfirmed => 'Receipt confirmed';
+
+  @override
+  String get settlementArrived => 'Arrived';
+
+  @override
+  String get settlementNotArrived => 'Did not arrive';
+
+  @override
+  String get settlementNotArrivedNote => 'A note for the guest';
+
+  @override
+  String get settlementNoAgreement => 'No agreement?';
+
+  @override
+  String get settlementArbitrationHow =>
+      'Three days after the cancellation with no settlement, one side may ask for arbitration. The arbitrator rules from the booking\'s terms, the payment proofs and the chat, sets any compensation from the booking\'s own value, and whoever does not pay a ruling cannot start new operations until they do.';
+
+  @override
+  String get settlementArbitrationAsk => 'Ask for arbitration';
+
+  @override
+  String get settlementArbitrationTitle => 'Ask for arbitration';
+
+  @override
+  String get settlementArbitrationConfirm =>
+      'A dispute will be opened on this booking and sent to an arbitrator. The session fee falls on the losing side, and your balance must cover it now.';
+
+  @override
+  String settlementArbitrationFrom(String date) {
+    return 'Arbitration can be asked from $date';
+  }
+
+  @override
+  String get settlementOpenDispute => 'Open the dispute';
+
+  @override
+  String get settlementsTitle => 'Settlements waiting for you';
+
+  @override
+  String get settlementsEmpty => 'No open settlements';
+
+  @override
+  String get settlementTheyConfirmed =>
+      'The other side confirmed — waiting for you';
+
+  @override
+  String get settlementWaitingBoth => 'Waiting for both sides';
+
+  @override
+  String get ratePlanDeposit => 'Commitment deposit';
+
+  @override
+  String get ratePlanDepositHint =>
+      'Held from the guest, and as much from you, when you accept — guarantee first, then the wallet. Nothing is deducted; it is released when the booking is settled.';
+
+  @override
+  String ratePlanDepositGuest(String amount) {
+    return 'A commitment deposit of $amount EGP is held from your guarantee, then your wallet, when the hotel accepts — and as much from the hotel — released on settlement.';
+  }
+
+  @override
   String get stayDetailsTitle => 'Stay details';
 
   @override
@@ -12628,7 +12822,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String nonRefundableCancelBody(String amount) {
-    return 'You booked this stay at the non-refundable rate. What you paid the hotel in advance ($amount EGP) is not refunded on cancelling. Any refund is between you and the hotel; the app\'s deposit, if any, is never confiscated.';
+    return 'You booked this stay at the non-refundable rate. What you paid the hotel in advance ($amount EGP) is not refunded on cancelling. Please settle to release the deposit: your held deposit, and the hotel\'s as much, are deducted from no one and released when you both confirm it is settled; with no agreement after 3 days either of you may ask for arbitration.';
   }
 
   @override

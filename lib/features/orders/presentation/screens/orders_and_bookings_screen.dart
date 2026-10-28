@@ -42,6 +42,7 @@ import '../widgets/order_trust_section.dart';
 import '../../../booking/presentation/widgets/relationship_card.dart';
 import '../../../../core/time/clock_format.dart';
 import '../../../../core/time/local_format.dart';
+import '../../../booking/presentation/screens/stay_settlement_screen.dart';
 import '../../../../core/time/egypt_time.dart';
 
 /// "My orders & bookings" — every placed order (menu/retail checkout) and
@@ -1253,6 +1254,15 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
             if (booking.cots > 0) ...[
               const SizedBox(height: 4),
               Text(l10n.cotLine(booking.cots), style: Theme.of(context).textTheme.bodyMedium),
+            ],
+            // «التسوية»: what is frozen for this non-refundable stay, and — after a cancellation — «يرجى التسوية لفك العربون»
+            if (booking.staySettlement != null) ...[
+              const SizedBox(height: 8),
+              OutlinedButton.icon(
+                icon: const Icon(Icons.balance_outlined),
+                label: Text(booking.staySettlement!.isOpen ? l10n.settlementPlease : l10n.settlementOpenButton),
+                onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => StaySettlementScreen(bookingId: booking.id, suggestedAmount: booking.price))),
+              ),
             ],
             // «مواعيد الوجبات»: the meals his plan gives, at the hotel's times
             if (booking.mealTimes.isNotEmpty) ...[

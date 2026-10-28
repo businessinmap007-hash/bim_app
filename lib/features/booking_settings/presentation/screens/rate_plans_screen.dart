@@ -16,6 +16,7 @@ class RatePlansScreen extends ConsumerStatefulWidget {
 
 class _RatePlansScreenState extends ConsumerState<RatePlansScreen> {
   final _percent = TextEditingController();
+  final _deposit = TextEditingController();
   bool _on = false;
   bool _loaded = false;
   bool _failed = false;
@@ -30,6 +31,7 @@ class _RatePlansScreenState extends ConsumerState<RatePlansScreen> {
   @override
   void dispose() {
     _percent.dispose();
+    _deposit.dispose();
     super.dispose();
   }
 
@@ -38,8 +40,9 @@ class _RatePlansScreenState extends ConsumerState<RatePlansScreen> {
       final p = await ref.read(bookingSettingsApiProvider).nonRefundablePercent();
       if (!mounted) return;
       setState(() {
-        _on = p != null;
-        _percent.text = p == null ? '10' : p.toStringAsFixed(p % 1 == 0 ? 0 : 2);
+        _on = p.percent != null;
+        _percent.text = p.percent == null ? '10' : p.percent!.toStringAsFixed(p.percent! % 1 == 0 ? 0 : 2);
+        _deposit.text = p.deposit.toStringAsFixed(p.deposit % 1 == 0 ? 0 : 2);
         _loaded = true;
       });
     } catch (_) {
@@ -52,7 +55,10 @@ class _RatePlansScreenState extends ConsumerState<RatePlansScreen> {
     final messenger = ScaffoldMessenger.of(context);
     setState(() => _saving = true);
     try {
-      await ref.read(bookingSettingsApiProvider).saveNonRefundablePercent(_on ? double.tryParse(_percent.text.trim().replaceAll(',', '.')) : null);
+      await ref.read(bookingSettingsApiProvider).saveNonRefundablePercent(
+        _on ? double.tryParse(_percent.text.trim().replaceAll(',', '.')) : null,
+        deposit: double.tryParse(_deposit.text.trim().replaceAll(',', '.')),
+      );
       messenger.showSnackBar(SnackBar(content: Text(l10n.ratePlansSaved)));
     } catch (e) {
       messenger.showSnackBar(SnackBar(content: Text(e is ApiException && e.message.isNotEmpty ? e.message : l10n.commonSomethingWentWrong)));
@@ -92,6 +98,15 @@ class _RatePlansScreenState extends ConsumerState<RatePlansScreen> {
                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
                     decoration: InputDecoration(labelText: l10n.ratePlanDiscount, suffixText: '%', helperText: l10n.ratePlanDiscountHint),
                   ),
+                // «عربون الجدية»: frozen from the guest — and as much from the hotel — on acceptance; guarantee first
+                if (_on) ...[
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: _deposit,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    decoration: InputDecoration(labelText: l10n.ratePlanDeposit, suffixText: '%', helperText: l10n.ratePlanDepositHint, helperMaxLines: 4),
+                  ),
+                ],
                 const SizedBox(height: 16),
                 FilledButton(onPressed: _saving ? null : _save, child: Text(l10n.commonSave)),
               ],

@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import 'stay_settlement.dart';
 import '../../../../core/assignment/assignee.dart';
 import '../../../chairs/data/models/service_chair.dart';
 import '../../../../core/time/egypt_time.dart';
@@ -212,6 +213,9 @@ class Booking {
 
   /// «تفاصيل الإقامة» of a hotel stay — null for anything else
   final StayDetails? stayDetails;
+
+  /// «التسوية» of a non-refundable stay — null when nothing is frozen for it
+  final StaySettlement? staySettlement;
   final ExternalDeposit externalDeposit;
 
   /// «يجب التواجد قبل الموعد بـ ١٥ دقيقة» — the business's own notice, as it composed it.
@@ -284,6 +288,7 @@ class Booking {
     this.ratePlan = 'flexible',
     this.cots = 0,
     this.stayDetails,
+    this.staySettlement,
     this.externalDeposit = const ExternalDeposit(),
     this.arrivalNotice,
     this.queueTurn,
@@ -365,6 +370,7 @@ class Booking {
       ratePlan: (json['stay_terms'] as Map<String, dynamic>?)?['rate_plan'] as String? ?? 'flexible',
       cots: ((json['stay_terms'] as Map<String, dynamic>?)?['cots'] as num?)?.toInt() ?? 0,
       stayDetails: StayDetails.fromJsonOrNull(json['stay_details']),
+      staySettlement: StaySettlement.fromJsonOrNull(json['stay_settlement']),
       mealTimes: [
         for (final m in json['meal_times'] as List<dynamic>? ?? const [])
           (meal: (m as Map<String, dynamic>)['meal'] as String? ?? '', from: m['from'] as String?, to: m['to'] as String?),

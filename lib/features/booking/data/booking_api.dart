@@ -1,4 +1,7 @@
+import 'package:dio/dio.dart';
+
 import '../../../core/network/api_client.dart';
+import 'models/stay_settlement.dart';
 import '../../../core/network/paginated.dart';
 import 'models/booking.dart';
 import 'models/booking_financial_preview.dart';
@@ -196,6 +199,7 @@ class BookingApi {
     if (data['meal_times'] != null) booking['meal_times'] = data['meal_times'];
     if (data['stay_terms'] != null) booking['stay_terms'] = data['stay_terms'];
     if (data['stay_details'] != null) booking['stay_details'] = data['stay_details'];
+    if (data['stay_settlement'] != null) booking['stay_settlement'] = data['stay_settlement'];
 
     return Booking.fromJson(booking);
   }
@@ -435,6 +439,67 @@ class BookingApi {
             )
             as Map<String, dynamic>;
     return BookingPreview.fromJson(data);
+  }
+
+  /// «التسوية» of a non-refundable stay — null when it has none.
+  Future<StaySettlement?> staySettlement(int bookingId) async {
+    final data = await _client.get('/bookings/$bookingId/stay-settlement') as Map<String, dynamic>;
+    return StaySettlement.fromJsonOrNull(data['settlement']);
+  }
+
+  /// «تمت التسوية» from this side ([confirm] false withdraws it while the other side has not confirmed).
+  Future<StaySettlement?> confirmStaySettlement(int bookingId, {bool confirm = true}) async {
+    final data = (confirm
+            ? await _client.post('/bookings/$bookingId/stay-settlement/confirm')
+            : await _client.delete('/bookings/$bookingId/stay-settlement/confirm'))
+        as Map<String, dynamic>;
+    return StaySettlement.fromJsonOrNull(data['settlement']);
+  }
+
+  /// The guest records a payment made outside the app, with its proof and his acknowledgement of the responsibility.
+  Future<StaySettlement?> recordStayPayment(int bookingId, {required double amount, required String method, String? reference, required String proofPath}) async {
+    final data = await _client.post(
+          '/bookings/$bookingId/stay-settlement/payments',
+          data: FormData.fromMap({
+            'amount': amount,
+            'method': method,
+            if (reference != null && reference.isNotEmpty) 'reference': reference,
+            'acknowledge': 1,
+            'proof': await MultipartFile.fromFile(proofPath),
+          }),
+        )
+        as Map<String, dynamic>;
+    return StaySettlement.fromJsonOrNull(data['settlement']);
+  }
+
+  /// The hotel says the recorded payment arrived — or did not.
+  Future<StaySettlement?> answerStayPayment(int bookingId, int paymentId, {required bool received, String? note}) async {
+    final data = await _client.post(
+          '/bookings/$bookingId/stay-settlement/payments/$paymentId/answer',
+          data: {'received': received, if (note != null && note.isNotEmpty) 'note': note},
+        )
+        as Map<String, dynamic>;
+    return StaySettlement.fromJsonOrNull(data['settlement']);
+  }
+
+  /// Three days after the cancellation, one side asks a judge. Returns the dispute opened.
+  Future<int?> requestStayArbitration(int bookingId) async {
+    final data = await _client.post('/bookings/$bookingId/stay-settlement/arbitration') as Map<String, dynamic>;
+    return (data['dispute_id'] as num?)?.toInt();
+  }
+
+  /// «تسويات بانتظارك» — the open settlements of this account.
+  Future<List<OpenStaySettlement>> openStaySettlements() async {
+    final data = await _client.get('/me/stay-settlements') as Map<String, dynamic>;
+    return [
+      for (final r in data['settlements'] as List<dynamic>? ?? const [])
+        if (StaySettlement.fromJsonOrNull(r) != null)
+          OpenStaySettlement(
+            bookingId: ((r as Map<String, dynamic>)['booking_id'] as num).toInt(),
+            counterpart: r['counterpart'] as String?,
+            settlement: StaySettlement.fromJsonOrNull(r)!,
+          ),
+    ];
   }
 
   /// The whole answer of `/discovery/units/{business}` — kinds, units and the booking shape the page is drawn in.

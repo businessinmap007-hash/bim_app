@@ -8,6 +8,7 @@ import '../../../../shared/widgets/cart_icon_button.dart';
 import '../../../../shared/widgets/chat_icon_button.dart';
 import '../../../../shared/widgets/create_post_button.dart';
 import '../../../../shared/widgets/notification_bell_button.dart';
+import '../../../../shared/widgets/settlement_icon_button.dart';
 import '../../../../shared/widgets/profile_cover_header.dart';
 import '../../../../shared/widgets/sliver_tab_bar_delegate.dart';
 import '../../../auth/application/auth_controller.dart';
@@ -57,6 +58,8 @@ class BusinessHomeScreen extends ConsumerWidget {
           actions: const [
             CreatePostButton(),
             ChatIconButton(),
+            // «يرجى التسوية لفك العربون» — only while a settlement is open
+            SettlementIconButton(),
             NotificationBellButton(),
             CartIconButton(),
           ],

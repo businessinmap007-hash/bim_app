@@ -22453,6 +22453,336 @@ abstract class AppLocalizations {
   /// **'إلى'**
   String get mealTo;
 
+  /// No description provided for @settlementTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'التسوية · حجز #{id}'**
+  String settlementTitle(int id);
+
+  /// No description provided for @settlementNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد ما يُسوّى في هذا الحجز'**
+  String get settlementNone;
+
+  /// No description provided for @settlementPlease.
+  ///
+  /// In ar, this message translates to:
+  /// **'يرجى التسوية لفك العربون'**
+  String get settlementPlease;
+
+  /// No description provided for @settlementOpenButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'التسوية والعربون'**
+  String get settlementOpenButton;
+
+  /// No description provided for @settlementFrozen.
+  ///
+  /// In ar, this message translates to:
+  /// **'المجمّد لهذا الحجز'**
+  String get settlementFrozen;
+
+  /// No description provided for @settlementClientHold.
+  ///
+  /// In ar, this message translates to:
+  /// **'عربون العميل ({pct}%)'**
+  String settlementClientHold(String pct);
+
+  /// No description provided for @settlementBusinessHold.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأمين الفندق ({pct}%)'**
+  String settlementBusinessHold(String pct);
+
+  /// No description provided for @settlementFromGuarantee.
+  ///
+  /// In ar, this message translates to:
+  /// **'{amount} من الضمان'**
+  String settlementFromGuarantee(String amount);
+
+  /// No description provided for @settlementFromWallet.
+  ///
+  /// In ar, this message translates to:
+  /// **'{amount} من المحفظة'**
+  String settlementFromWallet(String amount);
+
+  /// No description provided for @settlementSecuredNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'مجمّد ما دام الحجز قائمًا. لا يُخصم من أحد.'**
+  String get settlementSecuredNote;
+
+  /// No description provided for @settlementOpenNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُلغي الحجز. المجمّد لا يُفك تلقائيًا أبدًا — يُفك عندما يؤكد الطرفان «تمت التسوية»، أو يؤكد الفندق استلام دفعة سجّلها العميل، أو يحكم المحكّم.'**
+  String get settlementOpenNote;
+
+  /// No description provided for @settlementSettledNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت التسوية وعاد كل ما جُمّد لصاحبه.'**
+  String get settlementSettledNote;
+
+  /// No description provided for @settlementArbitrationNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحجز في التحكيم؛ المجمّد ينتظر حكم المحكّم.'**
+  String get settlementArbitrationNote;
+
+  /// No description provided for @settlementConfirmTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد التسوية'**
+  String get settlementConfirmTitle;
+
+  /// No description provided for @settlementHotel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفندق'**
+  String get settlementHotel;
+
+  /// No description provided for @settlementGuest.
+  ///
+  /// In ar, this message translates to:
+  /// **'العميل'**
+  String get settlementGuest;
+
+  /// No description provided for @settlementWaiting.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار تأكيده'**
+  String get settlementWaiting;
+
+  /// No description provided for @settlementDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمت التسوية'**
+  String get settlementDone;
+
+  /// No description provided for @settlementWithdraw.
+  ///
+  /// In ar, this message translates to:
+  /// **'سحب تأكيدي'**
+  String get settlementWithdraw;
+
+  /// No description provided for @settlementBothNeeded.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يُفك العربون إلا بتأكيد الطرفين. يمكنك سحب تأكيدك حتى يؤكد الطرف الآخر.'**
+  String get settlementBothNeeded;
+
+  /// No description provided for @settlementPaymentsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدفعات خارج التطبيق'**
+  String get settlementPaymentsTitle;
+
+  /// No description provided for @settlementPaymentsNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'يسجّلها العميل بإثباتها، ويؤكد الفندق وحده استلامها.'**
+  String get settlementPaymentsNote;
+
+  /// No description provided for @settlementRecordPayment.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل دفعة خارج التطبيق'**
+  String get settlementRecordPayment;
+
+  /// No description provided for @settlementRecordSend.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل الدفعة'**
+  String get settlementRecordSend;
+
+  /// No description provided for @settlementOwnResponsibility.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدفع خارج التطبيق على مسؤوليتك الشخصية، ويجب أن يكون لديك إثبات الدفع. التطبيق لا يستلم المبلغ ولا يضمنه؛ يسجّل ما تقوله وإثباتك فقط، والفندق وحده يؤكد الاستلام.'**
+  String get settlementOwnResponsibility;
+
+  /// No description provided for @settlementAcknowledge.
+  ///
+  /// In ar, this message translates to:
+  /// **'أقر بأن الدفع خارج التطبيق على مسؤوليتي الشخصية، وأن الإثبات المرفق صحيح ويخص هذا الحجز.'**
+  String get settlementAcknowledge;
+
+  /// No description provided for @settlementAmount.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ المدفوع'**
+  String get settlementAmount;
+
+  /// No description provided for @settlementTransfer.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحويل'**
+  String get settlementTransfer;
+
+  /// No description provided for @settlementCash.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقدًا'**
+  String get settlementCash;
+
+  /// No description provided for @settlementReference.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم العملية أو المرجع (اختياري)'**
+  String get settlementReference;
+
+  /// No description provided for @settlementProof.
+  ///
+  /// In ar, this message translates to:
+  /// **'إثبات الدفع (إيصال أو صورة التحويل)'**
+  String get settlementProof;
+
+  /// No description provided for @settlementProofCamera.
+  ///
+  /// In ar, this message translates to:
+  /// **'كاميرا'**
+  String get settlementProofCamera;
+
+  /// No description provided for @settlementProofGallery.
+  ///
+  /// In ar, this message translates to:
+  /// **'المعرض'**
+  String get settlementProofGallery;
+
+  /// No description provided for @settlementPaymentMissing.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب المبلغ وأرفق الإثبات ووافق على الإقرار'**
+  String get settlementPaymentMissing;
+
+  /// No description provided for @settlementPaymentWaiting.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار رد الفندق'**
+  String get settlementPaymentWaiting;
+
+  /// No description provided for @settlementPaymentReceived.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكّد الفندق الاستلام'**
+  String get settlementPaymentReceived;
+
+  /// No description provided for @settlementPaymentRefused.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفندق يقول إنها لم تصل'**
+  String get settlementPaymentRefused;
+
+  /// No description provided for @settlementPaymentConfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تأكيد الاستلام'**
+  String get settlementPaymentConfirmed;
+
+  /// No description provided for @settlementArrived.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصلت'**
+  String get settlementArrived;
+
+  /// No description provided for @settlementNotArrived.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تصل'**
+  String get settlementNotArrived;
+
+  /// No description provided for @settlementNotArrivedNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظة للعميل'**
+  String get settlementNotArrivedNote;
+
+  /// No description provided for @settlementNoAgreement.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تتفقا؟'**
+  String get settlementNoAgreement;
+
+  /// No description provided for @settlementArbitrationHow.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعد 3 أيام من الإلغاء بلا تسوية، يكفي طرف واحد لطلب تحكيم. المحكّم يحكم من شروط الحجز وإثباتات الدفع والمحادثة، ويحدد التعويض من قيمة الحجز نفسه، ومن لا يدفع ما حُكم عليه تتوقف عملياته الجديدة حتى يسدد.'**
+  String get settlementArbitrationHow;
+
+  /// No description provided for @settlementArbitrationAsk.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب تحكيم'**
+  String get settlementArbitrationAsk;
+
+  /// No description provided for @settlementArbitrationTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب تحكيم'**
+  String get settlementArbitrationTitle;
+
+  /// No description provided for @settlementArbitrationConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيُفتح نزاع على هذا الحجز ويُحال لمحكّم. رسم الجلسة يتحمله الطرف الخاسر، ويجب أن يغطيه رصيدك الآن.'**
+  String get settlementArbitrationConfirm;
+
+  /// No description provided for @settlementArbitrationFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'يمكن طلب التحكيم من {date}'**
+  String settlementArbitrationFrom(String date);
+
+  /// No description provided for @settlementOpenDispute.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح النزاع'**
+  String get settlementOpenDispute;
+
+  /// No description provided for @settlementsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسويات بانتظارك'**
+  String get settlementsTitle;
+
+  /// No description provided for @settlementsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد تسويات مفتوحة'**
+  String get settlementsEmpty;
+
+  /// No description provided for @settlementTheyConfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطرف الآخر أكّد — بانتظار تأكيدك'**
+  String get settlementTheyConfirmed;
+
+  /// No description provided for @settlementWaitingBoth.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار تأكيد الطرفين'**
+  String get settlementWaitingBoth;
+
+  /// No description provided for @ratePlanDeposit.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة عربون الجدية'**
+  String get ratePlanDeposit;
+
+  /// No description provided for @ratePlanDepositHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُجمَّد من العميل، ومثله تأمين منك، عند قبولك الحجز — من الضمان أولًا ثم المحفظة. لا يُخصم من أحد، ويُفك عندما تتم التسوية.'**
+  String get ratePlanDepositHint;
+
+  /// No description provided for @ratePlanDepositGuest.
+  ///
+  /// In ar, this message translates to:
+  /// **'عربون الجدية {amount} ج يُجمَّد من ضمانك ثم محفظتك عند قبول الفندق، ومثله من الفندق، ويُفك عند التسوية.'**
+  String ratePlanDepositGuest(String amount);
+
   /// No description provided for @stayDetailsTitle.
   ///
   /// In ar, this message translates to:
@@ -22540,7 +22870,7 @@ abstract class AppLocalizations {
   /// No description provided for @nonRefundableCancelBody.
   ///
   /// In ar, this message translates to:
-  /// **'حجزت هذه الإقامة بالسعر غير القابل للاسترداد. ما دفعته للفندق مقدمًا ({amount} ج) لا يُسترد عند الإلغاء. أي استرداد يكون باتفاقك مع الفندق مباشرة، وعربون التطبيق — إن وُجد — لا يُصادر.'**
+  /// **'حجزت هذه الإقامة بالسعر غير القابل للاسترداد. ما دفعته للفندق مقدمًا ({amount} ج) لا يُسترد عند الإلغاء. يرجى التسوية لفك العربون: عربونك المجمّد، ومثله تأمين الفندق، لا يُخصم من أحد ويُفك عندما تؤكدان معًا «تمت التسوية»؛ وإن لم تتفقا خلال 3 أيام يمكن لأي منكما طلب تحكيم.'**
   String nonRefundableCancelBody(String amount);
 
   /// No description provided for @singleOccupancyLabel.

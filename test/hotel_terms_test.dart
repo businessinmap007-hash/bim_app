@@ -2,6 +2,7 @@ import 'package:bim_app/features/booking/data/models/booking.dart';
 import 'package:bim_app/features/booking/data/models/booking_form.dart';
 import 'package:bim_app/features/booking/data/models/child_policy.dart';
 import 'package:bim_app/features/booking/data/models/hotel_season.dart';
+import 'package:bim_app/features/booking/data/models/stay_settlement.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -65,6 +66,31 @@ void main() {
     expect(b.stayDetails!.galaDinners.single.name, 'عشاء رأس السنة');
     expect(b.externalDeposit.isPrepayment, isTrue);
     expect(b.externalDeposit.isPending, isTrue);
+  });
+
+  test('a settlement reads both holds, both confirmations and the recorded payments', () {
+    final s = StaySettlement.fromJsonOrNull({
+      'status': 'open',
+      'percent': 20,
+      'amount': 360,
+      'client_hold': {'guarantee': 200, 'wallet': 160},
+      'business_hold': {'guarantee': 0, 'wallet': 360},
+      'cancelled_by': 'client',
+      'opened_at': '2026-10-28 10:00:00',
+      'business_confirmed_at': '2026-10-29 09:00:00',
+      'client_confirmed_at': null,
+      'my_side': 'client',
+      'can_request_arbitration': false,
+      'payments': [
+        {'id': 3, 'amount': 1800, 'method': 'transfer', 'reference': 'TR-1', 'proof_url': 'https://x/p', 'status': 'recorded'},
+      ],
+    })!;
+    expect(s.isOpen, isTrue);
+    expect(s.clientHold!.guarantee, 200);
+    expect(s.myConfirmedAt, isNull);
+    expect(s.theirConfirmedAt, isNotNull);
+    expect(s.hasWaitingPayment, isTrue);
+    expect(StaySettlement.fromJsonOrNull(null), isNull);
   });
 
   test('an extra bed is sold at a fixed price or at the third adult reduction', () {

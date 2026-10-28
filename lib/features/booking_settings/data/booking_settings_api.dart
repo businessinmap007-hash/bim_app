@@ -257,13 +257,14 @@ class BookingSettingsApi {
   Future<void> deleteSeason(int id) => _client.delete('/business/seasons/$id');
 
   /// «غير قابل للاسترداد»: the hotel's discount for it — null when it sells only the flexible rate.
-  Future<double?> nonRefundablePercent() async {
+  /// …and its «عربون الجدية» % — frozen from the guest, and as much from the hotel, when the hotel accepts.
+  Future<({double? percent, double deposit})> nonRefundablePercent() async {
     final data = await _client.get('/business/booking-settings/rate-plans') as Map<String, dynamic>;
-    return (data['non_refundable_percent'] as num?)?.toDouble();
+    return (percent: (data['non_refundable_percent'] as num?)?.toDouble(), deposit: (data['deposit_percent'] as num?)?.toDouble() ?? 20);
   }
 
-  Future<void> saveNonRefundablePercent(double? percent) =>
-      _client.put('/business/booking-settings/rate-plans', data: {'non_refundable_percent': percent});
+  Future<void> saveNonRefundablePercent(double? percent, {double? deposit}) =>
+      _client.put('/business/booking-settings/rate-plans', data: {'non_refundable_percent': percent, 'deposit_percent': ?deposit});
 
   /// «العشاء الإلزامي»: the hotel's gala nights from today on.
   Future<List<GalaDinner>> galaDinners() async {

@@ -178,7 +178,7 @@ class BookingPreview {
   final ({int count, double perNight})? cots;
 
   /// «غير قابل للاسترداد»: the discount of the cheaper rate, off the whole stay
-  final ({double percent, double amount})? nonRefundable;
+  final ({double percent, double amount, double deposit})? nonRefundable;
 
   /// «سرير إضافي»: how many, and what they add a night
   final ({int count, double perNight})? extraBeds;
@@ -243,6 +243,7 @@ class BookingPreview {
           ? (
               percent: ((breakdown['non_refundable'] as Map<String, dynamic>)['percent'] as num?)?.toDouble() ?? 0,
               amount: ((breakdown['non_refundable'] as Map<String, dynamic>)['amount'] as num?)?.toDouble() ?? 0,
+              deposit: ((breakdown['non_refundable'] as Map<String, dynamic>)['deposit'] as num?)?.toDouble() ?? 0,
             )
           : null,
       galaDinners: [

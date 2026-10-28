@@ -876,6 +876,19 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
               ),
             ]),
           ),
+          // «عربون الجدية» and «الدفع خارج التطبيق على مسؤوليتك الشخصية»
+          if (_nonRefundable)
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(color: theme.colorScheme.errorContainer.withValues(alpha: 0.6), borderRadius: BorderRadius.circular(10)),
+              child: Text(
+                [
+                  if ((_preview?.nonRefundable?.deposit ?? 0) > 0) l10n.ratePlanDepositGuest(_preview!.nonRefundable!.deposit.toStringAsFixed(0)),
+                  l10n.settlementOwnResponsibility,
+                ].join('\n'),
+                style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onErrorContainer),
+              ),
+            ),
         ],
       ),
     );

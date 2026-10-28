@@ -12476,6 +12476,196 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mealTo => 'إلى';
 
   @override
+  String settlementTitle(int id) {
+    return 'التسوية · حجز #$id';
+  }
+
+  @override
+  String get settlementNone => 'لا يوجد ما يُسوّى في هذا الحجز';
+
+  @override
+  String get settlementPlease => 'يرجى التسوية لفك العربون';
+
+  @override
+  String get settlementOpenButton => 'التسوية والعربون';
+
+  @override
+  String get settlementFrozen => 'المجمّد لهذا الحجز';
+
+  @override
+  String settlementClientHold(String pct) {
+    return 'عربون العميل ($pct%)';
+  }
+
+  @override
+  String settlementBusinessHold(String pct) {
+    return 'تأمين الفندق ($pct%)';
+  }
+
+  @override
+  String settlementFromGuarantee(String amount) {
+    return '$amount من الضمان';
+  }
+
+  @override
+  String settlementFromWallet(String amount) {
+    return '$amount من المحفظة';
+  }
+
+  @override
+  String get settlementSecuredNote =>
+      'مجمّد ما دام الحجز قائمًا. لا يُخصم من أحد.';
+
+  @override
+  String get settlementOpenNote =>
+      'أُلغي الحجز. المجمّد لا يُفك تلقائيًا أبدًا — يُفك عندما يؤكد الطرفان «تمت التسوية»، أو يؤكد الفندق استلام دفعة سجّلها العميل، أو يحكم المحكّم.';
+
+  @override
+  String get settlementSettledNote => 'تمت التسوية وعاد كل ما جُمّد لصاحبه.';
+
+  @override
+  String get settlementArbitrationNote =>
+      'الحجز في التحكيم؛ المجمّد ينتظر حكم المحكّم.';
+
+  @override
+  String get settlementConfirmTitle => 'تأكيد التسوية';
+
+  @override
+  String get settlementHotel => 'الفندق';
+
+  @override
+  String get settlementGuest => 'العميل';
+
+  @override
+  String get settlementWaiting => 'بانتظار تأكيده';
+
+  @override
+  String get settlementDone => 'تمت التسوية';
+
+  @override
+  String get settlementWithdraw => 'سحب تأكيدي';
+
+  @override
+  String get settlementBothNeeded =>
+      'لا يُفك العربون إلا بتأكيد الطرفين. يمكنك سحب تأكيدك حتى يؤكد الطرف الآخر.';
+
+  @override
+  String get settlementPaymentsTitle => 'الدفعات خارج التطبيق';
+
+  @override
+  String get settlementPaymentsNote =>
+      'يسجّلها العميل بإثباتها، ويؤكد الفندق وحده استلامها.';
+
+  @override
+  String get settlementRecordPayment => 'تسجيل دفعة خارج التطبيق';
+
+  @override
+  String get settlementRecordSend => 'تسجيل الدفعة';
+
+  @override
+  String get settlementOwnResponsibility =>
+      'الدفع خارج التطبيق على مسؤوليتك الشخصية، ويجب أن يكون لديك إثبات الدفع. التطبيق لا يستلم المبلغ ولا يضمنه؛ يسجّل ما تقوله وإثباتك فقط، والفندق وحده يؤكد الاستلام.';
+
+  @override
+  String get settlementAcknowledge =>
+      'أقر بأن الدفع خارج التطبيق على مسؤوليتي الشخصية، وأن الإثبات المرفق صحيح ويخص هذا الحجز.';
+
+  @override
+  String get settlementAmount => 'المبلغ المدفوع';
+
+  @override
+  String get settlementTransfer => 'تحويل';
+
+  @override
+  String get settlementCash => 'نقدًا';
+
+  @override
+  String get settlementReference => 'رقم العملية أو المرجع (اختياري)';
+
+  @override
+  String get settlementProof => 'إثبات الدفع (إيصال أو صورة التحويل)';
+
+  @override
+  String get settlementProofCamera => 'كاميرا';
+
+  @override
+  String get settlementProofGallery => 'المعرض';
+
+  @override
+  String get settlementPaymentMissing =>
+      'اكتب المبلغ وأرفق الإثبات ووافق على الإقرار';
+
+  @override
+  String get settlementPaymentWaiting => 'بانتظار رد الفندق';
+
+  @override
+  String get settlementPaymentReceived => 'أكّد الفندق الاستلام';
+
+  @override
+  String get settlementPaymentRefused => 'الفندق يقول إنها لم تصل';
+
+  @override
+  String get settlementPaymentConfirmed => 'تم تأكيد الاستلام';
+
+  @override
+  String get settlementArrived => 'وصلت';
+
+  @override
+  String get settlementNotArrived => 'لم تصل';
+
+  @override
+  String get settlementNotArrivedNote => 'ملاحظة للعميل';
+
+  @override
+  String get settlementNoAgreement => 'لم تتفقا؟';
+
+  @override
+  String get settlementArbitrationHow =>
+      'بعد 3 أيام من الإلغاء بلا تسوية، يكفي طرف واحد لطلب تحكيم. المحكّم يحكم من شروط الحجز وإثباتات الدفع والمحادثة، ويحدد التعويض من قيمة الحجز نفسه، ومن لا يدفع ما حُكم عليه تتوقف عملياته الجديدة حتى يسدد.';
+
+  @override
+  String get settlementArbitrationAsk => 'طلب تحكيم';
+
+  @override
+  String get settlementArbitrationTitle => 'طلب تحكيم';
+
+  @override
+  String get settlementArbitrationConfirm =>
+      'سيُفتح نزاع على هذا الحجز ويُحال لمحكّم. رسم الجلسة يتحمله الطرف الخاسر، ويجب أن يغطيه رصيدك الآن.';
+
+  @override
+  String settlementArbitrationFrom(String date) {
+    return 'يمكن طلب التحكيم من $date';
+  }
+
+  @override
+  String get settlementOpenDispute => 'فتح النزاع';
+
+  @override
+  String get settlementsTitle => 'تسويات بانتظارك';
+
+  @override
+  String get settlementsEmpty => 'لا توجد تسويات مفتوحة';
+
+  @override
+  String get settlementTheyConfirmed => 'الطرف الآخر أكّد — بانتظار تأكيدك';
+
+  @override
+  String get settlementWaitingBoth => 'بانتظار تأكيد الطرفين';
+
+  @override
+  String get ratePlanDeposit => 'نسبة عربون الجدية';
+
+  @override
+  String get ratePlanDepositHint =>
+      'يُجمَّد من العميل، ومثله تأمين منك، عند قبولك الحجز — من الضمان أولًا ثم المحفظة. لا يُخصم من أحد، ويُفك عندما تتم التسوية.';
+
+  @override
+  String ratePlanDepositGuest(String amount) {
+    return 'عربون الجدية $amount ج يُجمَّد من ضمانك ثم محفظتك عند قبول الفندق، ومثله من الفندق، ويُفك عند التسوية.';
+  }
+
+  @override
   String get stayDetailsTitle => 'تفاصيل الإقامة';
 
   @override
@@ -12528,7 +12718,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String nonRefundableCancelBody(String amount) {
-    return 'حجزت هذه الإقامة بالسعر غير القابل للاسترداد. ما دفعته للفندق مقدمًا ($amount ج) لا يُسترد عند الإلغاء. أي استرداد يكون باتفاقك مع الفندق مباشرة، وعربون التطبيق — إن وُجد — لا يُصادر.';
+    return 'حجزت هذه الإقامة بالسعر غير القابل للاسترداد. ما دفعته للفندق مقدمًا ($amount ج) لا يُسترد عند الإلغاء. يرجى التسوية لفك العربون: عربونك المجمّد، ومثله تأمين الفندق، لا يُخصم من أحد ويُفك عندما تؤكدان معًا «تمت التسوية»؛ وإن لم تتفقا خلال 3 أيام يمكن لأي منكما طلب تحكيم.';
   }
 
   @override
