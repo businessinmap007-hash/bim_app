@@ -85,11 +85,11 @@ class _StaySettlementScreenState extends ConsumerState<StaySettlementScreen> {
     }
   }
 
-  /// «اقبل التسوية بالدفع من محفظة التطبيق»: the whole held deposit, or a smaller fine.
-  Future<void> _collect(StaySettlement s) async {
-    final amount = await showDialog<double>(context: context, builder: (_) => _CollectDialog(max: s.collectable));
+  /// «التسوية من محفظة التطبيق»: propose the whole held deposit, or less — the guest offers it, the hotel asks for it.
+  Future<void> _offerWallet(StaySettlement s) async {
+    final amount = await showDialog<double>(context: context, builder: (_) => _CollectDialog(max: s.collectable, guest: s.isClient));
     if (amount == null || !mounted) return;
-    await _run(() => ref.read(bookingApiProvider).collectStayDeposit(widget.bookingId, amount: amount));
+    await _run(() => ref.read(bookingApiProvider).offerStayWallet(widget.bookingId, amount: amount));
   }
 
   Future<void> _arbitration() async {
@@ -240,8 +240,8 @@ class _StaySettlementScreenState extends ConsumerState<StaySettlementScreen> {
                     ),
                   ),
                 ),
-                // «اقبل التسوية بالدفع من محفظة التطبيق»: the guest cancelled — the hotel may take the deposit, or less, at once
-                if (s.canCollect) ...[
+                // «التسوية من محفظة التطبيق»: a faster way to settle — one side proposes, the other says yes
+                if (s.isOpen && s.collectable > 0) ...[
                   const SizedBox(height: 12),
                   Card(
                     margin: EdgeInsets.zero,
@@ -254,7 +254,39 @@ class _StaySettlementScreenState extends ConsumerState<StaySettlementScreen> {
                           const SizedBox(height: 4),
                           Text(l10n.settlementCollectNote(money(s.collectable)), style: theme.textTheme.bodySmall),
                           const SizedBox(height: 8),
-                          FilledButton.tonal(onPressed: _busy ? null : () => _collect(s), child: Text(l10n.settlementCollectButton)),
+                          if (s.walletOffer == null)
+                            FilledButton.tonal(
+                              onPressed: _busy ? null : () => _offerWallet(s),
+                              child: Text(s.isClient ? l10n.settlementWalletOfferGuest : l10n.settlementWalletAskHotel),
+                            )
+                          else if (s.walletOffer!.by == s.mySide) ...[
+                            Text(l10n.settlementWalletMine(money(s.walletOffer!.amount)), style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+                            TextButton(
+                              onPressed: _busy ? null : () => _run(() => ref.read(bookingApiProvider).withdrawStayWalletOffer(widget.bookingId)),
+                              child: Text(l10n.settlementWalletWithdraw),
+                            ),
+                          ] else ...[
+                            Text(
+                              s.isClient ? l10n.settlementWalletHotelAsks(money(s.walletOffer!.amount)) : l10n.settlementWalletGuestOffers(money(s.walletOffer!.amount)),
+                              style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                            ),
+                            const SizedBox(height: 6),
+                            Row(children: [
+                              Expanded(
+                                child: FilledButton(
+                                  onPressed: _busy ? null : () => _run(() => ref.read(bookingApiProvider).answerStayWalletOffer(widget.bookingId, accept: true)),
+                                  child: Text(l10n.settlementWalletAccept),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: OutlinedButton(
+                                  onPressed: _busy ? null : () => _run(() => ref.read(bookingApiProvider).answerStayWalletOffer(widget.bookingId, accept: false)),
+                                  child: Text(l10n.settlementWalletDecline),
+                                ),
+                              ),
+                            ]),
+                          ],
                         ],
                       ),
                     ),
@@ -342,7 +374,10 @@ class _StaySettlementScreenState extends ConsumerState<StaySettlementScreen> {
 
 class _CollectDialog extends StatefulWidget {
   final double max;
-  const _CollectDialog({required this.max});
+
+  /// the guest offers; the hotel asks
+  final bool guest;
+  const _CollectDialog({required this.max, required this.guest});
 
   @override
   State<_CollectDialog> createState() => _CollectDialogState();
@@ -365,7 +400,7 @@ class _CollectDialogState extends State<_CollectDialog> {
     final max = widget.max.toStringAsFixed(widget.max == widget.max.roundToDouble() ? 0 : 2);
 
     return AlertDialog(
-      title: Text(l10n.settlementCollectTitle),
+      title: Text(widget.guest ? l10n.settlementWalletOfferGuest : l10n.settlementWalletAskHotel),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -394,7 +429,7 @@ class _CollectDialogState extends State<_CollectDialog> {
             if (v == null || v <= 0 || v > widget.max) return setState(() => _error = l10n.settlementCollectAmount(max));
             Navigator.pop(context, v);
           },
-          child: Text(l10n.settlementCollectButton),
+          child: Text(widget.guest ? l10n.settlementWalletSendOffer : l10n.settlementWalletSendAsk),
         ),
       ],
     );

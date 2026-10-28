@@ -12576,11 +12576,48 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mealTo => 'To';
 
   @override
+  String get settlementWalletOfferGuest => 'Offer to settle from your wallet';
+
+  @override
+  String get settlementWalletAskHotel =>
+      'Ask to settle from the guest\'s wallet';
+
+  @override
+  String get settlementWalletSendOffer => 'Send the offer';
+
+  @override
+  String get settlementWalletSendAsk => 'Send the request';
+
+  @override
+  String settlementWalletMine(String amount) {
+    return 'Your proposal: $amount EGP — waiting for the other side';
+  }
+
+  @override
+  String get settlementWalletWithdraw => 'Withdraw the proposal';
+
+  @override
+  String settlementWalletHotelAsks(String amount) {
+    return 'The hotel asks $amount EGP of your deposit to settle; the rest comes back to you';
+  }
+
+  @override
+  String settlementWalletGuestOffers(String amount) {
+    return 'The guest offers $amount EGP of the deposit to settle';
+  }
+
+  @override
+  String get settlementWalletAccept => 'Accept';
+
+  @override
+  String get settlementWalletDecline => 'Decline';
+
+  @override
   String get settlementCollectTitle => 'Settle from the app wallet';
 
   @override
   String settlementCollectNote(String amount) {
-    return 'The guest cancelled a non-refundable booking. You can collect the held deposit ($amount EGP), or part of it as a cancellation fine, now; the rest goes back and it is settled — without waiting for the guest.';
+    return 'The fastest way to settle: the guest offers the hotel his held deposit ($amount EGP) or part of it, or the hotel asks for it — nothing is taken without the other side\'s yes. The rest then goes back and it is settled.';
   }
 
   @override
@@ -12601,7 +12638,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String settlementCollectedNote(String amount) {
-    return 'The hotel collected $amount EGP of the deposit; the rest went back and it is settled.';
+    return 'By both sides\' agreement $amount EGP of the deposit went to the hotel; the rest went back and it is settled.';
   }
 
   @override

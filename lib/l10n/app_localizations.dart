@@ -22453,16 +22453,76 @@ abstract class AppLocalizations {
   /// **'إلى'**
   String get mealTo;
 
+  /// No description provided for @settlementWalletOfferGuest.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعرض التسوية من محفظتك'**
+  String get settlementWalletOfferGuest;
+
+  /// No description provided for @settlementWalletAskHotel.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلب التسوية من محفظة العميل'**
+  String get settlementWalletAskHotel;
+
+  /// No description provided for @settlementWalletSendOffer.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال العرض'**
+  String get settlementWalletSendOffer;
+
+  /// No description provided for @settlementWalletSendAsk.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال الطلب'**
+  String get settlementWalletSendAsk;
+
+  /// No description provided for @settlementWalletMine.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرضك: {amount} ج — بانتظار موافقة الطرف الآخر'**
+  String settlementWalletMine(String amount);
+
+  /// No description provided for @settlementWalletWithdraw.
+  ///
+  /// In ar, this message translates to:
+  /// **'سحب العرض'**
+  String get settlementWalletWithdraw;
+
+  /// No description provided for @settlementWalletHotelAsks.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفندق يطلب {amount} ج من عربونك ليتم التسوية ويعود لك الباقي'**
+  String settlementWalletHotelAsks(String amount);
+
+  /// No description provided for @settlementWalletGuestOffers.
+  ///
+  /// In ar, this message translates to:
+  /// **'العميل يعرض أن تأخذ {amount} ج من عربونه ويتم التسوية'**
+  String settlementWalletGuestOffers(String amount);
+
+  /// No description provided for @settlementWalletAccept.
+  ///
+  /// In ar, this message translates to:
+  /// **'موافق'**
+  String get settlementWalletAccept;
+
+  /// No description provided for @settlementWalletDecline.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفض'**
+  String get settlementWalletDecline;
+
   /// No description provided for @settlementCollectTitle.
   ///
   /// In ar, this message translates to:
-  /// **'قبول التسوية من محفظة التطبيق'**
+  /// **'التسوية من محفظة التطبيق'**
   String get settlementCollectTitle;
 
   /// No description provided for @settlementCollectNote.
   ///
   /// In ar, this message translates to:
-  /// **'ألغى العميل حجزًا غير قابل للاسترداد. يمكنك تحصيل عربونه المجمّد ({amount} ج) أو جزء منه كغرامة إلغاء الآن، ويعود له الباقي وتمت التسوية — دون انتظار تأكيده.'**
+  /// **'أسرع طريقة لإنهاء التسوية: يعرض العميل أن يأخذ الفندق من عربونه المجمّد ({amount} ج) أو جزءًا منه، أو يطلب الفندق ذلك — ولا يُؤخذ شيء إلا بموافقة الطرف الآخر. ثم يعود الباقي لأصحابه وتتم التسوية.'**
   String settlementCollectNote(String amount);
 
   /// No description provided for @settlementCollectButton.
@@ -22492,7 +22552,7 @@ abstract class AppLocalizations {
   /// No description provided for @settlementCollectedNote.
   ///
   /// In ar, this message translates to:
-  /// **'حصّل الفندق {amount} ج من العربون، وعاد الباقي لصاحبه وتمت التسوية.'**
+  /// **'باتفاق الطرفين أُخذ {amount} ج من العربون للفندق، وعاد الباقي لأصحابه وتمت التسوية.'**
   String settlementCollectedNote(String amount);
 
   /// No description provided for @settlementStayStartedNote.

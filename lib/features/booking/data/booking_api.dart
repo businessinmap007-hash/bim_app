@@ -482,9 +482,20 @@ class BookingApi {
     return StaySettlement.fromJsonOrNull(data['settlement']);
   }
 
-  /// «اقبل التسوية بالدفع من محفظة التطبيق»: the hotel takes [amount] (the whole held deposit when null) from the guest's hold.
-  Future<StaySettlement?> collectStayDeposit(int bookingId, {double? amount}) async {
-    final data = await _client.post('/bookings/$bookingId/stay-settlement/collect', data: {'amount': ?amount}) as Map<String, dynamic>;
+  /// «التسوية من محفظة التطبيق»: the guest offers [amount] of his held deposit, or the hotel asks for it — taken only when the
+  /// other side accepts.
+  Future<StaySettlement?> offerStayWallet(int bookingId, {double? amount}) async {
+    final data = await _client.post('/bookings/$bookingId/stay-settlement/wallet-offer', data: {'amount': ?amount}) as Map<String, dynamic>;
+    return StaySettlement.fromJsonOrNull(data['settlement']);
+  }
+
+  Future<StaySettlement?> withdrawStayWalletOffer(int bookingId) async {
+    final data = await _client.delete('/bookings/$bookingId/stay-settlement/wallet-offer') as Map<String, dynamic>;
+    return StaySettlement.fromJsonOrNull(data['settlement']);
+  }
+
+  Future<StaySettlement?> answerStayWalletOffer(int bookingId, {required bool accept}) async {
+    final data = await _client.post('/bookings/$bookingId/stay-settlement/wallet-offer/answer', data: {'accept': accept}) as Map<String, dynamic>;
     return StaySettlement.fromJsonOrNull(data['settlement']);
   }
 

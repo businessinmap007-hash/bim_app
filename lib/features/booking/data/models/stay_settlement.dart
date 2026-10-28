@@ -21,8 +21,8 @@ class StaySettlement {
   final int? disputeId;
   final List<StaySettlementPayment> payments;
 
-  /// «اقبل التسوية بالدفع من محفظة التطبيق»: the hotel, when the guest cancelled — up to [collectable]
-  final bool canCollect;
+  /// «التسوية من محفظة التطبيق»: one side proposes (the guest offers, the hotel asks) up to [collectable]; the other accepts
+  final ({String by, double amount})? walletOffer;
   final double collectable;
   final double? collected;
 
@@ -44,7 +44,7 @@ class StaySettlement {
     this.canRequestArbitration = false,
     this.disputeId,
     this.payments = const [],
-    this.canCollect = false,
+    this.walletOffer,
     this.collectable = 0,
     this.collected,
     this.settledBy,
@@ -78,7 +78,12 @@ class StaySettlement {
           canRequestArbitration: json['can_request_arbitration'] == true,
           disputeId: (json['dispute_id'] as num?)?.toInt(),
           payments: [for (final p in json['payments'] as List<dynamic>? ?? const []) StaySettlementPayment.fromJson(p as Map<String, dynamic>)],
-          canCollect: json['can_collect'] == true,
+          walletOffer: json['wallet_offer'] is Map<String, dynamic>
+              ? (
+                  by: (json['wallet_offer'] as Map<String, dynamic>)['by'] as String? ?? 'client',
+                  amount: ((json['wallet_offer'] as Map<String, dynamic>)['amount'] as num?)?.toDouble() ?? 0,
+                )
+              : null,
           collectable: (json['collectable'] as num?)?.toDouble() ?? 0,
           collected: (json['collected'] as num?)?.toDouble(),
           settledBy: json['settled_by'] as String?,

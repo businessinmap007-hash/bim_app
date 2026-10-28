@@ -91,7 +91,8 @@ void main() {
     expect(s.theirConfirmedAt, isNotNull);
     expect(s.hasWaitingPayment, isTrue);
     expect(StaySettlement.fromJsonOrNull(null), isNull);
-    final collected = StaySettlement.fromJsonOrNull({'status': 'settled', 'settled_by': 'wallet_collection', 'collected': 200, 'can_collect': false, 'collectable': 360})!;
+    final collected = StaySettlement.fromJsonOrNull({'status': 'settled', 'settled_by': 'wallet_collection', 'collected': 200, 'wallet_offer': {'by': 'client', 'amount': 200}, 'collectable': 360})!;
+    expect(collected.walletOffer!.by, 'client');
     expect(collected.settledBy, 'wallet_collection');
     expect(collected.collected, 200);
     expect(collected.collectable, 360);

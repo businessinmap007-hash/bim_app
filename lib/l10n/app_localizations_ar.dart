@@ -12476,11 +12476,47 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mealTo => 'إلى';
 
   @override
-  String get settlementCollectTitle => 'قبول التسوية من محفظة التطبيق';
+  String get settlementWalletOfferGuest => 'اعرض التسوية من محفظتك';
+
+  @override
+  String get settlementWalletAskHotel => 'اطلب التسوية من محفظة العميل';
+
+  @override
+  String get settlementWalletSendOffer => 'إرسال العرض';
+
+  @override
+  String get settlementWalletSendAsk => 'إرسال الطلب';
+
+  @override
+  String settlementWalletMine(String amount) {
+    return 'عرضك: $amount ج — بانتظار موافقة الطرف الآخر';
+  }
+
+  @override
+  String get settlementWalletWithdraw => 'سحب العرض';
+
+  @override
+  String settlementWalletHotelAsks(String amount) {
+    return 'الفندق يطلب $amount ج من عربونك ليتم التسوية ويعود لك الباقي';
+  }
+
+  @override
+  String settlementWalletGuestOffers(String amount) {
+    return 'العميل يعرض أن تأخذ $amount ج من عربونه ويتم التسوية';
+  }
+
+  @override
+  String get settlementWalletAccept => 'موافق';
+
+  @override
+  String get settlementWalletDecline => 'رفض';
+
+  @override
+  String get settlementCollectTitle => 'التسوية من محفظة التطبيق';
 
   @override
   String settlementCollectNote(String amount) {
-    return 'ألغى العميل حجزًا غير قابل للاسترداد. يمكنك تحصيل عربونه المجمّد ($amount ج) أو جزء منه كغرامة إلغاء الآن، ويعود له الباقي وتمت التسوية — دون انتظار تأكيده.';
+    return 'أسرع طريقة لإنهاء التسوية: يعرض العميل أن يأخذ الفندق من عربونه المجمّد ($amount ج) أو جزءًا منه، أو يطلب الفندق ذلك — ولا يُؤخذ شيء إلا بموافقة الطرف الآخر. ثم يعود الباقي لأصحابه وتتم التسوية.';
   }
 
   @override
@@ -12501,7 +12537,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String settlementCollectedNote(String amount) {
-    return 'حصّل الفندق $amount ج من العربون، وعاد الباقي لصاحبه وتمت التسوية.';
+    return 'باتفاق الطرفين أُخذ $amount ج من العربون للفندق، وعاد الباقي لأصحابه وتمت التسوية.';
   }
 
   @override
