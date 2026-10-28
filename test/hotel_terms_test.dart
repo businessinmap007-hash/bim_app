@@ -93,6 +93,7 @@ void main() {
     expect(StaySettlement.fromJsonOrNull(null), isNull);
     final collected = StaySettlement.fromJsonOrNull({'status': 'settled', 'settled_by': 'wallet_collection', 'collected': 200, 'wallet_offer': {'by': 'client', 'amount': 200}, 'collectable': 360})!;
     expect(collected.walletOffer!.by, 'client');
+    expect(StaySettlement.fromJsonOrNull({'status': 'open', 'business_confirmed_by': 'سارة'})!.businessConfirmedBy, 'سارة');
     expect(collected.settledBy, 'wallet_collection');
     expect(collected.collected, 200);
     expect(collected.collectable, 360);

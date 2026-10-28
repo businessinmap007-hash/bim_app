@@ -14,6 +14,9 @@ class StaySettlement {
   final DateTime? clientConfirmedAt;
   final DateTime? businessConfirmedAt;
 
+  /// who pressed «تمت التسوية» for the hotel — its owner or a staff member, by name
+  final String? businessConfirmedBy;
+
   /// the side of whoever reads it: `client` or `business`
   final String mySide;
   final DateTime? arbitrationFrom;
@@ -39,6 +42,7 @@ class StaySettlement {
     this.openedAt,
     this.clientConfirmedAt,
     this.businessConfirmedAt,
+    this.businessConfirmedBy,
     this.mySide = 'client',
     this.arbitrationFrom,
     this.canRequestArbitration = false,
@@ -73,6 +77,7 @@ class StaySettlement {
           openedAt: _at(json['opened_at']),
           clientConfirmedAt: _at(json['client_confirmed_at']),
           businessConfirmedAt: _at(json['business_confirmed_at']),
+          businessConfirmedBy: json['business_confirmed_by'] as String?,
           mySide: json['my_side'] as String? ?? 'client',
           arbitrationFrom: _at(json['arbitration_from']),
           canRequestArbitration: json['can_request_arbitration'] == true,
@@ -132,7 +137,10 @@ class StaySettlementPayment {
 class OpenStaySettlement {
   final int bookingId;
   final String? counterpart;
+
+  /// the hotel a staff member settles for — null for the guest and the hotel's owner
+  final String? forBusiness;
   final StaySettlement settlement;
 
-  const OpenStaySettlement({required this.bookingId, this.counterpart, required this.settlement});
+  const OpenStaySettlement({required this.bookingId, this.counterpart, this.forBusiness, required this.settlement});
 }

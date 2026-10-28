@@ -22453,6 +22453,18 @@ abstract class AppLocalizations {
   /// **'إلى'**
   String get mealTo;
 
+  /// No description provided for @settlementConfirmedBy.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكّدها: {name}'**
+  String settlementConfirmedBy(String name);
+
+  /// No description provided for @settlementForBusiness.
+  ///
+  /// In ar, this message translates to:
+  /// **'نيابةً عن {name}'**
+  String settlementForBusiness(String name);
+
   /// No description provided for @settlementIConfirmed.
   ///
   /// In ar, this message translates to:

@@ -514,6 +514,7 @@ class BookingApi {
           OpenStaySettlement(
             bookingId: ((r as Map<String, dynamic>)['booking_id'] as num).toInt(),
             counterpart: r['counterpart'] as String?,
+            forBusiness: r['for_business'] as String?,
             settlement: StaySettlement.fromJsonOrNull(r)!,
           ),
     ];

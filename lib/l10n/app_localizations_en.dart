@@ -12576,6 +12576,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mealTo => 'To';
 
   @override
+  String settlementConfirmedBy(String name) {
+    return 'Confirmed by $name';
+  }
+
+  @override
+  String settlementForBusiness(String name) {
+    return 'On behalf of $name';
+  }
+
+  @override
   String get settlementIConfirmed =>
       'You confirmed — waiting for the other side';
 

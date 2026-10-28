@@ -196,7 +196,13 @@ class _StaySettlementScreenState extends ConsumerState<StaySettlementScreen> {
                         children: [
                           Text(l10n.settlementConfirmTitle, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
                           const SizedBox(height: 6),
-                          Row(children: [Expanded(child: Text(l10n.settlementHotel)), Text(when(s.businessConfirmedAt))]),
+                          Row(children: [
+                            Expanded(child: Text(l10n.settlementHotel)),
+                            Text(when(s.businessConfirmedAt)),
+                          ]),
+                          // the staff member who confirmed for the hotel, by name
+                          if (s.businessConfirmedAt != null && (s.businessConfirmedBy ?? '').isNotEmpty)
+                            Text(l10n.settlementConfirmedBy(s.businessConfirmedBy!), style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
                           Row(children: [Expanded(child: Text(l10n.settlementGuest)), Text(when(s.clientConfirmedAt))]),
                           const SizedBox(height: 10),
                           if (s.myConfirmedAt == null)
@@ -609,7 +615,12 @@ class MyStaySettlementsScreen extends ConsumerWidget {
                       child: ListTile(
                         leading: const Icon(Icons.balance_outlined),
                         title: Text(l10n.settlementPlease),
-                        subtitle: Text('${l10n.settlementTitle(r.bookingId)} · ${r.counterpart ?? ''}\n${_waiting(l10n, r.settlement)}'),
+                        subtitle: Text([
+                          '${l10n.settlementTitle(r.bookingId)} · ${r.counterpart ?? ''}',
+                          // a staff member settles on behalf of the hotel he works for
+                          if ((r.forBusiness ?? '').isNotEmpty) l10n.settlementForBusiness(r.forBusiness!),
+                          _waiting(l10n, r.settlement),
+                        ].join('\n')),
                         isThreeLine: true,
                         onTap: () async {
                           await Navigator.of(context).push(MaterialPageRoute(builder: (_) => StaySettlementScreen(bookingId: r.bookingId)));

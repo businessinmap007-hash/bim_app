@@ -12476,6 +12476,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mealTo => 'إلى';
 
   @override
+  String settlementConfirmedBy(String name) {
+    return 'أكّدها: $name';
+  }
+
+  @override
+  String settlementForBusiness(String name) {
+    return 'نيابةً عن $name';
+  }
+
+  @override
   String get settlementIConfirmed => 'أكّدتَ التسوية — بانتظار الطرف الآخر';
 
   @override
