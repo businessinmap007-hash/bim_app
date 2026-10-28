@@ -574,6 +574,21 @@ class _RecordPaymentSheetState extends ConsumerState<_RecordPaymentSheet> {
 class MyStaySettlementsScreen extends ConsumerWidget {
   const MyStaySettlementsScreen({super.key});
 
+  /// What the settlement waits for, from where the reader stands.
+  static String _waiting(AppLocalizations l10n, StaySettlement s) {
+    String money(double v) => v.toStringAsFixed(v == v.roundToDouble() ? 0 : 2);
+    final offer = s.walletOffer;
+
+    if (offer != null && offer.by != s.mySide) {
+      return s.isClient ? l10n.settlementWalletHotelAsks(money(offer.amount)) : l10n.settlementWalletGuestOffers(money(offer.amount));
+    }
+    if (offer != null) return l10n.settlementWalletMine(money(offer.amount));
+    if (s.theirConfirmedAt != null) return l10n.settlementTheyConfirmed;
+    if (s.myConfirmedAt != null) return l10n.settlementIConfirmed;
+
+    return l10n.settlementWaitingBoth;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
@@ -594,8 +609,7 @@ class MyStaySettlementsScreen extends ConsumerWidget {
                       child: ListTile(
                         leading: const Icon(Icons.balance_outlined),
                         title: Text(l10n.settlementPlease),
-                        subtitle: Text('${l10n.settlementTitle(r.bookingId)} · ${r.counterpart ?? ''}\n'
-                            '${r.settlement.theirConfirmedAt != null ? l10n.settlementTheyConfirmed : l10n.settlementWaitingBoth}'),
+                        subtitle: Text('${l10n.settlementTitle(r.bookingId)} · ${r.counterpart ?? ''}\n${_waiting(l10n, r.settlement)}'),
                         isThreeLine: true,
                         onTap: () async {
                           await Navigator.of(context).push(MaterialPageRoute(builder: (_) => StaySettlementScreen(bookingId: r.bookingId)));

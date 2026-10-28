@@ -22453,6 +22453,12 @@ abstract class AppLocalizations {
   /// **'إلى'**
   String get mealTo;
 
+  /// No description provided for @settlementIConfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكّدتَ التسوية — بانتظار الطرف الآخر'**
+  String get settlementIConfirmed;
+
   /// No description provided for @settlementWalletOfferGuest.
   ///
   /// In ar, this message translates to:
@@ -22624,7 +22630,7 @@ abstract class AppLocalizations {
   /// No description provided for @settlementOpenNote.
   ///
   /// In ar, this message translates to:
-  /// **'أُلغي الحجز. المجمّد لا يُفك تلقائيًا أبدًا — يُفك عندما يؤكد الطرفان «تمت التسوية»، أو يؤكد الفندق استلام دفعة سجّلها العميل، أو يحكم المحكّم.'**
+  /// **'أُلغي الحجز. المجمّد لا يُفك تلقائيًا أبدًا — يُفك عندما يؤكد الطرفان «تمت التسوية»، أو يوافق أحدهما على عرض التسوية من محفظة التطبيق، أو يؤكد الفندق استلام دفعة سجّلها العميل، أو يحكم المحكّم.'**
   String get settlementOpenNote;
 
   /// No description provided for @settlementSettledNote.

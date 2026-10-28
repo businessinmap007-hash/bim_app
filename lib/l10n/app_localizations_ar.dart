@@ -12476,6 +12476,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mealTo => 'إلى';
 
   @override
+  String get settlementIConfirmed => 'أكّدتَ التسوية — بانتظار الطرف الآخر';
+
+  @override
   String get settlementWalletOfferGuest => 'اعرض التسوية من محفظتك';
 
   @override
@@ -12587,7 +12590,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get settlementOpenNote =>
-      'أُلغي الحجز. المجمّد لا يُفك تلقائيًا أبدًا — يُفك عندما يؤكد الطرفان «تمت التسوية»، أو يؤكد الفندق استلام دفعة سجّلها العميل، أو يحكم المحكّم.';
+      'أُلغي الحجز. المجمّد لا يُفك تلقائيًا أبدًا — يُفك عندما يؤكد الطرفان «تمت التسوية»، أو يوافق أحدهما على عرض التسوية من محفظة التطبيق، أو يؤكد الفندق استلام دفعة سجّلها العميل، أو يحكم المحكّم.';
 
   @override
   String get settlementSettledNote => 'تمت التسوية وعاد كل ما جُمّد لصاحبه.';

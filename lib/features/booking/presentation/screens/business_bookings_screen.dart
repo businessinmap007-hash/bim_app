@@ -562,7 +562,9 @@ class BusinessBookingDetailScreen extends ConsumerWidget {
                       ),
                   ],
                 ],
+                // a non-refundable stay settles its deposit on its own «التسوية» page — not here too
                 if (!state.isBusy &&
+                    booking.staySettlement == null &&
                     booking.deposit != null &&
                     (booking.deposit!.isFrozen || booking.deposit!.isReleased || booking.deposit!.isRefunded)) ...[
                   const Divider(height: 32),

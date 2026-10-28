@@ -12576,6 +12576,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mealTo => 'To';
 
   @override
+  String get settlementIConfirmed =>
+      'You confirmed — waiting for the other side';
+
+  @override
   String get settlementWalletOfferGuest => 'Offer to settle from your wallet';
 
   @override
@@ -12688,7 +12692,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settlementOpenNote =>
-      'The booking was cancelled. Nothing is ever released by itself — only when both sides confirm it is settled, when the hotel confirms a payment the guest recorded, or by an arbitrator\'s ruling.';
+      'The booking was cancelled. Nothing is ever released by itself — only when both sides confirm it is settled, when one side accepts the other\'s wallet settlement, when the hotel confirms a payment the guest recorded, or by an arbitrator\'s ruling.';
 
   @override
   String get settlementSettledNote =>

@@ -1419,7 +1419,10 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
                   ),
               ],
             ],
-            if (booking.deposit != null && (booking.deposit!.isFrozen || booking.deposit!.isReleased || booking.deposit!.isRefunded)) ...[
+            // a non-refundable stay settles its deposit on its own «التسوية» page — not here too
+            if (booking.staySettlement == null &&
+                booking.deposit != null &&
+                (booking.deposit!.isFrozen || booking.deposit!.isReleased || booking.deposit!.isRefunded)) ...[
               const Divider(height: 24),
               Text(l10n.bookingsDepositSettlement, style: Theme.of(context).textTheme.titleSmall),
               const SizedBox(height: 8),
