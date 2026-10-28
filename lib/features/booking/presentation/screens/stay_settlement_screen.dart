@@ -85,6 +85,13 @@ class _StaySettlementScreenState extends ConsumerState<StaySettlementScreen> {
     }
   }
 
+  /// «اقبل التسوية بالدفع من محفظة التطبيق»: the whole held deposit, or a smaller fine.
+  Future<void> _collect(StaySettlement s) async {
+    final amount = await showDialog<double>(context: context, builder: (_) => _CollectDialog(max: s.collectable));
+    if (amount == null || !mounted) return;
+    await _run(() => ref.read(bookingApiProvider).collectStayDeposit(widget.bookingId, amount: amount));
+  }
+
   Future<void> _arbitration() async {
     final l10n = AppLocalizations.of(context)!;
     final ok = await showDialog<bool>(
@@ -164,7 +171,11 @@ class _StaySettlementScreenState extends ConsumerState<StaySettlementScreen> {
                         Text(
                           switch (s.status) {
                             'secured' => l10n.settlementSecuredNote,
-                            'settled' => l10n.settlementSettledNote,
+                            'settled' => switch (s.settledBy) {
+                              'wallet_collection' => l10n.settlementCollectedNote(money(s.collected ?? 0)),
+                              'stay_started' => l10n.settlementStayStartedNote,
+                              _ => l10n.settlementSettledNote,
+                            },
                             'arbitration' => l10n.settlementArbitrationNote,
                             _ => l10n.settlementOpenNote,
                           },
@@ -229,6 +240,26 @@ class _StaySettlementScreenState extends ConsumerState<StaySettlementScreen> {
                     ),
                   ),
                 ),
+                // «اقبل التسوية بالدفع من محفظة التطبيق»: the guest cancelled — the hotel may take the deposit, or less, at once
+                if (s.canCollect) ...[
+                  const SizedBox(height: 12),
+                  Card(
+                    margin: EdgeInsets.zero,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(l10n.settlementCollectTitle, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+                          const SizedBox(height: 4),
+                          Text(l10n.settlementCollectNote(money(s.collectable)), style: theme.textTheme.bodySmall),
+                          const SizedBox(height: 8),
+                          FilledButton.tonal(onPressed: _busy ? null : () => _collect(s), child: Text(l10n.settlementCollectButton)),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
                 if (s.isOpen || s.status == 'arbitration') ...[
                   const SizedBox(height: 12),
                   Card(
@@ -305,6 +336,67 @@ class _StaySettlementScreenState extends ConsumerState<StaySettlementScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _CollectDialog extends StatefulWidget {
+  final double max;
+  const _CollectDialog({required this.max});
+
+  @override
+  State<_CollectDialog> createState() => _CollectDialogState();
+}
+
+class _CollectDialogState extends State<_CollectDialog> {
+  late final _amount = TextEditingController(text: widget.max.toStringAsFixed(widget.max == widget.max.roundToDouble() ? 0 : 2));
+  bool _all = true;
+  String? _error;
+
+  @override
+  void dispose() {
+    _amount.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final max = widget.max.toStringAsFixed(widget.max == widget.max.roundToDouble() ? 0 : 2);
+
+    return AlertDialog(
+      title: Text(l10n.settlementCollectTitle),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          RadioGroup<bool>(
+            groupValue: _all,
+            onChanged: (v) => setState(() => _all = v ?? true),
+            child: Column(children: [
+              RadioListTile<bool>(contentPadding: EdgeInsets.zero, value: true, title: Text(l10n.settlementCollectAll(max))),
+              RadioListTile<bool>(contentPadding: EdgeInsets.zero, value: false, title: Text(l10n.settlementCollectFine)),
+            ]),
+          ),
+          if (!_all)
+            TextField(
+              controller: _amount,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(labelText: l10n.settlementCollectAmount(max), errorText: _error),
+            ),
+        ],
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.commonCancel)),
+        FilledButton(
+          onPressed: () {
+            if (_all) return Navigator.pop(context, widget.max);
+            final v = double.tryParse(_amount.text.trim().replaceAll(',', '.'));
+            if (v == null || v <= 0 || v > widget.max) return setState(() => _error = l10n.settlementCollectAmount(max));
+            Navigator.pop(context, v);
+          },
+          child: Text(l10n.settlementCollectButton),
+        ),
+      ],
     );
   }
 }

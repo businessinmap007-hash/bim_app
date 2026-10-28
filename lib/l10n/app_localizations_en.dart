@@ -12576,6 +12576,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mealTo => 'To';
 
   @override
+  String get settlementCollectTitle => 'Settle from the app wallet';
+
+  @override
+  String settlementCollectNote(String amount) {
+    return 'The guest cancelled a non-refundable booking. You can collect the held deposit ($amount EGP), or part of it as a cancellation fine, now; the rest goes back and it is settled — without waiting for the guest.';
+  }
+
+  @override
+  String get settlementCollectButton => 'Collect from the wallet';
+
+  @override
+  String settlementCollectAll(String amount) {
+    return 'The whole deposit ($amount EGP)';
+  }
+
+  @override
+  String get settlementCollectFine => 'A smaller fine';
+
+  @override
+  String settlementCollectAmount(String max) {
+    return 'Amount (up to $max EGP)';
+  }
+
+  @override
+  String settlementCollectedNote(String amount) {
+    return 'The hotel collected $amount EGP of the deposit; the rest went back and it is settled.';
+  }
+
+  @override
+  String get settlementStayStartedNote =>
+      'The hotel received the amount and the stay began, so the deposits were released.';
+
+  @override
   String settlementTitle(int id) {
     return 'Settlement · booking #$id';
   }
@@ -12614,7 +12647,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settlementSecuredNote =>
-      'Held while the booking stands. Nothing is deducted from anyone.';
+      'Held while the booking stands, and released as soon as the stay begins after the hotel received the amount. Nothing is deducted from anyone.';
 
   @override
   String get settlementOpenNote =>
@@ -12724,7 +12757,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settlementArbitrationHow =>
-      'Three days after the cancellation with no settlement, one side may ask for arbitration. The arbitrator rules from the booking\'s terms, the payment proofs and the chat, sets any compensation from the booking\'s own value, and whoever does not pay a ruling cannot start new operations until they do.';
+      'Three days after the cancellation with no settlement, one side may ask for arbitration. The arbitrator rules from the booking\'s terms, the payment proofs and the chat, and sets any compensation from the booking\'s own value. No account is stopped; whoever does not pay a ruling has their guarantee frozen for it, then it is taken from their wallet or guarantee.';
 
   @override
   String get settlementArbitrationAsk => 'Ask for arbitration';

@@ -12476,6 +12476,39 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mealTo => 'إلى';
 
   @override
+  String get settlementCollectTitle => 'قبول التسوية من محفظة التطبيق';
+
+  @override
+  String settlementCollectNote(String amount) {
+    return 'ألغى العميل حجزًا غير قابل للاسترداد. يمكنك تحصيل عربونه المجمّد ($amount ج) أو جزء منه كغرامة إلغاء الآن، ويعود له الباقي وتمت التسوية — دون انتظار تأكيده.';
+  }
+
+  @override
+  String get settlementCollectButton => 'تحصيل من المحفظة';
+
+  @override
+  String settlementCollectAll(String amount) {
+    return 'العربون كاملًا ($amount ج)';
+  }
+
+  @override
+  String get settlementCollectFine => 'غرامة بمبلغ أقل';
+
+  @override
+  String settlementCollectAmount(String max) {
+    return 'المبلغ (حتى $max ج)';
+  }
+
+  @override
+  String settlementCollectedNote(String amount) {
+    return 'حصّل الفندق $amount ج من العربون، وعاد الباقي لصاحبه وتمت التسوية.';
+  }
+
+  @override
+  String get settlementStayStartedNote =>
+      'استلم الفندق المبلغ وبدأت الإقامة، ففُك العربون والتأمين.';
+
+  @override
   String settlementTitle(int id) {
     return 'التسوية · حجز #$id';
   }
@@ -12514,7 +12547,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get settlementSecuredNote =>
-      'مجمّد ما دام الحجز قائمًا. لا يُخصم من أحد.';
+      'مجمّد ما دام الحجز قائمًا، ويُفك فور بدء الإقامة بعد أن يستلم الفندق المبلغ. لا يُخصم من أحد.';
 
   @override
   String get settlementOpenNote =>
@@ -12621,7 +12654,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get settlementArbitrationHow =>
-      'بعد 3 أيام من الإلغاء بلا تسوية، يكفي طرف واحد لطلب تحكيم. المحكّم يحكم من شروط الحجز وإثباتات الدفع والمحادثة، ويحدد التعويض من قيمة الحجز نفسه، ومن لا يدفع ما حُكم عليه تتوقف عملياته الجديدة حتى يسدد.';
+      'بعد 3 أيام من الإلغاء بلا تسوية، يكفي طرف واحد لطلب تحكيم. المحكّم يحكم من شروط الحجز وإثباتات الدفع والمحادثة، ويحدد التعويض من قيمة الحجز نفسه. الحساب لا يتوقف؛ من لا يدفع ما حُكم عليه يُجمَّد ضمانه بقدره ثم يُحصَّل من محفظته أو ضمانه.';
 
   @override
   String get settlementArbitrationAsk => 'طلب تحكيم';

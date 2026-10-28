@@ -21,6 +21,14 @@ class StaySettlement {
   final int? disputeId;
   final List<StaySettlementPayment> payments;
 
+  /// «اقبل التسوية بالدفع من محفظة التطبيق»: the hotel, when the guest cancelled — up to [collectable]
+  final bool canCollect;
+  final double collectable;
+  final double? collected;
+
+  /// `mutual` · `payment_received` · `wallet_collection` · `stay_started`
+  final String? settledBy;
+
   const StaySettlement({
     required this.status,
     this.percent = 0,
@@ -36,6 +44,10 @@ class StaySettlement {
     this.canRequestArbitration = false,
     this.disputeId,
     this.payments = const [],
+    this.canCollect = false,
+    this.collectable = 0,
+    this.collected,
+    this.settledBy,
   });
 
   bool get isOpen => status == 'open';
@@ -66,6 +78,10 @@ class StaySettlement {
           canRequestArbitration: json['can_request_arbitration'] == true,
           disputeId: (json['dispute_id'] as num?)?.toInt(),
           payments: [for (final p in json['payments'] as List<dynamic>? ?? const []) StaySettlementPayment.fromJson(p as Map<String, dynamic>)],
+          canCollect: json['can_collect'] == true,
+          collectable: (json['collectable'] as num?)?.toDouble() ?? 0,
+          collected: (json['collected'] as num?)?.toDouble(),
+          settledBy: json['settled_by'] as String?,
         )
       : null;
 }

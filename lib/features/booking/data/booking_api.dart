@@ -482,6 +482,12 @@ class BookingApi {
     return StaySettlement.fromJsonOrNull(data['settlement']);
   }
 
+  /// «اقبل التسوية بالدفع من محفظة التطبيق»: the hotel takes [amount] (the whole held deposit when null) from the guest's hold.
+  Future<StaySettlement?> collectStayDeposit(int bookingId, {double? amount}) async {
+    final data = await _client.post('/bookings/$bookingId/stay-settlement/collect', data: {'amount': ?amount}) as Map<String, dynamic>;
+    return StaySettlement.fromJsonOrNull(data['settlement']);
+  }
+
   /// Three days after the cancellation, one side asks a judge. Returns the dispute opened.
   Future<int?> requestStayArbitration(int bookingId) async {
     final data = await _client.post('/bookings/$bookingId/stay-settlement/arbitration') as Map<String, dynamic>;

@@ -22453,6 +22453,54 @@ abstract class AppLocalizations {
   /// **'إلى'**
   String get mealTo;
 
+  /// No description provided for @settlementCollectTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'قبول التسوية من محفظة التطبيق'**
+  String get settlementCollectTitle;
+
+  /// No description provided for @settlementCollectNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'ألغى العميل حجزًا غير قابل للاسترداد. يمكنك تحصيل عربونه المجمّد ({amount} ج) أو جزء منه كغرامة إلغاء الآن، ويعود له الباقي وتمت التسوية — دون انتظار تأكيده.'**
+  String settlementCollectNote(String amount);
+
+  /// No description provided for @settlementCollectButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحصيل من المحفظة'**
+  String get settlementCollectButton;
+
+  /// No description provided for @settlementCollectAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'العربون كاملًا ({amount} ج)'**
+  String settlementCollectAll(String amount);
+
+  /// No description provided for @settlementCollectFine.
+  ///
+  /// In ar, this message translates to:
+  /// **'غرامة بمبلغ أقل'**
+  String get settlementCollectFine;
+
+  /// No description provided for @settlementCollectAmount.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ (حتى {max} ج)'**
+  String settlementCollectAmount(String max);
+
+  /// No description provided for @settlementCollectedNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'حصّل الفندق {amount} ج من العربون، وعاد الباقي لصاحبه وتمت التسوية.'**
+  String settlementCollectedNote(String amount);
+
+  /// No description provided for @settlementStayStartedNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'استلم الفندق المبلغ وبدأت الإقامة، ففُك العربون والتأمين.'**
+  String get settlementStayStartedNote;
+
   /// No description provided for @settlementTitle.
   ///
   /// In ar, this message translates to:
@@ -22510,7 +22558,7 @@ abstract class AppLocalizations {
   /// No description provided for @settlementSecuredNote.
   ///
   /// In ar, this message translates to:
-  /// **'مجمّد ما دام الحجز قائمًا. لا يُخصم من أحد.'**
+  /// **'مجمّد ما دام الحجز قائمًا، ويُفك فور بدء الإقامة بعد أن يستلم الفندق المبلغ. لا يُخصم من أحد.'**
   String get settlementSecuredNote;
 
   /// No description provided for @settlementOpenNote.
@@ -22708,7 +22756,7 @@ abstract class AppLocalizations {
   /// No description provided for @settlementArbitrationHow.
   ///
   /// In ar, this message translates to:
-  /// **'بعد 3 أيام من الإلغاء بلا تسوية، يكفي طرف واحد لطلب تحكيم. المحكّم يحكم من شروط الحجز وإثباتات الدفع والمحادثة، ويحدد التعويض من قيمة الحجز نفسه، ومن لا يدفع ما حُكم عليه تتوقف عملياته الجديدة حتى يسدد.'**
+  /// **'بعد 3 أيام من الإلغاء بلا تسوية، يكفي طرف واحد لطلب تحكيم. المحكّم يحكم من شروط الحجز وإثباتات الدفع والمحادثة، ويحدد التعويض من قيمة الحجز نفسه. الحساب لا يتوقف؛ من لا يدفع ما حُكم عليه يُجمَّد ضمانه بقدره ثم يُحصَّل من محفظته أو ضمانه.'**
   String get settlementArbitrationHow;
 
   /// No description provided for @settlementArbitrationAsk.
