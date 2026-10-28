@@ -166,7 +166,10 @@ class BookingPreview {
   final List<({String name, double amount})> lines;
 
   /// What each child adds a night, by the hotel's «سياسة الأطفال».
-  final List<({int age, double percent, double perNight})> children;
+  final List<({int age, double percent, double perNight, bool singleParent})> children;
+
+  /// «العشاء الإلزامي»: the hotel's gala nights inside the stay, each with what it adds (once, not a night)
+  final List<({String date, String name, double total})> galaDinners;
 
   /// «سرير إضافي»: how many, and what they add a night
   final ({int count, double perNight})? extraBeds;
@@ -184,6 +187,7 @@ class BookingPreview {
     this.lines = const [],
     this.children = const [],
     this.extraBeds,
+    this.galaDinners = const [],
   });
 
   factory BookingPreview.fromJson(Map<String, dynamic> json) {
@@ -207,6 +211,15 @@ class BookingPreview {
             age: ((c as Map<String, dynamic>)['age'] as num?)?.toInt() ?? 0,
             percent: (c['percent'] as num?)?.toDouble() ?? 0,
             perNight: (c['per_night'] as num?)?.toDouble() ?? 0,
+            singleParent: c['single_parent'] == true,
+          ),
+      ],
+      galaDinners: [
+        for (final g in breakdown['gala_dinners'] as List<dynamic>? ?? const [])
+          (
+            date: ((g as Map<String, dynamic>)['date'] as String?) ?? '',
+            name: g['name'] as String? ?? '',
+            total: (g['total'] as num?)?.toDouble() ?? 0,
           ),
       ],
       extraBeds: breakdown['extra_beds'] is Map<String, dynamic>

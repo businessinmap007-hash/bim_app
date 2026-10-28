@@ -12576,6 +12576,69 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mealTo => 'To';
 
   @override
+  String get singleParentTitle => 'One adult with a child';
+
+  @override
+  String get singleParentHint =>
+      'In a room with one adult, the second adult\'s place is paid for in the room\'s price; the (oldest) child in it pays what you set here instead of its usual share.';
+
+  @override
+  String get singleParentChild => 'Child in adult\'s place';
+
+  @override
+  String bookingChildSingleParentLine(int age, String pays) {
+    return 'Child of $age in the second adult\'s place · $pays';
+  }
+
+  @override
+  String get galaTitle => 'Gala dinners';
+
+  @override
+  String get galaIntro =>
+      'Gala nights (New Year\'s Eve, Christmas, Eid…): every stay over the night pays the dinner — each adult the price, a child from the age you set its percentage, a younger child free — whatever the meal plan, also when a partner sells your rooms.';
+
+  @override
+  String get galaEmpty => 'No gala nights';
+
+  @override
+  String get galaAdd => 'Add a gala dinner';
+
+  @override
+  String get galaEdit => 'Edit gala dinner';
+
+  @override
+  String get galaDate => 'Night';
+
+  @override
+  String get galaName => 'Name';
+
+  @override
+  String get galaNameHint => 'New Year\'s Eve gala';
+
+  @override
+  String get galaAdultPrice => 'Adult price';
+
+  @override
+  String get galaChildPercent => 'Child\'s % of the adult price';
+
+  @override
+  String get galaFreeUnder => 'Free for a child under (years)';
+
+  @override
+  String get galaMissing =>
+      'Pick the night and write the name and the adult price';
+
+  @override
+  String galaSummary(String price, String percent, int age) {
+    return 'Adult $price · child $percent% · free under $age';
+  }
+
+  @override
+  String galaLine(String name, String date) {
+    return '$name ($date) — compulsory';
+  }
+
+  @override
   String get childPolicyTitle => 'Children policy';
 
   @override

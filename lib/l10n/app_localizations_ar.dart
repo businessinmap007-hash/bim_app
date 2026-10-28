@@ -12476,6 +12476,68 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mealTo => 'إلى';
 
   @override
+  String get singleParentTitle => 'بالغ واحد مع طفل';
+
+  @override
+  String get singleParentHint =>
+      'في غرفة بها بالغ واحد، مكان البالغ الثاني مدفوع في سعر الغرفة؛ الطفل (الأكبر) الذي يشغله يدفع ما تحدده هنا بدل نسبته المعتادة.';
+
+  @override
+  String get singleParentChild => 'الطفل مكان البالغ';
+
+  @override
+  String bookingChildSingleParentLine(int age, String pays) {
+    return 'طفل $age سنوات مكان البالغ الثاني · $pays';
+  }
+
+  @override
+  String get galaTitle => 'العشاء الإلزامي';
+
+  @override
+  String get galaIntro =>
+      'ليالي الحفلات (رأس السنة، الكريسماس، الأعياد…): كل إقامة تشمل الليلة تدفع العشاء — كل بالغ بالسعر، والطفل من السن المحدد بنسبته، ومن هو أصغر مجانًا — أيًا كان نظام الوجبات، وعند بيع الشريك لغرفك أيضًا.';
+
+  @override
+  String get galaEmpty => 'لا توجد ليالٍ بعشاء إلزامي';
+
+  @override
+  String get galaAdd => 'إضافة عشاء إلزامي';
+
+  @override
+  String get galaEdit => 'تعديل العشاء الإلزامي';
+
+  @override
+  String get galaDate => 'الليلة';
+
+  @override
+  String get galaName => 'الاسم';
+
+  @override
+  String get galaNameHint => 'عشاء رأس السنة';
+
+  @override
+  String get galaAdultPrice => 'سعر البالغ';
+
+  @override
+  String get galaChildPercent => 'نسبة الطفل من سعر البالغ';
+
+  @override
+  String get galaFreeUnder => 'مجانًا للطفل أقل من (سنة)';
+
+  @override
+  String get galaMissing => 'اختر الليلة واكتب الاسم وسعر البالغ';
+
+  @override
+  String galaSummary(String price, String percent, int age) {
+    return 'البالغ $price · الطفل $percent% · مجانًا تحت $age سنوات';
+  }
+
+  @override
+  String galaLine(String name, String date) {
+    return '$name ($date) — إلزامي';
+  }
+
+  @override
   String get childPolicyTitle => 'سياسة الأطفال';
 
   @override

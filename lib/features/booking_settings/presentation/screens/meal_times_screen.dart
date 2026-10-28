@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/network/api_exception.dart';
+import '../../../../core/time/clock_format.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/booking_settings_controller.dart';
 
@@ -49,7 +50,7 @@ class _MealTimesScreenState extends ConsumerState<MealTimesScreen> {
   Future<void> _pick(String meal, bool from) async {
     final current = from ? _times[meal]!.from : _times[meal]!.to;
     final parts = (current ?? (from ? '07:00' : '10:00')).split(':');
-    final picked = await showTimePicker(context: context, initialTime: TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1])));
+    final picked = await ClockFormat.pick(context, initial: TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1])));
     if (picked == null) return;
     final text = '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
     setState(() => _times[meal] = from ? (from: text, to: _times[meal]!.to) : (from: _times[meal]!.from, to: text));
@@ -92,9 +93,9 @@ class _MealTimesScreenState extends ConsumerState<MealTimesScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       child: Row(children: [
                         Expanded(child: Text(_mealName(l10n, meal), style: theme.textTheme.titleSmall)),
-                        TextButton(onPressed: () => _pick(meal, true), child: Text(_times[meal]!.from ?? l10n.mealFrom)),
+                        TextButton(onPressed: () => _pick(meal, true), child: Text(_times[meal]!.from == null ? l10n.mealFrom : ClockFormat.hhmm(context, _times[meal]!.from))),
                         const Text('—'),
-                        TextButton(onPressed: () => _pick(meal, false), child: Text(_times[meal]!.to ?? l10n.mealTo)),
+                        TextButton(onPressed: () => _pick(meal, false), child: Text(_times[meal]!.to == null ? l10n.mealTo : ClockFormat.hhmm(context, _times[meal]!.to))),
                         IconButton(
                           tooltip: l10n.commonDelete,
                           icon: const Icon(Icons.close),

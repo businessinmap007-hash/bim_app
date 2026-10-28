@@ -6,6 +6,7 @@ import 'models/booking_terms.dart';
 import 'models/add_on_models.dart';
 import 'models/room_models.dart';
 import '../../booking/data/models/child_policy.dart';
+import '../../booking/data/models/gala_dinner.dart';
 
 /// /business/prices, /business/bookable-items, /business/working-hours —
 /// business-only self-service (the `business` middleware gate on the
@@ -239,6 +240,19 @@ class BookingSettingsApi {
 
   Future<void> saveMealTimes(Map<String, ({String? from, String? to})> times) =>
       _client.put('/business/meal-times', data: {for (final e in times.entries) e.key: {'from': e.value.from, 'to': e.value.to}});
+
+  /// «العشاء الإلزامي»: the hotel's gala nights from today on.
+  Future<List<GalaDinner>> galaDinners() async {
+    final data = await _client.get('/business/gala-dinners') as Map<String, dynamic>;
+    return GalaDinner.listFrom(data['gala_dinners']);
+  }
+
+  /// Adds a gala night (id 0) or rewrites one.
+  Future<void> saveGalaDinner(GalaDinner gala) => gala.id == 0
+      ? _client.post('/business/gala-dinners', data: gala.toJson())
+      : _client.put('/business/gala-dinners/${gala.id}', data: gala.toJson());
+
+  Future<void> deleteGalaDinner(int id) => _client.delete('/business/gala-dinners/$id');
 
   /// «سياسة الأطفال» of the hotel — null until it writes one.
   Future<ChildPolicy?> childPolicy() async {

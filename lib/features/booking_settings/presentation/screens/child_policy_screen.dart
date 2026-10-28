@@ -25,6 +25,9 @@ class _ChildPolicyScreenState extends ConsumerState<ChildPolicyScreen> {
   bool _meals = true;
   final _bedPrice = TextEditingController();
   int _bedsMax = 1;
+
+  /// «بالغ واحد مع طفل»: null = the child pays its normal share
+  double? _single;
   List<ChildBand> _bands = const [ChildBand(from: 0, to: 5, percent: 0, secondPercent: 50), ChildBand(from: 6, to: 11, percent: 50)];
 
   @override
@@ -45,6 +48,7 @@ class _ChildPolicyScreenState extends ConsumerState<ChildPolicyScreen> {
           _bands = p.bands;
           _bedPrice.text = p.extraBedPrice == null ? '' : p.extraBedPrice!.toStringAsFixed(p.extraBedPrice! % 1 == 0 ? 0 : 2);
           _bedsMax = p.extraBedsMax;
+          _single = p.singleParentPercent;
         }
         _loaded = true;
       });
@@ -60,7 +64,7 @@ class _ChildPolicyScreenState extends ConsumerState<ChildPolicyScreen> {
     try {
       final bed = double.tryParse(_bedPrice.text.trim().replaceAll(',', '.'));
       await ref.read(bookingSettingsApiProvider).saveChildPolicy(
-        ChildPolicy(adultFromAge: _adult, countsFromAge: _counts, mealsFollow: _meals, bands: _bands, extraBedPrice: bed, extraBedsMax: _bedsMax),
+        ChildPolicy(adultFromAge: _adult, countsFromAge: _counts, mealsFollow: _meals, bands: _bands, extraBedPrice: bed, extraBedsMax: _bedsMax, singleParentPercent: _single),
       );
       messenger.showSnackBar(SnackBar(content: Text(l10n.childPolicySaved)));
     } catch (e) {
@@ -189,6 +193,16 @@ class _ChildPolicyScreenState extends ConsumerState<ChildPolicyScreen> {
                   const SizedBox(width: 8),
                   _ageField(_bedsMax, (v) => setState(() => _bedsMax = v), max: 4),
                 ]),
+                const Divider(height: 24),
+                // «بالغ واحد مع طفل»: the second adult's place is paid for in the room's price; the child in it pays this
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(l10n.singleParentTitle),
+                  subtitle: Text(l10n.singleParentHint),
+                  value: _single != null,
+                  onChanged: (v) => setState(() => _single = v ? 0 : null),
+                ),
+                if (_single != null) _payRow(l10n, l10n.singleParentChild, _single!, (p) => setState(() => _single = p), 'sp'),
                 const SizedBox(height: 16),
                 FilledButton(onPressed: _saving ? null : _save, child: Text(l10n.commonSave)),
               ],

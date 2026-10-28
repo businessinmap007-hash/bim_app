@@ -41,6 +41,7 @@ import '../widgets/order_tracker_timeline.dart';
 import '../widgets/order_trust_section.dart';
 import '../../../booking/presentation/widgets/relationship_card.dart';
 import '../../../../core/time/clock_format.dart';
+import '../../../../core/time/local_format.dart';
 import '../../../../core/time/egypt_time.dart';
 
 /// "My orders & bookings" — every placed order (menu/retail checkout) and
@@ -1240,7 +1241,7 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
               Text(l10n.mealTimesYours, style: Theme.of(context).textTheme.titleSmall),
               for (final m in booking.mealTimes)
                 Text(
-                  '${switch (m.meal) { 'breakfast' => l10n.mealBreakfast, 'lunch' => l10n.mealLunch, _ => l10n.mealDinner }}: ${m.from ?? '—'} – ${m.to ?? '—'}',
+                  '${switch (m.meal) { 'breakfast' => l10n.mealBreakfast, 'lunch' => l10n.mealLunch, _ => l10n.mealDinner }}: ${ClockFormat.hhmm(context, m.from, fallback: '—')} – ${ClockFormat.hhmm(context, m.to, fallback: '—')}',
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
             ],
@@ -1459,6 +1460,11 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
 }
 
 String _formatRange(BuildContext context, DateTime start, DateTime? end) {
+  // a stay is nights between two dates: «2 نوفمبر → 5 نوفمبر», never «12:00 ص → 12:00 ص»
+  bool midnight(DateTime d) => d.hour == 0 && d.minute == 0;
+  if (end != null && midnight(start) && midnight(end) && !end.isAtSameMomentAs(start)) {
+    return '${LocalFormat.date(context).format(start)} → ${LocalFormat.date(context).format(end)}';
+  }
   final startStr = ClockFormat.dateTime(context, start);
   if (end == null) return startStr;
 

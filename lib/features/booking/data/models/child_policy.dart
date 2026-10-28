@@ -36,7 +36,19 @@ class ChildPolicy {
   final double? extraBedPrice;
   final int extraBedsMax;
 
-  const ChildPolicy({this.adultFromAge = 12, this.countsFromAge = 6, this.mealsFollow = true, this.bands = const [], this.extraBedPrice, this.extraBedsMax = 1});
+  /// «بالغ واحد مع طفل»: what the child in the second adult's place of a one-adult room pays of one person's night (0 = free) —
+  /// null when the hotel keeps the normal share
+  final double? singleParentPercent;
+
+  const ChildPolicy({
+    this.adultFromAge = 12,
+    this.countsFromAge = 6,
+    this.mealsFollow = true,
+    this.bands = const [],
+    this.extraBedPrice,
+    this.extraBedsMax = 1,
+    this.singleParentPercent,
+  });
 
   /// How many extra beds a stay of [rooms] rooms may take.
   int extraBedsAllowed(int rooms) => extraBedPrice == null ? 0 : extraBedsMax * (rooms < 1 ? 1 : rooms);
@@ -62,6 +74,7 @@ class ChildPolicy {
           mealsFollow: json['meals_follow'] as bool? ?? true,
           extraBedPrice: (json['extra_bed_price'] as num?)?.toDouble(),
           extraBedsMax: (json['extra_beds_max'] as num?)?.toInt() ?? 1,
+          singleParentPercent: (json['single_parent_percent'] as num?)?.toDouble(),
           bands: [for (final b in json['bands'] as List<dynamic>? ?? const []) ChildBand.fromJson(b as Map<String, dynamic>)],
         )
       : null;
@@ -72,6 +85,7 @@ class ChildPolicy {
     'meals_follow': mealsFollow,
     'extra_bed_price': extraBedPrice,
     'extra_beds_max': extraBedsMax,
+    'single_parent_percent': singleParentPercent,
     'bands': [for (final b in bands) b.toJson()],
   };
 }

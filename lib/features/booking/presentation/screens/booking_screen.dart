@@ -1070,13 +1070,18 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     ];
   }
 
+  String _galaDate(BuildContext context, String date) {
+    final d = DateTime.tryParse(date);
+    return d == null ? date : LocalFormat.date(context).format(d);
+  }
+
   /// The total, with what it is made of: «الغرفة 800 · إطلالة 150 · نصف إقامة 250 = 1200 × 2 ليلة».
   Widget _summaryCard(BuildContext context, AppLocalizations l10n, bool dayUseOn) {
     final theme = Theme.of(context);
     final preview = _preview;
     final currency = widget.offering.currency;
     final lines = preview?.lines ?? const <({String name, double amount})>[];
-    final showBreakdown = preview != null && (lines.isNotEmpty || preview.children.isNotEmpty || preview.extraBeds != null) && preview.unitPrice != null;
+    final showBreakdown = preview != null && (lines.isNotEmpty || preview.children.isNotEmpty || preview.extraBeds != null || preview.galaDinners.isNotEmpty) && preview.unitPrice != null;
     final nights = preview?.periods ?? 1;
 
     String money(double v) => '${v.toStringAsFixed(0)} $currency';
@@ -1100,12 +1105,21 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
               if (preview.extraBeds != null && preview.extraBeds!.count > 0)
                 _summaryRow(theme, l10n.extraBedLine(preview.extraBeds!.count), '+${preview.extraBeds!.perNight.toStringAsFixed(0)}'),
               for (final c in preview.children.where((c) => c.perNight > 0))
-                _summaryRow(theme, l10n.bookingChildLine(c.age, '${c.percent % 1 == 0 ? c.percent.toStringAsFixed(0) : c.percent.toStringAsFixed(2)}%'), '+${c.perNight.toStringAsFixed(0)}'),
+                _summaryRow(
+                  theme,
+                  c.singleParent
+                      ? l10n.bookingChildSingleParentLine(c.age, '${c.percent % 1 == 0 ? c.percent.toStringAsFixed(0) : c.percent.toStringAsFixed(2)}%')
+                      : l10n.bookingChildLine(c.age, '${c.percent % 1 == 0 ? c.percent.toStringAsFixed(0) : c.percent.toStringAsFixed(2)}%'),
+                  '+${c.perNight.toStringAsFixed(0)}',
+                ),
               if (!dayUseOn) ...[
                 const Divider(height: 16),
                 _summaryRow(theme, l10n.bookingNightPrice, money(preview.unitPrice! + preview.children.fold<double>(0, (s, c) => s + c.perNight) + (preview.extraBeds?.perNight ?? 0)), bold: true),
                 if (nights > 1) _summaryRow(theme, l10n.bookingTimesNights(nights), ''),
               ],
+              // «العشاء الإلزامي»: once for its night, on top of the nights
+              for (final g in preview.galaDinners)
+                _summaryRow(theme, l10n.galaLine(g.name, _galaDate(context, g.date)), '+${g.total.toStringAsFixed(0)}'),
               const SizedBox(height: 8),
             ],
             if (preview != null && preview.offerDiscount > 0) ...[

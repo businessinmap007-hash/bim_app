@@ -22453,6 +22453,114 @@ abstract class AppLocalizations {
   /// **'إلى'**
   String get mealTo;
 
+  /// No description provided for @singleParentTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'بالغ واحد مع طفل'**
+  String get singleParentTitle;
+
+  /// No description provided for @singleParentHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'في غرفة بها بالغ واحد، مكان البالغ الثاني مدفوع في سعر الغرفة؛ الطفل (الأكبر) الذي يشغله يدفع ما تحدده هنا بدل نسبته المعتادة.'**
+  String get singleParentHint;
+
+  /// No description provided for @singleParentChild.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطفل مكان البالغ'**
+  String get singleParentChild;
+
+  /// No description provided for @bookingChildSingleParentLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'طفل {age} سنوات مكان البالغ الثاني · {pays}'**
+  String bookingChildSingleParentLine(int age, String pays);
+
+  /// No description provided for @galaTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'العشاء الإلزامي'**
+  String get galaTitle;
+
+  /// No description provided for @galaIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'ليالي الحفلات (رأس السنة، الكريسماس، الأعياد…): كل إقامة تشمل الليلة تدفع العشاء — كل بالغ بالسعر، والطفل من السن المحدد بنسبته، ومن هو أصغر مجانًا — أيًا كان نظام الوجبات، وعند بيع الشريك لغرفك أيضًا.'**
+  String get galaIntro;
+
+  /// No description provided for @galaEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد ليالٍ بعشاء إلزامي'**
+  String get galaEmpty;
+
+  /// No description provided for @galaAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة عشاء إلزامي'**
+  String get galaAdd;
+
+  /// No description provided for @galaEdit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل العشاء الإلزامي'**
+  String get galaEdit;
+
+  /// No description provided for @galaDate.
+  ///
+  /// In ar, this message translates to:
+  /// **'الليلة'**
+  String get galaDate;
+
+  /// No description provided for @galaName.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم'**
+  String get galaName;
+
+  /// No description provided for @galaNameHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'عشاء رأس السنة'**
+  String get galaNameHint;
+
+  /// No description provided for @galaAdultPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر البالغ'**
+  String get galaAdultPrice;
+
+  /// No description provided for @galaChildPercent.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة الطفل من سعر البالغ'**
+  String get galaChildPercent;
+
+  /// No description provided for @galaFreeUnder.
+  ///
+  /// In ar, this message translates to:
+  /// **'مجانًا للطفل أقل من (سنة)'**
+  String get galaFreeUnder;
+
+  /// No description provided for @galaMissing.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر الليلة واكتب الاسم وسعر البالغ'**
+  String get galaMissing;
+
+  /// No description provided for @galaSummary.
+  ///
+  /// In ar, this message translates to:
+  /// **'البالغ {price} · الطفل {percent}% · مجانًا تحت {age} سنوات'**
+  String galaSummary(String price, String percent, int age);
+
+  /// No description provided for @galaLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} ({date}) — إلزامي'**
+  String galaLine(String name, String date);
+
   /// No description provided for @childPolicyTitle.
   ///
   /// In ar, this message translates to:

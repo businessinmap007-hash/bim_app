@@ -9,6 +9,7 @@ import '../../../booking_settings/presentation/screens/booking_settings_screen.d
 import '../../../booking_settings/presentation/screens/booking_add_ons_screen.dart';
 import '../../../booking_settings/presentation/screens/child_policy_screen.dart';
 import '../../../booking_settings/presentation/screens/meal_times_screen.dart';
+import '../../../booking_settings/presentation/screens/gala_dinners_screen.dart';
 import '../../../booking_settings/presentation/screens/booking_terms_screen.dart';
 import '../../../delivery/application/delivery_providers.dart';
 import '../../../auth/application/auth_controller.dart';
@@ -415,6 +416,13 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.schedule_outlined,
         title: l10n.mealTimesTitle,
         builder: (_) => const MealTimesScreen(),
+      ),
+      _Tile(
+        // «العشاء الإلزامي»: the gala nights every stay over them pays
+        show: _has('bookings') && hasStayUnits,
+        leading: Icons.celebration_outlined,
+        title: l10n.galaTitle,
+        builder: (_) => const GalaDinnersScreen(),
       ),
       _Tile(
         // only a business that lets rooms has guests to hear from
