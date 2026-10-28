@@ -75,7 +75,12 @@ class ExternalDeposit {
   final double amount;
   final String? method;
 
-  const ExternalDeposit({this.required = false, this.status, this.amount = 0, this.method});
+  /// `prepayment`: the whole price of a non-refundable stay, paid to the hotel in advance; `deposit`: the business's own deposit
+  final String kind;
+
+  const ExternalDeposit({this.required = false, this.status, this.amount = 0, this.method, this.kind = 'deposit'});
+
+  bool get isPrepayment => kind == 'prepayment';
 
   bool get isPending => required && status == 'pending';
   bool get isReceived => status == 'received';
@@ -86,7 +91,54 @@ class ExternalDeposit {
     status: json['status'] as String?,
     amount: (json['amount'] as num?)?.toDouble() ?? 0,
     method: json['method'] as String?,
+    kind: json['kind'] as String? ?? 'deposit',
   );
+}
+
+/// «تفاصيل الإقامة»: what a hotel stay is made of, as it was priced.
+class StayDetails {
+  final int adults;
+  final List<({int age, double percent, bool singleParent})> children;
+  final int extraBeds;
+  final double? singleOccupancyPercent;
+  final int cots;
+  final List<String> mealPlans;
+  final List<({String date, String name})> galaDinners;
+  final String ratePlan;
+
+  const StayDetails({
+    this.adults = 1,
+    this.children = const [],
+    this.extraBeds = 0,
+    this.singleOccupancyPercent,
+    this.cots = 0,
+    this.mealPlans = const [],
+    this.galaDinners = const [],
+    this.ratePlan = 'flexible',
+  });
+
+  static StayDetails? fromJsonOrNull(Object? json) => json is Map<String, dynamic>
+      ? StayDetails(
+          adults: (json['adults'] as num?)?.toInt() ?? 1,
+          children: [
+            for (final c in json['children'] as List<dynamic>? ?? const [])
+              (
+                age: ((c as Map<String, dynamic>)['age'] as num?)?.toInt() ?? 0,
+                percent: (c['percent'] as num?)?.toDouble() ?? 0,
+                singleParent: c['single_parent'] == true,
+              ),
+          ],
+          extraBeds: (json['extra_beds'] as num?)?.toInt() ?? 0,
+          singleOccupancyPercent: (json['single_occupancy_percent'] as num?)?.toDouble(),
+          cots: (json['cots'] as num?)?.toInt() ?? 0,
+          mealPlans: [for (final m in json['meal_plans'] as List<dynamic>? ?? const []) m.toString()],
+          galaDinners: [
+            for (final g in json['gala_dinners'] as List<dynamic>? ?? const [])
+              (date: ((g as Map<String, dynamic>)['date'] as String?) ?? '', name: g['name'] as String? ?? ''),
+          ],
+          ratePlan: json['rate_plan'] as String? ?? 'flexible',
+        )
+      : null;
 }
 
 /// «بالدور»: where a waiting booking stands in its day's queue right now.
@@ -157,6 +209,9 @@ class Booking {
 
   /// «سرير أطفال» asked for
   final int cots;
+
+  /// «تفاصيل الإقامة» of a hotel stay — null for anything else
+  final StayDetails? stayDetails;
   final ExternalDeposit externalDeposit;
 
   /// «يجب التواجد قبل الموعد بـ ١٥ دقيقة» — the business's own notice, as it composed it.
@@ -228,6 +283,7 @@ class Booking {
     this.mealTimes = const [],
     this.ratePlan = 'flexible',
     this.cots = 0,
+    this.stayDetails,
     this.externalDeposit = const ExternalDeposit(),
     this.arrivalNotice,
     this.queueTurn,
@@ -308,6 +364,7 @@ class Booking {
       arrivalNotice: json['arrival_notice'] is Map<String, dynamic> ? (json['arrival_notice'] as Map<String, dynamic>)['message'] as String? : null,
       ratePlan: (json['stay_terms'] as Map<String, dynamic>?)?['rate_plan'] as String? ?? 'flexible',
       cots: ((json['stay_terms'] as Map<String, dynamic>?)?['cots'] as num?)?.toInt() ?? 0,
+      stayDetails: StayDetails.fromJsonOrNull(json['stay_details']),
       mealTimes: [
         for (final m in json['meal_times'] as List<dynamic>? ?? const [])
           (meal: (m as Map<String, dynamic>)['meal'] as String? ?? '', from: m['from'] as String?, to: m['to'] as String?),

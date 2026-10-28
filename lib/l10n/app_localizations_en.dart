@@ -12576,6 +12576,62 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mealTo => 'To';
 
   @override
+  String get stayDetailsTitle => 'Stay details';
+
+  @override
+  String get stayAdults => 'Adults';
+
+  @override
+  String get stayChildren => 'Children';
+
+  @override
+  String stayChildLine(int age, String pays) {
+    return 'Child of $age — $pays';
+  }
+
+  @override
+  String stayChildSingleParent(int age, String pays) {
+    return 'Child of $age in the second adult\'s place — $pays';
+  }
+
+  @override
+  String get stayMealPlan => 'Meal plan';
+
+  @override
+  String get stayOccupancy => 'Occupancy';
+
+  @override
+  String prepaymentOwed(String amount) {
+    return 'The full amount is due in advance: $amount EGP';
+  }
+
+  @override
+  String get prepaymentWaiting =>
+      'Non-refundable rate — the guest is not checked in before you confirm it arrived or waive it.';
+
+  @override
+  String get prepaymentWaive => 'Waive the prepayment';
+
+  @override
+  String get prepaymentReceived => 'The prepayment was confirmed.';
+
+  @override
+  String get prepaymentWaived => 'You waived the prepayment.';
+
+  @override
+  String prepaymentCustomerNote(String amount) {
+    return 'Non-refundable rate: pay the full amount ($amount EGP) to the hotel in advance, in cash or by transfer. Check-in waits until the hotel confirms it.';
+  }
+
+  @override
+  String get nonRefundableCancelTitle => 'Cancel a non-refundable booking?';
+
+  @override
+  String nonRefundableCancelBody(String amount) {
+    return 'You booked this stay at the non-refundable rate. What you paid the hotel in advance ($amount EGP) is not refunded on cancelling. Any refund is between you and the hotel; the app\'s deposit, if any, is never confiscated.';
+  }
+
+  @override
   String get singleOccupancyLabel => 'Single occupancy rate';
 
   @override

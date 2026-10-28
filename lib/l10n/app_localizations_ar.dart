@@ -12476,6 +12476,62 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mealTo => 'إلى';
 
   @override
+  String get stayDetailsTitle => 'تفاصيل الإقامة';
+
+  @override
+  String get stayAdults => 'البالغون';
+
+  @override
+  String get stayChildren => 'الأطفال';
+
+  @override
+  String stayChildLine(int age, String pays) {
+    return 'طفل $age سنوات — $pays';
+  }
+
+  @override
+  String stayChildSingleParent(int age, String pays) {
+    return 'طفل $age سنوات مكان البالغ الثاني — $pays';
+  }
+
+  @override
+  String get stayMealPlan => 'نظام الوجبات';
+
+  @override
+  String get stayOccupancy => 'الإشغال';
+
+  @override
+  String prepaymentOwed(String amount) {
+    return 'المبلغ كاملًا مستحق مقدمًا: $amount ج';
+  }
+
+  @override
+  String get prepaymentWaiting =>
+      'سعر غير قابل للاسترداد — لا يبدأ تسجيل الوصول قبل أن تؤكد استلامه أو تتنازل عنه.';
+
+  @override
+  String get prepaymentWaive => 'التنازل عن الدفع المقدم';
+
+  @override
+  String get prepaymentReceived => 'تم تأكيد استلام المبلغ المقدم.';
+
+  @override
+  String get prepaymentWaived => 'تنازلت عن الدفع المقدم.';
+
+  @override
+  String prepaymentCustomerNote(String amount) {
+    return 'سعر غير قابل للاسترداد: ادفع المبلغ كاملًا ($amount ج) للفندق مقدمًا كاش أو تحويلًا. لا يبدأ تسجيل الوصول حتى يؤكد الفندق استلامه.';
+  }
+
+  @override
+  String get nonRefundableCancelTitle => 'إلغاء حجز غير قابل للاسترداد؟';
+
+  @override
+  String nonRefundableCancelBody(String amount) {
+    return 'حجزت هذه الإقامة بالسعر غير القابل للاسترداد. ما دفعته للفندق مقدمًا ($amount ج) لا يُسترد عند الإلغاء. أي استرداد يكون باتفاقك مع الفندق مباشرة، وعربون التطبيق — إن وُجد — لا يُصادر.';
+  }
+
+  @override
   String get singleOccupancyLabel => 'سعر الإقامة الفردية';
 
   @override

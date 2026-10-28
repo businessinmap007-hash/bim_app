@@ -1,3 +1,4 @@
+import 'package:bim_app/features/booking/data/models/booking.dart';
 import 'package:bim_app/features/booking/data/models/booking_form.dart';
 import 'package:bim_app/features/booking/data/models/child_policy.dart';
 import 'package:bim_app/features/booking/data/models/hotel_season.dart';
@@ -38,6 +39,32 @@ void main() {
     expect(p.singleOccupancy!.perNight, 200);
     expect(p.cots!.count, 1);
     expect(p.nonRefundable!.amount, 170);
+  });
+
+  test('the booking reads its stay details and a non-refundable prepayment', () {
+    final b = Booking.fromJson({
+      'id': 9,
+      'status': 'accepted',
+      'stay_terms': {'rate_plan': 'non_refundable', 'cots': 1},
+      'stay_details': {
+        'adults': 1,
+        'children': [
+          {'age': 8, 'percent': 0, 'single_parent': true},
+        ],
+        'cots': 1,
+        'meal_plans': ['نصف إقامة'],
+        'gala_dinners': [
+          {'date': '2026-12-31', 'name': 'عشاء رأس السنة'},
+        ],
+        'rate_plan': 'non_refundable',
+      },
+      'external_deposit': {'required': true, 'status': 'pending', 'amount': 4713, 'kind': 'prepayment'},
+    });
+    expect(b.ratePlan, 'non_refundable');
+    expect(b.stayDetails!.children.single.singleParent, isTrue);
+    expect(b.stayDetails!.galaDinners.single.name, 'عشاء رأس السنة');
+    expect(b.externalDeposit.isPrepayment, isTrue);
+    expect(b.externalDeposit.isPending, isTrue);
   });
 
   test('an extra bed is sold at a fixed price or at the third adult reduction', () {

@@ -1050,10 +1050,18 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
 
   Future<void> _cancel() async {
     final l10n = AppLocalizations.of(context)!;
+    // «غير قابل للاسترداد»: what was paid to the hotel in advance is not refunded — said before the guest cancels
+    final nonRefundable = _booking.ratePlan == 'non_refundable';
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        content: Text(l10n.bookingsCancelConfirm),
+        icon: nonRefundable ? Icon(Icons.warning_amber_rounded, color: Theme.of(context).colorScheme.error) : null,
+        title: nonRefundable ? Text(l10n.nonRefundableCancelTitle) : null,
+        content: Text(
+          nonRefundable
+              ? l10n.nonRefundableCancelBody(_booking.price.toStringAsFixed(_booking.price == _booking.price.roundToDouble() ? 0 : 2))
+              : l10n.bookingsCancelConfirm,
+        ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l10n.commonCancel)),
           TextButton(onPressed: () => Navigator.pop(context, true), child: Text(l10n.bookingsCancel)),
@@ -1221,7 +1229,9 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(color: AppColors.accentGold.withValues(alpha: 0.14), borderRadius: BorderRadius.circular(10)),
                 child: Text(
-                  l10n.externalDepositCustomerNote(booking.externalDeposit.amount.toStringAsFixed(booking.externalDeposit.amount == booking.externalDeposit.amount.roundToDouble() ? 0 : 2)),
+                  booking.externalDeposit.isPrepayment
+                      ? l10n.prepaymentCustomerNote(booking.externalDeposit.amount.toStringAsFixed(booking.externalDeposit.amount == booking.externalDeposit.amount.roundToDouble() ? 0 : 2))
+                      : l10n.externalDepositCustomerNote(booking.externalDeposit.amount.toStringAsFixed(booking.externalDeposit.amount == booking.externalDeposit.amount.roundToDouble() ? 0 : 2)),
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),

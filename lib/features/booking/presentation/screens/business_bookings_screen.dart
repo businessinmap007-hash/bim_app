@@ -1,6 +1,7 @@
 import '../../../../core/assignment/assignment_providers.dart';
 import '../../../../core/assignment/widgets/assignee_widgets.dart';
 import 'package:flutter/material.dart';
+import '../widgets/stay_details_card.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/guarantee_badge/widgets/account_name.dart';
 
@@ -369,6 +370,8 @@ class BusinessBookingDetailScreen extends ConsumerWidget {
                   _DetailRow(label: l10n.businessBookingsPartySize, value: booking.partySize.toString()),
                 if (booking.notes != null && booking.notes!.isNotEmpty)
                   _DetailRow(label: l10n.businessBookingsNotes, value: booking.notes!),
+                // «تفاصيل الإقامة»: the children and what each pays, the beds, the meal plan, the gala nights
+                if (booking.stayDetails != null) StayDetailsCard(details: booking.stayDetails!),
                 const Divider(height: 32),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -387,11 +390,16 @@ class BusinessBookingDetailScreen extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                          l10n.externalDepositOwed(booking.externalDeposit.amount.toStringAsFixed(booking.externalDeposit.amount == booking.externalDeposit.amount.roundToDouble() ? 0 : 2)),
+                          booking.externalDeposit.isPrepayment
+                              ? l10n.prepaymentOwed(booking.externalDeposit.amount.toStringAsFixed(booking.externalDeposit.amount == booking.externalDeposit.amount.roundToDouble() ? 0 : 2))
+                              : l10n.externalDepositOwed(booking.externalDeposit.amount.toStringAsFixed(booking.externalDeposit.amount == booking.externalDeposit.amount.roundToDouble() ? 0 : 2)),
                           style: Theme.of(context).textTheme.titleSmall,
                         ),
                         const SizedBox(height: 4),
-                        Text(l10n.externalDepositWaiting, style: Theme.of(context).textTheme.bodySmall),
+                        Text(
+                          booking.externalDeposit.isPrepayment ? l10n.prepaymentWaiting : l10n.externalDepositWaiting,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
                         const SizedBox(height: 10),
                         Row(
                           children: [
@@ -413,7 +421,7 @@ class BusinessBookingDetailScreen extends ConsumerWidget {
                         const SizedBox(height: 6),
                         OutlinedButton(
                           onPressed: () => _run(context, ref, () => ref.read(businessBookingDetailControllerProvider(bookingId).notifier).waiveExternalDeposit()),
-                          child: Text(l10n.externalDepositWaive),
+                          child: Text(booking.externalDeposit.isPrepayment ? l10n.prepaymentWaive : l10n.externalDepositWaive),
                         ),
                       ],
                     ),
@@ -421,7 +429,9 @@ class BusinessBookingDetailScreen extends ConsumerWidget {
                 ] else if (booking.externalDeposit.isReceived || booking.externalDeposit.isWaived) ...[
                   const SizedBox(height: 12),
                   Text(
-                    booking.externalDeposit.isWaived ? l10n.externalDepositWaived : l10n.externalDepositReceived,
+                    booking.externalDeposit.isPrepayment
+                        ? (booking.externalDeposit.isWaived ? l10n.prepaymentWaived : l10n.prepaymentReceived)
+                        : (booking.externalDeposit.isWaived ? l10n.externalDepositWaived : l10n.externalDepositReceived),
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],

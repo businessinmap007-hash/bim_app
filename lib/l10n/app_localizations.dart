@@ -22453,6 +22453,96 @@ abstract class AppLocalizations {
   /// **'إلى'**
   String get mealTo;
 
+  /// No description provided for @stayDetailsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل الإقامة'**
+  String get stayDetailsTitle;
+
+  /// No description provided for @stayAdults.
+  ///
+  /// In ar, this message translates to:
+  /// **'البالغون'**
+  String get stayAdults;
+
+  /// No description provided for @stayChildren.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأطفال'**
+  String get stayChildren;
+
+  /// No description provided for @stayChildLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'طفل {age} سنوات — {pays}'**
+  String stayChildLine(int age, String pays);
+
+  /// No description provided for @stayChildSingleParent.
+  ///
+  /// In ar, this message translates to:
+  /// **'طفل {age} سنوات مكان البالغ الثاني — {pays}'**
+  String stayChildSingleParent(int age, String pays);
+
+  /// No description provided for @stayMealPlan.
+  ///
+  /// In ar, this message translates to:
+  /// **'نظام الوجبات'**
+  String get stayMealPlan;
+
+  /// No description provided for @stayOccupancy.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإشغال'**
+  String get stayOccupancy;
+
+  /// No description provided for @prepaymentOwed.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ كاملًا مستحق مقدمًا: {amount} ج'**
+  String prepaymentOwed(String amount);
+
+  /// No description provided for @prepaymentWaiting.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر غير قابل للاسترداد — لا يبدأ تسجيل الوصول قبل أن تؤكد استلامه أو تتنازل عنه.'**
+  String get prepaymentWaiting;
+
+  /// No description provided for @prepaymentWaive.
+  ///
+  /// In ar, this message translates to:
+  /// **'التنازل عن الدفع المقدم'**
+  String get prepaymentWaive;
+
+  /// No description provided for @prepaymentReceived.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تأكيد استلام المبلغ المقدم.'**
+  String get prepaymentReceived;
+
+  /// No description provided for @prepaymentWaived.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنازلت عن الدفع المقدم.'**
+  String get prepaymentWaived;
+
+  /// No description provided for @prepaymentCustomerNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر غير قابل للاسترداد: ادفع المبلغ كاملًا ({amount} ج) للفندق مقدمًا كاش أو تحويلًا. لا يبدأ تسجيل الوصول حتى يؤكد الفندق استلامه.'**
+  String prepaymentCustomerNote(String amount);
+
+  /// No description provided for @nonRefundableCancelTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء حجز غير قابل للاسترداد؟'**
+  String get nonRefundableCancelTitle;
+
+  /// No description provided for @nonRefundableCancelBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجزت هذه الإقامة بالسعر غير القابل للاسترداد. ما دفعته للفندق مقدمًا ({amount} ج) لا يُسترد عند الإلغاء. أي استرداد يكون باتفاقك مع الفندق مباشرة، وعربون التطبيق — إن وُجد — لا يُصادر.'**
+  String nonRefundableCancelBody(String amount);
+
   /// No description provided for @singleOccupancyLabel.
   ///
   /// In ar, this message translates to:

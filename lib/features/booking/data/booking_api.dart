@@ -195,6 +195,7 @@ class BookingApi {
     if (data['deposit_as_payment'] != null) booking['deposit_as_payment'] = data['deposit_as_payment'];
     if (data['meal_times'] != null) booking['meal_times'] = data['meal_times'];
     if (data['stay_terms'] != null) booking['stay_terms'] = data['stay_terms'];
+    if (data['stay_details'] != null) booking['stay_details'] = data['stay_details'];
 
     return Booking.fromJson(booking);
   }
