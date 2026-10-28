@@ -123,8 +123,9 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
             .map((u) => u.capacity)
             .firstOrNull;
     if (unit == null || unit <= 0) return null;
-    // children from the hotel's age take places too: the adults may fill only what they leave
-    return (unit * _quantity - _countedChildren).clamp(1, 1000);
+    // children from the hotel's age take places too: the adults may fill only what they leave — and the extra beds the hotel sells
+    final beds = widget.childPolicy?.extraBedsAllowed(_quantity) ?? 0;
+    return (unit * _quantity + beds - _countedChildren).clamp(1, 1000);
   }
 
   /// the party as it is sent: never above what the room takes, even if the guest changed room type or the number of rooms after setting it
@@ -837,8 +838,10 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     final theme = Theme.of(context);
     final maxAge = (policy.adultFromAge - 1).clamp(0, 17);
 
-    String pays(int age) {
-      final p = policy.percentFor(age);
+    // what the server priced each child at (a room's first child may be free and a second pay half); before it answers, the first-child rate
+    final priced = _preview?.children ?? const [];
+    String pays(int i) {
+      final p = i < priced.length ? priced[i].percent : policy.percentFor(_childAges[i], first: i == 0);
       return p <= 0 ? l10n.childFree : '${p % 1 == 0 ? p.toStringAsFixed(0) : p.toStringAsFixed(2)}%';
     }
 
@@ -876,7 +879,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                 },
               ),
               const SizedBox(width: 8),
-              Expanded(child: Text(pays(_childAges[i]), style: theme.textTheme.bodySmall)),
+              Expanded(child: Text(pays(i), style: theme.textTheme.bodySmall)),
               IconButton(
                 tooltip: l10n.commonDelete,
                 icon: const Icon(Icons.close),
@@ -1073,7 +1076,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     final preview = _preview;
     final currency = widget.offering.currency;
     final lines = preview?.lines ?? const <({String name, double amount})>[];
-    final showBreakdown = preview != null && lines.isNotEmpty && preview.unitPrice != null;
+    final showBreakdown = preview != null && (lines.isNotEmpty || preview.children.isNotEmpty || preview.extraBeds != null) && preview.unitPrice != null;
     final nights = preview?.periods ?? 1;
 
     String money(double v) => '${v.toStringAsFixed(0)} $currency';
@@ -1094,11 +1097,13 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
             if (showBreakdown) ...[
               _summaryRow(theme, viewNames.isEmpty ? l10n.bookingBasePriceLine : card!.displayTitle, money((preview.baseUnitPrice ?? 0) + viewExtra)),
               for (final line in otherLines) _summaryRow(theme, line.name, '+${line.amount.toStringAsFixed(0)}'),
+              if (preview.extraBeds != null && preview.extraBeds!.count > 0)
+                _summaryRow(theme, l10n.extraBedLine(preview.extraBeds!.count), '+${preview.extraBeds!.perNight.toStringAsFixed(0)}'),
               for (final c in preview.children.where((c) => c.perNight > 0))
                 _summaryRow(theme, l10n.bookingChildLine(c.age, '${c.percent % 1 == 0 ? c.percent.toStringAsFixed(0) : c.percent.toStringAsFixed(2)}%'), '+${c.perNight.toStringAsFixed(0)}'),
               if (!dayUseOn) ...[
                 const Divider(height: 16),
-                _summaryRow(theme, l10n.bookingNightPrice, money(preview.unitPrice! + preview.children.fold<double>(0, (s, c) => s + c.perNight)), bold: true),
+                _summaryRow(theme, l10n.bookingNightPrice, money(preview.unitPrice! + preview.children.fold<double>(0, (s, c) => s + c.perNight) + (preview.extraBeds?.perNight ?? 0)), bold: true),
                 if (nights > 1) _summaryRow(theme, l10n.bookingTimesNights(nights), ''),
               ],
               const SizedBox(height: 8),

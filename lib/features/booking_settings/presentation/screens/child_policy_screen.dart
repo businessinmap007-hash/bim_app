@@ -23,7 +23,9 @@ class _ChildPolicyScreenState extends ConsumerState<ChildPolicyScreen> {
   int _adult = 12;
   int _counts = 6;
   bool _meals = true;
-  List<ChildBand> _bands = const [ChildBand(from: 0, to: 5, percent: 0), ChildBand(from: 6, to: 11, percent: 50)];
+  final _bedPrice = TextEditingController();
+  int _bedsMax = 1;
+  List<ChildBand> _bands = const [ChildBand(from: 0, to: 5, percent: 0, secondPercent: 50), ChildBand(from: 6, to: 11, percent: 50)];
 
   @override
   void initState() {
@@ -41,6 +43,8 @@ class _ChildPolicyScreenState extends ConsumerState<ChildPolicyScreen> {
           _counts = p.countsFromAge;
           _meals = p.mealsFollow;
           _bands = p.bands;
+          _bedPrice.text = p.extraBedPrice == null ? '' : p.extraBedPrice!.toStringAsFixed(p.extraBedPrice! % 1 == 0 ? 0 : 2);
+          _bedsMax = p.extraBedsMax;
         }
         _loaded = true;
       });
@@ -54,7 +58,10 @@ class _ChildPolicyScreenState extends ConsumerState<ChildPolicyScreen> {
     final messenger = ScaffoldMessenger.of(context);
     setState(() => _saving = true);
     try {
-      await ref.read(bookingSettingsApiProvider).saveChildPolicy(ChildPolicy(adultFromAge: _adult, countsFromAge: _counts, mealsFollow: _meals, bands: _bands));
+      final bed = double.tryParse(_bedPrice.text.trim().replaceAll(',', '.'));
+      await ref.read(bookingSettingsApiProvider).saveChildPolicy(
+        ChildPolicy(adultFromAge: _adult, countsFromAge: _counts, mealsFollow: _meals, bands: _bands, extraBedPrice: bed, extraBedsMax: _bedsMax),
+      );
       messenger.showSnackBar(SnackBar(content: Text(l10n.childPolicySaved)));
     } catch (e) {
       messenger.showSnackBar(SnackBar(content: Text(e is ApiException && e.message.isNotEmpty ? e.message : l10n.commonSomethingWentWrong)));
@@ -69,6 +76,30 @@ class _ChildPolicyScreenState extends ConsumerState<ChildPolicyScreen> {
     value: value.clamp(min, max),
     items: [for (var a = min; a <= max; a++) DropdownMenuItem(value: a, child: Text('$a'))],
     onChanged: (v) => v == null ? null : onChanged(v),
+  );
+
+  /// Free, half or a third of one person's night, or a percentage the hotel writes.
+  Widget _payRow(AppLocalizations l10n, String label, double value, ValueChanged<double> onChanged, String key) => Padding(
+    padding: const EdgeInsets.only(top: 6),
+    child: Wrap(spacing: 8, crossAxisAlignment: WrapCrossAlignment.center, children: [
+      SizedBox(width: 92, child: Text(label, style: const TextStyle(fontWeight: FontWeight.w600))),
+      for (final p in const [0.0, 50.0, 33.33])
+        ChoiceChip(
+          label: Text(p == 0 ? l10n.childFree : (p == 50 ? l10n.childHalf : l10n.childThird)),
+          selected: value == p,
+          onSelected: (_) => onChanged(p),
+        ),
+      SizedBox(
+        width: 96,
+        child: TextFormField(
+          key: ValueKey('pct-$key-$value'),
+          initialValue: value == 0 ? '' : value.toStringAsFixed(value % 1 == 0 ? 0 : 2),
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          decoration: InputDecoration(isDense: true, labelText: l10n.childPolicyPercent, suffixText: '%'),
+          onFieldSubmitted: (v) => onChanged((double.tryParse(v.replaceAll(',', '.')) ?? 0).clamp(0, 100).toDouble()),
+        ),
+      ),
+    ]),
   );
 
   @override
@@ -111,25 +142,9 @@ class _ChildPolicyScreenState extends ConsumerState<ChildPolicyScreen> {
                               onPressed: () => setState(() => _bands = [..._bands]..removeAt(i)),
                             ),
                           ]),
-                          // what a child of these ages pays: free, half or a third of the night, or a percentage the hotel writes
-                          Wrap(spacing: 8, children: [
-                            for (final p in const [0.0, 50.0, 33.33])
-                              ChoiceChip(
-                                label: Text(p == 0 ? l10n.childFree : (p == 50 ? l10n.childHalf : l10n.childThird)),
-                                selected: _bands[i].percent == p,
-                                onSelected: (_) => _setBand(i, _bands[i].copyWith(percent: p)),
-                              ),
-                            SizedBox(
-                              width: 110,
-                              child: TextFormField(
-                                key: ValueKey('pct-$i-${_bands[i].percent}'),
-                                initialValue: _bands[i].percent == 0 ? '' : _bands[i].percent.toStringAsFixed(_bands[i].percent % 1 == 0 ? 0 : 2),
-                                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                decoration: InputDecoration(isDense: true, labelText: l10n.childPolicyPercent, suffixText: '%'),
-                                onFieldSubmitted: (v) => _setBand(i, _bands[i].copyWith(percent: (double.tryParse(v.replaceAll(',', '.')) ?? 0).clamp(0, 100).toDouble())),
-                              ),
-                            ),
-                          ]),
+                          // what a child of these ages pays of one person's night: the room's FIRST child, then each further one
+                          _payRow(l10n, l10n.childPolicyFirstChild, _bands[i].percent, (p) => _setBand(i, _bands[i].copyWith(percent: p)), 'f$i'),
+                          _payRow(l10n, l10n.childPolicyNextChild, _bands[i].secondPercent, (p) => _setBand(i, _bands[i].copyWith(secondPercent: p)), 's$i'),
                         ],
                       ),
                     ),
@@ -156,6 +171,24 @@ class _ChildPolicyScreenState extends ConsumerState<ChildPolicyScreen> {
                   value: _meals,
                   onChanged: (v) => setState(() => _meals = v),
                 ),
+                const Divider(height: 24),
+                // «سرير إضافي»: instead of refusing a guest over the room's capacity
+                Text(l10n.extraBedTitle, style: theme.textTheme.titleMedium),
+                Text(l10n.extraBedHint, style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor)),
+                const SizedBox(height: 8),
+                Row(children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _bedPrice,
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      decoration: InputDecoration(labelText: l10n.extraBedPrice),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Text(l10n.extraBedsMax),
+                  const SizedBox(width: 8),
+                  _ageField(_bedsMax, (v) => setState(() => _bedsMax = v), max: 4),
+                ]),
                 const SizedBox(height: 16),
                 FilledButton(onPressed: _saving ? null : _save, child: Text(l10n.commonSave)),
               ],

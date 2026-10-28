@@ -148,6 +148,9 @@ class Booking {
   final int? partySize;
   final BookingDeposit? deposit;
   final DepositAsPayment depositAsPayment;
+
+  /// The meals the stay's plan gives, at the hotel's times: `breakfast` / `lunch` / `dinner`, from–to (HH:mm, either may be null).
+  final List<({String meal, String? from, String? to})> mealTimes;
   final ExternalDeposit externalDeposit;
 
   /// «يجب التواجد قبل الموعد بـ ١٥ دقيقة» — the business's own notice, as it composed it.
@@ -216,6 +219,7 @@ class Booking {
     this.partySize,
     this.deposit,
     this.depositAsPayment = const DepositAsPayment(),
+    this.mealTimes = const [],
     this.externalDeposit = const ExternalDeposit(),
     this.arrivalNotice,
     this.queueTurn,
@@ -294,6 +298,10 @@ class Booking {
       assignee: json['assignee'] is Map<String, dynamic> ? Assignee.fromJson(json['assignee'] as Map<String, dynamic>) : null,
       queue: json['queue'] is Map<String, dynamic> ? BookingQueueState.fromJson(json['queue'] as Map<String, dynamic>) : null,
       arrivalNotice: json['arrival_notice'] is Map<String, dynamic> ? (json['arrival_notice'] as Map<String, dynamic>)['message'] as String? : null,
+      mealTimes: [
+        for (final m in json['meal_times'] as List<dynamic>? ?? const [])
+          (meal: (m as Map<String, dynamic>)['meal'] as String? ?? '', from: m['from'] as String?, to: m['to'] as String?),
+      ],
       depositAsPayment: json['deposit_as_payment'] is Map<String, dynamic> ? DepositAsPayment.fromJson(json['deposit_as_payment'] as Map<String, dynamic>) : const DepositAsPayment(),
       externalDeposit: json['external_deposit'] is Map<String, dynamic> ? ExternalDeposit.fromJson(json['external_deposit'] as Map<String, dynamic>) : const ExternalDeposit(),
     );

@@ -226,6 +226,20 @@ class BookingSettingsApi {
     return RoomsPayload.fromJson(data);
   }
 
+  /// «مواعيد الوجبات» — null until the hotel writes them.
+  Future<Map<String, ({String? from, String? to})>?> mealTimes() async {
+    final data = await _client.get('/business/meal-times') as Map<String, dynamic>;
+    final t = data['times'];
+    if (t is! Map<String, dynamic>) return null;
+    return {
+      for (final e in t.entries)
+        e.key: (from: (e.value as Map<String, dynamic>?)?['from'] as String?, to: (e.value as Map<String, dynamic>?)?['to'] as String?),
+    };
+  }
+
+  Future<void> saveMealTimes(Map<String, ({String? from, String? to})> times) =>
+      _client.put('/business/meal-times', data: {for (final e in times.entries) e.key: {'from': e.value.from, 'to': e.value.to}});
+
   /// «سياسة الأطفال» of the hotel — null until it writes one.
   Future<ChildPolicy?> childPolicy() async {
     final data = await _client.get('/business/child-policy') as Map<String, dynamic>;

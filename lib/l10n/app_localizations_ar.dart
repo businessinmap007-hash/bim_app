@@ -3634,13 +3634,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get trainingBodyReportsEmpty => 'لا توجد قراءات مسجلة بعد.';
 
   @override
-  String get mealBreakfast => 'فطار';
+  String get mealBreakfast => 'الإفطار';
 
   @override
-  String get mealLunch => 'غداء';
+  String get mealLunch => 'الغداء';
 
   @override
-  String get mealDinner => 'عشاء';
+  String get mealDinner => 'العشاء';
 
   @override
   String get mealSnack => 'سناك';
@@ -12431,6 +12431,49 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get roomFeaturesHint =>
       'الضيف الذي اختار إطلالة أو ميزة عند الحجز يأخذ عند بدء الإقامة رقمًا يحملها';
+
+  @override
+  String get childPolicyFirstChild => 'الطفل الأول';
+
+  @override
+  String get childPolicyNextChild => 'كل طفل بعده';
+
+  @override
+  String get extraBedTitle => 'السرير الإضافي';
+
+  @override
+  String get extraBedHint =>
+      'نزيل زائد عن سعة الغرفة يُضاف له سرير بسعره بدل رفض الحجز. اتركه فارغًا إن كان الفندق لا يوفّره. الطفل الزائد يدفع نسبته فقط.';
+
+  @override
+  String get extraBedPrice => 'سعر السرير الإضافي لليلة';
+
+  @override
+  String get extraBedsMax => 'الحد لكل غرفة';
+
+  @override
+  String extraBedLine(int n) {
+    return 'سرير إضافي × $n';
+  }
+
+  @override
+  String get mealTimesTitle => 'مواعيد الوجبات';
+
+  @override
+  String get mealTimesIntro =>
+      'يرى النزيل في حجزه مواعيد الوجبات التي يشملها نظامه: الإفطار للإفطار، ونصف الإقامة للإفطار والعشاء، والإقامة الكاملة والشامل كليًا للثلاث.';
+
+  @override
+  String get mealTimesSaved => 'حُفظت مواعيد الوجبات';
+
+  @override
+  String get mealTimesYours => 'مواعيد الوجبات';
+
+  @override
+  String get mealFrom => 'من';
+
+  @override
+  String get mealTo => 'إلى';
 
   @override
   String get childPolicyTitle => 'سياسة الأطفال';

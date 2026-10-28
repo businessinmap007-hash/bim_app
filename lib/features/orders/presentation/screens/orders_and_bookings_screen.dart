@@ -1234,6 +1234,16 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
               const SizedBox(height: 4),
               Text(l10n.bookingRoomYours(booking.room!.number), style: Theme.of(context).textTheme.titleSmall),
             ],
+            // «مواعيد الوجبات»: the meals his plan gives, at the hotel's times
+            if (booking.mealTimes.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Text(l10n.mealTimesYours, style: Theme.of(context).textTheme.titleSmall),
+              for (final m in booking.mealTimes)
+                Text(
+                  '${switch (m.meal) { 'breakfast' => l10n.mealBreakfast, 'lunch' => l10n.mealLunch, _ => l10n.mealDinner }}: ${m.from ?? '—'} – ${m.to ?? '—'}',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+            ],
             const SizedBox(height: 12),
             if (booking.startsAt != null)
               Text(_formatRange(context, booking.startsAt!, booking.endsAt))

@@ -168,6 +168,9 @@ class BookingPreview {
   /// What each child adds a night, by the hotel's «سياسة الأطفال».
   final List<({int age, double percent, double perNight})> children;
 
+  /// «سرير إضافي»: how many, and what they add a night
+  final ({int count, double perNight})? extraBeds;
+
   /// «عروض الحجز»: what the hotel's offer took off the nights (the total is already net of it).
   final double offerDiscount;
 
@@ -180,6 +183,7 @@ class BookingPreview {
     this.periodUnit,
     this.lines = const [],
     this.children = const [],
+    this.extraBeds,
   });
 
   factory BookingPreview.fromJson(Map<String, dynamic> json) {
@@ -205,6 +209,12 @@ class BookingPreview {
             perNight: (c['per_night'] as num?)?.toDouble() ?? 0,
           ),
       ],
+      extraBeds: breakdown['extra_beds'] is Map<String, dynamic>
+          ? (
+              count: ((breakdown['extra_beds'] as Map<String, dynamic>)['count'] as num?)?.toInt() ?? 0,
+              perNight: ((breakdown['extra_beds'] as Map<String, dynamic>)['per_night'] as num?)?.toDouble() ?? 0,
+            )
+          : null,
     );
   }
 }

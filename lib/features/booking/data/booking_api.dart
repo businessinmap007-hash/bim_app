@@ -193,6 +193,7 @@ class BookingApi {
   Booking _booking(Map<String, dynamic> data) {
     final booking = Map<String, dynamic>.from(data['booking'] as Map<String, dynamic>);
     if (data['deposit_as_payment'] != null) booking['deposit_as_payment'] = data['deposit_as_payment'];
+    if (data['meal_times'] != null) booking['meal_times'] = data['meal_times'];
 
     return Booking.fromJson(booking);
   }

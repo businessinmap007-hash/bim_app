@@ -6670,19 +6670,19 @@ abstract class AppLocalizations {
   /// No description provided for @mealBreakfast.
   ///
   /// In ar, this message translates to:
-  /// **'فطار'**
+  /// **'الإفطار'**
   String get mealBreakfast;
 
   /// No description provided for @mealLunch.
   ///
   /// In ar, this message translates to:
-  /// **'غداء'**
+  /// **'الغداء'**
   String get mealLunch;
 
   /// No description provided for @mealDinner.
   ///
   /// In ar, this message translates to:
-  /// **'عشاء'**
+  /// **'العشاء'**
   String get mealDinner;
 
   /// No description provided for @mealSnack.
@@ -22374,6 +22374,84 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الضيف الذي اختار إطلالة أو ميزة عند الحجز يأخذ عند بدء الإقامة رقمًا يحملها'**
   String get roomFeaturesHint;
+
+  /// No description provided for @childPolicyFirstChild.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطفل الأول'**
+  String get childPolicyFirstChild;
+
+  /// No description provided for @childPolicyNextChild.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل طفل بعده'**
+  String get childPolicyNextChild;
+
+  /// No description provided for @extraBedTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'السرير الإضافي'**
+  String get extraBedTitle;
+
+  /// No description provided for @extraBedHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'نزيل زائد عن سعة الغرفة يُضاف له سرير بسعره بدل رفض الحجز. اتركه فارغًا إن كان الفندق لا يوفّره. الطفل الزائد يدفع نسبته فقط.'**
+  String get extraBedHint;
+
+  /// No description provided for @extraBedPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر السرير الإضافي لليلة'**
+  String get extraBedPrice;
+
+  /// No description provided for @extraBedsMax.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحد لكل غرفة'**
+  String get extraBedsMax;
+
+  /// No description provided for @extraBedLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'سرير إضافي × {n}'**
+  String extraBedLine(int n);
+
+  /// No description provided for @mealTimesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مواعيد الوجبات'**
+  String get mealTimesTitle;
+
+  /// No description provided for @mealTimesIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'يرى النزيل في حجزه مواعيد الوجبات التي يشملها نظامه: الإفطار للإفطار، ونصف الإقامة للإفطار والعشاء، والإقامة الكاملة والشامل كليًا للثلاث.'**
+  String get mealTimesIntro;
+
+  /// No description provided for @mealTimesSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'حُفظت مواعيد الوجبات'**
+  String get mealTimesSaved;
+
+  /// No description provided for @mealTimesYours.
+  ///
+  /// In ar, this message translates to:
+  /// **'مواعيد الوجبات'**
+  String get mealTimesYours;
+
+  /// No description provided for @mealFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'من'**
+  String get mealFrom;
+
+  /// No description provided for @mealTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلى'**
+  String get mealTo;
 
   /// No description provided for @childPolicyTitle.
   ///

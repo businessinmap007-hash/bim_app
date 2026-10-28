@@ -38,6 +38,17 @@ void variants() {
     expect(ChildPolicy.fromJsonOrNull(null), isNull);
   });
 
+  test('one child free per room: the first child of a band and each further one pay their own share; extra beds come from the price', () {
+    final p = ChildPolicy.fromJsonOrNull({
+      'adult_from_age': 12, 'counts_from_age': 6, 'extra_bed_price': 200, 'extra_beds_max': 1,
+      'bands': [{'from': 0, 'to': 5, 'percent': 0, 'second_percent': 50}],
+    })!;
+    expect(p.percentFor(3), 0);
+    expect(p.percentFor(3, first: false), 50);
+    expect(p.extraBedsAllowed(2), 2);
+    expect(ChildPolicy.fromJsonOrNull({'bands': []})!.extraBedsAllowed(1), 0, reason: 'no price, no extra bed');
+  });
+
   test('a partner room of one allocation comes as one card per kind, told apart by its features', () {
     final base = {'allocation_id': 5, 'bookable_id': 7, 'label': 'غرفة فردية', 'price': 700};
     final plain = PartnerRoom.fromJson(base);

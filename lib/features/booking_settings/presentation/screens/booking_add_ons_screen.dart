@@ -87,7 +87,13 @@ class _BookingAddOnsScreenState extends ConsumerState<BookingAddOnsScreen> {
 
       return g.copyWith(
         selectionType: selectionType,
-        options: [for (final o in g.options) o.id == optionId ? o.copyWith(enabled: enabled, perPerson: perPerson) : o],
+        // a meal plan switched on is priced per person a night — the way Egyptian hotels sell it; the hotel can still untick it
+        options: [
+          for (final o in g.options)
+            o.id == optionId
+                ? o.copyWith(enabled: enabled, perPerson: perPerson ?? (enabled == true && !o.enabled && g.selectionType == 'single' ? true : null))
+                : o,
+        ],
       );
     }
 

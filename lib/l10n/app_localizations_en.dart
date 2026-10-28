@@ -12533,6 +12533,49 @@ class AppLocalizationsEn extends AppLocalizations {
       'A guest who ticked a view or feature at booking is given, when the stay starts, a number that carries it';
 
   @override
+  String get childPolicyFirstChild => 'First child';
+
+  @override
+  String get childPolicyNextChild => 'Each further';
+
+  @override
+  String get extraBedTitle => 'Extra bed';
+
+  @override
+  String get extraBedHint =>
+      'A guest over the room\'s capacity gets an extra bed at its price instead of a refusal. Leave it empty if the hotel has none. A child over it pays only its share.';
+
+  @override
+  String get extraBedPrice => 'Extra bed price a night';
+
+  @override
+  String get extraBedsMax => 'Per room';
+
+  @override
+  String extraBedLine(int n) {
+    return 'Extra bed × $n';
+  }
+
+  @override
+  String get mealTimesTitle => 'Meal times';
+
+  @override
+  String get mealTimesIntro =>
+      'Guests see on their booking the times of the meals their plan gives: breakfast for BB, breakfast and dinner for half board, all three for full board and all inclusive.';
+
+  @override
+  String get mealTimesSaved => 'Meal times saved';
+
+  @override
+  String get mealTimesYours => 'Meal times';
+
+  @override
+  String get mealFrom => 'From';
+
+  @override
+  String get mealTo => 'To';
+
+  @override
   String get childPolicyTitle => 'Children policy';
 
   @override

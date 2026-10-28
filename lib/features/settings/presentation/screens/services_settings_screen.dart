@@ -8,6 +8,7 @@ import '../../../booking/presentation/screens/business_bookings_screen.dart';
 import '../../../booking_settings/presentation/screens/booking_settings_screen.dart';
 import '../../../booking_settings/presentation/screens/booking_add_ons_screen.dart';
 import '../../../booking_settings/presentation/screens/child_policy_screen.dart';
+import '../../../booking_settings/presentation/screens/meal_times_screen.dart';
 import '../../../booking_settings/presentation/screens/booking_terms_screen.dart';
 import '../../../delivery/application/delivery_providers.dart';
 import '../../../auth/application/auth_controller.dart';
@@ -407,6 +408,13 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.child_care_outlined,
         title: l10n.childPolicyTitle,
         builder: (_) => const ChildPolicyScreen(),
+      ),
+      _Tile(
+        // «مواعيد الوجبات»: the guest reads the times of the meals his plan gives
+        show: _has('bookings') && hasStayUnits,
+        leading: Icons.schedule_outlined,
+        title: l10n.mealTimesTitle,
+        builder: (_) => const MealTimesScreen(),
       ),
       _Tile(
         // only a business that lets rooms has guests to hear from
