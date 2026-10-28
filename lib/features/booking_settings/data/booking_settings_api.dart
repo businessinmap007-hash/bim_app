@@ -7,6 +7,7 @@ import 'models/add_on_models.dart';
 import 'models/room_models.dart';
 import '../../booking/data/models/child_policy.dart';
 import '../../booking/data/models/gala_dinner.dart';
+import '../../booking/data/models/hotel_season.dart';
 
 /// /business/prices, /business/bookable-items, /business/working-hours —
 /// business-only self-service (the `business` middleware gate on the
@@ -131,6 +132,9 @@ class BookingSettingsApi {
     String? status,
     String? guestScope,
     int? reserveRooms,
+    // «إقامة فردية»: sent only when [sendSingle] — null then clears it
+    bool sendSingle = false,
+    double? singleOccupancyPercent,
   }) async {
     final data = await _client.put(
       '/business/bookable-items/$id',
@@ -145,6 +149,7 @@ class BookingSettingsApi {
         'status': ?status,
         'guest_scope': ?guestScope,
         'reserve_rooms': ?reserveRooms,
+        if (sendSingle) 'single_occupancy_percent': singleOccupancyPercent,
       },
     );
     return BookableItemRow.fromJson(data as Map<String, dynamic>);
@@ -240,6 +245,25 @@ class BookingSettingsApi {
 
   Future<void> saveMealTimes(Map<String, ({String? from, String? to})> times) =>
       _client.put('/business/meal-times', data: {for (final e in times.entries) e.key: {'from': e.value.from, 'to': e.value.to}});
+
+  /// «المواسم»: the hotel's seasons, with its room types and meal plans for the form.
+  Future<HotelSeasonsData> seasons() async =>
+      HotelSeasonsData.fromJson(await _client.get('/business/seasons') as Map<String, dynamic>);
+
+  Future<void> saveSeason(HotelSeason season) => season.id == 0
+      ? _client.post('/business/seasons', data: season.toJson())
+      : _client.put('/business/seasons/${season.id}', data: season.toJson());
+
+  Future<void> deleteSeason(int id) => _client.delete('/business/seasons/$id');
+
+  /// «غير قابل للاسترداد»: the hotel's discount for it — null when it sells only the flexible rate.
+  Future<double?> nonRefundablePercent() async {
+    final data = await _client.get('/business/booking-settings/rate-plans') as Map<String, dynamic>;
+    return (data['non_refundable_percent'] as num?)?.toDouble();
+  }
+
+  Future<void> saveNonRefundablePercent(double? percent) =>
+      _client.put('/business/booking-settings/rate-plans', data: {'non_refundable_percent': percent});
 
   /// «العشاء الإلزامي»: the hotel's gala nights from today on.
   Future<List<GalaDinner>> galaDinners() async {

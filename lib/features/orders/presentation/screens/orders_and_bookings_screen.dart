@@ -1235,6 +1235,15 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
               const SizedBox(height: 4),
               Text(l10n.bookingRoomYours(booking.room!.number), style: Theme.of(context).textTheme.titleSmall),
             ],
+            // «غير قابل للاسترداد» and «سرير أطفال»
+            if (booking.ratePlan == 'non_refundable') ...[
+              const SizedBox(height: 8),
+              Text(l10n.ratePlanNonRefundableBooked, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+            ],
+            if (booking.cots > 0) ...[
+              const SizedBox(height: 4),
+              Text(l10n.cotLine(booking.cots), style: Theme.of(context).textTheme.bodyMedium),
+            ],
             // «مواعيد الوجبات»: the meals his plan gives, at the hotel's times
             if (booking.mealTimes.isNotEmpty) ...[
               const SizedBox(height: 8),
@@ -1316,7 +1325,7 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
               const SizedBox(height: 8),
             ],
             if (booking.status == 'accepted') const SizedBox(height: 8),
-            if (booking.isCancellable && booking.startsAt != null) ...[
+            if (booking.isCancellable && booking.startsAt != null && booking.ratePlan != 'non_refundable') ...[
               SizedBox(
                 width: double.infinity,
                 child: FilledButton.tonal(

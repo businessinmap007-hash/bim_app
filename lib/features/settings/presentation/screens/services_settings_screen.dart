@@ -10,6 +10,8 @@ import '../../../booking_settings/presentation/screens/booking_add_ons_screen.da
 import '../../../booking_settings/presentation/screens/child_policy_screen.dart';
 import '../../../booking_settings/presentation/screens/meal_times_screen.dart';
 import '../../../booking_settings/presentation/screens/gala_dinners_screen.dart';
+import '../../../booking_settings/presentation/screens/hotel_seasons_screen.dart';
+import '../../../booking_settings/presentation/screens/rate_plans_screen.dart';
 import '../../../booking_settings/presentation/screens/booking_terms_screen.dart';
 import '../../../delivery/application/delivery_providers.dart';
 import '../../../auth/application/auth_controller.dart';
@@ -423,6 +425,20 @@ class _ServiceList extends StatelessWidget {
         leading: Icons.celebration_outlined,
         title: l10n.galaTitle,
         builder: (_) => const GalaDinnersScreen(),
+      ),
+      _Tile(
+        // «المواسم»: the rooms' and meal plans' price in a season, and its shortest stay
+        show: _has('bookings') && hasStayUnits,
+        leading: Icons.date_range_outlined,
+        title: l10n.seasonsTitle,
+        builder: (_) => const HotelSeasonsScreen(),
+      ),
+      _Tile(
+        // «خطط الأسعار»: the cheaper non-refundable rate beside the flexible one
+        show: _has('bookings') && hasStayUnits,
+        leading: Icons.price_change_outlined,
+        title: l10n.ratePlansTitle,
+        builder: (_) => const RatePlansScreen(),
       ),
       _Tile(
         // only a business that lets rooms has guests to hear from

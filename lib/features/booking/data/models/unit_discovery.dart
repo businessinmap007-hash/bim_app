@@ -387,7 +387,18 @@ class UnitCatalog {
   /// How the business takes its appointments: `slots` (the customer picks a time) or `queue` (the next turn of the day).
   final String flow;
 
-  const UnitCatalog({this.serviceId, this.kinds = const [], this.shape, this.flow = 'slots', this.partnerRooms = const [], this.childPolicy});
+  /// «غير قابل للاسترداد»: the hotel's discount for it — null when it sells only the flexible rate
+  final double? nonRefundablePercent;
+
+  const UnitCatalog({
+    this.serviceId,
+    this.kinds = const [],
+    this.shape,
+    this.flow = 'slots',
+    this.partnerRooms = const [],
+    this.childPolicy,
+    this.nonRefundablePercent,
+  });
 
   bool get isQueue => flow == 'queue';
 
@@ -402,6 +413,7 @@ class UnitCatalog {
     flow: json['flow'] as String? ?? 'slots',
     partnerRooms: [for (final r in (json['partner_rooms'] as List<dynamic>? ?? const [])) PartnerRoom.fromJson(r as Map<String, dynamic>)],
     childPolicy: ChildPolicy.fromJsonOrNull(json['child_policy']),
+    nonRefundablePercent: (json['non_refundable_percent'] as num?)?.toDouble(),
   );
 }
 

@@ -12476,6 +12476,176 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mealTo => 'إلى';
 
   @override
+  String get singleOccupancyLabel => 'سعر الإقامة الفردية';
+
+  @override
+  String get singleOccupancyHelp =>
+      'ما يدفعه بالغ واحد وحده في الغرفة من سعر الليلة (مثلًا 85%). اتركه فارغًا ليدفع سعر الغرفة كاملًا.';
+
+  @override
+  String singleOccupancyLine(String pct) {
+    return 'إقامة فردية ($pct من الغرفة)';
+  }
+
+  @override
+  String get thirdAdultLabel => 'تخفيض الشخص الثالث';
+
+  @override
+  String get thirdAdultHint =>
+      'إن كتبته، يدفع البالغ في السرير الإضافي سعر الفرد ناقص هذه النسبة بدل سعر السرير الثابت.';
+
+  @override
+  String get cotTitle => 'سرير أطفال';
+
+  @override
+  String get cotsPerRoom => 'عدد أسرّة الأطفال لكل غرفة';
+
+  @override
+  String get cotPrice => 'سعر سرير الأطفال لليلة';
+
+  @override
+  String get cotPriceHint => 'اتركه فارغًا إن كان مجانيًا';
+
+  @override
+  String cotAsk(String price) {
+    return 'سرير أطفال ($price)';
+  }
+
+  @override
+  String cotLine(int n) {
+    return 'سرير أطفال × $n';
+  }
+
+  @override
+  String get ratePlansTitle => 'خطط الأسعار';
+
+  @override
+  String get ratePlansIntro =>
+      'بجانب السعر المرن يمكنك بيع سعر أرخص غير قابل للاسترداد: يدفع النزيل للفندق المبلغ كاملًا مقدمًا خارج التطبيق، ولا يمكنه تغيير الموعد. التطبيق لا يصادر أي عربون.';
+
+  @override
+  String get ratePlansSaved => 'حُفظت خطط الأسعار';
+
+  @override
+  String get ratePlanFlexible => 'سعر مرن';
+
+  @override
+  String get ratePlanFlexibleHint =>
+      'السعر العادي — يمكن للنزيل تغيير الموعد أو الإلغاء.';
+
+  @override
+  String get ratePlanFlexibleGuest => 'يمكنك تغيير الموعد أو الإلغاء';
+
+  @override
+  String get ratePlanNonRefundable => 'غير قابل للاسترداد';
+
+  @override
+  String get ratePlanNonRefundableHint =>
+      'أرخص بنسبة تحددها، يُدفع كاملًا مقدمًا ولا يُغيّر موعده.';
+
+  @override
+  String get ratePlanNonRefundableGuest =>
+      'أرخص — تدفع للفندق كاملًا مقدمًا ولا يمكن تغيير الموعد أو استرداد المبلغ';
+
+  @override
+  String get ratePlanNonRefundableBooked =>
+      'سعر غير قابل للاسترداد — لا يمكن تغيير الموعد';
+
+  @override
+  String get ratePlanDiscount => 'نسبة التخفيض';
+
+  @override
+  String get ratePlanDiscountHint => 'من 1% إلى 50%';
+
+  @override
+  String get ratePlanChoose => 'خطة السعر';
+
+  @override
+  String nonRefundableLine(String pct) {
+    return 'خصم غير قابل للاسترداد ($pct)';
+  }
+
+  @override
+  String get seasonsTitle => 'المواسم';
+
+  @override
+  String get seasonsIntro =>
+      'لكل موسم سعر للغرف (نسبة أو مبلغ على كل الأنواع، أو سعر ليلة لنوع بعينه)، وسعر لأنظمة الوجبات، وأقل عدد ليالٍ لمن يصل فيه. المواسم لا تتداخل.';
+
+  @override
+  String get seasonsEmpty => 'لا توجد مواسم';
+
+  @override
+  String get seasonAdd => 'إضافة موسم';
+
+  @override
+  String get seasonEdit => 'تعديل الموسم';
+
+  @override
+  String get seasonName => 'اسم الموسم';
+
+  @override
+  String get seasonNameHint => 'الصيف، عيد الأضحى، رأس السنة…';
+
+  @override
+  String get seasonDates => 'من … إلى …';
+
+  @override
+  String get seasonMissing => 'اكتب اسم الموسم واختر تواريخه';
+
+  @override
+  String get seasonRoomsTitle => 'سعر الغرف في الموسم';
+
+  @override
+  String get seasonChangePercent => 'نسبة';
+
+  @override
+  String get seasonChangeAmount => 'مبلغ';
+
+  @override
+  String get seasonChangeValue => 'الزيادة أو التخفيض';
+
+  @override
+  String get seasonChangeHint =>
+      'على كل أنواع الغرف — اكتب رقمًا سالبًا للتخفيض';
+
+  @override
+  String get seasonRoomPriceHint =>
+      'أو سعر ليلة لنوع غرفة بعينه (يغلب على النسبة):';
+
+  @override
+  String get seasonMealsTitle => 'سعر الوجبات في الموسم';
+
+  @override
+  String seasonMealOwnPrice(String price) {
+    return 'سعره العادي $price — اتركه فارغًا ليبقى كما هو';
+  }
+
+  @override
+  String get seasonMinNights => 'أقل عدد ليالٍ';
+
+  @override
+  String get seasonNoMinimum => 'بلا حد';
+
+  @override
+  String get seasonMinNightsHint => 'لمن يصل خلال الموسم';
+
+  @override
+  String seasonRoomPricesN(int n) {
+    return '$n أسعار غرف';
+  }
+
+  @override
+  String seasonMealPricesN(int n) {
+    return '$n أسعار وجبات';
+  }
+
+  @override
+  String seasonMinNightsN(int n) {
+    return 'أقل إقامة $n ليالٍ';
+  }
+
+  @override
   String get singleParentTitle => 'بالغ واحد مع طفل';
 
   @override

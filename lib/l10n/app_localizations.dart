@@ -22453,6 +22453,294 @@ abstract class AppLocalizations {
   /// **'إلى'**
   String get mealTo;
 
+  /// No description provided for @singleOccupancyLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر الإقامة الفردية'**
+  String get singleOccupancyLabel;
+
+  /// No description provided for @singleOccupancyHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما يدفعه بالغ واحد وحده في الغرفة من سعر الليلة (مثلًا 85%). اتركه فارغًا ليدفع سعر الغرفة كاملًا.'**
+  String get singleOccupancyHelp;
+
+  /// No description provided for @singleOccupancyLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'إقامة فردية ({pct} من الغرفة)'**
+  String singleOccupancyLine(String pct);
+
+  /// No description provided for @thirdAdultLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'تخفيض الشخص الثالث'**
+  String get thirdAdultLabel;
+
+  /// No description provided for @thirdAdultHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'إن كتبته، يدفع البالغ في السرير الإضافي سعر الفرد ناقص هذه النسبة بدل سعر السرير الثابت.'**
+  String get thirdAdultHint;
+
+  /// No description provided for @cotTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'سرير أطفال'**
+  String get cotTitle;
+
+  /// No description provided for @cotsPerRoom.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد أسرّة الأطفال لكل غرفة'**
+  String get cotsPerRoom;
+
+  /// No description provided for @cotPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر سرير الأطفال لليلة'**
+  String get cotPrice;
+
+  /// No description provided for @cotPriceHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتركه فارغًا إن كان مجانيًا'**
+  String get cotPriceHint;
+
+  /// No description provided for @cotAsk.
+  ///
+  /// In ar, this message translates to:
+  /// **'سرير أطفال ({price})'**
+  String cotAsk(String price);
+
+  /// No description provided for @cotLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'سرير أطفال × {n}'**
+  String cotLine(int n);
+
+  /// No description provided for @ratePlansTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'خطط الأسعار'**
+  String get ratePlansTitle;
+
+  /// No description provided for @ratePlansIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'بجانب السعر المرن يمكنك بيع سعر أرخص غير قابل للاسترداد: يدفع النزيل للفندق المبلغ كاملًا مقدمًا خارج التطبيق، ولا يمكنه تغيير الموعد. التطبيق لا يصادر أي عربون.'**
+  String get ratePlansIntro;
+
+  /// No description provided for @ratePlansSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'حُفظت خطط الأسعار'**
+  String get ratePlansSaved;
+
+  /// No description provided for @ratePlanFlexible.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر مرن'**
+  String get ratePlanFlexible;
+
+  /// No description provided for @ratePlanFlexibleHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر العادي — يمكن للنزيل تغيير الموعد أو الإلغاء.'**
+  String get ratePlanFlexibleHint;
+
+  /// No description provided for @ratePlanFlexibleGuest.
+  ///
+  /// In ar, this message translates to:
+  /// **'يمكنك تغيير الموعد أو الإلغاء'**
+  String get ratePlanFlexibleGuest;
+
+  /// No description provided for @ratePlanNonRefundable.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير قابل للاسترداد'**
+  String get ratePlanNonRefundable;
+
+  /// No description provided for @ratePlanNonRefundableHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'أرخص بنسبة تحددها، يُدفع كاملًا مقدمًا ولا يُغيّر موعده.'**
+  String get ratePlanNonRefundableHint;
+
+  /// No description provided for @ratePlanNonRefundableGuest.
+  ///
+  /// In ar, this message translates to:
+  /// **'أرخص — تدفع للفندق كاملًا مقدمًا ولا يمكن تغيير الموعد أو استرداد المبلغ'**
+  String get ratePlanNonRefundableGuest;
+
+  /// No description provided for @ratePlanNonRefundableBooked.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر غير قابل للاسترداد — لا يمكن تغيير الموعد'**
+  String get ratePlanNonRefundableBooked;
+
+  /// No description provided for @ratePlanDiscount.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة التخفيض'**
+  String get ratePlanDiscount;
+
+  /// No description provided for @ratePlanDiscountHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'من 1% إلى 50%'**
+  String get ratePlanDiscountHint;
+
+  /// No description provided for @ratePlanChoose.
+  ///
+  /// In ar, this message translates to:
+  /// **'خطة السعر'**
+  String get ratePlanChoose;
+
+  /// No description provided for @nonRefundableLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'خصم غير قابل للاسترداد ({pct})'**
+  String nonRefundableLine(String pct);
+
+  /// No description provided for @seasonsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المواسم'**
+  String get seasonsTitle;
+
+  /// No description provided for @seasonsIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'لكل موسم سعر للغرف (نسبة أو مبلغ على كل الأنواع، أو سعر ليلة لنوع بعينه)، وسعر لأنظمة الوجبات، وأقل عدد ليالٍ لمن يصل فيه. المواسم لا تتداخل.'**
+  String get seasonsIntro;
+
+  /// No description provided for @seasonsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد مواسم'**
+  String get seasonsEmpty;
+
+  /// No description provided for @seasonAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة موسم'**
+  String get seasonAdd;
+
+  /// No description provided for @seasonEdit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل الموسم'**
+  String get seasonEdit;
+
+  /// No description provided for @seasonName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الموسم'**
+  String get seasonName;
+
+  /// No description provided for @seasonNameHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصيف، عيد الأضحى، رأس السنة…'**
+  String get seasonNameHint;
+
+  /// No description provided for @seasonDates.
+  ///
+  /// In ar, this message translates to:
+  /// **'من … إلى …'**
+  String get seasonDates;
+
+  /// No description provided for @seasonMissing.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب اسم الموسم واختر تواريخه'**
+  String get seasonMissing;
+
+  /// No description provided for @seasonRoomsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر الغرف في الموسم'**
+  String get seasonRoomsTitle;
+
+  /// No description provided for @seasonChangePercent.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسبة'**
+  String get seasonChangePercent;
+
+  /// No description provided for @seasonChangeAmount.
+  ///
+  /// In ar, this message translates to:
+  /// **'مبلغ'**
+  String get seasonChangeAmount;
+
+  /// No description provided for @seasonChangeValue.
+  ///
+  /// In ar, this message translates to:
+  /// **'الزيادة أو التخفيض'**
+  String get seasonChangeValue;
+
+  /// No description provided for @seasonChangeHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'على كل أنواع الغرف — اكتب رقمًا سالبًا للتخفيض'**
+  String get seasonChangeHint;
+
+  /// No description provided for @seasonRoomPriceHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'أو سعر ليلة لنوع غرفة بعينه (يغلب على النسبة):'**
+  String get seasonRoomPriceHint;
+
+  /// No description provided for @seasonMealsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر الوجبات في الموسم'**
+  String get seasonMealsTitle;
+
+  /// No description provided for @seasonMealOwnPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعره العادي {price} — اتركه فارغًا ليبقى كما هو'**
+  String seasonMealOwnPrice(String price);
+
+  /// No description provided for @seasonMinNights.
+  ///
+  /// In ar, this message translates to:
+  /// **'أقل عدد ليالٍ'**
+  String get seasonMinNights;
+
+  /// No description provided for @seasonNoMinimum.
+  ///
+  /// In ar, this message translates to:
+  /// **'بلا حد'**
+  String get seasonNoMinimum;
+
+  /// No description provided for @seasonMinNightsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'لمن يصل خلال الموسم'**
+  String get seasonMinNightsHint;
+
+  /// No description provided for @seasonRoomPricesN.
+  ///
+  /// In ar, this message translates to:
+  /// **'{n} أسعار غرف'**
+  String seasonRoomPricesN(int n);
+
+  /// No description provided for @seasonMealPricesN.
+  ///
+  /// In ar, this message translates to:
+  /// **'{n} أسعار وجبات'**
+  String seasonMealPricesN(int n);
+
+  /// No description provided for @seasonMinNightsN.
+  ///
+  /// In ar, this message translates to:
+  /// **'أقل إقامة {n} ليالٍ'**
+  String seasonMinNightsN(int n);
+
   /// No description provided for @singleParentTitle.
   ///
   /// In ar, this message translates to:

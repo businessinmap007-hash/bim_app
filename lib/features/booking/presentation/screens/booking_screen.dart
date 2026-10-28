@@ -46,6 +46,9 @@ class BookingScreen extends ConsumerStatefulWidget {
   /// The hotel's «سياسة الأطفال»: when given, a stay asks each child's age instead of a count.
   final ChildPolicy? childPolicy;
 
+  /// «غير قابل للاسترداد»: the hotel's discount for its cheaper rate — null when it sells only the flexible one (and on a partner's page)
+  final double? nonRefundablePercent;
+
   /// Opened from the Day use card: starts on the Day use side of the room type.
   final bool startInDayUse;
 
@@ -77,6 +80,7 @@ class BookingScreen extends ConsumerStatefulWidget {
     this.initialUnit,
     this.variants = const [],
     this.childPolicy,
+    this.nonRefundablePercent,
     this.startInDayUse = false,
     this.initialStartsAt,
     this.initialEndsAt,
@@ -101,6 +105,14 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
 
   /// each child's age, when the hotel has a «سياسة الأطفال»
   final List<int> _childAges = [];
+
+  /// «سرير أطفال» asked for, and the cheaper non-refundable rate
+  int _cots = 0;
+  bool _nonRefundable = false;
+
+  bool get _offersCots => _asksAges && widget.childPolicy!.cotsMax > 0;
+
+  bool get _offersNonRefundable => widget.nonRefundablePercent != null && widget.offering.itemType == 'booking_stay';
 
   bool get _asksAges => widget.childPolicy != null && widget.offering.itemType == 'booking_stay';
 
@@ -362,6 +374,8 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
         partySize: _partyToSend,
         optionIds: _modifierOptionIds.toList(),
         childrenAges: _asksAges ? List<int>.of(_childAges) : const [],
+        cots: _offersCots ? _cots : 0,
+        ratePlan: _offersNonRefundable && _nonRefundable && !dayUse ? 'non_refundable' : null,
       );
       // A slower earlier request landing after a newer one must not
       // overwrite it with a stale total.
@@ -592,6 +606,8 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
         chairId: widget.chair?.id,
         providerId: widget.provider?.id,
         guestOrigin: _scope == 'locals' ? 'local' : (_scope == 'foreigners' ? 'foreign' : null),
+        cots: _offersCots ? _cots : 0,
+        ratePlan: _offersNonRefundable && _nonRefundable && !dayUse ? 'non_refundable' : null,
       );
       // the hold became the booking on the server
       _holdId = null;
@@ -783,6 +799,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
               if (unitFirst) ...modifiersBlock,
               ...fields.map((field) => _fieldWidget(context, l10n, field, form.shape)),
               if (!unitFirst) ...modifiersBlock,
+              if (_offersNonRefundable && !dayUseOn) _ratePlanBlock(context, l10n),
               const SizedBox(height: 20),
               _summaryCard(context, l10n, dayUseOn),
               const SizedBox(height: 16),
@@ -828,6 +845,38 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  /// «خطة السعر»: the flexible rate, or the cheaper non-refundable one (paid to the hotel in full, its dates cannot move).
+  Widget _ratePlanBlock(BuildContext context, AppLocalizations l10n) {
+    final theme = Theme.of(context);
+    final pct = widget.nonRefundablePercent!;
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(l10n.ratePlanChoose, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+          RadioGroup<bool>(
+            groupValue: _nonRefundable,
+            onChanged: (v) {
+              setState(() => _nonRefundable = v ?? false);
+              _schedulePreview();
+            },
+            child: Column(children: [
+              RadioListTile<bool>(contentPadding: EdgeInsets.zero, value: false, title: Text(l10n.ratePlanFlexible), subtitle: Text(l10n.ratePlanFlexibleGuest)),
+              RadioListTile<bool>(
+                contentPadding: EdgeInsets.zero,
+                value: true,
+                title: Text('${l10n.ratePlanNonRefundable} −${pct % 1 == 0 ? pct.toStringAsFixed(0) : pct.toStringAsFixed(2)}%'),
+                subtitle: Text(l10n.ratePlanNonRefundableGuest),
+              ),
+            ]),
+          ),
+        ],
       ),
     );
   }
@@ -1081,7 +1130,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
     final preview = _preview;
     final currency = widget.offering.currency;
     final lines = preview?.lines ?? const <({String name, double amount})>[];
-    final showBreakdown = preview != null && (lines.isNotEmpty || preview.children.isNotEmpty || preview.extraBeds != null || preview.galaDinners.isNotEmpty) && preview.unitPrice != null;
+    final showBreakdown = preview != null && (lines.isNotEmpty || preview.children.isNotEmpty || preview.extraBeds != null || preview.galaDinners.isNotEmpty || preview.singleOccupancy != null || preview.cots != null || preview.nonRefundable != null) && preview.unitPrice != null;
     final nights = preview?.periods ?? 1;
 
     String money(double v) => '${v.toStringAsFixed(0)} $currency';
@@ -1101,7 +1150,12 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
           children: [
             if (showBreakdown) ...[
               _summaryRow(theme, viewNames.isEmpty ? l10n.bookingBasePriceLine : card!.displayTitle, money((preview.baseUnitPrice ?? 0) + viewExtra)),
+              // «إقامة فردية»: one adult alone pays the single rate of the room
+              if (preview.singleOccupancy != null)
+                _summaryRow(theme, l10n.singleOccupancyLine('${preview.singleOccupancy!.percent.toStringAsFixed(0)}%'), '−${preview.singleOccupancy!.perNight.toStringAsFixed(0)}'),
               for (final line in otherLines) _summaryRow(theme, line.name, '+${line.amount.toStringAsFixed(0)}'),
+              if (preview.cots != null && preview.cots!.count > 0)
+                _summaryRow(theme, l10n.cotLine(preview.cots!.count), preview.cots!.perNight > 0 ? '+${preview.cots!.perNight.toStringAsFixed(0)}' : l10n.childFree),
               if (preview.extraBeds != null && preview.extraBeds!.count > 0)
                 _summaryRow(theme, l10n.extraBedLine(preview.extraBeds!.count), '+${preview.extraBeds!.perNight.toStringAsFixed(0)}'),
               for (final c in preview.children.where((c) => c.perNight > 0))
@@ -1114,12 +1168,24 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                 ),
               if (!dayUseOn) ...[
                 const Divider(height: 16),
-                _summaryRow(theme, l10n.bookingNightPrice, money(preview.unitPrice! + preview.children.fold<double>(0, (s, c) => s + c.perNight) + (preview.extraBeds?.perNight ?? 0)), bold: true),
+                _summaryRow(
+                  theme,
+                  l10n.bookingNightPrice,
+                  money(preview.unitPrice! +
+                      preview.children.fold<double>(0, (s, c) => s + c.perNight) +
+                      (preview.extraBeds?.perNight ?? 0) +
+                      (preview.cots?.perNight ?? 0) -
+                      (preview.singleOccupancy?.perNight ?? 0)),
+                  bold: true,
+                ),
                 if (nights > 1) _summaryRow(theme, l10n.bookingTimesNights(nights), ''),
               ],
               // «العشاء الإلزامي»: once for its night, on top of the nights
               for (final g in preview.galaDinners)
                 _summaryRow(theme, l10n.galaLine(g.name, _galaDate(context, g.date)), '+${g.total.toStringAsFixed(0)}'),
+              // «غير قابل للاسترداد»: off the whole stay
+              if (preview.nonRefundable != null)
+                _summaryRow(theme, l10n.nonRefundableLine('${preview.nonRefundable!.percent.toStringAsFixed(0)}%'), '−${preview.nonRefundable!.amount.toStringAsFixed(0)}'),
               const SizedBox(height: 8),
             ],
             if (preview != null && preview.offerDiscount > 0) ...[
@@ -1424,7 +1490,17 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
           _schedulePreview();
         });
       case 'children_count':
-        if (_asksAges) return _childAgesBlock(context, l10n);
+        if (_asksAges) {
+          return Column(children: [
+            _childAgesBlock(context, l10n),
+            // «سرير أطفال»: on request, up to what the hotel's rooms take
+            if (_offersCots)
+              _stepperRow(context, l10n.cotAsk(widget.childPolicy!.cotPrice <= 0 ? l10n.childFree : '${widget.childPolicy!.cotPrice.toStringAsFixed(0)} ${widget.offering.currency}'), _cots, (v) {
+                setState(() => _cots = v);
+                _schedulePreview();
+              }, min: 0, max: widget.childPolicy!.cotsMax * (_quantity < 1 ? 1 : _quantity)),
+          ]);
+        }
         return _stepperRow(context, labelText, _childrenCount, (v) => setState(() => _childrenCount = v), min: 0);
       case 'channel':
         return _choiceRow(

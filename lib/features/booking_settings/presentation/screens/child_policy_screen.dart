@@ -24,6 +24,9 @@ class _ChildPolicyScreenState extends ConsumerState<ChildPolicyScreen> {
   int _counts = 6;
   bool _meals = true;
   final _bedPrice = TextEditingController();
+  final _thirdAdult = TextEditingController();
+  final _cotPrice = TextEditingController();
+  int _cotsMax = 0;
   int _bedsMax = 1;
 
   /// «بالغ واحد مع طفل»: null = the child pays its normal share
@@ -34,6 +37,14 @@ class _ChildPolicyScreenState extends ConsumerState<ChildPolicyScreen> {
   void initState() {
     super.initState();
     _load();
+  }
+
+  @override
+  void dispose() {
+    _bedPrice.dispose();
+    _thirdAdult.dispose();
+    _cotPrice.dispose();
+    super.dispose();
   }
 
   Future<void> _load() async {
@@ -49,6 +60,9 @@ class _ChildPolicyScreenState extends ConsumerState<ChildPolicyScreen> {
           _bedPrice.text = p.extraBedPrice == null ? '' : p.extraBedPrice!.toStringAsFixed(p.extraBedPrice! % 1 == 0 ? 0 : 2);
           _bedsMax = p.extraBedsMax;
           _single = p.singleParentPercent;
+          _thirdAdult.text = p.thirdAdultReduction == null ? '' : p.thirdAdultReduction!.toStringAsFixed(p.thirdAdultReduction! % 1 == 0 ? 0 : 2);
+          _cotsMax = p.cotsMax;
+          _cotPrice.text = p.cotPrice == 0 ? '' : p.cotPrice.toStringAsFixed(p.cotPrice % 1 == 0 ? 0 : 2);
         }
         _loaded = true;
       });
@@ -64,7 +78,10 @@ class _ChildPolicyScreenState extends ConsumerState<ChildPolicyScreen> {
     try {
       final bed = double.tryParse(_bedPrice.text.trim().replaceAll(',', '.'));
       await ref.read(bookingSettingsApiProvider).saveChildPolicy(
-        ChildPolicy(adultFromAge: _adult, countsFromAge: _counts, mealsFollow: _meals, bands: _bands, extraBedPrice: bed, extraBedsMax: _bedsMax, singleParentPercent: _single),
+        ChildPolicy(adultFromAge: _adult, countsFromAge: _counts, mealsFollow: _meals, bands: _bands, extraBedPrice: bed, extraBedsMax: _bedsMax, singleParentPercent: _single,
+          thirdAdultReduction: double.tryParse(_thirdAdult.text.trim().replaceAll(',', '.')),
+          cotsMax: _cotsMax,
+          cotPrice: double.tryParse(_cotPrice.text.trim().replaceAll(',', '.')) ?? 0),
       );
       messenger.showSnackBar(SnackBar(content: Text(l10n.childPolicySaved)));
     } catch (e) {
@@ -193,6 +210,25 @@ class _ChildPolicyScreenState extends ConsumerState<ChildPolicyScreen> {
                   const SizedBox(width: 8),
                   _ageField(_bedsMax, (v) => setState(() => _bedsMax = v), max: 4),
                 ]),
+                // «تخفيض الشخص الثالث»: instead of a fixed bed price, the adult in it pays one person's night less this %
+                TextField(
+                  controller: _thirdAdult,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  decoration: InputDecoration(labelText: l10n.thirdAdultLabel, helperText: l10n.thirdAdultHint, suffixText: '%'),
+                ),
+                const Divider(height: 24),
+                // «سرير أطفال»: on request, per room
+                Text(l10n.cotTitle, style: theme.textTheme.titleMedium),
+                Row(children: [
+                  Expanded(child: Text(l10n.cotsPerRoom)),
+                  _ageField(_cotsMax, (v) => setState(() => _cotsMax = v), max: 3),
+                ]),
+                if (_cotsMax > 0)
+                  TextField(
+                    controller: _cotPrice,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    decoration: InputDecoration(labelText: l10n.cotPrice, helperText: l10n.cotPriceHint),
+                  ),
                 const Divider(height: 24),
                 // «بالغ واحد مع طفل»: the second adult's place is paid for in the room's price; the child in it pays this
                 SwitchListTile(

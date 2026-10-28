@@ -40,6 +40,13 @@ class ChildPolicy {
   /// null when the hotel keeps the normal share
   final double? singleParentPercent;
 
+  /// «تخفيض الشخص الثالث»: an adult in an extra bed pays one person's night less this % — null = the fixed [extraBedPrice]
+  final double? thirdAdultReduction;
+
+  /// «سرير أطفال»: how many cots a room takes (0 = none) and the price of one a night (0 = free)
+  final int cotsMax;
+  final double cotPrice;
+
   const ChildPolicy({
     this.adultFromAge = 12,
     this.countsFromAge = 6,
@@ -48,10 +55,13 @@ class ChildPolicy {
     this.extraBedPrice,
     this.extraBedsMax = 1,
     this.singleParentPercent,
+    this.thirdAdultReduction,
+    this.cotsMax = 0,
+    this.cotPrice = 0,
   });
 
   /// How many extra beds a stay of [rooms] rooms may take.
-  int extraBedsAllowed(int rooms) => extraBedPrice == null ? 0 : extraBedsMax * (rooms < 1 ? 1 : rooms);
+  int extraBedsAllowed(int rooms) => (extraBedPrice == null && thirdAdultReduction == null) ? 0 : extraBedsMax * (rooms < 1 ? 1 : rooms);
 
   bool isAdult(int age) => age >= adultFromAge;
 
@@ -75,6 +85,9 @@ class ChildPolicy {
           extraBedPrice: (json['extra_bed_price'] as num?)?.toDouble(),
           extraBedsMax: (json['extra_beds_max'] as num?)?.toInt() ?? 1,
           singleParentPercent: (json['single_parent_percent'] as num?)?.toDouble(),
+          thirdAdultReduction: (json['third_adult_reduction'] as num?)?.toDouble(),
+          cotsMax: (json['cots_max'] as num?)?.toInt() ?? 0,
+          cotPrice: (json['cot_price'] as num?)?.toDouble() ?? 0,
           bands: [for (final b in json['bands'] as List<dynamic>? ?? const []) ChildBand.fromJson(b as Map<String, dynamic>)],
         )
       : null;
@@ -86,6 +99,9 @@ class ChildPolicy {
     'extra_bed_price': extraBedPrice,
     'extra_beds_max': extraBedsMax,
     'single_parent_percent': singleParentPercent,
+    'third_adult_reduction': thirdAdultReduction,
+    'cots_max': cotsMax,
+    'cot_price': cotPrice,
     'bands': [for (final b in bands) b.toJson()],
   };
 }

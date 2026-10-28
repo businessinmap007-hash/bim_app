@@ -90,6 +90,7 @@ void openUnitBooking(
         shape: shape,
         initialUnit: unit,
         childPolicy: catalog.childPolicy,
+        nonRefundablePercent: catalog.nonRefundablePercent,
         // the other kinds of the same room type (a view each), so the form can offer them as one choice
         variants: group.units.where((u) => u.id == unit.id).length > 1 ? group.units.where((u) => u.id == unit.id).toList() : const [],
         startInDayUse: dayUse,

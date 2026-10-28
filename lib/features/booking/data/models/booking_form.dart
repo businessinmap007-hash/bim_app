@@ -171,6 +171,15 @@ class BookingPreview {
   /// «العشاء الإلزامي»: the hotel's gala nights inside the stay, each with what it adds (once, not a night)
   final List<({String date, String name, double total})> galaDinners;
 
+  /// «إقامة فردية»: what the single rate takes off a night, for how many rooms
+  final ({int rooms, double percent, double perNight})? singleOccupancy;
+
+  /// «سرير أطفال»: how many, and what they add a night
+  final ({int count, double perNight})? cots;
+
+  /// «غير قابل للاسترداد»: the discount of the cheaper rate, off the whole stay
+  final ({double percent, double amount})? nonRefundable;
+
   /// «سرير إضافي»: how many, and what they add a night
   final ({int count, double perNight})? extraBeds;
 
@@ -188,6 +197,9 @@ class BookingPreview {
     this.children = const [],
     this.extraBeds,
     this.galaDinners = const [],
+    this.singleOccupancy,
+    this.cots,
+    this.nonRefundable,
   });
 
   factory BookingPreview.fromJson(Map<String, dynamic> json) {
@@ -214,6 +226,25 @@ class BookingPreview {
             singleParent: c['single_parent'] == true,
           ),
       ],
+      singleOccupancy: breakdown['single_occupancy'] is Map<String, dynamic>
+          ? (
+              rooms: ((breakdown['single_occupancy'] as Map<String, dynamic>)['rooms'] as num?)?.toInt() ?? 1,
+              percent: ((breakdown['single_occupancy'] as Map<String, dynamic>)['percent'] as num?)?.toDouble() ?? 100,
+              perNight: ((breakdown['single_occupancy'] as Map<String, dynamic>)['per_night'] as num?)?.toDouble() ?? 0,
+            )
+          : null,
+      cots: breakdown['cots'] is Map<String, dynamic>
+          ? (
+              count: ((breakdown['cots'] as Map<String, dynamic>)['count'] as num?)?.toInt() ?? 0,
+              perNight: ((breakdown['cots'] as Map<String, dynamic>)['per_night'] as num?)?.toDouble() ?? 0,
+            )
+          : null,
+      nonRefundable: breakdown['non_refundable'] is Map<String, dynamic>
+          ? (
+              percent: ((breakdown['non_refundable'] as Map<String, dynamic>)['percent'] as num?)?.toDouble() ?? 0,
+              amount: ((breakdown['non_refundable'] as Map<String, dynamic>)['amount'] as num?)?.toDouble() ?? 0,
+            )
+          : null,
       galaDinners: [
         for (final g in breakdown['gala_dinners'] as List<dynamic>? ?? const [])
           (

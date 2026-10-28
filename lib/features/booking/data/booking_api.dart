@@ -194,6 +194,7 @@ class BookingApi {
     final booking = Map<String, dynamic>.from(data['booking'] as Map<String, dynamic>);
     if (data['deposit_as_payment'] != null) booking['deposit_as_payment'] = data['deposit_as_payment'];
     if (data['meal_times'] != null) booking['meal_times'] = data['meal_times'];
+    if (data['stay_terms'] != null) booking['stay_terms'] = data['stay_terms'];
 
     return Booking.fromJson(booking);
   }
@@ -261,6 +262,9 @@ class BookingApi {
     int? providerId,
     // «مصري أو مقيم» (`local`) / «أجنبي» (`foreign`): the guest's declaration for a room type sold to one of them only
     String? guestOrigin,
+    // «سرير أطفال» asked for, and `non_refundable` for the cheaper rate
+    int cots = 0,
+    String? ratePlan,
   }) async {
     final data =
         await _client.post(
@@ -278,6 +282,8 @@ class BookingApi {
                 'quantity': ?quantity,
                 if (childrenAges.isNotEmpty) 'children_ages': childrenAges,
                 'guest_origin': ?guestOrigin,
+                if (cots > 0) 'cots': cots,
+                'rate_plan': ?ratePlan,
                 if (notes != null && notes.isNotEmpty) 'notes': notes,
                 if (meta != null && meta.isNotEmpty) 'meta': meta,
                 if (optionIds.isNotEmpty) 'option_ids': optionIds,
@@ -404,6 +410,8 @@ class BookingApi {
     List<int> optionIds = const [],
     DateTime? dayUseDate,
     List<int> childrenAges = const [],
+    int cots = 0,
+    String? ratePlan,
   }) async {
     final data =
         await _client.post(
@@ -420,6 +428,8 @@ class BookingApi {
                 'party_size': ?partySize,
                 if (childrenAges.isNotEmpty) 'children_ages': childrenAges,
                 if (optionIds.isNotEmpty) 'option_ids': optionIds,
+                if (cots > 0) 'cots': cots,
+                'rate_plan': ?ratePlan,
               },
             )
             as Map<String, dynamic>;

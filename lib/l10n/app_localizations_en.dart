@@ -12576,6 +12576,176 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mealTo => 'To';
 
   @override
+  String get singleOccupancyLabel => 'Single occupancy rate';
+
+  @override
+  String get singleOccupancyHelp =>
+      'What one adult alone in the room pays of the night (e.g. 85%). Leave it empty and he pays the whole room.';
+
+  @override
+  String singleOccupancyLine(String pct) {
+    return 'Single occupancy ($pct of the room)';
+  }
+
+  @override
+  String get thirdAdultLabel => 'Third person reduction';
+
+  @override
+  String get thirdAdultHint =>
+      'When set, the adult in an extra bed pays one person\'s night less this %, instead of the fixed bed price.';
+
+  @override
+  String get cotTitle => 'Baby cot';
+
+  @override
+  String get cotsPerRoom => 'Baby cots per room';
+
+  @override
+  String get cotPrice => 'Baby cot price a night';
+
+  @override
+  String get cotPriceHint => 'Leave empty when it is free';
+
+  @override
+  String cotAsk(String price) {
+    return 'Baby cot ($price)';
+  }
+
+  @override
+  String cotLine(int n) {
+    return 'Baby cot × $n';
+  }
+
+  @override
+  String get ratePlansTitle => 'Rate plans';
+
+  @override
+  String get ratePlansIntro =>
+      'Beside the flexible rate you can sell a cheaper non-refundable one: the guest pays the hotel in full in advance outside the app and cannot change the dates. The app confiscates no deposit.';
+
+  @override
+  String get ratePlansSaved => 'Rate plans saved';
+
+  @override
+  String get ratePlanFlexible => 'Flexible rate';
+
+  @override
+  String get ratePlanFlexibleHint =>
+      'The usual rate — the guest may change the dates or cancel.';
+
+  @override
+  String get ratePlanFlexibleGuest => 'You can change the dates or cancel';
+
+  @override
+  String get ratePlanNonRefundable => 'Non-refundable';
+
+  @override
+  String get ratePlanNonRefundableHint =>
+      'Cheaper by the % you set, paid in full in advance, dates fixed.';
+
+  @override
+  String get ratePlanNonRefundableGuest =>
+      'Cheaper — paid to the hotel in full in advance; the dates cannot change and nothing is refunded';
+
+  @override
+  String get ratePlanNonRefundableBooked =>
+      'Non-refundable rate — the dates cannot change';
+
+  @override
+  String get ratePlanDiscount => 'Discount';
+
+  @override
+  String get ratePlanDiscountHint => 'From 1% to 50%';
+
+  @override
+  String get ratePlanChoose => 'Rate';
+
+  @override
+  String nonRefundableLine(String pct) {
+    return 'Non-refundable discount ($pct)';
+  }
+
+  @override
+  String get seasonsTitle => 'Seasons';
+
+  @override
+  String get seasonsIntro =>
+      'Each season has the rooms\' price (a % or an amount on every type, or a night price for one type), the meal plans\' price, and the shortest stay for an arrival in it. Seasons do not overlap.';
+
+  @override
+  String get seasonsEmpty => 'No seasons';
+
+  @override
+  String get seasonAdd => 'Add a season';
+
+  @override
+  String get seasonEdit => 'Edit season';
+
+  @override
+  String get seasonName => 'Season name';
+
+  @override
+  String get seasonNameHint => 'Summer, Eid, New Year…';
+
+  @override
+  String get seasonDates => 'From … to …';
+
+  @override
+  String get seasonMissing => 'Write the season\'s name and pick its dates';
+
+  @override
+  String get seasonRoomsTitle => 'Room prices in the season';
+
+  @override
+  String get seasonChangePercent => 'Percent';
+
+  @override
+  String get seasonChangeAmount => 'Amount';
+
+  @override
+  String get seasonChangeValue => 'Increase or reduction';
+
+  @override
+  String get seasonChangeHint =>
+      'On every room type — a negative number reduces';
+
+  @override
+  String get seasonRoomPriceHint =>
+      'Or a night price for one room type (it wins over the change):';
+
+  @override
+  String get seasonMealsTitle => 'Meal prices in the season';
+
+  @override
+  String seasonMealOwnPrice(String price) {
+    return 'Its usual price $price — leave empty to keep it';
+  }
+
+  @override
+  String get seasonMinNights => 'Minimum nights';
+
+  @override
+  String get seasonNoMinimum => 'None';
+
+  @override
+  String get seasonMinNightsHint => 'For an arrival in the season';
+
+  @override
+  String seasonRoomPricesN(int n) {
+    return '$n room prices';
+  }
+
+  @override
+  String seasonMealPricesN(int n) {
+    return '$n meal prices';
+  }
+
+  @override
+  String seasonMinNightsN(int n) {
+    return 'min $n nights';
+  }
+
+  @override
   String get singleParentTitle => 'One adult with a child';
 
   @override

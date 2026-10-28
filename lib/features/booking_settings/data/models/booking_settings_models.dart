@@ -183,6 +183,9 @@ class BookableItemRow {
   /// «غرف احتياطية للضغط»: rooms of the type kept back for the hotel's own guests — a partner cannot sell into them.
   final int reserveRooms;
 
+  /// «إقامة فردية»: what one adult alone pays of the night (null = the whole room)
+  final double? singleOccupancyPercent;
+
   const BookableItemRow({
     required this.id,
     required this.serviceId,
@@ -203,6 +206,7 @@ class BookableItemRow {
     this.monthlyDiscount = 0,
     this.guestScope = 'all',
     this.reserveRooms = 0,
+    this.singleOccupancyPercent,
   });
 
   bool get isHotelRoom => unitNoun == 'room';
@@ -236,6 +240,7 @@ class BookableItemRow {
       monthlyDiscount: ((json['stay_discounts'] as Map<String, dynamic>?)?['monthly_percent'] as num?)?.toDouble() ?? 0,
       guestScope: json['guest_scope'] as String? ?? 'all',
       reserveRooms: (json['reserve_rooms'] as num?)?.toInt() ?? 0,
+      singleOccupancyPercent: (json['single_occupancy_percent'] as num?)?.toDouble(),
     );
   }
 }
