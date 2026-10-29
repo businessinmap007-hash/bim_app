@@ -1,3 +1,4 @@
+import '../../../hr/presentation/mobile/hr_screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
@@ -280,6 +281,18 @@ class _MembershipCard extends StatelessWidget {
                           ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2))
                           : Text(l10n.attendanceCheckIn),
                     ),
+            ),
+            // «حضوري ومرتبي»: my month, my leave, my requests and payslips at this employer
+            const SizedBox(height: 8),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => MyHrScreen(businessId: membership.businessId, businessName: membership.businessName)),
+                ),
+                icon: const Icon(Icons.badge_outlined, size: 18),
+                label: Text(l10n.hrMyWork),
+              ),
             ),
             if (membership.capabilities.contains('orders')) ...[
               const SizedBox(height: 8),

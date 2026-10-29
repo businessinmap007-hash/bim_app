@@ -14296,4 +14296,415 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get suiteTestPrint => 'طباعة تجريبية';
+
+  @override
+  String get hrAttendanceTitle => 'الحضور';
+
+  @override
+  String get hrNavPayroll => 'المرتبات';
+
+  @override
+  String get hrBoard => 'لوحة الشهر';
+
+  @override
+  String get hrRequests => 'الطلبات';
+
+  @override
+  String get hrEmployeesShifts => 'الموظفون والورديات';
+
+  @override
+  String get hrRules => 'اللائحة والإجازات الرسمية';
+
+  @override
+  String get hrPresent => 'حاضر';
+
+  @override
+  String get hrLate => 'متأخر';
+
+  @override
+  String get hrAbsent => 'غائب';
+
+  @override
+  String get hrOnLeave => 'إجازة';
+
+  @override
+  String get hrUnpaidLeave => 'إجازة بدون أجر';
+
+  @override
+  String get hrRest => 'راحة';
+
+  @override
+  String get hrHoliday => 'إجازة رسمية';
+
+  @override
+  String get hrEarly => 'انصراف مبكر';
+
+  @override
+  String get hrEmployee => 'الموظف';
+
+  @override
+  String get hrEmployees => 'الموظفون';
+
+  @override
+  String get hrNoEmployees => 'لا موظفين بعد. أضفهم من «الموظفون» في التطبيق.';
+
+  @override
+  String get hrMinutesShort => 'د';
+
+  @override
+  String get hrHoursShort => 'س';
+
+  @override
+  String get hrNightShort => 'ليلي';
+
+  @override
+  String get hrOvertimeSuggested => 'إضافي محسوب';
+
+  @override
+  String get hrIn => 'الحضور';
+
+  @override
+  String get hrOut => 'الانصراف';
+
+  @override
+  String hrDeductionDays(String days) {
+    return 'خصم $days يوم';
+  }
+
+  @override
+  String get hrApproveOvertime => 'اعتماد الإضافي';
+
+  @override
+  String get hrNoPending => 'لا طلبات بانتظارك.';
+
+  @override
+  String get hrApprove => 'اعتماد';
+
+  @override
+  String get hrKindLeave => 'إجازة';
+
+  @override
+  String get hrKindCorrection => 'تصحيح بصمة';
+
+  @override
+  String get hrKindOvertime => 'إضافي';
+
+  @override
+  String get hrLeaveAnnual => 'اعتيادية';
+
+  @override
+  String get hrLeaveCasual => 'عارضة';
+
+  @override
+  String get hrLeaveSick => 'مرضية';
+
+  @override
+  String get hrLeaveUnpaid => 'بدون أجر';
+
+  @override
+  String get hrPending => 'بانتظار الاعتماد';
+
+  @override
+  String get hrApproved => 'معتمد';
+
+  @override
+  String get hrRejected => 'مرفوض';
+
+  @override
+  String get hrCancelled => 'ملغي';
+
+  @override
+  String get hrShifts => 'الورديات';
+
+  @override
+  String get hrNewShift => 'وردية جديدة';
+
+  @override
+  String get hrNoShifts => 'لا ورديات بعد.';
+
+  @override
+  String get hrNoShift => 'بلا وردية';
+
+  @override
+  String get hrShift => 'الوردية';
+
+  @override
+  String get hrShiftName => 'اسم الوردية';
+
+  @override
+  String get hrStartsAt => 'تبدأ';
+
+  @override
+  String get hrEndsAt => 'تنتهي';
+
+  @override
+  String hrLeaveBalance(String remaining, String total) {
+    return 'رصيد الإجازة $remaining من $total';
+  }
+
+  @override
+  String get hrHireDate => 'تاريخ التعيين';
+
+  @override
+  String get hrInsured => 'مؤمَّن عليه';
+
+  @override
+  String get hrAllowanceName => 'البدل';
+
+  @override
+  String get hrInsurable => 'تأميني';
+
+  @override
+  String get hrAddAllowance => 'أضف بدلًا';
+
+  @override
+  String get hrYourRules => 'لائحتك';
+
+  @override
+  String get hrGrace => 'دقائق السماح';
+
+  @override
+  String get hrTier1Upto => 'تأخير حتى (دقيقة)';
+
+  @override
+  String get hrTier1Fraction => 'خصمه (من اليوم)';
+
+  @override
+  String get hrTier2Fraction => 'أكثر من ذلك (من اليوم)';
+
+  @override
+  String get hrAbsenceFraction => 'خصم الغياب (أيام)';
+
+  @override
+  String get hrMonthlyCap => 'سقف الخصم الشهري (أيام)';
+
+  @override
+  String get hrOvertimeDayPct => 'الإضافي النهاري %';
+
+  @override
+  String get hrOvertimeNightPct => 'الإضافي الليلي %';
+
+  @override
+  String get hrNightFrom => 'الليل من';
+
+  @override
+  String get hrNightTo => 'إلى';
+
+  @override
+  String get hrDaysPerMonth => 'أيام الشهر للحساب';
+
+  @override
+  String get hrHoursPerDay => 'ساعات اليوم';
+
+  @override
+  String get hrRestDays => 'أيام الراحة الأسبوعية';
+
+  @override
+  String get hrSat => 'سبت';
+
+  @override
+  String get hrSun => 'أحد';
+
+  @override
+  String get hrMon => 'إثنين';
+
+  @override
+  String get hrTue => 'ثلاثاء';
+
+  @override
+  String get hrWed => 'أربعاء';
+
+  @override
+  String get hrThu => 'خميس';
+
+  @override
+  String get hrFri => 'جمعة';
+
+  @override
+  String hrHolidays(int n) {
+    return 'الإجازات الرسمية $n';
+  }
+
+  @override
+  String get hrHolidayName => 'اسم الإجازة';
+
+  @override
+  String get hrAddHoliday => 'أضف';
+
+  @override
+  String hrPayrollTitle(String month) {
+    return 'مسير المرتبات $month';
+  }
+
+  @override
+  String get hrNewAdvance => 'سلفة جديدة';
+
+  @override
+  String get hrBonusPenalty => 'مكافأة / جزاء';
+
+  @override
+  String get hrGenerate => 'احسب المسير';
+
+  @override
+  String get hrApproveLock => 'اعتماد وإقفال الشهر';
+
+  @override
+  String get hrPrintAll => 'طباعة الكشوف';
+
+  @override
+  String get hrNoRunYet => 'لم يُحسب مسير هذا الشهر بعد. اضغط «احسب المسير».';
+
+  @override
+  String get hrApprovedLocked => 'معتمد ومقفل';
+
+  @override
+  String get hrDraft => 'مسودة';
+
+  @override
+  String get hrReviewTax => 'دخل سنوي كبير: راجع الضريبة مع المحاسب';
+
+  @override
+  String get hrGross => 'إجمالي المرتبات';
+
+  @override
+  String get hrNetToPay => 'صافي يُصرف';
+
+  @override
+  String get hrInsuranceBoth => 'تأمينات (موظفون + صاحب العمل)';
+
+  @override
+  String get hrTaxToRemit => 'ضرائب تُورَّد';
+
+  @override
+  String get hrAllowances => 'البدلات';
+
+  @override
+  String get hrLineBasic => 'الأساسي';
+
+  @override
+  String get hrLineOvertime => 'الإضافي';
+
+  @override
+  String get hrLineBonus => 'مكافأة';
+
+  @override
+  String get hrLineAttendance => 'خصم الحضور';
+
+  @override
+  String get hrLineAdvance => 'قسط سلفة';
+
+  @override
+  String get hrLinePenalty => 'جزاء';
+
+  @override
+  String get hrLineInsurance => 'التأمينات';
+
+  @override
+  String get hrLineTax => 'الضريبة';
+
+  @override
+  String get hrNet => 'الصافي';
+
+  @override
+  String get hrPaid => 'صُرف';
+
+  @override
+  String get hrNotPaidYet => 'لم يُصرف بعد';
+
+  @override
+  String get hrRecordPaid => 'سجّل الصرف';
+
+  @override
+  String get hrPaidOutsideHint => 'المرتب يُصرف خارج التطبيق؛ هنا نسجّله فقط.';
+
+  @override
+  String get hrInstallments => 'عدد الأقساط';
+
+  @override
+  String hrAdvanceFrom(String month) {
+    return 'تُخصم من مسير $month';
+  }
+
+  @override
+  String hrHowCalculated(String name) {
+    return 'كيف حُسب $name';
+  }
+
+  @override
+  String hrEmployerInsurance(String amount) {
+    return 'حصة صاحب العمل في التأمينات: $amount';
+  }
+
+  @override
+  String hrPayslipTitle(String month) {
+    return 'كشف مرتب $month';
+  }
+
+  @override
+  String get hrItem => 'البند';
+
+  @override
+  String get hrDetail => 'التفصيل';
+
+  @override
+  String get hrDeductions => 'الاستقطاعات';
+
+  @override
+  String get hrSignAccountant => 'المحاسب';
+
+  @override
+  String get hrSignEmployee => 'توقيع الموظف بالاستلام';
+
+  @override
+  String get hrMyWork => 'حضوري ومرتبي';
+
+  @override
+  String get hrNewRequest => 'طلب جديد';
+
+  @override
+  String get hrRequestSent => 'أُرسل طلبك للمدير.';
+
+  @override
+  String get hrDaysPresent => 'يوم حضور';
+
+  @override
+  String get hrLateThisMonth => 'تأخير الشهر';
+
+  @override
+  String get hrLeaveLeft => 'رصيد إجازة';
+
+  @override
+  String get hrMyRequests => 'طلباتي';
+
+  @override
+  String get hrMyPayslips => 'كشوف مرتبي';
+
+  @override
+  String get hrNoPayslips => 'لا كشوف بعد.';
+
+  @override
+  String get hrLeaveType => 'نوع الإجازة';
+
+  @override
+  String get hrFrom => 'من';
+
+  @override
+  String get hrTo => 'إلى';
+
+  @override
+  String get hrOvertimeHours => 'ساعات الإضافي';
+
+  @override
+  String get hrStaffToday => 'الموظفون اليوم';
+
+  @override
+  String get hrStaffTodaySubtitle => 'الحضور، الطلبات، واعتماد المسير';
+
+  @override
+  String get hrAwaitingYou => 'بانتظار اعتمادك';
+
+  @override
+  String hrPayrollReady(String month) {
+    return 'مسير $month جاهز للاعتماد';
+  }
 }

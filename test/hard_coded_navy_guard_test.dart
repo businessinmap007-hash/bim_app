@@ -31,6 +31,9 @@ void main() {
     // receiving screen's scan bar — a navy block in both themes, with white / gold on it
     'desktop/desktop_app.dart': 1,
     'desktop/screens/receive_page.dart': 1,
+    'desktop/screens/payroll_page.dart': 1,
+    // the payroll-ready card on the owner's phone: navy with white text and a gold button
+    'features/hr/presentation/mobile/hr_screens.dart': 2,
     'desktop/shell/desktop_shell.dart': 3,
     'shared/widgets/app_drawer.dart': 2,
     'shared/widgets/profile_cover_header.dart': 3,

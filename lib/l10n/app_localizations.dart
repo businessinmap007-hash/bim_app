@@ -25686,6 +25686,792 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'طباعة تجريبية'**
   String get suiteTestPrint;
+
+  /// No description provided for @hrAttendanceTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحضور'**
+  String get hrAttendanceTitle;
+
+  /// No description provided for @hrNavPayroll.
+  ///
+  /// In ar, this message translates to:
+  /// **'المرتبات'**
+  String get hrNavPayroll;
+
+  /// No description provided for @hrBoard.
+  ///
+  /// In ar, this message translates to:
+  /// **'لوحة الشهر'**
+  String get hrBoard;
+
+  /// No description provided for @hrRequests.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطلبات'**
+  String get hrRequests;
+
+  /// No description provided for @hrEmployeesShifts.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموظفون والورديات'**
+  String get hrEmployeesShifts;
+
+  /// No description provided for @hrRules.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللائحة والإجازات الرسمية'**
+  String get hrRules;
+
+  /// No description provided for @hrPresent.
+  ///
+  /// In ar, this message translates to:
+  /// **'حاضر'**
+  String get hrPresent;
+
+  /// No description provided for @hrLate.
+  ///
+  /// In ar, this message translates to:
+  /// **'متأخر'**
+  String get hrLate;
+
+  /// No description provided for @hrAbsent.
+  ///
+  /// In ar, this message translates to:
+  /// **'غائب'**
+  String get hrAbsent;
+
+  /// No description provided for @hrOnLeave.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجازة'**
+  String get hrOnLeave;
+
+  /// No description provided for @hrUnpaidLeave.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجازة بدون أجر'**
+  String get hrUnpaidLeave;
+
+  /// No description provided for @hrRest.
+  ///
+  /// In ar, this message translates to:
+  /// **'راحة'**
+  String get hrRest;
+
+  /// No description provided for @hrHoliday.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجازة رسمية'**
+  String get hrHoliday;
+
+  /// No description provided for @hrEarly.
+  ///
+  /// In ar, this message translates to:
+  /// **'انصراف مبكر'**
+  String get hrEarly;
+
+  /// No description provided for @hrEmployee.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموظف'**
+  String get hrEmployee;
+
+  /// No description provided for @hrEmployees.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموظفون'**
+  String get hrEmployees;
+
+  /// No description provided for @hrNoEmployees.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا موظفين بعد. أضفهم من «الموظفون» في التطبيق.'**
+  String get hrNoEmployees;
+
+  /// No description provided for @hrMinutesShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'د'**
+  String get hrMinutesShort;
+
+  /// No description provided for @hrHoursShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'س'**
+  String get hrHoursShort;
+
+  /// No description provided for @hrNightShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'ليلي'**
+  String get hrNightShort;
+
+  /// No description provided for @hrOvertimeSuggested.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافي محسوب'**
+  String get hrOvertimeSuggested;
+
+  /// No description provided for @hrIn.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحضور'**
+  String get hrIn;
+
+  /// No description provided for @hrOut.
+  ///
+  /// In ar, this message translates to:
+  /// **'الانصراف'**
+  String get hrOut;
+
+  /// No description provided for @hrDeductionDays.
+  ///
+  /// In ar, this message translates to:
+  /// **'خصم {days} يوم'**
+  String hrDeductionDays(String days);
+
+  /// No description provided for @hrApproveOvertime.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتماد الإضافي'**
+  String get hrApproveOvertime;
+
+  /// No description provided for @hrNoPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا طلبات بانتظارك.'**
+  String get hrNoPending;
+
+  /// No description provided for @hrApprove.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتماد'**
+  String get hrApprove;
+
+  /// No description provided for @hrKindLeave.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجازة'**
+  String get hrKindLeave;
+
+  /// No description provided for @hrKindCorrection.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصحيح بصمة'**
+  String get hrKindCorrection;
+
+  /// No description provided for @hrKindOvertime.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافي'**
+  String get hrKindOvertime;
+
+  /// No description provided for @hrLeaveAnnual.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتيادية'**
+  String get hrLeaveAnnual;
+
+  /// No description provided for @hrLeaveCasual.
+  ///
+  /// In ar, this message translates to:
+  /// **'عارضة'**
+  String get hrLeaveCasual;
+
+  /// No description provided for @hrLeaveSick.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرضية'**
+  String get hrLeaveSick;
+
+  /// No description provided for @hrLeaveUnpaid.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون أجر'**
+  String get hrLeaveUnpaid;
+
+  /// No description provided for @hrPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار الاعتماد'**
+  String get hrPending;
+
+  /// No description provided for @hrApproved.
+  ///
+  /// In ar, this message translates to:
+  /// **'معتمد'**
+  String get hrApproved;
+
+  /// No description provided for @hrRejected.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرفوض'**
+  String get hrRejected;
+
+  /// No description provided for @hrCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغي'**
+  String get hrCancelled;
+
+  /// No description provided for @hrShifts.
+  ///
+  /// In ar, this message translates to:
+  /// **'الورديات'**
+  String get hrShifts;
+
+  /// No description provided for @hrNewShift.
+  ///
+  /// In ar, this message translates to:
+  /// **'وردية جديدة'**
+  String get hrNewShift;
+
+  /// No description provided for @hrNoShifts.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا ورديات بعد.'**
+  String get hrNoShifts;
+
+  /// No description provided for @hrNoShift.
+  ///
+  /// In ar, this message translates to:
+  /// **'بلا وردية'**
+  String get hrNoShift;
+
+  /// No description provided for @hrShift.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوردية'**
+  String get hrShift;
+
+  /// No description provided for @hrShiftName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الوردية'**
+  String get hrShiftName;
+
+  /// No description provided for @hrStartsAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'تبدأ'**
+  String get hrStartsAt;
+
+  /// No description provided for @hrEndsAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنتهي'**
+  String get hrEndsAt;
+
+  /// No description provided for @hrLeaveBalance.
+  ///
+  /// In ar, this message translates to:
+  /// **'رصيد الإجازة {remaining} من {total}'**
+  String hrLeaveBalance(String remaining, String total);
+
+  /// No description provided for @hrHireDate.
+  ///
+  /// In ar, this message translates to:
+  /// **'تاريخ التعيين'**
+  String get hrHireDate;
+
+  /// No description provided for @hrInsured.
+  ///
+  /// In ar, this message translates to:
+  /// **'مؤمَّن عليه'**
+  String get hrInsured;
+
+  /// No description provided for @hrAllowanceName.
+  ///
+  /// In ar, this message translates to:
+  /// **'البدل'**
+  String get hrAllowanceName;
+
+  /// No description provided for @hrInsurable.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأميني'**
+  String get hrInsurable;
+
+  /// No description provided for @hrAddAllowance.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف بدلًا'**
+  String get hrAddAllowance;
+
+  /// No description provided for @hrYourRules.
+  ///
+  /// In ar, this message translates to:
+  /// **'لائحتك'**
+  String get hrYourRules;
+
+  /// No description provided for @hrGrace.
+  ///
+  /// In ar, this message translates to:
+  /// **'دقائق السماح'**
+  String get hrGrace;
+
+  /// No description provided for @hrTier1Upto.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأخير حتى (دقيقة)'**
+  String get hrTier1Upto;
+
+  /// No description provided for @hrTier1Fraction.
+  ///
+  /// In ar, this message translates to:
+  /// **'خصمه (من اليوم)'**
+  String get hrTier1Fraction;
+
+  /// No description provided for @hrTier2Fraction.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكثر من ذلك (من اليوم)'**
+  String get hrTier2Fraction;
+
+  /// No description provided for @hrAbsenceFraction.
+  ///
+  /// In ar, this message translates to:
+  /// **'خصم الغياب (أيام)'**
+  String get hrAbsenceFraction;
+
+  /// No description provided for @hrMonthlyCap.
+  ///
+  /// In ar, this message translates to:
+  /// **'سقف الخصم الشهري (أيام)'**
+  String get hrMonthlyCap;
+
+  /// No description provided for @hrOvertimeDayPct.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإضافي النهاري %'**
+  String get hrOvertimeDayPct;
+
+  /// No description provided for @hrOvertimeNightPct.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإضافي الليلي %'**
+  String get hrOvertimeNightPct;
+
+  /// No description provided for @hrNightFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'الليل من'**
+  String get hrNightFrom;
+
+  /// No description provided for @hrNightTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلى'**
+  String get hrNightTo;
+
+  /// No description provided for @hrDaysPerMonth.
+  ///
+  /// In ar, this message translates to:
+  /// **'أيام الشهر للحساب'**
+  String get hrDaysPerMonth;
+
+  /// No description provided for @hrHoursPerDay.
+  ///
+  /// In ar, this message translates to:
+  /// **'ساعات اليوم'**
+  String get hrHoursPerDay;
+
+  /// No description provided for @hrRestDays.
+  ///
+  /// In ar, this message translates to:
+  /// **'أيام الراحة الأسبوعية'**
+  String get hrRestDays;
+
+  /// No description provided for @hrSat.
+  ///
+  /// In ar, this message translates to:
+  /// **'سبت'**
+  String get hrSat;
+
+  /// No description provided for @hrSun.
+  ///
+  /// In ar, this message translates to:
+  /// **'أحد'**
+  String get hrSun;
+
+  /// No description provided for @hrMon.
+  ///
+  /// In ar, this message translates to:
+  /// **'إثنين'**
+  String get hrMon;
+
+  /// No description provided for @hrTue.
+  ///
+  /// In ar, this message translates to:
+  /// **'ثلاثاء'**
+  String get hrTue;
+
+  /// No description provided for @hrWed.
+  ///
+  /// In ar, this message translates to:
+  /// **'أربعاء'**
+  String get hrWed;
+
+  /// No description provided for @hrThu.
+  ///
+  /// In ar, this message translates to:
+  /// **'خميس'**
+  String get hrThu;
+
+  /// No description provided for @hrFri.
+  ///
+  /// In ar, this message translates to:
+  /// **'جمعة'**
+  String get hrFri;
+
+  /// No description provided for @hrHolidays.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجازات الرسمية {n}'**
+  String hrHolidays(int n);
+
+  /// No description provided for @hrHolidayName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الإجازة'**
+  String get hrHolidayName;
+
+  /// No description provided for @hrAddHoliday.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف'**
+  String get hrAddHoliday;
+
+  /// No description provided for @hrPayrollTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسير المرتبات {month}'**
+  String hrPayrollTitle(String month);
+
+  /// No description provided for @hrNewAdvance.
+  ///
+  /// In ar, this message translates to:
+  /// **'سلفة جديدة'**
+  String get hrNewAdvance;
+
+  /// No description provided for @hrBonusPenalty.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكافأة / جزاء'**
+  String get hrBonusPenalty;
+
+  /// No description provided for @hrGenerate.
+  ///
+  /// In ar, this message translates to:
+  /// **'احسب المسير'**
+  String get hrGenerate;
+
+  /// No description provided for @hrApproveLock.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتماد وإقفال الشهر'**
+  String get hrApproveLock;
+
+  /// No description provided for @hrPrintAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'طباعة الكشوف'**
+  String get hrPrintAll;
+
+  /// No description provided for @hrNoRunYet.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يُحسب مسير هذا الشهر بعد. اضغط «احسب المسير».'**
+  String get hrNoRunYet;
+
+  /// No description provided for @hrApprovedLocked.
+  ///
+  /// In ar, this message translates to:
+  /// **'معتمد ومقفل'**
+  String get hrApprovedLocked;
+
+  /// No description provided for @hrDraft.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسودة'**
+  String get hrDraft;
+
+  /// No description provided for @hrReviewTax.
+  ///
+  /// In ar, this message translates to:
+  /// **'دخل سنوي كبير: راجع الضريبة مع المحاسب'**
+  String get hrReviewTax;
+
+  /// No description provided for @hrGross.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي المرتبات'**
+  String get hrGross;
+
+  /// No description provided for @hrNetToPay.
+  ///
+  /// In ar, this message translates to:
+  /// **'صافي يُصرف'**
+  String get hrNetToPay;
+
+  /// No description provided for @hrInsuranceBoth.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأمينات (موظفون + صاحب العمل)'**
+  String get hrInsuranceBoth;
+
+  /// No description provided for @hrTaxToRemit.
+  ///
+  /// In ar, this message translates to:
+  /// **'ضرائب تُورَّد'**
+  String get hrTaxToRemit;
+
+  /// No description provided for @hrAllowances.
+  ///
+  /// In ar, this message translates to:
+  /// **'البدلات'**
+  String get hrAllowances;
+
+  /// No description provided for @hrLineBasic.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأساسي'**
+  String get hrLineBasic;
+
+  /// No description provided for @hrLineOvertime.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإضافي'**
+  String get hrLineOvertime;
+
+  /// No description provided for @hrLineBonus.
+  ///
+  /// In ar, this message translates to:
+  /// **'مكافأة'**
+  String get hrLineBonus;
+
+  /// No description provided for @hrLineAttendance.
+  ///
+  /// In ar, this message translates to:
+  /// **'خصم الحضور'**
+  String get hrLineAttendance;
+
+  /// No description provided for @hrLineAdvance.
+  ///
+  /// In ar, this message translates to:
+  /// **'قسط سلفة'**
+  String get hrLineAdvance;
+
+  /// No description provided for @hrLinePenalty.
+  ///
+  /// In ar, this message translates to:
+  /// **'جزاء'**
+  String get hrLinePenalty;
+
+  /// No description provided for @hrLineInsurance.
+  ///
+  /// In ar, this message translates to:
+  /// **'التأمينات'**
+  String get hrLineInsurance;
+
+  /// No description provided for @hrLineTax.
+  ///
+  /// In ar, this message translates to:
+  /// **'الضريبة'**
+  String get hrLineTax;
+
+  /// No description provided for @hrNet.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصافي'**
+  String get hrNet;
+
+  /// No description provided for @hrPaid.
+  ///
+  /// In ar, this message translates to:
+  /// **'صُرف'**
+  String get hrPaid;
+
+  /// No description provided for @hrNotPaidYet.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يُصرف بعد'**
+  String get hrNotPaidYet;
+
+  /// No description provided for @hrRecordPaid.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجّل الصرف'**
+  String get hrRecordPaid;
+
+  /// No description provided for @hrPaidOutsideHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'المرتب يُصرف خارج التطبيق؛ هنا نسجّله فقط.'**
+  String get hrPaidOutsideHint;
+
+  /// No description provided for @hrInstallments.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد الأقساط'**
+  String get hrInstallments;
+
+  /// No description provided for @hrAdvanceFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'تُخصم من مسير {month}'**
+  String hrAdvanceFrom(String month);
+
+  /// No description provided for @hrHowCalculated.
+  ///
+  /// In ar, this message translates to:
+  /// **'كيف حُسب {name}'**
+  String hrHowCalculated(String name);
+
+  /// No description provided for @hrEmployerInsurance.
+  ///
+  /// In ar, this message translates to:
+  /// **'حصة صاحب العمل في التأمينات: {amount}'**
+  String hrEmployerInsurance(String amount);
+
+  /// No description provided for @hrPayslipTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'كشف مرتب {month}'**
+  String hrPayslipTitle(String month);
+
+  /// No description provided for @hrItem.
+  ///
+  /// In ar, this message translates to:
+  /// **'البند'**
+  String get hrItem;
+
+  /// No description provided for @hrDetail.
+  ///
+  /// In ar, this message translates to:
+  /// **'التفصيل'**
+  String get hrDetail;
+
+  /// No description provided for @hrDeductions.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاستقطاعات'**
+  String get hrDeductions;
+
+  /// No description provided for @hrSignAccountant.
+  ///
+  /// In ar, this message translates to:
+  /// **'المحاسب'**
+  String get hrSignAccountant;
+
+  /// No description provided for @hrSignEmployee.
+  ///
+  /// In ar, this message translates to:
+  /// **'توقيع الموظف بالاستلام'**
+  String get hrSignEmployee;
+
+  /// No description provided for @hrMyWork.
+  ///
+  /// In ar, this message translates to:
+  /// **'حضوري ومرتبي'**
+  String get hrMyWork;
+
+  /// No description provided for @hrNewRequest.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب جديد'**
+  String get hrNewRequest;
+
+  /// No description provided for @hrRequestSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'أُرسل طلبك للمدير.'**
+  String get hrRequestSent;
+
+  /// No description provided for @hrDaysPresent.
+  ///
+  /// In ar, this message translates to:
+  /// **'يوم حضور'**
+  String get hrDaysPresent;
+
+  /// No description provided for @hrLateThisMonth.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأخير الشهر'**
+  String get hrLateThisMonth;
+
+  /// No description provided for @hrLeaveLeft.
+  ///
+  /// In ar, this message translates to:
+  /// **'رصيد إجازة'**
+  String get hrLeaveLeft;
+
+  /// No description provided for @hrMyRequests.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلباتي'**
+  String get hrMyRequests;
+
+  /// No description provided for @hrMyPayslips.
+  ///
+  /// In ar, this message translates to:
+  /// **'كشوف مرتبي'**
+  String get hrMyPayslips;
+
+  /// No description provided for @hrNoPayslips.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا كشوف بعد.'**
+  String get hrNoPayslips;
+
+  /// No description provided for @hrLeaveType.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع الإجازة'**
+  String get hrLeaveType;
+
+  /// No description provided for @hrFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'من'**
+  String get hrFrom;
+
+  /// No description provided for @hrTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلى'**
+  String get hrTo;
+
+  /// No description provided for @hrOvertimeHours.
+  ///
+  /// In ar, this message translates to:
+  /// **'ساعات الإضافي'**
+  String get hrOvertimeHours;
+
+  /// No description provided for @hrStaffToday.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموظفون اليوم'**
+  String get hrStaffToday;
+
+  /// No description provided for @hrStaffTodaySubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحضور، الطلبات، واعتماد المسير'**
+  String get hrStaffTodaySubtitle;
+
+  /// No description provided for @hrAwaitingYou.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار اعتمادك'**
+  String get hrAwaitingYou;
+
+  /// No description provided for @hrPayrollReady.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسير {month} جاهز للاعتماد'**
+  String hrPayrollReady(String month);
 }
 
 class _AppLocalizationsDelegate

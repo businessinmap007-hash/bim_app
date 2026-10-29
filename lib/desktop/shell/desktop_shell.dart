@@ -8,9 +8,11 @@ import '../../features/inventory/data/inventory_models.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/async_value_view.dart';
 import '../desktop_app.dart';
+import '../screens/attendance_page.dart';
 import '../screens/dashboard_page.dart';
 import '../screens/devices_page.dart';
 import '../screens/items_page.dart';
+import '../screens/payroll_page.dart';
 import '../screens/pos_page.dart';
 import '../screens/purchases_page.dart';
 import '../screens/receive_page.dart';
@@ -21,11 +23,11 @@ import '../sync/desktop_sync.dart';
 
 /// The desktop suite's screens. What a computer shows is what its ROLE allows (set by the owner on «الأجهزة») AND what
 /// the person signed in may do — the server checks the second again on every call.
-enum SuiteScreen { dashboard, items, recipes, purchases, receive, stocktake, pos, devices, settings }
+enum SuiteScreen { dashboard, items, recipes, purchases, receive, stocktake, pos, attendance, payroll, devices, settings }
 
 const _roleScreens = {
   'main': SuiteScreen.values,
-  'manager': [SuiteScreen.dashboard, SuiteScreen.items, SuiteScreen.recipes, SuiteScreen.purchases, SuiteScreen.receive, SuiteScreen.stocktake, SuiteScreen.pos, SuiteScreen.settings],
+  'manager': [SuiteScreen.dashboard, SuiteScreen.items, SuiteScreen.recipes, SuiteScreen.purchases, SuiteScreen.receive, SuiteScreen.stocktake, SuiteScreen.pos, SuiteScreen.attendance, SuiteScreen.payroll, SuiteScreen.settings],
   'warehouse': [SuiteScreen.dashboard, SuiteScreen.items, SuiteScreen.receive, SuiteScreen.stocktake, SuiteScreen.settings],
   'purchases': [SuiteScreen.dashboard, SuiteScreen.items, SuiteScreen.purchases, SuiteScreen.receive, SuiteScreen.settings],
   'cashier': [SuiteScreen.pos, SuiteScreen.settings],
@@ -38,6 +40,8 @@ Set<SuiteScreen> _byPerson(InvSettings s) {
   if (s.can('purchases') || s.can('purchase_approval')) out.addAll([SuiteScreen.dashboard, SuiteScreen.purchases]);
   if (s.can('purchases')) out.addAll([SuiteScreen.receive, SuiteScreen.items]);
   if (s.can('pos')) out.add(SuiteScreen.pos);
+  if (s.can('attendance')) out.add(SuiteScreen.attendance);
+  if (s.can('payroll')) out.addAll([SuiteScreen.attendance, SuiteScreen.payroll]);
   return out;
 }
 
@@ -95,15 +99,16 @@ class _DesktopShellState extends ConsumerState<DesktopShell> {
       value: settings,
       onRetry: () => ref.invalidate(invSettingsProvider),
       builder: (context, s) {
-        if (!s.available || !s.enabled) {
-          return Scaffold(appBar: AppBar(title: Text(l10n.suiteBrand)), body: const SettingsPage());
-        }
-
         final device = ref.watch(thisDeviceProvider).valueOrNull;
         final role = device?.screens != null
             ? device!.screens!.map((k) => SuiteScreen.values.where((v) => v.name == k).firstOrNull).whereType<SuiteScreen>().toSet()
             : (device == null ? SuiteScreen.values.toSet() : _roleScreens[device.role]!.toSet());
-        final allowed = SuiteScreen.values.where((v) => role.contains(v) && _byPerson(s).contains(v) && _byFeature(s).contains(v)).toList();
+        // attendance and payroll serve every business; the inventory screens only once inventory is switched on
+        final inventoryOn = s.available && s.enabled;
+        const hrScreens = {SuiteScreen.attendance, SuiteScreen.payroll, SuiteScreen.settings};
+        final allowed = SuiteScreen.values
+            .where((v) => role.contains(v) && _byPerson(s).contains(v) && (hrScreens.contains(v) || (inventoryOn && _byFeature(s).contains(v))))
+            .toList();
         final chosen = ref.watch(currentScreenProvider);
         final current = (chosen != null && allowed.contains(chosen)) ? chosen : allowed.first;
 
@@ -134,6 +139,8 @@ class _DesktopShellState extends ConsumerState<DesktopShell> {
         SuiteScreen.receive => const ReceivePage(),
         SuiteScreen.stocktake => const StocktakePage(),
         SuiteScreen.pos => const PosPage(),
+        SuiteScreen.attendance => const AttendancePage(),
+        SuiteScreen.payroll => const PayrollPage(),
         SuiteScreen.devices => const DevicesPage(),
         SuiteScreen.settings => const SettingsPage(),
       };
@@ -147,6 +154,8 @@ String suiteScreenLabel(AppLocalizations l10n, SuiteScreen s) => switch (s) {
       SuiteScreen.receive => l10n.suiteNavReceive,
       SuiteScreen.stocktake => l10n.suiteNavStocktake,
       SuiteScreen.pos => l10n.suiteNavPos,
+      SuiteScreen.attendance => l10n.hrAttendanceTitle,
+      SuiteScreen.payroll => l10n.hrNavPayroll,
       SuiteScreen.devices => l10n.suiteNavDevices,
       SuiteScreen.settings => l10n.suiteNavSettings,
     };
@@ -159,6 +168,8 @@ IconData _icon(SuiteScreen s) => switch (s) {
       SuiteScreen.receive => Icons.move_to_inbox_outlined,
       SuiteScreen.stocktake => Icons.fact_check_outlined,
       SuiteScreen.pos => Icons.point_of_sale_outlined,
+      SuiteScreen.attendance => Icons.badge_outlined,
+      SuiteScreen.payroll => Icons.payments_outlined,
       SuiteScreen.devices => Icons.lan_outlined,
       SuiteScreen.settings => Icons.settings_outlined,
     };
@@ -231,7 +242,8 @@ class _TopBar extends ConsumerWidget {
 
     return Column(
       children: [
-        if (!settings.subscription.writable)
+        // only a business that switched inventory on has a subscription to warn about
+        if (settings.enabled && !settings.subscription.writable)
           MaterialBanner(
             backgroundColor: const Color(0xFFF9E4DF),
             content: Text(l10n.suiteReadOnlyBanner, style: const TextStyle(color: Color(0xFFB93A22))),

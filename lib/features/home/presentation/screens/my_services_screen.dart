@@ -21,6 +21,7 @@ import '../../../service_requests/presentation/screens/my_requests_screen.dart';
 import '../../../service_requests/presentation/screens/ride_request_screen.dart';
 import '../../../table/presentation/screens/table_scan_screen.dart';
 import '../../../training/presentation/screens/training_plans_screen.dart';
+import '../../../hr/presentation/mobile/hr_screens.dart';
 import '../../../inventory/presentation/mobile/stock_screens.dart';
 import '../../../finance/presentation/screens/finance_screen.dart';
 
@@ -154,6 +155,16 @@ class MyServicesScreen extends StatelessWidget {
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => const StockScreen()),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.badge_outlined),
+                  title: Text(l10n.hrStaffToday),
+                  subtitle: Text(l10n.hrStaffTodaySubtitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const StaffApprovalsScreen()),
                   ),
                 ),
                 const Divider(height: 1),

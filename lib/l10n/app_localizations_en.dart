@@ -14419,4 +14419,419 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get suiteTestPrint => 'Test print';
+
+  @override
+  String get hrAttendanceTitle => 'Attendance';
+
+  @override
+  String get hrNavPayroll => 'Payroll';
+
+  @override
+  String get hrBoard => 'Month board';
+
+  @override
+  String get hrRequests => 'Requests';
+
+  @override
+  String get hrEmployeesShifts => 'Staff & shifts';
+
+  @override
+  String get hrRules => 'Rules & holidays';
+
+  @override
+  String get hrPresent => 'Present';
+
+  @override
+  String get hrLate => 'Late';
+
+  @override
+  String get hrAbsent => 'Absent';
+
+  @override
+  String get hrOnLeave => 'On leave';
+
+  @override
+  String get hrUnpaidLeave => 'Unpaid leave';
+
+  @override
+  String get hrRest => 'Day off';
+
+  @override
+  String get hrHoliday => 'Holiday';
+
+  @override
+  String get hrEarly => 'Left early';
+
+  @override
+  String get hrEmployee => 'Employee';
+
+  @override
+  String get hrEmployees => 'Staff';
+
+  @override
+  String get hrNoEmployees => 'No staff yet. Add them from «Staff» in the app.';
+
+  @override
+  String get hrMinutesShort => 'min';
+
+  @override
+  String get hrHoursShort => 'h';
+
+  @override
+  String get hrNightShort => 'night';
+
+  @override
+  String get hrOvertimeSuggested => 'Computed overtime';
+
+  @override
+  String get hrIn => 'In';
+
+  @override
+  String get hrOut => 'Out';
+
+  @override
+  String hrDeductionDays(String days) {
+    return '$days day(s) deducted';
+  }
+
+  @override
+  String get hrApproveOvertime => 'Approve the overtime';
+
+  @override
+  String get hrNoPending => 'No requests waiting.';
+
+  @override
+  String get hrApprove => 'Approve';
+
+  @override
+  String get hrKindLeave => 'Leave';
+
+  @override
+  String get hrKindCorrection => 'Punch correction';
+
+  @override
+  String get hrKindOvertime => 'Overtime';
+
+  @override
+  String get hrLeaveAnnual => 'Annual';
+
+  @override
+  String get hrLeaveCasual => 'Casual';
+
+  @override
+  String get hrLeaveSick => 'Sick';
+
+  @override
+  String get hrLeaveUnpaid => 'Unpaid';
+
+  @override
+  String get hrPending => 'Pending';
+
+  @override
+  String get hrApproved => 'Approved';
+
+  @override
+  String get hrRejected => 'Declined';
+
+  @override
+  String get hrCancelled => 'Cancelled';
+
+  @override
+  String get hrShifts => 'Shifts';
+
+  @override
+  String get hrNewShift => 'New shift';
+
+  @override
+  String get hrNoShifts => 'No shifts yet.';
+
+  @override
+  String get hrNoShift => 'No shift';
+
+  @override
+  String get hrShift => 'Shift';
+
+  @override
+  String get hrShiftName => 'Shift name';
+
+  @override
+  String get hrStartsAt => 'Starts';
+
+  @override
+  String get hrEndsAt => 'Ends';
+
+  @override
+  String hrLeaveBalance(String remaining, String total) {
+    return 'Leave $remaining of $total';
+  }
+
+  @override
+  String get hrHireDate => 'Hire date';
+
+  @override
+  String get hrInsured => 'Insured';
+
+  @override
+  String get hrAllowanceName => 'Allowance';
+
+  @override
+  String get hrInsurable => 'Insurable';
+
+  @override
+  String get hrAddAllowance => 'Add an allowance';
+
+  @override
+  String get hrYourRules => 'Your rules';
+
+  @override
+  String get hrGrace => 'Grace minutes';
+
+  @override
+  String get hrTier1Upto => 'Late up to (min)';
+
+  @override
+  String get hrTier1Fraction => 'Its deduction (of a day)';
+
+  @override
+  String get hrTier2Fraction => 'Beyond that (of a day)';
+
+  @override
+  String get hrAbsenceFraction => 'Absence deduction (days)';
+
+  @override
+  String get hrMonthlyCap => 'Monthly cap (days)';
+
+  @override
+  String get hrOvertimeDayPct => 'Day overtime %';
+
+  @override
+  String get hrOvertimeNightPct => 'Night overtime %';
+
+  @override
+  String get hrNightFrom => 'Night from';
+
+  @override
+  String get hrNightTo => 'To';
+
+  @override
+  String get hrDaysPerMonth => 'Days per month';
+
+  @override
+  String get hrHoursPerDay => 'Hours per day';
+
+  @override
+  String get hrRestDays => 'Weekly days off';
+
+  @override
+  String get hrSat => 'Sat';
+
+  @override
+  String get hrSun => 'Sun';
+
+  @override
+  String get hrMon => 'Mon';
+
+  @override
+  String get hrTue => 'Tue';
+
+  @override
+  String get hrWed => 'Wed';
+
+  @override
+  String get hrThu => 'Thu';
+
+  @override
+  String get hrFri => 'Fri';
+
+  @override
+  String hrHolidays(int n) {
+    return 'Holidays $n';
+  }
+
+  @override
+  String get hrHolidayName => 'Holiday name';
+
+  @override
+  String get hrAddHoliday => 'Add';
+
+  @override
+  String hrPayrollTitle(String month) {
+    return 'Payroll $month';
+  }
+
+  @override
+  String get hrNewAdvance => 'New advance';
+
+  @override
+  String get hrBonusPenalty => 'Bonus / penalty';
+
+  @override
+  String get hrGenerate => 'Calculate payroll';
+
+  @override
+  String get hrApproveLock => 'Approve and lock the month';
+
+  @override
+  String get hrPrintAll => 'Print payslips';
+
+  @override
+  String get hrNoRunYet =>
+      'No payroll for this month yet. Press «Calculate payroll».';
+
+  @override
+  String get hrApprovedLocked => 'Approved and locked';
+
+  @override
+  String get hrDraft => 'Draft';
+
+  @override
+  String get hrReviewTax =>
+      'High annual income: review the tax with your accountant';
+
+  @override
+  String get hrGross => 'Gross';
+
+  @override
+  String get hrNetToPay => 'Net to pay';
+
+  @override
+  String get hrInsuranceBoth => 'Insurance (staff + employer)';
+
+  @override
+  String get hrTaxToRemit => 'Tax to remit';
+
+  @override
+  String get hrAllowances => 'Allowances';
+
+  @override
+  String get hrLineBasic => 'Basic';
+
+  @override
+  String get hrLineOvertime => 'Overtime';
+
+  @override
+  String get hrLineBonus => 'Bonus';
+
+  @override
+  String get hrLineAttendance => 'Attendance deduction';
+
+  @override
+  String get hrLineAdvance => 'Advance installment';
+
+  @override
+  String get hrLinePenalty => 'Penalty';
+
+  @override
+  String get hrLineInsurance => 'Social insurance';
+
+  @override
+  String get hrLineTax => 'Wage tax';
+
+  @override
+  String get hrNet => 'Net';
+
+  @override
+  String get hrPaid => 'Paid';
+
+  @override
+  String get hrNotPaidYet => 'Not paid yet';
+
+  @override
+  String get hrRecordPaid => 'Record payment';
+
+  @override
+  String get hrPaidOutsideHint =>
+      'The salary is paid outside the app; this only records it.';
+
+  @override
+  String get hrInstallments => 'Installments';
+
+  @override
+  String hrAdvanceFrom(String month) {
+    return 'Deducted from the $month payroll';
+  }
+
+  @override
+  String hrHowCalculated(String name) {
+    return 'How $name was calculated';
+  }
+
+  @override
+  String hrEmployerInsurance(String amount) {
+    return 'Employer\'s insurance share: $amount';
+  }
+
+  @override
+  String hrPayslipTitle(String month) {
+    return 'Payslip $month';
+  }
+
+  @override
+  String get hrItem => 'Item';
+
+  @override
+  String get hrDetail => 'Detail';
+
+  @override
+  String get hrDeductions => 'Deductions';
+
+  @override
+  String get hrSignAccountant => 'Accountant';
+
+  @override
+  String get hrSignEmployee => 'Employee\'s receipt signature';
+
+  @override
+  String get hrMyWork => 'My attendance & pay';
+
+  @override
+  String get hrNewRequest => 'New request';
+
+  @override
+  String get hrRequestSent => 'Your request was sent to your manager.';
+
+  @override
+  String get hrDaysPresent => 'Days present';
+
+  @override
+  String get hrLateThisMonth => 'Late this month';
+
+  @override
+  String get hrLeaveLeft => 'Leave left';
+
+  @override
+  String get hrMyRequests => 'My requests';
+
+  @override
+  String get hrMyPayslips => 'My payslips';
+
+  @override
+  String get hrNoPayslips => 'No payslips yet.';
+
+  @override
+  String get hrLeaveType => 'Leave type';
+
+  @override
+  String get hrFrom => 'From';
+
+  @override
+  String get hrTo => 'To';
+
+  @override
+  String get hrOvertimeHours => 'Overtime hours';
+
+  @override
+  String get hrStaffToday => 'Staff today';
+
+  @override
+  String get hrStaffTodaySubtitle =>
+      'Attendance, requests and approving payroll';
+
+  @override
+  String get hrAwaitingYou => 'Awaiting your approval';
+
+  @override
+  String hrPayrollReady(String month) {
+    return 'The $month payroll is ready to approve';
+  }
 }
