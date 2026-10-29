@@ -268,10 +268,10 @@ class SchedulesApi {
   }
 
   /// Taken from the sender: the code he shows as a QR (scanned) or reads out (typed).
-  Future<TripParcel> loadParcel(int id, String code, {bool cashCollected = false}) async {
+  Future<TripParcel> loadParcel(int id, String code, {bool? cashCollected}) async {
     final data = await _client.post(
       '/business/schedules/parcels/$id/load',
-      data: {'code': code, if (cashCollected) 'cash_collected': true},
+      data: {'code': code, 'cash_collected': ?cashCollected},
     ) as Map<String, dynamic>;
 
     return TripParcel.fromJson(data['parcel'] as Map<String, dynamic>);
@@ -283,10 +283,10 @@ class SchedulesApi {
   Future<TripParcel> rejectParcel(int id) => _parcelAction('/business/schedules/parcels/$id/reject');
 
   /// Handed over against the code the receiver told the driver.
-  Future<TripParcel> deliverParcel(int id, String code, {bool cashCollected = false}) async {
+  Future<TripParcel> deliverParcel(int id, String code, {bool? cashCollected}) async {
     final data = await _client.post(
       '/business/schedules/parcels/$id/deliver',
-      data: {'code': code, if (cashCollected) 'cash_collected': true},
+      data: {'code': code, 'cash_collected': ?cashCollected},
     ) as Map<String, dynamic>;
 
     return TripParcel.fromJson(data['parcel'] as Map<String, dynamic>);

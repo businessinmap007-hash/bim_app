@@ -383,7 +383,8 @@ class _CarrierParcelsScreenState extends ConsumerState<CarrierParcelsScreen> {
     await _run(() => ref.read(schedulesApiProvider).priceParcel(p.id, price: result.price, seats: result.seats, expectedArrivalAt: result.arrival));
   }
 
-  /// Asks for the code (scan or type) and — when this is the moment the cash changes hands — whether it was collected.
+  /// Asks for the code (scan or type); the server checks it first, and only a right code — when this is the moment the
+  /// cash changes hands — comes back asking whether it was collected (a wrong code is never met with a question about money).
   Future<void> _handover(TripParcel p, {required bool pickup}) async {
     final l10n = AppLocalizations.of(context)!;
 
@@ -394,10 +395,17 @@ class _CarrierParcelsScreenState extends ConsumerState<CarrierParcelsScreen> {
     );
     if (code == null || !mounted) return;
 
-    var cash = false;
-    final payerNow = pickup ? p.payer == 'sender' : p.payer == 'receiver';
+    final api = ref.read(schedulesApiProvider);
+    Future<TripParcel> send(bool? cash) => pickup ? api.loadParcel(p.id, code, cashCollected: cash) : api.deliverParcel(p.id, code, cashCollected: cash);
 
-    if (payerNow && p.price != null && p.price! > 0 && !p.isPaid) {
+    bool? cash;
+    try {
+      await send(null);
+    } on ApiException catch (e) {
+      if (e.firstErrorFor('cash_collected') == null || !mounted) {
+        if (mounted) _toast(context, e);
+        return;
+      }
       final collected = await showDialog<bool>(
         context: context,
         builder: (dialogContext) => AlertDialog(
@@ -409,14 +417,19 @@ class _CarrierParcelsScreenState extends ConsumerState<CarrierParcelsScreen> {
           ],
         ),
       );
-      cash = collected == true;
+      if (collected == null) return;
+      cash = collected;
+    } catch (e) {
+      if (mounted) _toast(context, e);
+      return;
     }
 
-    await _run(() {
-      final api = ref.read(schedulesApiProvider);
-
-      return pickup ? api.loadParcel(p.id, code, cashCollected: cash) : api.deliverParcel(p.id, code, cashCollected: cash);
-    });
+    // no money changed hands at this handover: the first call already did it
+    if (cash == null) {
+      await _load();
+      return;
+    }
+    await _run(() => send(cash));
   }
 
   Future<void> _dispute(TripParcel p) async {
