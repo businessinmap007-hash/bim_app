@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+
 import '../../../core/env/env.dart';
 import '../../../core/network/api_client.dart';
 import '../../../core/network/paginated.dart';
@@ -220,12 +222,16 @@ class SchedulesApi {
     String? receiverName,
     String? receiverPhone,
     String payer = 'receiver',
+    bool sealed = false,
+    String? sealNumber,
   }) async {
     final data = await _client.post(
       '/schedules/$scheduleId/parcels',
       data: {
         'description': description,
         'payer': payer,
+        'sealed': sealed,
+        if (sealNumber != null && sealNumber.isNotEmpty) 'seal_number': sealNumber,
         'receiver_user_id': ?receiverUserId,
         if (receiverName != null && receiverName.isNotEmpty) 'receiver_name': receiverName,
         if (receiverPhone != null && receiverPhone.isNotEmpty) 'receiver_phone': receiverPhone,
@@ -268,10 +274,12 @@ class SchedulesApi {
   }
 
   /// Taken from the sender: the code he shows as a QR (scanned) or reads out (typed).
-  Future<TripParcel> loadParcel(int id, String code, {bool? cashCollected}) async {
+  /// A sealed parcel goes with the camera photo of its sealed bag (multipart).
+  Future<TripParcel> loadParcel(int id, String code, {bool? cashCollected, String? sealPhotoPath}) async {
+    final fields = <String, dynamic>{'code': code, 'cash_collected': ?cashCollected};
     final data = await _client.post(
       '/business/schedules/parcels/$id/load',
-      data: {'code': code, 'cash_collected': ?cashCollected},
+      data: sealPhotoPath == null ? fields : FormData.fromMap({...fields, 'seal_photo': await MultipartFile.fromFile(sealPhotoPath)}),
     ) as Map<String, dynamic>;
 
     return TripParcel.fromJson(data['parcel'] as Map<String, dynamic>);
@@ -282,11 +290,14 @@ class SchedulesApi {
       _client.post('/schedules/parcels/$id/disputes', data: {'reason_code': reasonCode, if (reasonText != null && reasonText.isNotEmpty) 'reason_text': reasonText});
   Future<TripParcel> rejectParcel(int id) => _parcelAction('/business/schedules/parcels/$id/reject');
 
+  /// The driver refuses an accepted parcel at pickup: it is not in a sealed bag.
+  Future<TripParcel> refuseUnsealedParcel(int id) => _parcelAction('/business/schedules/parcels/$id/refuse-unsealed');
+
   /// Handed over against the code the receiver told the driver.
-  Future<TripParcel> deliverParcel(int id, String code, {bool? cashCollected}) async {
+  Future<TripParcel> deliverParcel(int id, String code, {bool? cashCollected, bool? sealIntact}) async {
     final data = await _client.post(
       '/business/schedules/parcels/$id/deliver',
-      data: {'code': code, 'cash_collected': ?cashCollected},
+      data: {'code': code, 'cash_collected': ?cashCollected, 'seal_intact': ?sealIntact},
     ) as Map<String, dynamic>;
 
     return TripParcel.fromJson(data['parcel'] as Map<String, dynamic>);

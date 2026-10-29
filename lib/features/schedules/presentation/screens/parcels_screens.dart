@@ -1,3 +1,5 @@
+import '../../../../shared/widgets/full_screen_gallery.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -61,7 +63,9 @@ class _ParcelRequestSheetState extends ConsumerState<_ParcelRequestSheet> {
   final _phone = TextEditingController();
   int? _receiverUserId;
   String? _receiverLabel;
+  final _sealNumber = TextEditingController();
   String _payer = 'receiver';
+  bool _sealed = false;
   bool _busy = false;
 
   @override
@@ -69,12 +73,17 @@ class _ParcelRequestSheetState extends ConsumerState<_ParcelRequestSheet> {
     _description.dispose();
     _name.dispose();
     _phone.dispose();
+    _sealNumber.dispose();
     super.dispose();
   }
 
   Future<void> _send() async {
     final l10n = AppLocalizations.of(context)!;
     if (_description.text.trim().isEmpty) return;
+    if (!_sealed) {
+      _toast(context, ApiException(message: l10n.parcelSealRequired));
+      return;
+    }
     if (_receiverUserId == null && (_name.text.trim().isEmpty || _phone.text.trim().isEmpty)) {
       _toast(context, ApiException(message: l10n.parcelReceiverRequired));
       return;
@@ -90,6 +99,8 @@ class _ParcelRequestSheetState extends ConsumerState<_ParcelRequestSheet> {
         receiverName: _receiverUserId == null ? _name.text.trim() : null,
         receiverPhone: _receiverUserId == null ? _phone.text.trim() : null,
         payer: _payer,
+        sealed: _sealed,
+        sealNumber: _sealNumber.text.trim(),
       );
       if (!mounted) return;
       Navigator.of(context).pop();
@@ -177,10 +188,20 @@ class _ParcelRequestSheetState extends ConsumerState<_ParcelRequestSheet> {
                 selected: {_payer},
                 onSelectionChanged: (v) => setState(() => _payer = v.first),
               ),
+              // «الكيس المختوم»: the parcel travels in a bag carrying the sender's mark that is destroyed when opened
+              const SizedBox(height: 10),
+              CheckboxListTile(
+                value: _sealed,
+                onChanged: (v) => setState(() => _sealed = v ?? false),
+                contentPadding: EdgeInsets.zero,
+                controlAffinity: ListTileControlAffinity.leading,
+                title: Text(l10n.parcelSealConfirm),
+              ),
+              TextField(controller: _sealNumber, decoration: InputDecoration(labelText: l10n.parcelSealNumber)),
               const SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,
-                child: FilledButton(onPressed: _busy ? null : _send, child: Text(l10n.parcelSendRequest)),
+                child: FilledButton(onPressed: _busy || !_sealed ? null : _send, child: Text(l10n.parcelSendRequest)),
               ),
             ],
           ),
@@ -293,6 +314,7 @@ class _MyParcelsScreenState extends ConsumerState<MyParcelsScreen> {
                             Text(l10n.parcelExpectedArrival(_when(p.expectedArrivalAt!)), style: Theme.of(context).textTheme.bodySmall),
                           if (p.deliveredAt != null)
                             Text(l10n.parcelDeliveredAt(_when(p.deliveredAt!)), style: Theme.of(context).textTheme.bodySmall),
+                          _SealLine(seal: p.seal),
                           const SizedBox(height: 8),
                           Wrap(
                             spacing: 8,
@@ -388,6 +410,49 @@ class _CarrierParcelsScreenState extends ConsumerState<CarrierParcelsScreen> {
   Future<void> _handover(TripParcel p, {required bool pickup}) async {
     final l10n = AppLocalizations.of(context)!;
 
+    // «الكيس المختوم»: at pickup a camera photo of the sealed bag (or refuse it); at delivery the receiver's word on the seal
+    String? sealPhoto;
+    bool? sealIntact;
+    if (p.seal.sealed && pickup) {
+      final choice = await showDialog<String>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          title: Text(l10n.parcelSealPhotoTitle),
+          content: Text(l10n.parcelSealPhotoBody),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(dialogContext, 'refuse'), child: Text(l10n.parcelRefuseUnsealed)),
+            FilledButton.icon(
+              onPressed: () => Navigator.pop(dialogContext, 'photo'),
+              icon: const Icon(Icons.photo_camera_outlined),
+              label: Text(l10n.parcelSealTakePhoto),
+            ),
+          ],
+        ),
+      );
+      if (choice == 'refuse') {
+        await _run(() => ref.read(schedulesApiProvider).refuseUnsealedParcel(p.id));
+        return;
+      }
+      if (choice != 'photo') return;
+      final shot = await ImagePicker().pickImage(source: ImageSource.camera, maxWidth: 1600, maxHeight: 1600, imageQuality: 75);
+      if (shot == null || !mounted) return;
+      sealPhoto = shot.path;
+    }
+    if (p.seal.sealed && !pickup) {
+      sealIntact = await showDialog<bool>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          title: Text(l10n.parcelSealAskTitle),
+          content: Text(l10n.parcelSealAskBody),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(dialogContext, false), child: Text(l10n.parcelSealBroken)),
+            FilledButton(onPressed: () => Navigator.pop(dialogContext, true), child: Text(l10n.parcelSealIntact)),
+          ],
+        ),
+      );
+      if (sealIntact == null || !mounted) return;
+    }
+
     final code = await askHandoverCode(
       context,
       title: pickup ? l10n.parcelPickupTitle : l10n.parcelDeliverTitle,
@@ -396,7 +461,9 @@ class _CarrierParcelsScreenState extends ConsumerState<CarrierParcelsScreen> {
     if (code == null || !mounted) return;
 
     final api = ref.read(schedulesApiProvider);
-    Future<TripParcel> send(bool? cash) => pickup ? api.loadParcel(p.id, code, cashCollected: cash) : api.deliverParcel(p.id, code, cashCollected: cash);
+    Future<TripParcel> send(bool? cash) => pickup
+        ? api.loadParcel(p.id, code, cashCollected: cash, sealPhotoPath: sealPhoto)
+        : api.deliverParcel(p.id, code, cashCollected: cash, sealIntact: sealIntact);
 
     bool? cash;
     try {
@@ -498,6 +565,7 @@ class _CarrierParcelsScreenState extends ConsumerState<CarrierParcelsScreen> {
                             Text(l10n.parcelExpectedArrival(_when(p.expectedArrivalAt!)), style: Theme.of(context).textTheme.bodySmall),
                           if (p.deliveredAt != null)
                             Text(l10n.parcelDeliveredAt(_when(p.deliveredAt!)), style: Theme.of(context).textTheme.bodySmall),
+                          _SealLine(seal: p.seal),
                           const SizedBox(height: 8),
                           Wrap(
                             spacing: 8,
@@ -606,6 +674,51 @@ class _ParcelPriceDialogState extends State<_ParcelPriceDialog> {
           child: Text(l10n.commonSave),
         ),
       ],
+    );
+  }
+}
+
+/// «الكيس المختوم» on a parcel card: sealed (and its number), the driver's photo of the bag, and what the receiver said of the
+/// seal — or that the driver refused it unsealed.
+class _SealLine extends StatelessWidget {
+  final ParcelSeal seal;
+  const _SealLine({required this.seal});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final small = Theme.of(context).textTheme.bodySmall;
+    if (seal.refusedUnsealed) {
+      return Text(l10n.parcelRefusedUnsealed, style: small?.copyWith(color: Theme.of(context).colorScheme.error));
+    }
+    if (!seal.sealed) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 4),
+      child: Row(
+        children: [
+          const Icon(Icons.lock_outline, size: 16),
+          const SizedBox(width: 4),
+          Expanded(
+            child: Text(
+              [
+                (seal.number ?? '').isNotEmpty ? l10n.parcelSealedNumber(seal.number!) : l10n.parcelSealed,
+                if (seal.state == 'intact') l10n.parcelSealIntactState,
+                if (seal.state == 'broken') l10n.parcelSealBrokenState,
+              ].join(' · '),
+              style: seal.state == 'broken' ? small?.copyWith(color: Theme.of(context).colorScheme.error) : small,
+            ),
+          ),
+          if (seal.photoUrl != null)
+            InkWell(
+              onTap: () => FullScreenGallery.show(context, urls: [seal.photoUrl!]),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(6),
+                child: Image.network(seal.photoUrl!, width: 40, height: 40, fit: BoxFit.cover, errorBuilder: (_, _, _) => const Icon(Icons.image_outlined)),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

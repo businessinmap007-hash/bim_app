@@ -46,6 +46,9 @@ class TripParcel {
 
   final DateTime? deliveredAt;
 
+  /// «الكيس المختوم»: confirmed by the sender, photographed by the driver at pickup, checked by the receiver at delivery
+  final ParcelSeal seal;
+
   const TripParcel({
     required this.id,
     required this.tripScheduleId,
@@ -68,6 +71,7 @@ class TripParcel {
     this.expectedArrivalAt,
     this.pickedUpAt,
     this.deliveredAt,
+    this.seal = const ParcelSeal(),
   });
 
   bool get isOpenForSender => status == requested || status == priced || status == accepted;
@@ -103,6 +107,31 @@ class TripParcel {
       expectedArrivalAt: json['expected_arrival_at'] != null ? EgyptTime.tryParse(json['expected_arrival_at'] as String) : null,
       pickedUpAt: json['picked_up_at'] != null ? EgyptTime.tryParse(json['picked_up_at'] as String) : null,
       deliveredAt: json['delivered_at'] != null ? EgyptTime.tryParse(json['delivered_at'] as String) : null,
+      seal: ParcelSeal.fromJson(json['seal']),
     );
   }
+}
+
+/// «الكيس المختوم» of a parcel: the sender says it is in a bag carrying his mark that is destroyed when opened; the driver's camera
+/// photo of the bag at pickup ([photoUrl], a signed link); what the receiver said of the seal at delivery ([state]).
+class ParcelSeal {
+  final bool sealed;
+  final String? number;
+  final String? photoUrl;
+
+  /// `intact` · `broken` (a dispute was opened) · null before delivery
+  final String? state;
+  final bool refusedUnsealed;
+
+  const ParcelSeal({this.sealed = false, this.number, this.photoUrl, this.state, this.refusedUnsealed = false});
+
+  static ParcelSeal fromJson(Object? json) => json is Map<String, dynamic>
+      ? ParcelSeal(
+          sealed: json['sealed'] == true,
+          number: json['number'] as String?,
+          photoUrl: json['photo_url'] as String?,
+          state: json['state'] as String?,
+          refusedUnsealed: json['refused_unsealed'] == true,
+        )
+      : const ParcelSeal();
 }
