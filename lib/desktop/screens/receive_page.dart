@@ -5,6 +5,8 @@ import '../../app/theme/app_colors.dart';
 import '../../features/inventory/application/inventory_providers.dart';
 import '../../features/inventory/data/inventory_models.dart';
 import '../../l10n/app_localizations.dart';
+import '../desktop_app.dart';
+import '../print/suite_print.dart';
 import '../sync/desktop_sync.dart';
 import 'common.dart';
 import 'items_page.dart';
@@ -57,6 +59,28 @@ class _ReceivePageState extends ConsumerState<ReceivePage> {
   final List<_Line> _lines = [];
   int? _loadedFor = -1;
   bool _busy = false;
+
+  /// The last confirmed receipt, kept for «طباعة إذن الاستلام».
+  ({String number, InvPurchaseOrder? order, List<List<String>> rows, bool lots})? _note;
+
+  Future<void> _printNote() async {
+    final note = _note;
+    if (note == null) return;
+    final l10n = AppLocalizations.of(context)!;
+    final pdf = await SuitePrint.document(
+      businessName: ref.read(suiteBusinessProvider)?.name ?? '',
+      title: l10n.suiteReceivingNote(note.number),
+      facts: [
+        if (note.order != null) (l10n.suiteAgainstOrder, '#${note.order!.number}'),
+        if (note.order?.supplier != null) (l10n.suiteSupplier, note.order!.supplier!.name),
+        (l10n.suiteWhen, MaterialLocalizations.of(context).formatMediumDate(DateTime.now())),
+      ],
+      headers: [l10n.suiteItem, l10n.suiteUnit, l10n.suiteReceivedNow, l10n.suiteDamaged, if (note.lots) l10n.suiteLot, if (note.lots) l10n.suiteExpiry],
+      rows: note.rows,
+      signatures: [l10n.suiteSignReceivedBy, l10n.suiteSignSupplier],
+    );
+    await ref.read(suitePrintProvider).print(pdf, receipt: false, name: 'receiving-${note.number}');
+  }
 
   @override
   void dispose() {
@@ -138,11 +162,19 @@ class _ReceivePageState extends ConsumerState<ReceivePage> {
     if (lines.isEmpty) return;
     setState(() => _busy = true);
     final store = ref.read(suiteStoreProvider);
-    await suiteRun(context, () => ref.read(inventoryApiProvider).receive(purchaseOrderId: orderId, lines: lines, deviceUuid: store.deviceUuid));
+    final orders = ref.read(_openOrdersProvider).valueOrNull ?? const <InvPurchaseOrder>[];
+    final po = orders.where((o) => o.id == orderId).firstOrNull;
+    final rows = [
+      for (final l in _lines)
+        if ((parseNum(l.qty.text) ?? 0) > 0) [l.name, l.unitName, l.qty.text.trim(), l.damaged.text.trim(), if (lots) l.lot.text.trim(), if (lots) l.expiry.text.trim()],
+    ];
+    final result = await suiteRun(context, () => ref.read(inventoryApiProvider).receive(purchaseOrderId: orderId, lines: lines, deviceUuid: store.deviceUuid));
     if (!mounted) return;
+    final receipt = (result as Map<String, dynamic>?)?['receipt'] as Map<String, dynamic>?;
     setState(() {
       _busy = false;
       _loadedFor = -1;
+      _note = (number: receipt?['number']?.toString() ?? '—', order: po, rows: rows, lots: lots);
     });
     ref.invalidate(_openOrdersProvider);
     ref.invalidate(suiteItemsProvider);
@@ -222,11 +254,15 @@ class _ReceivePageState extends ConsumerState<ReceivePage> {
           const SizedBox(height: 8),
           Align(
             alignment: AlignmentDirectional.centerStart,
-            child: FilledButton.icon(
-              icon: const Icon(Icons.check),
-              label: Text(l10n.suiteConfirmReceipt),
-              onPressed: _busy ? null : () => _confirm(orderId, lots),
-            ),
+            child: Wrap(spacing: 8, children: [
+              FilledButton.icon(
+                icon: const Icon(Icons.check),
+                label: Text(l10n.suiteConfirmReceipt),
+                onPressed: _busy ? null : () => _confirm(orderId, lots),
+              ),
+              if (_note != null)
+                OutlinedButton.icon(icon: const Icon(Icons.print_outlined), label: Text(l10n.suitePrintReceivingNote), onPressed: _printNote),
+            ]),
           ),
         ],
       ),

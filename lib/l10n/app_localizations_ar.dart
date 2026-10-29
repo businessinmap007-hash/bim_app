@@ -9523,6 +9523,61 @@ class AppLocalizationsAr extends AppLocalizations {
   String get parcelSendRequest => 'إرسال الطلب';
 
   @override
+  String get parcelSealConfirm =>
+      'الشحنة مغلّفة في كيس مختوم بعلامتي، يتلف عند فتحه';
+
+  @override
+  String get parcelSealNumber => 'رقم الختم (اختياري)';
+
+  @override
+  String get parcelSealRequired =>
+      'غلّف الشحنة في كيس مختوم بعلامتك، ثم أكّد ذلك.';
+
+  @override
+  String get parcelSealPhotoTitle => 'صوّر الكيس المختوم';
+
+  @override
+  String get parcelSealPhotoBody =>
+      'صوّر الكيس بالكاميرا قبل التحميل؛ الصورة دليل على حالته عند الاستلام. لو الكيس غير مختوم، ارفض الشحنة.';
+
+  @override
+  String get parcelSealTakePhoto => 'التقاط صورة';
+
+  @override
+  String get parcelRefuseUnsealed => 'غير مختومة — رفض';
+
+  @override
+  String get parcelSealAskTitle => 'هل ختم الكيس سليم؟';
+
+  @override
+  String get parcelSealAskBody =>
+      'اسأل المستلم قبل التسليم. لو الختم مفتوح، تُسلَّم الشحنة ويُفتح نزاع تلقائيًا.';
+
+  @override
+  String get parcelSealIntact => 'سليم';
+
+  @override
+  String get parcelSealBroken => 'مفتوح';
+
+  @override
+  String get parcelSealed => 'مختومة';
+
+  @override
+  String parcelSealedNumber(String number) {
+    return 'مختومة · رقم $number';
+  }
+
+  @override
+  String get parcelSealIntactState => 'الختم سليم عند التسليم';
+
+  @override
+  String get parcelSealBrokenState =>
+      'الختم كان مفتوحًا عند التسليم — فُتح نزاع';
+
+  @override
+  String get parcelRefusedUnsealed => 'رفضها السائق: غير مختومة';
+
+  @override
   String get parcelRequestSent => 'أُرسل طلب الشحنة. سيحدد السائق سعرها.';
 
   @override
@@ -14182,4 +14237,63 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get suiteClear => 'مسح القائمة';
+
+  @override
+  String get suiteReceiptTitle => 'إيصال بيع';
+
+  @override
+  String get suiteReceiptFooter => 'شكرًا لزيارتكم — الدفع نقدًا';
+
+  @override
+  String get suiteReceiptNumber => 'رقم الفاتورة';
+
+  @override
+  String get suiteChangeLabel => 'الباقي';
+
+  @override
+  String get suitePrint => 'طباعة';
+
+  @override
+  String get suitePrintFailed => 'تعذرت الطباعة. تأكد من الطابعة في الإعدادات.';
+
+  @override
+  String get suiteStatus => 'الحالة';
+
+  @override
+  String get suiteSignPreparedBy => 'أعدّه';
+
+  @override
+  String get suiteSignApprovedBy => 'اعتمده';
+
+  @override
+  String get suiteSignSupplier => 'المورد';
+
+  @override
+  String get suiteSignReceivedBy => 'المستلم';
+
+  @override
+  String suiteReceivingNote(String no) {
+    return 'إذن استلام #$no';
+  }
+
+  @override
+  String get suitePrintReceivingNote => 'طباعة إذن الاستلام';
+
+  @override
+  String get suitePrinting => 'الطباعة على هذا الجهاز';
+
+  @override
+  String get suitePrintDialog => 'نافذة الطباعة (أختار كل مرة)';
+
+  @override
+  String get suiteReceiptPrinter => 'طابعة الإيصالات (رول 80 مم)';
+
+  @override
+  String get suiteDocumentPrinter => 'طابعة المستندات (A4)';
+
+  @override
+  String get suiteAutoReceipt => 'اطبع الإيصال تلقائيًا بعد كل بيع';
+
+  @override
+  String get suiteTestPrint => 'طباعة تجريبية';
 }

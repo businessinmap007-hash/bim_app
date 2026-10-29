@@ -9587,6 +9587,61 @@ class AppLocalizationsEn extends AppLocalizations {
   String get parcelSendRequest => 'Send the request';
 
   @override
+  String get parcelSealConfirm =>
+      'The parcel is packed in a sealed bag carrying my mark, destroyed when opened';
+
+  @override
+  String get parcelSealNumber => 'Seal number (optional)';
+
+  @override
+  String get parcelSealRequired =>
+      'Pack the parcel in a sealed bag carrying your mark, then confirm it.';
+
+  @override
+  String get parcelSealPhotoTitle => 'Photograph the sealed bag';
+
+  @override
+  String get parcelSealPhotoBody =>
+      'Take a camera photo of the bag before loading: it proves its state at pickup. If the bag is not sealed, refuse the parcel.';
+
+  @override
+  String get parcelSealTakePhoto => 'Take a photo';
+
+  @override
+  String get parcelRefuseUnsealed => 'Not sealed — refuse';
+
+  @override
+  String get parcelSealAskTitle => 'Is the bag\'s seal intact?';
+
+  @override
+  String get parcelSealAskBody =>
+      'Ask the receiver before handing it over. If the seal is open, the parcel is handed over and a dispute opens at once.';
+
+  @override
+  String get parcelSealIntact => 'Intact';
+
+  @override
+  String get parcelSealBroken => 'Open';
+
+  @override
+  String get parcelSealed => 'Sealed';
+
+  @override
+  String parcelSealedNumber(String number) {
+    return 'Sealed · no. $number';
+  }
+
+  @override
+  String get parcelSealIntactState => 'Seal intact at delivery';
+
+  @override
+  String get parcelSealBrokenState =>
+      'The seal was open at delivery — a dispute was opened';
+
+  @override
+  String get parcelRefusedUnsealed => 'Refused by the driver: not sealed';
+
+  @override
   String get parcelRequestSent =>
       'The parcel request was sent. The driver will price it.';
 
@@ -14303,4 +14358,65 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get suiteClear => 'Clear the list';
+
+  @override
+  String get suiteReceiptTitle => 'Sales receipt';
+
+  @override
+  String get suiteReceiptFooter => 'Thank you for your visit — paid in cash';
+
+  @override
+  String get suiteReceiptNumber => 'Invoice no.';
+
+  @override
+  String get suiteChangeLabel => 'Change';
+
+  @override
+  String get suitePrint => 'Print';
+
+  @override
+  String get suitePrintFailed =>
+      'Printing failed. Check the printer in settings.';
+
+  @override
+  String get suiteStatus => 'Status';
+
+  @override
+  String get suiteSignPreparedBy => 'Prepared by';
+
+  @override
+  String get suiteSignApprovedBy => 'Approved by';
+
+  @override
+  String get suiteSignSupplier => 'Supplier';
+
+  @override
+  String get suiteSignReceivedBy => 'Received by';
+
+  @override
+  String suiteReceivingNote(String no) {
+    return 'Receiving note #$no';
+  }
+
+  @override
+  String get suitePrintReceivingNote => 'Print the receiving note';
+
+  @override
+  String get suitePrinting => 'Printing on this computer';
+
+  @override
+  String get suitePrintDialog => 'The print dialog (choose each time)';
+
+  @override
+  String get suiteReceiptPrinter => 'Receipt printer (80 mm roll)';
+
+  @override
+  String get suiteDocumentPrinter => 'Documents printer (A4)';
+
+  @override
+  String get suiteAutoReceipt =>
+      'Print the receipt automatically after every sale';
+
+  @override
+  String get suiteTestPrint => 'Test print';
 }

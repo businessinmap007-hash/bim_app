@@ -17407,6 +17407,102 @@ abstract class AppLocalizations {
   /// **'إرسال الطلب'**
   String get parcelSendRequest;
 
+  /// No description provided for @parcelSealConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشحنة مغلّفة في كيس مختوم بعلامتي، يتلف عند فتحه'**
+  String get parcelSealConfirm;
+
+  /// No description provided for @parcelSealNumber.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الختم (اختياري)'**
+  String get parcelSealNumber;
+
+  /// No description provided for @parcelSealRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'غلّف الشحنة في كيس مختوم بعلامتك، ثم أكّد ذلك.'**
+  String get parcelSealRequired;
+
+  /// No description provided for @parcelSealPhotoTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'صوّر الكيس المختوم'**
+  String get parcelSealPhotoTitle;
+
+  /// No description provided for @parcelSealPhotoBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'صوّر الكيس بالكاميرا قبل التحميل؛ الصورة دليل على حالته عند الاستلام. لو الكيس غير مختوم، ارفض الشحنة.'**
+  String get parcelSealPhotoBody;
+
+  /// No description provided for @parcelSealTakePhoto.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقاط صورة'**
+  String get parcelSealTakePhoto;
+
+  /// No description provided for @parcelRefuseUnsealed.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير مختومة — رفض'**
+  String get parcelRefuseUnsealed;
+
+  /// No description provided for @parcelSealAskTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'هل ختم الكيس سليم؟'**
+  String get parcelSealAskTitle;
+
+  /// No description provided for @parcelSealAskBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسأل المستلم قبل التسليم. لو الختم مفتوح، تُسلَّم الشحنة ويُفتح نزاع تلقائيًا.'**
+  String get parcelSealAskBody;
+
+  /// No description provided for @parcelSealIntact.
+  ///
+  /// In ar, this message translates to:
+  /// **'سليم'**
+  String get parcelSealIntact;
+
+  /// No description provided for @parcelSealBroken.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفتوح'**
+  String get parcelSealBroken;
+
+  /// No description provided for @parcelSealed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مختومة'**
+  String get parcelSealed;
+
+  /// No description provided for @parcelSealedNumber.
+  ///
+  /// In ar, this message translates to:
+  /// **'مختومة · رقم {number}'**
+  String parcelSealedNumber(String number);
+
+  /// No description provided for @parcelSealIntactState.
+  ///
+  /// In ar, this message translates to:
+  /// **'الختم سليم عند التسليم'**
+  String get parcelSealIntactState;
+
+  /// No description provided for @parcelSealBrokenState.
+  ///
+  /// In ar, this message translates to:
+  /// **'الختم كان مفتوحًا عند التسليم — فُتح نزاع'**
+  String get parcelSealBrokenState;
+
+  /// No description provided for @parcelRefusedUnsealed.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفضها السائق: غير مختومة'**
+  String get parcelRefusedUnsealed;
+
   /// No description provided for @parcelRequestSent.
   ///
   /// In ar, this message translates to:
@@ -25476,6 +25572,120 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'مسح القائمة'**
   String get suiteClear;
+
+  /// No description provided for @suiteReceiptTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إيصال بيع'**
+  String get suiteReceiptTitle;
+
+  /// No description provided for @suiteReceiptFooter.
+  ///
+  /// In ar, this message translates to:
+  /// **'شكرًا لزيارتكم — الدفع نقدًا'**
+  String get suiteReceiptFooter;
+
+  /// No description provided for @suiteReceiptNumber.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الفاتورة'**
+  String get suiteReceiptNumber;
+
+  /// No description provided for @suiteChangeLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الباقي'**
+  String get suiteChangeLabel;
+
+  /// No description provided for @suitePrint.
+  ///
+  /// In ar, this message translates to:
+  /// **'طباعة'**
+  String get suitePrint;
+
+  /// No description provided for @suitePrintFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذرت الطباعة. تأكد من الطابعة في الإعدادات.'**
+  String get suitePrintFailed;
+
+  /// No description provided for @suiteStatus.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحالة'**
+  String get suiteStatus;
+
+  /// No description provided for @suiteSignPreparedBy.
+  ///
+  /// In ar, this message translates to:
+  /// **'أعدّه'**
+  String get suiteSignPreparedBy;
+
+  /// No description provided for @suiteSignApprovedBy.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتمده'**
+  String get suiteSignApprovedBy;
+
+  /// No description provided for @suiteSignSupplier.
+  ///
+  /// In ar, this message translates to:
+  /// **'المورد'**
+  String get suiteSignSupplier;
+
+  /// No description provided for @suiteSignReceivedBy.
+  ///
+  /// In ar, this message translates to:
+  /// **'المستلم'**
+  String get suiteSignReceivedBy;
+
+  /// No description provided for @suiteReceivingNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'إذن استلام #{no}'**
+  String suiteReceivingNote(String no);
+
+  /// No description provided for @suitePrintReceivingNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'طباعة إذن الاستلام'**
+  String get suitePrintReceivingNote;
+
+  /// No description provided for @suitePrinting.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطباعة على هذا الجهاز'**
+  String get suitePrinting;
+
+  /// No description provided for @suitePrintDialog.
+  ///
+  /// In ar, this message translates to:
+  /// **'نافذة الطباعة (أختار كل مرة)'**
+  String get suitePrintDialog;
+
+  /// No description provided for @suiteReceiptPrinter.
+  ///
+  /// In ar, this message translates to:
+  /// **'طابعة الإيصالات (رول 80 مم)'**
+  String get suiteReceiptPrinter;
+
+  /// No description provided for @suiteDocumentPrinter.
+  ///
+  /// In ar, this message translates to:
+  /// **'طابعة المستندات (A4)'**
+  String get suiteDocumentPrinter;
+
+  /// No description provided for @suiteAutoReceipt.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطبع الإيصال تلقائيًا بعد كل بيع'**
+  String get suiteAutoReceipt;
+
+  /// No description provided for @suiteTestPrint.
+  ///
+  /// In ar, this message translates to:
+  /// **'طباعة تجريبية'**
+  String get suiteTestPrint;
 }
 
 class _AppLocalizationsDelegate

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:printing/printing.dart';
 
 import '../../features/inventory/application/inventory_providers.dart';
 import '../../features/inventory/data/inventory_models.dart';
 import '../../features/inventory/presentation/inventory_labels.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/async_value_view.dart';
+import '../desktop_app.dart';
+import '../print/suite_print.dart';
 import '../sync/desktop_sync.dart';
 import 'common.dart';
 
@@ -113,6 +116,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                     ],
                   ),
                 ),
+              if (s.enabled) const _PrintSettings(),
               if (rejected.isNotEmpty)
                 SuiteSection(
                   title: l10n.suiteRejectedTitle,
@@ -145,4 +149,95 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         'read_only' => l10n.suiteSubReadOnly,
         _ => l10n.suiteSubNone,
       };
+}
+
+/// «الطباعة على هذا الجهاز» — each computer picks its receipt printer (an 80 mm roll) and its documents printer (A4),
+/// from the printers Windows / macOS know — «Microsoft Print to PDF» included, to try it without paper. None picked:
+/// the system's print dialog opens.
+class _PrintSettings extends ConsumerStatefulWidget {
+  const _PrintSettings();
+
+  @override
+  ConsumerState<_PrintSettings> createState() => _PrintSettingsState();
+}
+
+class _PrintSettingsState extends ConsumerState<_PrintSettings> {
+  late final Future<List<Printer>> _printers = Printing.listPrinters();
+
+  Future<void> _set(String key, String? value) async {
+    final meta = ref.read(suiteStoreProvider).meta;
+    value == null || value.isEmpty ? await meta.delete(key) : await meta.put(key, value);
+    setState(() {});
+  }
+
+  Future<void> _testReceipt() async {
+    final l10n = AppLocalizations.of(context)!;
+    final pdf = await SuitePrint.receipt(
+      businessName: ref.read(suiteBusinessProvider)?.name ?? '',
+      title: l10n.suiteTestPrint,
+      number: 'TEST',
+      at: DateTime.now(),
+      lines: const [
+        PrintLine(name: 'وجبة برجر دبل', qty: '2', price: '260', total: '520'),
+        PrintLine(name: 'في كولا علبة', qty: '3', price: '25', total: '75'),
+      ],
+      total: '595',
+      paid: '600',
+      change: '5',
+      footer: l10n.suiteReceiptFooter,
+      labels: {'number': l10n.suiteReceiptNumber, 'date': l10n.suiteWhen, 'total': l10n.stkTotal, 'paid': l10n.suitePaidCash, 'change': l10n.suiteChangeLabel},
+    );
+    try {
+      await ref.read(suitePrintProvider).print(pdf, receipt: true, name: 'test-receipt');
+    } catch (_) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.suitePrintFailed)));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final meta = ref.watch(suiteStoreProvider).meta;
+
+    return SuiteSection(
+      title: l10n.suitePrinting,
+      child: FutureBuilder<List<Printer>>(
+        future: _printers,
+        builder: (context, snap) {
+          final printers = snap.data ?? const <Printer>[];
+          DropdownButtonFormField<String> picker(String key, String label) {
+            final current = meta.get(key);
+            return DropdownButtonFormField<String>(
+              initialValue: printers.any((p) => p.url == current) ? current : '',
+              decoration: InputDecoration(labelText: label),
+              items: [
+                DropdownMenuItem(value: '', child: Text(l10n.suitePrintDialog)),
+                for (final p in printers) DropdownMenuItem(value: p.url, child: Text(p.name)),
+              ],
+              onChanged: (v) => _set(key, v),
+            );
+          }
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              picker(SuitePrint.receiptPrinterKey, l10n.suiteReceiptPrinter),
+              const SizedBox(height: 8),
+              picker(SuitePrint.documentPrinterKey, l10n.suiteDocumentPrinter),
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(l10n.suiteAutoReceipt),
+                value: meta.get(SuitePrint.autoReceiptKey) == '1',
+                onChanged: (v) => _set(SuitePrint.autoReceiptKey, v ? '1' : null),
+              ),
+              Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: OutlinedButton.icon(icon: const Icon(Icons.print_outlined), label: Text(l10n.suiteTestPrint), onPressed: _testReceipt),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
 }

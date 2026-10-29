@@ -6,6 +6,8 @@ import '../../features/inventory/data/inventory_models.dart';
 import '../../features/inventory/presentation/inventory_labels.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/async_value_view.dart';
+import '../desktop_app.dart';
+import '../print/suite_print.dart';
 import '../shell/desktop_shell.dart';
 import 'common.dart';
 import 'items_page.dart';
@@ -239,6 +241,28 @@ class _OrderDetail extends ConsumerWidget {
               spacing: 8,
               runSpacing: 8,
               children: [
+                OutlinedButton.icon(
+                  icon: const Icon(Icons.print_outlined),
+                  label: Text(l10n.suitePrint),
+                  onPressed: () async {
+                    final pdf = await SuitePrint.document(
+                      businessName: ref.read(suiteBusinessProvider)?.name ?? '',
+                      title: l10n.stkPurchaseOrderNo(po.number),
+                      facts: [
+                        (l10n.suiteSupplier, po.supplier?.name ?? ''),
+                        (l10n.suiteWhen, po.createdAt == null ? '' : MaterialLocalizations.of(context).formatMediumDate(po.createdAt!)),
+                        (l10n.suiteStatus, InvLabels.poStatus(l10n, po.status)),
+                      ],
+                      headers: [l10n.suiteItem, l10n.suiteUnit, l10n.suiteQty, l10n.suiteUnitPrice, l10n.stkTotal],
+                      rows: SuitePrint.orderRows(po),
+                      totalLabel: l10n.stkTotal,
+                      total: '${InvLabels.money(po.total)} ${l10n.stkCurrency}',
+                      notes: po.notes,
+                      signatures: [l10n.suiteSignPreparedBy, l10n.suiteSignApprovedBy, l10n.suiteSignSupplier],
+                    );
+                    await ref.read(suitePrintProvider).print(pdf, receipt: false, name: 'purchase-order-${po.number}');
+                  },
+                ),
                 if (po.status == 'draft') FilledButton(onPressed: () => act('submit'), child: Text(l10n.suiteSubmit)),
                 if (po.status == 'pending_approval' && d.canApprove) ...[
                   FilledButton(onPressed: () => act('approve'), child: Text(l10n.stkApproveAndSend)),

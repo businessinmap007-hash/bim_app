@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -9,6 +10,8 @@ import '../../features/inventory/data/inventory_models.dart';
 import '../../features/inventory/presentation/inventory_labels.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/async_value_view.dart';
+import '../desktop_app.dart';
+import '../print/suite_print.dart';
 import '../sync/desktop_sync.dart';
 import 'common.dart';
 
@@ -173,6 +176,15 @@ class _PosPageState extends ConsumerState<PosPage> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(result == null ? '${l10n.suiteQueued} · ${l10n.suiteChange(InvLabels.money(change))}' : l10n.suiteChange(InvLabels.money(change))),
       ));
+      // the receipt: from the server's own pricing when it answered, from this computer's cart when the sale was queued
+      final sale = result?['sale'] as Map<String, dynamic>? ??
+          {
+            'number': '—',
+            'total': _total,
+            'paid': paid,
+            'lines': [for (final l in _cart) {'name': l.product.name, 'qty': l.qty, 'unit_price': l.unitPrice, 'total': l.unitPrice * l.qty}],
+          };
+      if (ref.read(suitePrintProvider).autoReceipt) unawaited(_printReceipt(sale));
       setState(() {
         if (result?['sale'] is Map<String, dynamic>) _lastSales.insert(0, result!['sale'] as Map<String, dynamic>);
         _cart.clear();
@@ -183,6 +195,33 @@ class _PosPageState extends ConsumerState<PosPage> {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message)));
     } finally {
       if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _printReceipt(Map<String, dynamic> sale) async {
+    final l10n = AppLocalizations.of(context)!;
+    num n(Object? v) => v is num ? v : num.tryParse('$v') ?? 0;
+    final total = n(sale['total']);
+    final paidAmount = n(sale['paid']);
+    final pdf = await SuitePrint.receipt(
+      businessName: ref.read(suiteBusinessProvider)?.name ?? '',
+      title: l10n.suiteReceiptTitle,
+      number: '${sale['number']}',
+      at: DateTime.tryParse('${sale['sold_at']}')?.toLocal() ?? DateTime.now(),
+      lines: [
+        for (final l in (sale['lines'] as List<dynamic>? ?? const []).cast<Map<String, dynamic>>())
+          PrintLine(name: '${l['name']}', qty: invNum(n(l['qty'])), price: InvLabels.money(n(l['unit_price'])), total: InvLabels.money(n(l['total']))),
+      ],
+      total: InvLabels.money(total),
+      paid: InvLabels.money(paidAmount),
+      change: InvLabels.money(paidAmount - total),
+      footer: l10n.suiteReceiptFooter,
+      labels: {'number': l10n.suiteReceiptNumber, 'date': l10n.suiteWhen, 'total': l10n.stkTotal, 'paid': l10n.suitePaidCash, 'change': l10n.suiteChangeLabel},
+    );
+    try {
+      await ref.read(suitePrintProvider).print(pdf, receipt: true, name: 'receipt-${sale['number']}');
+    } catch (e) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.suitePrintFailed)));
     }
   }
 
@@ -345,6 +384,7 @@ class _PosPageState extends ConsumerState<PosPage> {
                         Row(
                           children: [
                             Expanded(child: Text('#${s['number']} · ${InvLabels.money((s['total'] as num?) ?? 0)}${s['status'] == 'returned' ? ' · ${l10n.suiteReturned}' : ''}')),
+                            IconButton(tooltip: l10n.suitePrint, icon: const Icon(Icons.print_outlined), onPressed: () => _printReceipt(s)),
                             if (s['status'] != 'returned')
                               TextButton(
                                 onPressed: () async {
