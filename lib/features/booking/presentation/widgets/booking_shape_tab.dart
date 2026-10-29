@@ -1,3 +1,4 @@
+import 'capacity_text.dart';
 import '../../../promotions/presentation/widgets/offer_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -267,7 +268,7 @@ class _UnitCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final price = unit.price ?? kind.price;
     final facts = <String>[
-      if (shape.showCapacity && unit.capacity != null) '${l10n.bookingCapacityLabel}: ${unit.capacity}',
+      if (shape.showCapacity && unit.capacity != null) capacityText(l10n, unit.capacity!, unit.maxChildren),
       if (unit.myHold?.isLive == true) l10n.bookingMyHold(unit.myHold!.leftLabel),
       if (unit.guestScope == 'locals') l10n.guestScopeLocals,
       if (unit.guestScope == 'foreigners') l10n.guestScopeForeigners,

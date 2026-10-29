@@ -105,6 +105,9 @@ class DiscoveredUnit {
   final String? label;
   final String? description;
   final int? capacity;
+
+  /// «2 بالغ + 2 طفل»: the children a room takes besides its adults (null = not said)
+  final int? maxChildren;
   final List<String> images;
   final double? price;
   final double? total;
@@ -145,6 +148,7 @@ class DiscoveredUnit {
     this.label,
     this.description,
     this.capacity,
+    this.maxChildren,
     this.images = const [],
     this.price,
     this.total,
@@ -174,6 +178,7 @@ class DiscoveredUnit {
     label: json['label'] as String?,
     description: json['description'] as String?,
     capacity: (json['capacity'] as num?)?.toInt(),
+    maxChildren: (json['max_children'] as num?)?.toInt(),
     images: (json['images'] as List<dynamic>? ?? [])
         .map((e) => Env.assetUrl((e as Map<String, dynamic>)['image'] as String?))
         .whereType<String>()

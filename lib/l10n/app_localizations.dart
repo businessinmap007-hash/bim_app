@@ -2989,6 +2989,24 @@ abstract class AppLocalizations {
   /// **'السعة'**
   String get bookingCapacityLabel;
 
+  /// No description provided for @maxChildrenLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'أقصى عدد أطفال في الغرفة'**
+  String get maxChildrenLabel;
+
+  /// No description provided for @maxChildrenHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'بجانب البالغين، من عمر سنتين (الرضيع في سرير أطفال). فارغ = لم يُحدَّد'**
+  String get maxChildrenHelp;
+
+  /// No description provided for @roomOccupancy.
+  ///
+  /// In ar, this message translates to:
+  /// **'{adults} بالغ + {children} طفل'**
+  String roomOccupancy(int adults, int children);
+
   /// No description provided for @bookingUnitRequired.
   ///
   /// In ar, this message translates to:

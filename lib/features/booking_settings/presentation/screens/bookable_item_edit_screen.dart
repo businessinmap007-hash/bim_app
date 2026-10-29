@@ -169,6 +169,7 @@ class _EditorState extends ConsumerState<_Editor> {
   late final TextEditingController _quantity;
   late final TextEditingController _reserve;
   late final TextEditingController _single;
+  late final TextEditingController _maxChildren;
   final _dayUsePrice = TextEditingController();
   late final TextEditingController _weeklyDiscount;
   late final TextEditingController _monthlyDiscount;
@@ -191,6 +192,7 @@ class _EditorState extends ConsumerState<_Editor> {
     _quantity.text.trim(),
     _reserve.text.trim(),
     _single.text.trim(),
+    _maxChildren.text.trim(),
     _status,
     _guestScope,
     _weeklyDiscount.text.trim(),
@@ -212,11 +214,12 @@ class _EditorState extends ConsumerState<_Editor> {
     _quantity = TextEditingController(text: widget.row.quantity.toString());
     _reserve = TextEditingController(text: widget.row.reserveRooms == 0 ? '' : widget.row.reserveRooms.toString());
     _single = TextEditingController(text: widget.row.singleOccupancyPercent == null ? '' : _percent(widget.row.singleOccupancyPercent!));
+    _maxChildren = TextEditingController(text: widget.row.maxChildren?.toString() ?? '');
     _status = widget.row.status;
     _guestScope = widget.row.guestScope;
     _weeklyDiscount = TextEditingController(text: _percent(widget.row.weeklyDiscount));
     _monthlyDiscount = TextEditingController(text: _percent(widget.row.monthlyDiscount));
-    for (final c in [_description, _capacity, _quantity, _reserve, _single, _dayUsePrice, _weeklyDiscount, _monthlyDiscount]) {
+    for (final c in [_description, _capacity, _quantity, _reserve, _single, _maxChildren, _dayUsePrice, _weeklyDiscount, _monthlyDiscount]) {
       c.addListener(_refresh);
     }
     if (_isStay) {
@@ -238,6 +241,7 @@ class _EditorState extends ConsumerState<_Editor> {
     _quantity.dispose();
     _reserve.dispose();
     _single.dispose();
+    _maxChildren.dispose();
     _dayUsePrice.dispose();
     _weeklyDiscount.dispose();
     _monthlyDiscount.dispose();
@@ -290,6 +294,7 @@ class _EditorState extends ConsumerState<_Editor> {
             reserveRooms: _isStay ? (int.tryParse(_reserve.text.trim()) ?? 0) : null,
             sendSingle: _isStay,
             singleOccupancyPercent: double.tryParse(_single.text.trim().replaceAll(',', '.')),
+            maxChildren: int.tryParse(_maxChildren.text.trim()),
           );
       if (_isStay) {
         await ref.read(bookingSettingsApiProvider).saveStayDiscounts(
@@ -422,6 +427,15 @@ class _EditorState extends ConsumerState<_Editor> {
             ],
             onChanged: (value) => setState(() => _status = value ?? _status),
           ),
+          // «2 بالغ + 2 طفل»: the children a room takes besides its adults
+          if (_isStay) ...[
+            const SizedBox(height: 12),
+            TextField(
+              controller: _maxChildren,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: l10n.maxChildrenLabel, helperText: l10n.maxChildrenHelp),
+            ),
+          ],
           // «غرف احتياطية للضغط»: a few rooms of the type only the hotel's own guests can take
           if (_isStay) ...[
             const SizedBox(height: 12),

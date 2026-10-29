@@ -142,6 +142,7 @@ class BookingSettingsController extends StateNotifier<BookingSettingsState> {
     int? reserveRooms,
     bool sendSingle = false,
     double? singleOccupancyPercent,
+    int? maxChildren,
   }) async {
     final row = await _api.updateBookableItem(
       id,
@@ -157,6 +158,7 @@ class BookingSettingsController extends StateNotifier<BookingSettingsState> {
       reserveRooms: reserveRooms,
       sendSingle: sendSingle,
       singleOccupancyPercent: singleOccupancyPercent,
+      maxChildren: maxChildren,
     );
     state = state.copyWith(items: [for (final i in state.items) i.id == id ? row : i]);
   }

@@ -1631,6 +1631,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get bookingCapacityLabel => 'السعة';
 
   @override
+  String get maxChildrenLabel => 'أقصى عدد أطفال في الغرفة';
+
+  @override
+  String get maxChildrenHelp =>
+      'بجانب البالغين، من عمر سنتين (الرضيع في سرير أطفال). فارغ = لم يُحدَّد';
+
+  @override
+  String roomOccupancy(int adults, int children) {
+    return '$adults بالغ + $children طفل';
+  }
+
+  @override
   String get bookingUnitRequired => 'اختر الوحدة أولًا.';
 
   @override

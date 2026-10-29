@@ -1623,6 +1623,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bookingCapacityLabel => 'Capacity';
 
   @override
+  String get maxChildrenLabel => 'Most children in the room';
+
+  @override
+  String get maxChildrenHelp =>
+      'Besides the adults, from two years old (a baby sleeps in a cot). Empty = not set';
+
+  @override
+  String roomOccupancy(int adults, int children) {
+    return '$adults adults + $children children';
+  }
+
+  @override
   String get bookingUnitRequired => 'Choose a unit first.';
 
   @override

@@ -186,6 +186,9 @@ class BookableItemRow {
   /// «إقامة فردية»: what one adult alone pays of the night (null = the whole room)
   final double? singleOccupancyPercent;
 
+  /// «2 بالغ + 2 طفل»: the children (two and older) a room takes besides its adults — null = not said
+  final int? maxChildren;
+
   const BookableItemRow({
     required this.id,
     required this.serviceId,
@@ -207,6 +210,7 @@ class BookableItemRow {
     this.guestScope = 'all',
     this.reserveRooms = 0,
     this.singleOccupancyPercent,
+    this.maxChildren,
   });
 
   bool get isHotelRoom => unitNoun == 'room';
@@ -241,6 +245,7 @@ class BookableItemRow {
       guestScope: json['guest_scope'] as String? ?? 'all',
       reserveRooms: (json['reserve_rooms'] as num?)?.toInt() ?? 0,
       singleOccupancyPercent: (json['single_occupancy_percent'] as num?)?.toDouble(),
+      maxChildren: (json['max_children'] as num?)?.toInt(),
     );
   }
 }

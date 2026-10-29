@@ -46,6 +46,7 @@ class _FakeApi implements BookingSettingsApi {
     int? reserveRooms,
     bool sendSingle = false,
     double? singleOccupancyPercent,
+    int? maxChildren,
   }) async {
     updated.add(id);
 

@@ -21,6 +21,7 @@ import '../../../service_requests/presentation/screens/my_requests_screen.dart';
 import '../../../service_requests/presentation/screens/ride_request_screen.dart';
 import '../../../table/presentation/screens/table_scan_screen.dart';
 import '../../../training/presentation/screens/training_plans_screen.dart';
+import '../../../inventory/presentation/mobile/stock_screens.dart';
 import '../../../finance/presentation/screens/finance_screen.dart';
 
 /// Every service a person has actually USED on the platform, one primary
@@ -143,6 +144,25 @@ class MyServicesScreen extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (_) => const ShopProductsScreen(),
                     ),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.inventory_2_outlined),
+                  title: Text(l10n.stkTitle),
+                  subtitle: Text(l10n.stkTileSubtitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const StockScreen()),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.move_to_inbox_outlined),
+                  title: Text(l10n.stkIncomingTitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const IncomingPurchaseOrdersScreen()),
                   ),
                 ),
                 const Divider(height: 1),

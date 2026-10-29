@@ -20,6 +20,7 @@ import '../../../../core/time/egypt_time.dart';
 import '../../../../core/time/clock_format.dart';
 import '../../../../core/time/local_format.dart';
 import '../../../course/data/models/course.dart';
+import '../widgets/capacity_text.dart';
 import '../widgets/booking_unit_icon.dart';
 import '../widgets/relationship_card.dart';
 
@@ -1368,7 +1369,7 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (entry.unit.capacity != null)
-                      Text('${l10n.bookingCapacityLabel}: ${entry.unit.capacity}'),
+                      Text(capacityText(l10n, entry.unit.capacity!, entry.unit.maxChildren)),
                     if (entry.unit.price != null)
                       Text('${entry.unit.price!.toStringAsFixed(0)} ${entry.group.currency ?? ''}'),
                     if (entry.unit.available == false)

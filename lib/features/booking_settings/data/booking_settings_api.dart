@@ -132,9 +132,10 @@ class BookingSettingsApi {
     String? status,
     String? guestScope,
     int? reserveRooms,
-    // «إقامة فردية»: sent only when [sendSingle] — null then clears it
+    // «إقامة فردية» and «أقصى عدد أطفال»: sent only when [sendSingle] (a room type) — null then clears them
     bool sendSingle = false,
     double? singleOccupancyPercent,
+    int? maxChildren,
   }) async {
     final data = await _client.put(
       '/business/bookable-items/$id',
@@ -150,6 +151,7 @@ class BookingSettingsApi {
         'guest_scope': ?guestScope,
         'reserve_rooms': ?reserveRooms,
         if (sendSingle) 'single_occupancy_percent': singleOccupancyPercent,
+        if (sendSingle) 'max_children': maxChildren,
       },
     );
     return BookableItemRow.fromJson(data as Map<String, dynamic>);
