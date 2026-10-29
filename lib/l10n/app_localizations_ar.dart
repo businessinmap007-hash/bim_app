@@ -13336,4 +13336,850 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get pshStandingHint =>
       'تبقى سارية بعد انتهاء الحصة أو إيقافها؛ لا يُلغى منها شيء.';
+
+  @override
+  String get stkTitle => 'المخزون';
+
+  @override
+  String get stkTileSubtitle => 'يكفي مبيعات اليوم؟ واعتماد أوامر الشراء';
+
+  @override
+  String get stkNotAvailable => 'المخزون غير متاح لتصنيف نشاطك.';
+
+  @override
+  String get stkEnableTitle => 'المخزون والمشتريات';
+
+  @override
+  String get stkEnableBody =>
+      'تابع المخزون لحظيًا: كل استلام وبيع وهالك حركة مسجلة، والبيع من التطبيق يخصم تلقائيًا بالوصفة. الإدارة الكاملة من تطبيق الكمبيوتر، وتتابعه من هنا.';
+
+  @override
+  String stkSubscriptionPrice(String price) {
+    return 'الاشتراك الشهري: $price ج من رصيد المحفظة';
+  }
+
+  @override
+  String get stkSubscriptionFree => 'بدون رسوم اشتراك حاليًا.';
+
+  @override
+  String get stkEnableAction => 'تفعيل المخزون';
+
+  @override
+  String get stkOwnerEnables => 'يفعّله صاحب النشاط.';
+
+  @override
+  String get stkStockValue => 'قيمة المخزون';
+
+  @override
+  String get stkCurrency => 'ج';
+
+  @override
+  String get stkBelowReorder => 'تحت حد الطلب';
+
+  @override
+  String stkPendingApproval(int number) {
+    return 'أمر شراء #$number بانتظار اعتمادك';
+  }
+
+  @override
+  String get stkCoversToday => 'يكفي مبيعات اليوم؟';
+
+  @override
+  String get stkNoItems => 'لا أصناف بعد.';
+
+  @override
+  String stkCoverageLine(String days, String onHand, String unit) {
+    return '$onHand $unit — يكفي ~$days يوم';
+  }
+
+  @override
+  String get stkVerdictNo => 'لا يكفي';
+
+  @override
+  String get stkVerdictTight => 'يكفي بالكاد';
+
+  @override
+  String get stkVerdictYes => 'يكفي';
+
+  @override
+  String get stkVerdictEmpty => 'نفد';
+
+  @override
+  String get stkVerdictUnknown => 'لا مبيعات بعد';
+
+  @override
+  String get stkOnHandNow => 'الرصيد الآن';
+
+  @override
+  String stkCoverageExplain(
+    String avg,
+    String rest,
+    String today,
+    String unit,
+  ) {
+    return 'بِيع اليوم $today $unit، ومتوسط هذا اليوم في آخر 4 أسابيع $avg، فالمتوقع للباقي ~$rest.';
+  }
+
+  @override
+  String stkDaysLeft(String days) {
+    return 'يكفي ~$days يوم بالمعدل الحالي.';
+  }
+
+  @override
+  String get stkRecentMoves => 'آخر الحركات';
+
+  @override
+  String get stkRecordWaste => 'سجّل هالك';
+
+  @override
+  String stkQtyIn(String unit) {
+    return 'الكمية ($unit)';
+  }
+
+  @override
+  String get stkReason => 'السبب';
+
+  @override
+  String get stkSaved => 'تم الحفظ.';
+
+  @override
+  String get stkReject => 'رفض';
+
+  @override
+  String stkPurchaseOrderNo(int number) {
+    return 'أمر شراء #$number';
+  }
+
+  @override
+  String get stkOnBim => 'على BIM';
+
+  @override
+  String get stkTotal => 'الإجمالي';
+
+  @override
+  String get stkApproveAndSend => 'اعتماد وإرسال';
+
+  @override
+  String get stkIncomingTitle => 'أوامر الشراء الواردة';
+
+  @override
+  String get stkIncomingEmpty => 'لم يرسل لك أي نشاط أمر شراء بعد.';
+
+  @override
+  String get stkConfirmed => 'أكّدت هذا الأمر.';
+
+  @override
+  String get stkConfirmOrder => 'تأكيد الأمر';
+
+  @override
+  String get stkMoveReceipt => 'استلام';
+
+  @override
+  String get stkMoveSale => 'بيع';
+
+  @override
+  String get stkMoveSaleReversal => 'إرجاع بيع';
+
+  @override
+  String get stkMoveWaste => 'هالك';
+
+  @override
+  String get stkMoveTransferOut => 'تحويل خارج';
+
+  @override
+  String get stkMoveTransferIn => 'تحويل داخل';
+
+  @override
+  String get stkMoveAdjustment => 'تسوية جرد';
+
+  @override
+  String get stkMoveSupplierReturn => 'مرتجع لمورد';
+
+  @override
+  String get stkMoveOpening => 'رصيد افتتاحي';
+
+  @override
+  String get stkMoveReversal => 'عكس حركة';
+
+  @override
+  String get stkPoDraft => 'مسودة';
+
+  @override
+  String get stkPoPending => 'بانتظار الاعتماد';
+
+  @override
+  String get stkPoApproved => 'معتمد ومُرسل';
+
+  @override
+  String get stkPoPartial => 'مستلم جزئيًا';
+
+  @override
+  String get stkPoReceived => 'مستلم بالكامل';
+
+  @override
+  String get stkPoClosed => 'مغلق';
+
+  @override
+  String get stkPoRejected => 'مرفوض';
+
+  @override
+  String get stkPoCancelled => 'ملغي';
+
+  @override
+  String get suiteBrand => 'BIM للأعمال';
+
+  @override
+  String get suiteSignInTitle => 'ادخل بحسابك على BIM';
+
+  @override
+  String get suiteSignInHint =>
+      'نفس الحساب الذي تستخدمه في التطبيق. الموظف يدخل بحسابه هو.';
+
+  @override
+  String get suiteLoginField => 'البريد الإلكتروني';
+
+  @override
+  String get suiteChooseBusiness => 'اختر النشاط الذي يعمل له هذا الجهاز';
+
+  @override
+  String get suiteNoBusiness =>
+      'حسابك ليس صاحب نشاط، ولا موظفًا بصلاحية مخزون أو مشتريات أو كاشير.';
+
+  @override
+  String get suiteNavDashboard => 'لوحة اليوم';
+
+  @override
+  String get suiteNavItems => 'الأصناف والمخزون';
+
+  @override
+  String get suiteNavRecipes => 'ربط المنيو والوصفات';
+
+  @override
+  String get suiteNavPurchases => 'المشتريات';
+
+  @override
+  String get suiteNavReceive => 'الاستلام';
+
+  @override
+  String get suiteNavStocktake => 'الجرد';
+
+  @override
+  String get suiteNavPos => 'الكاشير';
+
+  @override
+  String get suiteNavDevices => 'الأجهزة';
+
+  @override
+  String get suiteNavSettings => 'الإعدادات والاشتراك';
+
+  @override
+  String get suiteLinkOnline => 'متصل';
+
+  @override
+  String get suiteLinkOffice => 'عبر جهاز المدير (بدون نت)';
+
+  @override
+  String get suiteLinkOffline => 'بدون اتصال — يُحفظ على الجهاز';
+
+  @override
+  String get suiteLinkChecking => 'جارٍ الفحص…';
+
+  @override
+  String suitePending(int n) {
+    return '$n بانتظار الإرسال';
+  }
+
+  @override
+  String suiteRejected(int n) {
+    return '$n رفضها الخادم';
+  }
+
+  @override
+  String get suiteSyncNow => 'زامن الآن';
+
+  @override
+  String get suiteReadOnlyBanner =>
+      'الاشتراك غير مدفوع: للقراءة والتصدير فقط حتى تشحن المحفظة وتجدد. بياناتك محفوظة.';
+
+  @override
+  String get suiteGraceBanner =>
+      'لم يكفِ الرصيد للتجديد — أيام سماح ثم يصبح للقراءة فقط.';
+
+  @override
+  String get suiteRenew => 'جدّد الآن';
+
+  @override
+  String get suiteQueued =>
+      'حُفظت على هذا الجهاز وتُرسل وحدها عند عودة الاتصال.';
+
+  @override
+  String get suiteAtAverageCost => 'بمتوسط التكلفة المرجّح';
+
+  @override
+  String get suiteOpenOrders => 'أوامر شراء مفتوحة';
+
+  @override
+  String get suiteWasteMonth => 'هالك هذا الشهر';
+
+  @override
+  String get suiteNeedsAttention => 'يحتاج انتباهك';
+
+  @override
+  String get suiteAllCovered => 'كل الأصناف فوق حد الطلب وتكفي اليوم.';
+
+  @override
+  String get suiteItem => 'الصنف';
+
+  @override
+  String get suiteOnHand => 'الرصيد';
+
+  @override
+  String get suiteDaysLeft => 'يكفي (يوم)';
+
+  @override
+  String get suiteNewItem => 'صنف جديد';
+
+  @override
+  String get suiteSearchOrScan => 'بحث بالاسم أو امسح الباركود…';
+
+  @override
+  String get suiteAll => 'الكل';
+
+  @override
+  String get suiteReorderLevel => 'حد إعادة الطلب';
+
+  @override
+  String get suiteAvgCost => 'متوسط التكلفة';
+
+  @override
+  String get suiteValue => 'القيمة';
+
+  @override
+  String get suitePickItem => 'اختر صنفًا لترى دفتر حركاته.';
+
+  @override
+  String get suiteBaseUnit => 'أساسية';
+
+  @override
+  String get suiteEdit => 'تعديل';
+
+  @override
+  String get suiteAddOpening => 'رصيد افتتاحي';
+
+  @override
+  String get suiteTransfer => 'تحويل لمخزن';
+
+  @override
+  String get suiteLedger => 'دفتر الحركات';
+
+  @override
+  String get suiteLedgerHint => 'لا تعديل ولا حذف لحركة — التصحيح بحركة عكسية.';
+
+  @override
+  String get suiteWhen => 'الوقت';
+
+  @override
+  String get suiteMove => 'الحركة';
+
+  @override
+  String get suiteQty => 'الكمية';
+
+  @override
+  String get suiteBalanceAfter => 'الرصيد بعدها';
+
+  @override
+  String get suiteUnitCost => 'تكلفة الوحدة الأساسية';
+
+  @override
+  String get suiteToWarehouse => 'إلى مخزن';
+
+  @override
+  String get suiteKindCount => 'عدد';
+
+  @override
+  String get suiteKindWeight => 'وزن';
+
+  @override
+  String get suiteKindVolume => 'حجم';
+
+  @override
+  String get suiteKindLength => 'طول';
+
+  @override
+  String get suiteNameAr => 'الاسم بالعربية';
+
+  @override
+  String get suiteNameEn => 'الاسم بالإنجليزية (اختياري)';
+
+  @override
+  String get suiteGroup => 'المجموعة (مشروبات، خامات مطبخ…)';
+
+  @override
+  String get suiteBaseUnitHint => 'الوحدة الأساسية (علبة، جرام، مل، قطعة)';
+
+  @override
+  String get suiteUnitKind => 'نوع الوحدة';
+
+  @override
+  String get suiteBarcode => 'الباركود';
+
+  @override
+  String get suitePurchaseUnits => 'وحدات الشراء (كرتونة، بالتة…)';
+
+  @override
+  String get suiteUnitName => 'اسم الوحدة';
+
+  @override
+  String suiteUnitFactor(String unit) {
+    return '= كم $unit';
+  }
+
+  @override
+  String get suiteAddUnit => 'أضف وحدة';
+
+  @override
+  String get suiteOpeningQty => 'رصيد افتتاحي (بالوحدة الأساسية)';
+
+  @override
+  String get suitePickMenuItem =>
+      'اختر صنفًا من المنيو أو المتجر لتحدد ما يخصمه من المخزون.';
+
+  @override
+  String get suiteLinkRecipe => 'وصفة';
+
+  @override
+  String get suiteLinkDirect => 'مباشر';
+
+  @override
+  String get suiteLinkNone => 'غير مربوط';
+
+  @override
+  String get suiteAddsTo => 'يضيف إلى الوصفة';
+
+  @override
+  String suiteRecipeCost(String cost, String percent) {
+    return 'التكلفة $cost ج · $percent% من السعر';
+  }
+
+  @override
+  String get suiteIngredient => 'المكوّن';
+
+  @override
+  String get suiteWastePct => 'فاقد %';
+
+  @override
+  String get suiteAddIngredient => 'أضف مكوّنًا';
+
+  @override
+  String get suiteNewSupplier => 'مورد جديد';
+
+  @override
+  String get suiteNewOrder => 'أمر شراء جديد';
+
+  @override
+  String get suiteOrders => 'أوامر الشراء';
+
+  @override
+  String get suiteSuppliers => 'الموردون';
+
+  @override
+  String get suiteSupplierName => 'اسم المورد';
+
+  @override
+  String get suitePhone => 'التليفون';
+
+  @override
+  String get suiteLinkedBusinessId => 'رقم النشاط على BIM (اختياري)';
+
+  @override
+  String get suiteLinkedBusinessHint =>
+      'لو المورد نشاط على BIM يصله أمر الشراء في تطبيقه.';
+
+  @override
+  String get suitePickOrder => 'اختر أمر شراء.';
+
+  @override
+  String get suiteSupplier => 'المورد';
+
+  @override
+  String get suiteSupplierConfirmed => 'أكّد المورد الأمر في تطبيقه.';
+
+  @override
+  String get suiteLines => 'الأصناف';
+
+  @override
+  String get suiteUnit => 'الوحدة';
+
+  @override
+  String get suiteOrdered => 'المطلوب';
+
+  @override
+  String get suitePrice => 'السعر';
+
+  @override
+  String get suiteReceived => 'المستلم';
+
+  @override
+  String get suiteBilled => 'المفوتر';
+
+  @override
+  String get suiteMatchProblem =>
+      'المطابقة الثلاثية: فاتورة المورد لا تطابق المطلوب والمستلم';
+
+  @override
+  String get suitePriceDiffers => 'السعر مختلف';
+
+  @override
+  String get suiteBilledMore => 'مفوتر أكثر من المستلم';
+
+  @override
+  String get suiteSubmit => 'إرسال';
+
+  @override
+  String get suiteSaveDraft => 'حفظ كمسودة';
+
+  @override
+  String get suiteReceiveNow => 'استلام';
+
+  @override
+  String get suiteRecordBill => 'فاتورة المورد';
+
+  @override
+  String get suiteRecordPayment => 'سجّل دفعة';
+
+  @override
+  String get suiteClose => 'إغلاق';
+
+  @override
+  String get suiteBillNumber => 'رقم الفاتورة';
+
+  @override
+  String get suitePaymentOutsideHint =>
+      'الفلوس تتحرك خارج التطبيق؛ هنا نسجّلها فقط لتعرف حسابك مع المورد.';
+
+  @override
+  String get suiteAmount => 'المبلغ';
+
+  @override
+  String get suiteCash => 'نقدًا';
+
+  @override
+  String get suiteTransferMoney => 'تحويل';
+
+  @override
+  String get suiteCheque => 'شيك';
+
+  @override
+  String get suiteNote => 'ملاحظة';
+
+  @override
+  String get suiteBalance => 'المستحق له';
+
+  @override
+  String get suiteUnitPrice => 'سعر الوحدة';
+
+  @override
+  String get suiteAddLine => 'أضف سطرًا';
+
+  @override
+  String get suiteAgainstOrder => 'على أمر شراء';
+
+  @override
+  String get suiteNoOrder => 'بدون أمر شراء';
+
+  @override
+  String get suiteScanToReceive =>
+      'امسح باركود الصنف أو الكرتونة — كل مسحة تزيد المستلم واحدًا';
+
+  @override
+  String suiteUnknownBarcode(String code) {
+    return 'باركود غير معروف: $code';
+  }
+
+  @override
+  String get suiteReceiveEmpty => 'اختر أمر شراء أو امسح باركود صنف.';
+
+  @override
+  String get suiteRemaining => 'الباقي';
+
+  @override
+  String get suiteReceivedNow => 'المستلم الآن';
+
+  @override
+  String get suiteDamaged => 'تالف';
+
+  @override
+  String get suiteLot => 'التشغيلة';
+
+  @override
+  String get suiteExpiry => 'الصلاحية';
+
+  @override
+  String get suiteReceiveNoEdit =>
+      'بعد التأكيد لا يُعدَّل الاستلام — الخطأ يُصحَّح بمرتجع أو جرد.';
+
+  @override
+  String get suiteConfirmReceipt => 'تأكيد الاستلام';
+
+  @override
+  String get suiteStartCount => 'جرد جديد';
+
+  @override
+  String get suiteCountTitle => 'عنوان الجرد';
+
+  @override
+  String get suiteCountGroup => 'مجموعة فقط (اختياري)';
+
+  @override
+  String get suiteBlindCount => 'جرد أعمى (العادّ لا يرى الرقم المحسوب)';
+
+  @override
+  String get suiteCounting => 'جارٍ العدّ';
+
+  @override
+  String get suiteReview => 'مراجعة الفروق';
+
+  @override
+  String get suiteApplied => 'معتمد';
+
+  @override
+  String get suiteBack => 'رجوع';
+
+  @override
+  String get suiteFinishCount => 'إنهاء العدّ';
+
+  @override
+  String get suiteApplyCount => 'اعتماد الجرد وتسجيل الفروق';
+
+  @override
+  String get suiteBlindHint =>
+      'جرد أعمى: الأرقام المحسوبة تظهر بعد إنهاء العدّ.';
+
+  @override
+  String get suiteScanToCount => 'امسح الباركود لزيادة المعدود';
+
+  @override
+  String suiteNetDifference(String amount) {
+    return 'صافي الفرق: $amount ج';
+  }
+
+  @override
+  String get suiteExpected => 'المحسوب';
+
+  @override
+  String get suiteCounted => 'المعدود';
+
+  @override
+  String get suiteDifference => 'الفرق';
+
+  @override
+  String get suiteOpenShift => 'فتح وردية';
+
+  @override
+  String get suiteCloseShift => 'تقفيل الوردية';
+
+  @override
+  String get suiteOpeningCash => 'نقدية البداية في الدرج';
+
+  @override
+  String get suiteCountedCash => 'النقدية المعدودة في الدرج';
+
+  @override
+  String get suiteShiftClosed => 'تم تقفيل الوردية';
+
+  @override
+  String suiteShiftSummary(String counted, String difference, String expected) {
+    return 'المتوقع $expected ج، المعدود $counted ج، الفرق $difference ج.';
+  }
+
+  @override
+  String get suitePaidLess => 'المدفوع أقل من الإجمالي.';
+
+  @override
+  String suiteChange(String amount) {
+    return 'الباقي للعميل: $amount ج';
+  }
+
+  @override
+  String get suiteScanToSell => 'امسح الباركود…';
+
+  @override
+  String get suiteSearch => 'بحث';
+
+  @override
+  String suiteAvailable(int n) {
+    return 'متاح ~$n';
+  }
+
+  @override
+  String get suiteInvoice => 'الفاتورة';
+
+  @override
+  String get suitePaidCash => 'المدفوع نقدًا';
+
+  @override
+  String get suitePay => 'دفع';
+
+  @override
+  String get suiteCashOutsideHint =>
+      'الفلوس نقدًا في الدرج — لا شيء من المحفظة.';
+
+  @override
+  String get suiteLastSales => 'آخر الفواتير';
+
+  @override
+  String get suiteReturned => 'مرتجع';
+
+  @override
+  String get suiteReturn => 'مرتجع';
+
+  @override
+  String get suiteSize => 'المقاس';
+
+  @override
+  String get suiteRegular => 'عادي';
+
+  @override
+  String get suiteExtras => 'الإضافات';
+
+  @override
+  String get suiteAddToInvoice => 'أضف للفاتورة';
+
+  @override
+  String get suiteRoleMain => 'جهاز المدير (الرئيسي)';
+
+  @override
+  String get suiteRoleManager => 'مدير';
+
+  @override
+  String get suiteRoleWarehouse => 'جهاز المخزن';
+
+  @override
+  String get suiteRolePurchases => 'جهاز المشتريات';
+
+  @override
+  String get suiteRoleCashier => 'جهاز الكاشير';
+
+  @override
+  String get suiteDeviceName => 'اسم الجهاز';
+
+  @override
+  String get suitePairTitle => 'ربط بجهاز المدير';
+
+  @override
+  String get suitePairCode => 'الكود الظاهر على جهاز المدير';
+
+  @override
+  String get suiteRole => 'دور الجهاز';
+
+  @override
+  String get suitePair => 'ربط';
+
+  @override
+  String get suitePaired => 'تم الربط بجهاز المدير.';
+
+  @override
+  String get suitePairFailed =>
+      'لم يتم الربط: تأكد من الكود وأن الجهازين على نفس الشبكة.';
+
+  @override
+  String get suiteThisComputer => 'هذا الجهاز';
+
+  @override
+  String get suiteIsMain =>
+      'هذا هو الجهاز الرئيسي: يجمع أجهزة النشاط على الشبكة الداخلية ويزامنها مع السيرفر.';
+
+  @override
+  String get suiteNewPairingCode => 'كود ربط جديد';
+
+  @override
+  String get suitePairingHint =>
+      'الكود صالح 5 دقائق ولمرة واحدة. أدخله على الجهاز الجديد وهو على نفس الشبكة.';
+
+  @override
+  String suitePairedWith(String address, String name) {
+    return 'مربوط بجهاز المدير «$name» ($address).';
+  }
+
+  @override
+  String get suiteUnpair => 'فك الربط';
+
+  @override
+  String get suiteMakeMain => 'اجعله الجهاز الرئيسي';
+
+  @override
+  String get suiteFindMain => 'ابحث عن جهاز المدير على الشبكة';
+
+  @override
+  String get suiteNoMainFound => 'لم يُعثر على جهاز رئيسي على هذه الشبكة.';
+
+  @override
+  String get suitePairedComputers => 'الأجهزة المربوطة بهذا الجهاز';
+
+  @override
+  String get suiteRegister => 'تسجيل';
+
+  @override
+  String get suiteForget => 'إزالة';
+
+  @override
+  String get suiteRegisteredDevices => 'الأجهزة المسجلة للنشاط';
+
+  @override
+  String get suiteNoDevices => 'لا أجهزة مسجلة بعد.';
+
+  @override
+  String get suiteRevoke => 'إلغاء التسجيل';
+
+  @override
+  String get suiteSubscription => 'الاشتراك الشهري';
+
+  @override
+  String suiteSubscriptionStatus(String status) {
+    return 'الحالة: $status';
+  }
+
+  @override
+  String suitePaidUntil(String date) {
+    return 'مدفوع حتى $date';
+  }
+
+  @override
+  String get suiteSubscriptionRules =>
+      'تنبيه قبل التجديد بـ3 أيام، ثم 7 أيام سماح، ثم قراءة وتصدير فقط حتى الشحن. لا تُحذف أي بيانات أبدًا، وخصم المبيعات من المخزون مستمر.';
+
+  @override
+  String get suiteSubActive => 'ساري';
+
+  @override
+  String get suiteSubGrace => 'أيام سماح';
+
+  @override
+  String get suiteSubReadOnly => 'قراءة فقط';
+
+  @override
+  String get suiteSubNone => 'غير مشترك';
+
+  @override
+  String get suiteParts => 'أجزاء المخزون المستخدمة';
+
+  @override
+  String get suitePartsHint =>
+      'يحددها تصنيف نشاطك من لوحة التحكم؛ الاختيارية تفعّلها أنت.';
+
+  @override
+  String get suiteOptional => 'اختياري';
+
+  @override
+  String get suiteApprovalLimit => 'حد اعتماد أوامر الشراء';
+
+  @override
+  String get suiteApprovalLimitField =>
+      'فوق هذا المبلغ يحتاج الأمر اعتمادك (فارغ = بلا حد)';
+
+  @override
+  String get suiteRejectedTitle => 'عمليات رفضها الخادم بعد عودة الاتصال';
+
+  @override
+  String get suiteClear => 'مسح القائمة';
 }

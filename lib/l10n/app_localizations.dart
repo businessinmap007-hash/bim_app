@@ -23910,6 +23910,1572 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تبقى سارية بعد انتهاء الحصة أو إيقافها؛ لا يُلغى منها شيء.'**
   String get pshStandingHint;
+
+  /// No description provided for @stkTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المخزون'**
+  String get stkTitle;
+
+  /// No description provided for @stkTileSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'يكفي مبيعات اليوم؟ واعتماد أوامر الشراء'**
+  String get stkTileSubtitle;
+
+  /// No description provided for @stkNotAvailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'المخزون غير متاح لتصنيف نشاطك.'**
+  String get stkNotAvailable;
+
+  /// No description provided for @stkEnableTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المخزون والمشتريات'**
+  String get stkEnableTitle;
+
+  /// No description provided for @stkEnableBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'تابع المخزون لحظيًا: كل استلام وبيع وهالك حركة مسجلة، والبيع من التطبيق يخصم تلقائيًا بالوصفة. الإدارة الكاملة من تطبيق الكمبيوتر، وتتابعه من هنا.'**
+  String get stkEnableBody;
+
+  /// No description provided for @stkSubscriptionPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاشتراك الشهري: {price} ج من رصيد المحفظة'**
+  String stkSubscriptionPrice(String price);
+
+  /// No description provided for @stkSubscriptionFree.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون رسوم اشتراك حاليًا.'**
+  String get stkSubscriptionFree;
+
+  /// No description provided for @stkEnableAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفعيل المخزون'**
+  String get stkEnableAction;
+
+  /// No description provided for @stkOwnerEnables.
+  ///
+  /// In ar, this message translates to:
+  /// **'يفعّله صاحب النشاط.'**
+  String get stkOwnerEnables;
+
+  /// No description provided for @stkStockValue.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيمة المخزون'**
+  String get stkStockValue;
+
+  /// No description provided for @stkCurrency.
+  ///
+  /// In ar, this message translates to:
+  /// **'ج'**
+  String get stkCurrency;
+
+  /// No description provided for @stkBelowReorder.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحت حد الطلب'**
+  String get stkBelowReorder;
+
+  /// No description provided for @stkPendingApproval.
+  ///
+  /// In ar, this message translates to:
+  /// **'أمر شراء #{number} بانتظار اعتمادك'**
+  String stkPendingApproval(int number);
+
+  /// No description provided for @stkCoversToday.
+  ///
+  /// In ar, this message translates to:
+  /// **'يكفي مبيعات اليوم؟'**
+  String get stkCoversToday;
+
+  /// No description provided for @stkNoItems.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا أصناف بعد.'**
+  String get stkNoItems;
+
+  /// No description provided for @stkCoverageLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'{onHand} {unit} — يكفي ~{days} يوم'**
+  String stkCoverageLine(String days, String onHand, String unit);
+
+  /// No description provided for @stkVerdictNo.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يكفي'**
+  String get stkVerdictNo;
+
+  /// No description provided for @stkVerdictTight.
+  ///
+  /// In ar, this message translates to:
+  /// **'يكفي بالكاد'**
+  String get stkVerdictTight;
+
+  /// No description provided for @stkVerdictYes.
+  ///
+  /// In ar, this message translates to:
+  /// **'يكفي'**
+  String get stkVerdictYes;
+
+  /// No description provided for @stkVerdictEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'نفد'**
+  String get stkVerdictEmpty;
+
+  /// No description provided for @stkVerdictUnknown.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا مبيعات بعد'**
+  String get stkVerdictUnknown;
+
+  /// No description provided for @stkOnHandNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرصيد الآن'**
+  String get stkOnHandNow;
+
+  /// No description provided for @stkCoverageExplain.
+  ///
+  /// In ar, this message translates to:
+  /// **'بِيع اليوم {today} {unit}، ومتوسط هذا اليوم في آخر 4 أسابيع {avg}، فالمتوقع للباقي ~{rest}.'**
+  String stkCoverageExplain(String avg, String rest, String today, String unit);
+
+  /// No description provided for @stkDaysLeft.
+  ///
+  /// In ar, this message translates to:
+  /// **'يكفي ~{days} يوم بالمعدل الحالي.'**
+  String stkDaysLeft(String days);
+
+  /// No description provided for @stkRecentMoves.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر الحركات'**
+  String get stkRecentMoves;
+
+  /// No description provided for @stkRecordWaste.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجّل هالك'**
+  String get stkRecordWaste;
+
+  /// No description provided for @stkQtyIn.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكمية ({unit})'**
+  String stkQtyIn(String unit);
+
+  /// No description provided for @stkReason.
+  ///
+  /// In ar, this message translates to:
+  /// **'السبب'**
+  String get stkReason;
+
+  /// No description provided for @stkSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الحفظ.'**
+  String get stkSaved;
+
+  /// No description provided for @stkReject.
+  ///
+  /// In ar, this message translates to:
+  /// **'رفض'**
+  String get stkReject;
+
+  /// No description provided for @stkPurchaseOrderNo.
+  ///
+  /// In ar, this message translates to:
+  /// **'أمر شراء #{number}'**
+  String stkPurchaseOrderNo(int number);
+
+  /// No description provided for @stkOnBim.
+  ///
+  /// In ar, this message translates to:
+  /// **'على BIM'**
+  String get stkOnBim;
+
+  /// No description provided for @stkTotal.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجمالي'**
+  String get stkTotal;
+
+  /// No description provided for @stkApproveAndSend.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتماد وإرسال'**
+  String get stkApproveAndSend;
+
+  /// No description provided for @stkIncomingTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أوامر الشراء الواردة'**
+  String get stkIncomingTitle;
+
+  /// No description provided for @stkIncomingEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يرسل لك أي نشاط أمر شراء بعد.'**
+  String get stkIncomingEmpty;
+
+  /// No description provided for @stkConfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكّدت هذا الأمر.'**
+  String get stkConfirmed;
+
+  /// No description provided for @stkConfirmOrder.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد الأمر'**
+  String get stkConfirmOrder;
+
+  /// No description provided for @stkMoveReceipt.
+  ///
+  /// In ar, this message translates to:
+  /// **'استلام'**
+  String get stkMoveReceipt;
+
+  /// No description provided for @stkMoveSale.
+  ///
+  /// In ar, this message translates to:
+  /// **'بيع'**
+  String get stkMoveSale;
+
+  /// No description provided for @stkMoveSaleReversal.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرجاع بيع'**
+  String get stkMoveSaleReversal;
+
+  /// No description provided for @stkMoveWaste.
+  ///
+  /// In ar, this message translates to:
+  /// **'هالك'**
+  String get stkMoveWaste;
+
+  /// No description provided for @stkMoveTransferOut.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحويل خارج'**
+  String get stkMoveTransferOut;
+
+  /// No description provided for @stkMoveTransferIn.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحويل داخل'**
+  String get stkMoveTransferIn;
+
+  /// No description provided for @stkMoveAdjustment.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسوية جرد'**
+  String get stkMoveAdjustment;
+
+  /// No description provided for @stkMoveSupplierReturn.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرتجع لمورد'**
+  String get stkMoveSupplierReturn;
+
+  /// No description provided for @stkMoveOpening.
+  ///
+  /// In ar, this message translates to:
+  /// **'رصيد افتتاحي'**
+  String get stkMoveOpening;
+
+  /// No description provided for @stkMoveReversal.
+  ///
+  /// In ar, this message translates to:
+  /// **'عكس حركة'**
+  String get stkMoveReversal;
+
+  /// No description provided for @stkPoDraft.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسودة'**
+  String get stkPoDraft;
+
+  /// No description provided for @stkPoPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار الاعتماد'**
+  String get stkPoPending;
+
+  /// No description provided for @stkPoApproved.
+  ///
+  /// In ar, this message translates to:
+  /// **'معتمد ومُرسل'**
+  String get stkPoApproved;
+
+  /// No description provided for @stkPoPartial.
+  ///
+  /// In ar, this message translates to:
+  /// **'مستلم جزئيًا'**
+  String get stkPoPartial;
+
+  /// No description provided for @stkPoReceived.
+  ///
+  /// In ar, this message translates to:
+  /// **'مستلم بالكامل'**
+  String get stkPoReceived;
+
+  /// No description provided for @stkPoClosed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مغلق'**
+  String get stkPoClosed;
+
+  /// No description provided for @stkPoRejected.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرفوض'**
+  String get stkPoRejected;
+
+  /// No description provided for @stkPoCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغي'**
+  String get stkPoCancelled;
+
+  /// No description provided for @suiteBrand.
+  ///
+  /// In ar, this message translates to:
+  /// **'BIM للأعمال'**
+  String get suiteBrand;
+
+  /// No description provided for @suiteSignInTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ادخل بحسابك على BIM'**
+  String get suiteSignInTitle;
+
+  /// No description provided for @suiteSignInHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'نفس الحساب الذي تستخدمه في التطبيق. الموظف يدخل بحسابه هو.'**
+  String get suiteSignInHint;
+
+  /// No description provided for @suiteLoginField.
+  ///
+  /// In ar, this message translates to:
+  /// **'البريد الإلكتروني'**
+  String get suiteLoginField;
+
+  /// No description provided for @suiteChooseBusiness.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر النشاط الذي يعمل له هذا الجهاز'**
+  String get suiteChooseBusiness;
+
+  /// No description provided for @suiteNoBusiness.
+  ///
+  /// In ar, this message translates to:
+  /// **'حسابك ليس صاحب نشاط، ولا موظفًا بصلاحية مخزون أو مشتريات أو كاشير.'**
+  String get suiteNoBusiness;
+
+  /// No description provided for @suiteNavDashboard.
+  ///
+  /// In ar, this message translates to:
+  /// **'لوحة اليوم'**
+  String get suiteNavDashboard;
+
+  /// No description provided for @suiteNavItems.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأصناف والمخزون'**
+  String get suiteNavItems;
+
+  /// No description provided for @suiteNavRecipes.
+  ///
+  /// In ar, this message translates to:
+  /// **'ربط المنيو والوصفات'**
+  String get suiteNavRecipes;
+
+  /// No description provided for @suiteNavPurchases.
+  ///
+  /// In ar, this message translates to:
+  /// **'المشتريات'**
+  String get suiteNavPurchases;
+
+  /// No description provided for @suiteNavReceive.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاستلام'**
+  String get suiteNavReceive;
+
+  /// No description provided for @suiteNavStocktake.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجرد'**
+  String get suiteNavStocktake;
+
+  /// No description provided for @suiteNavPos.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكاشير'**
+  String get suiteNavPos;
+
+  /// No description provided for @suiteNavDevices.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأجهزة'**
+  String get suiteNavDevices;
+
+  /// No description provided for @suiteNavSettings.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإعدادات والاشتراك'**
+  String get suiteNavSettings;
+
+  /// No description provided for @suiteLinkOnline.
+  ///
+  /// In ar, this message translates to:
+  /// **'متصل'**
+  String get suiteLinkOnline;
+
+  /// No description provided for @suiteLinkOffice.
+  ///
+  /// In ar, this message translates to:
+  /// **'عبر جهاز المدير (بدون نت)'**
+  String get suiteLinkOffice;
+
+  /// No description provided for @suiteLinkOffline.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون اتصال — يُحفظ على الجهاز'**
+  String get suiteLinkOffline;
+
+  /// No description provided for @suiteLinkChecking.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ الفحص…'**
+  String get suiteLinkChecking;
+
+  /// No description provided for @suitePending.
+  ///
+  /// In ar, this message translates to:
+  /// **'{n} بانتظار الإرسال'**
+  String suitePending(int n);
+
+  /// No description provided for @suiteRejected.
+  ///
+  /// In ar, this message translates to:
+  /// **'{n} رفضها الخادم'**
+  String suiteRejected(int n);
+
+  /// No description provided for @suiteSyncNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'زامن الآن'**
+  String get suiteSyncNow;
+
+  /// No description provided for @suiteReadOnlyBanner.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاشتراك غير مدفوع: للقراءة والتصدير فقط حتى تشحن المحفظة وتجدد. بياناتك محفوظة.'**
+  String get suiteReadOnlyBanner;
+
+  /// No description provided for @suiteGraceBanner.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يكفِ الرصيد للتجديد — أيام سماح ثم يصبح للقراءة فقط.'**
+  String get suiteGraceBanner;
+
+  /// No description provided for @suiteRenew.
+  ///
+  /// In ar, this message translates to:
+  /// **'جدّد الآن'**
+  String get suiteRenew;
+
+  /// No description provided for @suiteQueued.
+  ///
+  /// In ar, this message translates to:
+  /// **'حُفظت على هذا الجهاز وتُرسل وحدها عند عودة الاتصال.'**
+  String get suiteQueued;
+
+  /// No description provided for @suiteAtAverageCost.
+  ///
+  /// In ar, this message translates to:
+  /// **'بمتوسط التكلفة المرجّح'**
+  String get suiteAtAverageCost;
+
+  /// No description provided for @suiteOpenOrders.
+  ///
+  /// In ar, this message translates to:
+  /// **'أوامر شراء مفتوحة'**
+  String get suiteOpenOrders;
+
+  /// No description provided for @suiteWasteMonth.
+  ///
+  /// In ar, this message translates to:
+  /// **'هالك هذا الشهر'**
+  String get suiteWasteMonth;
+
+  /// No description provided for @suiteNeedsAttention.
+  ///
+  /// In ar, this message translates to:
+  /// **'يحتاج انتباهك'**
+  String get suiteNeedsAttention;
+
+  /// No description provided for @suiteAllCovered.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل الأصناف فوق حد الطلب وتكفي اليوم.'**
+  String get suiteAllCovered;
+
+  /// No description provided for @suiteItem.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصنف'**
+  String get suiteItem;
+
+  /// No description provided for @suiteOnHand.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرصيد'**
+  String get suiteOnHand;
+
+  /// No description provided for @suiteDaysLeft.
+  ///
+  /// In ar, this message translates to:
+  /// **'يكفي (يوم)'**
+  String get suiteDaysLeft;
+
+  /// No description provided for @suiteNewItem.
+  ///
+  /// In ar, this message translates to:
+  /// **'صنف جديد'**
+  String get suiteNewItem;
+
+  /// No description provided for @suiteSearchOrScan.
+  ///
+  /// In ar, this message translates to:
+  /// **'بحث بالاسم أو امسح الباركود…'**
+  String get suiteSearchOrScan;
+
+  /// No description provided for @suiteAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get suiteAll;
+
+  /// No description provided for @suiteReorderLevel.
+  ///
+  /// In ar, this message translates to:
+  /// **'حد إعادة الطلب'**
+  String get suiteReorderLevel;
+
+  /// No description provided for @suiteAvgCost.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوسط التكلفة'**
+  String get suiteAvgCost;
+
+  /// No description provided for @suiteValue.
+  ///
+  /// In ar, this message translates to:
+  /// **'القيمة'**
+  String get suiteValue;
+
+  /// No description provided for @suitePickItem.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر صنفًا لترى دفتر حركاته.'**
+  String get suitePickItem;
+
+  /// No description provided for @suiteBaseUnit.
+  ///
+  /// In ar, this message translates to:
+  /// **'أساسية'**
+  String get suiteBaseUnit;
+
+  /// No description provided for @suiteEdit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل'**
+  String get suiteEdit;
+
+  /// No description provided for @suiteAddOpening.
+  ///
+  /// In ar, this message translates to:
+  /// **'رصيد افتتاحي'**
+  String get suiteAddOpening;
+
+  /// No description provided for @suiteTransfer.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحويل لمخزن'**
+  String get suiteTransfer;
+
+  /// No description provided for @suiteLedger.
+  ///
+  /// In ar, this message translates to:
+  /// **'دفتر الحركات'**
+  String get suiteLedger;
+
+  /// No description provided for @suiteLedgerHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا تعديل ولا حذف لحركة — التصحيح بحركة عكسية.'**
+  String get suiteLedgerHint;
+
+  /// No description provided for @suiteWhen.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوقت'**
+  String get suiteWhen;
+
+  /// No description provided for @suiteMove.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحركة'**
+  String get suiteMove;
+
+  /// No description provided for @suiteQty.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكمية'**
+  String get suiteQty;
+
+  /// No description provided for @suiteBalanceAfter.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرصيد بعدها'**
+  String get suiteBalanceAfter;
+
+  /// No description provided for @suiteUnitCost.
+  ///
+  /// In ar, this message translates to:
+  /// **'تكلفة الوحدة الأساسية'**
+  String get suiteUnitCost;
+
+  /// No description provided for @suiteToWarehouse.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلى مخزن'**
+  String get suiteToWarehouse;
+
+  /// No description provided for @suiteKindCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدد'**
+  String get suiteKindCount;
+
+  /// No description provided for @suiteKindWeight.
+  ///
+  /// In ar, this message translates to:
+  /// **'وزن'**
+  String get suiteKindWeight;
+
+  /// No description provided for @suiteKindVolume.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجم'**
+  String get suiteKindVolume;
+
+  /// No description provided for @suiteKindLength.
+  ///
+  /// In ar, this message translates to:
+  /// **'طول'**
+  String get suiteKindLength;
+
+  /// No description provided for @suiteNameAr.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم بالعربية'**
+  String get suiteNameAr;
+
+  /// No description provided for @suiteNameEn.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم بالإنجليزية (اختياري)'**
+  String get suiteNameEn;
+
+  /// No description provided for @suiteGroup.
+  ///
+  /// In ar, this message translates to:
+  /// **'المجموعة (مشروبات، خامات مطبخ…)'**
+  String get suiteGroup;
+
+  /// No description provided for @suiteBaseUnitHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوحدة الأساسية (علبة، جرام، مل، قطعة)'**
+  String get suiteBaseUnitHint;
+
+  /// No description provided for @suiteUnitKind.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع الوحدة'**
+  String get suiteUnitKind;
+
+  /// No description provided for @suiteBarcode.
+  ///
+  /// In ar, this message translates to:
+  /// **'الباركود'**
+  String get suiteBarcode;
+
+  /// No description provided for @suitePurchaseUnits.
+  ///
+  /// In ar, this message translates to:
+  /// **'وحدات الشراء (كرتونة، بالتة…)'**
+  String get suitePurchaseUnits;
+
+  /// No description provided for @suiteUnitName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الوحدة'**
+  String get suiteUnitName;
+
+  /// No description provided for @suiteUnitFactor.
+  ///
+  /// In ar, this message translates to:
+  /// **'= كم {unit}'**
+  String suiteUnitFactor(String unit);
+
+  /// No description provided for @suiteAddUnit.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف وحدة'**
+  String get suiteAddUnit;
+
+  /// No description provided for @suiteOpeningQty.
+  ///
+  /// In ar, this message translates to:
+  /// **'رصيد افتتاحي (بالوحدة الأساسية)'**
+  String get suiteOpeningQty;
+
+  /// No description provided for @suitePickMenuItem.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر صنفًا من المنيو أو المتجر لتحدد ما يخصمه من المخزون.'**
+  String get suitePickMenuItem;
+
+  /// No description provided for @suiteLinkRecipe.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصفة'**
+  String get suiteLinkRecipe;
+
+  /// No description provided for @suiteLinkDirect.
+  ///
+  /// In ar, this message translates to:
+  /// **'مباشر'**
+  String get suiteLinkDirect;
+
+  /// No description provided for @suiteLinkNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير مربوط'**
+  String get suiteLinkNone;
+
+  /// No description provided for @suiteAddsTo.
+  ///
+  /// In ar, this message translates to:
+  /// **'يضيف إلى الوصفة'**
+  String get suiteAddsTo;
+
+  /// No description provided for @suiteRecipeCost.
+  ///
+  /// In ar, this message translates to:
+  /// **'التكلفة {cost} ج · {percent}% من السعر'**
+  String suiteRecipeCost(String cost, String percent);
+
+  /// No description provided for @suiteIngredient.
+  ///
+  /// In ar, this message translates to:
+  /// **'المكوّن'**
+  String get suiteIngredient;
+
+  /// No description provided for @suiteWastePct.
+  ///
+  /// In ar, this message translates to:
+  /// **'فاقد %'**
+  String get suiteWastePct;
+
+  /// No description provided for @suiteAddIngredient.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف مكوّنًا'**
+  String get suiteAddIngredient;
+
+  /// No description provided for @suiteNewSupplier.
+  ///
+  /// In ar, this message translates to:
+  /// **'مورد جديد'**
+  String get suiteNewSupplier;
+
+  /// No description provided for @suiteNewOrder.
+  ///
+  /// In ar, this message translates to:
+  /// **'أمر شراء جديد'**
+  String get suiteNewOrder;
+
+  /// No description provided for @suiteOrders.
+  ///
+  /// In ar, this message translates to:
+  /// **'أوامر الشراء'**
+  String get suiteOrders;
+
+  /// No description provided for @suiteSuppliers.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموردون'**
+  String get suiteSuppliers;
+
+  /// No description provided for @suiteSupplierName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم المورد'**
+  String get suiteSupplierName;
+
+  /// No description provided for @suitePhone.
+  ///
+  /// In ar, this message translates to:
+  /// **'التليفون'**
+  String get suitePhone;
+
+  /// No description provided for @suiteLinkedBusinessId.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم النشاط على BIM (اختياري)'**
+  String get suiteLinkedBusinessId;
+
+  /// No description provided for @suiteLinkedBusinessHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'لو المورد نشاط على BIM يصله أمر الشراء في تطبيقه.'**
+  String get suiteLinkedBusinessHint;
+
+  /// No description provided for @suitePickOrder.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر أمر شراء.'**
+  String get suitePickOrder;
+
+  /// No description provided for @suiteSupplier.
+  ///
+  /// In ar, this message translates to:
+  /// **'المورد'**
+  String get suiteSupplier;
+
+  /// No description provided for @suiteSupplierConfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكّد المورد الأمر في تطبيقه.'**
+  String get suiteSupplierConfirmed;
+
+  /// No description provided for @suiteLines.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأصناف'**
+  String get suiteLines;
+
+  /// No description provided for @suiteUnit.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوحدة'**
+  String get suiteUnit;
+
+  /// No description provided for @suiteOrdered.
+  ///
+  /// In ar, this message translates to:
+  /// **'المطلوب'**
+  String get suiteOrdered;
+
+  /// No description provided for @suitePrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر'**
+  String get suitePrice;
+
+  /// No description provided for @suiteReceived.
+  ///
+  /// In ar, this message translates to:
+  /// **'المستلم'**
+  String get suiteReceived;
+
+  /// No description provided for @suiteBilled.
+  ///
+  /// In ar, this message translates to:
+  /// **'المفوتر'**
+  String get suiteBilled;
+
+  /// No description provided for @suiteMatchProblem.
+  ///
+  /// In ar, this message translates to:
+  /// **'المطابقة الثلاثية: فاتورة المورد لا تطابق المطلوب والمستلم'**
+  String get suiteMatchProblem;
+
+  /// No description provided for @suitePriceDiffers.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر مختلف'**
+  String get suitePriceDiffers;
+
+  /// No description provided for @suiteBilledMore.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفوتر أكثر من المستلم'**
+  String get suiteBilledMore;
+
+  /// No description provided for @suiteSubmit.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال'**
+  String get suiteSubmit;
+
+  /// No description provided for @suiteSaveDraft.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ كمسودة'**
+  String get suiteSaveDraft;
+
+  /// No description provided for @suiteReceiveNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'استلام'**
+  String get suiteReceiveNow;
+
+  /// No description provided for @suiteRecordBill.
+  ///
+  /// In ar, this message translates to:
+  /// **'فاتورة المورد'**
+  String get suiteRecordBill;
+
+  /// No description provided for @suiteRecordPayment.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجّل دفعة'**
+  String get suiteRecordPayment;
+
+  /// No description provided for @suiteClose.
+  ///
+  /// In ar, this message translates to:
+  /// **'إغلاق'**
+  String get suiteClose;
+
+  /// No description provided for @suiteBillNumber.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الفاتورة'**
+  String get suiteBillNumber;
+
+  /// No description provided for @suitePaymentOutsideHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفلوس تتحرك خارج التطبيق؛ هنا نسجّلها فقط لتعرف حسابك مع المورد.'**
+  String get suitePaymentOutsideHint;
+
+  /// No description provided for @suiteAmount.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ'**
+  String get suiteAmount;
+
+  /// No description provided for @suiteCash.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقدًا'**
+  String get suiteCash;
+
+  /// No description provided for @suiteTransferMoney.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحويل'**
+  String get suiteTransferMoney;
+
+  /// No description provided for @suiteCheque.
+  ///
+  /// In ar, this message translates to:
+  /// **'شيك'**
+  String get suiteCheque;
+
+  /// No description provided for @suiteNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظة'**
+  String get suiteNote;
+
+  /// No description provided for @suiteBalance.
+  ///
+  /// In ar, this message translates to:
+  /// **'المستحق له'**
+  String get suiteBalance;
+
+  /// No description provided for @suiteUnitPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'سعر الوحدة'**
+  String get suiteUnitPrice;
+
+  /// No description provided for @suiteAddLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف سطرًا'**
+  String get suiteAddLine;
+
+  /// No description provided for @suiteAgainstOrder.
+  ///
+  /// In ar, this message translates to:
+  /// **'على أمر شراء'**
+  String get suiteAgainstOrder;
+
+  /// No description provided for @suiteNoOrder.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون أمر شراء'**
+  String get suiteNoOrder;
+
+  /// No description provided for @suiteScanToReceive.
+  ///
+  /// In ar, this message translates to:
+  /// **'امسح باركود الصنف أو الكرتونة — كل مسحة تزيد المستلم واحدًا'**
+  String get suiteScanToReceive;
+
+  /// No description provided for @suiteUnknownBarcode.
+  ///
+  /// In ar, this message translates to:
+  /// **'باركود غير معروف: {code}'**
+  String suiteUnknownBarcode(String code);
+
+  /// No description provided for @suiteReceiveEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر أمر شراء أو امسح باركود صنف.'**
+  String get suiteReceiveEmpty;
+
+  /// No description provided for @suiteRemaining.
+  ///
+  /// In ar, this message translates to:
+  /// **'الباقي'**
+  String get suiteRemaining;
+
+  /// No description provided for @suiteReceivedNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'المستلم الآن'**
+  String get suiteReceivedNow;
+
+  /// No description provided for @suiteDamaged.
+  ///
+  /// In ar, this message translates to:
+  /// **'تالف'**
+  String get suiteDamaged;
+
+  /// No description provided for @suiteLot.
+  ///
+  /// In ar, this message translates to:
+  /// **'التشغيلة'**
+  String get suiteLot;
+
+  /// No description provided for @suiteExpiry.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصلاحية'**
+  String get suiteExpiry;
+
+  /// No description provided for @suiteReceiveNoEdit.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعد التأكيد لا يُعدَّل الاستلام — الخطأ يُصحَّح بمرتجع أو جرد.'**
+  String get suiteReceiveNoEdit;
+
+  /// No description provided for @suiteConfirmReceipt.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد الاستلام'**
+  String get suiteConfirmReceipt;
+
+  /// No description provided for @suiteStartCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'جرد جديد'**
+  String get suiteStartCount;
+
+  /// No description provided for @suiteCountTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عنوان الجرد'**
+  String get suiteCountTitle;
+
+  /// No description provided for @suiteCountGroup.
+  ///
+  /// In ar, this message translates to:
+  /// **'مجموعة فقط (اختياري)'**
+  String get suiteCountGroup;
+
+  /// No description provided for @suiteBlindCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'جرد أعمى (العادّ لا يرى الرقم المحسوب)'**
+  String get suiteBlindCount;
+
+  /// No description provided for @suiteCounting.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ العدّ'**
+  String get suiteCounting;
+
+  /// No description provided for @suiteReview.
+  ///
+  /// In ar, this message translates to:
+  /// **'مراجعة الفروق'**
+  String get suiteReview;
+
+  /// No description provided for @suiteApplied.
+  ///
+  /// In ar, this message translates to:
+  /// **'معتمد'**
+  String get suiteApplied;
+
+  /// No description provided for @suiteBack.
+  ///
+  /// In ar, this message translates to:
+  /// **'رجوع'**
+  String get suiteBack;
+
+  /// No description provided for @suiteFinishCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنهاء العدّ'**
+  String get suiteFinishCount;
+
+  /// No description provided for @suiteApplyCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعتماد الجرد وتسجيل الفروق'**
+  String get suiteApplyCount;
+
+  /// No description provided for @suiteBlindHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'جرد أعمى: الأرقام المحسوبة تظهر بعد إنهاء العدّ.'**
+  String get suiteBlindHint;
+
+  /// No description provided for @suiteScanToCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'امسح الباركود لزيادة المعدود'**
+  String get suiteScanToCount;
+
+  /// No description provided for @suiteNetDifference.
+  ///
+  /// In ar, this message translates to:
+  /// **'صافي الفرق: {amount} ج'**
+  String suiteNetDifference(String amount);
+
+  /// No description provided for @suiteExpected.
+  ///
+  /// In ar, this message translates to:
+  /// **'المحسوب'**
+  String get suiteExpected;
+
+  /// No description provided for @suiteCounted.
+  ///
+  /// In ar, this message translates to:
+  /// **'المعدود'**
+  String get suiteCounted;
+
+  /// No description provided for @suiteDifference.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفرق'**
+  String get suiteDifference;
+
+  /// No description provided for @suiteOpenShift.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح وردية'**
+  String get suiteOpenShift;
+
+  /// No description provided for @suiteCloseShift.
+  ///
+  /// In ar, this message translates to:
+  /// **'تقفيل الوردية'**
+  String get suiteCloseShift;
+
+  /// No description provided for @suiteOpeningCash.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقدية البداية في الدرج'**
+  String get suiteOpeningCash;
+
+  /// No description provided for @suiteCountedCash.
+  ///
+  /// In ar, this message translates to:
+  /// **'النقدية المعدودة في الدرج'**
+  String get suiteCountedCash;
+
+  /// No description provided for @suiteShiftClosed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تقفيل الوردية'**
+  String get suiteShiftClosed;
+
+  /// No description provided for @suiteShiftSummary.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتوقع {expected} ج، المعدود {counted} ج، الفرق {difference} ج.'**
+  String suiteShiftSummary(String counted, String difference, String expected);
+
+  /// No description provided for @suitePaidLess.
+  ///
+  /// In ar, this message translates to:
+  /// **'المدفوع أقل من الإجمالي.'**
+  String get suitePaidLess;
+
+  /// No description provided for @suiteChange.
+  ///
+  /// In ar, this message translates to:
+  /// **'الباقي للعميل: {amount} ج'**
+  String suiteChange(String amount);
+
+  /// No description provided for @suiteScanToSell.
+  ///
+  /// In ar, this message translates to:
+  /// **'امسح الباركود…'**
+  String get suiteScanToSell;
+
+  /// No description provided for @suiteSearch.
+  ///
+  /// In ar, this message translates to:
+  /// **'بحث'**
+  String get suiteSearch;
+
+  /// No description provided for @suiteAvailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'متاح ~{n}'**
+  String suiteAvailable(int n);
+
+  /// No description provided for @suiteInvoice.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفاتورة'**
+  String get suiteInvoice;
+
+  /// No description provided for @suitePaidCash.
+  ///
+  /// In ar, this message translates to:
+  /// **'المدفوع نقدًا'**
+  String get suitePaidCash;
+
+  /// No description provided for @suitePay.
+  ///
+  /// In ar, this message translates to:
+  /// **'دفع'**
+  String get suitePay;
+
+  /// No description provided for @suiteCashOutsideHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفلوس نقدًا في الدرج — لا شيء من المحفظة.'**
+  String get suiteCashOutsideHint;
+
+  /// No description provided for @suiteLastSales.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر الفواتير'**
+  String get suiteLastSales;
+
+  /// No description provided for @suiteReturned.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرتجع'**
+  String get suiteReturned;
+
+  /// No description provided for @suiteReturn.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرتجع'**
+  String get suiteReturn;
+
+  /// No description provided for @suiteSize.
+  ///
+  /// In ar, this message translates to:
+  /// **'المقاس'**
+  String get suiteSize;
+
+  /// No description provided for @suiteRegular.
+  ///
+  /// In ar, this message translates to:
+  /// **'عادي'**
+  String get suiteRegular;
+
+  /// No description provided for @suiteExtras.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإضافات'**
+  String get suiteExtras;
+
+  /// No description provided for @suiteAddToInvoice.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف للفاتورة'**
+  String get suiteAddToInvoice;
+
+  /// No description provided for @suiteRoleMain.
+  ///
+  /// In ar, this message translates to:
+  /// **'جهاز المدير (الرئيسي)'**
+  String get suiteRoleMain;
+
+  /// No description provided for @suiteRoleManager.
+  ///
+  /// In ar, this message translates to:
+  /// **'مدير'**
+  String get suiteRoleManager;
+
+  /// No description provided for @suiteRoleWarehouse.
+  ///
+  /// In ar, this message translates to:
+  /// **'جهاز المخزن'**
+  String get suiteRoleWarehouse;
+
+  /// No description provided for @suiteRolePurchases.
+  ///
+  /// In ar, this message translates to:
+  /// **'جهاز المشتريات'**
+  String get suiteRolePurchases;
+
+  /// No description provided for @suiteRoleCashier.
+  ///
+  /// In ar, this message translates to:
+  /// **'جهاز الكاشير'**
+  String get suiteRoleCashier;
+
+  /// No description provided for @suiteDeviceName.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم الجهاز'**
+  String get suiteDeviceName;
+
+  /// No description provided for @suitePairTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ربط بجهاز المدير'**
+  String get suitePairTitle;
+
+  /// No description provided for @suitePairCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكود الظاهر على جهاز المدير'**
+  String get suitePairCode;
+
+  /// No description provided for @suiteRole.
+  ///
+  /// In ar, this message translates to:
+  /// **'دور الجهاز'**
+  String get suiteRole;
+
+  /// No description provided for @suitePair.
+  ///
+  /// In ar, this message translates to:
+  /// **'ربط'**
+  String get suitePair;
+
+  /// No description provided for @suitePaired.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم الربط بجهاز المدير.'**
+  String get suitePaired;
+
+  /// No description provided for @suitePairFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يتم الربط: تأكد من الكود وأن الجهازين على نفس الشبكة.'**
+  String get suitePairFailed;
+
+  /// No description provided for @suiteThisComputer.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا الجهاز'**
+  String get suiteThisComputer;
+
+  /// No description provided for @suiteIsMain.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا هو الجهاز الرئيسي: يجمع أجهزة النشاط على الشبكة الداخلية ويزامنها مع السيرفر.'**
+  String get suiteIsMain;
+
+  /// No description provided for @suiteNewPairingCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'كود ربط جديد'**
+  String get suiteNewPairingCode;
+
+  /// No description provided for @suitePairingHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكود صالح 5 دقائق ولمرة واحدة. أدخله على الجهاز الجديد وهو على نفس الشبكة.'**
+  String get suitePairingHint;
+
+  /// No description provided for @suitePairedWith.
+  ///
+  /// In ar, this message translates to:
+  /// **'مربوط بجهاز المدير «{name}» ({address}).'**
+  String suitePairedWith(String address, String name);
+
+  /// No description provided for @suiteUnpair.
+  ///
+  /// In ar, this message translates to:
+  /// **'فك الربط'**
+  String get suiteUnpair;
+
+  /// No description provided for @suiteMakeMain.
+  ///
+  /// In ar, this message translates to:
+  /// **'اجعله الجهاز الرئيسي'**
+  String get suiteMakeMain;
+
+  /// No description provided for @suiteFindMain.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث عن جهاز المدير على الشبكة'**
+  String get suiteFindMain;
+
+  /// No description provided for @suiteNoMainFound.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يُعثر على جهاز رئيسي على هذه الشبكة.'**
+  String get suiteNoMainFound;
+
+  /// No description provided for @suitePairedComputers.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأجهزة المربوطة بهذا الجهاز'**
+  String get suitePairedComputers;
+
+  /// No description provided for @suiteRegister.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل'**
+  String get suiteRegister;
+
+  /// No description provided for @suiteForget.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزالة'**
+  String get suiteForget;
+
+  /// No description provided for @suiteRegisteredDevices.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأجهزة المسجلة للنشاط'**
+  String get suiteRegisteredDevices;
+
+  /// No description provided for @suiteNoDevices.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا أجهزة مسجلة بعد.'**
+  String get suiteNoDevices;
+
+  /// No description provided for @suiteRevoke.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء التسجيل'**
+  String get suiteRevoke;
+
+  /// No description provided for @suiteSubscription.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاشتراك الشهري'**
+  String get suiteSubscription;
+
+  /// No description provided for @suiteSubscriptionStatus.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحالة: {status}'**
+  String suiteSubscriptionStatus(String status);
+
+  /// No description provided for @suitePaidUntil.
+  ///
+  /// In ar, this message translates to:
+  /// **'مدفوع حتى {date}'**
+  String suitePaidUntil(String date);
+
+  /// No description provided for @suiteSubscriptionRules.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنبيه قبل التجديد بـ3 أيام، ثم 7 أيام سماح، ثم قراءة وتصدير فقط حتى الشحن. لا تُحذف أي بيانات أبدًا، وخصم المبيعات من المخزون مستمر.'**
+  String get suiteSubscriptionRules;
+
+  /// No description provided for @suiteSubActive.
+  ///
+  /// In ar, this message translates to:
+  /// **'ساري'**
+  String get suiteSubActive;
+
+  /// No description provided for @suiteSubGrace.
+  ///
+  /// In ar, this message translates to:
+  /// **'أيام سماح'**
+  String get suiteSubGrace;
+
+  /// No description provided for @suiteSubReadOnly.
+  ///
+  /// In ar, this message translates to:
+  /// **'قراءة فقط'**
+  String get suiteSubReadOnly;
+
+  /// No description provided for @suiteSubNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير مشترك'**
+  String get suiteSubNone;
+
+  /// No description provided for @suiteParts.
+  ///
+  /// In ar, this message translates to:
+  /// **'أجزاء المخزون المستخدمة'**
+  String get suiteParts;
+
+  /// No description provided for @suitePartsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يحددها تصنيف نشاطك من لوحة التحكم؛ الاختيارية تفعّلها أنت.'**
+  String get suitePartsHint;
+
+  /// No description provided for @suiteOptional.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختياري'**
+  String get suiteOptional;
+
+  /// No description provided for @suiteApprovalLimit.
+  ///
+  /// In ar, this message translates to:
+  /// **'حد اعتماد أوامر الشراء'**
+  String get suiteApprovalLimit;
+
+  /// No description provided for @suiteApprovalLimitField.
+  ///
+  /// In ar, this message translates to:
+  /// **'فوق هذا المبلغ يحتاج الأمر اعتمادك (فارغ = بلا حد)'**
+  String get suiteApprovalLimitField;
+
+  /// No description provided for @suiteRejectedTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عمليات رفضها الخادم بعد عودة الاتصال'**
+  String get suiteRejectedTitle;
+
+  /// No description provided for @suiteClear.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسح القائمة'**
+  String get suiteClear;
 }
 
 class _AppLocalizationsDelegate

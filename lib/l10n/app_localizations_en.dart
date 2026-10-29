@@ -13449,4 +13449,858 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get pshStandingHint =>
       'They stay valid after the allocation ends or stops; nothing is cancelled.';
+
+  @override
+  String get stkTitle => 'Stock';
+
+  @override
+  String get stkTileSubtitle =>
+      'Does it cover today? and approving purchase orders';
+
+  @override
+  String get stkNotAvailable =>
+      'Inventory is not available for your business category.';
+
+  @override
+  String get stkEnableTitle => 'Inventory & purchases';
+
+  @override
+  String get stkEnableBody =>
+      'Follow your stock live: every receipt, sale and waste is a recorded move, and app sales deduct by recipe automatically. Full management is on the desktop app; follow it from here.';
+
+  @override
+  String stkSubscriptionPrice(String price) {
+    return 'Monthly subscription: $price EGP from your wallet';
+  }
+
+  @override
+  String get stkSubscriptionFree => 'No subscription fee for now.';
+
+  @override
+  String get stkEnableAction => 'Switch inventory on';
+
+  @override
+  String get stkOwnerEnables => 'The business owner switches it on.';
+
+  @override
+  String get stkStockValue => 'Stock value';
+
+  @override
+  String get stkCurrency => 'EGP';
+
+  @override
+  String get stkBelowReorder => 'Below reorder level';
+
+  @override
+  String stkPendingApproval(int number) {
+    return 'Purchase order #$number awaits your approval';
+  }
+
+  @override
+  String get stkCoversToday => 'Covers today\'s sales?';
+
+  @override
+  String get stkNoItems => 'No items yet.';
+
+  @override
+  String stkCoverageLine(String days, String onHand, String unit) {
+    return '$onHand $unit — about $days days';
+  }
+
+  @override
+  String get stkVerdictNo => 'Not enough';
+
+  @override
+  String get stkVerdictTight => 'Barely';
+
+  @override
+  String get stkVerdictYes => 'Enough';
+
+  @override
+  String get stkVerdictEmpty => 'Out';
+
+  @override
+  String get stkVerdictUnknown => 'No sales yet';
+
+  @override
+  String get stkOnHandNow => 'On hand now';
+
+  @override
+  String stkCoverageExplain(
+    String avg,
+    String rest,
+    String today,
+    String unit,
+  ) {
+    return 'Sold today $today $unit; this weekday\'s average over 4 weeks is $avg, so ~$rest is expected for the rest of the day.';
+  }
+
+  @override
+  String stkDaysLeft(String days) {
+    return 'Lasts ~$days days at the current rate.';
+  }
+
+  @override
+  String get stkRecentMoves => 'Recent moves';
+
+  @override
+  String get stkRecordWaste => 'Record waste';
+
+  @override
+  String stkQtyIn(String unit) {
+    return 'Quantity ($unit)';
+  }
+
+  @override
+  String get stkReason => 'Reason';
+
+  @override
+  String get stkSaved => 'Saved.';
+
+  @override
+  String get stkReject => 'Reject';
+
+  @override
+  String stkPurchaseOrderNo(int number) {
+    return 'Purchase order #$number';
+  }
+
+  @override
+  String get stkOnBim => 'On BIM';
+
+  @override
+  String get stkTotal => 'Total';
+
+  @override
+  String get stkApproveAndSend => 'Approve and send';
+
+  @override
+  String get stkIncomingTitle => 'Incoming purchase orders';
+
+  @override
+  String get stkIncomingEmpty =>
+      'No business has sent you a purchase order yet.';
+
+  @override
+  String get stkConfirmed => 'You confirmed this order.';
+
+  @override
+  String get stkConfirmOrder => 'Confirm the order';
+
+  @override
+  String get stkMoveReceipt => 'Receipt';
+
+  @override
+  String get stkMoveSale => 'Sale';
+
+  @override
+  String get stkMoveSaleReversal => 'Sale returned';
+
+  @override
+  String get stkMoveWaste => 'Waste';
+
+  @override
+  String get stkMoveTransferOut => 'Transfer out';
+
+  @override
+  String get stkMoveTransferIn => 'Transfer in';
+
+  @override
+  String get stkMoveAdjustment => 'Stocktake adjustment';
+
+  @override
+  String get stkMoveSupplierReturn => 'Return to supplier';
+
+  @override
+  String get stkMoveOpening => 'Opening balance';
+
+  @override
+  String get stkMoveReversal => 'Reversal';
+
+  @override
+  String get stkPoDraft => 'Draft';
+
+  @override
+  String get stkPoPending => 'Awaiting approval';
+
+  @override
+  String get stkPoApproved => 'Approved and sent';
+
+  @override
+  String get stkPoPartial => 'Partially received';
+
+  @override
+  String get stkPoReceived => 'Received';
+
+  @override
+  String get stkPoClosed => 'Closed';
+
+  @override
+  String get stkPoRejected => 'Rejected';
+
+  @override
+  String get stkPoCancelled => 'Cancelled';
+
+  @override
+  String get suiteBrand => 'BIM Business';
+
+  @override
+  String get suiteSignInTitle => 'Sign in with your BIM account';
+
+  @override
+  String get suiteSignInHint =>
+      'The same account as the app. A staff member signs in with their own.';
+
+  @override
+  String get suiteLoginField => 'Email';
+
+  @override
+  String get suiteChooseBusiness =>
+      'Choose the business this computer works for';
+
+  @override
+  String get suiteNoBusiness =>
+      'Your account is not a business, nor staff with inventory, purchases or cashier access.';
+
+  @override
+  String get suiteNavDashboard => 'Today';
+
+  @override
+  String get suiteNavItems => 'Items & stock';
+
+  @override
+  String get suiteNavRecipes => 'Menu links & recipes';
+
+  @override
+  String get suiteNavPurchases => 'Purchases';
+
+  @override
+  String get suiteNavReceive => 'Receiving';
+
+  @override
+  String get suiteNavStocktake => 'Stocktake';
+
+  @override
+  String get suiteNavPos => 'Cashier';
+
+  @override
+  String get suiteNavDevices => 'Devices';
+
+  @override
+  String get suiteNavSettings => 'Settings & subscription';
+
+  @override
+  String get suiteLinkOnline => 'Online';
+
+  @override
+  String get suiteLinkOffice => 'Via the main computer (offline)';
+
+  @override
+  String get suiteLinkOffline => 'Offline — saved on this computer';
+
+  @override
+  String get suiteLinkChecking => 'Checking…';
+
+  @override
+  String suitePending(int n) {
+    return '$n waiting to send';
+  }
+
+  @override
+  String suiteRejected(int n) {
+    return '$n refused by the server';
+  }
+
+  @override
+  String get suiteSyncNow => 'Sync now';
+
+  @override
+  String get suiteReadOnlyBanner =>
+      'Subscription unpaid: read and export only until you top up and renew. Your data is kept.';
+
+  @override
+  String get suiteGraceBanner =>
+      'The wallet did not cover the renewal — grace days, then read-only.';
+
+  @override
+  String get suiteRenew => 'Renew now';
+
+  @override
+  String get suiteQueued =>
+      'Saved on this computer; it is sent by itself when the connection is back.';
+
+  @override
+  String get suiteAtAverageCost => 'At weighted average cost';
+
+  @override
+  String get suiteOpenOrders => 'Open purchase orders';
+
+  @override
+  String get suiteWasteMonth => 'Waste this month';
+
+  @override
+  String get suiteNeedsAttention => 'Needs your attention';
+
+  @override
+  String get suiteAllCovered =>
+      'Every item is above its reorder level and covers today.';
+
+  @override
+  String get suiteItem => 'Item';
+
+  @override
+  String get suiteOnHand => 'On hand';
+
+  @override
+  String get suiteDaysLeft => 'Days left';
+
+  @override
+  String get suiteNewItem => 'New item';
+
+  @override
+  String get suiteSearchOrScan => 'Search by name or scan a barcode…';
+
+  @override
+  String get suiteAll => 'All';
+
+  @override
+  String get suiteReorderLevel => 'Reorder level';
+
+  @override
+  String get suiteAvgCost => 'Average cost';
+
+  @override
+  String get suiteValue => 'Value';
+
+  @override
+  String get suitePickItem => 'Pick an item to see its ledger.';
+
+  @override
+  String get suiteBaseUnit => 'base';
+
+  @override
+  String get suiteEdit => 'Edit';
+
+  @override
+  String get suiteAddOpening => 'Opening balance';
+
+  @override
+  String get suiteTransfer => 'Transfer to a warehouse';
+
+  @override
+  String get suiteLedger => 'Ledger';
+
+  @override
+  String get suiteLedgerHint =>
+      'No move is edited or deleted — a mistake is answered by a reversing move.';
+
+  @override
+  String get suiteWhen => 'When';
+
+  @override
+  String get suiteMove => 'Move';
+
+  @override
+  String get suiteQty => 'Qty';
+
+  @override
+  String get suiteBalanceAfter => 'Balance after';
+
+  @override
+  String get suiteUnitCost => 'Cost per base unit';
+
+  @override
+  String get suiteToWarehouse => 'To warehouse';
+
+  @override
+  String get suiteKindCount => 'Count';
+
+  @override
+  String get suiteKindWeight => 'Weight';
+
+  @override
+  String get suiteKindVolume => 'Volume';
+
+  @override
+  String get suiteKindLength => 'Length';
+
+  @override
+  String get suiteNameAr => 'Name in Arabic';
+
+  @override
+  String get suiteNameEn => 'Name in English (optional)';
+
+  @override
+  String get suiteGroup => 'Group (drinks, kitchen supplies…)';
+
+  @override
+  String get suiteBaseUnitHint => 'Base unit (can, gram, ml, piece)';
+
+  @override
+  String get suiteUnitKind => 'Unit kind';
+
+  @override
+  String get suiteBarcode => 'Barcode';
+
+  @override
+  String get suitePurchaseUnits => 'Purchase units (carton, pallet…)';
+
+  @override
+  String get suiteUnitName => 'Unit name';
+
+  @override
+  String suiteUnitFactor(String unit) {
+    return '= how many $unit';
+  }
+
+  @override
+  String get suiteAddUnit => 'Add a unit';
+
+  @override
+  String get suiteOpeningQty => 'Opening quantity (base unit)';
+
+  @override
+  String get suitePickMenuItem =>
+      'Pick a menu or store item to set what it takes from the stock.';
+
+  @override
+  String get suiteLinkRecipe => 'Recipe';
+
+  @override
+  String get suiteLinkDirect => 'Direct';
+
+  @override
+  String get suiteLinkNone => 'Not linked';
+
+  @override
+  String get suiteAddsTo => 'Adds to the recipe';
+
+  @override
+  String suiteRecipeCost(String cost, String percent) {
+    return 'Cost $cost EGP · $percent% of the price';
+  }
+
+  @override
+  String get suiteIngredient => 'Ingredient';
+
+  @override
+  String get suiteWastePct => 'Loss %';
+
+  @override
+  String get suiteAddIngredient => 'Add an ingredient';
+
+  @override
+  String get suiteNewSupplier => 'New supplier';
+
+  @override
+  String get suiteNewOrder => 'New purchase order';
+
+  @override
+  String get suiteOrders => 'Purchase orders';
+
+  @override
+  String get suiteSuppliers => 'Suppliers';
+
+  @override
+  String get suiteSupplierName => 'Supplier name';
+
+  @override
+  String get suitePhone => 'Phone';
+
+  @override
+  String get suiteLinkedBusinessId => 'Business id on BIM (optional)';
+
+  @override
+  String get suiteLinkedBusinessHint =>
+      'If the supplier is a business on BIM, it receives the order in its app.';
+
+  @override
+  String get suitePickOrder => 'Pick a purchase order.';
+
+  @override
+  String get suiteSupplier => 'Supplier';
+
+  @override
+  String get suiteSupplierConfirmed => 'The supplier confirmed it in its app.';
+
+  @override
+  String get suiteLines => 'Lines';
+
+  @override
+  String get suiteUnit => 'Unit';
+
+  @override
+  String get suiteOrdered => 'Ordered';
+
+  @override
+  String get suitePrice => 'Price';
+
+  @override
+  String get suiteReceived => 'Received';
+
+  @override
+  String get suiteBilled => 'Billed';
+
+  @override
+  String get suiteMatchProblem =>
+      'Three-way match: the supplier\'s bill does not match what was ordered and received';
+
+  @override
+  String get suitePriceDiffers => 'price differs';
+
+  @override
+  String get suiteBilledMore => 'billed more than received';
+
+  @override
+  String get suiteSubmit => 'Send';
+
+  @override
+  String get suiteSaveDraft => 'Save as draft';
+
+  @override
+  String get suiteReceiveNow => 'Receive';
+
+  @override
+  String get suiteRecordBill => 'Supplier\'s bill';
+
+  @override
+  String get suiteRecordPayment => 'Record a payment';
+
+  @override
+  String get suiteClose => 'Close';
+
+  @override
+  String get suiteBillNumber => 'Bill number';
+
+  @override
+  String get suitePaymentOutsideHint =>
+      'Money moves outside the app; this only records it so you know where you stand with the supplier.';
+
+  @override
+  String get suiteAmount => 'Amount';
+
+  @override
+  String get suiteCash => 'Cash';
+
+  @override
+  String get suiteTransferMoney => 'Transfer';
+
+  @override
+  String get suiteCheque => 'Cheque';
+
+  @override
+  String get suiteNote => 'Note';
+
+  @override
+  String get suiteBalance => 'Owed to him';
+
+  @override
+  String get suiteUnitPrice => 'Unit price';
+
+  @override
+  String get suiteAddLine => 'Add a line';
+
+  @override
+  String get suiteAgainstOrder => 'Against purchase order';
+
+  @override
+  String get suiteNoOrder => 'Without a purchase order';
+
+  @override
+  String get suiteScanToReceive =>
+      'Scan the item or carton barcode — each scan adds one';
+
+  @override
+  String suiteUnknownBarcode(String code) {
+    return 'Unknown barcode: $code';
+  }
+
+  @override
+  String get suiteReceiveEmpty => 'Pick a purchase order or scan an item.';
+
+  @override
+  String get suiteRemaining => 'Remaining';
+
+  @override
+  String get suiteReceivedNow => 'Received now';
+
+  @override
+  String get suiteDamaged => 'Damaged';
+
+  @override
+  String get suiteLot => 'Lot';
+
+  @override
+  String get suiteExpiry => 'Expiry';
+
+  @override
+  String get suiteReceiveNoEdit =>
+      'A confirmed receipt is not edited — a mistake goes back as a return or a stocktake.';
+
+  @override
+  String get suiteConfirmReceipt => 'Confirm receipt';
+
+  @override
+  String get suiteStartCount => 'New count';
+
+  @override
+  String get suiteCountTitle => 'Count title';
+
+  @override
+  String get suiteCountGroup => 'One group only (optional)';
+
+  @override
+  String get suiteBlindCount =>
+      'Blind count (the counter does not see the computed figure)';
+
+  @override
+  String get suiteCounting => 'Counting';
+
+  @override
+  String get suiteReview => 'Reviewing differences';
+
+  @override
+  String get suiteApplied => 'Applied';
+
+  @override
+  String get suiteBack => 'Back';
+
+  @override
+  String get suiteFinishCount => 'Finish counting';
+
+  @override
+  String get suiteApplyCount => 'Apply and book the differences';
+
+  @override
+  String get suiteBlindHint =>
+      'Blind count: computed figures show after counting ends.';
+
+  @override
+  String get suiteScanToCount => 'Scan to add to the count';
+
+  @override
+  String suiteNetDifference(String amount) {
+    return 'Net difference: $amount EGP';
+  }
+
+  @override
+  String get suiteExpected => 'Expected';
+
+  @override
+  String get suiteCounted => 'Counted';
+
+  @override
+  String get suiteDifference => 'Difference';
+
+  @override
+  String get suiteOpenShift => 'Open a shift';
+
+  @override
+  String get suiteCloseShift => 'Close the shift';
+
+  @override
+  String get suiteOpeningCash => 'Opening cash in the drawer';
+
+  @override
+  String get suiteCountedCash => 'Cash counted in the drawer';
+
+  @override
+  String get suiteShiftClosed => 'Shift closed';
+
+  @override
+  String suiteShiftSummary(String counted, String difference, String expected) {
+    return 'Expected $expected EGP, counted $counted EGP, difference $difference EGP.';
+  }
+
+  @override
+  String get suitePaidLess => 'The amount paid is less than the total.';
+
+  @override
+  String suiteChange(String amount) {
+    return 'Change: $amount EGP';
+  }
+
+  @override
+  String get suiteScanToSell => 'Scan a barcode…';
+
+  @override
+  String get suiteSearch => 'Search';
+
+  @override
+  String suiteAvailable(int n) {
+    return '~$n available';
+  }
+
+  @override
+  String get suiteInvoice => 'Invoice';
+
+  @override
+  String get suitePaidCash => 'Paid in cash';
+
+  @override
+  String get suitePay => 'Pay';
+
+  @override
+  String get suiteCashOutsideHint =>
+      'Cash in the drawer — nothing from the wallet.';
+
+  @override
+  String get suiteLastSales => 'Last sales';
+
+  @override
+  String get suiteReturned => 'returned';
+
+  @override
+  String get suiteReturn => 'Return';
+
+  @override
+  String get suiteSize => 'Size';
+
+  @override
+  String get suiteRegular => 'Regular';
+
+  @override
+  String get suiteExtras => 'Extras';
+
+  @override
+  String get suiteAddToInvoice => 'Add to invoice';
+
+  @override
+  String get suiteRoleMain => 'Main computer';
+
+  @override
+  String get suiteRoleManager => 'Manager';
+
+  @override
+  String get suiteRoleWarehouse => 'Warehouse';
+
+  @override
+  String get suiteRolePurchases => 'Purchasing';
+
+  @override
+  String get suiteRoleCashier => 'Cashier';
+
+  @override
+  String get suiteDeviceName => 'Computer name';
+
+  @override
+  String get suitePairTitle => 'Pair with the main computer';
+
+  @override
+  String get suitePairCode => 'The code shown on the main computer';
+
+  @override
+  String get suiteRole => 'Role';
+
+  @override
+  String get suitePair => 'Pair';
+
+  @override
+  String get suitePaired => 'Paired with the main computer.';
+
+  @override
+  String get suitePairFailed =>
+      'Pairing failed: check the code and that both computers are on the same network.';
+
+  @override
+  String get suiteThisComputer => 'This computer';
+
+  @override
+  String get suiteIsMain =>
+      'This is the main computer: it gathers the business\'s computers on the office network and syncs them with the server.';
+
+  @override
+  String get suiteNewPairingCode => 'New pairing code';
+
+  @override
+  String get suitePairingHint =>
+      'The code is valid for 5 minutes, once. Enter it on the new computer while on the same network.';
+
+  @override
+  String suitePairedWith(String address, String name) {
+    return 'Paired with the main computer «$name» ($address).';
+  }
+
+  @override
+  String get suiteUnpair => 'Unpair';
+
+  @override
+  String get suiteMakeMain => 'Make it the main computer';
+
+  @override
+  String get suiteFindMain => 'Find the main computer on the network';
+
+  @override
+  String get suiteNoMainFound => 'No main computer found on this network.';
+
+  @override
+  String get suitePairedComputers => 'Computers paired with this one';
+
+  @override
+  String get suiteRegister => 'Register';
+
+  @override
+  String get suiteForget => 'Remove';
+
+  @override
+  String get suiteRegisteredDevices => 'The business\'s registered computers';
+
+  @override
+  String get suiteNoDevices => 'No computers registered yet.';
+
+  @override
+  String get suiteRevoke => 'Revoke';
+
+  @override
+  String get suiteSubscription => 'Monthly subscription';
+
+  @override
+  String suiteSubscriptionStatus(String status) {
+    return 'Status: $status';
+  }
+
+  @override
+  String suitePaidUntil(String date) {
+    return 'Paid until $date';
+  }
+
+  @override
+  String get suiteSubscriptionRules =>
+      'A reminder 3 days before renewal, then 7 grace days, then read and export only until you top up. No data is ever deleted, and sales keep updating the stock.';
+
+  @override
+  String get suiteSubActive => 'Active';
+
+  @override
+  String get suiteSubGrace => 'Grace days';
+
+  @override
+  String get suiteSubReadOnly => 'Read-only';
+
+  @override
+  String get suiteSubNone => 'Not subscribed';
+
+  @override
+  String get suiteParts => 'Parts in use';
+
+  @override
+  String get suitePartsHint =>
+      'Your category sets them from the control panel; you switch the optional ones.';
+
+  @override
+  String get suiteOptional => 'Optional';
+
+  @override
+  String get suiteApprovalLimit => 'Purchase order approval limit';
+
+  @override
+  String get suiteApprovalLimitField =>
+      'Above this amount an order needs your approval (empty = no limit)';
+
+  @override
+  String get suiteRejectedTitle =>
+      'Operations the server refused after reconnecting';
+
+  @override
+  String get suiteClear => 'Clear the list';
 }

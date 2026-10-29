@@ -214,6 +214,8 @@ class SuiteSync extends StateNotifier<SuiteSyncState> {
   }
 
   bool get wantsHub => store.meta.get('lan_is_hub') == '1';
+
+  SuiteLink get link => state.link;
 }
 
 /// The desktop's [InventoryTransport]: the server when it answers; otherwise this computer's copy (or the main
@@ -247,7 +249,7 @@ class DesktopInventoryTransport implements InventoryTransport {
   @override
   Future<dynamic> send(String method, String path, {Map<String, dynamic>? body, bool queueable = false}) async {
     // a queue that is not empty keeps its order: a new write waits behind it
-    if (queueable && store.outbox.isNotEmpty && sync.state.link != SuiteLink.online) {
+    if (queueable && store.outbox.isNotEmpty && sync.link != SuiteLink.online) {
       await sync.enqueue(method, path, body);
       return null;
     }

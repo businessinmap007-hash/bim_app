@@ -27,6 +27,11 @@ void main() {
     'features/profile/presentation/widgets/profile_avatar_picker.dart': 2,
     'features/splash/presentation/screens/splash_screen.dart': 1,
     'features/training/presentation/screens/training_chat_screen.dart': 1,
+    // the desktop suite's own dark chrome — the sign-in backdrop, the sidebar (gold selection with navy ink on it) and the
+    // receiving screen's scan bar — a navy block in both themes, with white / gold on it
+    'desktop/desktop_app.dart': 1,
+    'desktop/screens/receive_page.dart': 1,
+    'desktop/shell/desktop_shell.dart': 3,
     'shared/widgets/app_drawer.dart': 2,
     'shared/widgets/profile_cover_header.dart': 3,
   };
