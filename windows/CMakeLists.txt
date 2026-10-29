@@ -2,6 +2,9 @@
 cmake_minimum_required(VERSION 3.14)
 project(bim_app LANGUAGES CXX)
 
+# The Firebase C++ SDK still declares cmake_minimum_required < 3.5, which CMake 4 refuses; this lets it configure.
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+
 # The name of the executable created for the application. Change this to change
 # the on-disk name of your application.
 set(BINARY_NAME "bim_app")
