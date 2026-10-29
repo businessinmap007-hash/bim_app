@@ -14834,4 +14834,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String hrPayrollReady(String month) {
     return 'The $month payroll is ready to approve';
   }
+
+  @override
+  String get hrConfirmReceived => 'Confirm I received it';
+
+  @override
+  String hrConfirmReceivedAsk(String amount, String month) {
+    return 'Do you confirm you received your $month salary of $amount? Your employer is told.';
+  }
+
+  @override
+  String get hrReceivedConfirmed => 'You confirmed receiving it';
+
+  @override
+  String get hrEmployeeConfirmed => 'Employee confirmed';
+
+  @override
+  String get hrNotConfirmedYet => 'Not yet';
 }

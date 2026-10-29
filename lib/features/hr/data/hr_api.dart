@@ -177,6 +177,7 @@ class HrPayslip {
   final double employerInsurance;
   final String? paidAt;
   final String? paidMethod;
+  final String? receivedAt; // the employee confirmed it himself
 
   const HrPayslip({
     required this.id,
@@ -191,6 +192,7 @@ class HrPayslip {
     required this.employerInsurance,
     this.paidAt,
     this.paidMethod,
+    this.receivedAt,
   });
 
   double line(String key) => lines.where((l) => l['key'] == key).fold(0.0, (s, l) => s + _d(l['amount']));
@@ -210,6 +212,7 @@ class HrPayslip {
         employerInsurance: _d(j['employer_insurance']),
         paidAt: j['paid_at'] as String?,
         paidMethod: j['paid_method'] as String?,
+        receivedAt: j['received_confirmed_at'] as String?,
       );
 }
 
@@ -295,6 +298,7 @@ class HrApi {
 
   Future<void> ask(Map<String, dynamic> body) => _c.post('/staff/hr/requests', data: body);
   Future<void> cancelRequest(int id) => _c.post('/staff/hr/requests/$id/cancel');
+  Future<void> confirmReceived(int payslipId) => _c.post('/staff/hr/payslips/$payslipId/confirm-received');
 }
 
 String hrMonthKey(DateTime d) => '${d.year}-${d.month.toString().padLeft(2, '0')}';

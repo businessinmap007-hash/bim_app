@@ -4965,5 +4965,10 @@
   "hrStaffToday": "Staff today",
   "hrStaffTodaySubtitle": "Attendance, requests and approving payroll",
   "hrAwaitingYou": "Awaiting your approval",
-  "hrPayrollReady": "The {month} payroll is ready to approve"
+  "hrPayrollReady": "The {month} payroll is ready to approve",
+  "hrConfirmReceived": "Confirm I received it",
+  "hrConfirmReceivedAsk": "Do you confirm you received your {month} salary of {amount}? Your employer is told.",
+  "hrReceivedConfirmed": "You confirmed receiving it",
+  "hrEmployeeConfirmed": "Employee confirmed",
+  "hrNotConfirmedYet": "Not yet"
 }

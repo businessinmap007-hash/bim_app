@@ -5088,5 +5088,11 @@
   "hrStaffTodaySubtitle": "الحضور، الطلبات، واعتماد المسير",
   "hrAwaitingYou": "بانتظار اعتمادك",
   "hrPayrollReady": "مسير {month} جاهز للاعتماد",
-  "@hrPayrollReady": {"placeholders": {"month": {"type": "String"}}}
+  "@hrPayrollReady": {"placeholders": {"month": {"type": "String"}}},
+  "hrConfirmReceived": "تأكيد استلام الراتب",
+  "hrConfirmReceivedAsk": "تؤكد أنك استلمت راتب {month} وقدره {amount}؟ يصل تأكيدك لصاحب العمل.",
+  "@hrConfirmReceivedAsk": {"placeholders": {"amount": {"type": "String"}, "month": {"type": "String"}}},
+  "hrReceivedConfirmed": "أكّدت استلام الراتب",
+  "hrEmployeeConfirmed": "أكّد الموظف",
+  "hrNotConfirmedYet": "لم يؤكد بعد"
 }

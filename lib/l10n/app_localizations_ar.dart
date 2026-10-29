@@ -14707,4 +14707,21 @@ class AppLocalizationsAr extends AppLocalizations {
   String hrPayrollReady(String month) {
     return 'مسير $month جاهز للاعتماد';
   }
+
+  @override
+  String get hrConfirmReceived => 'تأكيد استلام الراتب';
+
+  @override
+  String hrConfirmReceivedAsk(String amount, String month) {
+    return 'تؤكد أنك استلمت راتب $month وقدره $amount؟ يصل تأكيدك لصاحب العمل.';
+  }
+
+  @override
+  String get hrReceivedConfirmed => 'أكّدت استلام الراتب';
+
+  @override
+  String get hrEmployeeConfirmed => 'أكّد الموظف';
+
+  @override
+  String get hrNotConfirmedYet => 'لم يؤكد بعد';
 }

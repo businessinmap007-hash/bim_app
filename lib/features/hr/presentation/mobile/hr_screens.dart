@@ -52,6 +52,28 @@ class _MyHrScreenState extends ConsumerState<MyHrScreen> {
     }
   }
 
+  Future<void> _confirmReceived(HrPayslip p) async {
+    final l10n = AppLocalizations.of(context)!;
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.hrConfirmReceived),
+        content: Text(l10n.hrConfirmReceivedAsk('${InvLabels.money(p.net)} ${l10n.stkCurrency}', p.month ?? '')),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.commonCancel)),
+          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: Text(l10n.hrConfirmReceived)),
+        ],
+      ),
+    );
+    if (ok != true || !mounted) return;
+    try {
+      await ref.read(hrApiProvider).confirmReceived(p.id);
+      ref.invalidate(hrMeProvider);
+    } on ApiException catch (e) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message)));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -120,6 +142,24 @@ class _MyHrScreenState extends ConsumerState<MyHrScreen> {
                     subtitle: Text(p.paidAt != null ? l10n.hrPaid : l10n.hrNotPaidYet),
                     trailing: Text('${InvLabels.money(p.net)} ${l10n.stkCurrency}', style: const TextStyle(fontWeight: FontWeight.w800, color: Color(0xFF1F7A44))),
                     children: [
+                      // «استلمت راتبي»: the employee's own confirmation, beside the manager's paid record
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        child: p.receivedAt != null
+                            ? Row(children: [
+                                const Icon(Icons.verified_outlined, color: Color(0xFF1F7A44)),
+                                const SizedBox(width: 8),
+                                Text(l10n.hrReceivedConfirmed, style: const TextStyle(color: Color(0xFF1F7A44), fontWeight: FontWeight.w700)),
+                              ])
+                            : SizedBox(
+                                width: double.infinity,
+                                child: FilledButton.icon(
+                                  icon: const Icon(Icons.payments_outlined),
+                                  label: Text(l10n.hrConfirmReceived),
+                                  onPressed: () => _confirmReceived(p),
+                                ),
+                              ),
+                      ),
                       for (final line in p.lines)
                         ListTile(
                           dense: true,

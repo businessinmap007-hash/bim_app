@@ -26472,6 +26472,36 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'مسير {month} جاهز للاعتماد'**
   String hrPayrollReady(String month);
+
+  /// No description provided for @hrConfirmReceived.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد استلام الراتب'**
+  String get hrConfirmReceived;
+
+  /// No description provided for @hrConfirmReceivedAsk.
+  ///
+  /// In ar, this message translates to:
+  /// **'تؤكد أنك استلمت راتب {month} وقدره {amount}؟ يصل تأكيدك لصاحب العمل.'**
+  String hrConfirmReceivedAsk(String amount, String month);
+
+  /// No description provided for @hrReceivedConfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكّدت استلام الراتب'**
+  String get hrReceivedConfirmed;
+
+  /// No description provided for @hrEmployeeConfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكّد الموظف'**
+  String get hrEmployeeConfirmed;
+
+  /// No description provided for @hrNotConfirmedYet.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يؤكد بعد'**
+  String get hrNotConfirmedYet;
 }
 
 class _AppLocalizationsDelegate

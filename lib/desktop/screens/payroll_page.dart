@@ -86,6 +86,7 @@ class PayrollPage extends ConsumerWidget {
                       DataColumn(label: Text(l10n.hrLineTax)),
                       DataColumn(label: Text(l10n.hrNet)),
                       DataColumn(label: Text(l10n.hrPaid)),
+                      DataColumn(label: Text(l10n.hrEmployeeConfirmed)),
                     ],
                     rows: [
                       for (final p in r.payslips)
@@ -107,6 +108,9 @@ class PayrollPage extends ConsumerWidget {
                                 : (r.status == 'approved'
                                     ? TextButton(onPressed: () => _paid(context, ref, p), child: Text(l10n.hrRecordPaid))
                                     : const Text('—'))),
+                            DataCell(p.receivedAt != null
+                                ? const Icon(Icons.verified_outlined, color: Color(0xFF1F7A44))
+                                : Text(r.status == 'approved' ? l10n.hrNotConfirmedYet : '—')),
                           ],
                         ),
                     ],
