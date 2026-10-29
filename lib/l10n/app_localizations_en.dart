@@ -10417,7 +10417,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeServiceNoAddress =>
-      'Only the city is shared. The exact address is agreed with the technician you choose.';
+      'Only the city is shared. Your address is shown only to the technician you choose, once you accept his offer.';
 
   @override
   String get homeServiceWhenLabel => 'When do you want him? (optional)';
@@ -10439,6 +10439,43 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get homeServiceTradeRequired =>
       'Choose the type of technician and your city.';
+
+  @override
+  String get homeServicePhotosLabel =>
+      'Photos of the problem (optional, up to 4)';
+
+  @override
+  String get homeServicePhotosHint =>
+      'Only the technicians your request reached see them, and they are deleted when the request or the visit is over.';
+
+  @override
+  String get homeVisitAddressTitle => 'Where should the technician come?';
+
+  @override
+  String get homeVisitAddressHint =>
+      'Only the technician you chose sees this address.';
+
+  @override
+  String get homeVisitNoAddress =>
+      'You have no saved address. Add your address first.';
+
+  @override
+  String get homeVisitAddAddress => 'Add an address';
+
+  @override
+  String get homeVisitChoose => 'Choose this offer';
+
+  @override
+  String get homeVisitTitle => 'Technician visit';
+
+  @override
+  String get homeVisitAddress => 'Address';
+
+  @override
+  String get homeVisitOpenMap => 'Open in maps';
+
+  @override
+  String get homeVisitPhotos => 'Photos of the problem';
 
   @override
   String get requestKindHome => 'Technicians';

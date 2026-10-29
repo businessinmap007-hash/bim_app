@@ -2,6 +2,7 @@ import '../../../../core/assignment/assignment_providers.dart';
 import '../../../../core/assignment/widgets/assignee_widgets.dart';
 import 'package:flutter/material.dart';
 import '../widgets/stay_details_card.dart';
+import '../widgets/home_visit_card.dart';
 import 'stay_settlement_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/guarantee_badge/widgets/account_name.dart';
@@ -373,6 +374,8 @@ class BusinessBookingDetailScreen extends ConsumerWidget {
                   _DetailRow(label: l10n.businessBookingsNotes, value: booking.notes!),
                 // «تفاصيل الإقامة»: the children and what each pays, the beds, the meal plan, the gala nights
                 if (booking.stayDetails != null) StayDetailsCard(details: booking.stayDetails!),
+                // «أحتاج فنيًا»: where to go and the photos of the problem
+                if (booking.homeVisit != null) HomeVisitCard(visit: booking.homeVisit!),
                 // «التسوية» of a non-refundable stay: the holds, both sides' confirmations, the guest's recorded payments
                 if (booking.staySettlement != null) ...[
                   const SizedBox(height: 8),

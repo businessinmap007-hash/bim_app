@@ -1,4 +1,5 @@
 import '../../../../core/env/env.dart';
+import 'home_visit.dart';
 import 'stay_settlement.dart';
 import '../../../../core/assignment/assignee.dart';
 import '../../../chairs/data/models/service_chair.dart';
@@ -216,6 +217,9 @@ class Booking {
 
   /// «التسوية» of a non-refundable stay — null when nothing is frozen for it
   final StaySettlement? staySettlement;
+
+  /// «أحتاج فنيًا»: where the technician goes and the photos of the problem — null for any other booking
+  final HomeVisit? homeVisit;
   final ExternalDeposit externalDeposit;
 
   /// «يجب التواجد قبل الموعد بـ ١٥ دقيقة» — the business's own notice, as it composed it.
@@ -288,6 +292,7 @@ class Booking {
     this.ratePlan = 'flexible',
     this.cots = 0,
     this.stayDetails,
+    this.homeVisit,
     this.staySettlement,
     this.externalDeposit = const ExternalDeposit(),
     this.arrivalNotice,
@@ -370,6 +375,7 @@ class Booking {
       ratePlan: (json['stay_terms'] as Map<String, dynamic>?)?['rate_plan'] as String? ?? 'flexible',
       cots: ((json['stay_terms'] as Map<String, dynamic>?)?['cots'] as num?)?.toInt() ?? 0,
       stayDetails: StayDetails.fromJsonOrNull(json['stay_details']),
+      homeVisit: HomeVisit.fromJsonOrNull(json['home_visit']),
       staySettlement: StaySettlement.fromJsonOrNull(json['stay_settlement']),
       mealTimes: [
         for (final m in json['meal_times'] as List<dynamic>? ?? const [])

@@ -8,6 +8,9 @@ import '../../../orders/presentation/screens/orders_and_bookings_screen.dart'
     show openBookingDetailSheet;
 import '../../application/service_requests_providers.dart';
 import '../../data/service_requests_api.dart';
+import '../../../addresses/application/addresses_providers.dart';
+import '../../../addresses/presentation/widgets/address_form_sheet.dart';
+import '../widgets/request_photos_row.dart';
 
 /// One of my requests: the offers on it from the cheapest, accept one (it becomes a booking), change the price I ask
 /// for, or cancel — see Api\V2\ServiceRequestController.
@@ -49,8 +52,18 @@ class _ServiceRequestDetailScreenState
   Future<void> _accept(ServiceRequestModel request, RequestOffer offer) async {
     final l10n = AppLocalizations.of(context)!;
     final api = ref.read(serviceRequestsApiProvider);
+    // a technician comes home: the customer says to which of his saved addresses — only the one he chose ever sees it
+    int? addressId;
+    if (request.isHomeService) {
+      addressId = await showModalBottomSheet<int>(
+        context: context,
+        isScrollControlled: true,
+        builder: (_) => const _VisitAddressSheet(),
+      );
+      if (addressId == null) return;
+    }
     await _run(() async {
-      await api.accept(request.id, offer.id);
+      await api.accept(request.id, offer.id, addressId: addressId);
       if (mounted) {
         ScaffoldMessenger.of(
           context,
@@ -303,6 +316,10 @@ class RequestSummaryCard extends StatelessWidget {
               const SizedBox(height: 6),
               Text(request.details!),
             ],
+            if (request.photos.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              RequestPhotosRow(urls: request.photos),
+            ],
           ],
         ),
       ),
@@ -434,6 +451,105 @@ class _PriceDialogState extends State<_PriceDialog> {
           child: Text(l10n.commonSave),
         ),
       ],
+    );
+  }
+}
+
+/// «أين يأتي الفني؟»: the customer's saved addresses, his primary one ticked; the one he confirms goes to the technician he
+/// chose, and to nobody else. With none saved he adds one here first.
+class _VisitAddressSheet extends ConsumerStatefulWidget {
+  const _VisitAddressSheet();
+
+  @override
+  ConsumerState<_VisitAddressSheet> createState() => _VisitAddressSheetState();
+}
+
+class _VisitAddressSheetState extends ConsumerState<_VisitAddressSheet> {
+  int? _picked;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final languageCode = Localizations.localeOf(context).languageCode;
+    final state = ref.watch(addressesControllerProvider);
+    final items = state.items;
+    final picked =
+        _picked ??
+        (items.where((a) => a.isPrimary).firstOrNull ?? items.firstOrNull)?.id;
+
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              l10n.homeVisitAddressTitle,
+              style: theme.textTheme.titleMedium,
+            ),
+            const SizedBox(height: 4),
+            Text(l10n.homeVisitAddressHint, style: theme.textTheme.bodySmall),
+            const SizedBox(height: 12),
+            if (state.isLoading)
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(12),
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            else if (items.isEmpty)
+              Text(l10n.homeVisitNoAddress)
+            else
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 280),
+                child: RadioGroup<int>(
+                  groupValue: picked,
+                  onChanged: (v) => setState(() => _picked = v),
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      for (final a in items)
+                        RadioListTile<int>(
+                          value: a.id,
+                          title: Text(
+                            a.addressLine,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          subtitle: Text(
+                            a.summary(languageCode),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          secondary: a.isPrimary
+                              ? const Icon(Icons.star, size: 18)
+                              : null,
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            const SizedBox(height: 8),
+            TextButton.icon(
+              onPressed: () async {
+                await showAddressFormSheet(context);
+                await ref.read(addressesControllerProvider.notifier).load();
+              },
+              icon: const Icon(Icons.add_location_alt_outlined),
+              label: Text(l10n.homeVisitAddAddress),
+            ),
+            const SizedBox(height: 8),
+            FilledButton(
+              onPressed: picked == null
+                  ? null
+                  : () => Navigator.of(context).pop(picked),
+              child: Text(l10n.homeVisitChoose),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

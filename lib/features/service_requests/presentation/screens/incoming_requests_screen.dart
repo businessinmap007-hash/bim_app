@@ -9,6 +9,7 @@ import '../../application/service_requests_providers.dart';
 import '../../data/service_requests_api.dart';
 import '../widgets/requests_availability_switch.dart';
 import 'service_request_detail_screen.dart' show RequestSummaryCard;
+import '../widgets/request_photos_row.dart';
 
 /// The business side: the open requests this account may answer (its trade, its governorate), its own offer on each,
 /// and the sheet to offer a price — see Api\V2\ServiceRequestController::incoming / offer / withdraw. A trade that
@@ -164,6 +165,12 @@ class _IncomingCard extends ConsumerWidget {
             if (request.details != null && request.details!.isNotEmpty) ...[
               const SizedBox(height: 4),
               Text(request.details!),
+            ],
+            // the photos of the problem, so the quote fits the job
+            if (request.photos.isNotEmpty) ...[
+              const SizedBox(height: 6),
+              RequestPhotosRow(urls: request.photos, size: 64),
+              const SizedBox(height: 4),
             ],
             if (request.budget != null)
               Text(

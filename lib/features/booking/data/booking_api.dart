@@ -200,6 +200,7 @@ class BookingApi {
     if (data['stay_terms'] != null) booking['stay_terms'] = data['stay_terms'];
     if (data['stay_details'] != null) booking['stay_details'] = data['stay_details'];
     if (data['stay_settlement'] != null) booking['stay_settlement'] = data['stay_settlement'];
+    if (data['home_visit'] != null) booking['home_visit'] = data['home_visit'];
 
     return Booking.fromJson(booking);
   }

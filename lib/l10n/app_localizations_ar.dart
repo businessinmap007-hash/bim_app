@@ -10346,7 +10346,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get homeServiceNoAddress =>
-      'تُرسل المدينة فقط. العنوان بالتفصيل تتفق عليه مع الفني الذي تختاره.';
+      'تُرسل المدينة فقط. عنوانك يظهر للفني الذي تختاره فقط، بعد أن تقبل عرضه.';
 
   @override
   String get homeServiceWhenLabel => 'متى تريده؟ (اختياري)';
@@ -10367,6 +10367,40 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get homeServiceTradeRequired => 'اختر نوع الفني ومدينتك.';
+
+  @override
+  String get homeServicePhotosLabel => 'صور المشكلة (اختياري، حتى 4)';
+
+  @override
+  String get homeServicePhotosHint =>
+      'تظهر فقط للفنيين الذين وصلهم طلبك، وتُحذف بعد انتهاء الطلب أو الزيارة.';
+
+  @override
+  String get homeVisitAddressTitle => 'أين يأتي الفني؟';
+
+  @override
+  String get homeVisitAddressHint => 'يظهر هذا العنوان للفني الذي اخترته فقط.';
+
+  @override
+  String get homeVisitNoAddress => 'لا يوجد لك عنوان محفوظ. أضف عنوانك أولًا.';
+
+  @override
+  String get homeVisitAddAddress => 'إضافة عنوان';
+
+  @override
+  String get homeVisitChoose => 'اختر هذا العرض';
+
+  @override
+  String get homeVisitTitle => 'زيارة الفني';
+
+  @override
+  String get homeVisitAddress => 'العنوان';
+
+  @override
+  String get homeVisitOpenMap => 'افتح في الخرائط';
+
+  @override
+  String get homeVisitPhotos => 'صور المشكلة';
 
   @override
   String get requestKindHome => 'الفنيون';

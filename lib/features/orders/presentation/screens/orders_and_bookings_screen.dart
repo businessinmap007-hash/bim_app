@@ -16,6 +16,7 @@ import '../../../booking/application/booking_providers.dart';
 import '../../../booking/data/models/booking.dart';
 import '../../../booking/presentation/widgets/booking_money_card.dart';
 import '../../../booking/presentation/widgets/day_use_tag.dart';
+import '../../../booking/presentation/widgets/home_visit_card.dart';
 import '../../../cart/application/cart_controller.dart';
 import '../../../cart/presentation/screens/cart_screen.dart';
 import '../../../chat/presentation/screens/operation_chat_screen.dart';
@@ -1255,6 +1256,8 @@ class _BookingDetailSheetState extends ConsumerState<_BookingDetailSheet> {
               const SizedBox(height: 4),
               Text(l10n.cotLine(booking.cots), style: Theme.of(context).textTheme.bodyMedium),
             ],
+            // «أحتاج فنيًا»: the address the technician comes to and the photos sent with the request
+            if (booking.homeVisit != null) HomeVisitCard(visit: booking.homeVisit!),
             // «التسوية»: what is frozen for this non-refundable stay, and — after a cancellation — «يرجى التسوية لفك العربون»
             if (booking.staySettlement != null) ...[
               const SizedBox(height: 8),

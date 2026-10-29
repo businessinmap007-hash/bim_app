@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+
 import '../../../core/network/api_client.dart';
 import '../../../core/network/paginated.dart';
 import '../../../core/time/egypt_time.dart';
@@ -129,6 +131,9 @@ class ServiceRequestModel {
   final RequestOffer? myOffer;
   final String? requesterFirstName;
 
+  /// «أحتاج فنيًا»: signed links to the photos of the problem (to the customer, and to a technician while he may answer)
+  final List<String> photos;
+
   /// «أريد سيارة»: 'buy' | 'rent', and the words of what he wants.
   final String? deal;
   final String? vehicleTypeName;
@@ -162,6 +167,7 @@ class ServiceRequestModel {
     this.offers = const [],
     this.myOffer,
     this.requesterFirstName,
+    this.photos = const [],
     this.deal,
     this.vehicleTypeName,
     this.brandName,
@@ -208,6 +214,9 @@ class ServiceRequestModel {
           .toList(),
       myOffer: my == null ? null : RequestOffer.fromJson(my),
       requesterFirstName: requester?['first_name'] as String?,
+      photos: [
+        for (final p in json['photos'] as List<dynamic>? ?? const []) '$p',
+      ],
       deal: params['deal'] as String?,
       vehicleTypeName:
           (params['vehicle_type'] as Map<String, dynamic>?)?['name'] as String?,
@@ -362,7 +371,8 @@ class ServiceRequestsApi {
                 'quantity': ?quantity,
                 if (unit != null && unit.trim().isNotEmpty) 'unit': unit.trim(),
                 if (deadline != null)
-                  'deadline': '${deadline.year}-${two(deadline.month)}-${two(deadline.day)}',
+                  'deadline':
+                      '${deadline.year}-${two(deadline.month)}-${two(deadline.day)}',
                 'max_price': ?maxPrice,
                 if (nationwide) 'nationwide': true,
               },
@@ -380,19 +390,30 @@ class ServiceRequestsApi {
     required String details,
     DateTime? startsAt,
     double? maxPrice,
+    List<String> photoPaths = const [],
   }) async {
+    final fields = <String, dynamic>{
+      'kind': 'home_service',
+      'trade_child_id': tradeId,
+      'governorate_id': governorateId,
+      'city_id': cityId,
+      'details': details.trim(),
+      if (startsAt != null) 'starts_at': _stamp(startsAt),
+      'max_price': ?maxPrice,
+    };
+    // the photos of the problem go as multipart; without them the request stays plain JSON
     final data =
         await _client.post(
               '/service-requests',
-              data: {
-                'kind': 'home_service',
-                'trade_child_id': tradeId,
-                'governorate_id': governorateId,
-                'city_id': cityId,
-                'details': details.trim(),
-                if (startsAt != null) 'starts_at': _stamp(startsAt),
-                'max_price': ?maxPrice,
-              },
+              data: photoPaths.isEmpty
+                  ? fields
+                  : FormData.fromMap({
+                      ...fields,
+                      'photos': [
+                        for (final p in photoPaths)
+                          await MultipartFile.fromFile(p),
+                      ],
+                    }),
             )
             as Map<String, dynamic>;
     return ServiceRequestModel.fromJson(
@@ -463,10 +484,13 @@ class ServiceRequestsApi {
     );
   }
 
-  /// Picks an offer; returns the booking it became.
-  Future<int> accept(int id, int offerId) async {
+  /// Picks an offer; returns the booking it became. A home visit names which of his saved addresses the technician comes to.
+  Future<int> accept(int id, int offerId, {int? addressId}) async {
     final data =
-        await _client.post('/service-requests/$id/offers/$offerId/accept')
+        await _client.post(
+              '/service-requests/$id/offers/$offerId/accept',
+              data: {'address_id': ?addressId},
+            )
             as Map<String, dynamic>;
     return (data['booking_id'] as num).toInt();
   }

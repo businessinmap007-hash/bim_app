@@ -205,7 +205,10 @@ class _RideRequestScreenState extends ConsumerState<RideRequestScreen> {
           ],
           // the drivers going back empty on this very line, at a lower price (booked as an ordinary trip reservation)
           if (_from != null && _to != null && _from!.cityId != _to!.cityId)
-            EmptyReturnsSection(fromCityId: _from!.cityId, toCityId: _to!.cityId),
+            EmptyReturnsSection(
+              fromCityId: _from!.cityId,
+              toCityId: _to!.cityId,
+            ),
           const SizedBox(height: 16),
           Row(
             children: [

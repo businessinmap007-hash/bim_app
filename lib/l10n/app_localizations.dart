@@ -18778,7 +18778,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeServiceNoAddress.
   ///
   /// In ar, this message translates to:
-  /// **'تُرسل المدينة فقط. العنوان بالتفصيل تتفق عليه مع الفني الذي تختاره.'**
+  /// **'تُرسل المدينة فقط. عنوانك يظهر للفني الذي تختاره فقط، بعد أن تقبل عرضه.'**
   String get homeServiceNoAddress;
 
   /// No description provided for @homeServiceWhenLabel.
@@ -18816,6 +18816,72 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'اختر نوع الفني ومدينتك.'**
   String get homeServiceTradeRequired;
+
+  /// No description provided for @homeServicePhotosLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'صور المشكلة (اختياري، حتى 4)'**
+  String get homeServicePhotosLabel;
+
+  /// No description provided for @homeServicePhotosHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'تظهر فقط للفنيين الذين وصلهم طلبك، وتُحذف بعد انتهاء الطلب أو الزيارة.'**
+  String get homeServicePhotosHint;
+
+  /// No description provided for @homeVisitAddressTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'أين يأتي الفني؟'**
+  String get homeVisitAddressTitle;
+
+  /// No description provided for @homeVisitAddressHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يظهر هذا العنوان للفني الذي اخترته فقط.'**
+  String get homeVisitAddressHint;
+
+  /// No description provided for @homeVisitNoAddress.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد لك عنوان محفوظ. أضف عنوانك أولًا.'**
+  String get homeVisitNoAddress;
+
+  /// No description provided for @homeVisitAddAddress.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة عنوان'**
+  String get homeVisitAddAddress;
+
+  /// No description provided for @homeVisitChoose.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر هذا العرض'**
+  String get homeVisitChoose;
+
+  /// No description provided for @homeVisitTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'زيارة الفني'**
+  String get homeVisitTitle;
+
+  /// No description provided for @homeVisitAddress.
+  ///
+  /// In ar, this message translates to:
+  /// **'العنوان'**
+  String get homeVisitAddress;
+
+  /// No description provided for @homeVisitOpenMap.
+  ///
+  /// In ar, this message translates to:
+  /// **'افتح في الخرائط'**
+  String get homeVisitOpenMap;
+
+  /// No description provided for @homeVisitPhotos.
+  ///
+  /// In ar, this message translates to:
+  /// **'صور المشكلة'**
+  String get homeVisitPhotos;
 
   /// No description provided for @requestKindHome.
   ///
