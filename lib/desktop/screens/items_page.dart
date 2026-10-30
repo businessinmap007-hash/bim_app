@@ -261,7 +261,7 @@ class _ItemPanel extends ConsumerWidget {
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setState) => AlertDialog(
           title: Text(switch (kind) { 'opening' => l10n.suiteAddOpening, 'waste' => l10n.stkRecordWaste, _ => l10n.suiteTransfer }),
-          content: Column(
+          content: Column(spacing: 12, 
             mainAxisSize: MainAxisSize.min,
             children: [
               NumField(controller: qty, label: l10n.stkQtyIn(item.baseUnit), width: 260),

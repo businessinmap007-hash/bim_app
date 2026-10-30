@@ -74,7 +74,7 @@ class _DevicesPageState extends ConsumerState<DevicesPage> {
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setState) => AlertDialog(
           title: Text(l10n.suitePairTitle),
-          content: Column(
+          content: Column(spacing: 12, 
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(

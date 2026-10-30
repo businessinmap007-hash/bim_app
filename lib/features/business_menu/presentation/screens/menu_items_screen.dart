@@ -23,19 +23,14 @@ import 'menu_item_edit_screen.dart';
 import 'menu_type_selection_screen.dart';
 import 'tech_pricing_screen.dart';
 
-/// An item's own name is the best key for its emoji — "بطاطس" IS a potato
-/// regardless of which vocabulary group it happens to sell under — falling
-/// back to its line option's name for the (usual) case where the item was
-/// created directly from that vocabulary branch and never got its own
-/// English name typed in.
-String _itemEmoji(BusinessMenuItem item) {
-  // A catalog-linked device is named by its model («Oppo Reno 12F»),
-  // which no emoji matches — its branch («Mobile») does.
-  if (item.catalogProductId != null) return produceEmoji(item.lineOption?.nameEn);
-  // A hand-named piece («غرفة نوم ماستر»): its own name first, else what it is.
-  final own = produceEmoji(item.nameEn ?? item.nameAr);
-  return own != '🧺' ? own : produceEmoji(item.lineOption?.nameEn ?? item.lineOption?.nameAr);
-}
+/// The item's stand-in emoji — the shared rule ([itemEmoji]) the desktop cashier draws too.
+String _itemEmoji(BusinessMenuItem item) => itemEmoji(
+      nameAr: item.nameAr,
+      nameEn: item.nameEn,
+      lineNameAr: item.lineOption?.nameAr,
+      lineNameEn: item.lineOption?.nameEn,
+      fromCatalog: item.catalogProductId != null,
+    );
 
 /// The photo the merchant chose for the card (else his first), else the catalog model's photo.
 String? _itemImage(BusinessMenuItem item) =>

@@ -290,6 +290,7 @@ class _OrderDetail extends ConsumerWidget {
         content: SizedBox(
           width: 520,
           child: Column(
+            spacing: 12,
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
@@ -345,6 +346,7 @@ class _OrderDetail extends ConsumerWidget {
         builder: (ctx, setState) => AlertDialog(
           title: Text(l10n.suiteRecordPayment),
           content: Column(
+            spacing: 12,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(l10n.suitePaymentOutsideHint, style: Theme.of(ctx).textTheme.bodySmall),
@@ -630,6 +632,7 @@ class _SupplierDialogState extends ConsumerState<_SupplierDialog> {
                 decoration: InputDecoration(prefixIcon: const Icon(Icons.search), hintText: l10n.suiteSupplierSearchHint, isDense: true),
                 onSubmitted: (_) => _search(),
               ),
+              const SizedBox(height: 8),
               CheckboxListTile(
                 value: _myCity,
                 contentPadding: EdgeInsets.zero,
@@ -668,6 +671,7 @@ class _SupplierDialogState extends ConsumerState<_SupplierDialog> {
                 autofocus: true,
                 decoration: InputDecoration(labelText: l10n.suiteSupplierName),
               ),
+              const SizedBox(height: 12),
               TextField(
                 controller: _phone,
                 keyboardType: TextInputType.phone,

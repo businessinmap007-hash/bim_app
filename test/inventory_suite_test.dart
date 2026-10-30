@@ -1,3 +1,4 @@
+import 'package:bim_app/shared/utils/produce_emoji.dart';
 import 'package:bim_app/desktop/lan/lan_link.dart';
 import 'package:bim_app/features/inventory/data/inventory_api.dart';
 import 'package:bim_app/features/inventory/data/inventory_models.dart';
@@ -88,5 +89,13 @@ void main() {
     final b = InvSupplierCandidate.fromJson({'id': 9, 'name': 'مورد الأمانة', 'trade': 'صيدلية', 'place': 'القاهرة — مدينة نصر', 'supplier_id': 3});
     expect(b.supplierId, 3);
     expect(b.place, contains('مدينة نصر'));
+  });
+
+  test('the cashier picks the same stand-in emoji as the phone: own name first, else its type; a catalog model by its type', () {
+    final potato = InvPosProduct.fromJson({'owner_type': 'menu_item', 'owner_id': 1, 'name': 'بطاطس', 'line': {'name_ar': 'خضار', 'name_en': 'Vegetables'}});
+    expect(itemEmoji(nameAr: potato.name, nameEn: potato.nameEn, lineNameAr: potato.lineNameAr, lineNameEn: potato.lineNameEn), produceEmoji('بطاطس'));
+
+    final phone = InvPosProduct.fromJson({'owner_type': 'menu_item', 'owner_id': 2, 'name': 'Oppo Reno 12F', 'name_en': 'Oppo Reno 12F', 'from_catalog': true, 'line': {'name_ar': 'موبايل', 'name_en': 'Mobile'}});
+    expect(itemEmoji(nameAr: phone.name, nameEn: phone.nameEn, lineNameAr: phone.lineNameAr, lineNameEn: phone.lineNameEn, fromCatalog: phone.fromCatalog), produceEmoji('Mobile'));
   });
 }

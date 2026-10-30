@@ -516,6 +516,12 @@ class InvPosProduct {
   final List<InvPosChoice> variants;
   final List<InvPosChoice> extras;
 
+  /// What the stand-in emoji is picked from when there is no photo (the phone's own rule — see itemEmoji).
+  final String? nameEn;
+  final String? lineNameAr;
+  final String? lineNameEn;
+  final bool fromCatalog;
+
   /// The customer card's photo (a path under the site, or a full URL) and the part of it the merchant chose.
   final String? image;
   final ({double x, double y, double zoom})? crop;
@@ -531,6 +537,10 @@ class InvPosProduct {
     required this.extras,
     this.image,
     this.crop,
+    this.nameEn,
+    this.lineNameAr,
+    this.lineNameEn,
+    this.fromCatalog = false,
   });
 
   factory InvPosProduct.fromJson(Map<String, dynamic> j) => InvPosProduct(
@@ -543,6 +553,10 @@ class InvPosProduct {
         variants: _list(j['variants']).map(InvPosChoice.fromJson).toList(),
         extras: _list(j['extras']).map(InvPosChoice.fromJson).toList(),
         image: (j['image'] as String?)?.trim().isEmpty ?? true ? null : j['image'] as String,
+        nameEn: j['name_en'] as String?,
+        lineNameAr: (j['line'] is Map) ? (j['line'] as Map)['name_ar'] as String? : null,
+        lineNameEn: (j['line'] is Map) ? (j['line'] as Map)['name_en'] as String? : null,
+        fromCatalog: j['from_catalog'] == true,
         crop: j['crop'] is Map ? (x: _d((j['crop'] as Map)['x']), y: _d((j['crop'] as Map)['y']), zoom: _d((j['crop'] as Map)['zoom'])) : null,
       );
 }

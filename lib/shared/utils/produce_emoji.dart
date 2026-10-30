@@ -140,3 +140,15 @@ String produceEmoji(String? nameEn) {
 
   return '🧺';
 }
+
+/// The stand-in for an item with no photo — ONE rule for the merchant's phone screens and the desktop cashier, so an
+/// item looks the same everywhere (owner, 2026-10-30: «انقل الايموجى من تطبيق الموبايل الى الديسك توب»). An item's own
+/// name is the best key — "بطاطس" IS a potato whatever group it sells under — falling back to its line option's name
+/// for an item created straight from that branch that never got a name of its own typed in.
+String itemEmoji({String? nameAr, String? nameEn, String? lineNameAr, String? lineNameEn, bool fromCatalog = false}) {
+  // A catalog-linked device is named by its model («Oppo Reno 12F»), which no emoji matches — its branch («Mobile») does.
+  if (fromCatalog && (lineNameEn != null || lineNameAr != null)) return produceEmoji(lineNameEn ?? lineNameAr);
+  // A hand-named piece («غرفة نوم ماستر»): its own name first, else what it is.
+  final own = produceEmoji(nameEn ?? nameAr);
+  return own != '🧺' ? own : produceEmoji(lineNameEn ?? lineNameAr);
+}

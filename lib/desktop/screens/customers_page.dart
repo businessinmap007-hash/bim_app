@@ -222,7 +222,7 @@ class _CustomerFilePanelState extends ConsumerState<_CustomerFilePanel> {
     final p = await suiteRun(context, () => _api.recordPayment(c.id, amount: input.amount, method: input.method, reference: input.reference, deviceUuid: store.deviceUuid), queueable: false);
     widget.onChanged();
     if (p == null || !mounted) return;
-    if (p.pending) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.crmPaymentRecorded)));
+    if (p.pending) suiteToast(context, l10n.crmPaymentRecorded, icon: Icons.hourglass_top);
     if (p.businessOnly && p.status == 'confirmed') await _printPaymentReceipt(c, p);
   }
 
@@ -301,7 +301,7 @@ class _CustomerFilePanelState extends ConsumerState<_CustomerFilePanel> {
           TextButton(
             onPressed: () async {
               await Clipboard.setData(ClipboardData(text: r.text));
-              if (ctx.mounted) ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(content: Text(l10n.crmCopied)));
+              if (ctx.mounted) suiteToast(ctx, l10n.crmCopied);
             },
             child: Text(l10n.crmCopy),
           ),
@@ -356,7 +356,7 @@ class _CustomerFilePanelState extends ConsumerState<_CustomerFilePanel> {
     final linked = await suiteRun(context, () => _api.link(c.id, text), queueable: false);
     widget.onChanged();
     if (linked != null && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.crmLinked)));
+      suiteToast(context, l10n.crmLinked);
       ref.read(_selectedProvider.notifier).state = linked.customer.id;
     }
   }
@@ -372,6 +372,7 @@ class _CustomerFilePanelState extends ConsumerState<_CustomerFilePanel> {
         content: SizedBox(
           width: 400,
           child: Column(
+            spacing: 12,
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
@@ -663,6 +664,7 @@ class _CustomerFormDialogState extends State<CustomerFormDialog> {
         width: 460,
         child: SingleChildScrollView(
           child: Column(
+            spacing: 12,
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(

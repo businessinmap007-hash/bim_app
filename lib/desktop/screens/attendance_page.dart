@@ -257,7 +257,7 @@ class _Employees extends ConsumerWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(shift == null ? l10n.hrNewShift : shift.name),
-        content: Column(mainAxisSize: MainAxisSize.min, children: [
+        content: Column(spacing: 12, mainAxisSize: MainAxisSize.min, children: [
           TextField(controller: name, decoration: InputDecoration(labelText: l10n.hrShiftName)),
           TextField(controller: from, decoration: InputDecoration(labelText: l10n.hrStartsAt, hintText: 'HH:MM')),
           TextField(controller: to, decoration: InputDecoration(labelText: l10n.hrEndsAt, hintText: 'HH:MM')),
@@ -298,7 +298,7 @@ class _Employees extends ConsumerWidget {
           content: SizedBox(
             width: 520,
             child: SingleChildScrollView(
-              child: Column(mainAxisSize: MainAxisSize.min, children: [
+              child: Column(spacing: 12, mainAxisSize: MainAxisSize.min, children: [
                 DropdownButtonFormField<int?>(
                   initialValue: shiftId,
                   decoration: InputDecoration(labelText: l10n.hrShift),

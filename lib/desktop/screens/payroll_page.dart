@@ -180,7 +180,7 @@ class PayrollPage extends ConsumerWidget {
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setState) => AlertDialog(
           title: Text(l10n.hrNewAdvance),
-          content: Column(
+          content: Column(spacing: 12, 
             mainAxisSize: MainAxisSize.min,
             children: [
               DropdownButtonFormField<int>(
@@ -223,7 +223,7 @@ class PayrollPage extends ConsumerWidget {
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setState) => AlertDialog(
           title: Text(l10n.hrBonusPenalty),
-          content: Column(
+          content: Column(spacing: 12, 
             mainAxisSize: MainAxisSize.min,
             children: [
               DropdownButtonFormField<int>(

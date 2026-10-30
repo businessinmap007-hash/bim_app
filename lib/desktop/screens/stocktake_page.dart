@@ -41,7 +41,7 @@ class StocktakePage extends ConsumerWidget {
               builder: (ctx) => StatefulBuilder(
                 builder: (ctx, setState) => AlertDialog(
                   title: Text(l10n.suiteStartCount),
-                  content: Column(
+                  content: Column(spacing: 12, 
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       TextField(controller: title, decoration: InputDecoration(labelText: l10n.suiteCountTitle)),

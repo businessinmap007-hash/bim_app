@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../app/theme/app_colors.dart';
 import '../../core/env/env.dart';
 import '../../core/network/api_exception.dart';
 import '../../features/business_menu/data/models/menu_item_image.dart';
@@ -14,6 +15,7 @@ import '../../features/inventory/data/inventory_models.dart';
 import '../../features/inventory/presentation/inventory_labels.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/async_value_view.dart';
+import '../../shared/utils/produce_emoji.dart';
 import '../../shared/widgets/cropped_network_image.dart';
 import '../desktop_app.dart';
 import '../print/suite_print.dart';
@@ -634,10 +636,12 @@ class _CustomerPickerState extends ConsumerState<_CustomerPicker> {
               ),
             ),
             if (_adding) ...[
+              const SizedBox(height: 8),
               TextField(
                 controller: _name,
                 decoration: InputDecoration(labelText: l10n.crmName, isDense: true),
               ),
+              const SizedBox(height: 12),
               TextField(
                 controller: _phone,
                 keyboardType: TextInputType.phone,
@@ -665,7 +669,7 @@ class _CustomerPickerState extends ConsumerState<_CustomerPicker> {
   }
 }
 
-/// The product's photo with the merchant's crop, or — when he has none — an icon of its kind on a soft tile.
+/// The product's photo with the merchant's crop, or — when he has none — the same emoji the phone shows for it.
 class _ProductPhoto extends StatelessWidget {
   final InvPosProduct product;
   const _ProductPhoto({required this.product});
@@ -673,11 +677,13 @@ class _ProductPhoto extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final url = Env.assetUrl(product.image);
-    final scheme = Theme.of(context).colorScheme;
     final placeholder = Container(
-      color: scheme.surfaceContainerHighest,
+      color: AppColors.photoPlaceholder(context),
       alignment: Alignment.center,
-      child: Icon(product.ownerType == 'retail_listing' ? Icons.shopping_bag_outlined : Icons.restaurant_menu_outlined, size: 34, color: scheme.onSurfaceVariant),
+      child: Text(
+        itemEmoji(nameAr: product.name, nameEn: product.nameEn, lineNameAr: product.lineNameAr, lineNameEn: product.lineNameEn, fromCatalog: product.fromCatalog),
+        style: const TextStyle(fontSize: 40),
+      ),
     );
     final c = product.crop;
     return ClipRRect(
