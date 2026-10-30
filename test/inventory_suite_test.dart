@@ -70,4 +70,23 @@ void main() {
     expect(await LanLink.proof('482913', device), isNot(await LanLink.proof('111111', device)));
     expect(await LanLink.pairingKey('482913', device), hasLength(32));
   });
+
+  test('a cashier product carries its card photo and crop; a supplier candidate says if it is already mine', () {
+    final p = InvPosProduct.fromJson({
+      'owner_type': 'menu_item',
+      'owner_id': 4,
+      'name': 'عصير مانجو',
+      'price': 25,
+      'barcodes': [],
+      'image': 'files/uploads/mango.png',
+      'crop': {'x': 0.3, 'y': 0.6, 'zoom': 1.5},
+    });
+    expect(p.image, 'files/uploads/mango.png');
+    expect(p.crop?.zoom, 1.5);
+    expect(InvPosProduct.fromJson({'owner_type': 'retail_listing', 'owner_id': 1, 'image': '', 'crop': null}).image, isNull);
+
+    final b = InvSupplierCandidate.fromJson({'id': 9, 'name': 'مورد الأمانة', 'trade': 'صيدلية', 'place': 'القاهرة — مدينة نصر', 'supplier_id': 3});
+    expect(b.supplierId, 3);
+    expect(b.place, contains('مدينة نصر'));
+  });
 }

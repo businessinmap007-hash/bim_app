@@ -44,7 +44,12 @@ class PurchasesPage extends ConsumerWidget {
         ],
         child: Column(
           children: [
-            TabBar(tabs: [Tab(text: l10n.suiteOrders), Tab(text: l10n.suiteSuppliers)]),
+            TabBar(
+              tabs: [
+                Tab(text: l10n.suiteOrders),
+                Tab(text: l10n.suiteSuppliers),
+              ],
+            ),
             const Expanded(child: TabBarView(children: [_OrdersTab(), _SuppliersTab()])),
           ],
         ),
@@ -53,39 +58,10 @@ class PurchasesPage extends ConsumerWidget {
   }
 
   Future<void> _newSupplier(BuildContext context, WidgetRef ref) async {
-    final l10n = AppLocalizations.of(context)!;
-    final name = TextEditingController();
-    final phone = TextEditingController();
-    final linked = TextEditingController();
-    final ok = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(l10n.suiteNewSupplier),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(controller: name, decoration: InputDecoration(labelText: l10n.suiteSupplierName)),
-            TextField(controller: phone, decoration: InputDecoration(labelText: l10n.suitePhone)),
-            TextField(controller: linked, decoration: InputDecoration(labelText: l10n.suiteLinkedBusinessId, helperText: l10n.suiteLinkedBusinessHint)),
-          ],
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.commonCancel)),
-          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: Text(l10n.commonSave)),
-        ],
-      ),
-    );
-    if (ok == true && name.text.trim().isNotEmpty && context.mounted) {
-      await suiteRun(context, () => ref.read(inventoryApiProvider).createSupplier(
-            name: name.text.trim(),
-            phone: phone.text.trim().isEmpty ? null : phone.text.trim(),
-            linkedBusinessId: int.tryParse(linked.text.trim()),
-          ));
-      ref.invalidate(suiteSuppliersProvider);
-    }
-    name.dispose();
-    phone.dispose();
-    linked.dispose();
+    final picked = await showDialog<({String name, String? phone, int? linkedBusinessId})>(context: context, builder: (_) => const _SupplierDialog());
+    if (picked == null || !context.mounted) return;
+    await suiteRun(context, () => ref.read(inventoryApiProvider).createSupplier(name: picked.name, phone: picked.phone, linkedBusinessId: picked.linkedBusinessId));
+    ref.invalidate(suiteSuppliersProvider);
   }
 }
 
@@ -120,7 +96,9 @@ class _OrdersTab extends ConsumerWidget {
           ),
         ),
         const VerticalDivider(),
-        Expanded(child: selected == null ? Center(child: Text(l10n.suitePickOrder)) : _OrderDetail(orderId: selected)),
+        Expanded(
+          child: selected == null ? Center(child: Text(l10n.suitePickOrder)) : _OrderDetail(orderId: selected),
+        ),
       ],
     );
   }
@@ -203,16 +181,22 @@ class _OrderDetail extends ConsumerWidget {
                 ],
                 rows: [
                   for (final l in po.lines)
-                    DataRow(cells: [
-                      DataCell(Text(l.itemName ?? '')),
-                      DataCell(Text(l.unitName)),
-                      DataCell(Text(invNum(l.qty))),
-                      DataCell(Text(InvLabels.money(l.unitPrice))),
-                      DataCell(Text(InvLabels.money(l.total))),
-                      DataCell(Text('${invNum(l.receivedQty)} / ${invNum(l.qty)}',
-                          style: TextStyle(color: l.receivedQty + 0.0001 >= l.qty ? Tone.good(context) : Tone.warn(context), fontWeight: FontWeight.w700))),
-                      DataCell(Text(invNum(l.billedQty))),
-                    ]),
+                    DataRow(
+                      cells: [
+                        DataCell(Text(l.itemName ?? '')),
+                        DataCell(Text(l.unitName)),
+                        DataCell(Text(invNum(l.qty))),
+                        DataCell(Text(InvLabels.money(l.unitPrice))),
+                        DataCell(Text(InvLabels.money(l.total))),
+                        DataCell(
+                          Text(
+                            '${invNum(l.receivedQty)} / ${invNum(l.qty)}',
+                            style: TextStyle(color: l.receivedQty + 0.0001 >= l.qty ? Tone.good(context) : Tone.warn(context), fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                        DataCell(Text(invNum(l.billedQty))),
+                      ],
+                    ),
                 ],
               ),
             ),
@@ -224,7 +208,10 @@ class _OrderDetail extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(l10n.suiteMatchProblem, style: TextStyle(color: Tone.bad(context), fontWeight: FontWeight.w800)),
+                      Text(
+                        l10n.suiteMatchProblem,
+                        style: TextStyle(color: Tone.bad(context), fontWeight: FontWeight.w800),
+                      ),
                       for (final m in d.match.where((m) => m.issues.isNotEmpty))
                         Text(
                           '${po.lines.where((l) => l.id == m.poLineId).firstOrNull?.itemName ?? ''}: '
@@ -305,7 +292,10 @@ class _OrderDetail extends ConsumerWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextField(controller: number, decoration: InputDecoration(labelText: l10n.suiteBillNumber)),
+              TextField(
+                controller: number,
+                decoration: InputDecoration(labelText: l10n.suiteBillNumber),
+              ),
               for (final l in po.lines)
                 Row(
                   children: [
@@ -325,15 +315,20 @@ class _OrderDetail extends ConsumerWidget {
       ),
     );
     if (ok == true && context.mounted) {
-      await suiteRun(context, () => ref.read(inventoryApiProvider).recordBill(
-            supplierId: po.supplier!.id,
-            purchaseOrderId: po.id,
-            number: number.text.trim().isEmpty ? null : number.text.trim(),
-            lines: [
-              for (final l in po.lines)
-                if ((parseNum(qtys[l.id]!.text) ?? 0) > 0) {'po_line_id': l.id, 'qty': parseNum(qtys[l.id]!.text), 'unit_price': parseNum(prices[l.id]!.text)},
-            ],
-          ));
+      await suiteRun(
+        context,
+        () => ref
+            .read(inventoryApiProvider)
+            .recordBill(
+              supplierId: po.supplier!.id,
+              purchaseOrderId: po.id,
+              number: number.text.trim().isEmpty ? null : number.text.trim(),
+              lines: [
+                for (final l in po.lines)
+                  if ((parseNum(qtys[l.id]!.text) ?? 0) > 0) {'po_line_id': l.id, 'qty': parseNum(qtys[l.id]!.text), 'unit_price': parseNum(prices[l.id]!.text)},
+              ],
+            ),
+      );
       refresh();
     }
     number.dispose();
@@ -363,7 +358,10 @@ class _OrderDetail extends ConsumerWidget {
                 ],
                 onChanged: (v) => setState(() => method = v ?? 'cash'),
               ),
-              TextField(controller: note, decoration: InputDecoration(labelText: l10n.suiteNote)),
+              TextField(
+                controller: note,
+                decoration: InputDecoration(labelText: l10n.suiteNote),
+              ),
             ],
           ),
           actions: [
@@ -402,12 +400,19 @@ class _SuppliersTab extends ConsumerWidget {
           ],
           rows: [
             for (final s in rows)
-              DataRow(cells: [
-                DataCell(Text(s.name)),
-                DataCell(Text(s.phone ?? '')),
-                DataCell(Text(s.onBim ? (s.linkedBusinessName ?? '✓') : '—')),
-                DataCell(Text(InvLabels.money(s.balance ?? 0), style: TextStyle(color: (s.balance ?? 0) > 0 ? Tone.bad(context) : null, fontWeight: FontWeight.w700))),
-              ]),
+              DataRow(
+                cells: [
+                  DataCell(Text(s.name)),
+                  DataCell(Text(s.phone ?? '')),
+                  DataCell(Text(s.onBim ? (s.linkedBusinessName ?? '✓') : '—')),
+                  DataCell(
+                    Text(
+                      InvLabels.money(s.balance ?? 0),
+                      style: TextStyle(color: (s.balance ?? 0) > 0 ? Tone.bad(context) : null, fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                ],
+              ),
           ],
         ),
       ),
@@ -467,7 +472,10 @@ class _OrderDialogState extends ConsumerState<_OrderDialog> {
           },
     ];
     if (lines.isEmpty) return;
-    await suiteRun(context, () => ref.read(inventoryApiProvider).createPurchaseOrder(supplierId: _supplier!, lines: lines, submit: submit, notes: _notes.text.trim().isEmpty ? null : _notes.text.trim()));
+    await suiteRun(
+      context,
+      () => ref.read(inventoryApiProvider).createPurchaseOrder(supplierId: _supplier!, lines: lines, submit: submit, notes: _notes.text.trim().isEmpty ? null : _notes.text.trim()),
+    );
     if (mounted) Navigator.pop(context, true);
   }
 
@@ -517,8 +525,7 @@ class _OrderDialogState extends ConsumerState<_OrderDialog> {
                         decoration: InputDecoration(labelText: l10n.suiteUnit, isDense: true),
                         items: [
                           DropdownMenuItem<InvUnit?>(value: null, child: Text(items.where((it) => it.id == _lines[i].item).firstOrNull?.baseUnit ?? '—')),
-                          for (final u in items.where((it) => it.id == _lines[i].item).firstOrNull?.units ?? const <InvUnit>[])
-                            DropdownMenuItem<InvUnit?>(value: u, child: Text(u.name)),
+                          for (final u in items.where((it) => it.id == _lines[i].item).firstOrNull?.units ?? const <InvUnit>[]) DropdownMenuItem<InvUnit?>(value: u, child: Text(u.name)),
                         ],
                         onChanged: (v) => setState(() => _lines[i] = (item: _lines[i].item, unit: v, qty: _lines[i].qty, price: _lines[i].price)),
                       ),
@@ -533,9 +540,15 @@ class _OrderDialogState extends ConsumerState<_OrderDialog> {
                 alignment: AlignmentDirectional.centerStart,
                 child: TextButton.icon(onPressed: () => setState(_addLine), icon: const Icon(Icons.add), label: Text(l10n.suiteAddLine)),
               ),
-              TextField(controller: _notes, decoration: InputDecoration(labelText: l10n.suiteNote)),
+              TextField(
+                controller: _notes,
+                decoration: InputDecoration(labelText: l10n.suiteNote),
+              ),
               const SizedBox(height: 8),
-              Align(alignment: AlignmentDirectional.centerEnd, child: Text('${l10n.stkTotal}: ${InvLabels.money(total)} ${l10n.stkCurrency}', style: const TextStyle(fontWeight: FontWeight.w800))),
+              Align(
+                alignment: AlignmentDirectional.centerEnd,
+                child: Text('${l10n.stkTotal}: ${InvLabels.money(total)} ${l10n.stkCurrency}', style: const TextStyle(fontWeight: FontWeight.w800)),
+              ),
             ],
           ),
         ),
@@ -544,6 +557,137 @@ class _OrderDialogState extends ConsumerState<_OrderDialog> {
         TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.commonCancel)),
         OutlinedButton(onPressed: () => _save(false), child: Text(l10n.suiteSaveDraft)),
         FilledButton(onPressed: () => _save(true), child: Text(l10n.suiteSubmit)),
+      ],
+    );
+  }
+}
+
+/// «مورد جديد»: a business on BIM found by its name, trade or city (its purchase orders then reach it in its app), or
+/// a supplier outside the app typed in by name and phone.
+class _SupplierDialog extends ConsumerStatefulWidget {
+  const _SupplierDialog();
+
+  @override
+  ConsumerState<_SupplierDialog> createState() => _SupplierDialogState();
+}
+
+class _SupplierDialogState extends ConsumerState<_SupplierDialog> {
+  final _q = TextEditingController();
+  final _name = TextEditingController();
+  final _phone = TextEditingController();
+  bool _onBim = true;
+  bool _myCity = false;
+  bool _loading = false;
+  List<InvSupplierCandidate> _found = const [];
+  InvSupplierCandidate? _chosen;
+
+  @override
+  void dispose() {
+    for (final c in [_q, _name, _phone]) {
+      c.dispose();
+    }
+    super.dispose();
+  }
+
+  Future<void> _search() async {
+    setState(() => _loading = true);
+    try {
+      final rows = await ref.read(inventoryApiProvider).supplierCandidates(q: _q.text, myCity: _myCity);
+      if (mounted) setState(() => _found = rows);
+    } catch (_) {
+      if (mounted) setState(() => _found = const []);
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final chosen = _chosen;
+
+    return AlertDialog(
+      title: Text(l10n.suiteNewSupplier),
+      content: SizedBox(
+        width: 520,
+        height: 480,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SegmentedButton<bool>(
+              segments: [
+                ButtonSegment(value: true, icon: const Icon(Icons.storefront_outlined), label: Text(l10n.suiteSupplierOnBim)),
+                ButtonSegment(value: false, icon: const Icon(Icons.person_outline), label: Text(l10n.suiteSupplierOffApp)),
+              ],
+              selected: {_onBim},
+              onSelectionChanged: (v) => setState(() => _onBim = v.first),
+            ),
+            const SizedBox(height: 12),
+            if (_onBim) ...[
+              TextField(
+                controller: _q,
+                autofocus: true,
+                decoration: InputDecoration(prefixIcon: const Icon(Icons.search), hintText: l10n.suiteSupplierSearchHint, isDense: true),
+                onSubmitted: (_) => _search(),
+              ),
+              CheckboxListTile(
+                value: _myCity,
+                contentPadding: EdgeInsets.zero,
+                dense: true,
+                title: Text(l10n.suiteSupplierMyCity),
+                onChanged: (v) {
+                  setState(() => _myCity = v ?? false);
+                  _search();
+                },
+              ),
+              Text(l10n.suiteLinkedBusinessHint, style: Theme.of(context).textTheme.bodySmall),
+              const SizedBox(height: 6),
+              Expanded(
+                child: _loading
+                    ? const Center(child: CircularProgressIndicator())
+                    : _found.isEmpty
+                    ? Center(child: Text(l10n.suiteSupplierSearchEmpty, textAlign: TextAlign.center))
+                    : ListView(
+                        children: [
+                          for (final b in _found)
+                            ListTile(
+                              selected: chosen?.id == b.id,
+                              enabled: b.supplierId == null,
+                              leading: CircleAvatar(child: Text(b.name.isEmpty ? '?' : b.name.characters.first)),
+                              title: Text(b.name, style: const TextStyle(fontWeight: FontWeight.w700)),
+                              subtitle: Text([if (b.trade != null) b.trade!, if (b.place != null) b.place!, if (b.supplierId != null) l10n.suiteSupplierAlready].join(' · ')),
+                              trailing: chosen?.id == b.id ? const Icon(Icons.check_circle) : null,
+                              onTap: () => setState(() => _chosen = b),
+                            ),
+                        ],
+                      ),
+              ),
+            ] else ...[
+              TextField(
+                controller: _name,
+                autofocus: true,
+                decoration: InputDecoration(labelText: l10n.suiteSupplierName),
+              ),
+              TextField(
+                controller: _phone,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(labelText: l10n.suitePhone),
+              ),
+            ],
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.commonCancel)),
+        FilledButton(
+          onPressed: _onBim
+              ? (chosen == null ? null : () => Navigator.pop(context, (name: chosen.name, phone: null, linkedBusinessId: chosen.id)))
+              : () {
+                  if (_name.text.trim().isEmpty) return;
+                  Navigator.pop(context, (name: _name.text.trim(), phone: _phone.text.trim().isEmpty ? null : _phone.text.trim(), linkedBusinessId: null));
+                },
+          child: Text(l10n.commonSave),
+        ),
       ],
     );
   }

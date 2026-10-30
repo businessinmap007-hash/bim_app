@@ -164,6 +164,12 @@ class InventoryApi {
   // ── purchases ──
   Future<List<InvSupplier>> suppliers() async => _rows(await _t.get('/business/inventory/suppliers'), 'suppliers').map(InvSupplier.fromJson).toList();
 
+  /// A business on BIM to buy from — by name, trade or city in one box, or [myCity] only.
+  Future<List<InvSupplierCandidate>> supplierCandidates({String? q, bool myCity = false}) async =>
+      _rows(await _t.get('/business/inventory/supplier-candidates', query: {if (q != null && q.trim().isNotEmpty) 'q': q.trim(), if (myCity) 'my_city': 1}), 'businesses')
+          .map(InvSupplierCandidate.fromJson)
+          .toList();
+
   Future<dynamic> createSupplier({required String name, String? phone, int? linkedBusinessId}) => _t.send('POST', '/business/inventory/suppliers',
       body: {'uuid': newUuid(), 'name': name, 'phone': ?phone, 'linked_business_id': ?linkedBusinessId}, queueable: true);
 

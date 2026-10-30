@@ -5098,5 +5098,11 @@
   "crmTopItemsEmpty": "No cashier purchases yet.",
   "crmPaymentReceipt": "Payment receipt",
   "crmPayments": "Payments",
-  "crmLinked": "The file is now linked to his app account"
+  "crmLinked": "The file is now linked to his app account",
+  "suiteSupplierOnBim": "A business on BIM",
+  "suiteSupplierOffApp": "Supplier outside the app",
+  "suiteSupplierSearchHint": "Search by name, trade or city",
+  "suiteSupplierMyCity": "In my city only",
+  "suiteSupplierSearchEmpty": "Type at least two letters of the supplier's name, trade or city and press Enter.",
+  "suiteSupplierAlready": "Already one of your suppliers"
 }

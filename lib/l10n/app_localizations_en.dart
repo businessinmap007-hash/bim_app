@@ -15275,4 +15275,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get crmLinked => 'The file is now linked to his app account';
+
+  @override
+  String get suiteSupplierOnBim => 'A business on BIM';
+
+  @override
+  String get suiteSupplierOffApp => 'Supplier outside the app';
+
+  @override
+  String get suiteSupplierSearchHint => 'Search by name, trade or city';
+
+  @override
+  String get suiteSupplierMyCity => 'In my city only';
+
+  @override
+  String get suiteSupplierSearchEmpty =>
+      'Type at least two letters of the supplier\'s name, trade or city and press Enter.';
+
+  @override
+  String get suiteSupplierAlready => 'Already one of your suppliers';
 }

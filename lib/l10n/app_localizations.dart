@@ -27270,6 +27270,42 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'رُبط الملف بحسابه على التطبيق'**
   String get crmLinked;
+
+  /// No description provided for @suiteSupplierOnBim.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشاط على BIM'**
+  String get suiteSupplierOnBim;
+
+  /// No description provided for @suiteSupplierOffApp.
+  ///
+  /// In ar, this message translates to:
+  /// **'مورد خارج التطبيق'**
+  String get suiteSupplierOffApp;
+
+  /// No description provided for @suiteSupplierSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث بالاسم أو النشاط أو المدينة'**
+  String get suiteSupplierSearchHint;
+
+  /// No description provided for @suiteSupplierMyCity.
+  ///
+  /// In ar, this message translates to:
+  /// **'في مدينتي فقط'**
+  String get suiteSupplierMyCity;
+
+  /// No description provided for @suiteSupplierSearchEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب حرفين على الأقل من اسم المورد أو نشاطه أو مدينته واضغط Enter.'**
+  String get suiteSupplierSearchEmpty;
+
+  /// No description provided for @suiteSupplierAlready.
+  ///
+  /// In ar, this message translates to:
+  /// **'من مورديك بالفعل'**
+  String get suiteSupplierAlready;
 }
 
 class _AppLocalizationsDelegate

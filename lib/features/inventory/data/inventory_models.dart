@@ -485,6 +485,27 @@ class InvPosChoice {
   factory InvPosChoice.fromJson(Map<String, dynamic> j) => InvPosChoice(id: _i(j['id']), name: j['name'] as String? ?? '', price: _d(j['price']));
 }
 
+/// A business on BIM that could supply this one (its orders then reach it in its app).
+class InvSupplierCandidate {
+  final int id;
+  final String name;
+  final String? logo;
+  final String? trade;
+  final String? place;
+  final int? supplierId; // already one of my suppliers
+
+  const InvSupplierCandidate({required this.id, required this.name, this.logo, this.trade, this.place, this.supplierId});
+
+  factory InvSupplierCandidate.fromJson(Map<String, dynamic> j) => InvSupplierCandidate(
+        id: _i(j['id']),
+        name: j['name'] as String? ?? '',
+        logo: j['logo'] as String?,
+        trade: j['trade'] as String?,
+        place: j['place'] as String?,
+        supplierId: _in(j['supplier_id']),
+      );
+}
+
 class InvPosProduct {
   final String ownerType; // menu_item | retail_listing
   final int ownerId;
@@ -495,6 +516,10 @@ class InvPosProduct {
   final List<InvPosChoice> variants;
   final List<InvPosChoice> extras;
 
+  /// The customer card's photo (a path under the site, or a full URL) and the part of it the merchant chose.
+  final String? image;
+  final ({double x, double y, double zoom})? crop;
+
   const InvPosProduct({
     required this.ownerType,
     required this.ownerId,
@@ -504,6 +529,8 @@ class InvPosProduct {
     required this.barcodes,
     required this.variants,
     required this.extras,
+    this.image,
+    this.crop,
   });
 
   factory InvPosProduct.fromJson(Map<String, dynamic> j) => InvPosProduct(
@@ -515,6 +542,8 @@ class InvPosProduct {
         barcodes: (j['barcodes'] as List<dynamic>? ?? const []).cast<String>(),
         variants: _list(j['variants']).map(InvPosChoice.fromJson).toList(),
         extras: _list(j['extras']).map(InvPosChoice.fromJson).toList(),
+        image: (j['image'] as String?)?.trim().isEmpty ?? true ? null : j['image'] as String,
+        crop: j['crop'] is Map ? (x: _d((j['crop'] as Map)['x']), y: _d((j['crop'] as Map)['y']), zoom: _d((j['crop'] as Map)['zoom'])) : null,
       );
 }
 

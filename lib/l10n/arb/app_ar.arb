@@ -5237,5 +5237,11 @@
   "crmTopItemsEmpty": "لا مشتريات من الكاشير بعد.",
   "crmPaymentReceipt": "إيصال استلام دفعة",
   "crmPayments": "الدفعات",
-  "crmLinked": "رُبط الملف بحسابه على التطبيق"
+  "crmLinked": "رُبط الملف بحسابه على التطبيق",
+  "suiteSupplierOnBim": "نشاط على BIM",
+  "suiteSupplierOffApp": "مورد خارج التطبيق",
+  "suiteSupplierSearchHint": "ابحث بالاسم أو النشاط أو المدينة",
+  "suiteSupplierMyCity": "في مدينتي فقط",
+  "suiteSupplierSearchEmpty": "اكتب حرفين على الأقل من اسم المورد أو نشاطه أو مدينته واضغط Enter.",
+  "suiteSupplierAlready": "من مورديك بالفعل"
 }

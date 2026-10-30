@@ -4,7 +4,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/env/env.dart';
 import '../../core/network/api_exception.dart';
+import '../../features/business_menu/data/models/menu_item_image.dart';
 import '../../features/customers/data/customers_api.dart';
 import '../../features/customers/presentation/crm_widgets.dart';
 import '../../features/inventory/application/inventory_providers.dart';
@@ -12,6 +14,7 @@ import '../../features/inventory/data/inventory_models.dart';
 import '../../features/inventory/presentation/inventory_labels.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/async_value_view.dart';
+import '../../shared/widgets/cropped_network_image.dart';
 import '../desktop_app.dart';
 import '../print/suite_print.dart';
 import '../sync/desktop_sync.dart';
@@ -336,16 +339,19 @@ class _PosPageState extends ConsumerState<PosPage> {
                         maxCrossAxisExtent: 180,
                         mainAxisSpacing: 10,
                         crossAxisSpacing: 10,
-                        childAspectRatio: 1.4,
+                        childAspectRatio: 0.82,
                         children: [
                           for (final p in shown)
                             OutlinedButton(
-                              style: OutlinedButton.styleFrom(padding: const EdgeInsets.all(10), alignment: AlignmentDirectional.topStart),
+                              style: OutlinedButton.styleFrom(padding: const EdgeInsets.all(8), alignment: AlignmentDirectional.topStart),
                               onPressed: () => _add(p),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
+                                  // the customer card's photo (kept on this computer once seen, so it shows offline)
+                                  Expanded(child: _ProductPhoto(product: p)),
+                                  const SizedBox(height: 6),
                                   Text(
                                     p.name,
                                     maxLines: 2,
@@ -655,6 +661,36 @@ class _CustomerPickerState extends ConsumerState<_CustomerPicker> {
             child: Text(l10n.commonSave),
           ),
       ],
+    );
+  }
+}
+
+/// The product's photo with the merchant's crop, or — when he has none — an icon of its kind on a soft tile.
+class _ProductPhoto extends StatelessWidget {
+  final InvPosProduct product;
+  const _ProductPhoto({required this.product});
+
+  @override
+  Widget build(BuildContext context) {
+    final url = Env.assetUrl(product.image);
+    final scheme = Theme.of(context).colorScheme;
+    final placeholder = Container(
+      color: scheme.surfaceContainerHighest,
+      alignment: Alignment.center,
+      child: Icon(product.ownerType == 'retail_listing' ? Icons.shopping_bag_outlined : Icons.restaurant_menu_outlined, size: 34, color: scheme.onSurfaceVariant),
+    );
+    final c = product.crop;
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: SizedBox.expand(
+        child: url == null
+            ? placeholder
+            : CroppedNetworkImage(
+                url: url,
+                crop: c == null ? PhotoCrop.whole : PhotoCrop(x: c.x, y: c.y, zoom: c.zoom),
+                errorWidget: (_, _, _) => placeholder,
+              ),
+      ),
     );
   }
 }

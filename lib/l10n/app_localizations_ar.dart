@@ -15145,4 +15145,23 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get crmLinked => 'رُبط الملف بحسابه على التطبيق';
+
+  @override
+  String get suiteSupplierOnBim => 'نشاط على BIM';
+
+  @override
+  String get suiteSupplierOffApp => 'مورد خارج التطبيق';
+
+  @override
+  String get suiteSupplierSearchHint => 'ابحث بالاسم أو النشاط أو المدينة';
+
+  @override
+  String get suiteSupplierMyCity => 'في مدينتي فقط';
+
+  @override
+  String get suiteSupplierSearchEmpty =>
+      'اكتب حرفين على الأقل من اسم المورد أو نشاطه أو مدينته واضغط Enter.';
+
+  @override
+  String get suiteSupplierAlready => 'من مورديك بالفعل';
 }
