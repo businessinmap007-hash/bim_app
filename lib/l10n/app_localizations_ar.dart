@@ -14724,4 +14724,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get hrNotConfirmedYet => 'لم يؤكد بعد';
+
+  @override
+  String get suiteAppPrefs => 'اللغة والمظهر والبيانات';
 }

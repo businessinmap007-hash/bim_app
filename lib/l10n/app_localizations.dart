@@ -26502,6 +26502,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لم يؤكد بعد'**
   String get hrNotConfirmedYet;
+
+  /// No description provided for @suiteAppPrefs.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللغة والمظهر والبيانات'**
+  String get suiteAppPrefs;
 }
 
 class _AppLocalizationsDelegate

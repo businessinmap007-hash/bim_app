@@ -14851,4 +14851,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hrNotConfirmedYet => 'Not yet';
+
+  @override
+  String get suiteAppPrefs => 'Language, theme and data';
 }

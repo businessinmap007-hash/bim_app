@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:printing/printing.dart';
 
+import '../../features/data_import/presentation/screens/data_import_hub_screen.dart';
 import '../../features/inventory/application/inventory_providers.dart';
 import '../../features/inventory/data/inventory_models.dart';
 import '../../features/inventory/presentation/inventory_labels.dart';
+import '../../features/settings/application/locale_controller.dart';
+import '../../features/settings/application/theme_mode_controller.dart';
+import '../../features/staff/application/staff_providers.dart';
 import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/async_value_view.dart';
 import '../desktop_app.dart';
@@ -45,110 +49,188 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
     return SuitePage(
       title: l10n.suiteNavSettings,
-      child: AsyncValueView<InvSettings>(
-        value: ref.watch(invSettingsProvider),
-        onRetry: () => ref.invalidate(invSettingsProvider),
-        builder: (context, s) {
-          if (!_seeded) {
-            _limit.text = s.poApprovalThreshold == null ? '' : invNum(s.poApprovalThreshold!);
-            _seeded = true;
-          }
-          if (!s.available) return Text(l10n.stkNotAvailable);
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const _AppPrefs(),
+          AsyncValueView<InvSettings>(
+            value: ref.watch(invSettingsProvider),
+            onRetry: () => ref.invalidate(invSettingsProvider),
+            builder: (context, s) {
+              if (!_seeded) {
+                _limit.text = s.poApprovalThreshold == null ? '' : invNum(s.poApprovalThreshold!);
+                _seeded = true;
+              }
+              if (!s.available) return Text(l10n.stkNotAvailable);
 
-          final sub = s.subscription;
-          final rejected = store.rejected();
+              final sub = s.subscription;
+              final rejected = store.rejected();
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SuiteSection(
-                title: l10n.suiteSubscription,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(sub.price > 0 ? l10n.stkSubscriptionPrice(InvLabels.money(sub.price)) : l10n.stkSubscriptionFree),
-                    Text(l10n.suiteSubscriptionStatus(_status(l10n, sub.status))),
-                    if (sub.paidUntil != null) Text(l10n.suitePaidUntil(MaterialLocalizations.of(context).formatMediumDate(sub.paidUntil!))),
-                    const SizedBox(height: 6),
-                    Text(l10n.suiteSubscriptionRules, style: Theme.of(context).textTheme.bodySmall),
-                    const SizedBox(height: 10),
-                    if (s.isOwner && !s.enabled) FilledButton(onPressed: () => _update(() => api.updateSettings(enabled: true)), child: Text(l10n.stkEnableAction)),
-                    if (s.isOwner && s.enabled && sub.status != 'active') FilledButton(onPressed: () => _update(api.renew), child: Text(l10n.suiteRenew)),
-                    if (!s.isOwner && !s.enabled) Text(l10n.stkOwnerEnables),
-                  ],
-                ),
-              ),
-              if (s.enabled)
-                SuiteSection(
-                  title: l10n.suiteParts,
-                  child: Column(
-                    children: [
-                      Text(l10n.suitePartsHint, style: Theme.of(context).textTheme.bodySmall),
-                      for (final f in s.features)
-                        SwitchListTile(
-                          title: Text(f.label),
-                          subtitle: f.optional ? Text(l10n.suiteOptional) : null,
-                          value: f.on,
-                          onChanged: !s.isOwner || f.key == 'units'
-                              ? null
-                              : (v) => _update(() => api.updateSettings(features: [
-                                    for (final x in s.features)
-                                      if (x.key == f.key ? v : x.on) x.key,
-                                  ])),
-                        ),
-                    ],
-                  ),
-                ),
-              if (s.enabled && s.isOwner)
-                SuiteSection(
-                  title: l10n.suiteApprovalLimit,
-                  child: Row(
-                    children: [
-                      NumField(controller: _limit, label: l10n.suiteApprovalLimitField, width: 240),
-                      const SizedBox(width: 12),
-                      FilledButton(
-                        onPressed: () {
-                          final v = parseNum(_limit.text);
-                          _update(() => api.updateSettings(poApprovalThreshold: v, clearThreshold: v == null));
-                        },
-                        child: Text(l10n.commonSave),
-                      ),
-                    ],
-                  ),
-                ),
-              if (s.enabled) const _PrintSettings(),
-              if (rejected.isNotEmpty)
-                SuiteSection(
-                  title: l10n.suiteRejectedTitle,
-                  actions: [
-                    TextButton(
-                      onPressed: () async {
-                        await store.clearRejected();
-                        setState(() {});
-                      },
-                      child: Text(l10n.suiteClear),
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SuiteSection(
+                    title: l10n.suiteSubscription,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(sub.price > 0 ? l10n.stkSubscriptionPrice(InvLabels.money(sub.price)) : l10n.stkSubscriptionFree),
+                        Text(l10n.suiteSubscriptionStatus(_status(l10n, sub.status))),
+                        if (sub.paidUntil != null) Text(l10n.suitePaidUntil(MaterialLocalizations.of(context).formatMediumDate(sub.paidUntil!))),
+                        const SizedBox(height: 6),
+                        Text(l10n.suiteSubscriptionRules, style: Theme.of(context).textTheme.bodySmall),
+                        const SizedBox(height: 10),
+                        if (s.isOwner && !s.enabled) FilledButton(onPressed: () => _update(() => api.updateSettings(enabled: true)), child: Text(l10n.stkEnableAction)),
+                        if (s.isOwner && s.enabled && sub.status != 'active') FilledButton(onPressed: () => _update(api.renew), child: Text(l10n.suiteRenew)),
+                        if (!s.isOwner && !s.enabled) Text(l10n.stkOwnerEnables),
+                      ],
                     ),
-                  ],
-                  child: Column(
-                    children: [
-                      for (final r in rejected)
-                        ListTile(dense: true, title: Text('${r['message']}'), subtitle: Text('${r['method']} ${r['path']} · ${r['at']}')),
-                    ],
                   ),
-                ),
-            ],
-          );
-        },
+                  if (s.enabled)
+                    SuiteSection(
+                      title: l10n.suiteParts,
+                      child: Column(
+                        children: [
+                          Text(l10n.suitePartsHint, style: Theme.of(context).textTheme.bodySmall),
+                          for (final f in s.features)
+                            SwitchListTile(
+                              title: Text(f.label),
+                              subtitle: f.optional ? Text(l10n.suiteOptional) : null,
+                              value: f.on,
+                              onChanged: !s.isOwner || f.key == 'units'
+                                  ? null
+                                  : (v) => _update(
+                                      () => api.updateSettings(
+                                        features: [
+                                          for (final x in s.features)
+                                            if (x.key == f.key ? v : x.on) x.key,
+                                        ],
+                                      ),
+                                    ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  if (s.enabled && s.isOwner)
+                    SuiteSection(
+                      title: l10n.suiteApprovalLimit,
+                      child: Row(
+                        children: [
+                          NumField(controller: _limit, label: l10n.suiteApprovalLimitField, width: 240),
+                          const SizedBox(width: 12),
+                          FilledButton(
+                            onPressed: () {
+                              final v = parseNum(_limit.text);
+                              _update(() => api.updateSettings(poApprovalThreshold: v, clearThreshold: v == null));
+                            },
+                            child: Text(l10n.commonSave),
+                          ),
+                        ],
+                      ),
+                    ),
+                  if (s.enabled) const _PrintSettings(),
+                  if (rejected.isNotEmpty)
+                    SuiteSection(
+                      title: l10n.suiteRejectedTitle,
+                      actions: [
+                        TextButton(
+                          onPressed: () async {
+                            await store.clearRejected();
+                            setState(() {});
+                          },
+                          child: Text(l10n.suiteClear),
+                        ),
+                      ],
+                      child: Column(
+                        children: [for (final r in rejected) ListTile(dense: true, title: Text('${r['message']}'), subtitle: Text('${r['method']} ${r['path']} · ${r['at']}'))],
+                      ),
+                    ),
+                ],
+              );
+            },
+          ),
+        ],
       ),
     );
   }
 
   String _status(AppLocalizations l10n, String status) => switch (status) {
-        'active' => l10n.suiteSubActive,
-        'grace' => l10n.suiteSubGrace,
-        'read_only' => l10n.suiteSubReadOnly,
-        _ => l10n.suiteSubNone,
-      };
+    'active' => l10n.suiteSubActive,
+    'grace' => l10n.suiteSubGrace,
+    'read_only' => l10n.suiteSubReadOnly,
+    _ => l10n.suiteSubNone,
+  };
+}
+
+/// «اللغة والمظهر والبيانات» — shown on every computer, the suite switched on or not (attendance and payroll work
+/// without it): the language and theme are this computer's own (kept on it, like the phone's), and «استيراد بياناتي»
+/// opens the same import wizard as the phone for the parts this business has.
+class _AppPrefs extends ConsumerWidget {
+  const _AppPrefs();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final locale = ref.watch(localeControllerProvider);
+    final mode = ref.watch(themeModeControllerProvider);
+    final isOwner = ref.watch(suiteBusinessProvider)?.isOwnerAccount ?? false;
+    final keys = isOwner ? ref.watch(myServiceKeysProvider).valueOrNull : null;
+    final canImport = keys != null && (keys.contains('menu') || keys.contains('clinic') || keys.contains('bookings'));
+
+    return SuiteSection(
+      title: l10n.suiteAppPrefs,
+      child: Wrap(
+        spacing: 24,
+        runSpacing: 16,
+        crossAxisAlignment: WrapCrossAlignment.end,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(l10n.settingsLanguage, style: const TextStyle(fontWeight: FontWeight.w700)),
+              const SizedBox(height: 6),
+              SegmentedButton<String>(
+                segments: [
+                  ButtonSegment(value: 'ar', label: Text(l10n.settingsLanguageArabic)),
+                  ButtonSegment(value: 'en', label: Text(l10n.settingsLanguageEnglish)),
+                ],
+                selected: {locale.languageCode},
+                onSelectionChanged: (v) => ref.read(localeControllerProvider.notifier).setLocale(Locale(v.first)),
+              ),
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(l10n.settingsAppearance, style: const TextStyle(fontWeight: FontWeight.w700)),
+              const SizedBox(height: 6),
+              SegmentedButton<ThemeMode>(
+                segments: [
+                  ButtonSegment(value: ThemeMode.light, icon: const Icon(Icons.light_mode_outlined), label: Text(l10n.settingsAppearanceLight)),
+                  ButtonSegment(value: ThemeMode.dark, icon: const Icon(Icons.dark_mode_outlined), label: Text(l10n.settingsAppearanceDark)),
+                  ButtonSegment(value: ThemeMode.system, icon: const Icon(Icons.computer_outlined), label: Text(l10n.settingsAppearanceSystem)),
+                ],
+                selected: {mode},
+                onSelectionChanged: (v) => ref.read(themeModeControllerProvider.notifier).setThemeMode(v.first),
+              ),
+            ],
+          ),
+          if (canImport)
+            OutlinedButton.icon(
+              icon: const Icon(Icons.import_export_outlined),
+              label: Text(l10n.importHubTitle),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => DataImportHubScreen(hasMenu: keys.contains('menu'), hasClinic: keys.contains('clinic'), hasUnits: keys.contains('bookings')),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
 }
 
 /// «الطباعة على هذا الجهاز» — each computer picks its receipt printer (an 80 mm roll) and its documents printer (A4),

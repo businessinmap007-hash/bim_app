@@ -210,7 +210,7 @@ class _OrderDetail extends ConsumerWidget {
                       DataCell(Text(InvLabels.money(l.unitPrice))),
                       DataCell(Text(InvLabels.money(l.total))),
                       DataCell(Text('${invNum(l.receivedQty)} / ${invNum(l.qty)}',
-                          style: TextStyle(color: l.receivedQty + 0.0001 >= l.qty ? const Color(0xFF1F7A44) : const Color(0xFF7A5200), fontWeight: FontWeight.w700))),
+                          style: TextStyle(color: l.receivedQty + 0.0001 >= l.qty ? Tone.good(context) : Tone.warn(context), fontWeight: FontWeight.w700))),
                       DataCell(Text(invNum(l.billedQty))),
                     ]),
                 ],
@@ -224,13 +224,13 @@ class _OrderDetail extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(l10n.suiteMatchProblem, style: const TextStyle(color: Color(0xFFB93A22), fontWeight: FontWeight.w800)),
+                      Text(l10n.suiteMatchProblem, style: TextStyle(color: Tone.bad(context), fontWeight: FontWeight.w800)),
                       for (final m in d.match.where((m) => m.issues.isNotEmpty))
                         Text(
                           '${po.lines.where((l) => l.id == m.poLineId).firstOrNull?.itemName ?? ''}: '
                           '${m.issues.map((i) => i == 'price_differs' ? l10n.suitePriceDiffers : l10n.suiteBilledMore).join('، ')} '
                           '(${InvLabels.money(m.differenceValue)})',
-                          style: const TextStyle(color: Color(0xFFB93A22)),
+                          style: TextStyle(color: Tone.bad(context)),
                         ),
                     ],
                   ),
@@ -406,7 +406,7 @@ class _SuppliersTab extends ConsumerWidget {
                 DataCell(Text(s.name)),
                 DataCell(Text(s.phone ?? '')),
                 DataCell(Text(s.onBim ? (s.linkedBusinessName ?? '✓') : '—')),
-                DataCell(Text(InvLabels.money(s.balance ?? 0), style: TextStyle(color: (s.balance ?? 0) > 0 ? const Color(0xFFB93A22) : null, fontWeight: FontWeight.w700))),
+                DataCell(Text(InvLabels.money(s.balance ?? 0), style: TextStyle(color: (s.balance ?? 0) > 0 ? Tone.bad(context) : null, fontWeight: FontWeight.w700))),
               ]),
           ],
         ),

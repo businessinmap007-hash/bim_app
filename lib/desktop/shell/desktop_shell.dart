@@ -92,7 +92,6 @@ class _DesktopShellState extends ConsumerState<DesktopShell> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     final settings = ref.watch(invSettingsProvider);
 
     return AsyncValueView<InvSettings>(

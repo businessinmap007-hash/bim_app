@@ -127,7 +127,7 @@ class _DevicesPageState extends ConsumerState<DevicesPage> {
                 SelectableText('ID: ${store.deviceUuid}', style: Theme.of(context).textTheme.bodySmall),
                 const SizedBox(height: 8),
                 if (hub?.running == true) ...[
-                  Text(l10n.suiteIsMain, style: const TextStyle(fontWeight: FontWeight.w800, color: Color(0xFF1F7A44))),
+                  Text(l10n.suiteIsMain, style: TextStyle(fontWeight: FontWeight.w800, color: Tone.good(context))),
                   const SizedBox(height: 8),
                   Row(
                     children: [

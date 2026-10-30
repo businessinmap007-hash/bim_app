@@ -168,7 +168,7 @@ class _CountScreenState extends ConsumerState<_CountScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (count.blind && count.status == 'counting') Text(l10n.suiteBlindHint, style: const TextStyle(color: Color(0xFF5E440E), fontWeight: FontWeight.w700)),
+              if (count.blind && count.status == 'counting') Text(l10n.suiteBlindHint, style: TextStyle(color: Tone.warn(context), fontWeight: FontWeight.w700)),
               if (editable)
                 TextField(
                   controller: _scan,
@@ -205,7 +205,7 @@ class _CountScreenState extends ConsumerState<_CountScreen> {
                         DataCell(Text(l.expectedQty == null ? '•••' : invNum(l.expectedQty!))),
                         DataCell(editable ? SizedBox(width: 90, child: TextField(controller: _counted[_key(l)], keyboardType: TextInputType.number)) : Text(l.countedQty == null ? '—' : invNum(l.countedQty!))),
                         DataCell(Text(l.difference == null ? '' : invNum(l.difference!),
-                            style: TextStyle(fontWeight: FontWeight.w800, color: (l.difference ?? 0) < 0 ? const Color(0xFFB93A22) : const Color(0xFF1F7A44)))),
+                            style: TextStyle(fontWeight: FontWeight.w800, color: (l.difference ?? 0) < 0 ? Tone.bad(context) : Tone.good(context)))),
                         DataCell(editable ? SizedBox(width: 180, child: TextField(controller: _reasons[_key(l)])) : Text(l.reason ?? '')),
                       ]),
                   ],

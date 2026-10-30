@@ -9,6 +9,7 @@ import '../core/providers/core_providers.dart';
 import '../features/auth/application/auth_controller.dart';
 import '../features/auth/data/models/auth_user.dart';
 import '../features/settings/application/locale_controller.dart';
+import '../features/settings/application/theme_mode_controller.dart';
 import '../features/staff/application/staff_providers.dart';
 import '../l10n/app_localizations.dart';
 import 'shell/desktop_shell.dart';
@@ -27,6 +28,7 @@ class DesktopApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
+      themeMode: ref.watch(themeModeControllerProvider),
       locale: ref.watch(localeControllerProvider),
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: const [

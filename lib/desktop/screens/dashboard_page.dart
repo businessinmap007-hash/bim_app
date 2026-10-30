@@ -27,19 +27,25 @@ class DashboardPage extends ConsumerWidget {
         builder: (context, d) => Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Row(
-              children: [
-                Expanded(child: SuiteStat(label: l10n.stkStockValue, value: '${InvLabels.money(d.summary.stockValue)} ${l10n.stkCurrency}', sub: l10n.suiteAtAverageCost)),
-                Expanded(
-                  child: SuiteStat(
-                    label: l10n.stkBelowReorder,
-                    value: '${d.summary.belowReorder}',
-                    color: d.summary.belowReorder > 0 ? const Color(0xFFB93A22) : null,
+            // one height for the four, whatever each one's text
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: SuiteStat(label: l10n.stkStockValue, value: '${InvLabels.money(d.summary.stockValue)} ${l10n.stkCurrency}', sub: l10n.suiteAtAverageCost),
                   ),
-                ),
-                Expanded(child: SuiteStat(label: l10n.suiteOpenOrders, value: '${d.summary.openPurchaseOrders}')),
-                Expanded(child: SuiteStat(label: l10n.suiteWasteMonth, value: '${InvLabels.money(d.summary.wasteThisMonth)} ${l10n.stkCurrency}', color: const Color(0xFF7A5200))),
-              ],
+                  Expanded(
+                    child: SuiteStat(label: l10n.stkBelowReorder, value: '${d.summary.belowReorder}', color: d.summary.belowReorder > 0 ? Tone.bad(context) : null),
+                  ),
+                  Expanded(
+                    child: SuiteStat(label: l10n.suiteOpenOrders, value: '${d.summary.openPurchaseOrders}'),
+                  ),
+                  Expanded(
+                    child: SuiteStat(label: l10n.suiteWasteMonth, value: '${InvLabels.money(d.summary.wasteThisMonth)} ${l10n.stkCurrency}', color: Tone.warn(context)),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 12),
             Row(
@@ -60,13 +66,19 @@ class DashboardPage extends ConsumerWidget {
                             ],
                             rows: [
                               for (final r in d.low)
-                                DataRow(cells: [
-                                  DataCell(Text(r.name)),
-                                  DataCell(Text('${invNum(r.onHand)} ${r.baseUnit}')),
-                                  DataCell(Text(r.daysLeft == null ? '—' : invNum(r.daysLeft!))),
-                                  DataCell(Text(InvLabels.verdict(l10n, r.verdict),
-                                      style: TextStyle(color: InvLabels.verdictColors(r.verdict).$2, fontWeight: FontWeight.w800))),
-                                ]),
+                                DataRow(
+                                  cells: [
+                                    DataCell(Text(r.name)),
+                                    DataCell(Text('${invNum(r.onHand)} ${r.baseUnit}')),
+                                    DataCell(Text(r.daysLeft == null ? '—' : invNum(r.daysLeft!))),
+                                    DataCell(
+                                      Text(
+                                        InvLabels.verdict(l10n, r.verdict),
+                                        style: TextStyle(color: InvLabels.verdictColors(r.verdict).$2, fontWeight: FontWeight.w800),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                             ],
                           ),
                   ),
@@ -82,8 +94,10 @@ class DashboardPage extends ConsumerWidget {
                             dense: true,
                             title: Text('${InvLabels.moveType(l10n, m.type)} — ${m.itemName ?? ''}'),
                             subtitle: Text(m.occurredAt == null ? '' : '${MaterialLocalizations.of(context).formatShortDate(m.occurredAt!)} ${TimeOfDay.fromDateTime(m.occurredAt!).format(context)}'),
-                            trailing: Text('${m.qty > 0 ? '+' : ''}${invNum(m.qty)}',
-                                style: TextStyle(fontWeight: FontWeight.w800, color: m.qty >= 0 ? const Color(0xFF1F7A44) : const Color(0xFFB93A22))),
+                            trailing: Text(
+                              '${m.qty > 0 ? '+' : ''}${invNum(m.qty)}',
+                              style: TextStyle(fontWeight: FontWeight.w800, color: m.qty >= 0 ? Tone.good(context) : Tone.bad(context)),
+                            ),
                           ),
                       ],
                     ),

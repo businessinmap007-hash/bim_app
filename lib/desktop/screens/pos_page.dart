@@ -305,7 +305,7 @@ class _PosPageState extends ConsumerState<PosPage> {
                                   Text('${InvLabels.money(p.price)} ${l10n.stkCurrency}'),
                                   if (p.available != null)
                                     Text(l10n.suiteAvailable(p.available!),
-                                        style: TextStyle(fontSize: 12, color: p.available! < 10 ? const Color(0xFFB93A22) : const Color(0xFF1F7A44))),
+                                        style: TextStyle(fontSize: 12, color: p.available! < 10 ? Tone.bad(context) : Tone.good(context))),
                                 ],
                               ),
                             ),
@@ -367,7 +367,7 @@ class _PosPageState extends ConsumerState<PosPage> {
                     if (paid != null && paid >= _total)
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 6),
-                        child: Text(l10n.suiteChange(InvLabels.money(paid - _total)), style: const TextStyle(color: Color(0xFF1F7A44), fontWeight: FontWeight.w800, fontSize: 18)),
+                        child: Text(l10n.suiteChange(InvLabels.money(paid - _total)), style: TextStyle(color: Tone.good(context), fontWeight: FontWeight.w800, fontSize: 18)),
                       ),
                     const SizedBox(height: 8),
                     FilledButton(

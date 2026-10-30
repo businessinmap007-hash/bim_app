@@ -4970,5 +4970,6 @@
   "hrConfirmReceivedAsk": "Do you confirm you received your {month} salary of {amount}? Your employer is told.",
   "hrReceivedConfirmed": "You confirmed receiving it",
   "hrEmployeeConfirmed": "Employee confirmed",
-  "hrNotConfirmedYet": "Not yet"
+  "hrNotConfirmedYet": "Not yet",
+  "suiteAppPrefs": "Language, theme and data"
 }

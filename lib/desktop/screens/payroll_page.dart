@@ -41,8 +41,7 @@ class PayrollPage extends ConsumerWidget {
         OutlinedButton(onPressed: () => _advance(context, ref), child: Text(l10n.hrNewAdvance)),
         if (!approved) OutlinedButton(onPressed: () => _adjustment(context, ref), child: Text(l10n.hrBonusPenalty)),
         if (!approved) FilledButton(onPressed: () => act(() => ref.read(hrApiProvider).generate(month)), child: Text(l10n.hrGenerate)),
-        if (run.valueOrNull?.status == 'draft')
-          FilledButton(onPressed: () => act(() => ref.read(hrApiProvider).approve(month)), child: Text(l10n.hrApproveLock)),
+        if (run.valueOrNull?.status == 'draft') FilledButton(onPressed: () => act(() => ref.read(hrApiProvider).approve(month)), child: Text(l10n.hrApproveLock)),
         if (run.valueOrNull != null) OutlinedButton.icon(icon: const Icon(Icons.print_outlined), label: Text(l10n.hrPrintAll), onPressed: () => _printAll(context, ref, run.value!)),
       ],
       child: AsyncValueView<HrRun?>(
@@ -56,20 +55,36 @@ class PayrollPage extends ConsumerWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Wrap(spacing: 8, children: [
-                Chip(
-                  label: Text(r.status == 'approved' ? l10n.hrApprovedLocked : l10n.hrDraft, style: TextStyle(color: r.status == 'approved' ? Colors.white : null)),
-                  backgroundColor: r.status == 'approved' ? const Color(0xFF1F7A44) : null,
-                ),
-                if ((r.totals['review'] ?? 0) as num > 0) Chip(label: Text(l10n.hrReviewTax), backgroundColor: const Color(0xFFFBF0D9)),
-              ]),
+              Wrap(
+                spacing: 8,
+                children: [
+                  Chip(
+                    label: Text(r.status == 'approved' ? l10n.hrApprovedLocked : l10n.hrDraft, style: TextStyle(color: r.status == 'approved' ? Colors.white : null)),
+                    backgroundColor: r.status == 'approved' ? const Color(0xFF1F7A44) : null,
+                  ),
+                  if ((r.totals['review'] ?? 0) as num > 0) Chip(label: Text(l10n.hrReviewTax), backgroundColor: const Color(0xFFFBF0D9)),
+                ],
+              ),
               const SizedBox(height: 8),
-              Row(children: [
-                Expanded(child: SuiteStat(label: l10n.hrGross, value: '${InvLabels.money(r.total('gross'))} ${l10n.stkCurrency}')),
-                Expanded(child: SuiteStat(label: l10n.hrNetToPay, value: '${InvLabels.money(r.total('net'))} ${l10n.stkCurrency}', color: const Color(0xFF1F7A44))),
-                Expanded(child: SuiteStat(label: l10n.hrInsuranceBoth, value: '${InvLabels.money(r.total('employee_insurance'))} + ${InvLabels.money(r.total('employer_insurance'))}')),
-                Expanded(child: SuiteStat(label: l10n.hrTaxToRemit, value: '${InvLabels.money(r.total('tax'))} ${l10n.stkCurrency}', color: const Color(0xFFB93A22))),
-              ]),
+              IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                      child: SuiteStat(label: l10n.hrGross, value: '${InvLabels.money(r.total('gross'))} ${l10n.stkCurrency}'),
+                    ),
+                    Expanded(
+                      child: SuiteStat(label: l10n.hrNetToPay, value: '${InvLabels.money(r.total('net'))} ${l10n.stkCurrency}', color: Tone.good(context)),
+                    ),
+                    Expanded(
+                      child: SuiteStat(label: l10n.hrInsuranceBoth, value: '${InvLabels.money(r.total('employee_insurance'))} + ${InvLabels.money(r.total('employer_insurance'))}'),
+                    ),
+                    Expanded(
+                      child: SuiteStat(label: l10n.hrTaxToRemit, value: '${InvLabels.money(r.total('tax'))} ${l10n.stkCurrency}', color: Tone.bad(context)),
+                    ),
+                  ],
+                ),
+              ),
               Card(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -97,20 +112,18 @@ class PayrollPage extends ConsumerWidget {
                             DataCell(Text(p.userName ?? '', style: const TextStyle(fontWeight: FontWeight.w800))),
                             DataCell(Text(InvLabels.money(p.line('basic')))),
                             DataCell(Text(InvLabels.money(p.line('allowance')))),
-                            DataCell(Text(InvLabels.money(p.line('overtime')), style: const TextStyle(color: Color(0xFF1F7A44)))),
-                            DataCell(Text(InvLabels.money(p.line('attendance') + p.line('unpaid_leave')), style: const TextStyle(color: Color(0xFFB93A22)))),
-                            DataCell(Text(InvLabels.money(p.line('advance')), style: const TextStyle(color: Color(0xFFB93A22)))),
-                            DataCell(Text(InvLabels.money(p.line('insurance')), style: const TextStyle(color: Color(0xFFB93A22)))),
-                            DataCell(Text(InvLabels.money(p.line('tax')), style: const TextStyle(color: Color(0xFFB93A22)))),
+                            DataCell(Text(InvLabels.money(p.line('overtime')), style: TextStyle(color: Tone.good(context)))),
+                            DataCell(Text(InvLabels.money(p.line('attendance') + p.line('unpaid_leave')), style: TextStyle(color: Tone.bad(context)))),
+                            DataCell(Text(InvLabels.money(p.line('advance')), style: TextStyle(color: Tone.bad(context)))),
+                            DataCell(Text(InvLabels.money(p.line('insurance')), style: TextStyle(color: Tone.bad(context)))),
+                            DataCell(Text(InvLabels.money(p.line('tax')), style: TextStyle(color: Tone.bad(context)))),
                             DataCell(Text(InvLabels.money(p.net), style: const TextStyle(fontWeight: FontWeight.w800))),
-                            DataCell(p.paidAt != null
-                                ? Text(p.paidMethod == 'transfer' ? l10n.suiteTransferMoney : l10n.suiteCash)
-                                : (r.status == 'approved'
-                                    ? TextButton(onPressed: () => _paid(context, ref, p), child: Text(l10n.hrRecordPaid))
-                                    : const Text('—'))),
-                            DataCell(p.receivedAt != null
-                                ? const Icon(Icons.verified_outlined, color: Color(0xFF1F7A44))
-                                : Text(r.status == 'approved' ? l10n.hrNotConfirmedYet : '—')),
+                            DataCell(
+                              p.paidAt != null
+                                  ? Text(p.paidMethod == 'transfer' ? l10n.suiteTransferMoney : l10n.suiteCash)
+                                  : (r.status == 'approved' ? TextButton(onPressed: () => _paid(context, ref, p), child: Text(l10n.hrRecordPaid)) : const Text('—')),
+                            ),
+                            DataCell(p.receivedAt != null ? Icon(Icons.verified_outlined, color: Tone.good(context)) : Text(r.status == 'approved' ? l10n.hrNotConfirmedYet : '—')),
                           ],
                         ),
                     ],
@@ -132,7 +145,10 @@ class PayrollPage extends ConsumerWidget {
       builder: (ctx) => SimpleDialog(
         title: Text('${l10n.hrRecordPaid} — ${p.userName ?? ''}'),
         children: [
-          Padding(padding: const EdgeInsets.symmetric(horizontal: 24), child: Text(l10n.hrPaidOutsideHint, style: Theme.of(ctx).textTheme.bodySmall)),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Text(l10n.hrPaidOutsideHint, style: Theme.of(ctx).textTheme.bodySmall),
+          ),
           SimpleDialogOption(onPressed: () => Navigator.pop(ctx, 'cash'), child: Text(l10n.suiteCash)),
           SimpleDialogOption(onPressed: () => Navigator.pop(ctx, 'transfer'), child: Text(l10n.suiteTransferMoney)),
         ],
@@ -164,16 +180,19 @@ class PayrollPage extends ConsumerWidget {
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setState) => AlertDialog(
           title: Text(l10n.hrNewAdvance),
-          content: Column(mainAxisSize: MainAxisSize.min, children: [
-            DropdownButtonFormField<int>(
-              decoration: InputDecoration(labelText: l10n.hrEmployee),
-              items: [for (final e in employees) DropdownMenuItem(value: e.userId, child: Text(e.name))],
-              onChanged: (v) => setState(() => who = v),
-            ),
-            NumField(controller: amount, label: l10n.suiteAmount, width: 300),
-            NumField(controller: count, label: l10n.hrInstallments, width: 300),
-            Text(l10n.hrAdvanceFrom(ref.read(hrMonthProvider)), style: Theme.of(ctx).textTheme.bodySmall),
-          ]),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              DropdownButtonFormField<int>(
+                decoration: InputDecoration(labelText: l10n.hrEmployee),
+                items: [for (final e in employees) DropdownMenuItem(value: e.userId, child: Text(e.name))],
+                onChanged: (v) => setState(() => who = v),
+              ),
+              NumField(controller: amount, label: l10n.suiteAmount, width: 300),
+              NumField(controller: count, label: l10n.hrInstallments, width: 300),
+              Text(l10n.hrAdvanceFrom(ref.read(hrMonthProvider)), style: Theme.of(ctx).textTheme.bodySmall),
+            ],
+          ),
           actions: [
             TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.commonCancel)),
             FilledButton(onPressed: () => Navigator.pop(ctx, true), child: Text(l10n.commonSave)),
@@ -204,20 +223,29 @@ class PayrollPage extends ConsumerWidget {
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setState) => AlertDialog(
           title: Text(l10n.hrBonusPenalty),
-          content: Column(mainAxisSize: MainAxisSize.min, children: [
-            DropdownButtonFormField<int>(
-              decoration: InputDecoration(labelText: l10n.hrEmployee),
-              items: [for (final e in employees) DropdownMenuItem(value: e.userId, child: Text(e.name))],
-              onChanged: (v) => setState(() => who = v),
-            ),
-            SegmentedButton<String>(
-              segments: [ButtonSegment(value: 'bonus', label: Text(l10n.hrLineBonus)), ButtonSegment(value: 'penalty', label: Text(l10n.hrLinePenalty))],
-              selected: {kind},
-              onSelectionChanged: (s) => setState(() => kind = s.first),
-            ),
-            NumField(controller: amount, label: l10n.suiteAmount, width: 300),
-            TextField(controller: reason, decoration: InputDecoration(labelText: l10n.stkReason)),
-          ]),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              DropdownButtonFormField<int>(
+                decoration: InputDecoration(labelText: l10n.hrEmployee),
+                items: [for (final e in employees) DropdownMenuItem(value: e.userId, child: Text(e.name))],
+                onChanged: (v) => setState(() => who = v),
+              ),
+              SegmentedButton<String>(
+                segments: [
+                  ButtonSegment(value: 'bonus', label: Text(l10n.hrLineBonus)),
+                  ButtonSegment(value: 'penalty', label: Text(l10n.hrLinePenalty)),
+                ],
+                selected: {kind},
+                onSelectionChanged: (s) => setState(() => kind = s.first),
+              ),
+              NumField(controller: amount, label: l10n.suiteAmount, width: 300),
+              TextField(
+                controller: reason,
+                decoration: InputDecoration(labelText: l10n.stkReason),
+              ),
+            ],
+          ),
           actions: [
             TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.commonCancel)),
             FilledButton(onPressed: () => Navigator.pop(ctx, true), child: Text(l10n.commonSave)),
@@ -246,31 +274,39 @@ class _Explain extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     return SuiteSection(
       title: l10n.hrHowCalculated(slip.userName ?? ''),
-      actions: [
-        OutlinedButton.icon(
-          icon: const Icon(Icons.print_outlined),
-          label: Text(l10n.suitePrint),
-          onPressed: () => printPayslip(context, ref, slip, ref.read(hrMonthProvider)),
-        ),
-      ],
+      actions: [OutlinedButton.icon(icon: const Icon(Icons.print_outlined), label: Text(l10n.suitePrint), onPressed: () => printPayslip(context, ref, slip, ref.read(hrMonthProvider)))],
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           for (final line in slip.lines)
-            Row(children: [
-              Expanded(child: Text('${HrLabels.lineLabel(l10n, line)}${line['detail'] != null ? ' — ${line['detail']}' : ''}')),
-              Text('${line['type'] == 'deduction' ? '−' : '+'}${InvLabels.money((line['amount'] as num?) ?? 0)}',
-                  style: TextStyle(fontWeight: FontWeight.w700, color: line['type'] == 'deduction' ? const Color(0xFFB93A22) : const Color(0xFF1F7A44))),
-            ]),
+            Row(
+              children: [
+                Expanded(child: Text('${HrLabels.lineLabel(l10n, line)}${line['detail'] != null ? ' — ${line['detail']}' : ''}')),
+                Text(
+                  '${line['type'] == 'deduction' ? '−' : '+'}${InvLabels.money((line['amount'] as num?) ?? 0)}',
+                  style: TextStyle(fontWeight: FontWeight.w700, color: line['type'] == 'deduction' ? Tone.bad(context) : Tone.good(context)),
+                ),
+              ],
+            ),
           const SizedBox(height: 8),
           // white text on the navy block — dark ink on navy is unreadable (owner, 2026-10-30)
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(color: AppColors.primaryNavy, borderRadius: BorderRadius.circular(12)),
-            child: Row(children: [
-              Expanded(child: Text(l10n.hrNet, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 16))),
-              Text('${InvLabels.money(slip.net)} ${l10n.stkCurrency}', style: const TextStyle(color: AppColors.accentGold, fontWeight: FontWeight.w800, fontSize: 20)),
-            ]),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    l10n.hrNet,
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 16),
+                  ),
+                ),
+                Text(
+                  '${InvLabels.money(slip.net)} ${l10n.stkCurrency}',
+                  style: const TextStyle(color: AppColors.accentGold, fontWeight: FontWeight.w800, fontSize: 20),
+                ),
+              ],
+            ),
           ),
           Text(l10n.hrEmployerInsurance(InvLabels.money(slip.employerInsurance)), style: Theme.of(context).textTheme.bodySmall),
         ],
@@ -288,12 +324,7 @@ Future<void> printPayslip(BuildContext context, WidgetRef ref, HrPayslip p, Stri
     facts: [(l10n.hrEmployee, p.userName ?? ''), (l10n.hrGross, InvLabels.money(p.gross)), (l10n.hrDeductions, InvLabels.money(p.deductions))],
     headers: [l10n.hrItem, l10n.hrDetail, l10n.suiteAmount],
     rows: [
-      for (final line in p.lines)
-        [
-          HrLabels.lineLabel(l10n, line),
-          '${line['detail'] ?? ''}',
-          '${line['type'] == 'deduction' ? '−' : '+'}${InvLabels.money((line['amount'] as num?) ?? 0)}',
-        ],
+      for (final line in p.lines) [HrLabels.lineLabel(l10n, line), '${line['detail'] ?? ''}', '${line['type'] == 'deduction' ? '−' : '+'}${InvLabels.money((line['amount'] as num?) ?? 0)}'],
     ],
     totalLabel: l10n.hrNet,
     total: '${InvLabels.money(p.net)} ${l10n.stkCurrency}',

@@ -48,17 +48,28 @@ class SuiteStat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // one height for every card of a row and a gap between them — side by side they used to touch and sit at
+    // different heights (owner, 2026-10-30)
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(label, style: Theme.of(context).textTheme.bodySmall),
-            const SizedBox(height: 4),
-            Text(value, style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: color)),
-            if (sub != null) Text(sub!, style: Theme.of(context).textTheme.bodySmall),
-          ],
+      margin: const EdgeInsets.all(6),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 112),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(label, style: Theme.of(context).textTheme.bodySmall),
+              const SizedBox(height: 4),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: AlignmentDirectional.centerStart,
+                child: Text(value, style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: color)),
+              ),
+              Text(sub ?? '', style: Theme.of(context).textTheme.bodySmall),
+            ],
+          ),
         ),
       ),
     );
@@ -75,6 +86,7 @@ class SuiteSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: const EdgeInsets.all(6),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -124,4 +136,16 @@ class NumField extends StatelessWidget {
           decoration: InputDecoration(labelText: label, isDense: true),
         ),
       );
+}
+
+/// Status colours for text drawn straight on a card. The fixed shades were chosen for a light page and turn unreadable
+/// on the dark theme (owner, 2026-10-30) — on a dark surface each takes its lighter twin.
+class Tone {
+  const Tone._();
+
+  static bool _dark(BuildContext c) => Theme.of(c).brightness == Brightness.dark;
+
+  static Color good(BuildContext c) => _dark(c) ? const Color(0xFF7DD3A0) : const Color(0xFF1F7A44);
+  static Color bad(BuildContext c) => _dark(c) ? const Color(0xFFF4A091) : const Color(0xFFB93A22);
+  static Color warn(BuildContext c) => _dark(c) ? const Color(0xFFF2C879) : const Color(0xFF7A5200);
 }
