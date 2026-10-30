@@ -213,7 +213,8 @@ class _TestDeviceRole extends ConsumerWidget {
             Wrap(
               spacing: 8,
               runSpacing: 8,
-              children: [for (final r in suiteRoles) ChoiceChip(label: Text(suiteRoleLabel(l10n, r)), selected: device?.role == r, onSelected: device?.role == r ? null : (_) => switchTo(r))],
+              // a chip is never disabled: a disabled chip is drawn faded and its label could not be read in either theme
+              children: [for (final r in suiteRoles) ChoiceChip(label: Text(suiteRoleLabel(l10n, r)), selected: device?.role == r, onSelected: (_) => device?.role == r ? null : switchTo(r))],
             ),
           ],
         ),

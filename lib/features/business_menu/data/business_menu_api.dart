@@ -450,6 +450,28 @@ class BusinessMenuApi {
     return MenuFileInspect.fromJson(data as Map<String, dynamic>);
   }
 
+  /// One batch of a file of any size (owner, 2026-10-30: «استيراد الداتا يجب ان تكون مفتوحة المساحة»): the header
+  /// and some rows, where they start in the sheet ([startRow]) and the [section] the batch before ended in.
+  Future<({MenuImportReport report, String? lastSection})> importMenuBatch({
+    required List<List<String>> grid,
+    required Map<String, int?> mapping,
+    required bool dryRun,
+    required int startRow,
+    String? section,
+  }) async {
+    final data = await _client.post('/business/menu/import', data: {
+      'grid': grid,
+      'mapping': {
+        for (final e in mapping.entries)
+          if (e.value != null) e.key: e.value,
+      },
+      'dry_run': dryRun ? 1 : 0,
+      'start_row': startRow,
+      'section': ?section,
+    }) as Map<String, dynamic>;
+    return (report: MenuImportReport.fromJson(data), lastSection: data['last_section'] as String?);
+  }
+
   /// An import through a column [mapping] (our key → the file's column number): an Excel [grid] or a [csv] file.
   Future<MenuImportReport> importMenuMapped({
     List<List<String>>? grid,

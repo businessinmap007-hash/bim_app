@@ -11,7 +11,9 @@ import '../../../../app/theme/app_colors.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../application/business_menu_providers.dart';
+import '../../data/business_menu_api.dart';
 import '../../data/menu_sheet.dart';
+import '../../../data_import/data/import_core.dart' show parseCsv;
 
 /// «استيراد وتصدير المنيو» — المالك، 2026-10-05: «المنيو يحفظ فى ملف csv او اكسل ويضاف عليه ثم يتم
 /// استيرادها للحساب». Export the items (or an empty template in the merchant's own vocabulary) as an Excel
@@ -29,7 +31,7 @@ class _MenuImportScreenState extends ConsumerState<MenuImportScreen> {
 
   /// What the picked file holds, kept for «تأكيد» after the preview.
   List<List<String>>? _grid;
-  ({List<int> bytes, String name})? _csv;
+  double? _progress;
   MenuFileInspect? _inspect;
 
   /// Our column key → the number of the column of the merchant's file it reads (null: not read).
@@ -122,25 +124,20 @@ class _MenuImportScreenState extends ConsumerState<MenuImportScreen> {
       _error = null;
       _report = null;
       _grid = null;
-      _csv = null;
       _inspect = null;
       _busy = true;
     });
     try {
       final api = ref.read(businessMenuApiProvider);
-      final MenuFileInspect inspect;
-      if (file.name.toLowerCase().endsWith('.csv')) {
-        _csv = (bytes: file.bytes!, name: file.name);
-        inspect = await api.inspectMenuFile(csv: _csv);
-      } else {
-        final grid = readXlsxGrid(file.bytes!);
-        if (grid.length < 2) {
-          setState(() => _error = l10n.menuSheetEmpty);
-          return;
-        }
-        _grid = grid;
-        inspect = await api.inspectMenuFile(grid: grid);
+      // the file is read HERE, whatever its size — the server only ever gets a sample and then batches of rows
+      final grid = file.name.toLowerCase().endsWith('.csv') ? parseCsv(utf8.decode(file.bytes!, allowMalformed: true)) : readXlsxGrid(file.bytes!);
+      if (grid.length < 2) {
+        setState(() => _error = l10n.menuSheetEmpty);
+        return;
       }
+      _grid = grid;
+      final sample = await api.inspectMenuFile(grid: grid.take(6).toList());
+      final inspect = MenuFileInspect(headers: sample.headers, sample: sample.sample, totalRows: grid.length - 1, mapping: sample.mapping, columns: sample.columns);
       final remembered = await _remembered(inspect.headers);
       setState(() {
         _inspect = inspect;
@@ -163,12 +160,7 @@ class _MenuImportScreenState extends ConsumerState<MenuImportScreen> {
     setState(() => _busy = true);
     try {
       if (dryRun) await _remember();
-      final report = await api.importMenuMapped(
-        grid: _grid,
-        csv: _csv,
-        mapping: _mapping,
-        dryRun: dryRun,
-      );
+      final report = await _inBatches(api, dryRun: dryRun);
       setState(() => _report = report);
       if (!dryRun) {
         // The lists that show the items read them again.
@@ -184,6 +176,40 @@ class _MenuImportScreenState extends ConsumerState<MenuImportScreen> {
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+  }
+
+  static const _batch = 500;
+
+  /// Sends the file a batch at a time and adds the reports up. A batch never ends on an unpriced row — it may be a
+  /// section heading whose items come next — and each batch tells the server where it starts and the section the
+  /// one before it ended in.
+  Future<MenuImportReport> _inBatches(BusinessMenuApi api, {required bool dryRun}) async {
+    final grid = _grid!;
+    final header = grid.first;
+    final body = grid.sublist(1);
+    final priceCol = _mapping['price'];
+    bool priced(List<String> row) => priceCol == null || (priceCol - 1 < row.length && row[priceCol - 1].trim().isNotEmpty);
+
+    int created = 0, updated = 0, errors = 0;
+    final rows = <MenuImportRow>[];
+    String? section;
+    var start = 0;
+    while (start < body.length) {
+      var end = (start + _batch).clamp(0, body.length);
+      while (end < body.length && end - start < _batch + 50 && !priced(body[end - 1])) {
+        end++;
+      }
+      final r = await api.importMenuBatch(grid: [header, ...body.sublist(start, end)], mapping: _mapping, dryRun: dryRun, startRow: start + 2, section: section);
+      created += r.report.created;
+      updated += r.report.updated;
+      errors += r.report.errors;
+      rows.addAll(r.report.rows);
+      section = r.lastSection;
+      start = end;
+      if (mounted) setState(() => _progress = start / body.length);
+    }
+    if (mounted) setState(() => _progress = null);
+    return MenuImportReport(created: created, updated: updated, errors: errors, dryRun: dryRun, rows: rows);
   }
 
   /// «ربط الأعمدة بالترقيم»: the file's columns numbered, and one picker per column of ours.
@@ -329,9 +355,10 @@ class _MenuImportScreenState extends ConsumerState<MenuImportScreen> {
             label: Text(l10n.menuSheetImport),
           ),
           if (_busy)
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: Center(child: CircularProgressIndicator()),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              // a big file goes in batches: how far it has got
+              child: _progress == null ? const Center(child: CircularProgressIndicator()) : LinearProgressIndicator(value: _progress),
             ),
           if (_error != null) ...[
             const SizedBox(height: 12),
