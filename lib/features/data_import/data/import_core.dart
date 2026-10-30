@@ -28,6 +28,18 @@ String normalizeHeader(String raw) => raw
 
 /// Our field key → the file column's index (0-based), guessed from the headers: an exact match on the label or an
 /// alias wins; a header that merely contains one is the fallback. A file column is used for ONE field only.
+/// One file column feeds ONE of our fields (owner, 2026-10-30): a column already linked is unavailable to the other
+/// fields until it is unlinked. A mapping remembered before that rule may repeat a column — the first field keeps it.
+Map<String, int?> withoutRepeatedColumns(Map<String, int?> mapping, List<ImportField> fields) {
+  final used = <int>{};
+  final out = <String, int?>{};
+  for (final f in fields) {
+    final i = mapping[f.key];
+    out[f.key] = (i != null && used.add(i)) ? i : null;
+  }
+  return out;
+}
+
 Map<String, int?> suggestMapping(List<String> headers, List<ImportField> fields) {
   final heads = [for (final h in headers) normalizeHeader(h)];
   final used = <int>{};

@@ -13,8 +13,10 @@ import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/async_value_view.dart';
 import '../desktop_app.dart';
 import '../print/suite_print.dart';
+import '../shell/desktop_shell.dart';
 import '../sync/desktop_sync.dart';
 import 'common.dart';
+import 'devices_page.dart';
 
 /// «الإعدادات والاشتراك» — switching the suite on (the first month from the wallet), the parts of it this business uses
 /// (what its category allows), the owner's approval limit for purchase orders, the subscription's state, and the writes
@@ -69,6 +71,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  if (kSuiteTestRoleSwitch && s.isOwner) const _TestDeviceRole(),
                   SuiteSection(
                     title: l10n.suiteSubscription,
                     child: Column(
@@ -160,6 +163,63 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     'read_only' => l10n.suiteSubReadOnly,
     _ => l10n.suiteSubNone,
   };
+}
+
+/// TEMPORARY (owner, 2026-10-30: «اضف خيارات تغيير بين انواع الاجهزة فترة الاختبارات ونحذف لاحقا»): while the suite
+/// is being tried on one computer, the owner switches THIS computer between the device types from here — a computer
+/// set to «مخزن» loses the «الأجهزة» screen and could not come back. Set to false (and delete [_TestDeviceRole]) to remove.
+const kSuiteTestRoleSwitch = true;
+
+class _TestDeviceRole extends ConsumerWidget {
+  const _TestDeviceRole();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+    final device = ref.watch(thisDeviceProvider).valueOrNull;
+    final store = ref.watch(suiteStoreProvider);
+
+    Future<void> switchTo(String role) async {
+      final api = ref.read(inventoryApiProvider);
+      await suiteRun(
+        context,
+        () => device == null
+            ? api.registerDevice(uuid: store.deviceUuid, name: suiteRoleLabel(l10n, role), role: role, isHub: role == 'main')
+            : api.updateDevice(device.id, {'role': role, 'screens': null, 'is_hub': role == 'main'}),
+        queueable: false,
+      );
+      ref.invalidate(thisDeviceProvider);
+      ref.read(currentScreenProvider.notifier).state = SuiteScreen.settings;
+    }
+
+    return Card(
+      margin: const EdgeInsets.all(6),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14),
+        side: BorderSide(color: Tone.warn(context), width: 1.5),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.suiteTestRoleTitle,
+              style: TextStyle(fontWeight: FontWeight.w800, color: Tone.warn(context)),
+            ),
+            const SizedBox(height: 4),
+            Text(l10n.suiteTestRoleHint, style: Theme.of(context).textTheme.bodySmall),
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [for (final r in suiteRoles) ChoiceChip(label: Text(suiteRoleLabel(l10n, r)), selected: device?.role == r, onSelected: device?.role == r ? null : (_) => switchTo(r))],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 /// «اللغة والمظهر والبيانات» — shown on every computer, the suite switched on or not (attendance and payroll work

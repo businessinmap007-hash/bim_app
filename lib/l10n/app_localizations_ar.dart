@@ -14727,4 +14727,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get suiteAppPrefs => 'اللغة والمظهر والبيانات';
+
+  @override
+  String get suiteTestRoleTitle => 'نوع هذا الجهاز — للتجربة فقط';
+
+  @override
+  String get suiteTestRoleHint =>
+      'تبديل سريع بين أنواع الأجهزة أثناء فترة الاختبار، ويُحذف لاحقًا. الشاشات تتغير فورًا.';
+
+  @override
+  String importColumnTakenBy(String field) {
+    return 'مربوط بـ «$field»';
+  }
 }

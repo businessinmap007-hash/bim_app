@@ -13,15 +13,15 @@ import 'common.dart';
 
 final _devicesProvider = FutureProvider.autoDispose<List<InvDevice>>((ref) => ref.watch(inventoryApiProvider).devices());
 
-const _roles = ['main', 'manager', 'warehouse', 'purchases', 'cashier'];
+const suiteRoles = ['main', 'manager', 'warehouse', 'purchases', 'cashier'];
 
-String _roleLabel(AppLocalizations l10n, String role) => switch (role) {
-      'main' => l10n.suiteRoleMain,
-      'manager' => l10n.suiteRoleManager,
-      'warehouse' => l10n.suiteRoleWarehouse,
-      'purchases' => l10n.suiteRolePurchases,
-      _ => l10n.suiteRoleCashier,
-    };
+String suiteRoleLabel(AppLocalizations l10n, String role) => switch (role) {
+  'main' => l10n.suiteRoleMain,
+  'manager' => l10n.suiteRoleManager,
+  'warehouse' => l10n.suiteRoleWarehouse,
+  'purchases' => l10n.suiteRolePurchases,
+  _ => l10n.suiteRoleCashier,
+};
 
 /// «الأجهزة» (owner, 2026-10-29): the main computer collects every other computer of the business over the office
 /// network — they pair once with a code shown here — and each computer is given a role that decides its screens.
@@ -40,7 +40,7 @@ class _DevicesPageState extends ConsumerState<DevicesPage> {
   Future<void> _registerThis({required String role, required bool hub}) async {
     final l10n = AppLocalizations.of(context)!;
     final store = ref.read(suiteStoreProvider);
-    final name = TextEditingController(text: _roleLabel(l10n, role));
+    final name = TextEditingController(text: suiteRoleLabel(l10n, role));
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -77,12 +77,18 @@ class _DevicesPageState extends ConsumerState<DevicesPage> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              TextField(controller: code, decoration: InputDecoration(labelText: l10n.suitePairCode)),
-              TextField(controller: name, decoration: InputDecoration(labelText: l10n.suiteDeviceName)),
+              TextField(
+                controller: code,
+                decoration: InputDecoration(labelText: l10n.suitePairCode),
+              ),
+              TextField(
+                controller: name,
+                decoration: InputDecoration(labelText: l10n.suiteDeviceName),
+              ),
               DropdownButtonFormField<String>(
                 initialValue: role,
                 decoration: InputDecoration(labelText: l10n.suiteRole),
-                items: [for (final r in _roles.skip(1)) DropdownMenuItem(value: r, child: Text(_roleLabel(l10n, r)))],
+                items: [for (final r in suiteRoles.skip(1)) DropdownMenuItem(value: r, child: Text(suiteRoleLabel(l10n, r)))],
                 onChanged: (v) => setState(() => role = v ?? role),
               ),
             ],
@@ -127,29 +133,45 @@ class _DevicesPageState extends ConsumerState<DevicesPage> {
                 SelectableText('ID: ${store.deviceUuid}', style: Theme.of(context).textTheme.bodySmall),
                 const SizedBox(height: 8),
                 if (hub?.running == true) ...[
-                  Text(l10n.suiteIsMain, style: TextStyle(fontWeight: FontWeight.w800, color: Tone.good(context))),
+                  Text(
+                    l10n.suiteIsMain,
+                    style: TextStyle(fontWeight: FontWeight.w800, color: Tone.good(context)),
+                  ),
                   const SizedBox(height: 8),
                   Row(
                     children: [
                       FilledButton(onPressed: () => setState(() => _code = hub!.newPairingCode()), child: Text(l10n.suiteNewPairingCode)),
                       const SizedBox(width: 12),
-                      if (_code != null && hub!.activeCode == _code)
-                        Text(_code!, style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w800, letterSpacing: 6)),
+                      if (_code != null && hub!.activeCode == _code) Text(_code!, style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w800, letterSpacing: 6)),
                     ],
                   ),
                   Text(l10n.suitePairingHint, style: Theme.of(context).textTheme.bodySmall),
                 ] else if (sync.lan.paired) ...[
                   Text(l10n.suitePairedWith(store.meta.get('lan_hub_name') ?? '', sync.lan.hubAddress ?? '')),
-                  TextButton(onPressed: () async {
-                    await sync.lan.unpair();
-                    setState(() {});
-                  }, child: Text(l10n.suiteUnpair)),
+                  TextButton(
+                    onPressed: () async {
+                      await sync.lan.unpair();
+                      setState(() {});
+                    },
+                    child: Text(l10n.suiteUnpair),
+                  ),
                 ] else ...[
                   if (isOwner)
-                    Wrap(spacing: 8, runSpacing: 8, children: [
-                      FilledButton(onPressed: () => _registerThis(role: 'main', hub: true), child: Text(l10n.suiteMakeMain)),
-                      for (final r in _roles.skip(1)) OutlinedButton(onPressed: () => _registerThis(role: r, hub: false), child: Text(_roleLabel(l10n, r))),
-                    ]),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        FilledButton(
+                          onPressed: () => _registerThis(role: 'main', hub: true),
+                          child: Text(l10n.suiteMakeMain),
+                        ),
+                        for (final r in suiteRoles.skip(1))
+                          OutlinedButton(
+                            onPressed: () => _registerThis(role: r, hub: false),
+                            child: Text(suiteRoleLabel(l10n, r)),
+                          ),
+                      ],
+                    ),
                   const SizedBox(height: 12),
                   OutlinedButton.icon(
                     icon: const Icon(Icons.wifi_find),
@@ -186,21 +208,27 @@ class _DevicesPageState extends ConsumerState<DevicesPage> {
                   for (final p in hub!.peers())
                     ListTile(
                       title: Text(p.name),
-                      subtitle: Text('${_roleLabel(l10n, p.role)} · ${p.uuid.substring(0, 8)}'),
-                      trailing: Wrap(spacing: 8, children: [
-                        if (isOwner)
-                          OutlinedButton(
+                      subtitle: Text('${suiteRoleLabel(l10n, p.role)} · ${p.uuid.substring(0, 8)}'),
+                      trailing: Wrap(
+                        spacing: 8,
+                        children: [
+                          if (isOwner)
+                            OutlinedButton(
+                              onPressed: () async {
+                                await suiteRun(context, () => ref.read(inventoryApiProvider).registerDevice(uuid: p.uuid, name: p.name, role: p.role), queueable: false);
+                                ref.invalidate(_devicesProvider);
+                              },
+                              child: Text(l10n.suiteRegister),
+                            ),
+                          TextButton(
                             onPressed: () async {
-                              await suiteRun(context, () => ref.read(inventoryApiProvider).registerDevice(uuid: p.uuid, name: p.name, role: p.role), queueable: false);
-                              ref.invalidate(_devicesProvider);
+                              await hub.forget(p.uuid);
+                              setState(() {});
                             },
-                            child: Text(l10n.suiteRegister),
+                            child: Text(l10n.suiteForget),
                           ),
-                        TextButton(onPressed: () async {
-                          await hub.forget(p.uuid);
-                          setState(() {});
-                        }, child: Text(l10n.suiteForget)),
-                      ]),
+                        ],
+                      ),
                     ),
                 ],
               ),
@@ -217,27 +245,30 @@ class _DevicesPageState extends ConsumerState<DevicesPage> {
                     ListTile(
                       leading: Icon(d.isHub ? Icons.dns_outlined : Icons.computer_outlined),
                       title: Text(d.name + (d.uuid == store.deviceUuid ? ' (${l10n.suiteThisComputer})' : '')),
-                      subtitle: Text('${_roleLabel(l10n, d.role)}${d.lastSeenAt == null ? '' : ' · ${MaterialLocalizations.of(context).formatShortDate(d.lastSeenAt!)}'}'),
+                      subtitle: Text('${suiteRoleLabel(l10n, d.role)}${d.lastSeenAt == null ? '' : ' · ${MaterialLocalizations.of(context).formatShortDate(d.lastSeenAt!)}'}'),
                       trailing: isOwner
-                          ? Wrap(spacing: 8, children: [
-                              DropdownButton<String>(
-                                value: d.role,
-                                items: [for (final r in _roles) DropdownMenuItem(value: r, child: Text(_roleLabel(l10n, r)))],
-                                onChanged: (v) async {
-                                  if (v == null) return;
-                                  await suiteRun(context, () => ref.read(inventoryApiProvider).updateDevice(d.id, {'role': v, 'screens': null}), queueable: false);
-                                  ref.invalidate(_devicesProvider);
-                                  ref.invalidate(thisDeviceProvider);
-                                },
-                              ),
-                              TextButton(
-                                onPressed: () async {
-                                  await suiteRun(context, () => ref.read(inventoryApiProvider).revokeDevice(d.id), queueable: false);
-                                  ref.invalidate(_devicesProvider);
-                                },
-                                child: Text(l10n.suiteRevoke),
-                              ),
-                            ])
+                          ? Wrap(
+                              spacing: 8,
+                              children: [
+                                DropdownButton<String>(
+                                  value: d.role,
+                                  items: [for (final r in suiteRoles) DropdownMenuItem(value: r, child: Text(suiteRoleLabel(l10n, r)))],
+                                  onChanged: (v) async {
+                                    if (v == null) return;
+                                    await suiteRun(context, () => ref.read(inventoryApiProvider).updateDevice(d.id, {'role': v, 'screens': null}), queueable: false);
+                                    ref.invalidate(_devicesProvider);
+                                    ref.invalidate(thisDeviceProvider);
+                                  },
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    await suiteRun(context, () => ref.read(inventoryApiProvider).revokeDevice(d.id), queueable: false);
+                                    ref.invalidate(_devicesProvider);
+                                  },
+                                  child: Text(l10n.suiteRevoke),
+                                ),
+                              ],
+                            )
                           : null,
                     ),
                 ],

@@ -126,13 +126,21 @@ class _ImportWizardScreenState extends State<ImportWizardScreen> {
       setState(() {
         _grid = grid;
         _fileName = file.name;
-        _mapping = remembered ?? suggestMapping(headers, widget.fields);
+        _mapping = remembered == null ? suggestMapping(headers, widget.fields) : withoutRepeatedColumns(remembered, widget.fields);
       });
     } catch (_) {
       setState(() => _error = l10n.importFileUnreadable);
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+  }
+
+  /// The label of the OTHER field this file column is already linked to, or null when it is free for [fieldKey].
+  String? _takenBy(int column, String fieldKey) {
+    for (final f in widget.fields) {
+      if (f.key != fieldKey && _mapping[f.key] == column) return f.label;
+    }
+    return null;
   }
 
   bool get _ready => _grid != null && widget.fields.where((f) => f.required).every((f) => _mapping[f.key] != null);
@@ -215,11 +223,15 @@ class _ImportWizardScreenState extends State<ImportWizardScreen> {
                         items: [
                           DropdownMenuItem<int?>(value: null, child: Text(l10n.importNotUsed)),
                           for (var i = 0; i < _headers.length; i++)
+                            // a column linked to another field stays greyed out until that link is undone
                             DropdownMenuItem<int?>(
                               value: i,
+                              enabled: _takenBy(i, f.key) == null,
                               child: Text(
-                                '${i + 1}. ${_headers[i].isEmpty ? l10n.importUnnamedColumn : _headers[i]}${_sample(i).isEmpty ? '' : '  —  ${_sample(i)}'}',
+                                '${i + 1}. ${_headers[i].isEmpty ? l10n.importUnnamedColumn : _headers[i]}'
+                                '${_takenBy(i, f.key) != null ? '  —  ${l10n.importColumnTakenBy(_takenBy(i, f.key)!)}' : _sample(i).isEmpty ? '' : '  —  ${_sample(i)}'}',
                                 overflow: TextOverflow.ellipsis,
+                                style: _takenBy(i, f.key) == null ? null : TextStyle(color: theme.disabledColor),
                               ),
                             ),
                         ],

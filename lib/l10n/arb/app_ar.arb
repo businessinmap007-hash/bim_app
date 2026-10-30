@@ -5095,5 +5095,9 @@
   "hrReceivedConfirmed": "أكّدت استلام الراتب",
   "hrEmployeeConfirmed": "أكّد الموظف",
   "hrNotConfirmedYet": "لم يؤكد بعد",
-  "suiteAppPrefs": "اللغة والمظهر والبيانات"
+  "suiteAppPrefs": "اللغة والمظهر والبيانات",
+  "suiteTestRoleTitle": "نوع هذا الجهاز — للتجربة فقط",
+  "suiteTestRoleHint": "تبديل سريع بين أنواع الأجهزة أثناء فترة الاختبار، ويُحذف لاحقًا. الشاشات تتغير فورًا.",
+  "importColumnTakenBy": "مربوط بـ «{field}»",
+  "@importColumnTakenBy": {"placeholders": {"field": {"type": "String"}}}
 }

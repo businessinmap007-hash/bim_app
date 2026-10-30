@@ -26508,6 +26508,24 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'اللغة والمظهر والبيانات'**
   String get suiteAppPrefs;
+
+  /// No description provided for @suiteTestRoleTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع هذا الجهاز — للتجربة فقط'**
+  String get suiteTestRoleTitle;
+
+  /// No description provided for @suiteTestRoleHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'تبديل سريع بين أنواع الأجهزة أثناء فترة الاختبار، ويُحذف لاحقًا. الشاشات تتغير فورًا.'**
+  String get suiteTestRoleHint;
+
+  /// No description provided for @importColumnTakenBy.
+  ///
+  /// In ar, this message translates to:
+  /// **'مربوط بـ «{field}»'**
+  String importColumnTakenBy(String field);
 }
 
 class _AppLocalizationsDelegate

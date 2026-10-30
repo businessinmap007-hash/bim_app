@@ -14854,4 +14854,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get suiteAppPrefs => 'Language, theme and data';
+
+  @override
+  String get suiteTestRoleTitle => 'This computer\'s type — testing only';
+
+  @override
+  String get suiteTestRoleHint =>
+      'Switch quickly between device types while testing; this will be removed later. The screens change at once.';
+
+  @override
+  String importColumnTakenBy(String field) {
+    return 'linked to “$field”';
+  }
 }

@@ -245,4 +245,10 @@ void main() {
       expect(parseWholeNumber('4.5'), isNull);
     });
   });
+
+  test('one file column feeds one field: a remembered repeat keeps the first field only', () {
+    const fields = [ImportField(key: 'name', label: 'الاسم'), ImportField(key: 'phone', label: 'الموبايل'), ImportField(key: 'notes', label: 'ملاحظات')];
+    final out = withoutRepeatedColumns({'name': 0, 'phone': 0, 'notes': 2}, fields);
+    expect(out, {'name': 0, 'phone': null, 'notes': 2});
+  });
 }

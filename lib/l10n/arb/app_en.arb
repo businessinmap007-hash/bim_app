@@ -4971,5 +4971,8 @@
   "hrReceivedConfirmed": "You confirmed receiving it",
   "hrEmployeeConfirmed": "Employee confirmed",
   "hrNotConfirmedYet": "Not yet",
-  "suiteAppPrefs": "Language, theme and data"
+  "suiteAppPrefs": "Language, theme and data",
+  "suiteTestRoleTitle": "This computer's type — testing only",
+  "suiteTestRoleHint": "Switch quickly between device types while testing; this will be removed later. The screens change at once.",
+  "importColumnTakenBy": "linked to “{field}”"
 }
