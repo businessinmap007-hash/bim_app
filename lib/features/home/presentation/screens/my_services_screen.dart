@@ -23,6 +23,7 @@ import '../../../table/presentation/screens/table_scan_screen.dart';
 import '../../../training/presentation/screens/training_plans_screen.dart';
 import '../../../hr/presentation/mobile/hr_screens.dart';
 import '../../../inventory/presentation/mobile/stock_screens.dart';
+import '../../../customers/presentation/mobile/customers_mobile.dart';
 import '../../../finance/presentation/screens/finance_screen.dart';
 
 /// Every service a person has actually USED on the platform, one primary
@@ -165,6 +166,26 @@ class MyServicesScreen extends StatelessWidget {
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => const StaffApprovalsScreen()),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.groups_outlined),
+                  title: Text(l10n.crmMyCustomers),
+                  subtitle: Text(l10n.crmMyCustomersSubtitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const MyCustomersScreen()),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.receipt_long_outlined),
+                  title: Text(l10n.crmMyAccounts),
+                  subtitle: Text(l10n.crmMyAccountsSubtitle),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const CustomerAccountsScreen()),
                   ),
                 ),
                 const Divider(height: 1),

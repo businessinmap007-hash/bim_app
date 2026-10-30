@@ -26526,6 +26526,750 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'مربوط بـ «{field}»'**
   String importColumnTakenBy(String field);
+
+  /// No description provided for @crmTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'العملاء'**
+  String get crmTitle;
+
+  /// No description provided for @crmMyCustomers.
+  ///
+  /// In ar, this message translates to:
+  /// **'عملائي'**
+  String get crmMyCustomers;
+
+  /// No description provided for @crmMyCustomersSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الآجل والدفعات وملفات العملاء'**
+  String get crmMyCustomersSubtitle;
+
+  /// No description provided for @crmMyAccounts.
+  ///
+  /// In ar, this message translates to:
+  /// **'حسابي عند المحلات'**
+  String get crmMyAccounts;
+
+  /// No description provided for @crmMyAccountsSubtitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما عليك عند كل محل ودفعاتك'**
+  String get crmMyAccountsSubtitle;
+
+  /// No description provided for @crmNewCustomer.
+  ///
+  /// In ar, this message translates to:
+  /// **'عميل جديد'**
+  String get crmNewCustomer;
+
+  /// No description provided for @crmName.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم'**
+  String get crmName;
+
+  /// No description provided for @crmPhone.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموبايل'**
+  String get crmPhone;
+
+  /// No description provided for @crmAddress.
+  ///
+  /// In ar, this message translates to:
+  /// **'العنوان'**
+  String get crmAddress;
+
+  /// No description provided for @crmTags.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوسوم (افصل بفاصلة)'**
+  String get crmTags;
+
+  /// No description provided for @crmNotes.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظاتك (لا يراها العميل)'**
+  String get crmNotes;
+
+  /// No description provided for @crmCreditLimit.
+  ///
+  /// In ar, this message translates to:
+  /// **'حد الآجل'**
+  String get crmCreditLimit;
+
+  /// No description provided for @crmNoLimit.
+  ///
+  /// In ar, this message translates to:
+  /// **'بلا حد'**
+  String get crmNoLimit;
+
+  /// No description provided for @crmTermsDays.
+  ///
+  /// In ar, this message translates to:
+  /// **'مدة السداد بالأيام'**
+  String get crmTermsDays;
+
+  /// No description provided for @crmOpeningBalance.
+  ///
+  /// In ar, this message translates to:
+  /// **'رصيد سابق عليه'**
+  String get crmOpeningBalance;
+
+  /// No description provided for @crmSearch.
+  ///
+  /// In ar, this message translates to:
+  /// **'بحث بالاسم أو الموبايل'**
+  String get crmSearch;
+
+  /// No description provided for @crmFilterAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get crmFilterAll;
+
+  /// No description provided for @crmFilterOwing.
+  ///
+  /// In ar, this message translates to:
+  /// **'عليه آجل'**
+  String get crmFilterOwing;
+
+  /// No description provided for @crmFilterTop.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأفضل إنفاقًا'**
+  String get crmFilterTop;
+
+  /// No description provided for @crmFilterFrequent.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأكثر زيارة'**
+  String get crmFilterFrequent;
+
+  /// No description provided for @crmFilterNew.
+  ///
+  /// In ar, this message translates to:
+  /// **'جديد هذا الشهر'**
+  String get crmFilterNew;
+
+  /// No description provided for @crmFilterLapsed.
+  ///
+  /// In ar, this message translates to:
+  /// **'انقطع'**
+  String get crmFilterLapsed;
+
+  /// No description provided for @crmFilterOverdue.
+  ///
+  /// In ar, this message translates to:
+  /// **'متأخر السداد'**
+  String get crmFilterOverdue;
+
+  /// No description provided for @crmOwedTotal.
+  ///
+  /// In ar, this message translates to:
+  /// **'إجمالي الآجل المستحق'**
+  String get crmOwedTotal;
+
+  /// No description provided for @crmPaymentsMonth.
+  ///
+  /// In ar, this message translates to:
+  /// **'دفعات هذا الشهر'**
+  String get crmPaymentsMonth;
+
+  /// No description provided for @crmNewMonth.
+  ///
+  /// In ar, this message translates to:
+  /// **'عملاء جدد هذا الشهر'**
+  String get crmNewMonth;
+
+  /// No description provided for @crmPendingPayments.
+  ///
+  /// In ar, this message translates to:
+  /// **'دفعات بانتظار تأكيدك'**
+  String get crmPendingPayments;
+
+  /// No description provided for @crmOwes.
+  ///
+  /// In ar, this message translates to:
+  /// **'عليه {amount}'**
+  String crmOwes(String amount);
+
+  /// No description provided for @crmHasCredit.
+  ///
+  /// In ar, this message translates to:
+  /// **'له {amount}'**
+  String crmHasCredit(String amount);
+
+  /// No description provided for @crmSettled.
+  ///
+  /// In ar, this message translates to:
+  /// **'خالص'**
+  String get crmSettled;
+
+  /// No description provided for @crmOnApp.
+  ///
+  /// In ar, this message translates to:
+  /// **'على التطبيق'**
+  String get crmOnApp;
+
+  /// No description provided for @crmVisits.
+  ///
+  /// In ar, this message translates to:
+  /// **'{n} زيارة'**
+  String crmVisits(int n);
+
+  /// No description provided for @crmLastVisit.
+  ///
+  /// In ar, this message translates to:
+  /// **'آخر زيارة {date}'**
+  String crmLastVisit(String date);
+
+  /// No description provided for @crmRecordPayment.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل دفعة'**
+  String get crmRecordPayment;
+
+  /// No description provided for @crmPrintStatement.
+  ///
+  /// In ar, this message translates to:
+  /// **'طباعة كشف حساب'**
+  String get crmPrintStatement;
+
+  /// No description provided for @crmRemind.
+  ///
+  /// In ar, this message translates to:
+  /// **'ذكّره'**
+  String get crmRemind;
+
+  /// No description provided for @crmEdit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل البيانات'**
+  String get crmEdit;
+
+  /// No description provided for @crmForget.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف بيانات العميل'**
+  String get crmForget;
+
+  /// No description provided for @crmForgetConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'تُمحى بياناته وملاحظاتك، وتبقى الفواتير والقيود باسم «عميل محذوف». متابعة؟'**
+  String get crmForgetConfirm;
+
+  /// No description provided for @crmLinkAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'ربط بحسابه على التطبيق'**
+  String get crmLinkAccount;
+
+  /// No description provided for @crmLinkHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلب من العميل فتح «حسابي عند المحلات» ثم «كود حسابي» واكتب الكود هنا.'**
+  String get crmLinkHint;
+
+  /// No description provided for @crmCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكود'**
+  String get crmCode;
+
+  /// No description provided for @crmBalanceNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'عليه الآن'**
+  String get crmBalanceNow;
+
+  /// No description provided for @crmSpendYear.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنفاق هذه السنة'**
+  String get crmSpendYear;
+
+  /// No description provided for @crmAvgTicket.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوسط الفاتورة'**
+  String get crmAvgTicket;
+
+  /// No description provided for @crmTabAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحساب'**
+  String get crmTabAccount;
+
+  /// No description provided for @crmTabPurchases.
+  ///
+  /// In ar, this message translates to:
+  /// **'المشتريات'**
+  String get crmTabPurchases;
+
+  /// No description provided for @crmTabTop.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكثر ما يشتريه'**
+  String get crmTabTop;
+
+  /// No description provided for @crmTabData.
+  ///
+  /// In ar, this message translates to:
+  /// **'البيانات'**
+  String get crmTabData;
+
+  /// No description provided for @crmDate.
+  ///
+  /// In ar, this message translates to:
+  /// **'التاريخ'**
+  String get crmDate;
+
+  /// No description provided for @crmLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'البيان'**
+  String get crmLine;
+
+  /// No description provided for @crmDebit.
+  ///
+  /// In ar, this message translates to:
+  /// **'عليه'**
+  String get crmDebit;
+
+  /// No description provided for @crmCreditCol.
+  ///
+  /// In ar, this message translates to:
+  /// **'دفع'**
+  String get crmCreditCol;
+
+  /// No description provided for @crmBalance.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرصيد'**
+  String get crmBalance;
+
+  /// No description provided for @crmAging30.
+  ///
+  /// In ar, this message translates to:
+  /// **'حتى 30 يومًا'**
+  String get crmAging30;
+
+  /// No description provided for @crmAging60.
+  ///
+  /// In ar, this message translates to:
+  /// **'31–60 يومًا'**
+  String get crmAging60;
+
+  /// No description provided for @crmAging90.
+  ///
+  /// In ar, this message translates to:
+  /// **'61–90 يومًا'**
+  String get crmAging90;
+
+  /// No description provided for @crmAgingOver.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكثر من 90'**
+  String get crmAgingOver;
+
+  /// No description provided for @crmOverdue.
+  ///
+  /// In ar, this message translates to:
+  /// **'متأخر عن مدة السداد'**
+  String get crmOverdue;
+
+  /// No description provided for @crmAmount.
+  ///
+  /// In ar, this message translates to:
+  /// **'المبلغ'**
+  String get crmAmount;
+
+  /// No description provided for @crmMethod.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة الدفع'**
+  String get crmMethod;
+
+  /// No description provided for @crmMethodCash.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقدًا'**
+  String get crmMethodCash;
+
+  /// No description provided for @crmMethodWallet.
+  ///
+  /// In ar, this message translates to:
+  /// **'محفظة (خارج التطبيق)'**
+  String get crmMethodWallet;
+
+  /// No description provided for @crmMethodInstapay.
+  ///
+  /// In ar, this message translates to:
+  /// **'إنستاباي'**
+  String get crmMethodInstapay;
+
+  /// No description provided for @crmMethodBank.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحويل بنكي'**
+  String get crmMethodBank;
+
+  /// No description provided for @crmReference.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم العملية'**
+  String get crmReference;
+
+  /// No description provided for @crmReferenceHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'من تطبيق البنك أو المحفظة عندك — الطرف الآخر يكتبه أيضًا دون أن يرى ما كتبته'**
+  String get crmReferenceHint;
+
+  /// No description provided for @crmPaymentRecorded.
+  ///
+  /// In ar, this message translates to:
+  /// **'سُجّلت الدفعة — بانتظار تأكيد الطرف الآخر'**
+  String get crmPaymentRecorded;
+
+  /// No description provided for @crmPaymentConfirmedNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكدت الدفعة'**
+  String get crmPaymentConfirmedNow;
+
+  /// No description provided for @crmStatusPending.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار الطرف الآخر'**
+  String get crmStatusPending;
+
+  /// No description provided for @crmStatusAwaitingMe.
+  ///
+  /// In ar, this message translates to:
+  /// **'بانتظار تأكيدك'**
+  String get crmStatusAwaitingMe;
+
+  /// No description provided for @crmStatusConfirmed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مؤكدة من الطرفين'**
+  String get crmStatusConfirmed;
+
+  /// No description provided for @crmStatusBusinessOnly.
+  ///
+  /// In ar, this message translates to:
+  /// **'مؤكدة من المحل فقط'**
+  String get crmStatusBusinessOnly;
+
+  /// No description provided for @crmStatusMismatch.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير مطابقة'**
+  String get crmStatusMismatch;
+
+  /// No description provided for @crmStatusRejected.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرفوضة'**
+  String get crmStatusRejected;
+
+  /// No description provided for @crmStatusCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغاة'**
+  String get crmStatusCancelled;
+
+  /// No description provided for @crmConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد'**
+  String get crmConfirm;
+
+  /// No description provided for @crmRejectBusiness.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يصلني'**
+  String get crmRejectBusiness;
+
+  /// No description provided for @crmRejectCustomer.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم أدفع هذا'**
+  String get crmRejectCustomer;
+
+  /// No description provided for @crmCancelPayment.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء الدفعة'**
+  String get crmCancelPayment;
+
+  /// No description provided for @crmAttemptsLeft.
+  ///
+  /// In ar, this message translates to:
+  /// **'متبقي {n} محاولات'**
+  String crmAttemptsLeft(int n);
+
+  /// No description provided for @crmReceiptNo.
+  ///
+  /// In ar, this message translates to:
+  /// **'إيصال {n}'**
+  String crmReceiptNo(int n);
+
+  /// No description provided for @crmKindOpening.
+  ///
+  /// In ar, this message translates to:
+  /// **'رصيد سابق'**
+  String get crmKindOpening;
+
+  /// No description provided for @crmKindSale.
+  ///
+  /// In ar, this message translates to:
+  /// **'بيع على الحساب'**
+  String get crmKindSale;
+
+  /// No description provided for @crmKindOrder.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب تطبيق'**
+  String get crmKindOrder;
+
+  /// No description provided for @crmKindPayment.
+  ///
+  /// In ar, this message translates to:
+  /// **'دفعة'**
+  String get crmKindPayment;
+
+  /// No description provided for @crmKindReturn.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرتجع'**
+  String get crmKindReturn;
+
+  /// No description provided for @crmKindAdjustment.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسوية'**
+  String get crmKindAdjustment;
+
+  /// No description provided for @crmChargeOrder.
+  ///
+  /// In ar, this message translates to:
+  /// **'على الحساب'**
+  String get crmChargeOrder;
+
+  /// No description provided for @crmAdjust.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسوية'**
+  String get crmAdjust;
+
+  /// No description provided for @crmAdjustReason.
+  ///
+  /// In ar, this message translates to:
+  /// **'السبب'**
+  String get crmAdjustReason;
+
+  /// No description provided for @crmAdjustHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'موجب يزيد ما عليه، وسالب يقلّله'**
+  String get crmAdjustHint;
+
+  /// No description provided for @crmStatementTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'كشف حساب — {name}'**
+  String crmStatementTitle(String name);
+
+  /// No description provided for @crmAmountDue.
+  ///
+  /// In ar, this message translates to:
+  /// **'المستحق عليه'**
+  String get crmAmountDue;
+
+  /// No description provided for @crmSignAccountant.
+  ///
+  /// In ar, this message translates to:
+  /// **'المحاسب'**
+  String get crmSignAccountant;
+
+  /// No description provided for @crmSignCustomer.
+  ///
+  /// In ar, this message translates to:
+  /// **'توقيع العميل بالاطلاع'**
+  String get crmSignCustomer;
+
+  /// No description provided for @crmReminderSent.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصله تذكير على التطبيق، وهذا النص لو أردت إرساله أيضًا:'**
+  String get crmReminderSent;
+
+  /// No description provided for @crmReminderShare.
+  ///
+  /// In ar, this message translates to:
+  /// **'انسخ النص وأرسله من موبايلك:'**
+  String get crmReminderShare;
+
+  /// No description provided for @crmCopy.
+  ///
+  /// In ar, this message translates to:
+  /// **'نسخ'**
+  String get crmCopy;
+
+  /// No description provided for @crmCopied.
+  ///
+  /// In ar, this message translates to:
+  /// **'نُسخ'**
+  String get crmCopied;
+
+  /// No description provided for @crmPickCustomer.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيار عميل'**
+  String get crmPickCustomer;
+
+  /// No description provided for @crmCashCustomer.
+  ///
+  /// In ar, this message translates to:
+  /// **'عميل نقدي'**
+  String get crmCashCustomer;
+
+  /// No description provided for @crmOnAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'على الحساب'**
+  String get crmOnAccount;
+
+  /// No description provided for @crmAllOnAccount.
+  ///
+  /// In ar, this message translates to:
+  /// **'كله على الحساب'**
+  String get crmAllOnAccount;
+
+  /// No description provided for @crmOverLimit.
+  ///
+  /// In ar, this message translates to:
+  /// **'يتجاوز حد الآجل بـ {amount}'**
+  String crmOverLimit(String amount);
+
+  /// No description provided for @crmAskOverride.
+  ///
+  /// In ar, this message translates to:
+  /// **'موافقة المدير على تجاوز الحد'**
+  String get crmAskOverride;
+
+  /// No description provided for @crmHeadroom.
+  ///
+  /// In ar, this message translates to:
+  /// **'متاح على الحساب {amount}'**
+  String crmHeadroom(String amount);
+
+  /// No description provided for @crmLimitOf.
+  ///
+  /// In ar, this message translates to:
+  /// **'من حد {limit}'**
+  String crmLimitOf(String limit);
+
+  /// No description provided for @crmScanCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'كود حسابه على التطبيق'**
+  String get crmScanCode;
+
+  /// No description provided for @crmMyCode.
+  ///
+  /// In ar, this message translates to:
+  /// **'كود حسابي'**
+  String get crmMyCode;
+
+  /// No description provided for @crmMyCodeHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اعرضه على الكاشير ليربط ملفك عنده بحسابك. صالح 10 دقائق.'**
+  String get crmMyCodeHint;
+
+  /// No description provided for @crmIPaid.
+  ///
+  /// In ar, this message translates to:
+  /// **'دفعت'**
+  String get crmIPaid;
+
+  /// No description provided for @crmIOwe.
+  ///
+  /// In ar, this message translates to:
+  /// **'عليّ {amount}'**
+  String crmIOwe(String amount);
+
+  /// No description provided for @crmOwedToMe.
+  ///
+  /// In ar, this message translates to:
+  /// **'لي {amount}'**
+  String crmOwedToMe(String amount);
+
+  /// No description provided for @crmNoAccounts.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد محل يسجل عليك حسابًا.'**
+  String get crmNoAccounts;
+
+  /// No description provided for @crmNoCustomers.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا عملاء بعد.'**
+  String get crmNoCustomers;
+
+  /// No description provided for @crmPickToSee.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر عميلًا لترى ملفه.'**
+  String get crmPickToSee;
+
+  /// No description provided for @crmBusinessOnlyHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'العميل خارج التطبيق: الدفعة تُحسب بتأكيدك، واطبع له إيصالًا يوقّعه.'**
+  String get crmBusinessOnlyHint;
+
+  /// No description provided for @crmPurchaseOrder.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب تطبيق #{number}'**
+  String crmPurchaseOrder(int number);
+
+  /// No description provided for @crmPurchaseSale.
+  ///
+  /// In ar, this message translates to:
+  /// **'فاتورة كاشير #{number}'**
+  String crmPurchaseSale(int number);
+
+  /// No description provided for @crmTopItemsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا مشتريات من الكاشير بعد.'**
+  String get crmTopItemsEmpty;
+
+  /// No description provided for @crmPaymentReceipt.
+  ///
+  /// In ar, this message translates to:
+  /// **'إيصال استلام دفعة'**
+  String get crmPaymentReceipt;
+
+  /// No description provided for @crmPayments.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدفعات'**
+  String get crmPayments;
+
+  /// No description provided for @crmLinked.
+  ///
+  /// In ar, this message translates to:
+  /// **'رُبط الملف بحسابه على التطبيق'**
+  String get crmLinked;
 }
 
 class _AppLocalizationsDelegate

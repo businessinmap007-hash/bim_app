@@ -14739,4 +14739,410 @@ class AppLocalizationsAr extends AppLocalizations {
   String importColumnTakenBy(String field) {
     return 'مربوط بـ «$field»';
   }
+
+  @override
+  String get crmTitle => 'العملاء';
+
+  @override
+  String get crmMyCustomers => 'عملائي';
+
+  @override
+  String get crmMyCustomersSubtitle => 'الآجل والدفعات وملفات العملاء';
+
+  @override
+  String get crmMyAccounts => 'حسابي عند المحلات';
+
+  @override
+  String get crmMyAccountsSubtitle => 'ما عليك عند كل محل ودفعاتك';
+
+  @override
+  String get crmNewCustomer => 'عميل جديد';
+
+  @override
+  String get crmName => 'الاسم';
+
+  @override
+  String get crmPhone => 'الموبايل';
+
+  @override
+  String get crmAddress => 'العنوان';
+
+  @override
+  String get crmTags => 'الوسوم (افصل بفاصلة)';
+
+  @override
+  String get crmNotes => 'ملاحظاتك (لا يراها العميل)';
+
+  @override
+  String get crmCreditLimit => 'حد الآجل';
+
+  @override
+  String get crmNoLimit => 'بلا حد';
+
+  @override
+  String get crmTermsDays => 'مدة السداد بالأيام';
+
+  @override
+  String get crmOpeningBalance => 'رصيد سابق عليه';
+
+  @override
+  String get crmSearch => 'بحث بالاسم أو الموبايل';
+
+  @override
+  String get crmFilterAll => 'الكل';
+
+  @override
+  String get crmFilterOwing => 'عليه آجل';
+
+  @override
+  String get crmFilterTop => 'الأفضل إنفاقًا';
+
+  @override
+  String get crmFilterFrequent => 'الأكثر زيارة';
+
+  @override
+  String get crmFilterNew => 'جديد هذا الشهر';
+
+  @override
+  String get crmFilterLapsed => 'انقطع';
+
+  @override
+  String get crmFilterOverdue => 'متأخر السداد';
+
+  @override
+  String get crmOwedTotal => 'إجمالي الآجل المستحق';
+
+  @override
+  String get crmPaymentsMonth => 'دفعات هذا الشهر';
+
+  @override
+  String get crmNewMonth => 'عملاء جدد هذا الشهر';
+
+  @override
+  String get crmPendingPayments => 'دفعات بانتظار تأكيدك';
+
+  @override
+  String crmOwes(String amount) {
+    return 'عليه $amount';
+  }
+
+  @override
+  String crmHasCredit(String amount) {
+    return 'له $amount';
+  }
+
+  @override
+  String get crmSettled => 'خالص';
+
+  @override
+  String get crmOnApp => 'على التطبيق';
+
+  @override
+  String crmVisits(int n) {
+    return '$n زيارة';
+  }
+
+  @override
+  String crmLastVisit(String date) {
+    return 'آخر زيارة $date';
+  }
+
+  @override
+  String get crmRecordPayment => 'تسجيل دفعة';
+
+  @override
+  String get crmPrintStatement => 'طباعة كشف حساب';
+
+  @override
+  String get crmRemind => 'ذكّره';
+
+  @override
+  String get crmEdit => 'تعديل البيانات';
+
+  @override
+  String get crmForget => 'حذف بيانات العميل';
+
+  @override
+  String get crmForgetConfirm =>
+      'تُمحى بياناته وملاحظاتك، وتبقى الفواتير والقيود باسم «عميل محذوف». متابعة؟';
+
+  @override
+  String get crmLinkAccount => 'ربط بحسابه على التطبيق';
+
+  @override
+  String get crmLinkHint =>
+      'اطلب من العميل فتح «حسابي عند المحلات» ثم «كود حسابي» واكتب الكود هنا.';
+
+  @override
+  String get crmCode => 'الكود';
+
+  @override
+  String get crmBalanceNow => 'عليه الآن';
+
+  @override
+  String get crmSpendYear => 'إنفاق هذه السنة';
+
+  @override
+  String get crmAvgTicket => 'متوسط الفاتورة';
+
+  @override
+  String get crmTabAccount => 'الحساب';
+
+  @override
+  String get crmTabPurchases => 'المشتريات';
+
+  @override
+  String get crmTabTop => 'أكثر ما يشتريه';
+
+  @override
+  String get crmTabData => 'البيانات';
+
+  @override
+  String get crmDate => 'التاريخ';
+
+  @override
+  String get crmLine => 'البيان';
+
+  @override
+  String get crmDebit => 'عليه';
+
+  @override
+  String get crmCreditCol => 'دفع';
+
+  @override
+  String get crmBalance => 'الرصيد';
+
+  @override
+  String get crmAging30 => 'حتى 30 يومًا';
+
+  @override
+  String get crmAging60 => '31–60 يومًا';
+
+  @override
+  String get crmAging90 => '61–90 يومًا';
+
+  @override
+  String get crmAgingOver => 'أكثر من 90';
+
+  @override
+  String get crmOverdue => 'متأخر عن مدة السداد';
+
+  @override
+  String get crmAmount => 'المبلغ';
+
+  @override
+  String get crmMethod => 'طريقة الدفع';
+
+  @override
+  String get crmMethodCash => 'نقدًا';
+
+  @override
+  String get crmMethodWallet => 'محفظة (خارج التطبيق)';
+
+  @override
+  String get crmMethodInstapay => 'إنستاباي';
+
+  @override
+  String get crmMethodBank => 'تحويل بنكي';
+
+  @override
+  String get crmReference => 'رقم العملية';
+
+  @override
+  String get crmReferenceHint =>
+      'من تطبيق البنك أو المحفظة عندك — الطرف الآخر يكتبه أيضًا دون أن يرى ما كتبته';
+
+  @override
+  String get crmPaymentRecorded => 'سُجّلت الدفعة — بانتظار تأكيد الطرف الآخر';
+
+  @override
+  String get crmPaymentConfirmedNow => 'تأكدت الدفعة';
+
+  @override
+  String get crmStatusPending => 'بانتظار الطرف الآخر';
+
+  @override
+  String get crmStatusAwaitingMe => 'بانتظار تأكيدك';
+
+  @override
+  String get crmStatusConfirmed => 'مؤكدة من الطرفين';
+
+  @override
+  String get crmStatusBusinessOnly => 'مؤكدة من المحل فقط';
+
+  @override
+  String get crmStatusMismatch => 'غير مطابقة';
+
+  @override
+  String get crmStatusRejected => 'مرفوضة';
+
+  @override
+  String get crmStatusCancelled => 'ملغاة';
+
+  @override
+  String get crmConfirm => 'تأكيد';
+
+  @override
+  String get crmRejectBusiness => 'لم يصلني';
+
+  @override
+  String get crmRejectCustomer => 'لم أدفع هذا';
+
+  @override
+  String get crmCancelPayment => 'إلغاء الدفعة';
+
+  @override
+  String crmAttemptsLeft(int n) {
+    return 'متبقي $n محاولات';
+  }
+
+  @override
+  String crmReceiptNo(int n) {
+    return 'إيصال $n';
+  }
+
+  @override
+  String get crmKindOpening => 'رصيد سابق';
+
+  @override
+  String get crmKindSale => 'بيع على الحساب';
+
+  @override
+  String get crmKindOrder => 'طلب تطبيق';
+
+  @override
+  String get crmKindPayment => 'دفعة';
+
+  @override
+  String get crmKindReturn => 'مرتجع';
+
+  @override
+  String get crmKindAdjustment => 'تسوية';
+
+  @override
+  String get crmChargeOrder => 'على الحساب';
+
+  @override
+  String get crmAdjust => 'تسوية';
+
+  @override
+  String get crmAdjustReason => 'السبب';
+
+  @override
+  String get crmAdjustHint => 'موجب يزيد ما عليه، وسالب يقلّله';
+
+  @override
+  String crmStatementTitle(String name) {
+    return 'كشف حساب — $name';
+  }
+
+  @override
+  String get crmAmountDue => 'المستحق عليه';
+
+  @override
+  String get crmSignAccountant => 'المحاسب';
+
+  @override
+  String get crmSignCustomer => 'توقيع العميل بالاطلاع';
+
+  @override
+  String get crmReminderSent =>
+      'وصله تذكير على التطبيق، وهذا النص لو أردت إرساله أيضًا:';
+
+  @override
+  String get crmReminderShare => 'انسخ النص وأرسله من موبايلك:';
+
+  @override
+  String get crmCopy => 'نسخ';
+
+  @override
+  String get crmCopied => 'نُسخ';
+
+  @override
+  String get crmPickCustomer => 'اختيار عميل';
+
+  @override
+  String get crmCashCustomer => 'عميل نقدي';
+
+  @override
+  String get crmOnAccount => 'على الحساب';
+
+  @override
+  String get crmAllOnAccount => 'كله على الحساب';
+
+  @override
+  String crmOverLimit(String amount) {
+    return 'يتجاوز حد الآجل بـ $amount';
+  }
+
+  @override
+  String get crmAskOverride => 'موافقة المدير على تجاوز الحد';
+
+  @override
+  String crmHeadroom(String amount) {
+    return 'متاح على الحساب $amount';
+  }
+
+  @override
+  String crmLimitOf(String limit) {
+    return 'من حد $limit';
+  }
+
+  @override
+  String get crmScanCode => 'كود حسابه على التطبيق';
+
+  @override
+  String get crmMyCode => 'كود حسابي';
+
+  @override
+  String get crmMyCodeHint =>
+      'اعرضه على الكاشير ليربط ملفك عنده بحسابك. صالح 10 دقائق.';
+
+  @override
+  String get crmIPaid => 'دفعت';
+
+  @override
+  String crmIOwe(String amount) {
+    return 'عليّ $amount';
+  }
+
+  @override
+  String crmOwedToMe(String amount) {
+    return 'لي $amount';
+  }
+
+  @override
+  String get crmNoAccounts => 'لا يوجد محل يسجل عليك حسابًا.';
+
+  @override
+  String get crmNoCustomers => 'لا عملاء بعد.';
+
+  @override
+  String get crmPickToSee => 'اختر عميلًا لترى ملفه.';
+
+  @override
+  String get crmBusinessOnlyHint =>
+      'العميل خارج التطبيق: الدفعة تُحسب بتأكيدك، واطبع له إيصالًا يوقّعه.';
+
+  @override
+  String crmPurchaseOrder(int number) {
+    return 'طلب تطبيق #$number';
+  }
+
+  @override
+  String crmPurchaseSale(int number) {
+    return 'فاتورة كاشير #$number';
+  }
+
+  @override
+  String get crmTopItemsEmpty => 'لا مشتريات من الكاشير بعد.';
+
+  @override
+  String get crmPaymentReceipt => 'إيصال استلام دفعة';
+
+  @override
+  String get crmPayments => 'الدفعات';
+
+  @override
+  String get crmLinked => 'رُبط الملف بحسابه على التطبيق';
 }

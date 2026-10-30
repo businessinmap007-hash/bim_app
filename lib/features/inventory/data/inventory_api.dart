@@ -225,15 +225,27 @@ class InventoryApi {
       _map(await _t.send('POST', '/business/inventory/pos/shifts/$id/close', body: {'counted_cash': countedCash}));
 
   /// null when queued on this computer (no connection) — the sale is kept and sent later
-  Future<Map<String, dynamic>?> sell({int? shiftId, required double paid, required List<Map<String, dynamic>> lines, String? deviceUuid}) async {
+  Future<Map<String, dynamic>?> sell({
+    int? shiftId,
+    required double paid,
+    required List<Map<String, dynamic>> lines,
+    String? deviceUuid,
+    int? customerId,
+    double onAccount = 0,
+    bool creditOverride = false,
+  }) async {
     final data = await _t.send('POST', '/business/inventory/pos/sales', body: {
       'uuid': newUuid(),
       'shift_id': ?shiftId,
       'paid': paid,
+      'customer_id': ?customerId,
+      if (onAccount > 0) 'on_account': onAccount,
+      if (creditOverride) 'credit_override': true,
       'lines': lines,
       'device_uuid': ?deviceUuid,
       'sold_at': DateTime.now().toIso8601String(),
-    }, queueable: true);
+      // a sale on a customer's account waits for the server's limit check — never queued blind
+    }, queueable: onAccount <= 0);
     return data == null ? null : _map(data);
   }
 

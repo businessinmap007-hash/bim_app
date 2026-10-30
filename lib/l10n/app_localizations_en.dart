@@ -14866,4 +14866,413 @@ class AppLocalizationsEn extends AppLocalizations {
   String importColumnTakenBy(String field) {
     return 'linked to “$field”';
   }
+
+  @override
+  String get crmTitle => 'Customers';
+
+  @override
+  String get crmMyCustomers => 'My customers';
+
+  @override
+  String get crmMyCustomersSubtitle => 'Credit, payments and customer files';
+
+  @override
+  String get crmMyAccounts => 'My accounts at shops';
+
+  @override
+  String get crmMyAccountsSubtitle =>
+      'What you owe at each shop and your payments';
+
+  @override
+  String get crmNewCustomer => 'New customer';
+
+  @override
+  String get crmName => 'Name';
+
+  @override
+  String get crmPhone => 'Mobile';
+
+  @override
+  String get crmAddress => 'Address';
+
+  @override
+  String get crmTags => 'Tags (comma separated)';
+
+  @override
+  String get crmNotes => 'Your notes (the customer never sees them)';
+
+  @override
+  String get crmCreditLimit => 'Credit limit';
+
+  @override
+  String get crmNoLimit => 'No limit';
+
+  @override
+  String get crmTermsDays => 'Payment terms in days';
+
+  @override
+  String get crmOpeningBalance => 'Opening balance he owes';
+
+  @override
+  String get crmSearch => 'Search by name or mobile';
+
+  @override
+  String get crmFilterAll => 'All';
+
+  @override
+  String get crmFilterOwing => 'Owing';
+
+  @override
+  String get crmFilterTop => 'Top spenders';
+
+  @override
+  String get crmFilterFrequent => 'Most visits';
+
+  @override
+  String get crmFilterNew => 'New this month';
+
+  @override
+  String get crmFilterLapsed => 'Lapsed';
+
+  @override
+  String get crmFilterOverdue => 'Overdue';
+
+  @override
+  String get crmOwedTotal => 'Total credit owed';
+
+  @override
+  String get crmPaymentsMonth => 'Payments this month';
+
+  @override
+  String get crmNewMonth => 'New customers this month';
+
+  @override
+  String get crmPendingPayments => 'Payments awaiting your confirmation';
+
+  @override
+  String crmOwes(String amount) {
+    return 'Owes $amount';
+  }
+
+  @override
+  String crmHasCredit(String amount) {
+    return 'In credit $amount';
+  }
+
+  @override
+  String get crmSettled => 'Settled';
+
+  @override
+  String get crmOnApp => 'On the app';
+
+  @override
+  String crmVisits(int n) {
+    return '$n visits';
+  }
+
+  @override
+  String crmLastVisit(String date) {
+    return 'Last visit $date';
+  }
+
+  @override
+  String get crmRecordPayment => 'Record a payment';
+
+  @override
+  String get crmPrintStatement => 'Print statement';
+
+  @override
+  String get crmRemind => 'Remind';
+
+  @override
+  String get crmEdit => 'Edit details';
+
+  @override
+  String get crmForget => 'Forget this customer';
+
+  @override
+  String get crmForgetConfirm =>
+      'His details and your notes are erased; receipts and the book stay under «deleted customer». Continue?';
+
+  @override
+  String get crmLinkAccount => 'Link to his app account';
+
+  @override
+  String get crmLinkHint =>
+      'Ask the customer to open «My accounts at shops» then «My account code», and type the code here.';
+
+  @override
+  String get crmCode => 'Code';
+
+  @override
+  String get crmBalanceNow => 'Owes now';
+
+  @override
+  String get crmSpendYear => 'Spend this year';
+
+  @override
+  String get crmAvgTicket => 'Average ticket';
+
+  @override
+  String get crmTabAccount => 'Account';
+
+  @override
+  String get crmTabPurchases => 'Purchases';
+
+  @override
+  String get crmTabTop => 'Buys most';
+
+  @override
+  String get crmTabData => 'Details';
+
+  @override
+  String get crmDate => 'Date';
+
+  @override
+  String get crmLine => 'Description';
+
+  @override
+  String get crmDebit => 'Debit';
+
+  @override
+  String get crmCreditCol => 'Credit';
+
+  @override
+  String get crmBalance => 'Balance';
+
+  @override
+  String get crmAging30 => 'Up to 30 days';
+
+  @override
+  String get crmAging60 => '31–60 days';
+
+  @override
+  String get crmAging90 => '61–90 days';
+
+  @override
+  String get crmAgingOver => 'Over 90';
+
+  @override
+  String get crmOverdue => 'Past the payment terms';
+
+  @override
+  String get crmAmount => 'Amount';
+
+  @override
+  String get crmMethod => 'Payment method';
+
+  @override
+  String get crmMethodCash => 'Cash';
+
+  @override
+  String get crmMethodWallet => 'Wallet (outside the app)';
+
+  @override
+  String get crmMethodInstapay => 'InstaPay';
+
+  @override
+  String get crmMethodBank => 'Bank transfer';
+
+  @override
+  String get crmReference => 'Transaction reference';
+
+  @override
+  String get crmReferenceHint =>
+      'From your own bank or wallet app — the other side types it too without seeing yours';
+
+  @override
+  String get crmPaymentRecorded =>
+      'Payment recorded — awaiting the other side\'s confirmation';
+
+  @override
+  String get crmPaymentConfirmedNow => 'Payment confirmed';
+
+  @override
+  String get crmStatusPending => 'Awaiting the other side';
+
+  @override
+  String get crmStatusAwaitingMe => 'Awaiting your confirmation';
+
+  @override
+  String get crmStatusConfirmed => 'Confirmed by both sides';
+
+  @override
+  String get crmStatusBusinessOnly => 'Confirmed by the shop only';
+
+  @override
+  String get crmStatusMismatch => 'Did not match';
+
+  @override
+  String get crmStatusRejected => 'Rejected';
+
+  @override
+  String get crmStatusCancelled => 'Cancelled';
+
+  @override
+  String get crmConfirm => 'Confirm';
+
+  @override
+  String get crmRejectBusiness => 'Not received';
+
+  @override
+  String get crmRejectCustomer => 'I did not pay this';
+
+  @override
+  String get crmCancelPayment => 'Cancel payment';
+
+  @override
+  String crmAttemptsLeft(int n) {
+    return '$n tries left';
+  }
+
+  @override
+  String crmReceiptNo(int n) {
+    return 'Receipt $n';
+  }
+
+  @override
+  String get crmKindOpening => 'Opening balance';
+
+  @override
+  String get crmKindSale => 'Sale on account';
+
+  @override
+  String get crmKindOrder => 'App order';
+
+  @override
+  String get crmKindPayment => 'Payment';
+
+  @override
+  String get crmKindReturn => 'Return';
+
+  @override
+  String get crmKindAdjustment => 'Adjustment';
+
+  @override
+  String get crmChargeOrder => 'Put on account';
+
+  @override
+  String get crmAdjust => 'Adjust';
+
+  @override
+  String get crmAdjustReason => 'Reason';
+
+  @override
+  String get crmAdjustHint =>
+      'Positive raises what he owes, negative lowers it';
+
+  @override
+  String crmStatementTitle(String name) {
+    return 'Statement — $name';
+  }
+
+  @override
+  String get crmAmountDue => 'Amount due';
+
+  @override
+  String get crmSignAccountant => 'Accountant';
+
+  @override
+  String get crmSignCustomer => 'Customer\'s signature';
+
+  @override
+  String get crmReminderSent =>
+      'A reminder reached him in the app; here is the text if you want to send it too:';
+
+  @override
+  String get crmReminderShare => 'Copy the text and send it from your phone:';
+
+  @override
+  String get crmCopy => 'Copy';
+
+  @override
+  String get crmCopied => 'Copied';
+
+  @override
+  String get crmPickCustomer => 'Pick a customer';
+
+  @override
+  String get crmCashCustomer => 'Walk-in customer';
+
+  @override
+  String get crmOnAccount => 'On account';
+
+  @override
+  String get crmAllOnAccount => 'All on account';
+
+  @override
+  String crmOverLimit(String amount) {
+    return 'Passes the credit limit by $amount';
+  }
+
+  @override
+  String get crmAskOverride => 'Manager\'s approval to pass the limit';
+
+  @override
+  String crmHeadroom(String amount) {
+    return '$amount available on account';
+  }
+
+  @override
+  String crmLimitOf(String limit) {
+    return 'of a $limit limit';
+  }
+
+  @override
+  String get crmScanCode => 'His app account code';
+
+  @override
+  String get crmMyCode => 'My account code';
+
+  @override
+  String get crmMyCodeHint =>
+      'Show it at the counter so the shop links your file to your account. Valid for 10 minutes.';
+
+  @override
+  String get crmIPaid => 'I paid';
+
+  @override
+  String crmIOwe(String amount) {
+    return 'I owe $amount';
+  }
+
+  @override
+  String crmOwedToMe(String amount) {
+    return 'In my favour $amount';
+  }
+
+  @override
+  String get crmNoAccounts => 'No shop keeps an account on you.';
+
+  @override
+  String get crmNoCustomers => 'No customers yet.';
+
+  @override
+  String get crmPickToSee => 'Pick a customer to see the file.';
+
+  @override
+  String get crmBusinessOnlyHint =>
+      'The customer is not on the app: the payment counts on your word — print a receipt for him to sign.';
+
+  @override
+  String crmPurchaseOrder(int number) {
+    return 'App order #$number';
+  }
+
+  @override
+  String crmPurchaseSale(int number) {
+    return 'Cashier receipt #$number';
+  }
+
+  @override
+  String get crmTopItemsEmpty => 'No cashier purchases yet.';
+
+  @override
+  String get crmPaymentReceipt => 'Payment receipt';
+
+  @override
+  String get crmPayments => 'Payments';
+
+  @override
+  String get crmLinked => 'The file is now linked to his app account';
 }

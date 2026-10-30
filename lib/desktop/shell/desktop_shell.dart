@@ -9,6 +9,7 @@ import '../../l10n/app_localizations.dart';
 import '../../shared/widgets/async_value_view.dart';
 import '../desktop_app.dart';
 import '../screens/attendance_page.dart';
+import '../screens/customers_page.dart';
 import '../screens/dashboard_page.dart';
 import '../screens/devices_page.dart';
 import '../screens/items_page.dart';
@@ -23,11 +24,11 @@ import '../sync/desktop_sync.dart';
 
 /// The desktop suite's screens. What a computer shows is what its ROLE allows (set by the owner on «الأجهزة») AND what
 /// the person signed in may do — the server checks the second again on every call.
-enum SuiteScreen { dashboard, items, recipes, purchases, receive, stocktake, pos, attendance, payroll, devices, settings }
+enum SuiteScreen { dashboard, items, recipes, purchases, receive, stocktake, pos, customers, attendance, payroll, devices, settings }
 
 const _roleScreens = {
   'main': SuiteScreen.values,
-  'manager': [SuiteScreen.dashboard, SuiteScreen.items, SuiteScreen.recipes, SuiteScreen.purchases, SuiteScreen.receive, SuiteScreen.stocktake, SuiteScreen.pos, SuiteScreen.attendance, SuiteScreen.payroll, SuiteScreen.settings],
+  'manager': [SuiteScreen.dashboard, SuiteScreen.items, SuiteScreen.recipes, SuiteScreen.purchases, SuiteScreen.receive, SuiteScreen.stocktake, SuiteScreen.pos, SuiteScreen.customers, SuiteScreen.attendance, SuiteScreen.payroll, SuiteScreen.settings],
   'warehouse': [SuiteScreen.dashboard, SuiteScreen.items, SuiteScreen.receive, SuiteScreen.stocktake, SuiteScreen.settings],
   'purchases': [SuiteScreen.dashboard, SuiteScreen.items, SuiteScreen.purchases, SuiteScreen.receive, SuiteScreen.settings],
   'cashier': [SuiteScreen.pos, SuiteScreen.settings],
@@ -40,6 +41,7 @@ Set<SuiteScreen> _byPerson(InvSettings s) {
   if (s.can('purchases') || s.can('purchase_approval')) out.addAll([SuiteScreen.dashboard, SuiteScreen.purchases]);
   if (s.can('purchases')) out.addAll([SuiteScreen.receive, SuiteScreen.items]);
   if (s.can('pos')) out.add(SuiteScreen.pos);
+  if (s.can('customers')) out.add(SuiteScreen.customers);
   if (s.can('attendance')) out.add(SuiteScreen.attendance);
   if (s.can('payroll')) out.addAll([SuiteScreen.attendance, SuiteScreen.payroll]);
   return out;
@@ -138,6 +140,7 @@ class _DesktopShellState extends ConsumerState<DesktopShell> {
         SuiteScreen.receive => const ReceivePage(),
         SuiteScreen.stocktake => const StocktakePage(),
         SuiteScreen.pos => const PosPage(),
+        SuiteScreen.customers => const CustomersPage(),
         SuiteScreen.attendance => const AttendancePage(),
         SuiteScreen.payroll => const PayrollPage(),
         SuiteScreen.devices => const DevicesPage(),
@@ -153,6 +156,7 @@ String suiteScreenLabel(AppLocalizations l10n, SuiteScreen s) => switch (s) {
       SuiteScreen.receive => l10n.suiteNavReceive,
       SuiteScreen.stocktake => l10n.suiteNavStocktake,
       SuiteScreen.pos => l10n.suiteNavPos,
+      SuiteScreen.customers => l10n.crmTitle,
       SuiteScreen.attendance => l10n.hrAttendanceTitle,
       SuiteScreen.payroll => l10n.hrNavPayroll,
       SuiteScreen.devices => l10n.suiteNavDevices,
@@ -167,6 +171,7 @@ IconData _icon(SuiteScreen s) => switch (s) {
       SuiteScreen.receive => Icons.move_to_inbox_outlined,
       SuiteScreen.stocktake => Icons.fact_check_outlined,
       SuiteScreen.pos => Icons.point_of_sale_outlined,
+      SuiteScreen.customers => Icons.groups_outlined,
       SuiteScreen.attendance => Icons.badge_outlined,
       SuiteScreen.payroll => Icons.payments_outlined,
       SuiteScreen.devices => Icons.lan_outlined,

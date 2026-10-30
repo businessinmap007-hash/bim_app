@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/network/api_exception.dart';
+import '../../features/customers/data/customers_api.dart';
+import '../../features/customers/presentation/crm_widgets.dart';
 import '../../features/inventory/application/inventory_providers.dart';
 import '../../features/inventory/data/inventory_models.dart';
 import '../../features/inventory/presentation/inventory_labels.dart';
@@ -28,18 +30,22 @@ class _CartLine {
   double get unitPrice => (variant?.price ?? product.price) + extras.fold(0.0, (s, e) => s + e.price);
 
   Map<String, dynamic> toJson() => {
-        'owner_type': product.ownerType,
-        'owner_id': product.ownerId,
-        'qty': qty,
-        'variant_id': ?variant?.id,
-        if (extras.isNotEmpty) 'extras': [for (final e in extras) {'id': e.id, 'qty': 1}],
-      };
+    'owner_type': product.ownerType,
+    'owner_id': product.ownerId,
+    'qty': qty,
+    'variant_id': ?variant?.id,
+    if (extras.isNotEmpty)
+      'extras': [
+        for (final e in extras) {'id': e.id, 'qty': 1},
+      ],
+  };
 }
 
 /// «الكاشير» — a counter sale on this computer: the products the apps sell, at the business's prices (the server prices
 /// them again — a device's price is never trusted), taken from the stock by the same recipes. Cash in the drawer, outside
 /// the app. With no internet the sale is kept here (or on the main computer) and sent later; the drawer closes against
-/// what the sales say it should hold.
+/// what the sales say it should hold. A sale may name a customer and put part or all of it «على الحساب» — within his
+/// limit, checked by the server (so such a sale is never queued offline); only the cash part is in the drawer.
 class PosPage extends ConsumerStatefulWidget {
   const PosPage({super.key});
 
@@ -51,6 +57,8 @@ class _PosPageState extends ConsumerState<PosPage> {
   final _scan = TextEditingController();
   final _paid = TextEditingController();
   final _search = TextEditingController();
+  final _onAccount = TextEditingController();
+  CrmCustomer? _customer;
   final List<_CartLine> _cart = [];
   final List<Map<String, dynamic>> _lastSales = [];
   bool _busy = false;
@@ -60,6 +68,7 @@ class _PosPageState extends ConsumerState<PosPage> {
     _scan.dispose();
     _paid.dispose();
     _search.dispose();
+    _onAccount.dispose();
     super.dispose();
   }
 
@@ -74,7 +83,10 @@ class _PosPageState extends ConsumerState<PosPage> {
     InvPosChoice? variant;
     var extras = <InvPosChoice>[];
     if (p.variants.isNotEmpty || p.extras.isNotEmpty) {
-      final picked = await showDialog<(InvPosChoice?, List<InvPosChoice>)>(context: context, builder: (_) => _ChoiceDialog(product: p));
+      final picked = await showDialog<(InvPosChoice?, List<InvPosChoice>)>(
+        context: context,
+        builder: (_) => _ChoiceDialog(product: p),
+      );
       if (picked == null) return;
       (variant, extras) = picked;
     }
@@ -141,11 +153,7 @@ class _PosPageState extends ConsumerState<PosPage> {
         context: context,
         builder: (ctx) => AlertDialog(
           title: Text(l10n.suiteShiftClosed),
-          content: Text(l10n.suiteShiftSummary(
-            InvLabels.money((summary['expected_cash'] as num?) ?? 0),
-            InvLabels.money(value),
-            InvLabels.money((summary['difference'] as num?) ?? 0),
-          )),
+          content: Text(l10n.suiteShiftSummary(InvLabels.money((summary['expected_cash'] as num?) ?? 0), InvLabels.money(value), InvLabels.money((summary['difference'] as num?) ?? 0))),
           actions: [FilledButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.commonOk))],
         ),
       );
@@ -154,45 +162,87 @@ class _PosPageState extends ConsumerState<PosPage> {
     }
   }
 
-  Future<void> _sell() async {
+  double get _onAccountValue => _customer == null ? 0 : (parseNum(_onAccount.text) ?? 0).clamp(0, _total).toDouble();
+
+  Future<void> _pickCustomer() async {
+    final picked = await showDialog<CrmCustomer>(context: context, builder: (_) => const _CustomerPicker());
+    if (picked != null) setState(() => _customer = picked);
+  }
+
+  /// The server refused the account part (over the limit): pass it with a manager's right, or go back.
+  Future<bool> _askOverride(ApiException e) async {
+    final l10n = AppLocalizations.of(context)!;
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l10n.crmCreditLimit),
+        content: Text(e.firstErrorFor('credit_limit') ?? e.message),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.commonCancel)),
+          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: Text(l10n.crmAskOverride)),
+        ],
+      ),
+    );
+    return ok == true;
+  }
+
+  Future<void> _sell({bool override = false}) async {
     final l10n = AppLocalizations.of(context)!;
     if (_cart.isEmpty) return;
-    final paid = parseNum(_paid.text) ?? _total;
-    if (paid + 0.001 < _total) {
+    final onAccount = _onAccountValue;
+    final paid = parseNum(_paid.text) ?? (_total - onAccount);
+    if (paid + onAccount + 0.001 < _total) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.suitePaidLess)));
       return;
     }
     setState(() => _busy = true);
     final store = ref.read(suiteStoreProvider);
     try {
-      final result = await ref.read(inventoryApiProvider).sell(
+      final result = await ref
+          .read(inventoryApiProvider)
+          .sell(
             shiftId: _shift?['id'] as int?,
             paid: paid,
             lines: [for (final l in _cart) l.toJson()],
             deviceUuid: store.deviceUuid,
+            customerId: _customer?.id,
+            onAccount: onAccount,
+            creditOverride: override,
           );
       if (!mounted) return;
-      final change = paid - _total;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(result == null ? '${l10n.suiteQueued} · ${l10n.suiteChange(InvLabels.money(change))}' : l10n.suiteChange(InvLabels.money(change))),
-      ));
+      final change = paid + onAccount - _total;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(result == null ? '${l10n.suiteQueued} · ${l10n.suiteChange(InvLabels.money(change))}' : l10n.suiteChange(InvLabels.money(change)))));
       // the receipt: from the server's own pricing when it answered, from this computer's cart when the sale was queued
-      final sale = result?['sale'] as Map<String, dynamic>? ??
+      final sale =
+          result?['sale'] as Map<String, dynamic>? ??
           {
             'number': '—',
             'total': _total,
             'paid': paid,
-            'lines': [for (final l in _cart) {'name': l.product.name, 'qty': l.qty, 'unit_price': l.unitPrice, 'total': l.unitPrice * l.qty}],
+            'on_account': onAccount,
+            'lines': [
+              for (final l in _cart) {'name': l.product.name, 'qty': l.qty, 'unit_price': l.unitPrice, 'total': l.unitPrice * l.qty},
+            ],
           };
       if (ref.read(suitePrintProvider).autoReceipt) unawaited(_printReceipt(sale));
       setState(() {
         if (result?['sale'] is Map<String, dynamic>) _lastSales.insert(0, result!['sale'] as Map<String, dynamic>);
         _cart.clear();
         _paid.clear();
+        _onAccount.clear();
+        _customer = null;
       });
       ref.invalidate(_catalogProvider);
     } on ApiException catch (e) {
-      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.message)));
+      if (!mounted) return;
+      if (e.firstErrorFor('credit_limit') != null && !override) {
+        setState(() => _busy = false);
+        if (await _askOverride(e)) await _sell(override: true);
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.firstErrorFor('credit_override') ?? e.message)));
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -202,7 +252,7 @@ class _PosPageState extends ConsumerState<PosPage> {
     final l10n = AppLocalizations.of(context)!;
     num n(Object? v) => v is num ? v : num.tryParse('$v') ?? 0;
     final total = n(sale['total']);
-    final paidAmount = n(sale['paid']);
+    final paidAmount = n(sale['paid']) + n(sale['on_account']);
     final pdf = await SuitePrint.receipt(
       businessName: ref.read(suiteBusinessProvider)?.name ?? '',
       title: l10n.suiteReceiptTitle,
@@ -235,12 +285,7 @@ class _PosPageState extends ConsumerState<PosPage> {
     return SuitePage(
       title: l10n.suiteNavPos,
       scroll: false,
-      actions: [
-        if (shift == null)
-          FilledButton(onPressed: _openShift, child: Text(l10n.suiteOpenShift))
-        else
-          OutlinedButton(onPressed: _closeShift, child: Text(l10n.suiteCloseShift)),
-      ],
+      actions: [if (shift == null) FilledButton(onPressed: _openShift, child: Text(l10n.suiteOpenShift)) else OutlinedButton(onPressed: _closeShift, child: Text(l10n.suiteCloseShift))],
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -301,11 +346,14 @@ class _PosPageState extends ConsumerState<PosPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(p.name, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w800)),
+                                  Text(
+                                    p.name,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontWeight: FontWeight.w800),
+                                  ),
                                   Text('${InvLabels.money(p.price)} ${l10n.stkCurrency}'),
-                                  if (p.available != null)
-                                    Text(l10n.suiteAvailable(p.available!),
-                                        style: TextStyle(fontSize: 12, color: p.available! < 10 ? Tone.bad(context) : Tone.good(context))),
+                                  if (p.available != null) Text(l10n.suiteAvailable(p.available!), style: TextStyle(fontSize: 12, color: p.available! < 10 ? Tone.bad(context) : Tone.good(context))),
                                 ],
                               ),
                             ),
@@ -339,11 +387,7 @@ class _PosPageState extends ConsumerState<PosPage> {
                               leading: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  IconButton(
-                                    visualDensity: VisualDensity.compact,
-                                    icon: const Icon(Icons.remove),
-                                    onPressed: () => setState(() => l.qty <= 1 ? _cart.remove(l) : l.qty -= 1),
-                                  ),
+                                  IconButton(visualDensity: VisualDensity.compact, icon: const Icon(Icons.remove), onPressed: () => setState(() => l.qty <= 1 ? _cart.remove(l) : l.qty -= 1)),
                                   Text(invNum(l.qty)),
                                   IconButton(visualDensity: VisualDensity.compact, icon: const Icon(Icons.add), onPressed: () => setState(() => l.qty += 1)),
                                 ],
@@ -354,20 +398,48 @@ class _PosPageState extends ConsumerState<PosPage> {
                       ),
                     ),
                     const Divider(),
-                    Row(children: [
-                      Expanded(child: Text(l10n.stkTotal, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800))),
-                      Text('${InvLabels.money(_total)} ${l10n.stkCurrency}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
-                    ]),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(l10n.stkTotal, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+                        ),
+                        Text('${InvLabels.money(_total)} ${l10n.stkCurrency}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+                      ],
+                    ),
+                    _customerBar(l10n),
+                    if (_customer != null)
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _onAccount,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(labelText: l10n.crmOnAccount, isDense: true),
+                              onChanged: (_) => setState(() {}),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () => setState(() {
+                              _onAccount.text = invNum(_total);
+                              _paid.text = '0';
+                            }),
+                            child: Text(l10n.crmAllOnAccount),
+                          ),
+                        ],
+                      ),
                     TextField(
                       controller: _paid,
                       keyboardType: TextInputType.number,
-                      decoration: InputDecoration(labelText: l10n.suitePaidCash),
+                      decoration: InputDecoration(labelText: l10n.suitePaidCash, hintText: InvLabels.money(_total - _onAccountValue)),
                       onChanged: (_) => setState(() {}),
                     ),
-                    if (paid != null && paid >= _total)
+                    if (paid != null && paid + _onAccountValue >= _total)
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 6),
-                        child: Text(l10n.suiteChange(InvLabels.money(paid - _total)), style: TextStyle(color: Tone.good(context), fontWeight: FontWeight.w800, fontSize: 18)),
+                        child: Text(
+                          l10n.suiteChange(InvLabels.money(paid + _onAccountValue - _total)),
+                          style: TextStyle(color: Tone.good(context), fontWeight: FontWeight.w800, fontSize: 18),
+                        ),
                       ),
                     const SizedBox(height: 8),
                     FilledButton(
@@ -407,6 +479,186 @@ class _PosPageState extends ConsumerState<PosPage> {
   }
 }
 
+extension on _PosPageState {
+  /// Who this sale is for: «عميل نقدي» (no file) or a customer with his balance against his limit.
+  Widget _customerBar(AppLocalizations l10n) {
+    final c = _customer;
+    if (c == null) {
+      return Align(
+        alignment: AlignmentDirectional.centerStart,
+        child: TextButton.icon(icon: const Icon(Icons.person_search_outlined), label: Text('${l10n.crmCashCustomer} · ${l10n.crmPickCustomer}'), onPressed: _pickCustomer),
+      );
+    }
+    final headroom = c.headroom;
+    final over = headroom == null ? 0.0 : _onAccountValue - headroom;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(c.name, style: const TextStyle(fontWeight: FontWeight.w800)),
+              ),
+              IconButton(
+                visualDensity: VisualDensity.compact,
+                tooltip: l10n.crmCashCustomer,
+                icon: const Icon(Icons.close),
+                // ignore: invalid_use_of_protected_member
+                onPressed: () => setState(() {
+                  _customer = null;
+                  _onAccount.clear();
+                }),
+              ),
+            ],
+          ),
+          Text(
+            '${CrmLabels.balance(context, c.balance)}${c.creditLimit == null ? '' : ' ${l10n.crmLimitOf(InvLabels.money(c.creditLimit!))}'}',
+            style: TextStyle(color: CrmLabels.balanceColor(context, c.balance), fontWeight: FontWeight.w700),
+          ),
+          if (c.creditLimit != null && c.creditLimit! > 0)
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: LinearProgressIndicator(value: (c.balance / c.creditLimit!).clamp(0, 1).toDouble(), minHeight: 6, color: CrmLabels.balanceColor(context, 1)),
+            ),
+          if (over > 0.004)
+            Text(
+              l10n.crmOverLimit(InvLabels.money(over)),
+              style: TextStyle(color: Tone.bad(context), fontWeight: FontWeight.w800),
+            )
+          else if (headroom != null)
+            Text(l10n.crmHeadroom(InvLabels.money(headroom)), style: Theme.of(context).textTheme.bodySmall),
+        ],
+      ),
+    );
+  }
+}
+
+/// «اختيار عميل» at the counter: search by name or mobile, type the code from his app, or add him on the spot.
+class _CustomerPicker extends ConsumerStatefulWidget {
+  const _CustomerPicker();
+
+  @override
+  ConsumerState<_CustomerPicker> createState() => _CustomerPickerState();
+}
+
+class _CustomerPickerState extends ConsumerState<_CustomerPicker> {
+  final _q = TextEditingController();
+  final _code = TextEditingController();
+  final _name = TextEditingController();
+  final _phone = TextEditingController();
+  List<CrmCustomer> _found = const [];
+  bool _adding = false;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _search();
+  }
+
+  @override
+  void dispose() {
+    for (final c in [_q, _code, _name, _phone]) {
+      c.dispose();
+    }
+    super.dispose();
+  }
+
+  Future<void> _run(Future<void> Function() action) async {
+    try {
+      setState(() => _error = null);
+      await action();
+    } on ApiException catch (e) {
+      if (mounted) setState(() => _error = e.firstErrorFor('code') ?? e.message);
+    }
+  }
+
+  Future<void> _search() => _run(() async {
+    final r = await ref.read(customersApiProvider).customers(q: _q.text);
+    if (mounted) setState(() => _found = r.customers);
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final api = ref.read(customersApiProvider);
+    return AlertDialog(
+      title: Text(l10n.crmPickCustomer),
+      content: SizedBox(
+        width: 460,
+        height: 460,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextField(
+              controller: _q,
+              autofocus: true,
+              decoration: InputDecoration(prefixIcon: const Icon(Icons.search), hintText: l10n.crmSearch, isDense: true),
+              onSubmitted: (_) => _search(),
+            ),
+            const SizedBox(height: 6),
+            TextField(
+              controller: _code,
+              decoration: InputDecoration(prefixIcon: const Icon(Icons.qr_code_2), hintText: l10n.crmScanCode, isDense: true),
+              onSubmitted: (v) => _run(() async {
+                final c = await api.resolveCode(v.trim());
+                if (context.mounted) Navigator.pop(context, c);
+              }),
+            ),
+            if (_error != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: Text(_error!, style: TextStyle(color: Tone.bad(context))),
+              ),
+            const SizedBox(height: 6),
+            Expanded(
+              child: ListView(
+                children: [
+                  for (final c in _found)
+                    ListTile(
+                      dense: true,
+                      title: Text(c.name),
+                      subtitle: Text([if (c.phone != null) c.phone!, if (c.onApp) l10n.crmOnApp].join(' · ')),
+                      trailing: Text(CrmLabels.balance(context, c.balance), style: TextStyle(color: CrmLabels.balanceColor(context, c.balance))),
+                      onTap: () => Navigator.pop(context, c),
+                    ),
+                ],
+              ),
+            ),
+            if (_adding) ...[
+              TextField(
+                controller: _name,
+                decoration: InputDecoration(labelText: l10n.crmName, isDense: true),
+              ),
+              TextField(
+                controller: _phone,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(labelText: l10n.crmPhone, isDense: true),
+              ),
+            ],
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.commonCancel)),
+        if (!_adding)
+          OutlinedButton(onPressed: () => setState(() => _adding = true), child: Text(l10n.crmNewCustomer))
+        else
+          FilledButton(
+            onPressed: () => _run(() async {
+              if (_name.text.trim().isEmpty) return;
+              final c = await api.create(name: _name.text.trim(), phone: _phone.text.trim().isEmpty ? null : _phone.text.trim());
+              if (context.mounted) Navigator.pop(context, c);
+            }),
+            child: Text(l10n.commonSave),
+          ),
+      ],
+    );
+  }
+}
+
 class _ChoiceDialog extends StatefulWidget {
   final InvPosProduct product;
   const _ChoiceDialog({required this.product});
@@ -435,20 +687,18 @@ class _ChoiceDialogState extends State<_ChoiceDialog> {
               RadioGroup<InvPosChoice?>(
                 groupValue: _variant,
                 onChanged: (v) => setState(() => _variant = v),
-                child: Column(children: [
-                  RadioListTile<InvPosChoice?>(value: null, title: Text('${l10n.suiteRegular} · ${InvLabels.money(p.price)}')),
-                  for (final v in p.variants) RadioListTile<InvPosChoice?>(value: v, title: Text('${v.name} · ${InvLabels.money(v.price)}')),
-                ]),
+                child: Column(
+                  children: [
+                    RadioListTile<InvPosChoice?>(value: null, title: Text('${l10n.suiteRegular} · ${InvLabels.money(p.price)}')),
+                    for (final v in p.variants) RadioListTile<InvPosChoice?>(value: v, title: Text('${v.name} · ${InvLabels.money(v.price)}')),
+                  ],
+                ),
               ),
             ],
             if (p.extras.isNotEmpty) ...[
               Text(l10n.suiteExtras, style: const TextStyle(fontWeight: FontWeight.w800)),
               for (final e in p.extras)
-                CheckboxListTile(
-                  value: _extras.contains(e),
-                  title: Text('${e.name} · +${InvLabels.money(e.price)}'),
-                  onChanged: (v) => setState(() => v == true ? _extras.add(e) : _extras.remove(e)),
-                ),
+                CheckboxListTile(value: _extras.contains(e), title: Text('${e.name} · +${InvLabels.money(e.price)}'), onChanged: (v) => setState(() => v == true ? _extras.add(e) : _extras.remove(e))),
             ],
           ],
         ),
